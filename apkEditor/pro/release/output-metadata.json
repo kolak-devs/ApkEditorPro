@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.gmail.heagoo.apkeditor.pro",
+  "variantName": "proRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 1110,
+      "versionName": "1.11.0-minApi26",
+      "outputFile": "proRelease-1.11.0-minApi26.apk"
+    }
+  ],
+  "elementType": "File"
+}

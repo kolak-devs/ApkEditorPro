@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/res_header_selection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <RelativeLayout
+                android:id="@+id/menu_done"
+                android:layout_width="48dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_menu_light"
+                android:paddingTop="4dip"
+                android:paddingBottom="4dip">
+
+                <ImageView
+                    android:layout_width="32dip"
+                    android:layout_height="32dip"
+                    android:layout_centerInParent="true"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/round_done_24" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/selection_tip"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="4dip"
+                android:layout_weight="1" />
+
+            <RelativeLayout
+                android:id="@+id/menu_select"
+                android:layout_width="48dip"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_menu_light"
+                android:paddingTop="4dip"
+                android:paddingBottom="4dip">
+
+                <ImageView
+                    android:layout_width="32dip"
+                    android:layout_height="32dip"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/round_select_all_24" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="40dip"
+            android:paddingLeft="4dip"
+            android:text=""
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/colorAccent" />
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/colorGray" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary">
+
+        <ListView
+            android:id="@+id/file_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4.0dip"
+            android:layout_marginRight="4.0dip"
+            android:fadingEdge="none"
+            android:groupIndicator="@null" />
+
+        <LinearLayout
+            android:id="@id/searching_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@id/progress_bar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@id/tv_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16.0dip"
+                android:maxLines="2"
+                android:text="@string/searching"
+                android:textColor="@color/colorAccent" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/delete"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btn_delete"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/delete"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btn_close"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/close" />
+
+    </LinearLayout>
+
+</LinearLayout>

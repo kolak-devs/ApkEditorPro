@@ -1,0 +1,26 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 32
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':common')
+    implementation project(':pngeditor')
+
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+
+    implementation 'com.google.android.material:material:1.5.0'
+}

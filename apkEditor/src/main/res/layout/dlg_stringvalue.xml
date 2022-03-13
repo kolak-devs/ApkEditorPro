@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dip">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/key"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:layout_marginBottom="4dip"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:text="@string/key"
+                android:textColor="@color/colorAccent"
+                android:textStyle="italic" />
+
+            <RelativeLayout
+                android:id="@+id/menu_clipboard"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:background="@drawable/selector_menu_light"
+                android:paddingTop="2dip"
+                android:paddingBottom="2dip">
+
+                <ImageView
+                    android:layout_width="28dip"
+                    android:layout_height="28dip"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/round_content_paste_24" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/value"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:maxLines="10"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/content_layout"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_editstring_ok"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@android:string/ok" />
+
+        <Button
+            android:id="@+id/btn_editstring_cancel"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@android:string/cancel" />
+    </LinearLayout>
+
+</RelativeLayout>
