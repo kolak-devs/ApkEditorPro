@@ -1,5 +1,8 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.apkeditor.R;
 
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ class PathFinder {
         }
     }
 
+    @Nullable
     private PathFilter createFilter(IPatchContext ctx, String word,
                                     int lineIdx) {
         if ("APPLICATION".equals(word)) {
@@ -53,7 +57,8 @@ class PathFinder {
         }
     }
 
-    private List<String> splitWords(String pathStr) {
+    @NonNull
+    private List<String> splitWords(@NonNull String pathStr) {
         List<String> result = new ArrayList<>();
 
         int startPos = 1;

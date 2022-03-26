@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 
@@ -19,8 +21,8 @@ class PatchRule_FuncReplace extends PatchRule {
     private String targetFile;
     // If the source is a zip, extract or not
     private String strFunction;
-    private List<String> replaceContents;
-    private List<String> keywords;
+    private final List<String> replaceContents;
+    private final List<String> keywords;
 
     PatchRule_FuncReplace() {
         replaceContents = new ArrayList<>();
@@ -32,7 +34,7 @@ class PatchRule_FuncReplace extends PatchRule {
     }
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger) throws IOException {
         super.startLine = br.getCurrentLine();
 
         String line = br.readLine();
@@ -63,7 +65,7 @@ class PatchRule_FuncReplace extends PatchRule {
 
     @Override
     public String executeRule(ApkInfoActivity activity, ZipFile patchZip,
-                              IPatchContext logger) {
+                              @NonNull IPatchContext logger) {
         logger.error(R.string.general_error, "Not supported yet.");
         return null;
     }

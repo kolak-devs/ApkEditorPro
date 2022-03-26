@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 
@@ -24,13 +26,13 @@ class PatchRule_MatchReplace extends PatchRule {
 
     // private String targetFile;
     private PathFinder pathFinder;
-    private List<String> matches;
-    private List<String> replaces;
+    private final List<String> matches;
+    private final List<String> replaces;
     private String replacingStr = null; // concat all lines in replaces
     private boolean bRegex = false;
     private boolean bDotall = false;
 
-    private List<String> keywords;
+    private final List<String> keywords;
 
     // The target file name is specified by wildchar or not
     private boolean isWildMatch;
@@ -48,7 +50,7 @@ class PatchRule_MatchReplace extends PatchRule {
     }
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger)
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger)
             throws IOException {
         super.startLine = br.getCurrentLine();
 
@@ -68,10 +70,10 @@ class PatchRule_MatchReplace extends PatchRule {
                         br.getCurrentLine());
             } else if (REGEX.equals(line)) {
                 String next = br.readLine();
-                this.bRegex = Boolean.valueOf(next.trim());
+                this.bRegex = Boolean.parseBoolean(next.trim());
             } else if (DOTALL.equals(line)) {
                 String next = br.readLine();
-                this.bDotall = Boolean.valueOf(next.trim());
+                this.bDotall = Boolean.parseBoolean(next.trim());
             } else if (MATCH.equals(line)) {
                 line = readMultiLines(br, matches, true, keywords);
                 continue;
@@ -118,7 +120,7 @@ class PatchRule_MatchReplace extends PatchRule {
         return null;
     }
 
-    private void executeOnEntry(ApkInfoActivity activity, ZipFile patchZip,
+    private void executeOnEntry(@NonNull ApkInfoActivity activity, ZipFile patchZip,
                                 IPatchContext patchCtx, String targetFile, Pattern pattern) {
         boolean modified = false;
         String filepath = activity.getDecodeRootPath() + "/" + targetFile;
@@ -234,7 +236,7 @@ class PatchRule_MatchReplace extends PatchRule {
     // content: original file content
     // sections: replacement position
     private void writeReplaces(String filepath, String content,
-                               List<Section> sections) throws IOException {
+                               @NonNull List<Section> sections) throws IOException {
         String replaceStr = getReplaceString();
 
         FileOutputStream fos = null;
@@ -264,7 +266,7 @@ class PatchRule_MatchReplace extends PatchRule {
         }
     }
 
-    private String getRealReplace(String replaceStr, Section sec) {
+    private String getRealReplace(String replaceStr, @NonNull Section sec) {
         String result = replaceStr;
         List<String> groups = sec.groupStrs;
         for (int i = 0; i < groups.size(); ++i) {
@@ -274,7 +276,7 @@ class PatchRule_MatchReplace extends PatchRule {
     }
 
     private void writeReplaces(String filepath, List<String> lines,
-                               List<Integer> matchedIndexes) throws IOException {
+                               @NonNull List<Integer> matchedIndexes) throws IOException {
         String replaceStr = getReplaceString();
 
         BufferedOutputStream out = null;

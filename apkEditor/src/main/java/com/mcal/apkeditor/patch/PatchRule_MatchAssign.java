@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 
@@ -21,12 +23,12 @@ class PatchRule_MatchAssign extends PatchRule {
 
     // private String targetFile;
     private PathFinder pathFinder;
-    private List<String> matches;
-    private List<String> assigns;
+    private final List<String> matches;
+    private final List<String> assigns;
     private boolean bRegex = false;
     private boolean bDotall = false;
 
-    private List<String> keywords;
+    private final List<String> keywords;
 
     PatchRule_MatchAssign() {
         matches = new ArrayList<>();
@@ -41,7 +43,7 @@ class PatchRule_MatchAssign extends PatchRule {
     }
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger)
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger)
             throws IOException {
         super.startLine = br.getCurrentLine();
 
@@ -61,10 +63,10 @@ class PatchRule_MatchAssign extends PatchRule {
                         br.getCurrentLine());
             } else if (REGEX.equals(line)) {
                 String next = br.readLine();
-                this.bRegex = Boolean.valueOf(next.trim());
+                this.bRegex = Boolean.parseBoolean(next.trim());
             } else if (DOTALL.equals(line)) {
                 String next = br.readLine();
-                this.bDotall = Boolean.valueOf(next.trim());
+                this.bDotall = Boolean.parseBoolean(next.trim());
             } else if (MATCH.equals(line)) {
                 line = readMultiLines(br, matches, true, keywords);
                 continue;
@@ -92,7 +94,7 @@ class PatchRule_MatchAssign extends PatchRule {
         return null;
     }
 
-    private boolean executeOnEntry(ApkInfoActivity activity, ZipFile patchZip,
+    private boolean executeOnEntry(@NonNull ApkInfoActivity activity, ZipFile patchZip,
                                    IPatchContext patchCtx, String targetFile) {
         String filepath = activity.getDecodeRootPath() + "/" + targetFile;
 
@@ -131,15 +133,13 @@ class PatchRule_MatchAssign extends PatchRule {
                     patchCtx.info("%s=\"%s\"", false, name, assignedVal);
                 }
             }
-
             return true;
         }
-
         return false;
     }
 
 
-    private String getRealValue(String valueBefore, List<String> groupStrs) {
+    private String getRealValue(String valueBefore, @NonNull List<String> groupStrs) {
         String result = valueBefore;
         for (int i = 0; i < groupStrs.size(); ++i) {
             result = result.replace("${GROUP" + (i + 1) + "}", groupStrs.get(i));

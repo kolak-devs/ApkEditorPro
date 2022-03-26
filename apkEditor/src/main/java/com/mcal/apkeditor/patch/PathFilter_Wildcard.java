@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -7,19 +9,19 @@ import java.util.List;
 
 public class PathFilter_Wildcard extends PathFilter {
 
-    private IPatchContext ctx;
-    private String wildPathStr;
-    private String regexPath;
-    private String decodedRootPath;
+    private final IPatchContext ctx;
+    private final String wildPathStr;
+    private final String regexPath;
+    private final String decodedRootPath;
 
     private boolean initialized = false;
 
     // Each element in folderList is the relative path
-    private List<String> folderList = new LinkedList<>();
-    private List<String> fileList = new ArrayList<>();
+    private final List<String> folderList = new LinkedList<>();
+    private final List<String> fileList = new ArrayList<>();
     private int fileCursor = 0; // Index inside fileList
 
-    public PathFilter_Wildcard(IPatchContext ctx, String pathStr) {
+    public PathFilter_Wildcard(@NonNull IPatchContext ctx, @NonNull String pathStr) {
         this.ctx = ctx;
         this.wildPathStr = pathStr;
         this.regexPath = "^" + pathStr.replace("*", ".*") + "$";
@@ -91,7 +93,7 @@ public class PathFilter_Wildcard extends PathFilter {
     }
 
     @Override
-    public boolean isTarget(String entryPath) {
+    public boolean isTarget(@NonNull String entryPath) {
         if (entryPath.matches(regexPath)) {
             return true;
         } else {

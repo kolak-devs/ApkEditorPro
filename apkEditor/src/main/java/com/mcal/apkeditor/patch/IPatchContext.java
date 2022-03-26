@@ -1,7 +1,10 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.Keep;
+
 import java.util.List;
 
+@Keep
 public interface IPatchContext {
 
     // Return decoded root path, like "/data/data/.../files/decoded"
@@ -37,5 +40,4 @@ public interface IPatchContext {
     public void setVariableValue(String key, String value);
 
     public String getVariableValue(String key);
-
 }

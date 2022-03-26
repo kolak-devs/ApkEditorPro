@@ -1,6 +1,10 @@
 package com.mcal.apkeditor.patch;
 
 
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class ResourceItem {
     public String type;
     public String name;
@@ -12,7 +16,9 @@ public class ResourceItem {
         this.id = _id;
     }
 
-    public static ResourceItem parseFrom(String line) {
+    @Nullable
+    @Keep
+    public static ResourceItem parseFrom(@NonNull String line) {
         String type = null;
         String name = null;
         int id = -1;
@@ -58,7 +64,7 @@ public class ResourceItem {
     }
 
     // convert string like 0x7f020007 to int
-    public static int string2Id(String str) {
+    public static int string2Id(@NonNull String str) {
         int value = 0;
         if (str.length() == 10) {
             for (int i = 2; i < 10; i++) {
@@ -68,6 +74,7 @@ public class ResourceItem {
         return value;
     }
 
+    @NonNull
     public static String id2String(int id) {
         return "0x" + Integer.toHexString(id);
     }
@@ -83,6 +90,7 @@ public class ResourceItem {
         return 0;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return String.format("<public type=\"%s\" name=\"%s\" id=\"0x%s\" />",

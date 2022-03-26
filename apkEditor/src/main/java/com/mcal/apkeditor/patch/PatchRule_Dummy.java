@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 
@@ -12,7 +14,7 @@ class PatchRule_Dummy extends PatchRule {
     private static final String strEnd = "[/DUMMY]";
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger) throws IOException {
         super.startLine = br.getCurrentLine();
 
         String line = br.readLine();

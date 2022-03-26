@@ -1,5 +1,8 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.IGeneralCallback;
 import com.mcal.apkeditor.R;
@@ -11,11 +14,12 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+@Keep
 public class PatchExecutor implements IGeneralCallback {
 
-    private WeakReference<ApkInfoActivity> activityRef;
-    private String patchPath;
-    private IPatchContext patchContext;
+    private final WeakReference<ApkInfoActivity> activityRef;
+    private final String patchPath;
+    private final IPatchContext patchContext;
 
     // patch and source zip file
     private Patch patch;
@@ -100,7 +104,7 @@ public class PatchExecutor implements IGeneralCallback {
     }
 
     // Get the index of the target rule
-    private int findTargetRule(List<PatchRule> rules, String name) {
+    private int findTargetRule(@NonNull List<PatchRule> rules, String name) {
         for (int i = 0; i < rules.size(); ++i) {
             if (name.equals(rules.get(i).getRuleName())) {
                 return i;

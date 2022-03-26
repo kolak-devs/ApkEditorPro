@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.IOUtils;
@@ -27,7 +29,7 @@ class PatchRule_AddFiles extends PatchRule {
     private boolean bExtract;
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger) throws IOException {
         super.startLine = br.getCurrentLine();
 
         String line = br.readLine();
@@ -47,7 +49,7 @@ class PatchRule_AddFiles extends PatchRule {
                 this.targetFile = next.trim();
             } else if (EXTRACT.equals(line)) {
                 String next = br.readLine();
-                this.bExtract = Boolean.valueOf(next.trim());
+                this.bExtract = Boolean.parseBoolean(next.trim());
             } else {
                 logger.error(R.string.patch_error_cannot_parse, br.getCurrentLine(), line);
             }
@@ -60,7 +62,7 @@ class PatchRule_AddFiles extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip,
+    public String executeRule(ApkInfoActivity activity, @NonNull ZipFile patchZip,
                               IPatchContext logger) {
 
         ZipEntry entry = patchZip.getEntry(sourceFile);

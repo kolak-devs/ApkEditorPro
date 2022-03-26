@@ -2,6 +2,8 @@ package com.mcal.apkeditor.patch;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.IOUtils;
@@ -43,7 +45,7 @@ class PatchRule_ExecDex extends PatchRule {
     private boolean smaliNeeded = false;
     private int ifVersion = 1;
 
-    private List<String> keywords;
+    private final List<String> keywords;
 
     PatchRule_ExecDex() {
         keywords = new ArrayList<>();
@@ -57,7 +59,7 @@ class PatchRule_ExecDex extends PatchRule {
     }
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger) throws IOException {
         super.startLine = br.getCurrentLine();
 
         String line = br.readLine();
@@ -92,10 +94,10 @@ class PatchRule_ExecDex extends PatchRule {
                 continue;
             } else if (SMALI_NEEDED.equals(line)) {
                 String next = br.readLine();
-                this.smaliNeeded = Boolean.valueOf(next.trim());
+                this.smaliNeeded = Boolean.parseBoolean(next.trim());
             } else if (INTERFACE_VERSION.equals(line)) {
                 String next = br.readLine();
-                this.ifVersion = Integer.valueOf(next.trim());
+                this.ifVersion = Integer.parseInt(next.trim());
             } else {
                 logger.error(R.string.patch_error_cannot_parse, br.getCurrentLine(), line);
             }
@@ -177,7 +179,8 @@ class PatchRule_ExecDex extends PatchRule {
         return null;
     }
 
-    private String getStackTrace(Throwable e) {
+    @NonNull
+    private String getStackTrace(@NonNull Throwable e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);

@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.R;
@@ -15,10 +17,10 @@ class PatchRule_RemoveFiles extends PatchRule {
     private static final String strEnd = "[/REMOVE_FILES]";
     private static final String TARGET = "TARGET:";
 
-    private List<String> targetList = new ArrayList<>();
+    private final List<String> targetList = new ArrayList<>();
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger) throws IOException {
         super.startLine = br.getCurrentLine();
 
         String line = br.readLine();
@@ -52,7 +54,7 @@ class PatchRule_RemoveFiles extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip,
+    public String executeRule(@NonNull ApkInfoActivity activity, ZipFile patchZip,
                               IPatchContext logger) {
         String rootPath = activity.getDecodeRootPath();
 
@@ -93,5 +95,4 @@ class PatchRule_RemoveFiles extends PatchRule {
         }
         return false;
     }
-
 }

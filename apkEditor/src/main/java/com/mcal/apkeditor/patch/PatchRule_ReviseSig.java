@@ -1,5 +1,8 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.HexUtils;
@@ -19,10 +22,10 @@ class PatchRule_ReviseSig extends PatchRule {
     private static final String strEnd = "[/SIGNATURE_REVISE]";
     private static final String TARGET = "TARGET:";
 
-    private List<String> targetList = new ArrayList<>();
+    private final List<String> targetList = new ArrayList<>();
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger) throws IOException {
         super.startLine = br.getCurrentLine();
 
         String line = br.readLine();
@@ -47,7 +50,7 @@ class PatchRule_ReviseSig extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip, IPatchContext logger) {
+    public String executeRule(@NonNull ApkInfoActivity activity, ZipFile patchZip, @NonNull IPatchContext logger) {
         String apkPath = activity.getApkPath();
         String hexRSA = getHexRSA(apkPath);
         String packageName = activity.getApkInfo().packageName;
@@ -68,6 +71,7 @@ class PatchRule_ReviseSig extends PatchRule {
     }
 
     // Get RSA data in hex from an apk file
+    @Nullable
     private String getHexRSA(String apkPath) {
         ZipFile zfile = null;
         BufferedInputStream input = null;

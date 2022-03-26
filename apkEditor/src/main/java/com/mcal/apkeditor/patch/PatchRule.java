@@ -1,5 +1,8 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 
@@ -24,7 +27,8 @@ public abstract class PatchRule {
 
     // Assign values inside rawStr, values are got from patch context
     // For example: name="${STR_NAME}" --> name="app_name"
-    public static String assignValues(IPatchContext ctx, String rawStr) {
+    @Nullable
+    public static String assignValues(IPatchContext ctx, @NonNull String rawStr) {
         List<REPLACE_REC> replaces = new ArrayList<>();
 
         int position = rawStr.indexOf("${", 0);
@@ -136,7 +140,7 @@ public abstract class PatchRule {
     }
 
     // To read multiple lines until encounter one keyword
-    String readMultiLines(BufferedReader br, List<String> lines,
+    String readMultiLines(@NonNull BufferedReader br, List<String> lines,
                           boolean bTrim, List<String> endKeywords) throws IOException {
         String line = br.readLine();
         while (line != null) {
@@ -172,7 +176,8 @@ public abstract class PatchRule {
         }
     }
 
-    private String getParentFolder(String path) {
+    @Nullable
+    private String getParentFolder(@NonNull String path) {
         int pos = path.lastIndexOf("/");
         if (pos > 0) {
             return path.substring(0, pos);
@@ -182,8 +187,8 @@ public abstract class PatchRule {
     }
 
     // targetDir is the absolute directory path
-    private boolean addFileEntry(ApkInfoActivity activity, ZipFile zfile,
-                                 ZipEntry entry, String targetDir, IPatchContext logger) {
+    private boolean addFileEntry(@NonNull ApkInfoActivity activity, ZipFile zfile,
+                                 @NonNull ZipEntry entry, String targetDir, IPatchContext logger) {
 
         String name = entry.getName();
         String path = targetDir + "/" + name;
@@ -221,7 +226,7 @@ public abstract class PatchRule {
         return false;
     }
 
-    void addFilesInZip(ApkInfoActivity activity, String zipFile,
+    void addFilesInZip(@NonNull ApkInfoActivity activity, String zipFile,
                        IBeforeAddFile hook, IPatchContext logger) throws Exception {
         ZipFile zfile = null;
         String targetDir = activity.getDecodeRootPath();
@@ -274,7 +279,7 @@ public abstract class PatchRule {
     }
 
     // Pre-process the values in string list
-    protected void preProcessing(IPatchContext ctx, List<String> values) {
+    protected void preProcessing(IPatchContext ctx, @NonNull List<String> values) {
         for (int i = 0; i < values.size(); ++i) {
             String assignedVal = assignValues(ctx, values.get(i));
             if (assignedVal != null) {

@@ -2,7 +2,7 @@ package com.mcal.apkeditor.patch;
 
 public class PathFilter_ExactEntry extends PathFilter {
 
-    private String entryName;
+    private final String entryName;
 
     private int cursor = 0;
 

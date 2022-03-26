@@ -3,6 +3,8 @@ package com.mcal.apkeditor.patch;
 import android.util.Log;
 import android.util.SparseIntArray;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.IOUtils;
@@ -38,7 +40,7 @@ class PatchRule_Merge extends PatchRule {
     private SparseIntArray replacedIds;
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger) throws IOException {
         super.startLine = br.getCurrentLine();
 
         String line = br.readLine();
@@ -62,7 +64,7 @@ class PatchRule_Merge extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip,
+    public String executeRule(ApkInfoActivity activity, @NonNull ZipFile patchZip,
                               IPatchContext logger) {
 
         ZipEntry entry = patchZip.getEntry(sourceFile);
@@ -140,7 +142,7 @@ class PatchRule_Merge extends PatchRule {
     }
 
     private void writeAddedItems(String curPublicXml,
-                                 List<ResourceItem> addedItems) throws Exception {
+                                 @NonNull List<ResourceItem> addedItems) throws Exception {
         List<String> lines = new ArrayList<>();
         for (int i = 0; i < addedItems.size(); ++i) {
             ResourceItem item = addedItems.get(i);
@@ -190,7 +192,8 @@ class PatchRule_Merge extends PatchRule {
     }
 
     // Refactor added resource items, according to current existing max ids
-    private SparseIntArray refactorAddedItems(List<ResourceItem> addedItems,
+    @NonNull
+    private SparseIntArray refactorAddedItems(@NonNull List<ResourceItem> addedItems,
                                               Map<String, Integer> type2maxId) {
 
         // old id -> new id
@@ -220,7 +223,7 @@ class PatchRule_Merge extends PatchRule {
     }
 
     // Get max resource type in current editing apk
-    private int getMaxType(Map<String, Integer> type2maxId) {
+    private int getMaxType(@NonNull Map<String, Integer> type2maxId) {
         int maxType = 0;
         for (Integer val : type2maxId.values()) {
             int curType = val & 0x00ff0000;
@@ -231,7 +234,8 @@ class PatchRule_Merge extends PatchRule {
         return (maxType >> 16);
     }
 
-    private Map<String, Integer> getMaxIds(List<ResourceItem> items) {
+    @NonNull
+    private Map<String, Integer> getMaxIds(@NonNull List<ResourceItem> items) {
         Map<String, Integer> maxIds = new HashMap<>();
         int drawableMaxId = 0;
         int layoutMaxId = 0;
@@ -262,6 +266,7 @@ class PatchRule_Merge extends PatchRule {
         return maxIds;
     }
 
+    @NonNull
     private List<ResourceItem> getResourceItems(InputStream input)
             throws IOException {
         List<ResourceItem> result = new ArrayList<>();
@@ -294,7 +299,7 @@ class PatchRule_Merge extends PatchRule {
 
     // Merge resources under values/ values-xx/
     private class ResourceMerger implements IBeforeAddFile {
-        private String rootPath;
+        private final String rootPath;
 
         ResourceMerger(String rootPath) {
             this.rootPath = rootPath;
@@ -302,7 +307,7 @@ class PatchRule_Merge extends PatchRule {
 
         @Override
         public boolean consumeAddedFile(ApkInfoActivity activity,
-                                        ZipFile zfile, ZipEntry entry) throws Exception {
+                                        ZipFile zfile, @NonNull ZipEntry entry) throws Exception {
             String name = entry.getName();
             String targetPath = this.rootPath + "/" + name;
             if ("res/values/public.xml".equals(name)) {
@@ -374,7 +379,7 @@ class PatchRule_Merge extends PatchRule {
         }
 
         // Refactor one line of a smali file
-        private String refactorId(String line) {
+        private String refactorId(@NonNull String line) {
             boolean idModified = false;
 
             int pos = line.indexOf("0x7f");
@@ -404,7 +409,8 @@ class PatchRule_Merge extends PatchRule {
             return line;
         }
 
-        private List<String> readZipEntry(ZipFile zfile, ZipEntry entry)
+        @NonNull
+        private List<String> readZipEntry(@NonNull ZipFile zfile, ZipEntry entry)
                 throws IOException {
             List<String> lines = new ArrayList<>();
             BufferedReader br = null;
@@ -422,7 +428,7 @@ class PatchRule_Merge extends PatchRule {
         }
 
         // Merge resources in zip entry to the original path
-        private void mergeResourceFiles(String path, ZipFile zfile,
+        private void mergeResourceFiles(String path, @NonNull ZipFile zfile,
                                         ZipEntry entry) throws Exception {
             BufferedReader br = null;
             try {

@@ -1,18 +1,21 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.File;
 import java.util.List;
 
 // Support "[APPLICATION]" "[ACTIVITIES]" "LAUNCHER_ACTIVITIES"
 public class PathFilter_Component extends PathFilter {
 
-    private ComponentType compType;
-    private String decodeRootPath;
+    private final ComponentType compType;
+    private final String decodeRootPath;
     private String applicationName;
     private List<String> componentList;
     private int cursor = 0;
 
-    public PathFilter_Component(IPatchContext ctx, ComponentType compType) {
+    public PathFilter_Component(@NonNull IPatchContext ctx, @NonNull ComponentType compType) {
         this.compType = compType;
         this.decodeRootPath = ctx.getDecodeRootPath();
         switch (compType) {
@@ -65,13 +68,10 @@ public class PathFilter_Component extends PathFilter {
         return path;
     }
 
-    private String getRelativePath(String smaliFolderName, String clsName, boolean notExistRetNull) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(smaliFolderName);
-        sb.append("/");
-        sb.append(clsName.replaceAll("\\.", "/"));
-        sb.append(".smali");
-        String relativePath = sb.toString();
+    @Nullable
+    private String getRelativePath(String smaliFolderName, @NonNull String clsName, boolean notExistRetNull) {
+        String relativePath = smaliFolderName + "/" +
+                clsName.replaceAll("\\.", "/") + ".smali";
         String absolutionPath = decodeRootPath + "/" + relativePath;
         if (notExistRetNull) {
             return new File(absolutionPath).exists() ? relativePath : null;
@@ -81,7 +81,7 @@ public class PathFilter_Component extends PathFilter {
     }
 
     @Override
-    public boolean isTarget(String entryPath) {
+    public boolean isTarget(@NonNull String entryPath) {
         int pos = entryPath.indexOf('/');
         if (pos != -1 && entryPath.endsWith(".smali")) {
             String str = entryPath.substring(pos + 1, entryPath.length() - 6);
@@ -95,7 +95,6 @@ public class PathFilter_Component extends PathFilter {
                     return componentList.contains(clsName);
             }
         }
-
         return false;
     }
 

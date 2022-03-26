@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 
@@ -21,12 +23,12 @@ class PatchRule_MatchGoto extends PatchRule {
 
     // private String targetFile;
     private PathFinder pathFinder;
-    private List<String> matches;
+    private final List<String> matches;
     private String gotoRule;
     private boolean bRegex = false;
     private boolean bDotall = false;
 
-    private List<String> keywords;
+    private final List<String> keywords;
 
     PatchRule_MatchGoto() {
         matches = new ArrayList<>();
@@ -40,7 +42,7 @@ class PatchRule_MatchGoto extends PatchRule {
     }
 
     @Override
-    public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
+    public void parseFrom(@NonNull LinedReader br, IPatchContext logger) throws IOException {
         super.startLine = br.getCurrentLine();
 
         String line = br.readLine();
@@ -58,10 +60,10 @@ class PatchRule_MatchGoto extends PatchRule {
                 this.pathFinder = new PathFinder(logger, pathStr, br.getCurrentLine());
             } else if (REGEX.equals(line)) {
                 String next = br.readLine();
-                this.bRegex = Boolean.valueOf(next.trim());
+                this.bRegex = Boolean.parseBoolean(next.trim());
             } else if (DOTALL.equals(line)) {
                 String next = br.readLine();
-                this.bDotall = Boolean.valueOf(next.trim());
+                this.bDotall = Boolean.parseBoolean(next.trim());
             } else if (MATCH.equals(line)) {
                 line = readMultiLines(br, matches, true, keywords);
                 continue;
@@ -91,7 +93,7 @@ class PatchRule_MatchGoto extends PatchRule {
         return null;
     }
 
-    private boolean entryMatches(ApkInfoActivity activity,
+    private boolean entryMatches(@NonNull ApkInfoActivity activity,
                                  IPatchContext patchCtx, String targetFile) {
         String filepath = activity.getDecodeRootPath() + "/" + targetFile;
 
@@ -211,5 +213,4 @@ class PatchRule_MatchGoto extends PatchRule {
             this.groupStrs = _groupStrs;
         }
     }
-
 }

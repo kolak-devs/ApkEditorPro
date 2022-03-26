@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.R;
 
 import java.io.IOException;
@@ -24,7 +26,8 @@ public class PatchParser {
     public static final String SIGNATURE_REVISE = "[SIGNATURE_REVISE]";
     public static final String EXECUTE_DEX = "[EXECUTE_DEX]";
 
-    public static Patch parse(InputStream input, IPatchContext logger)
+    @NonNull
+    public static Patch parse(InputStream input, @NonNull IPatchContext logger)
             throws Exception {
         logger.info(R.string.patch_start_parse, true);
         Patch result = new Patch();
