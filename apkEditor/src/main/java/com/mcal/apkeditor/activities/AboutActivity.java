@@ -55,6 +55,19 @@ public class AboutActivity extends CustomizedLangActivity {
         Toast.makeText(this, "Copied TON Coin Address", Toast.LENGTH_SHORT).show();
     }
 
+    public void donateYandexMoney(@NonNull View view) {
+        @NonNull
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        @NonNull
+        ClipData clip = ClipData.newPlainText("Copied Yandex Money Address", "4100117726163824");
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(this, "Copied Yandex Money Address", Toast.LENGTH_SHORT).show();
+    }
+
+    public void donateQiwi(@NonNull View view) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://qiwi.com/p/79025916451")));
+    }
+
     public void donatePayPal(@NonNull View view) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.me/timscriptov")));
     }
