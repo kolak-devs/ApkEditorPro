@@ -19,7 +19,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.gmail.heagoo.apkeditor.R;
+import com.mcal.apkeditor.R;
 
 public class ColorMixerDialog extends AlertDialog implements
         DialogInterface.OnClickListener {

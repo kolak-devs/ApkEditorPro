@@ -21,7 +21,7 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.gmail.heagoo.apkeditor.R;
+import com.mcal.apkeditor.R;
 
 public class ColorPreference extends DialogPreference {
   private int lastColor=0;

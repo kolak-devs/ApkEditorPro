@@ -81,7 +81,7 @@ public class CheckUtil {
         if (installedTime > 24 * 3600 * 1000) {
             int randVal = (int)(curTime % Integer.MAX_VALUE);
             int ret = (Integer) RefInvoke.invokeStaticMethod(
-                    "com.gmail.heagoo.apkeditor.MainActivity", "vc",
+                    "com.mcal.apkeditor.MainActivity", "vc",
                     new Class[] {Object.class, int.class}, new Object[] {context, randVal});
             if (ret != (randVal ^ 0x55555555)) {
                 sign = 0x38;

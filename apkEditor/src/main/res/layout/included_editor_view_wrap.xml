@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.gmail.heagoo.neweditor.ObScrollView
+    <com.mcal.neweditor.ObScrollView
         android:id="@+id/editorScrollview"
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -40,7 +40,7 @@
                 android:layout_width="1.0px"
                 android:layout_height="match_parent" />
 
-            <com.gmail.heagoo.neweditor.ObEditText
+            <com.mcal.neweditor.ObEditText
 
                 android:id="@+id/editor"
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 android:textSize="12.0sp"
                 android:typeface="monospace" />
         </LinearLayout>
-    </com.gmail.heagoo.neweditor.ObScrollView>
+    </com.mcal.neweditor.ObScrollView>
 
     <include layout="@layout/included_editor_menu" />
 </LinearLayout>

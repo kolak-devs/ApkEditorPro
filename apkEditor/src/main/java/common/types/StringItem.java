@@ -1,5 +1,7 @@
 package common.types;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 import brut.androlib.res.xml.ResXmlEncoders;
@@ -28,6 +30,7 @@ public class StringItem implements Serializable {
         this.styledValue = styledValue;
     }
 
+    @NonNull
     public static String toString(String name, String value, String styledValue) {
         // Should add formatted="false" or not
         boolean bAddFormat = false;
@@ -62,6 +65,7 @@ public class StringItem implements Serializable {
         return sb.toString();
     }
 
+    @NonNull
     @Override
     public String toString() {
         return toString(name, value, styledValue);

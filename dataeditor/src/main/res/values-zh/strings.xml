@@ -20,7 +20,8 @@
     <string name="appdm_apk_build_time">Apk创建时间</string>
     <string name="appdm_install_time">安装时间</string>
     <string name="appdm_signature">签名</string>
-    
+    <string name="save">Save</string>
+
     <!--  
     <string name="appdm_action_settings">Settings</string>
     <string name="appdm_user_app">User Apps</string>

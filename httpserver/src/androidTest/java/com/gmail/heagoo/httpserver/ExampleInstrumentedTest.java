@@ -1,4 +1,4 @@
-package com.gmail.heagoo.httpserver;
+package com.mcal.httpserver;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.gmail.heagoo.httpserver", appContext.getPackageName());
+        assertEquals("com.mcal.httpserver", appContext.getPackageName());
     }
 }

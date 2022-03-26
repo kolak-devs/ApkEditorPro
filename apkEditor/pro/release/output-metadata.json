@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.gmail.heagoo.apkeditor.pro",
+  "applicationId": "com.mcal.apkeditor.pro",
   "variantName": "proRelease",
   "elements": [
     {

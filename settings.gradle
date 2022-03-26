@@ -1,3 +1,18 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 include ':apklib'
 include ':httpserver'
 include ':pngeditor'
@@ -13,7 +28,6 @@ include ':apksigner'
 include ':xpp3'
 include ':androlib'
 include ':androlib-legacy'
-include ':melissa'
 include ':smali'
 include ':smali-legacy'
 include ':jadx'

@@ -32,7 +32,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
-import com.gmail.heagoo.apkeditor.R;
+import com.mcal.apkeditor.R;
 
 public class ColorMixer extends RelativeLayout implements TextWatcher {
     private static final String SUPERSTATE = "superState";

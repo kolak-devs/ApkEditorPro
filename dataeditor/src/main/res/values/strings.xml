@@ -38,7 +38,8 @@
     <string name="appdm_files">Files</string>
     <string name="appdm_file_size">File Size:</string>
     <string name="appdm_open_in_editor">Open in Editor</string>
-    
+    <string name="save">Save</string>
+
     <!--  
     <string name="appdm_action_settings">Settings</string>
     <string name="appdm_user_app">User Apps</string>

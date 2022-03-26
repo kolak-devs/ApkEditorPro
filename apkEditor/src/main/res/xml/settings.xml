@@ -5,7 +5,7 @@
     <PreferenceCategory
         android:key="Appearance"
         android:title="@string/appearance">
-        <com.gmail.heagoo.apkeditor.util.IconPickerPreference
+        <com.mcal.apkeditor.util.IconPickerPreference
             android:entries="@array/appicon_key"
             android:entryValues="@array/appicon_value"
             android:key="MyIcon"
@@ -74,7 +74,7 @@
             android:summary="@string/compression_level_summary"
             android:title="@string/compression_level" />
 
-        <com.gmail.heagoo.apkeditor.KeyListPreference
+        <com.mcal.apkeditor.KeyListPreference
             android:entries="@array/signer_key"
             android:entryValues="@array/signer_value_dont_translate"
             android:key="SignApkWith"

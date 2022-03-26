@@ -1,4 +1,4 @@
-package com.gmail.heagoo.httpserver;
+package com.mcal.httpserver;
 
 import org.junit.Test;
 

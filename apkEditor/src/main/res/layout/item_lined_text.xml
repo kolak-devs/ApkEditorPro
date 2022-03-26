@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/white" />
 
-    <com.gmail.heagoo.apkeditor.ui.EditTextRememberCursor
+    <com.mcal.apkeditor.ui.EditTextRememberCursor
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

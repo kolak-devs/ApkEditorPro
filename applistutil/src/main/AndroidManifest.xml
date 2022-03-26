@@ -1,8 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gmail.heagoo.util.applist"
-    android:versionCode="1"
-    android:versionName="1.0" >
-
+    package="com.mcal.util.applist">
 
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+
 </manifest>

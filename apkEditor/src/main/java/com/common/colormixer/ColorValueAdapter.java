@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.gmail.heagoo.apkeditor.GlobalConfig;
-import com.gmail.heagoo.apkeditor.R;
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

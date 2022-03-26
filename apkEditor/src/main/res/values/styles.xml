@@ -9,11 +9,9 @@
         <item name="background">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondary</item>
-        <item name="dialog_style">#FFF8F8F8</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">?isLightTheme</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">#66808080</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/google_sans</item>
-        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <item name="alertDialogTheme">@style/MD.AlertDialog</item>
         <item name="android:alertDialogTheme">@style/MD.AlertDialog</item>
         <item name="materialAlertDialogTheme">@style/MD.AlertDialog</item>
@@ -22,7 +20,6 @@
 
     <style name="MD.AlertDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog.Alert">
         <item name="android:buttonStyle">@style/MD.Button.Borderless</item>
-        <item name="android:windowBackground">@drawable/bottom_sheet_background</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowTitleStyle">@style/Base.TextAppearance.AppCompat.Title</item>
         <item name="android:windowElevation">4.0dip</item>
@@ -42,33 +39,13 @@
         <item name="android:minHeight">48.0dip</item>
     </style>
 
-    <!-- style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
-        <item name="android:windowBackground">@drawable/bottom_sheet_background</item>
-        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
-        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
-        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-    </style>
-
-    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/colorAccent</item>
-    </style>
-
-    <style name="NeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/colorAccent</item>
-    </style>
-
-    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/colorAccent</item>
-    </style -->
-
     <style name="main_tab_bottom">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">#666666</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1.0</item>
-        <!-- 每个按钮的权重，相等则平分尺寸 -->
         <item name="android:button">@null</item>
     </style>
 
@@ -79,6 +56,18 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:button">@null</item>
         <item name="android:layout_marginRight">1.0dip</item>
+    </style>
+
+    <style name="Dialog_No_Border_2">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowSoftInputMode">adjustPan</item>
     </style>
 
 </resources>

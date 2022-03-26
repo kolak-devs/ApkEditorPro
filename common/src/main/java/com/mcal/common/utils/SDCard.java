@@ -58,15 +58,15 @@ public class SDCard {
 
         String subDir = "";
         String packagePath = ctx.getPackageName();
-        if (packagePath.startsWith("com.gmail.heagoo.apkpermremover")) {
+        if (packagePath.startsWith("com.mcal.apkpermremover")) {
             subDir = "/.ApkPermRemover/" + dirName + "/";
-        } else if (packagePath.startsWith("com.gmail.heagoo.pmaster")) {
+        } else if (packagePath.startsWith("com.mcal.pmaster")) {
             subDir = "/PermMaster/" + dirName + "/";
-        } else if (packagePath.equals("com.gmail.heagoo.permissionmanager")) {
+        } else if (packagePath.equals("com.mcal.permissionmanager")) {
             subDir = "/PermMaster/" + dirName + "/";
-        } else if (packagePath.startsWith("com.gmail.heagoo.apkeditor")) {
+        } else if (packagePath.startsWith("com.mcal.apkeditor")) {
             subDir = "/ApkEditor/" + dirName + "/";
-        } else if (packagePath.startsWith("com.gmail.heagoo.appdm")) {
+        } else if (packagePath.startsWith("com.mcal.appdm")) {
             subDir = "/HackAppData/" + dirName + "/";
         }
 

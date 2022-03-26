@@ -44,7 +44,7 @@
     </LinearLayout>
 
     <!--
-    <com.gmail.heagoo.apkeditor.util.CustomScrollView
+    <com.mcal.apkeditor.util.CustomScrollView
         android:id="@+id/scrollView"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
@@ -65,14 +65,14 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <com.gmail.heagoo.apkeditor.util.LineEditText
+            <com.mcal.apkeditor.util.LineEditText
                 android:id="@+id/editText_xml"
                 android:layout_width="fill_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1"
                 android:background="@drawable/bg_edittext"
                 android:inputType="textMultiLine"
-                android:textSize="14sp"></com.gmail.heagoo.apkeditor.util.LineEditText>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <ScrollView
@@ -86,13 +86,13 @@
                 android:id="@+id/xmlTable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:stretchColumns="1"></TableLayout>
+                android:stretchColumns="1"/>
         </ScrollView>
 
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></WebView>
+            android:layout_height="match_parent"/>
     </FrameLayout>
 
     <LinearLayout

@@ -1,13 +1,17 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
+
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.gmail.heagoo.apkeditor"
-        minSdkVersion 14
+        applicationId "com.mcal.apkeditor"
+        minSdk 14
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 26
+        targetSdk 26
         versionCode 1110
         versionName "1.11.0"
         multiDexEnabled true
@@ -113,6 +117,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 configurations {
@@ -128,11 +135,12 @@ dependencies {
     implementation project(':pngeditor')
     implementation project(':imageview')
     implementation project(':apksigner')
-    implementation project(':melissa')
     implementation project(':dataeditor')
+    implementation project(':crashreporter')
 
     implementation project(':libraries')
 
+    implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.drawerlayout:drawerlayout:1.1.1'

@@ -81,7 +81,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.gmail.heagoo.apkeditor.ui.LayoutObListView
+            <com.mcal.apkeditor.ui.LayoutObListView
                 android:id="@+id/text_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dip"

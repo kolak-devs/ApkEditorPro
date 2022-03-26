@@ -19,7 +19,7 @@
 #   public *;
 #}
 -dontwarn android.support.v4.**
--dontwarn com.gmail.heagoo.**
+-dontwarn com.mcal.**
 
 -dontwarn antlr.**
 -dontwarn org.antlr.**
@@ -30,13 +30,13 @@
 -dontwarn com.polites.android.**
 -dontwarn com.beust.**
 
--keep class com.gmail.heagoo.apkeditor.R$** { *; }
--keep class com.gmail.heagoo.seticon.** { *; }
--keep class com.gmail.heagoo.apkeditor.pro.** { *; }
--keep class com.gmail.heagoo.apkeditor.translate.TranslateDialog { *; }
--keep class com.gmail.heagoo.neweditor.Token { *; }
--keep class com.gmail.heagoo.appdm.util.FileCopyUtil { *; }
--keep class com.gmail.heagoo.apkeditor.translate.** { *; }
+-keep class com.mcal.apkeditor.R$** { *; }
+-keep class com.mcal.seticon.** { *; }
+-keep class com.mcal.apkeditor.pro.** { *; }
+-keep class com.mcal.apkeditor.translate.TranslateDialog { *; }
+-keep class com.mcal.neweditor.Token { *; }
+-keep class com.mcal.appdm.util.FileCopyUtil { *; }
+-keep class com.mcal.apkeditor.translate.** { *; }
 
 # For project persistence
 -keep class common.types.** { *; }

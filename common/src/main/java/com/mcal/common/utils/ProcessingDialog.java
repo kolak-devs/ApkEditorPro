@@ -10,13 +10,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.gmail.heagoo.common.R;
+import com.mcal.common.R;
 
 public class ProcessingDialog extends Dialog {
 
-	private Activity activity;
-	private ProcessingInterface processor;
-	private int successTipResId;
+	private final Activity activity;
+	private final ProcessingInterface processor;
+	private final int successTipResId;
 
 	public static interface ProcessingInterface {
 		public void process() throws Exception;
