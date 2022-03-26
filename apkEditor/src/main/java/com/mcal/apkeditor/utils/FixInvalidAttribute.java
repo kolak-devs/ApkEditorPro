@@ -2,8 +2,13 @@ package com.mcal.apkeditor.utils;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.TextFileReader;
+
+import org.jetbrains.annotations.Contract;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,10 +26,10 @@ public class FixInvalidAttribute extends FixInvalid {
     private final static String err_InvalidAttr = "^(.+):([0-9]+): Tag (.+) attribute (.+) has invalid character '";
 
     private int modifiedFiles = 0;
-    private List<InvalidAttrRecord> invalidRecords = new ArrayList<InvalidAttrRecord>();
+    private final List<InvalidAttrRecord> invalidRecords = new ArrayList<InvalidAttrRecord>();
 
     // Record all the file modifications
-    private Map<String, Map<String, String>> fileModifications = new HashMap<>();
+    private final Map<String, Map<String, String>> fileModifications = new HashMap<>();
 
     // replaces means replaces already made
     public FixInvalidAttribute(String decodeRootPath, String message,
@@ -33,10 +38,11 @@ public class FixInvalidAttribute extends FixInvalid {
         try {
             parseErrorMessage();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private static boolean isAttrMatched(String name, List<String> attrNames) {
+    private static boolean isAttrMatched(String name, @NonNull List<String> attrNames) {
         for (String attrName : attrNames) {
             if (name.equals(attrName)) {
                 return true;
@@ -66,7 +72,7 @@ public class FixInvalidAttribute extends FixInvalid {
 
                     int lineNO = -1;
                     try {
-                        lineNO = Integer.valueOf(strLine);
+                        lineNO = Integer.parseInt(strLine);
                     } catch (Exception e) {
                         continue;
                     }
@@ -96,6 +102,7 @@ public class FixInvalidAttribute extends FixInvalid {
     }
 
     // Get record by file path
+    @Nullable
     private InvalidAttrRecord getInvalidRecord(String path) {
         for (int i = 0; i < invalidRecords.size(); i++) {
             InvalidAttrRecord rec = invalidRecords.get(i);
@@ -152,7 +159,8 @@ public class FixInvalidAttribute extends FixInvalid {
 
     }
 
-    private String modifyLine(String filePath, String line,
+    @NonNull
+    private String modifyLine(String filePath, @NonNull String line,
                               List<String> attrNames) {
         String[] words = line.split(" ");
         for (int i = 0; i < words.length; i++) {
@@ -181,16 +189,13 @@ public class FixInvalidAttribute extends FixInvalid {
 
     private void addModification(String filePath, String originStr,
                                  String newStr) {
-        Map<String, String> rec = this.fileModifications.get(filePath);
-        if (rec == null) {
-            rec = new HashMap<String, String>();
-            this.fileModifications.put(filePath, rec);
-        }
+        Map<String, String> rec = fileModifications.computeIfAbsent(filePath, k -> new HashMap<>());
 
         rec.put(originStr, newStr);
     }
 
-    private String makeValidName(String name, String[] replaces) {
+    @NonNull
+    private String makeValidName(@NonNull String name, String[] replaces) {
         int start = 0;
         int end;
         String pre = "";
@@ -225,10 +230,9 @@ public class FixInvalidAttribute extends FixInvalid {
     }
 
     @Override
-    public String getMofifyMessage(Context ctx) {
-        String msg = String.format(
+    public String getMofifyMessage(@NonNull Context ctx) {
+        return String.format(
                 ctx.getString(R.string.str_num_modified_file), modifiedFiles);
-        return msg;
     }
 
     @Override
@@ -271,7 +275,7 @@ public class FixInvalidAttribute extends FixInvalid {
 
         List<ErrorLine> errLines = new ArrayList<>();
 
-        private InvalidAttrRecord(String decodedRootPath, String filePath,
+        private InvalidAttrRecord(String decodedRootPath, @NonNull String filePath,
                                   int lineNO, String tagName, String attrName) {
             if (!filePath.startsWith("/")) {
                 filePath = decodedRootPath + filePath;
@@ -301,6 +305,8 @@ public class FixInvalidAttribute extends FixInvalid {
         }
 
         // Get error line record by line index
+        @Nullable
+        @Contract(pure = true)
         private ErrorLine getErrorLine(int lineIdx) {
             for (ErrorLine line : errLines) {
                 if (line.lineIndex == lineIdx) {

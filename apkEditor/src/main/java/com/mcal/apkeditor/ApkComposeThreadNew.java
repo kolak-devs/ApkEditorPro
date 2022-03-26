@@ -264,7 +264,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
                         new File(decodedFilePath + "/" + dexName));
                 long dexTime2 = getLastModifyTime(
                         new File(decodedFilePath + "/build/" + dexName));
-                long dexTime = (dexTime2 > dexTime1 ? dexTime2 : dexTime1);
+                long dexTime = (Math.max(dexTime2, dexTime1));
                 long smaliTime = FileUtil.recursiveModifiedTime(f);
                 // Means smali code is modified
                 if (smaliTime > dexTime) {
@@ -309,12 +309,6 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         // Invoke DexEncoder.smali2Dex
         try {
             long start = System.currentTimeMillis();
-            /*Class<?> obj_class = Class
-                    .forName("com.mcal.apkeditor.pro.DexEncoder");
-            Method method = obj_class.getMethod("smali2Dex",
-                    String.class, String.class, ISmaliAssembleCallback.class);
-            method.invoke(null, smaliFilePath, dexFilePath, this);*/
-
             DexEncoder.smali2Dex(smaliFilePath, dexFilePath, this);
 
             Log.i("DEBUG", "Encode time=" + (System.currentTimeMillis() - start));
@@ -343,30 +337,11 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
     }
 
     private void mergeApk() {
-        // Before merge, call the extra maker
-        /*Map<String, String> extraReplaces = new HashMap<>();
-        if (this.extraMaker != null) {
-            try {
-                extraMaker.prepareReplaces(ctx, resourceApkPath, extraReplaces,
-                        // Note: currently not support description update
-                        new IDescriptionUpdate() {
-                            @Override
-                            public void updateDescription(String strDesc) {
-                            }
-                        });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }*/
-
         if (this.extraMaker != null) {
             try {
                 extraMaker.prepareReplaces(ctx, resourceApkPath, replacedFiles,
                         // Note: currently not support description update
-                        new IDescriptionUpdate() {
-                            @Override
-                            public void updateDescription(String strDesc) {
-                            }
+                        strDesc -> {
                         });
             } catch (Exception e) {
                 e.printStackTrace();
@@ -433,28 +408,6 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         }
     }
 
-    // Collect all the dex files should be added to resource.apk
-    /*private void collectDexFiles(Map<String, String> filesToAdd) {
-        filesToAdd.putAll(this.builtDexFiles);
-
-        File decodeDir = new File(decodedFilePath);
-        File[] files = decodeDir.listFiles();
-        for (File f : files) {
-            String name = f.getName();
-            if (f.isFile() && name.endsWith(".dex")) {
-                if (!this.builtDexFiles.containsKey(name)) {
-                    // Check the same dex name in build directory whether exist
-                    File dex = new File(decodedFilePath + "/build/" + name);
-                    if (dex.isFile() && dex.exists()) {
-                        filesToAdd.put(name, dex.getPath());
-                    } else {
-                        filesToAdd.put(name, f.getPath());
-                    }
-                }
-            }
-        }
-    }*/
-
     private void collectDexFiles(@NonNull Map<String, String> filesToAdd) {
         filesToAdd.putAll(this.builtDexFiles);
 
@@ -463,8 +416,6 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         for (File f : files) {
             String name = f.getName();
             if (f.isFile() && name.endsWith(".dex")) {
-                //if (!this.builtDexFiles.containsKey(name)) { TODO: закоментировал
-                // Check the same dex name in build directory whether exist
                 File dex = new File(decodedFilePath + "/build/" + name);
                 if (dex.isFile() && dex.exists()) {
                     filesToAdd.put(name, dex.getPath());
@@ -473,21 +424,10 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
                     filesToAdd.put(name, f.getPath());
                     replacedFiles.put(name, f.getPath());
                 }
-                //}
             }
         }
     }
 
-    /*private void collectFiles(Map<String, String> relPath2AbsPath, File dir, String relPath) {
-        File[] files = dir.listFiles();
-        for (File f : files) {
-            if (f.isFile()) {
-                relPath2AbsPath.put(relPath + f.getName(), f.getPath());
-            } else if (f.isDirectory()) {
-                collectFiles(relPath2AbsPath, f, relPath + f.getName() + "/");
-            }
-        }
-    }*/
     private void collectFiles(Map<String, String> relPath2AbsPath, @NonNull File dir, String relPath) {
         File[] files = dir.listFiles();
         for (File f : files) {
@@ -517,26 +457,6 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
 
         return buildResource;
     }
-
-    /*private boolean signApk() {
-        String signedPath = targetApkPath + ".signed";
-        try {
-            Map<String, String> emptyMap = new HashMap<>();
-            Set<String> emptySet = new HashSet<>();
-            SignHelper.sign(ctx, targetApkPath, signedPath, emptyMap, emptyMap, emptySet);
-
-            // Rename the signed the apk to target apk name
-            File targetFile = new File(targetApkPath);
-            targetFile.delete();
-            new File(signedPath).renameTo(targetFile);
-
-            return true;
-        } catch (Exception e) {
-            String strHeader = ctx.getResources().getString(R.string.sign_error);
-            errMessage = strHeader + e.getMessage();
-        }
-        return false;
-    }*/
 
     private boolean signApk() {
         try {

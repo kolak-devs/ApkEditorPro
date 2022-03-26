@@ -9,13 +9,13 @@
 
     <!-- android:paddingLeft="16dp" -->
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

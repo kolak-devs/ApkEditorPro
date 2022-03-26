@@ -7,17 +7,19 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.Layout;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
-public class LineEditText extends EditText {
-    private Rect mRect;
-    private Paint mPaint;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
 
-    private float scale;
+public class LineEditText extends AppCompatMultiAutoCompleteTextView {
+    private final Rect mRect;
+    private final Paint mPaint;
+
+    private final float scale;
     private int left;
-    private int right;
-    private int bottom;
-    private int top;
+    private final int right;
+    private final int bottom;
+    private final int top;
 
     public LineEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -52,6 +54,7 @@ public class LineEditText extends EditText {
         return mPaint.measureText(testedStr);
     }
 
+    @NonNull
     @SuppressLint("DefaultLocale")
     private String getLineDescription(int index) {
         if (index < 1000) {

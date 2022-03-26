@@ -10,6 +10,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import java.io.BufferedReader;
@@ -20,20 +21,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class OnlineMessage {
-    private WeakReference<Activity> activityRef;
+    private final WeakReference<Activity> activityRef;
 
     public OnlineMessage(Activity activity) {
         this.activityRef = new WeakReference<>(activity);
         SharedPreferences sp = activity.getSharedPreferences("updates", 0);
         long lastTime = sp.getLong("last_pull", 0);
-        if (System.currentTimeMillis() - lastTime > 24 * 3600 * 1000l) {
-            new Thread() {
-                @Override
-                public void run() {
-                    getOnlineMessage();
-                    //emulateMessage();
-                }
-            }.start();
+        if (System.currentTimeMillis() - lastTime > 24 * 3600 * 1000L) {
+            new Thread(() -> {
+                getOnlineMessage();
+                //emulateMessage();
+            }).start();
         }
     }
 
@@ -52,7 +50,7 @@ public class OnlineMessage {
 
             // Save the pull time
             editor.putLong("last_pull", System.currentTimeMillis());
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -80,13 +78,13 @@ public class OnlineMessage {
             if (message.length() > 10 && !savedMsg.equals(message)) {
                 SharedPreferences.Editor editor = sp.edit();
 
-                int showNum = Integer.valueOf(firstLine);
+                int showNum = Integer.parseInt(firstLine);
                 editor.putInt("num", showNum);
                 editor.putString("message", message);
 
                 // Save the pull time
                 editor.putLong("last_pull", System.currentTimeMillis());
-                editor.commit();
+                editor.apply();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,7 +97,7 @@ public class OnlineMessage {
         String savedMsg = sp.getString("message", "");
         long lastShow = sp.getLong("last_show", 0);
 
-        if ((System.currentTimeMillis() - lastShow > 24 * 3600 * 1000l) &&
+        if ((System.currentTimeMillis() - lastShow > 24 * 3600 * 1000L) &&
                 (num > 0) && !"".equals(savedMsg)) {
             AlertDialog.Builder alert = new AlertDialog.Builder(activityRef.get());
             alert.setTitle("Message");
@@ -121,7 +119,7 @@ public class OnlineMessage {
                     return handleUri(uri);
                 }
 
-                private boolean handleUri(final Uri uri) {
+                private boolean handleUri(@NonNull final Uri uri) {
                     final String host = uri.getHost();
                     final String scheme = uri.getScheme();
                     // Based on some condition you need to determine if you are going to load the url
@@ -150,7 +148,7 @@ public class OnlineMessage {
             SharedPreferences.Editor editor = sp.edit();
             editor.putInt("num", num - 1);
             editor.putLong("last_show", System.currentTimeMillis());
-            editor.commit();
+            editor.apply();
         }
     }
 }

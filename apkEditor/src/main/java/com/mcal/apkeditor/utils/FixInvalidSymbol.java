@@ -2,6 +2,9 @@ package com.mcal.apkeditor.utils;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.RandomUtil;
 import com.mcal.common.utils.TextFileReader;
@@ -20,7 +23,7 @@ import java.util.regex.Pattern;
 
 class FixInvalidSymbol extends FixInvalid {
     private final static String err_InvalidSymbol = "^(.+):([0-9]+): error: invalid symbol: '(.+)'";
-    private List<InvalidFile> invalidFiles = new ArrayList<>();
+    private final List<InvalidFile> invalidFiles = new ArrayList<>();
 
     FixInvalidSymbol(String decodeRootPath, String message) {
         super(decodeRootPath, message);
@@ -46,7 +49,7 @@ class FixInvalidSymbol extends FixInvalid {
 
                     int lineNO;
                     try {
-                        lineNO = Integer.valueOf(strLine);
+                        lineNO = Integer.parseInt(strLine);
                     } catch (Exception e) {
                         continue;
                     }
@@ -67,7 +70,8 @@ class FixInvalidSymbol extends FixInvalid {
         }
     }
 
-    private InvalidFile getInvalidFile(String file) {
+    @Nullable
+    private InvalidFile getInvalidFile(@NonNull String file) {
         if (!file.startsWith("/")) {
             file = decodeRootPath + file;
         }
@@ -109,11 +113,12 @@ class FixInvalidSymbol extends FixInvalid {
 
         // Update reference
         List<ResourceRename> allRenames = collectAllRenames();
-        if (allRenames != null && !allRenames.isEmpty()) {
+        if (!allRenames.isEmpty()) {
             modifyReferences(allRenames);
         }
     }
 
+    @NonNull
     private List<ResourceRename> collectAllRenames() {
         List<ResourceRename> result = new ArrayList<>();
         for (InvalidFile invalidFile : this.invalidFiles) {
@@ -129,7 +134,7 @@ class FixInvalidSymbol extends FixInvalid {
     }
 
     // Check the list whether already contains the rename record
-    private boolean containsRecord(List<ResourceRename> renameList, String type, String name) {
+    private boolean containsRecord(@NonNull List<ResourceRename> renameList, String type, String name) {
         for (ResourceRename rr : renameList) {
             if (type.equals(rr.resourceType) && name.equals(rr.resourceName)) {
                 return true;
@@ -139,8 +144,9 @@ class FixInvalidSymbol extends FixInvalid {
     }
 
     // Arrange the invalid symbols according to resource type
+    @NonNull
     private Map<String, List<ResourceRename>> arrangeSymbols(
-            List<InvalidFile.InvalidSymbol> symbols) {
+            @NonNull List<InvalidFile.InvalidSymbol> symbols) {
         Map<String, List<ResourceRename>> type2Symbols = new HashMap<>();
         for (InvalidFile.InvalidSymbol symbol : symbols) {
             List<ResourceRename> valueList = type2Symbols.get(symbol.type);
@@ -153,7 +159,7 @@ class FixInvalidSymbol extends FixInvalid {
         return type2Symbols;
     }
 
-    private void modifyPublicXml(InvalidFile invalidFile) {
+    private void modifyPublicXml(@NonNull InvalidFile invalidFile) {
         try {
             TextFileReader reader = new TextFileReader(invalidFile.filePath);
             List<String> lines = reader.getLines();
@@ -242,7 +248,7 @@ class FixInvalidSymbol extends FixInvalid {
             this.symbolList.add(rec);
         }
 
-        class InvalidSymbol {
+        static class InvalidSymbol {
             int lineNumber;
             String type;
             String name;
@@ -265,10 +271,10 @@ class FixInvalidSymbol extends FixInvalid {
             }
 
             // Create a new valid name
+            @NonNull
             private String createNewName() {
                 return name + "_" + RandomUtil.getRandomString(4);
             }
         }
     }
-
 }

@@ -20,7 +20,6 @@ import java.util.zip.ZipOutputStream;
 public class ZipUtils {
 
     public static void unzip(String zipFile, String zipDir) throws IOException {
-
         ZipFile zfile = null;
         InputStream is = null;
         OutputStream os = null;
@@ -169,7 +168,7 @@ public class ZipUtils {
                     zfile.close();
                 }
             } catch (IOException ex) {
-                // ignore
+                ex.printStackTrace();
             }
         }
     }

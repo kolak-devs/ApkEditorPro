@@ -2,6 +2,8 @@ package com.mcal.apkeditor.utils;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.TextFileReader;
 
@@ -20,13 +22,14 @@ public class FixInvalidFileName extends FixInvalid {
 
     private int renamedFiles = 0;
     private int modifiedFiles = 0;
-    private List<InvalidFileRecord> invalidFiles = new ArrayList<>();
+    private final List<InvalidFileRecord> invalidFiles = new ArrayList<>();
 
     public FixInvalidFileName(String decodeRootPath, String message) {
         super(decodeRootPath, message);
         try {
             parseErrorMessage();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -57,12 +60,13 @@ public class FixInvalidFileName extends FixInvalid {
             try {
                 br.close();
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     // Is there already the error of "Invalid file name" for same file
-    private boolean isInvalidPathExist(String relativePath) {
+    private boolean isInvalidPathExist(@NonNull String relativePath) {
         String[] folders = relativePath.split("/");
         int num = folders.length;
         String fileName = folders[num - 1];
@@ -225,7 +229,7 @@ public class FixInvalidFileName extends FixInvalid {
         String newFileName;
         String newResourceName;
 
-        private InvalidFileRecord(String relativePath) {
+        private InvalidFileRecord(@NonNull String relativePath) {
             this.relativePath = relativePath;
 
             String[] folders = relativePath.split("/");
@@ -287,5 +291,4 @@ public class FixInvalidFileName extends FixInvalid {
             this.newFileName = sb.toString();
         }
     }
-
 }

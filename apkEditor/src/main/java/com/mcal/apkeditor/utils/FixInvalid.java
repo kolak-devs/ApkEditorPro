@@ -2,6 +2,9 @@ package com.mcal.apkeditor.utils;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.common.utils.TextFileReader;
 
 import java.io.Closeable;
@@ -22,7 +25,7 @@ abstract class FixInvalid {
     HashSet<String> modifiedFileSet = new HashSet<>();
     int renamedFileNum = 0;
 
-    FixInvalid(String decodeRootPath, String message) {
+    FixInvalid(@NonNull String decodeRootPath, String message) {
         this.decodeRootPath = decodeRootPath;
         if (!decodeRootPath.endsWith("/")) {
             this.decodeRootPath += "/";
@@ -33,7 +36,8 @@ abstract class FixInvalid {
     // Do replace for the reference
     // Note: when oldStr is "@string/do", avoid to replace "@string/doit"
     // Return the content after replace, if not replaced, return null
-    private static String doReferenceReplace(String content, Map<String, Map<String, String>> renameRecords) {
+    @Nullable
+    private static String doReferenceReplace(@NonNull String content, Map<String, Map<String, String>> renameRecords) {
         // Cannot find any occurrence
         int atPos = content.indexOf('@', 0);
         if (atPos == -1) {
@@ -91,7 +95,8 @@ abstract class FixInvalid {
         }
     }
 
-    private static String doReplace(String content, List<ReplaceRecord> allReplaces) {
+    @NonNull
+    private static String doReplace(String content, @NonNull List<ReplaceRecord> allReplaces) {
         StringBuilder sb = new StringBuilder();
         int startPos = 0;
         for (ReplaceRecord replace : allReplaces) {
@@ -127,11 +132,7 @@ abstract class FixInvalid {
         // Re-arrange to type -> rename(old name -> new name)
         Map<String, Map<String, String>> renameRecords = new HashMap<>();
         for (ResourceRename rr : _renameRecords) {
-            Map<String, String> old2NewName = renameRecords.get(rr.resourceType);
-            if (old2NewName == null) {
-                old2NewName = new HashMap<>();
-                renameRecords.put(rr.resourceType, old2NewName);
-            }
+            Map<String, String> old2NewName = renameRecords.computeIfAbsent(rr.resourceType, k -> new HashMap<>());
             old2NewName.put(rr.resourceName, rr.newResourceName);
         }
 
@@ -192,7 +193,7 @@ abstract class FixInvalid {
     }
 
     // Rename all the resource names inside a file
-    private boolean replaceReference(File f, Map<String, Map<String, String>> renameRecords) {
+    private boolean replaceReference(@NonNull File f, Map<String, Map<String, String>> renameRecords) {
         try {
             boolean modified = false;
 
@@ -256,7 +257,7 @@ abstract class FixInvalid {
 
     // Rename for specified type in related value files
     // For example, type="attr", then do the rename in attrs.xml
-    private void modifyNameInValues(String type, List<ResourceRename> renameList) {
+    private void modifyNameInValues(String type, @NonNull List<ResourceRename> renameList) {
         // Arrange to map record
         Map<String, String> nameReplaces = new HashMap<>();
         for (ResourceRename rr : renameList) {
@@ -314,6 +315,7 @@ abstract class FixInvalid {
     }
 
     // Replace the content of group 1 when find the match
+    @Nullable
     private String replaceAllGroup1(String str, String format, Map<String, String> replaces) {
         List<ReplaceRecord> allReplaces = new ArrayList<>();
 
@@ -384,7 +386,8 @@ abstract class FixInvalid {
     }
 
     // Return the new file name in case we need to rename it
-    private String getNewFileName(File f, List<ResourceRename> renameList) {
+    @Nullable
+    private String getNewFileName(@NonNull File f, @NonNull List<ResourceRename> renameList) {
         String name = f.getName();
         for (ResourceRename rename : renameList) {
             if (name.startsWith(rename.resourceName)) {
@@ -404,7 +407,7 @@ abstract class FixInvalid {
         return null;
     }
 
-    private void writeBack(String filePath, String content) {
+    private void writeBack(String filePath, @NonNull String content) {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(filePath);

@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.mcal.common.utils.ActivityUtil;
 
 import java.io.File;
@@ -82,22 +85,19 @@ public class ApkComposeFailAdapter extends BaseAdapter {
                 int nextCommaPos = strLine.indexOf(':', commaPos + 1);
                 if (nextCommaPos != -1) {
                     try {
-                        lineNum = Integer.valueOf(strLine.substring(commaPos + 1, nextCommaPos));
+                        lineNum = Integer.parseInt(strLine.substring(commaPos + 1, nextCommaPos));
                     } catch (Exception ignored) {
                     }
                 }
 
                 final int lineIndex = lineNum;
-                holder.viewBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ApkComposeActivity activity = activityRef.get();
-                        Intent intent = TextEditor.getEditorIntent(activity, filePath, activity.srcApkPath);
-                        if (lineIndex > 0) {
-                            ActivityUtil.attachParam(intent, "startLine", "" + lineIndex);
-                        }
-                        activity.startActivity(intent);
+                holder.viewBtn.setOnClickListener(v -> {
+                    ApkComposeActivity activity = activityRef.get();
+                    Intent intent = TextEditor.getEditorIntent(activity, filePath, activity.srcApkPath);
+                    if (lineIndex > 0) {
+                        ActivityUtil.attachParam(intent, "startLine", "" + lineIndex);
                     }
+                    activity.startActivity(intent);
                 });
             }
         }
@@ -111,7 +111,7 @@ public class ApkComposeFailAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        TextView messageTv;
-        Button viewBtn;
+        AppCompatTextView messageTv;
+        AppCompatButton viewBtn;
     }
 }

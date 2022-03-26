@@ -3,6 +3,8 @@ package com.mcal.apkeditor.utils;
 import android.app.Activity;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ApkComposeActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.ProcessingDialog;
@@ -24,6 +26,7 @@ class ResourceRename {
         this.newResourceName = newName;
     }
 
+    @NonNull
     public String toString() {
         return "type: " + resourceType
                 + ", name: " + resourceName
@@ -42,7 +45,7 @@ public class ErrorFixManager {
     Map<String, String> allReplaces = new HashMap<String, String>();
     // Record replaces for each file
     Map<String, Map<String, String>> fileReplaces = new HashMap<>();
-    private String decodeRootPath;
+    private final String decodeRootPath;
     private String errMessage;
     private FixInvalid fixer;
     private int fixerId = -1;
@@ -52,7 +55,8 @@ public class ErrorFixManager {
     }
 
     // token is an invalid token
-    public static String makeValidToken(String token) {
+    @NonNull
+    public static String makeValidToken(@NonNull String token) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < token.length(); i++) {
             char c = token.charAt(i);
@@ -85,7 +89,7 @@ public class ErrorFixManager {
             new ProcessingDialog(activity,
                     new ProcessingDialog.ProcessingInterface() {
                         @Override
-                        public void process() throws Exception {
+                        public void process() {
                             fixer.fixErrors();
                             addReplaces(fixer.getAxmlModifications());
                         }

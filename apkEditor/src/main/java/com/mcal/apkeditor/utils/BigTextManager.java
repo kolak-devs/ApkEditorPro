@@ -2,16 +2,15 @@ package com.mcal.apkeditor.utils;
 
 import android.graphics.Paint;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by phe3 on 7/11/2017.
- */
-
 public class BigTextManager {
-    private String text;
+    private final String text;
 
     // Line index inside the EditText when wrap
     // lineLines[0] = 0
@@ -28,7 +27,8 @@ public class BigTextManager {
         return str == null || "".equals(str);
     }
 
-    public static String join(String strConcat, List<String> elements) {
+    @NonNull
+    public static String join(String strConcat, @NonNull List<String> elements) {
         StringBuilder sb = new StringBuilder();
         if (!elements.isEmpty()) {
             sb.append(elements.get(0));
@@ -127,7 +127,7 @@ public class BigTextManager {
         }
     }
 
-    public List<String> splitWordsIntoStringsThatFit(String source, float maxWidthPx, Paint paint) {
+    public List<String> splitWordsIntoStringsThatFit(@NonNull String source, float maxWidthPx, Paint paint) {
         ArrayList<String> result = new ArrayList<>();
 
         ArrayList<String> currentLine = new ArrayList<>();
@@ -155,9 +155,10 @@ public class BigTextManager {
      * Splits a string to multiple strings each of which does not exceed the width
      * of maxWidthPx.
      */
+    @NonNull
     private List<String> splitIntoStringsThatFit(String source, float maxWidthPx, Paint paint) {
         if (BigTextManager.isEmpty(source) || paint.measureText(source) <= maxWidthPx) {
-            return Arrays.asList(source);
+            return Collections.singletonList(source);
         }
 
         ArrayList<String> result = new ArrayList<>();
@@ -182,7 +183,7 @@ public class BigTextManager {
     /**
      * Processes the chunk which does not exceed maxWidth.
      */
-    private void processFitChunk(float maxWidth, Paint paint, ArrayList<String> result, ArrayList<String> currentLine, String chunk) {
+    private void processFitChunk(float maxWidth, @NonNull Paint paint, ArrayList<String> result, @NonNull ArrayList<String> currentLine, String chunk) {
         currentLine.add(chunk);
         String currentLineStr = BigTextManager.join(" ", currentLine);
         if (paint.measureText(currentLineStr) >= maxWidth) {

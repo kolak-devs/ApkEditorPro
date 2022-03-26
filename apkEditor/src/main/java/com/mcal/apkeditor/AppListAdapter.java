@@ -64,31 +64,19 @@ public class AppListAdapter extends BaseAdapter {
 
         switch (order) {
             case BY_NAME:
-                comparator = new Comparator<AppInfo>() {
-                    @Override
-                    public int compare(AppInfo arg0, AppInfo arg1) {
-                        return arg0.appName.toLowerCase(locale).compareTo(
-                                arg1.appName.toLowerCase(locale));
-                    }
-                };
+                comparator = Comparator.comparing(arg0 -> arg0.appName.toLowerCase(locale));
                 break;
             case BY_INSTALL_TIME:
-                comparator = new Comparator<AppInfo>() {
-                    @Override
-                    public int compare(AppInfo arg0, AppInfo arg1) {
-                        return arg0.lastUpdateTime < arg1.lastUpdateTime ? 1 : -1;
-                    }
-                };
+                comparator = (arg0, arg1) -> arg0.lastUpdateTime < arg1.lastUpdateTime ? 1 : -1;
                 break;
         }
 
-        Collections.sort(appList, comparator);
+        appList.sort(comparator);
     }
 
     public List<AppInfo> getAppList() {
         synchronized (this.appList) {
-            List<AppInfo> retList = new ArrayList<>();
-            retList.addAll(appList);
+            List<AppInfo> retList = new ArrayList<>(appList);
             return retList;
         }
     }
@@ -120,7 +108,7 @@ public class AppListAdapter extends BaseAdapter {
             return null;
         }
 
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(ctx).inflate(R.layout.item_applist, null);
 
@@ -172,11 +160,9 @@ public class AppListAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-
         public ImageView icon;
         public TextView desc2;
         public TextView desc1;
         public TextView appName;
-
     }
 }

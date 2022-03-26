@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.utils;
 
+import androidx.annotation.NonNull;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -9,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Smali2Html {
-
     private BufferedReader reader;
     private BufferedWriter writer;
 
-    private List<String> lines = new ArrayList<>();
+    private final List<String> lines = new ArrayList<>();
 
     // Current dealing content is inside a string
     private boolean inString = false;
@@ -92,7 +93,8 @@ public class Smali2Html {
     }
 
     // Get the color string according to the string category
-    private String getInstructionColor(String str) {
+    @NonNull
+    private String getInstructionColor(@NonNull String str) {
         if (str.startsWith(".")) {
             return "#FF3399";
         } else if (str.startsWith(":")) {
@@ -102,7 +104,7 @@ public class Smali2Html {
         }
     }
 
-    private String generateHtml(String str) {
+    private String generateHtml(@NonNull String str) {
         // const string starts
         if (str.startsWith("\"")) {
             if (!str.endsWith("\"")) {
@@ -159,7 +161,8 @@ public class Smali2Html {
         return sb.toString();
     }
 
-    private String getRawHtml(String content) {
+    @NonNull
+    private String getRawHtml(@NonNull String content) {
         return content.replaceAll("<", "&lt;").replace(">", "&gt;");
     }
 

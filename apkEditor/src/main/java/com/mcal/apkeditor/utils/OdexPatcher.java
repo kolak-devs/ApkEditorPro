@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.FileUtil;
 import com.mcal.common.utils.RootCommand;
@@ -27,15 +30,11 @@ public class OdexPatcher {
     private int checksumOffset; // crc32 offset;
     private byte[] crc32;   // checksum in the cached odex
 
-    private String packageName;
+    private final String packageName;
 
     public OdexPatcher(String packageName) {
         this.packageName = packageName;
     }
-
-//    // Fake method
-//    public void applyPatch(Activity activity, String targetApkPath) {
-//    }
 
     private static boolean isAlphabet(char c) {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
@@ -81,6 +80,7 @@ public class OdexPatcher {
         killApp();
     }
 
+    @Nullable
     private String getTargetOdex(Activity ctx) {
         TextFileReader reader = null;
         try {
@@ -139,7 +139,7 @@ public class OdexPatcher {
         return name;
     }
 
-    private String getOdexPath(Activity activity, List<String> lines) {
+    private String getOdexPath(@NonNull Activity activity, @NonNull List<String> lines) {
         String path = null;
         String myPkgName = activity.getPackageName();
 
@@ -196,7 +196,7 @@ public class OdexPatcher {
     }
 
     // Find the pattern of len and apk name
-    private boolean searchChecksum(byte[] buf, String apkName, boolean bSaveChecksum) {
+    private boolean searchChecksum(@NonNull byte[] buf, @NonNull String apkName, boolean bSaveChecksum) {
         int len = apkName.length();
         byte[] lenData = new byte[]{(byte) (len & 0xff), (byte) ((len >> 8) & 0xff),
                 (byte) ((len >> 16) & 0xff), (byte) ((len >> 24) & 0xff),};

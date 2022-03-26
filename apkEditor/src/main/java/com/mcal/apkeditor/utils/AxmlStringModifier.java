@@ -2,11 +2,15 @@ package com.mcal.apkeditor.utils;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.ce.e.MyFileOutput;
 import com.mcal.apkeditor.ce.e.MyInputStream;
 import com.mcal.apkeditor.ce.e.ResStringChunk;
+
+import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,10 +23,11 @@ import java.util.zip.ZipFile;
 public class AxmlStringModifier implements IApkMaking {
 
     // Always ends with "/"
-    private String decodedRootpath;
-    private Map<String, Map<String, String>> fileReplaces;
+    private final String decodedRootpath;
+    private final Map<String, Map<String, String>> fileReplaces;
 
-    public AxmlStringModifier(String decodedRootpath,
+    @Contract(pure = true)
+    public AxmlStringModifier(@NonNull String decodedRootpath,
                               Map<String, Map<String, String>> modifications) {
         if (!decodedRootpath.endsWith("/")) {
             decodedRootpath += "/";
@@ -32,7 +37,7 @@ public class AxmlStringModifier implements IApkMaking {
     }
 
     public boolean modify(InputStream input, String outFilePath,
-                          Map<String, String> replaces) throws IOException {
+                          @NonNull Map<String, String> replaces) throws IOException {
         // Create reverse replaces
         Map<String, String> rReplaces = new HashMap<String, String>();
         for (Map.Entry<String, String> entry : replaces.entrySet()) {
@@ -93,6 +98,7 @@ public class AxmlStringModifier implements IApkMaking {
             try {
                 out.close();
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -102,6 +108,7 @@ public class AxmlStringModifier implements IApkMaking {
             try {
                 f.close();
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

@@ -2,6 +2,9 @@ package com.mcal.apkeditor.utils;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.TextFileReader;
 
@@ -21,14 +24,15 @@ public class FixInvalidToken extends FixInvalid {
     private int modifiedFiles = 0;
 
     // Record modification for each files
-    private Map<String, Map<String, String>> fileModifications = new HashMap<String, Map<String, String>>();
-    private List<InvalidTokenRecord> invalidRecords = new ArrayList<InvalidTokenRecord>();
+    private final Map<String, Map<String, String>> fileModifications = new HashMap<String, Map<String, String>>();
+    private final List<InvalidTokenRecord> invalidRecords = new ArrayList<InvalidTokenRecord>();
 
     public FixInvalidToken(String decodeRootPath, String message) {
         super(decodeRootPath, message);
         try {
             parseErrorMessage();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -50,7 +54,7 @@ public class FixInvalidToken extends FixInvalid {
                     String strLine = pathAndLine.substring(commaPos + 1);
                     int lineNO = -1;
                     try {
-                        lineNO = Integer.valueOf(strLine);
+                        lineNO = Integer.parseInt(strLine);
                     } catch (Exception e) {
                         continue;
                     }
@@ -71,6 +75,7 @@ public class FixInvalidToken extends FixInvalid {
     }
 
     // Get record by file path
+    @Nullable
     private InvalidTokenRecord getInvalidRecord(String path) {
         for (int i = 0; i < invalidRecords.size(); i++) {
             InvalidTokenRecord rec = invalidRecords.get(i);
@@ -189,10 +194,9 @@ public class FixInvalidToken extends FixInvalid {
     }
 
     @Override
-    public String getMofifyMessage(Context ctx) {
-        String msg = String.format(
+    public String getMofifyMessage(@NonNull Context ctx) {
+        return String.format(
                 ctx.getString(R.string.str_num_modified_file), modifiedFiles);
-        return msg;
     }
 
     @Override

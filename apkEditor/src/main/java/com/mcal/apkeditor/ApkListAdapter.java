@@ -19,7 +19,7 @@ public class ApkListAdapter extends BaseAdapter {
 
     private final Context ctx;
     List<String> fileList = new ArrayList<>();
-    private LruCache<String, ApkInfoParser.AppInfo> apkInfoCache = new LruCache<String, ApkInfoParser.AppInfo>(
+    private final LruCache<String, ApkInfoParser.AppInfo> apkInfoCache = new LruCache<String, ApkInfoParser.AppInfo>(
             64) {
 //		protected void entryRemoved(boolean evicted, String key,
 //				ApkInfoParser.AppInfo oldValue, ApkInfoParser.AppInfo newValue) {

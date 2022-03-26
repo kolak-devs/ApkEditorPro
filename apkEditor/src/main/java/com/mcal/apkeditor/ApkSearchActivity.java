@@ -128,7 +128,6 @@ public class ApkSearchActivity extends CustomizedLangActivity implements OnItemC
 
     @Override
     public void editModeSelected(int mode, String extraStr) {
-        String filePath = extraStr;
 
         Intent intent = null;
         switch (mode) {
@@ -136,7 +135,7 @@ public class ApkSearchActivity extends CustomizedLangActivity implements OnItemC
                 intent = new Intent(this, SimpleEditActivity.class);
                 break;
             case EditModeView.FULL_EDIT:
-                startFullEditActivity(filePath);
+                startFullEditActivity(extraStr);
                 return;
             case EditModeView.COMMON_EDIT:
                 intent = new Intent(this, CommonEditActivity.class);
@@ -147,7 +146,7 @@ public class ApkSearchActivity extends CustomizedLangActivity implements OnItemC
         }
 
         if (intent != null) {
-            ActivityUtil.attachParam(intent, "apkPath", filePath);
+            ActivityUtil.attachParam(intent, "apkPath", extraStr);
             startActivity(intent);
         }
     }

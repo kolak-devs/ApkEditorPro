@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TimeDumper {
-    private boolean bDump;
-    private long startTime;
+    private final boolean bDump;
+    private final long startTime;
     private long lastTime;
 
-    private Map<String, Long[]> tag2Time = new HashMap<String, Long[]>();
+    private final Map<String, Long[]> tag2Time = new HashMap<>();
 
     public TimeDumper(boolean bDump) {
         this.bDump = bDump;

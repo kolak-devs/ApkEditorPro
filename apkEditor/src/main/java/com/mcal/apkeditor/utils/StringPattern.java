@@ -1,5 +1,8 @@
 package com.mcal.apkeditor.utils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,7 +13,8 @@ import java.util.regex.Pattern;
 
 public class StringPattern {
 
-    private static String getTag(String str, int start, int end) {
+    @NonNull
+    private static String getTag(@NonNull String str, int start, int end) {
         int offset = 1;
         if (str.charAt(start + 1) == '/') {
             offset = 2;
@@ -24,6 +28,7 @@ public class StringPattern {
         }
     }
 
+    @Nullable
     public static List<TagRecord> getHtmlTags(String str) {
 //		int position = str.indexOf('<');
 //		if (position == -1) {
@@ -61,7 +66,7 @@ public class StringPattern {
             return null;
         }
 
-        Collections.sort(allTags, new MyComparator());
+        allTags.sort(new MyComparator());
 //
 //		for (TagRecord rec : allTags) {
 //			System.out.println(rec.toString());
@@ -90,7 +95,7 @@ public class StringPattern {
             }
         }
 
-        Collections.sort(matchedHtmlTags, new MyComparator());
+        matchedHtmlTags.sort(new MyComparator());
         return matchedHtmlTags;
     }
 
@@ -107,6 +112,7 @@ public class StringPattern {
             this.bStartTag = bStartTag;
         }
 
+        @NonNull
         public String toString() {
             return tag + ", position=" + startPos + ", bStartTag=" + bStartTag;
         }
@@ -114,14 +120,8 @@ public class StringPattern {
 
     static class MyComparator implements Comparator<TagRecord> {
         @Override
-        public int compare(TagRecord arg0, TagRecord arg1) {
-            if (arg0.startPos > arg1.startPos) {
-                return 1;
-            } else if (arg0.startPos < arg1.startPos) {
-                return -1;
-            } else {
-                return 0;
-            }
+        public int compare(@NonNull TagRecord arg0, @NonNull TagRecord arg1) {
+            return Integer.compare(arg0.startPos, arg1.startPos);
         }
     }
 

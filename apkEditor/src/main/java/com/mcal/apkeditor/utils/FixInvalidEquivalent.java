@@ -26,19 +26,20 @@ import java.util.regex.Pattern;
 public class FixInvalidEquivalent extends FixInvalid {
     private final static String err_eqivalent = "^(.+): error: File is case-insensitive equivalent to: (.+)";
 
-    private Map<String, String> equivalents = new HashMap<>();
+    private final Map<String, String> equivalents = new HashMap<>();
 
     // Record all resource names in lower case grouped by type
-    private Map<String, Set<String>> resourceNames = new HashMap<>();
+    private final Map<String, Set<String>> resourceNames = new HashMap<>();
 
     // Record all the renamed resource names grouped by type
-    private Map<String, List<ResourceRename>> renamedResources = new HashMap<>();
+    private final Map<String, List<ResourceRename>> renamedResources = new HashMap<>();
 
     public FixInvalidEquivalent(String decodeRootPath, String message) {
         super(decodeRootPath, message);
         try {
             parseErrorMessage();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -135,11 +136,7 @@ public class FixInvalidEquivalent extends FixInvalid {
 
     // Add a rename record
     private void recordRenameRecord(String resType, String resName, String newName) {
-        List<ResourceRename> renameRec = renamedResources.get(resType);
-        if (renameRec == null) {
-            renameRec = new ArrayList<>();
-            renamedResources.put(resType, renameRec);
-        }
+        List<ResourceRename> renameRec = renamedResources.computeIfAbsent(resType, k -> new ArrayList<>());
 
         ResourceRename rec = new ResourceRename(resType, resName, newName);
         renameRec.add(rec);
@@ -147,11 +144,7 @@ public class FixInvalidEquivalent extends FixInvalid {
 
     // Add a resource name record
     private boolean recordResourceName(String resType, String lcName) {
-        Set<String> nameSet = resourceNames.get(resType);
-        if (nameSet == null) {
-            nameSet = new HashSet<>();
-            resourceNames.put(resType, nameSet);
-        }
+        Set<String> nameSet = resourceNames.computeIfAbsent(resType, k -> new HashSet<>());
         if (!nameSet.contains(lcName)) {
             nameSet.add(lcName);
             return true;

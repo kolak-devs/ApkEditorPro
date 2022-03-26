@@ -7,6 +7,7 @@ import android.content.res.AssetManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mcal.apkeditor.pro.ResourceDecoder;
 import com.mcal.apklib.ManifestInfoCollector;
 import com.mcal.common.utils.FileUtil;
 import com.mcal.common.utils.IOUtils;
@@ -131,11 +132,7 @@ public class ApkParseThread extends Thread {
                     in.close();
                     out.close();
 
-                    RefInvoke.invokeStaticMethod(
-                            "com.mcal.apkeditor.pro.ResourceDecoder",
-                            "decodeResources",
-                            new Class<?>[]{String.class, String.class},
-                            new Object[]{dexFilePath, workDir});
+                    ResourceDecoder.decodeResources(dexFilePath, workDir);
                     this.idProvider = new ResSmaliIdProvider(workDir, pkgName);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -178,7 +175,6 @@ public class ApkParseThread extends Thread {
         return false;
     }
 
-    // TODO: FOR APK EDITOR
     @NonNull
     private ResTable getResTable(ExtFile apkFile, boolean loadMainPkg)
             throws AndrolibException {

@@ -14,14 +14,12 @@ import com.mcal.common.utils.Display;
 import java.lang.ref.WeakReference;
 
 public class AndroidBug5497Workaround {
-
-
-    private WeakReference<Activity> actRef;
-    private int screenHeight;
-    private int screenWidth;
-    private View mChildOfContent;
+    private final WeakReference<Activity> actRef;
+    private final int screenHeight;
+    private final int screenWidth;
+    private final View mChildOfContent;
     private int usableHeightPrevious;
-    private FrameLayout.LayoutParams frameLayoutParams;
+    private final FrameLayout.LayoutParams frameLayoutParams;
 
     private AndroidBug5497Workaround(Activity activity) {
         actRef = new WeakReference<>(activity);
@@ -30,11 +28,9 @@ public class AndroidBug5497Workaround {
 
         FrameLayout content = (FrameLayout) activity.findViewById(android.R.id.content);
         mChildOfContent = content.getChildAt(0);
-        mChildOfContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            public void onGlobalLayout() {
-                //possiblyResizeChildOfContent();
-                switchScreenMode();
-            }
+        mChildOfContent.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            //possiblyResizeChildOfContent();
+            switchScreenMode();
         });
         frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
     }

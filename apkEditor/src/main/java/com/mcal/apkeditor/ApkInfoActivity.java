@@ -289,7 +289,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // Return the smali root directory by smali entry
     // Return like "smali" "smali_class2"
-    private static String getSmaliRootDir(String fileEntry) {
+    private static String getSmaliRootDir(@NonNull String fileEntry) {
         int pos = fileEntry.indexOf('/');
         String folderName = null;
         if (pos != -1) {
@@ -299,7 +299,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     // entryName is like: smali
-    public static String dealWithSmaliFile(String entryName,
+    @Nullable
+    public static String dealWithSmaliFile(@NonNull String entryName,
                                            Set<String> modifiedDexNames) {
         if ((entryName.startsWith("smali/") || entryName.startsWith("smali_"))
                 && entryName.endsWith(".smali")) {
@@ -312,13 +313,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // Check is the common image or not
     // For the common image, we donot need to rebuild the res
-    public static boolean isCommonImage(String entryName) {
+    public static boolean isCommonImage(@NonNull String entryName) {
         return entryName.endsWith(".jpg") || ((entryName.endsWith(".png")
                 && !entryName.endsWith(".9.png")));
     }
 
     // filename does not contain ".apk"
-    public static String createOutputPath(String inputPath, String outputDir, String filename) {
+    public static String createOutputPath(String inputPath, @NonNull String outputDir, String filename) {
         if (outputDir.endsWith("/")) {
             outputDir = outputDir.substring(0, outputDir.length() - 1);
         }
@@ -348,7 +349,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         return targetApkPath;
     }
 
-    public static boolean generalTranslatePluginExist(Context ctx) {
+    public static boolean generalTranslatePluginExist(@NonNull Context ctx) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.setDataAndType(null,
@@ -358,7 +359,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
         return (infos.size() > 0);
     }
 
-    public static ResConfigFlags getBestConfigFlags(Set<ResConfigFlags> configs) {
+    @Nullable
+    public static ResConfigFlags getBestConfigFlags(@NonNull Set<ResConfigFlags> configs) {
         Set<String> qualifiers = new HashSet<>();
         for (ResConfigFlags configFlags : configs) {
             qualifiers.add(configFlags.getQualifiers());
@@ -373,7 +375,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     // Get best configuration according to current locale
-    public static String getBestConfig(Set<String> configs) {
+    public static String getBestConfig(@NonNull Set<String> configs) {
         String bestConfig = null;
 
         Locale locale = Locale.getDefault();
@@ -527,7 +529,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     // Always recover from a bundle
-    private void recoverFromProject(ProjectInfo prjInfo) {
+    private void recoverFromProject(@NonNull ProjectInfo prjInfo) {
         Bundle bundle = new Bundle();
         prjInfo.state.toBundle(bundle);
         recoverFromBundle(bundle);
@@ -548,6 +550,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }, -1).show();
     }
 
+    @NonNull
     private ActivityState saveCurrentState(String workingPath) {
         return saveCurrentState(workingPath, false, null);
     }
@@ -555,6 +558,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // workingPath: path where to save object files, ends with "/"
     // saveAll: save big files like all strings
     // projectDir: should move temp files to this project directory; null means do nothing
+    @NonNull
     private ActivityState saveCurrentState(
             String workingPath, boolean saveAll, File projectDir) {
         ActivityState state = new ActivityState();
@@ -707,7 +711,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         recoverView();
     }
 
-    private void recoverData(Bundle savedInstanceState) {
+    private void recoverData(@NonNull Bundle savedInstanceState) {
 
         String path = savedInstanceState.getString("allStringValues_file");
         this.allStringValues = (HashMap) IOUtils.readObjectFromFile(path);
@@ -763,7 +767,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // Merge changed string values to allStringValues
     private void mergeStrings(Map<String, ArrayList<StringItem>> allStringValues,
-                              Map<String, Map<String, String>> changedStringValues) {
+                              @NonNull Map<String, Map<String, String>> changedStringValues) {
         Set<Entry<String, Map<String, String>>> entries = changedStringValues.entrySet();
         for (Entry<String, Map<String, String>> entry : entries) {
             String cfgFlags = entry.getKey();
@@ -1123,7 +1127,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }
     }
 
-    private void fileModifiedIncludeTempPath(String filePath, String entryName) {
+    private void fileModifiedIncludeTempPath(@NonNull String filePath, String entryName) {
         // To get the string removed last type
         String pathRemovedType;
         String[] names = filePath.split("/");
@@ -1313,7 +1317,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@NonNull View v) {
         int id = v.getId();
         // Search a keyword in all strings
         if (id == R.id.search_button) {
@@ -1478,35 +1482,15 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     protected void setupClickListener() {
-        stringRadio.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stringRadioClicked();
-            }
-        });
-        resRadio.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resRadioClicked();
-            }
-        });
-        manifestRadio.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                manifestRadioClicked();
-            }
-        });
+        stringRadio.setOnClickListener(v -> stringRadioClicked());
+        resRadio.setOnClickListener(v -> resRadioClicked());
+        manifestRadio.setOnClickListener(v -> manifestRadioClicked());
 
         this.saveBtn = this.findViewById(R.id.save_button);
         if (BuildConfig.PARSER_ONLY) {
             this.saveBtn.setVisibility(View.GONE);
         } else {
-            saveBtn.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    composeApkFile();
-                }
-            });
+            saveBtn.setOnClickListener(v -> composeApkFile());
         }
 
         this.webserverMenu = this.findViewById(R.id.menu_webserver);
@@ -1564,7 +1548,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     ////////////////////////////////////////////////////////////////////////////////
     // Add or import a folder, dialog callback functions
 
-    private void saveStringValues(Map<String, Map<String, String>> allChangedValues)
+    private void saveStringValues(@NonNull Map<String, Map<String, String>> allChangedValues)
             throws Exception {
         Set<Entry<String, Map<String, String>>> entries = allChangedValues.entrySet();
         for (Entry<String, Map<String, String>> entry : entries) {
@@ -1644,9 +1628,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // Collect modified smali folders
         this.smaliFolders = new ArrayList<>();
-        for (String folder : modifiedDex) {
-            smaliFolders.add(folder);
-        }
+        smaliFolders.addAll(modifiedDex);
 
         // Need to rebuild the resource, check known issues first
         if (stringModified || manifestModified || resFileModified) {
@@ -1674,6 +1656,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     ////////////////////////////////////////////////////////////////////////////////
 
+    @Nullable
+    @Contract(pure = true)
     private String getKnownResourceError() {
         // Check AndroidManifest: <provider android:authorities="@string" not
         // allowed
@@ -1829,6 +1813,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // Write the map structure to file
     // Return the file name
+    @Nullable
     private String serialize2File(Map<String, String> fileEntry2ZipEntry2) {
         try {
             String filepath = SDCard.makeWorkingDir(this)
@@ -1958,21 +1943,18 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // Save the big structure to file
         // So that we do not need to save it every time in onSaveInstanceState
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    String workingPath = SDCard
-                            .makeWorkingDir(ApkInfoActivity.this);
-                    String path = workingPath + "allStringValues";
-                    IOUtils.writeObjectToFile(path, allStringValues);
-                    path = workingPath + "fileEntry2ZipEntry";
-                    IOUtils.writeObjectToFile(path, fileEntry2ZipEntry);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        new Thread(() -> {
+            try {
+                String workingPath = SDCard
+                        .makeWorkingDir(ApkInfoActivity.this);
+                String path = workingPath + "allStringValues";
+                IOUtils.writeObjectToFile(path, allStringValues);
+                path = workingPath + "fileEntry2ZipEntry";
+                IOUtils.writeObjectToFile(path, fileEntry2ZipEntry);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }.start();
+        }).start();
 
         // To check whether need to re-show the string list
         final boolean stringShowNeeded = !this.bStringPrepared;
@@ -2097,13 +2079,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     private void initAddLanguageBtn() {
         AppCompatImageButton iv = this.findViewById(R.id.add_language);
-        iv.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new LanguageSelectDialog(
-                        ApkInfoActivity.this, null, null, getString(R.string.select_target_lang));
-            }
-        });
+        iv.setOnClickListener(v -> new LanguageSelectDialog(
+                ApkInfoActivity.this, null, null, getString(R.string.select_target_lang)));
     }
 
     // Set the click listener for translate button
@@ -2116,12 +2093,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 && proTranslatePluginExist()) {
             iv.setOnClickListener(this);
         } else {
-            iv.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new AboutPluginDialog(ApkInfoActivity.this);
-                }
-            });
+            iv.setOnClickListener(v -> new AboutPluginDialog(ApkInfoActivity.this));
         }
     }
 
@@ -2176,8 +2148,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // The language does not exist at all
         if (targetConfig == null) {
             targetConfig = qualifier;
-            ArrayList<StringItem> stringList = new ArrayList<>();
-            stringList.addAll(stringValues);
+            ArrayList<StringItem> stringList = new ArrayList<>(stringValues);
             allStringValues.put(targetConfig, stringList);
         }
 
@@ -2903,17 +2874,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
                             MenuItem item1 = menu.add(0, Menu.FIRST, 0,
                                     R.string.delete);
                             item1.setOnMenuItemClickListener(
-                                    new OnMenuItemClickListener() {
-                                        @Override
-                                        public boolean onMenuItemClick(
-                                                MenuItem item) {
-                                            List<Integer> positions = new ArrayList<>(1);
-                                            positions.add(position);
-                                            resListAdapter
-                                                    .deleteFile(positions);
-                                            resListAdapter.dumpChangedFiles();
-                                            return true;
-                                        }
+                                    item -> {
+                                        List<Integer> positions = new ArrayList<>(1);
+                                        positions.add(position);
+                                        resListAdapter
+                                                .deleteFile(positions);
+                                        resListAdapter.dumpChangedFiles();
+                                        return true;
                                     });
                         }
                         // Extract (res directory also allow to extract)
@@ -2921,15 +2888,11 @@ public class ApkInfoActivity extends CustomizedLangActivity
                             MenuItem item2 = menu.add(0, Menu.FIRST + 1, 0,
                                     R.string.extract);
                             item2.setOnMenuItemClickListener(
-                                    new OnMenuItemClickListener() {
-                                        @Override
-                                        public boolean onMenuItemClick(
-                                                MenuItem item) {
-                                            List<Integer> positions = new ArrayList<>(1);
-                                            positions.add(position);
-                                            extractFileOrDir(positions);
-                                            return true;
-                                        }
+                                    item -> {
+                                        List<Integer> positions = new ArrayList<>(1);
+                                        positions.add(position);
+                                        extractFileOrDir(positions);
+                                        return true;
                                     });
                         }
                         // Replace the file/folder
@@ -2938,24 +2901,16 @@ public class ApkInfoActivity extends CustomizedLangActivity
                                     R.string.replace);
                             OnMenuItemClickListener listener;
                             if (isDir) {
-                                listener = new OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(
-                                            MenuItem item) {
-                                        replaceFolder(position);
-                                        resListAdapter.dumpChangedFiles();
-                                        return true;
-                                    }
+                                listener = item -> {
+                                    replaceFolder(position);
+                                    resListAdapter.dumpChangedFiles();
+                                    return true;
                                 };
                             } else {
-                                listener = new OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(
-                                            MenuItem item) {
-                                        replaceFile(position);
-                                        resListAdapter.dumpChangedFiles();
-                                        return true;
-                                    }
+                                listener = item -> {
+                                    replaceFile(position);
+                                    resListAdapter.dumpChangedFiles();
+                                    return true;
                                 };
                             }
                             item3.setOnMenuItemClickListener(listener);
@@ -2966,14 +2921,10 @@ public class ApkInfoActivity extends CustomizedLangActivity
                             MenuItem item4 = menu.add(0, Menu.FIRST + 3, 0,
                                     R.string.add_a_file);
                             item4.setOnMenuItemClickListener(
-                                    new OnMenuItemClickListener() {
-                                        @Override
-                                        public boolean onMenuItemClick(
-                                                MenuItem item) {
-                                            addFile(position);
-                                            // resListAdapter.dumpChangedFiles();
-                                            return true;
-                                        }
+                                    item -> {
+                                        addFile(position);
+                                        // resListAdapter.dumpChangedFiles();
+                                        return true;
                                     });
                         }
 
@@ -2982,13 +2933,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
                             MenuItem item5 = menu.add(0, Menu.FIRST + 4, 0,
                                     R.string.new_folder);
                             item5.setOnMenuItemClickListener(
-                                    new OnMenuItemClickListener() {
-                                        @Override
-                                        public boolean onMenuItemClick(
-                                                MenuItem item) {
-                                            createFolder(position);
-                                            return true;
-                                        }
+                                    item -> {
+                                        createFolder(position);
+                                        return true;
                                     });
                         }
                     }
@@ -3219,10 +3166,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     @Override
                     public void fileSelectedInDialog(
                             String filePath, String extraStr, boolean openFile) {
-                        String dirPath = extraStr;
                         String name = filePath
                                 .substring(filePath.lastIndexOf("/") + 1);
-                        resListAdapter.addFile(dirPath + "/" + name, filePath);
+                        resListAdapter.addFile(extraStr + "/" + name, filePath);
                     }
 
                     @Override

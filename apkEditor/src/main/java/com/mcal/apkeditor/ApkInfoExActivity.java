@@ -286,30 +286,24 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             inputDlg.setView(layout);
 
             inputDlg.setPositiveButton(android.R.string.ok,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,
-                                            int whichButton) {
-                            String keyword = input.getText().toString();
-                            keyword = keyword.trim();
-                            if ("".equals(keyword)) {
-                                Toast.makeText(ApkInfoExActivity.this,
-                                        R.string.empty_input_tip,
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                boolean bSearchName = filenameCb.isChecked();
-                                boolean bCaseIsst = caseInsstCb.isChecked();
-                                doSearchInSelectedItems(keyword, bSearchName,
-                                        bCaseIsst);
-                            }
+                    (dialog, whichButton) -> {
+                        String keyword = input.getText().toString();
+                        keyword = keyword.trim();
+                        if ("".equals(keyword)) {
+                            Toast.makeText(ApkInfoExActivity.this,
+                                    R.string.empty_input_tip,
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            boolean bSearchName = filenameCb.isChecked();
+                            boolean bCaseIsst = caseInsstCb.isChecked();
+                            doSearchInSelectedItems(keyword, bSearchName,
+                                    bCaseIsst);
                         }
                     });
 
             inputDlg.setNegativeButton(android.R.string.cancel,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,
-                                            int whichButton) {
-                            // Canceled.
-                        }
+                    (dialog, whichButton) -> {
+                        // Canceled.
                     });
 
             inputDlg.show();
@@ -404,14 +398,11 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             if (record.isDir) {
                 extractBtn.setVisibility(View.GONE);
             } else {
-                extractBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            ZipUtil.unzipFileTo(apkPath, _entry, "/sdcard/axml");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                extractBtn.setOnClickListener(v -> {
+                    try {
+                        ZipUtil.unzipFileTo(apkPath, _entry, "/sdcard/axml");
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 });
             }
@@ -421,44 +412,34 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             if (!isFullDecoding && record.isDir) {
                 renameBtn.setVisibility(View.GONE);
             }
-            renameBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final String newName = et.getText().toString().trim();
-                    // Empty input
-                    if (newName.equals("")) {
-                        Toast.makeText(ApkInfoExActivity.this,
-                                R.string.empty_input_tip,
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    // Not changed
-                    if (newName.equals(record.fileName)) {
-                        Toast.makeText(ApkInfoExActivity.this,
-                                R.string.no_change_detected,
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    // If file extension is changed, show tip
-                    if (!record.isDir && isExtensionChanged(record.fileName, newName)) {
-                        AlertDialog.Builder dlg = new AlertDialog.Builder(
-                                ApkInfoExActivity.this);
-                        dlg.setMessage(R.string.extension_changed_tip);
-                        dlg.setPositiveButton(R.string.yes,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(
-                                            DialogInterface dialog,
-                                            int which) {
-                                        doFileRename(curDir, record, _entry,
-                                                newName, position);
-                                    }
-                                });
-                        dlg.setNegativeButton(R.string.no, null);
-                        dlg.show();
-                    } else {
-                        doFileRename(curDir, record, _entry, newName, position);
-                    }
+            renameBtn.setOnClickListener(v -> {
+                final String newName = et.getText().toString().trim();
+                // Empty input
+                if (newName.equals("")) {
+                    Toast.makeText(ApkInfoExActivity.this,
+                            R.string.empty_input_tip,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Not changed
+                if (newName.equals(record.fileName)) {
+                    Toast.makeText(ApkInfoExActivity.this,
+                            R.string.no_change_detected,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // If file extension is changed, show tip
+                if (!record.isDir && isExtensionChanged(record.fileName, newName)) {
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(
+                            ApkInfoExActivity.this);
+                    dlg.setMessage(R.string.extension_changed_tip);
+                    dlg.setPositiveButton(R.string.yes,
+                            (dialog, which) -> doFileRename(curDir, record, _entry,
+                                    newName, position));
+                    dlg.setNegativeButton(R.string.no, null);
+                    dlg.show();
+                } else {
+                    doFileRename(curDir, record, _entry, newName, position);
                 }
             });
 
@@ -466,16 +447,13 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             infoDlg.setTitle(R.string.detail);
             infoDlg.setView(view);
             infoDlg.setNeutralButton(R.string.copy_file_path,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Context ctx = ApkInfoExActivity.this;
-                            ClipboardUtil.copyToClipboard(ctx, relativePath);
-                            String msg = ctx
-                                    .getString(R.string.copied_to_clipboard);
-                            msg = String.format(msg, relativePath);
-                            Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
-                        }
+                    (dialog, which) -> {
+                        Context ctx = ApkInfoExActivity.this;
+                        ClipboardUtil.copyToClipboard(ctx, relativePath);
+                        String msg = ctx
+                                .getString(R.string.copied_to_clipboard);
+                        msg = String.format(msg, relativePath);
+                        Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
                     });
             infoDlg.setPositiveButton(android.R.string.ok, null);
 
@@ -617,7 +595,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 return;
             }
 
-            List<Integer> selected = new ArrayList<Integer>();
+            List<Integer> selected = new ArrayList<>();
             selected.addAll(checked);
             Collections.sort(selected);
 
@@ -631,7 +609,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 return;
             }
 
-            List<Integer> selected = new ArrayList<Integer>();
+            List<Integer> selected = new ArrayList<>();
             selected.addAll(checked);
             Collections.sort(selected);
 
@@ -642,7 +620,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             Set<Integer> checked = ApkInfoExActivity.this.resListAdapter
                     .getCheckedItems();
             int count = resListAdapter.getCount();
-            List<FileRecord> records = new ArrayList<FileRecord>(count);
+            List<FileRecord> records = new ArrayList<>(count);
             resListAdapter.getData(records);
             if ("..".equals(records.get(0).fileName)) { // Do not count the
                 // parent folder
@@ -662,14 +640,14 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             int position = selected.iterator().next();
 
             // Check the item is directory or not
-            List<FileRecord> records = new ArrayList<FileRecord>();
+            List<FileRecord> records = new ArrayList<>();
             resListAdapter.getData(records);
             boolean isDir = records.get(position).isDir;
 
             if (isDir) {
-                ApkInfoExActivity.this.replaceFolder(position);
+                replaceFolder(position);
             } else {
-                ApkInfoExActivity.this.replaceFile(position);
+                replaceFile(position);
             }
         }
     }

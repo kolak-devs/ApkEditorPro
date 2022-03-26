@@ -400,22 +400,11 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
         removeResInMap(this.addedFiles);
         removeResInMap(this.replacedFiles);
 
-        Iterator<String> it = this.deletedFiles.iterator();
-        while (it.hasNext()) {
-            if (it.next().startsWith("res/")) {
-                it.remove();
-            }
-        }
+        this.deletedFiles.removeIf(s -> s.startsWith("res/"));
     }
 
     private void removeResInMap(@NonNull Map<String, String> data) {
-        Iterator<Map.Entry<String, String>> it = data.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, String> entry = it.next();
-            if (entry.getKey().startsWith("res/")) {
-                it.remove();
-            }
-        }
+        data.entrySet().removeIf(entry -> entry.getKey().startsWith("res/"));
     }
 
     @NonNull
@@ -461,113 +450,6 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
             throw e.getTargetException();
         }
     }
-
-    /*
-     * protected boolean mergeApk_Java() throws IOException { String resourceApk
-     * = this.tempApkPath; JarFile resJar = new JarFile(new File(resourceApk),
-     * false); JarFile originJar = new JarFile(new File(srcApkPath), false);
-     *
-     * String outputPath = this.tempApkPath + ".out"; OutputStream outputStream
-     * = new FileOutputStream(outputPath); JarOutputStream outputJar = new
-     * JarOutputStream(outputStream); outputJar.setLevel(1);
-     *
-     * JarEntry je;
-     *
-     * // Copy resource to intermediate file Enumeration<JarEntry> it =
-     * resJar.entries(); while (it.hasMoreElements()) { JarEntry entry =
-     * it.nextElement(); je = new JarEntry(entry);
-     *
-     * InputStream in = null; String name = entry.getName(); // Is the common
-     * image if (name.endsWith(".jpg") || (name.endsWith(".png") &&
-     * !name.endsWith(".9.png"))) { // Not in add and replace collections //
-     * Then use the content in original apk/jar if
-     * (!addedFiles.containsKey(name) && !replacedFiles.containsKey(name)) {
-     * String originName = this.fileEntry2ZipEntry.get(name); if (originName ==
-     * null) { originName = name; } ZipEntry ze =
-     * originJar.getEntry(originName); if (ze != null) { // ze may be null like
-     * QuickPic je.setMethod(ze.getMethod()); je.setSize(ze.getSize());
-     * je.setCompressedSize(ze.getCompressedSize()); je.setCrc(ze.getCrc());
-     * je.setExtra(ze.getExtra()); je.setComment(ze.getComment()); in =
-     * originJar.getInputStream(ze); } else { continue; } } }
-     *
-     * if (in == null) { in = resJar.getInputStream(entry); }
-     *
-     * // in is still null, cannot do the copy if (in == null) { continue; }
-     *
-     * outputJar.putNextEntry(je);
-     *
-     * IOUtils.copy(in, outputJar); in.close(); }
-     *
-     * // Copy other files it = originJar.entries(); while
-     * (it.hasMoreElements()) { JarEntry entry = it.nextElement();
-     *
-     * // Skip res/resources.arsc/AndroidManifest.xml String name =
-     * entry.getName(); if (name.startsWith("res/") ||
-     * name.equals("resources.arsc") || name.equals("AndroidManifest.xml")) {
-     * continue; }
-     *
-     * InputStream in = originJar.getInputStream(entry);
-     *
-     * je = new JarEntry(entry); outputJar.putNextEntry(je);
-     *
-     * IOUtils.copy(in, outputJar); in.close(); }
-     *
-     * outputJar.close(); outputStream.close(); originJar.close();
-     * resJar.close();
-     *
-     * new File(this.tempApkPath).delete(); new File(outputPath).renameTo(new
-     * File(this.tempApkPath));
-     *
-     * return false; }
-     */
-
-    // Copy the compiled file from target Apk path after compose
-    // Merge 2 jar files
-    // Seems not used any more
-    // private void extractCompiledFile() throws IOException {
-    // JarFile inputJar = new JarFile(new File(targetApkPath), false);
-    //
-    // // When xmlGotoResource=true, it means the xml file does not
-    // // independently exist in the apk
-    // boolean xmlGotoResource = false;
-    // for (String entryName : xmlReplaces.keySet()) {
-    // String filePath = xmlReplaces.get(entryName);
-    // JarEntry inEntry = inputJar.getJarEntry(entryName);
-    // if (inEntry != null) {
-    // compiledResourceFiles.put(entryName, filePath);
-    // InputStream in = inputJar.getInputStream(inEntry);
-    // FileOutputStream out = new FileOutputStream(filePath);
-    // IOUtils.copy(in, out);
-    // in.close();
-    // out.close();
-    // } else {
-    // xmlGotoResource = true;
-    // }
-    // }
-    //
-    // if (this.stringModified || xmlGotoResource) {
-    // compiledResourceFiles.put("resources.arsc", this.decodedFilePath
-    // + "/resources.arsc");
-    // JarEntry inEntry = inputJar.getJarEntry("resources.arsc");
-    // InputStream in = inputJar.getInputStream(inEntry);
-    // FileOutputStream out = new FileOutputStream(this.decodedFilePath
-    // + "/resources.arsc");
-    // IOUtils.copy(in, out);
-    // in.close();
-    // out.close();
-    // }
-    //
-    // if (this.manifestModified) {
-    // JarEntry inEntry = inputJar.getJarEntry("AndroidManifest.xml");
-    // InputStream in = inputJar.getInputStream(inEntry);
-    // FileOutputStream out = new FileOutputStream(this.decodedFilePath
-    // + "/AndroidManifest.xml");
-    // IOUtils.copy(in, out);
-    // out.close();
-    // }
-    //
-    // inputJar.close();
-    // }
 
     @NonNull
     private String getPathInSameDirectory(@NonNull String path, String name) {
@@ -709,63 +591,6 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
         }
 
         return false;
-    }
-
-    /*private boolean signApk() {
-        // When smali code is edited, also replace classes.dex
-        replacedFiles.putAll(this.dexReplaces);
-
-        try {
-            SignHelper.sign(ctx, tempApkPath, targetApkPath, replacedFiles,
-                    addedFiles, deletedFiles);
-            return true;
-        } catch (Exception e) {
-            String strHeader = ctx.getResources()
-                    .getString(R.string.sign_error);
-            this.errMessage = strHeader + e.getMessage();
-        }
-
-        return false;
-    }*/
-
-    private boolean notSignApk() {
-        replacedFiles.putAll(this.dexReplaces);
-
-        StringBuilder sb1 = new StringBuilder();
-        int addLen = 0;
-        for (Map.Entry<String, String> entry : addedFiles.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            sb1.append(key);
-            sb1.append('\n');
-            sb1.append(value);
-            sb1.append('\n');
-            addLen += key.getBytes().length + value.getBytes().length + 2;
-        }
-
-        StringBuilder sb2 = new StringBuilder();
-        int deleteLen = 0;
-        for (String entry : deletedFiles) {
-            sb2.append(entry);
-            sb2.append('\n');
-            deleteLen += entry.getBytes().length + 1;
-        }
-
-        StringBuilder sb3 = new StringBuilder();
-        int replaceLen = 0;
-        for (Map.Entry<String, String> entry : replacedFiles.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            sb3.append(key);
-            sb3.append('\n');
-            sb3.append(value);
-            sb3.append('\n');
-            replaceLen += key.getBytes().length + value.getBytes().length + 2;
-        }
-
-        MainActivity.md(targetApkPath, tempApkPath, sb1.toString(), addLen,
-                sb2.toString(), deleteLen, sb3.toString(), replaceLen);
-        return true;
     }
 
     private boolean composeResource() {

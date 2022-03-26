@@ -59,11 +59,7 @@ public class FileUtils {
     }
 
     public static boolean exist() {
-        if (android.os.Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else {
-            return false;
-        }
+        return Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED);
     }
 }

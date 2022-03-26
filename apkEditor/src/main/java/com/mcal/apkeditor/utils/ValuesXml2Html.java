@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.utils;
 
+import androidx.annotation.NonNull;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -22,12 +24,12 @@ public class ValuesXml2Html {
         writer.write(content);
     }
 
-    private static void writeRaw(BufferedWriter writer, String content)
+    private static void writeRaw(@NonNull BufferedWriter writer, @NonNull String content)
             throws IOException {
         writer.write(content.replaceAll("<", "&lt;").replace(">", "&gt;"));
     }
 
-    private static void writeAttribute(BufferedWriter writer, int indent,
+    private static void writeAttribute(@NonNull BufferedWriter writer, int indent,
                                        String name, String value) throws IOException {
         writer.write("\n");
         for (int i = 0; i < indent; i++) {
@@ -50,7 +52,7 @@ public class ValuesXml2Html {
         writer.write("&lt;<span class=\"start-tag\">" + tagName + "</span>");
     }
 
-    public void transform(List<String> xmlLines, String htmlFilePath)
+    public void transform(@NonNull List<String> xmlLines, String htmlFilePath)
             throws IOException {
 
         File htmlFile = new File(htmlFilePath);
@@ -90,9 +92,9 @@ public class ValuesXml2Html {
         // reader.close();
     }
 
-    private void parseStartTag(BufferedWriter writer, String content, boolean flag)
+    private void parseStartTag(BufferedWriter writer, @NonNull String content, boolean flag)
             throws IOException {
-        String segments[] = content.split(" ");
+        String[] segments = content.split(" ");
         String tagName = segments[0];
         writeStartTag(writer, indent, tagName, flag);
 
@@ -109,7 +111,7 @@ public class ValuesXml2Html {
     }
 
     // flag = true only when the html content will be written to a new line
-    private void parseLine(BufferedWriter writer, String line, boolean flag)
+    private void parseLine(BufferedWriter writer, @NonNull String line, boolean flag)
             throws IOException {
 
         int ltPos = line.indexOf('<');
@@ -169,6 +171,5 @@ public class ValuesXml2Html {
             }
 
         }
-
     }
 }

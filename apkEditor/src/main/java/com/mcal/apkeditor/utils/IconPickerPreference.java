@@ -20,8 +20,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.RefInvoke;
+import com.mcal.seticon.SetIcon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +33,18 @@ import java.util.List;
 public class IconPickerPreference extends ListPreference {
 
     private static final String KEY = "MyIcon";
-    private Context context;
-    private int[] iconResIds;
+    private final Context context;
+    private final int[] iconResIds;
     private CharSequence[] iconNames; // android:entries
     private CharSequence[] iconValues; // android:entryValues
     // Make it as the original list preference, no icon
     // private ImageView icon;
     private List<IconItem> icons;
-    private SharedPreferences preferences;
-    private Resources resources;
-    private String selectedIconValue, defaultIconValue;
-    private TextView summary;
+    private final SharedPreferences preferences;
+    private final Resources resources;
+    private String selectedIconValue;
+    private final String defaultIconValue;
+    private AppCompatTextView summary;
 
     public IconPickerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,26 +59,18 @@ public class IconPickerPreference extends ListPreference {
         this.defaultIconValue = iconValues[0].toString();
         this.selectedIconValue = preferences.getString(KEY, defaultIconValue);
 
-        this.iconResIds = (int[]) RefInvoke.invokeStaticMethod(
-                "com.mcal.seticon.SetIcon", "getAllIcons", null, null);
+        this.iconResIds = SetIcon.getAllIcons();
     }
 
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
 
-        if (Build.VERSION.SDK_INT < 21) {
-            int padLeft = view.getPaddingLeft();
-            float ratio = padLeft / 16.0f;
-            view.setPadding((int) (6 * ratio), view.getPaddingTop(),
-                    view.getPaddingRight(), view.getPaddingBottom());
-        }
-
-        TextView titleTv = (TextView) view.findViewById(R.id.title);
+        AppCompatTextView titleTv = (AppCompatTextView) view.findViewById(R.id.title);
         titleTv.setText(R.string.launcher_icon);
 
         // Set summary as selected icon
-        summary = (TextView) view.findViewById(R.id.summary);
+        summary = (AppCompatTextView) view.findViewById(R.id.summary);
         for (int i = 0; i < iconValues.length; i++) {
             if (this.selectedIconValue.equals(iconValues[i])) {
                 summary.setText(this.iconNames[i]);
@@ -93,7 +90,7 @@ public class IconPickerPreference extends ListPreference {
                     // Save to shared preference
                     Editor editor = preferences.edit();
                     editor.putString(KEY, item.value);
-                    editor.commit();
+                    editor.apply();
 
                     // Change summary
                     summary.setText(item.name);
@@ -116,16 +113,14 @@ public class IconPickerPreference extends ListPreference {
 
         this.selectedIconValue = newIconValue;
 
-        RefInvoke.invokeStaticMethod("com.mcal.seticon.SetIcon",
-                "setIcon", new Class<?>[]{Activity.class, String.class},
-                new Object[]{(Activity) context, newIconValue});
+        SetIcon.setIcon((Activity) context, newIconValue);
 
         Toast.makeText(context, R.string.icon_changed_tip, Toast.LENGTH_LONG)
                 .show();
     }
 
     @Override
-    protected void onPrepareDialogBuilder(Builder builder) {
+    protected void onPrepareDialogBuilder(@NonNull Builder builder) {
 
         builder.setNegativeButton(android.R.string.cancel, null);
         builder.setPositiveButton(null, null);
@@ -140,8 +135,7 @@ public class IconPickerPreference extends ListPreference {
 
         icons = new ArrayList<IconItem>();
         for (int i = 0; i < iconNames.length; i++) {
-            boolean isSelected = selectedIconValue.equals(iconValues[i]) ? true
-                    : false;
+            boolean isSelected = selectedIconValue.contentEquals(iconValues[i]);
             IconItem item = new IconItem(iconNames[i], iconValues[i],
                     iconResIds[i], isSelected);
             icons.add(item);
@@ -153,20 +147,18 @@ public class IconPickerPreference extends ListPreference {
     }
 
     private static class IconItem {
-
-        private int iconResId;
+        private final int iconResId;
         private boolean isChecked;
-        private String name;
-        private String value;
+        private final String name;
+        private final String value;
 
-        public IconItem(CharSequence name, CharSequence value, int iconResId,
+        public IconItem(@NonNull CharSequence name, @NonNull CharSequence value, int iconResId,
                         boolean isChecked) {
             this.name = name.toString();
             this.value = value.toString();
             this.iconResId = iconResId;
             this.isChecked = isChecked;
         }
-
     }
 
     private static class ViewHolder {
@@ -177,9 +169,9 @@ public class IconPickerPreference extends ListPreference {
 
     private class CustomListPreferenceAdapter extends ArrayAdapter<IconItem> {
 
-        private Context context;
-        private List<IconItem> icons;
-        private int resource;
+        private final Context context;
+        private final List<IconItem> icons;
+        private final int resource;
 
         public CustomListPreferenceAdapter(Context context, int resource,
                                            List<IconItem> objects) {
@@ -189,6 +181,7 @@ public class IconPickerPreference extends ListPreference {
             this.icons = objects;
         }
 
+        @NonNull
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -214,23 +207,17 @@ public class IconPickerPreference extends ListPreference {
             holder.iconImage.setImageResource(curItem.iconResId);
             holder.radioButton.setChecked(curItem.isChecked);
 
-            convertView.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    // ViewHolder holder = (ViewHolder) v.getTag();
-                    for (int i = 0; i < icons.size(); i++) {
-                        if (i == position)
-                            icons.get(i).isChecked = true;
-                        else
-                            icons.get(i).isChecked = false;
-                    }
-                    getDialog().dismiss();
+            convertView.setOnClickListener(v -> {
+                // ViewHolder holder = (ViewHolder) v.getTag();
+                for (int i = 0; i < icons.size(); i++) {
+                    if (i == position)
+                        icons.get(i).isChecked = true;
+                    else
+                        icons.get(i).isChecked = false;
                 }
+                getDialog().dismiss();
             });
-
             return convertView;
         }
-
     }
 }

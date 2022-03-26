@@ -22,6 +22,7 @@ import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.common.utils.ActivityUtil;
 import com.mcal.common.utils.ITaskCallback;
 import com.mcal.common.utils.RefInvoke;
+import com.mcal.seticon.SetIcon;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -97,9 +98,7 @@ public class ApkComposeService extends Service implements ITaskCallback {
         this.replacedFiles = ActivityUtil.getMapParam(intent, "replacedFiles");
         this.deletedFiles = new HashSet<>();
         List<String> delEntries = ActivityUtil.getStringArray(intent, "deletedFiles");
-        for (String name : delEntries) {
-            this.deletedFiles.add(name);
-        }
+        this.deletedFiles.addAll(delEntries);
 
         String passedFile = ActivityUtil.getParam(intent, "fileEntry2ZipEntry");
         if (passedFile != null) {
@@ -130,19 +129,14 @@ public class ApkComposeService extends Service implements ITaskCallback {
         composeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, composeIntent, 0);
 
-        int iconId = (int) RefInvoke.invokeStaticMethod(
-                "com.mcal.seticon.SetIcon", "getIconId", null, null);
+        int iconId = (int) SetIcon.getIconId();
         Bitmap icon = BitmapFactory.decodeResource(getResources(), iconId);
         String appName = getString(R.string.app_name);
 
         this.mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            this.mNotifyBuilder = new NotificationCompat.Builder(this, ApkComposeActivity.PRIMARY_NOTIF_CHANNEL);
-        } else {
-            this.mNotifyBuilder = new NotificationCompat.Builder(this);
-        }
+        this.mNotifyBuilder = new NotificationCompat.Builder(this, ApkComposeActivity.PRIMARY_NOTIF_CHANNEL);
         this.mNotifyBuilder.setContentTitle(appName)
                 .setTicker(appName)
                 .setContentText(getString(R.string.build_ongoing))

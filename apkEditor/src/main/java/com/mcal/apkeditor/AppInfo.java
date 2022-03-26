@@ -29,7 +29,7 @@ public class AppInfo {
 
     @NonNull
     public static AppInfo create(PackageManager pm,
-                                 ApplicationInfo applicationInfo) {
+                                 @NonNull ApplicationInfo applicationInfo) {
         AppInfo appInfo = new AppInfo();
         appInfo.applicationInfo = applicationInfo;
         appInfo.appName = (String) applicationInfo.loadLabel(pm);

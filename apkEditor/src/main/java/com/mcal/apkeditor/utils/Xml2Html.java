@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.utils;
 
+import androidx.annotation.NonNull;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -7,8 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class Xml2Html {
-
-    public static void transform(List<String> xmlLines, String htmlFilePath)
+    public static void transform(@NonNull List<String> xmlLines, String htmlFilePath)
             throws IOException {
         if (xmlLines.isEmpty()) {
             return;
@@ -61,7 +62,7 @@ public class Xml2Html {
                             }
                         }
 
-                        String segments[] = line.split(" ");
+                        String[] segments = line.split(" ");
                         String tagName = segments[0].substring(1);
                         writeStartTag(writer, indent, tagName);
                         for (int i = 1; i < segments.length; i++) {
@@ -82,9 +83,7 @@ public class Xml2Html {
                         }
 
                         // Self closed
-                        if (selfClosed) {
-
-                        } else {
+                        if (!selfClosed) {
                             indent += 1;
                         }
                         dealed = true;
@@ -123,12 +122,12 @@ public class Xml2Html {
         writer.write(content);
     }
 
-    private static void writeRaw(BufferedWriter writer, String content)
+    private static void writeRaw(@NonNull BufferedWriter writer, @NonNull String content)
             throws IOException {
         writer.write(content.replaceAll("<", "&lt;").replace(">", "&gt;"));
     }
 
-    private static void writeAttribute(BufferedWriter writer, int indent,
+    private static void writeAttribute(@NonNull BufferedWriter writer, int indent,
                                        String name, String value) throws IOException {
         writer.write("\n");
         for (int i = 0; i < indent; i++) {
