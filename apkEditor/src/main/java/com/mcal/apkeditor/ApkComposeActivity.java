@@ -26,17 +26,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
@@ -71,19 +71,19 @@ public class ApkComposeActivity extends CustomizedLangActivity
     // View related
     private LinearLayout composingLayout;
     private LinearLayout composedLayout;
-    private TextView progressTv;
-    private TextView resultTv;
+    private AppCompatTextView progressTv;
+    private AppCompatTextView resultTv;
     private ListView failedLv;
-    private ImageView resultImgView;
-    private Button hideWarningBtn;
-    private Button removeBtn;
+    private AppCompatImageView resultImgView;
+    private AppCompatButton hideWarningBtn;
+    private AppCompatButton removeBtn;
     private LinearLayout fixLayout;
-    private TextView fixTipTv;
-    private TextView patchTip;
-    private Button patchBtn;
-    private Button fixBtn;
-    private Button copyBtn;
-    private Button bgButton;
+    private AppCompatTextView fixTipTv;
+    private AppCompatTextView patchTip;
+    private AppCompatButton patchBtn;
+    private AppCompatButton fixBtn;
+    private AppCompatButton copyBtn;
+    private AppCompatButton bgButton;
     // Apply patch to code cache succeed or not
     private boolean patchSucceed = false;
     // Progressing and result
@@ -112,7 +112,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
             // Cancel the notification if invoked from service
             // When activity is created by clicking at the notification, will into following code
-            if (intentAction != null && Constants.ACTION.MAIN_ACTION.equals(intentAction)) {
+            if (Constants.ACTION.MAIN_ACTION.equals(intentAction)) {
                 ApkComposeActivity.this.createdFromNotification = true;
                 if (!binder.isRunning()) {
                     binder.hideNotification();
@@ -138,21 +138,19 @@ public class ApkComposeActivity extends CustomizedLangActivity
     };
 
     private void createChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-            NotificationChannel chan1 = new NotificationChannel(
-                    PRIMARY_NOTIF_CHANNEL,
-                    "default",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel chan1 = new NotificationChannel(
+                PRIMARY_NOTIF_CHANNEL,
+                "default",
+                NotificationManager.IMPORTANCE_DEFAULT);
 
-            chan1.setLightColor(Color.TRANSPARENT);
-            chan1.enableVibration(false);
-            chan1.setVibrationPattern(new long[]{0L});
-            chan1.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+        chan1.setLightColor(Color.TRANSPARENT);
+        chan1.enableVibration(false);
+        chan1.setVibrationPattern(new long[]{0L});
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
-            notificationManager.createNotificationChannel(chan1);
-        }
+        notificationManager.createNotificationChannel(chan1);
     }
 
     @Override
@@ -186,7 +184,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
         super.onNewIntent(intent);
         intentAction = intent.getAction();
         // Cancel the notification if invoked from service
-        if (intentAction != null && Constants.ACTION.MAIN_ACTION.equals(intentAction)) {
+        if (Constants.ACTION.MAIN_ACTION.equals(intentAction)) {
             if (binder != null && !binder.isRunning()) {
                 binder.hideNotification();
             }
@@ -234,7 +232,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
         composedLayout.setVisibility(View.INVISIBLE);
 
         // Close button
-        Button closeBtn = this.findViewById(R.id.btn_close);
+        AppCompatButton closeBtn = this.findViewById(R.id.btn_close);
         closeBtn.setOnClickListener(this);
 
         // Remove the old app
@@ -305,7 +303,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
             binder.hideNotification();
         }
 
-        Button installBtn = this.findViewById(R.id.btn_install);
+        AppCompatButton installBtn = this.findViewById(R.id.btn_install);
 
         if (ret) {
             this.setResult(SUCCEED);
@@ -533,7 +531,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
         String path = filepath.substring(0, position + 1);
 
         File file = new File(path);
-        if (null == file || !file.exists()) {
+        if (!file.exists()) {
             return;
         }
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -618,9 +616,9 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
     private void showTipDialog() {
         View view = LayoutInflater.from(this).inflate(R.layout.dlg_tip, null);
-        TextView msgTv = view.findViewById(R.id.tv_message);
+        AppCompatTextView msgTv = view.findViewById(R.id.tv_message);
         msgTv.setText(R.string.build_still_running_tip);
-        final CheckBox cb = view.findViewById(R.id.cb_show_once);
+        final AppCompatCheckBox cb = view.findViewById(R.id.cb_show_once);
 
         AlertDialog.Builder tipDlg = new AlertDialog.Builder(this)
                 .setTitle(R.string.tip)

@@ -20,12 +20,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ff28649c"
                 android:orientation="horizontal">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/logo"
-                    android:layout_width="200dip"
+                    android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:src="@drawable/editor_log" />
@@ -43,79 +42,57 @@
                         android:fillViewport="true">
 
                         <LinearLayout
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="24dp">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/tv_select_apkfile"
-                                android:layout_width="fill_parent"
-                                android:layout_height="50dip"
-                                android:layout_marginLeft="32dip"
-                                android:layout_marginRight="32dip"
-                                android:layout_marginBottom="24dip"
-                                android:background="@drawable/textview_bg"
+                                style="@style/Base.Widget.AppCompat.Button.Colored"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:singleLine="true"
-                                android:text="@string/select_apk_file"
-                                android:textColor="#ff28649c"
-                                android:textSize="20sp" />
+                                android:text="@string/select_apk_file" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/tv_select_appfile"
-                                android:layout_width="fill_parent"
-                                android:layout_height="50dip"
-                                android:layout_marginLeft="32dip"
-                                android:layout_marginRight="32dip"
-                                android:layout_marginBottom="24dip"
-                                android:background="@drawable/textview_bg"
+                                style="@style/Base.Widget.AppCompat.Button.Colored"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:singleLine="true"
-                                android:text="@string/select_apk_from_app"
-                                android:textColor="#ff28649c"
-                                android:textSize="20sp" />
+                                android:text="@string/select_apk_from_app" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/tv_odex_patcher"
-                                android:layout_width="fill_parent"
-                                android:layout_height="50dip"
-                                android:layout_marginLeft="32dip"
-                                android:layout_marginRight="32dip"
-                                android:layout_marginBottom="24dip"
-                                android:background="@drawable/textview_bg"
+                                style="@style/Base.Widget.AppCompat.Button.Colored"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:singleLine="true"
-                                android:text="Odex Patcher"
-                                android:textColor="#ff28649c"
-                                android:textSize="20sp" />
+                                android:text="Odex Patcher" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/tv_help"
-                                android:layout_width="fill_parent"
-                                android:layout_height="50dip"
-                                android:layout_marginLeft="32dip"
-                                android:layout_marginRight="32dip"
-                                android:layout_marginBottom="24dip"
-                                android:background="@drawable/textview_bg"
+                                style="@style/Base.Widget.AppCompat.Button.Colored"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:singleLine="true"
-                                android:text="@string/help"
-                                android:textColor="#ff28649c"
-                                android:textSize="20sp" />
+                                android:text="@string/help" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/tv_exit"
-                                android:layout_width="fill_parent"
-                                android:layout_height="50dip"
-                                android:layout_marginLeft="32dip"
-                                android:layout_marginRight="32dip"
-                                android:background="@drawable/textview_bg"
+                                style="@style/Base.Widget.AppCompat.Button.Colored"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:singleLine="true"
-                                android:text="@string/exit"
-                                android:textColor="#ff28649c"
-                                android:textSize="20sp" />
+                                android:text="@string/exit" />
+
                         </LinearLayout>
 
                     </ScrollView>
