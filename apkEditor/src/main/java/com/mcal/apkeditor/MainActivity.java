@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.balsikandar.crashreporter.ui.CrashReporterActivity;
+import com.mcal.apkeditor.activities.AboutActivity;
 import com.mcal.apkeditor.data.Dialogs;
 import com.mcal.apkeditor.dialogs.AppAgreementDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
@@ -252,7 +253,9 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(i);
             return true;
         } else if (id == R.id.action_about) {
-            Dialogs.about(this);
+            //Dialogs.about(this);
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
