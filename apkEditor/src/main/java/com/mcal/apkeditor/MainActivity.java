@@ -32,7 +32,7 @@ import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.prj.ProjectListActivity;
 import com.mcal.apkeditor.prj.ProjectListActivity2;
 import com.mcal.apkeditor.utils.OnlineMessage;
-import com.mcal.common.utils.FileUtil;
+import com.mcal.common.utils.FileUtils;
 import com.mcal.httpserver.HttpServiceManager;
 
 import java.io.File;
@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements
             File fileDir = MainActivity.this.getFilesDir();
             String rootDirectory = fileDir.getAbsolutePath();
             String decodeRootPath = rootDirectory + "/decoded";
-            FileUtil.deleteAll(new File(decodeRootPath));
+            FileUtils.deleteAll(new File(decodeRootPath));
         } catch (Throwable e) {
             e.printStackTrace();
         }

@@ -11,6 +11,10 @@ import java.util.Map;
 
 public class RootCommand implements CommandInterface {
 
+    static String[] SU_LOCATIONS = {"/data/bin/su", "/system/bin/su",
+            // This is last because we are afraid a proper su might be in
+            // one of those other locations, while this one is secured.
+            "/system/xbin/su",};
     // The first one is stdout, second is stderr
     // private String stdout;
     // private String stderr;
@@ -50,11 +54,6 @@ public class RootCommand implements CommandInterface {
         return out.toString();
     }
 
-    static String[] SU_LOCATIONS = { "/data/bin/su", "/system/bin/su",
-            // This is last because we are afraid a proper su might be in
-            // one of those other locations, while this one is secured.
-            "/system/xbin/su", };
-
     static String getSuPath() {
         String path = "su";
         for (String p : SU_LOCATIONS) {
@@ -87,7 +86,7 @@ public class RootCommand implements CommandInterface {
     }
 
     public boolean runRootCommand(String command, String[] env,
-            Integer timeout) {
+                                  Integer timeout) {
         return runRootCommand(command, env, timeout, false);
     }
 
@@ -97,7 +96,7 @@ public class RootCommand implements CommandInterface {
     }
 
     public boolean runRootCommand(String command, String[] env, Integer timeout,
-            String curDir, boolean readWhileExec) {
+                                  String curDir, boolean readWhileExec) {
         Process process = null;
         DataOutputStream os = null;
         try {
@@ -235,7 +234,7 @@ public class RootCommand implements CommandInterface {
     public String getStdError() {
         return outputs[1];
     }
-    
+
     private void closeQuietly(InputStream input) {
         if (input != null) {
             try {
@@ -245,6 +244,12 @@ public class RootCommand implements CommandInterface {
         }
     }
 
+    @Override
+    public boolean runCommand(String command, String[] env, Integer timeout,
+                              boolean readWhileExec) {
+        return runRootCommand(command, env, timeout, readWhileExec);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     private static class StreamReadThread extends Thread {
         private InputStream input;
@@ -252,7 +257,7 @@ public class RootCommand implements CommandInterface {
         private int index;
 
         public StreamReadThread(InputStream input, String[] outputs,
-                int index) {
+                                int index) {
             this.input = input;
             this.outputs = outputs;
             this.index = index;
@@ -284,11 +289,5 @@ public class RootCommand implements CommandInterface {
             } catch (IOException e) {
             }
         }
-    }
-
-    @Override
-    public boolean runCommand(String command, String[] env, Integer timeout,
-            boolean readWhileExec) {
-        return runRootCommand(command, env, timeout, readWhileExec);
     }
 }

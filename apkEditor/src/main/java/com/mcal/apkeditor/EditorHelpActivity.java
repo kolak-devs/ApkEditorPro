@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.activities.CustomizedLangActivity;
 
 public class EditorHelpActivity extends CustomizedLangActivity {
 

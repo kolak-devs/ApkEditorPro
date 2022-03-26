@@ -14,9 +14,9 @@ import androidx.annotation.NonNull;
 import com.mcal.apkeditor.SettingActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.view.ViewDialog;
-import com.mcal.common.utils.FileUtil;
+import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.SDCard;
-import com.mcal.common.utils.ZipUtil;
+import com.mcal.common.utils.ZipUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -202,9 +202,9 @@ public class FileCopyDialog extends ViewDialog implements
         }
 
         if (source.isDir) {
-            ZipUtil.unzipDirectory(apkPath, source.path, targetPath);
+            ZipUtils.unzipDirectory(apkPath, source.path, targetPath);
         } else {
-            ZipUtil.unzipFileTo(apkPath, source.path, targetPath);
+            ZipUtils.unzipFileTo(apkPath, source.path, targetPath);
         }
 
         this.savedFilePath = targetPath;
@@ -285,9 +285,9 @@ public class FileCopyDialog extends ViewDialog implements
             if (realEntry != null) {
                 entryName = realEntry;
             }
-            ZipUtil.unzipFileTo(this.apkPath, entryName, to.getPath());
+            ZipUtils.unzipFileTo(this.apkPath, entryName, to.getPath());
         } else {
-            FileUtil.copyFile(from, to);
+            FileUtils.copyFile(from, to);
         }
     }
 

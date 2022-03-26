@@ -14,8 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mcal.common.utils.ActivityUtil;
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityUtils;
+import com.mcal.common.activities.CustomizedLangActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,9 +60,9 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
 	//	}
 
 		Intent intent = getIntent();
-		this.originDbFilePath = ActivityUtil
+		this.originDbFilePath = ActivityUtils
 				.getParam(intent, "dbFilePath");
-		String strRootMode = ActivityUtil.getParam(intent, "isRootMode");
+		String strRootMode = ActivityUtils.getParam(intent, "isRootMode");
 		if ("false".equalsIgnoreCase(strRootMode)) {
 			isRootMode = false;
 		} else {
@@ -146,11 +146,11 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
 				String tableName = tableList.get(position);
 				Intent intent = new Intent(SqliteTableListActivity.this,
 						SqliteTableViewActivity.class);
-				ActivityUtil.attachParam(intent, "originDbFilePath",
+				ActivityUtils.attachParam(intent, "originDbFilePath",
 						originDbFilePath);
-				ActivityUtil.attachParam(intent, "dbFilePath", dbFilePath);
-				ActivityUtil.attachParam(intent, "tableName", tableName);
-				ActivityUtil.attachParam(intent, "themeId", themeId);
+				ActivityUtils.attachParam(intent, "dbFilePath", dbFilePath);
+				ActivityUtils.attachParam(intent, "tableName", tableName);
+				ActivityUtils.attachParam(intent, "themeId", themeId);
 				startActivity(intent);
 			}
 		});

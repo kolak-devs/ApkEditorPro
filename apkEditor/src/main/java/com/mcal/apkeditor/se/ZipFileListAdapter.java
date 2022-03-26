@@ -28,7 +28,7 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apklib.AXMLPrinter;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.ImageZoomer;
 import com.mcal.common.utils.SDCard;
@@ -218,8 +218,8 @@ public class ZipFileListAdapter extends BaseAdapter implements
         if (convertSucceed) {
             String apkPath = (zipHelper != null ? zipHelper.getFilePath() : null);
             Intent intent = TextEditor.getEditorIntent(ctx, decodedXmlPath, apkPath);
-            ActivityUtil.attachParam(intent, "displayFileName", clickedEntryPath);
-            ActivityUtil.attachParam(intent, "extraString", clickedEntryPath);
+            ActivityUtils.attachParam(intent, "displayFileName", clickedEntryPath);
+            ActivityUtils.attachParam(intent, "extraString", clickedEntryPath);
             ctx.startActivityForResult(intent, 0);
         } else {
             String fmt = ctx.getString(R.string.failed_to_parse_xml);
@@ -419,12 +419,12 @@ public class ZipFileListAdapter extends BaseAdapter implements
     private void viewImageFile(String entryPath) {
         String replaceFile = fileReplaces.get(entryPath);
         Intent intent = new Intent(ctx, ViewZipImageActivity.class);
-        ActivityUtil.attachParam(intent, "fullScreen", GlobalConfig.instance(ctx).isFullScreen());
+        ActivityUtils.attachParam(intent, "fullScreen", GlobalConfig.instance(ctx).isFullScreen());
         if (replaceFile == null) {
-            ActivityUtil.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
-            ActivityUtil.attachParam(intent, "entryName", entryPath);
+            ActivityUtils.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
+            ActivityUtils.attachParam(intent, "entryName", entryPath);
         } else {
-            ActivityUtil.attachParam(intent, "imageFilePath", replaceFile);
+            ActivityUtils.attachParam(intent, "imageFilePath", replaceFile);
         }
         ctx.startActivity(intent);
     }

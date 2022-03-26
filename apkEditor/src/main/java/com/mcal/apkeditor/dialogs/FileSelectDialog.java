@@ -26,10 +26,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
-import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.view.ViewDialog;
-import com.mcal.common.utils.InputUtil;
-import com.mcal.common.utils.PathUtil;
+import com.mcal.common.utils.InputUtils;
+import com.mcal.common.utils.PathUtils;
 import com.mcal.common.utils.SDCard;
 import com.mcal.folderlist.FileRecord;
 
@@ -157,7 +156,7 @@ public class FileSelectDialog implements OnItemClickListener,
         if (showEditOption) {
             editCheckBox.setText(
                     String.format(ctx.getString(R.string.edit_before_replace),
-                            PathUtil.getNameFromPath(extraString)));
+                            PathUtils.getNameFromPath(extraString)));
             editCheckBox.setChecked(getHistoryEditOption());
             editCheckBox.setVisibility(View.VISIBLE);
         } else {
@@ -202,7 +201,7 @@ public class FileSelectDialog implements OnItemClickListener,
 
         // Set an EditText view to get user input
         final EditText input = new EditText(ctx);
-        InputFilter filter = InputUtil.getFileNameFilter();
+        InputFilter filter = InputUtils.getFileNameFilter();
         input.setFilters(new InputFilter[]{filter});
         inputDlg.setView(input);
 

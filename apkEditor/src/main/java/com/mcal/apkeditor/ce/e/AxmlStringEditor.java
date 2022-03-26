@@ -1,6 +1,6 @@
 package com.mcal.apkeditor.ce.e;
 
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.RandomUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,7 +59,7 @@ public class AxmlStringEditor {
 
     private void prepareOutput() throws IOException {
         File dir = new File(outputFolder);
-        File f = new File(dir, RandomUtil.getRandomString(6));
+        File f = new File(dir, RandomUtils.getRandomString(6));
         if (f.exists()) {
             f.delete();
         }

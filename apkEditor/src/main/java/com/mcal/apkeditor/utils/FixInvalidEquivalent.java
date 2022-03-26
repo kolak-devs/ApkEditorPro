@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.patch.ResourceItem;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.TextFileReader;
 
 import java.io.BufferedOutputStream;
@@ -109,7 +109,7 @@ public class FixInvalidEquivalent extends FixInvalid {
                 String lcName = resName.toLowerCase();
                 // When cannot record it, means already exist
                 if (!recordResourceName(resType, lcName)) {
-                    String newName = resName + "_" + RandomUtil.getRandomString(6);
+                    String newName = resName + "_" + RandomUtils.getRandomString(6);
                     recordRenameRecord(resType, resName, newName);
 
                     // Change the item

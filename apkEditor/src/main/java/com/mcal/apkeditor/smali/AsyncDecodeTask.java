@@ -156,11 +156,6 @@ public class AsyncDecodeTask extends AsyncTask<Void, Integer, Boolean> {
 
     private void decodeDexFiles() {
         for (String dexFilePath : this.dexFileList) {
-            /*Object decoder = RefInvoke.createInstance(
-                    "com.mcal.apkeditor.pro.DexDecoder",
-                    new Class<?>[]{String.class},
-                    new Object[]{dexFilePath});*/
-
             DexDecoder decoder = new DexDecoder(dexFilePath);
 
             String directory = this.decodeRootPath + "/smali";
@@ -173,10 +168,6 @@ public class AsyncDecodeTask extends AsyncTask<Void, Integer, Boolean> {
             }
             createDirectoryIfNotExist(directory);
 
-            /*RefInvoke.invokeMethod("com.mcal.apkeditor.pro.DexDecoder",
-                    "dex2smali", decoder, new Class<?>[]{String.class},
-                    new Object[]{directory});*/
-
             try {
                 decoder.dex2smali(directory);
             } catch (Exception e) {
@@ -185,9 +176,6 @@ public class AsyncDecodeTask extends AsyncTask<Void, Integer, Boolean> {
 
 
             if (this.strWarning == null) {
-                /*this.strWarning = (String) RefInvoke.invokeMethod(
-                        "com.mcal.apkeditor.pro.DexDecoder",
-                        "getWarning", decoder, null, null);*/
                 this.strWarning = decoder.getWarning();
             }
         }

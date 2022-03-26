@@ -49,12 +49,12 @@ import com.mcal.apkeditor.ce.e.RefactorLayout;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.se.ApkCreateActivity;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.IOUtils;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
 import com.mcal.common.utils.FileEncrypter;
 
@@ -151,7 +151,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-        this.apkPath = ActivityUtil.getParam(getIntent(), "apkPath");
+        this.apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
 
         // Create a thread to parse APK Information
         new Thread() {
@@ -346,7 +346,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         }
 
         // authorityName
-        String authString = RandomUtil.getRandomString(4);
+        String authString = RandomUtils.getRandomString(4);
 
         try {
             this.newManifestFile = SDCard.makeWorkingDir(this) + ".xml";
@@ -406,9 +406,9 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         }
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
-        ActivityUtil.attachParam(intent, "apkPath", tmplApkPath);
-        ActivityUtil.attachParam(intent, "packageName", manifestInfo.packageName);
-        ActivityUtil.attachParam(intent, "otherReplaces", fileReplaces);
+        ActivityUtils.attachParam(intent, "apkPath", tmplApkPath);
+        ActivityUtils.attachParam(intent, "packageName", manifestInfo.packageName);
+        ActivityUtils.attachParam(intent, "otherReplaces", fileReplaces);
         ArrayList<IApkMaking> extraTasks = new ArrayList<>();
         extraTasks.add(new PluginWrapperExtra(authString));
         intent.putExtra("interfaces", extraTasks);
@@ -593,23 +593,23 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         fileReplaces.put("AndroidManifest.xml", this.newManifestFile);
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
-        ActivityUtil.attachParam(intent, "apkPath", this.apkPath);
-        ActivityUtil.attachParam(intent, "packageName", manifestInfo.packageName);
-        ActivityUtil.attachParam(intent, "otherReplaces", fileReplaces);
+        ActivityUtils.attachParam(intent, "apkPath", this.apkPath);
+        ActivityUtils.attachParam(intent, "packageName", manifestInfo.packageName);
+        ActivityUtils.attachParam(intent, "otherReplaces", fileReplaces);
 
         // Need to modify resources.arsc when package name is changed
         if (!this.manifestInfo.packageName.equals(this.newPackageName)) {
             if (renameResCb.isChecked()) {
-                ActivityUtil.attachParam(intent, "newPackageNameInArsc", this.newPackageName);
+                ActivityUtils.attachParam(intent, "newPackageNameInArsc", this.newPackageName);
             }
         }
 
         // When app name is changed and it is saved in resource, will modify it
         if (manifestInfo.appNameIdx < 0
                 && !this.newAppName.equals(this.manifestInfo.appName)) {
-            ActivityUtil.attachParam(intent, "oldAppNameInArsc",
+            ActivityUtils.attachParam(intent, "oldAppNameInArsc",
                     this.manifestInfo.appName);
-            ActivityUtil.attachParam(intent, "newAppNameInArsc", newAppName);
+            ActivityUtils.attachParam(intent, "newAppNameInArsc", newAppName);
         }
 
         // Need to modify dex file
@@ -624,7 +624,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
                 value = "L" + value;
                 replaces.put(key, value);
             }
-            ActivityUtil.attachParam(intent, "classRenames", replaces);
+            ActivityUtils.attachParam(intent, "classRenames", replaces);
         }
 
         // Collect extra tasks

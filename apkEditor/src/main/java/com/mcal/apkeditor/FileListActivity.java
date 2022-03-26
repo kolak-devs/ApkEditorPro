@@ -28,9 +28,9 @@ import androidx.core.content.ContextCompat;
 
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.folderlist.FileRecord;
@@ -320,8 +320,8 @@ public class FileListActivity extends CustomizedLangActivity implements IListEve
                 String keyword = et.getText().toString();
                 String currentFolder = this.foderWrapper.getAdapter().getData(null);
                 Intent intent = new Intent(this, ApkSearchActivity.class);
-                ActivityUtil.attachParam(intent, "Keyword", keyword);
-                ActivityUtil.attachParam(intent, "Path", currentFolder);
+                ActivityUtils.attachParam(intent, "Keyword", keyword);
+                ActivityUtils.attachParam(intent, "Path", currentFolder);
                 this.startActivity(intent);
             }
         }
@@ -348,7 +348,7 @@ public class FileListActivity extends CustomizedLangActivity implements IListEve
         }
 
         if (intent != null) {
-            ActivityUtil.attachParam(intent, "apkPath", extraStr);
+            ActivityUtils.attachParam(intent, "apkPath", extraStr);
             startActivity(intent);
         }
     }

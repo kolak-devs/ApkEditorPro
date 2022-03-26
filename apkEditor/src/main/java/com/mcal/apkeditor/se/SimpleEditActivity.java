@@ -30,11 +30,11 @@ import androidx.viewpager.widget.ViewPager;
 import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
-import com.mcal.common.utils.CustomizedLangActivity;
-import com.mcal.common.utils.DynamicExpandListView;
+import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.view.DynamicExpandListView;
 import com.mcal.common.utils.SDCard;
 
 import java.lang.ref.WeakReference;
@@ -106,7 +106,7 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-        this.apkPath = ActivityUtil.getParam(getIntent(), "apkPath");
+        this.apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
 
         try {
             this.apkInfo = new ApkInfoParser().parse(this, apkPath);
@@ -354,12 +354,12 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         Map<String, String> audioReplaces = audiosAdapter.getReplaces();
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
-        ActivityUtil.attachParam(intent, "apkPath", this.apkPath);
-        ActivityUtil.attachParam(intent, "packageName", apkInfo.packageName);
-        ActivityUtil.attachParam(intent, "imageReplaces", imgReplaces);
+        ActivityUtils.attachParam(intent, "apkPath", this.apkPath);
+        ActivityUtils.attachParam(intent, "packageName", apkInfo.packageName);
+        ActivityUtils.attachParam(intent, "imageReplaces", imgReplaces);
         if (!fileReplaces.isEmpty() || !audioReplaces.isEmpty()) {
             fileReplaces.putAll(audioReplaces);
-            ActivityUtil.attachParam(intent, "otherReplaces", fileReplaces);
+            ActivityUtils.attachParam(intent, "otherReplaces", fileReplaces);
         }
 
         startActivity(intent);

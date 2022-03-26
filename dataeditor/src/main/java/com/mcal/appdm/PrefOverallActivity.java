@@ -1,8 +1,6 @@
 package com.mcal.appdm;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -19,9 +17,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,22 +26,22 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.appdm.base.R;
-import com.mcal.appdm.util.FileRecord;
-import com.mcal.appdm.util.FilenameComparator;
-import com.mcal.appdm.util.InterestAdManager;
-import com.mcal.appdm.util.PaidAppsChecker;
-import com.mcal.appdm.util.SDCard;
-import com.mcal.appdm.util.SignatureInfoReader;
-import com.mcal.appdm.util.StringPair;
+import com.mcal.appdm.utils.FileRecord;
+import com.mcal.appdm.utils.FilenameComparator;
+import com.mcal.appdm.utils.SDCard;
+import com.mcal.appdm.utils.SignatureInfoReader;
+import com.mcal.appdm.utils.StringPair;
 import com.mcal.applistutil.AppInfo;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.CommandInterface;
 import com.mcal.common.utils.CommandRunner;
-import com.mcal.common.utils.CustomizedLangActivity;
-import com.mcal.common.utils.ProcessingDialog;
-import com.mcal.common.utils.ProcessingDialog.ProcessingInterface;
-import com.mcal.common.utils.RefInvoke;
+import com.mcal.common.view.ProcessingDialog;
+import com.mcal.common.view.ProcessingDialog.ProcessingInterface;
 import com.mcal.sqliteutil.RootCommand;
 
 import java.io.File;
@@ -63,7 +58,17 @@ import java.util.zip.ZipFile;
 public class PrefOverallActivity extends CustomizedLangActivity implements OnClickListener {
 
     protected static final int DETAIL_ACTIVITY_REQUEST_CODE = 1001;
-
+    // File list in full path
+    // private List<String> xmlFileList = new ArrayList<String>();
+    // private List<String> dbFileList = new ArrayList<String>();
+    private final List<StringPair> xmlFilePairs = new ArrayList<>();
+    private final List<StringPair> dbFilePairs = new ArrayList<>();
+    // Stage: -1, scanning not finished
+    // 0, failed
+    // 1, succeed
+    int stage = -1;
+    String errMsg;
+    int curTabIndex = 0;
     private String packagePath;
     private ScanThread thread;
     private ListView prefListView;
@@ -77,15 +82,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     private ApplicationInfo applicationInfo;
     private PackageInfo packageInfo;
     private String appName;
-
     private RootFileAdapter fileListAdapter;
-
-    // File list in full path
-    // private List<String> xmlFileList = new ArrayList<String>();
-    // private List<String> dbFileList = new ArrayList<String>();
-    private List<StringPair> xmlFilePairs = new ArrayList<StringPair>();
-    private List<StringPair> dbFilePairs = new ArrayList<StringPair>();
-
     // Button in bottom
     private RadioButton infoBtn;
     private RadioButton prefBtn;
@@ -99,27 +96,37 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     private Drawable dbBlueDrawable;
     private Drawable fileDrawable;
     private Drawable fileBlueDrawable;
-
-    // Stage: -1, scanning not finished
-    // 0, failed
-    // 1, succeed
-    int stage = -1;
-    String errMsg;
-    int curTabIndex = 0;
-
     // Is root mode or not
     private boolean isRootMode;
 
     // Show backup or not
     private boolean bShowBackup;
 
-    // For interest AD
-    private InterestAdManager interestAdMgr;
     private boolean prefModified = false;
     private long prefClickTime;
     private long prefReturnTime;
     private long createTime;
     private int prefClickedNum = 0;
+
+    @Nullable
+    protected static String getEditableSyntax(@NonNull String fileName) {
+        if (fileName.endsWith(".xml")) {
+            return "xml.xml";
+        } else if (fileName.endsWith(".html") || fileName.endsWith(".htm")) {
+            return "html.xml";
+        } else if (fileName.endsWith(".css")) {
+            return "css.xml";
+        } else if (fileName.endsWith(".java")) {
+            return "java.xml";
+        } else if (fileName.endsWith(".json")) {
+            return "json.xml";
+        } else if (fileName.endsWith(".txt")) {
+            return "txt.xml";
+        } else if (fileName.endsWith(".js")) {
+            return "js.xml";
+        }
+        return null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,8 +136,8 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         Intent intent = getIntent();
         setContentView(R.layout.appdm_activity_dataoverview);
 
-        this.packagePath = ActivityUtil.getParam(intent, "packagePath");
-        this.bShowBackup = ActivityUtil.getBoolParam(intent, "backup");
+        this.packagePath = ActivityUtils.getParam(intent, "packagePath");
+        this.bShowBackup = ActivityUtils.getBoolParam(intent, "backup");
         try {
             this.pm = this.getPackageManager();
             this.applicationInfo = pm.getApplicationInfo(packagePath, 0);
@@ -145,8 +152,8 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
             // The target app shares the same user id with me
             if (this.packageInfo.sharedUserId != null
                     && packageInfo.sharedUserId
-                            .equals(pm.getPackageInfo(getPackageName(),
-                                    0).sharedUserId)) {
+                    .equals(pm.getPackageInfo(getPackageName(),
+                            0).sharedUserId)) {
                 this.isRootMode = false;
             }
         } catch (NameNotFoundException e) {
@@ -160,29 +167,6 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Show interest ad on some conditions
-        if (interestAdMgr != null) {
-            interestAdMgr.onResume();
-            if (this.prefModified || prefClickedNum >= 3
-                    || (prefReturnTime - prefClickTime) >= 15000
-                    || (System.currentTimeMillis() - createTime) >= 45000) {
-                interestAdMgr.show();
-            }
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (interestAdMgr != null) {
-            interestAdMgr.onPause();
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
     }
@@ -190,6 +174,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Returned from detail activity
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == DETAIL_ACTIVITY_REQUEST_CODE) {
             this.prefReturnTime = System.currentTimeMillis();
             // Log.d("DEBUG", "onActivityResult called, stayTime= "
@@ -230,7 +215,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         this.tipTv = (TextView) this.findViewById(R.id.tv_tip);
 
         // App info
-        List<BasicInfoItem> data = new ArrayList<BasicInfoItem>();
+        List<BasicInfoItem> data = new ArrayList<>();
         initAppInfo(data);
         appInfoListView.setAdapter(new BasicInfoAdapter(this, data));
 
@@ -240,7 +225,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         enableListSwitch();
     }
 
-    private void initAppInfo(List<BasicInfoItem> data) {
+    private void initAppInfo(@NonNull List<BasicInfoItem> data) {
         Resources res = getResources();
 
         // App name
@@ -279,12 +264,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         BasicInfoItem pathItem = new BasicInfoItem(
                 res.getString(R.string.appdm_apk_file_path),
                 applicationInfo.sourceDir, res.getString(R.string.save),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        saveTheApk();
-                    }
-                });
+                v -> saveTheApk());
         data.add(pathItem);
 
         // Apk Build Time
@@ -310,7 +290,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
 
             zipFile.close();
         } catch (IOException e) {
-            // e.printStackTrace();
+            e.printStackTrace();
         }
 
         // Install Time
@@ -344,71 +324,68 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
             this.errMsg = thread.getErrorMsg();
         }
 
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                PrefOverallActivity.this.findViewById(R.id.layout_scanning)
-                        .setVisibility(View.INVISIBLE);
+        this.runOnUiThread(() -> {
+            PrefOverallActivity.this.findViewById(R.id.layout_scanning)
+                    .setVisibility(View.INVISIBLE);
 
-                if (succeed) {
+            if (succeed) {
 
-                    // Parse preference list
-                    String output = thread.getPrefList();
-                    if (output != null) {
-                        String[] lines = output.split("\n");
-                        for (String line : lines) {
-                            if (line.endsWith(".xml")) {
-                                String filePath = line;
-                                int pos = line.lastIndexOf('/');
-                                String filename = line.substring(pos + 1);
-                                filename = filename.substring(0,
-                                        filename.length() - 4);
-                                xmlFilePairs.add(
-                                        new StringPair(filename, filePath));
-                            }
+                // Parse preference list
+                String output = thread.getPrefList();
+                if (output != null) {
+                    String[] lines = output.split("\n");
+                    for (String line : lines) {
+                        if (line.endsWith(".xml")) {
+                            String filePath = line;
+                            int pos = line.lastIndexOf('/');
+                            String filename = line.substring(pos + 1);
+                            filename = filename.substring(0,
+                                    filename.length() - 4);
+                            xmlFilePairs.add(
+                                    new StringPair(filename, filePath));
                         }
                     }
-
-                    // Parse database list
-                    output = thread.getDbList();
-                    if (output != null) {
-                        String[] lines = output.split("\n");
-                        for (String line : lines) {
-                            if (line.endsWith(".db")) {
-                                String filePath = line;
-                                int pos = line.lastIndexOf('/');
-                                String filename = line.substring(pos + 1);
-                                filename = filename.substring(0,
-                                        filename.length() - 3);
-                                dbFilePairs.add(
-                                        new StringPair(filename, filePath));
-                            }
-                        }
-                    }
-
-                    initPrefListView();
-                    initDbListView();
-                    updateListView();
-
-                } else {
-                    Toast.makeText(PrefOverallActivity.this, errMsg,
-                            Toast.LENGTH_SHORT).show();
                 }
+
+                // Parse database list
+                output = thread.getDbList();
+                if (output != null) {
+                    String[] lines = output.split("\n");
+                    for (String line : lines) {
+                        if (line.endsWith(".db")) {
+                            String filePath = line;
+                            int pos = line.lastIndexOf('/');
+                            String filename = line.substring(pos + 1);
+                            filename = filename.substring(0,
+                                    filename.length() - 3);
+                            dbFilePairs.add(
+                                    new StringPair(filename, filePath));
+                        }
+                    }
+                }
+
+                initPrefListView();
+                initDbListView();
+                updateListView();
+
+            } else {
+                Toast.makeText(PrefOverallActivity.this, errMsg,
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     protected void updateListView() {
         switch (this.curTabIndex) {
-        case 0:
-            drawAppInfoListView();
-            break;
-        case 1:
-            drawPrefListView();
-            break;
-        case 2:
-            drawDbListView();
-            break;
+            case 0:
+                drawAppInfoListView();
+                break;
+            case 1:
+                drawPrefListView();
+                break;
+            case 2:
+                drawDbListView();
+                break;
         }
     }
 
@@ -430,76 +407,64 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         this.dbBtn = (RadioButton) this.findViewById(R.id.tab_database);
         this.fileBtn = (RadioButton) this.findViewById(R.id.tab_files);
 
-        infoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                curTabIndex = 0;
+        infoBtn.setOnClickListener(v -> {
+            curTabIndex = 0;
 
-                drawAppInfoListView();
+            drawAppInfoListView();
 
-                infoBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        infoBlueDrawable, null, null);
-                prefBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        prefDrawable, null, null);
-                dbBtn.setCompoundDrawablesWithIntrinsicBounds(null, dbDrawable,
-                        null, null);
-                fileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        fileDrawable, null, null);
-            }
+            infoBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    infoBlueDrawable, null, null);
+            prefBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    prefDrawable, null, null);
+            dbBtn.setCompoundDrawablesWithIntrinsicBounds(null, dbDrawable,
+                    null, null);
+            fileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    fileDrawable, null, null);
         });
 
-        prefBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                curTabIndex = 1;
+        prefBtn.setOnClickListener(v -> {
+            curTabIndex = 1;
 
-                drawPrefListView();
+            drawPrefListView();
 
-                infoBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        infoDrawable, null, null);
-                prefBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        prefBlueDrawable, null, null);
-                dbBtn.setCompoundDrawablesWithIntrinsicBounds(null, dbDrawable,
-                        null, null);
-                fileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        fileDrawable, null, null);
-            }
+            infoBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    infoDrawable, null, null);
+            prefBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    prefBlueDrawable, null, null);
+            dbBtn.setCompoundDrawablesWithIntrinsicBounds(null, dbDrawable,
+                    null, null);
+            fileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    fileDrawable, null, null);
         });
 
-        dbBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                curTabIndex = 2;
+        dbBtn.setOnClickListener(v -> {
+            curTabIndex = 2;
 
-                drawDbListView();
+            drawDbListView();
 
-                infoBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        infoDrawable, null, null);
-                prefBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        prefDrawable, null, null);
-                dbBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        dbBlueDrawable, null, null);
-                fileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        fileDrawable, null, null);
-            }
+            infoBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    infoDrawable, null, null);
+            prefBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    prefDrawable, null, null);
+            dbBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    dbBlueDrawable, null, null);
+            fileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    fileDrawable, null, null);
         });
 
-        fileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                curTabIndex = 3;
+        fileBtn.setOnClickListener(v -> {
+            curTabIndex = 3;
 
-                drawFileListView();
+            drawFileListView();
 
-                infoBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        infoDrawable, null, null);
-                prefBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        prefDrawable, null, null);
-                dbBtn.setCompoundDrawablesWithIntrinsicBounds(null, dbDrawable,
-                        null, null);
-                fileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                        fileBlueDrawable, null, null);
-            }
+            infoBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    infoDrawable, null, null);
+            prefBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    prefDrawable, null, null);
+            dbBtn.setCompoundDrawablesWithIntrinsicBounds(null, dbDrawable,
+                    null, null);
+            fileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    fileBlueDrawable, null, null);
         });
     }
 
@@ -514,20 +479,20 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     protected void drawPrefListView() {
         synchronized (this) {
             switch (this.stage) {
-            case -1:
-                prefListView.setVisibility(View.INVISIBLE);
-                scanningLayout.setVisibility(View.VISIBLE);
-                break;
-            case 0:
-                prefListView.setVisibility(View.INVISIBLE);
-                scanningLayout.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-                tipTv.setText(PrefOverallActivity.this.errMsg);
-                break;
-            case 1:
-                scanningLayout.setVisibility(View.INVISIBLE);
-                prefListView.setVisibility(View.VISIBLE);
-                break;
+                case -1:
+                    prefListView.setVisibility(View.INVISIBLE);
+                    scanningLayout.setVisibility(View.VISIBLE);
+                    break;
+                case 0:
+                    prefListView.setVisibility(View.INVISIBLE);
+                    scanningLayout.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    tipTv.setText(PrefOverallActivity.this.errMsg);
+                    break;
+                case 1:
+                    scanningLayout.setVisibility(View.INVISIBLE);
+                    prefListView.setVisibility(View.VISIBLE);
+                    break;
             }
         }
         appInfoListView.setVisibility(View.INVISIBLE);
@@ -538,20 +503,20 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     protected void drawDbListView() {
         synchronized (this) {
             switch (this.stage) {
-            case -1:
-                dbListView.setVisibility(View.INVISIBLE);
-                scanningLayout.setVisibility(View.VISIBLE);
-                break;
-            case 0:
-                dbListView.setVisibility(View.INVISIBLE);
-                scanningLayout.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-                tipTv.setText(PrefOverallActivity.this.errMsg);
-                break;
-            case 1:
-                scanningLayout.setVisibility(View.INVISIBLE);
-                dbListView.setVisibility(View.VISIBLE);
-                break;
+                case -1:
+                    dbListView.setVisibility(View.INVISIBLE);
+                    scanningLayout.setVisibility(View.VISIBLE);
+                    break;
+                case 0:
+                    dbListView.setVisibility(View.INVISIBLE);
+                    scanningLayout.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    tipTv.setText(PrefOverallActivity.this.errMsg);
+                    break;
+                case 1:
+                    scanningLayout.setVisibility(View.INVISIBLE);
+                    dbListView.setVisibility(View.VISIBLE);
+                    break;
             }
         }
         appInfoListView.setVisibility(View.INVISIBLE);
@@ -571,56 +536,36 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     private void initPrefListView() {
         prefListView.setAdapter(
                 new NameAndPathAdapter(this, this.xmlFilePairs));
-        prefListView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1,
-                    int position, long arg3) {
-                PrefOverallActivity.this.prefClickTime = System
-                        .currentTimeMillis();
-                PrefOverallActivity.this.prefClickedNum += 1;
+        prefListView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
+            PrefOverallActivity.this.prefClickTime = System
+                    .currentTimeMillis();
+            PrefOverallActivity.this.prefClickedNum += 1;
 
-                Intent intent = new Intent(PrefOverallActivity.this,
-                        PrefDetailActivity.class);
-                ActivityUtil.attachParam(intent, "appName",
-                        (String) applicationInfo.loadLabel(pm));
-                ActivityUtil.attachParam(intent, "xmlFilePath",
-                        xmlFilePairs.get(position).second);
-                ActivityUtil.attachParam(intent, "packagePath",
-                        PrefOverallActivity.this.packagePath);
-                ActivityUtil.attachBoolParam(intent, "isRootMode",
-                        PrefOverallActivity.this.isRootMode);
-                startActivityForResult(intent, DETAIL_ACTIVITY_REQUEST_CODE);
-            }
+            Intent intent = new Intent(PrefOverallActivity.this,
+                    PrefDetailActivity.class);
+            ActivityUtils.attachParam(intent, "appName",
+                    (String) applicationInfo.loadLabel(pm));
+            ActivityUtils.attachParam(intent, "xmlFilePath",
+                    xmlFilePairs.get(position).second);
+            ActivityUtils.attachParam(intent, "packagePath",
+                    PrefOverallActivity.this.packagePath);
+            ActivityUtils.attachBoolParam(intent, "isRootMode",
+                    PrefOverallActivity.this.isRootMode);
+            startActivityForResult(intent, DETAIL_ACTIVITY_REQUEST_CODE);
         });
-
-        // Load the interest AD
-        // Load it only when preference file number >= 3
-        if (!PaidAppsChecker.isPaidAppsExist(this) && this.xmlFilePairs != null
-                && xmlFilePairs.size() >= 3) {
-            SharedPreferences sp = this.getSharedPreferences("info", 0);
-            long lastAdTime = sp.getLong("lastTime", 0);
-            long curTime = System.currentTimeMillis();
-            if (curTime > lastAdTime + 75000) {
-                this.interestAdMgr = new InterestAdManager(this);
-            }
-        }
     }
 
     private void initDbListView() {
         dbListView.setAdapter(
                 new NameAndPathAdapter(this, this.dbFilePairs));
-        dbListView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1,
-                    int position, long arg3) {
-                Intent intent = new Intent(PrefOverallActivity.this,
-                        com.mcal.sqliteutil.SqliteTableListActivity.class);
-                ActivityUtil.attachParam(intent, "dbFilePath",
-                        dbFilePairs.get(position).second);
-                ActivityUtil.attachParam(intent, "isRootMode",
-                        (isRootMode ? "true" : "false"));
-                startActivity(intent);
-            }
+        dbListView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
+            Intent intent = new Intent(PrefOverallActivity.this,
+                    com.mcal.sqliteutil.SqliteTableListActivity.class);
+            ActivityUtils.attachParam(intent, "dbFilePath",
+                    dbFilePairs.get(position).second);
+            ActivityUtils.attachParam(intent, "isRootMode",
+                    (isRootMode ? "true" : "false"));
+            startActivity(intent);
         });
     }
 
@@ -633,48 +578,38 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         this.fileListAdapter = new RootFileAdapter(this,
                 rootPath + packagePath + "/files", this.isRootMode);
         fileListView.setAdapter(fileListAdapter);
-        fileListView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1,
-                    int position, long arg3) {
-                fileItemClicked(position);
-            }
-        });
+        fileListView.setOnItemClickListener((arg0, arg1, position1, arg3) -> fileItemClicked(position1));
 
         // Long click listener
-        fileListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                List<FileRecord> records = new ArrayList<FileRecord>();
-                final String curDir = fileListAdapter.getData(records);
-                final FileRecord rec = records.get(position);
-                if (rec.isDir) {
-                    return true;
-                }
-
-                parent.setOnCreateContextMenuListener(
-                        new OnCreateContextMenuListener() {
-                            public void onCreateContextMenu(ContextMenu menu,
-                                    View v, ContextMenuInfo menuInfo) {
-                                // Open in Editor
-                                MenuItem item1 = menu.add(0, Menu.FIRST, 0,
-                                        R.string.appdm_open_in_editor);
-                                item1.setOnMenuItemClickListener(
-                                        new OnMenuItemClickListener() {
-                                            @Override
-                                            public boolean onMenuItemClick(
-                                                    MenuItem item) {
-                                                extractAndOpenEditor(
-                                                        curDir + "/" + rec.fileName,
-                                                        null);
-                                                return true;
-                                            }
-                                        });
-                            }
-                        });
-                return false;
+        fileListView.setOnItemLongClickListener((parent, view, position12, id) -> {
+            List<FileRecord> records = new ArrayList<FileRecord>();
+            final String curDir = fileListAdapter.getData(records);
+            final FileRecord rec = records.get(position12);
+            if (rec.isDir) {
+                return true;
             }
+
+            parent.setOnCreateContextMenuListener(
+                    new OnCreateContextMenuListener() {
+                        public void onCreateContextMenu(ContextMenu menu,
+                                                        View v, ContextMenuInfo menuInfo) {
+                            // Open in Editor
+                            MenuItem item1 = menu.add(0, Menu.FIRST, 0,
+                                    R.string.appdm_open_in_editor);
+                            item1.setOnMenuItemClickListener(
+                                    new OnMenuItemClickListener() {
+                                        @Override
+                                        public boolean onMenuItemClick(
+                                                MenuItem item) {
+                                            extractAndOpenEditor(
+                                                    curDir + "/" + rec.fileName,
+                                                    null);
+                                            return true;
+                                        }
+                                    });
+                        }
+                    });
+            return false;
         });
     }
 
@@ -690,7 +625,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
                         new ProcessingInterface() {
                             @SuppressWarnings("unchecked")
                             @Override
-                            public void process() throws Exception {
+                            public void process() {
                                 List<FileRecord> subFiles = fileListAdapter
                                         .listFiles(dirPath, true);
                                 Collections.sort(subFiles,
@@ -717,6 +652,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         }
     }
 
+    @NonNull
     private String getSubDirectory(String curDir, String name) {
         if ("..".equals(name)) {
             int pos = curDir.lastIndexOf('/');
@@ -732,7 +668,8 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
 
     // Return the target file path
     // Return null if failed
-    private String copyFileBySu(String filePath) {
+    @Nullable
+    private String copyFileBySu(@NonNull String filePath) {
         String postfix = null;
         int pos = filePath.lastIndexOf('.');
         if (pos != -1) {
@@ -762,12 +699,12 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     }
 
     private void extractAndOpenEditor(final String filePath,
-            final String syntaxName) {
+                                      final String syntaxName) {
         new ProcessingDialog(this, new ProcessingInterface() {
             String tmpFilePath = null;
 
             @Override
-            public void process() throws Exception {
+            public void process() {
                 tmpFilePath = copyFileBySu(filePath);
             }
 
@@ -786,11 +723,11 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
                     bundle.putBoolean("isRootMode",
                             PrefOverallActivity.this.isRootMode);
                     bundle.putIntArray("resourceIds",
-                            new int[] { R.string.appdm_file_too_big,
+                            new int[]{R.string.appdm_file_too_big,
                                     R.string.appdm_file_saved,
-                                    R.string.appdm_not_found });
+                                    R.string.appdm_not_found});
                     intent.putExtras(bundle);
-                    PrefOverallActivity.this.startActivityForResult(intent,
+                    startActivityForResult(intent,
                             1000);
                 } else {
                     Toast.makeText(PrefOverallActivity.this,
@@ -808,14 +745,14 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
             String tmpFilePath = null;
 
             @Override
-            public void process() throws Exception {
+            public void process() {
                 tmpFilePath = copyFileBySu(filePath);
             }
 
             @Override
             public void afterProcess() {
                 if (tmpFilePath != null) {
-                    com.mcal.appdm.util.OpenFiles
+                    com.mcal.appdm.utils.OpenFiles
                             .openFile(PrefOverallActivity.this, tmpFilePath);
                 } else {
                     Toast.makeText(PrefOverallActivity.this,
@@ -826,50 +763,49 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         }, -1).show();
     }
 
-    protected static String getEditableSyntax(String fileName) {
-        if (fileName.endsWith(".xml")) {
-            return "xml.xml";
-        } else if (fileName.endsWith(".html") || fileName.endsWith(".htm")) {
-            return "html.xml";
-        } else if (fileName.endsWith(".css")) {
-            return "css.xml";
-        } else if (fileName.endsWith(".java")) {
-            return "java.xml";
-        } else if (fileName.endsWith(".json")) {
-            return "json.xml";
-        } else if (fileName.endsWith(".txt")) {
-            return "txt.xml";
-        } else if (fileName.endsWith(".js")) {
-            return "js.xml";
+    @Override
+    public void onClick(@NonNull View v) {
+        int id = v.getId();
+        // As backup is hidden, not implemented yet!
+        if (id == R.id.button_backup) {
+            AppInfo appInfo = AppInfo.create(pm, applicationInfo);
         }
-        return null;
+    }
+
+    // Support root mode and non-root mode
+    protected CommandInterface createCommandRunner() {
+        if (this.isRootMode) {
+            return new RootCommand();
+        } else {
+            return new CommandRunner();
+        }
     }
 
     static class MyFilter implements FilenameFilter {
-        private String type;
+        private final String type;
 
         public MyFilter(String type) {
             this.type = type;
         }
 
         @Override
-        public boolean accept(File dir, String name) {
+        public boolean accept(File dir, @NonNull String name) {
             return name.endsWith(type);
         }
     }
 
     static class ScanThread extends Thread {
+        private final String packagePath;
         WeakReference<PrefOverallActivity> activityRef;
-        private String packagePath;
         private String errMsg;
 
         // Record the output returned by ls
         private String prefOutput;
         private String dbOutput;
 
-        public ScanThread(PrefOverallActivity activity) {
+        public ScanThread(@NonNull PrefOverallActivity activity) {
             this.packagePath = activity.packagePath;
-            activityRef = new WeakReference<PrefOverallActivity>(activity);
+            activityRef = new WeakReference<>(activity);
         }
 
         @Override
@@ -928,7 +864,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
             // Still DO NOT know why ls will fail
             else {
                 File dir = new File(rootPath + packagePath + "/shared_prefs");
-                File files[] = dir.listFiles();
+                File[] files = dir.listFiles();
                 if (files != null) {
                     StringBuffer sb = new StringBuffer();
                     for (File f : files) {
@@ -965,29 +901,6 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
 
         public String getErrorMsg() {
             return errMsg;
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        // As backup is hidden, not implemented yet!
-        if (id == R.id.button_backup) {
-            AppInfo appInfo = AppInfo.create(pm, applicationInfo);
-            // BackupDialog dlg = new BackupDialog(this, appInfo);
-            // dlg.show();
-            RefInvoke.invokeStaticMethod("com.mcal.appdm.free.a", "s",
-                    new Class<?>[] { Activity.class, AppInfo.class },
-                    new Object[] { this, appInfo });
-        }
-    }
-
-    // Support root mode and non-root mode
-    protected CommandInterface createCommandRunner() {
-        if (this.isRootMode) {
-            return new RootCommand();
-        } else {
-            return new CommandRunner();
         }
     }
 }

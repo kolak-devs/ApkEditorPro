@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import com.mcal.apkeditor.StringListAdapter;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.view.ViewDialog;
-import com.mcal.common.utils.ClipboardUtil;
+import com.mcal.common.utils.ClipboardUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -74,7 +74,7 @@ public class StringValueDialog implements android.view.View.OnClickListener {
         } else if (id == R.id.menu_clipboard) {
             Context ctx = ctxRef.get();
             String str = keyTv.getText().toString();
-            ClipboardUtil.copyToClipboard(ctx, str);
+            ClipboardUtils.copyToClipboard(ctx, str);
 
             String msg = ctx.getString(R.string.copied_to_clipboard);
             msg = String.format(msg, str);

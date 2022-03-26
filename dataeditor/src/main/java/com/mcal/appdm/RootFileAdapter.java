@@ -9,9 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.appdm.base.R;
-import com.mcal.appdm.util.FileRecord;
-import com.mcal.appdm.util.FilenameComparator;
+import com.mcal.appdm.utils.FileRecord;
+import com.mcal.appdm.utils.FilenameComparator;
 import com.mcal.common.utils.CommandInterface;
 
 import java.io.BufferedReader;
@@ -27,15 +29,13 @@ public class RootFileAdapter extends BaseAdapter {
 
     private final WeakReference<PrefOverallActivity> activityRef;
     private final String rootDir;
-    private String curDir;
     private final boolean isRootMode;
-
     private final List<FileRecord> fileList = new ArrayList<FileRecord>();
-
     private final String strFileSize;
+    private String curDir;
 
     public RootFileAdapter(PrefOverallActivity activity, String rootDir,
-            boolean rootMode) {
+                           boolean rootMode) {
         this.activityRef = new WeakReference<>(activity);
         this.rootDir = rootDir;
         this.isRootMode = rootMode;
@@ -44,24 +44,6 @@ public class RootFileAdapter extends BaseAdapter {
         this.strFileSize = activity.getString(R.string.appdm_file_size) + " ";
 
         new FileListThread(curDir).start();
-    }
-
-    class FileListThread extends Thread {
-        private String dirPath;
-
-        public FileListThread(String dirPath) {
-            this.dirPath = dirPath;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public void run() {
-            List<FileRecord> subFiles = listFiles(dirPath);
-            if (subFiles != null) {
-                Collections.sort(subFiles, new FilenameComparator());
-                updateList(dirPath, subFiles);
-            }
-        }
     }
 
     private void showMessage_nonUiThread(final String msg) {
@@ -89,7 +71,7 @@ public class RootFileAdapter extends BaseAdapter {
                     return parseLsOutput(output);
                 }
             }
-            
+
             String errMsg = "Read error, please try again.";
             showMessage_nonUiThread(errMsg);
             return null;
@@ -117,25 +99,22 @@ public class RootFileAdapter extends BaseAdapter {
     // Update the list
     // can be called from non-ui thread
     public void updateList(final String dirPath,
-            final List<FileRecord> subFiles) {
+                           final List<FileRecord> subFiles) {
         Activity activity = activityRef.get();
         if (activity == null) {
             return;
         }
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (fileList) {
-                    curDir = dirPath;
-                    fileList.clear();
-                    if (!curDir.equals(rootDir)) {
-                        fileList.add(makeParentFileRec());
-                    }
-                    fileList.addAll(subFiles);
+        activity.runOnUiThread(() -> {
+            synchronized (fileList) {
+                curDir = dirPath;
+                fileList.clear();
+                if (!curDir.equals(rootDir)) {
+                    fileList.add(makeParentFileRec());
                 }
-                notifyDataSetChanged();
+                fileList.addAll(subFiles);
             }
+            notifyDataSetChanged();
         });
     }
 
@@ -147,8 +126,9 @@ public class RootFileAdapter extends BaseAdapter {
     }
 
     // Parse "ls -l" outputs to file records
+    @NonNull
     private List<FileRecord> parseLsOutput(String output) {
-        List<FileRecord> result = new ArrayList<FileRecord>();
+        List<FileRecord> result = new ArrayList<>();
 
         BufferedReader br = null;
         try {
@@ -163,7 +143,7 @@ public class RootFileAdapter extends BaseAdapter {
                         rec = new FileRecord();
                         rec.isDir = false;
                         try {
-                            rec.size = Integer.valueOf(segs[3]);
+                            rec.size = Integer.parseInt(segs[3]);
                         } catch (Throwable t) {
                         }
                     } else if (c == 'd') { // directory
@@ -186,6 +166,7 @@ public class RootFileAdapter extends BaseAdapter {
                 try {
                     br.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -218,7 +199,7 @@ public class RootFileAdapter extends BaseAdapter {
         ViewHolder viewHolder = null;
         // sawsem theme
         if (convertView == null) {
-            convertView = LayoutInflater.from(activityRef.get()).inflate(( R.layout.appdm_item_file),
+            convertView = LayoutInflater.from(activityRef.get()).inflate((R.layout.appdm_item_file),
                     null);
 
             viewHolder = new ViewHolder();
@@ -246,18 +227,36 @@ public class RootFileAdapter extends BaseAdapter {
         return convertView;
     }
 
-    static class ViewHolder {
-        public ImageView icon;
-        public TextView title;
-        public TextView subTitle;
-    }
-
     public String getData(List<FileRecord> records) {
         synchronized (fileList) {
             if (records != null) {
                 records.addAll(fileList);
             }
             return curDir;
+        }
+    }
+
+    static class ViewHolder {
+        public ImageView icon;
+        public TextView title;
+        public TextView subTitle;
+    }
+
+    class FileListThread extends Thread {
+        private final String dirPath;
+
+        public FileListThread(String dirPath) {
+            this.dirPath = dirPath;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void run() {
+            List<FileRecord> subFiles = listFiles(dirPath);
+            if (subFiles != null) {
+                Collections.sort(subFiles, new FilenameComparator());
+                updateList(dirPath, subFiles);
+            }
         }
     }
 }

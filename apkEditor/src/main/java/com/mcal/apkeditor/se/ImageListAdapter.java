@@ -26,8 +26,8 @@ import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
-import com.mcal.common.utils.ActivityUtil;
-import com.mcal.common.utils.DynamicExpandListView;
+import com.mcal.common.utils.ActivityUtils;
+import com.mcal.common.view.DynamicExpandListView;
 import com.mcal.common.utils.ImageZoomer;
 import com.mcal.imageviewlib.ViewZipImageActivity;
 
@@ -221,12 +221,12 @@ public class ImageListAdapter extends BaseAdapter implements
         String filename = drawableFileList.get(position);
         DrawableEntry entry = drawableEntries.get(filename);
         Intent intent = new Intent(ctx, ViewZipImageActivity.class);
-        ActivityUtil.attachParam(intent, "fullScreen", GlobalConfig.instance(ctx).isFullScreen());
+        ActivityUtils.attachParam(intent, "fullScreen", GlobalConfig.instance(ctx).isFullScreen());
         if (entry.replaceFile == null) {
-            ActivityUtil.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
-            ActivityUtil.attachParam(intent, "entryName", entry.bestQualifier + "/" + filename);
+            ActivityUtils.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
+            ActivityUtils.attachParam(intent, "entryName", entry.bestQualifier + "/" + filename);
         } else {
-            ActivityUtil.attachParam(intent, "imageFilePath", entry.replaceFile);
+            ActivityUtils.attachParam(intent, "imageFilePath", entry.replaceFile);
         }
         ctx.startActivity(intent);
     }

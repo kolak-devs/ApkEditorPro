@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mcal.apkeditor.R;
-import com.mcal.common.utils.PathUtil;
+import com.mcal.common.utils.PathUtils;
 import com.mcal.common.utils.SDCard;
 
 import java.io.File;
@@ -107,12 +107,12 @@ public class FolderListAdapter extends BaseAdapter {
 			}
 			// Special case: in the parent path of SD card (like /storage/emulated/0)
             // As on some phones, we cannot access the directory like /storage/emulated
-			else if (PathUtil.isParentFolderOf(path, SDCard.getRootDirectory())) {
+			else if (PathUtils.isParentFolderOf(path, SDCard.getRootDirectory())) {
                 fileList.clear();
 
                 SDCard.getRootDirectory();
                 FileRecord fr = new FileRecord();
-                fr.fileName = PathUtil.getSubFolder(path, SDCard.getRootDirectory());
+                fr.fileName = PathUtils.getSubFolder(path, SDCard.getRootDirectory());
                 fr.isDir = true;
                 fr.totalSize = -1;
                 fileList.add(fr);

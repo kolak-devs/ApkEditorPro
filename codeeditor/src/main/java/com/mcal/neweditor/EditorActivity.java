@@ -7,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -22,7 +21,6 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.widget.EditText;
@@ -33,8 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.SlidingDrawer;
-import android.widget.SlidingDrawer.OnDrawerCloseListener;
-import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -42,25 +38,30 @@ import android.widget.ViewAnimator;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.common.utils.CustomizedLangActivity;
-import com.mcal.common.utils.ProcessingDialog;
-import com.mcal.common.utils.RefInvoke;
+import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.view.ProcessingDialog;
+import com.mcal.neweditor.data.ColorTheme;
+import com.mcal.neweditor.view.ObEditText;
+import com.mcal.neweditor.view.ObScrollView;
 
 public class EditorActivity extends CustomizedLangActivity implements OnClickListener {
-	private static int AUTODELAY = 300;
-	private static int LINECOUNTDELAY = 300;
-	private static int TYPEDELAY = 400;
-	private static int SCROLLDELAY = 100;
+	private static final int AUTODELAY = 300;
+	private static final int LINECOUNTDELAY = 300;
+	private static final int TYPEDELAY = 400;
+	private static final int SCROLLDELAY = 100;
 
-	private boolean syntaxHighlighting = true;
+	private final boolean syntaxHighlighting = true;
 	private boolean hlChange = false;
 	private int hlEnd = -1;
 	private int hlStart = -1;
 	private boolean textWrap = true;
 	private int fontSize;
-	private int highlightSize = 50;
-	private Handler mHandler = new Handler();
+	private final int highlightSize = 50;
+	@NonNull
+	private final Handler mHandler = new Handler();
+	@NonNull
 	UpdateLineCount ulcTask = new UpdateLineCount();
+	@NonNull
 	SyntaxHighLight shTask = new SyntaxHighLight();
 	private boolean autoTextChange;
 
@@ -98,12 +99,12 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 	private boolean updateLineCount = true;
 	private int previousMaxDigits;
 
-	private boolean wasOpenedDrawer = false; // search panel opened
-	private boolean lastRedoState = true;
-	private boolean lastSaveState = true; // Latest changed saved or not
+	private final boolean wasOpenedDrawer = false; // search panel opened
+	private final boolean lastRedoState = true;
+	private final boolean lastSaveState = true; // Latest changed saved or not
 	private boolean lastChangedState = false; // Like a cache for document
 												// changed state
-	private boolean lastUndoState = true;
+	private final boolean lastUndoState = true;
 
 	// ///////////////////////////////// Not directly for editor
 	// ////////////////////////////////////////
@@ -129,18 +130,19 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 					updateNoWrap();
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			EditorActivity.this.previousLineCount = EditorActivity.this.textEditor
+			previousLineCount = textEditor
 					.getLineCount();
 		}
 
 		private void updateWrap() {
-			String[] lines = new StringBuilder(
-					String.valueOf(EditorActivity.this.textEditor.getText()
-							.toString())).append("\nEND").toString()
+			String[] lines = (textEditor.getText()
+					.toString() +
+					"\nEND")
 					.split("\n");
 			EditorActivity.this.changeLineNumbers(
-					EditorActivity.this.updateLineCount,
+					updateLineCount,
 					getNumberDigits(lines.length));
 			int offset = 0;
 			StringBuilder sb = new StringBuilder();
@@ -150,7 +152,7 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 				int expected2;
 				while (true) {
 					expected2 = expected + 1;
-					if (expected >= EditorActivity.this.textEditor
+					if (expected >= textEditor
 							.getLineNumber(offset)) {
 						break;
 					}
@@ -176,13 +178,13 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 		}
 
 		private void updateNoWrap() {
-			int lineCount = EditorActivity.this.textEditor.getLineCount();
+			int lineCount = textEditor.getLineCount();
 			if (lineCount == 0) {
 				lineCount = 1;
 			}
 
-			EditorActivity.this.changeLineNumbers(
-					EditorActivity.this.updateLineCount,
+			changeLineNumbers(
+					updateLineCount,
 					getNumberDigits(lineCount));
 
 			StringBuilder sb = new StringBuilder();
@@ -191,8 +193,8 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 				sb.append('\n');
 			}
 
-			EditorActivity.this.lineNumbers.setText(sb.toString());
-			EditorActivity.this.lineNumbers.requestLayout();
+			lineNumbers.setText(sb.toString());
+			lineNumbers.requestLayout();
 		}
 	}
 
@@ -201,31 +203,31 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 		}
 
 		public void run() {
-			final Document document = EditorActivity.this.getCurrentDocument();
+			final Document document = getCurrentDocument();
 			final Rect r = new Rect();
-			if (EditorActivity.this.textEditor.getLocalVisibleRect(r)) {
+			if (textEditor.getLocalVisibleRect(r)) {
 				doHighlighting(document, r);
 			} else {
 				highlightingOnLayout(document, r);
 			}
-			EditorActivity.this.hlStart = -1;
-			EditorActivity.this.hlEnd = -1;
-			EditorActivity.this.hlChange = false;
+			hlStart = -1;
+			hlEnd = -1;
+			hlChange = false;
 		}
 
-		private void highlightingOnLayout(final Document document, final Rect r) {
-			document.syntaxHighlight(EditorActivity.this.textEditor,
-					EditorActivity.this.hlStart, EditorActivity.this.hlEnd, -1,
-					-1, EditorActivity.this.hlChange,
-					EditorActivity.this.getApplicationContext());
-			EditorActivity.this.textEditor.getViewTreeObserver()
+		private void highlightingOnLayout(@NonNull final Document document, final Rect r) {
+			document.syntaxHighlight(textEditor,
+					hlStart, hlEnd, -1,
+					-1, hlChange,
+					getApplicationContext());
+			textEditor.getViewTreeObserver()
 					.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 						@SuppressWarnings("deprecation")
 						public void onGlobalLayout() {
-							EditorActivity.this.textEditor
+							textEditor
 									.getViewTreeObserver()
 									.removeGlobalOnLayoutListener(this);
-							if (EditorActivity.this.textEditor
+							if (textEditor
 									.getLocalVisibleRect(r)) {
 								doHighlighting(document, r);
 							}
@@ -236,18 +238,18 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 		private void doHighlighting(Document document, Rect r) {
 			try {
 				int lstart = r.top
-						/ EditorActivity.this.textEditor.getLineHeight();
-				int lend = (r.top + EditorActivity.this.getWindowManager()
+						/ textEditor.getLineHeight();
+				int lend = (r.top + getWindowManager()
 						.getDefaultDisplay().getHeight())
-						/ EditorActivity.this.textEditor.getLineHeight();
-				if (EditorActivity.this.textWrap) {
+						/ textEditor.getLineHeight();
+				if (textWrap) {
 					int rlstart = 0;
 					int rlend = 0;
-					String[] lines = EditorActivity.this.textEditor.getText()
+					String[] lines = textEditor.getText()
 							.toString().split("\\n");
 					int offset = 0;
 					for (int i = 0; i < lines.length; i++) {
-						int line = EditorActivity.this.textEditor
+						int line = textEditor
 								.getLineNumber(offset);
 						offset += lines[i].length() + 1;
 						if (line <= lstart) {
@@ -260,14 +262,15 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 					lstart = rlstart;
 					lend = rlend;
 				}
-				lstart -= EditorActivity.this.highlightSize;
-				lend += EditorActivity.this.highlightSize;
-				document.syntaxHighlight(EditorActivity.this.textEditor,
+				lstart -= highlightSize;
+				lend += highlightSize;
+				document.syntaxHighlight(textEditor,
 				/* TestActivity.this.currentTheme, */
-				EditorActivity.this.hlStart, EditorActivity.this.hlEnd, lstart,
-						lend, EditorActivity.this.hlChange,
-						EditorActivity.this.getApplicationContext());
+				hlStart, hlEnd, lstart,
+						lend, hlChange,
+						getApplicationContext());
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -327,7 +330,7 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 	// }
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putBoolean("modifySaved", modifySaved);
 	}
@@ -425,7 +428,7 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 		this.lineNumbers = (EditText) findViewById(R.id.lineNumbers);
 		this.textEditor = (ObEditText) findViewById(R.id.editor);
 		this.lineDivider = findViewById(R.id.divider);
-		this.editorScrollView = (com.mcal.neweditor.ObScrollView) findViewById(R.id.editorScrollview);
+		this.editorScrollView = (ObScrollView) findViewById(R.id.editorScrollview);
 		// this.editorHorizontalLayout = (HorizontalScrollView)
 		// findViewById(R.id.hScrollView);
 		this.docFindAnim = (ViewAnimator) findViewById(R.id.searchAnimator);
@@ -489,24 +492,14 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 	@SuppressWarnings("deprecation")
 	private void setupOnclickListener() {
 		this.documentListDrawer
-				.setOnDrawerOpenListener(new OnDrawerOpenListener() {
-					public void onDrawerOpened() {
-						EditorActivity.this.adjustOpenedDrawer();
-					}
-				});
+				.setOnDrawerOpenListener(() -> adjustOpenedDrawer());
 		this.documentListDrawer
-				.setOnDrawerCloseListener(new OnDrawerCloseListener() {
-					public void onDrawerClosed() {
-						EditorActivity.this.adjustClosedDrawer();
-					}
-				});
+				.setOnDrawerCloseListener(() -> adjustClosedDrawer());
 
 		// Selection change listener
-		this.textEditor.setTextSelectionListener(new TextSelectionListener() {
-			public void selectionChanged(int selStart, int selEnd) {
-				if (EditorActivity.this.documentListDrawer.isOpened()) {
-					EditorActivity.this.updateReplaceState();
-				}
+		this.textEditor.setTextSelectionListener((selStart, selEnd) -> {
+			if (documentListDrawer.isOpened()) {
+				updateReplaceState();
 			}
 		});
 
@@ -517,18 +510,18 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 					int count) {
 				// Log.d("DEBUG", "Text change detected, start=" + start +
 				// ", before=" + before + ", count=" + count);
-				Document document = EditorActivity.this.getCurrentDocument();
+				Document document = getCurrentDocument();
 				boolean wasChanged = document.changed();
-				if (!EditorActivity.this.autoTextChange) {
+				if (!autoTextChange) {
 					document.textChanged(s, start, before, count);
 				}
-				EditorActivity.this.syntaxHighlight(
-						Math.min(EditorActivity.this.hlStart, start),
+				syntaxHighlight(
+						Math.min(hlStart, start),
 						Math.max(before, count) + start, true);
-				EditorActivity.this.updateUndoRedoState();
-				EditorActivity.this.updateLineCount(true);
+				updateUndoRedoState();
+				updateLineCount(true);
 				if (!wasChanged && document.changed()) {
-					EditorActivity.this.updateSaveState();
+					updateSaveState();
 					// TestActivity.this.notifyDocumentListChanged();
 				}
 			}
@@ -542,45 +535,35 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 		});
 
 		// When scroll, redraw the highlighting
-		this.editorScrollView.setScrollViewListener(new ScrollViewListener() {
-			public void onScrollChanged(ObScrollView scrollView, int x, int y,
-					int oldx, int oldy) {
-				EditorActivity.this.syntaxHighlight(-1, -1, false);
-			}
-		});
+		this.editorScrollView.setScrollViewListener((scrollView, x, y, oldx, oldy) -> syntaxHighlight(-1, -1, false));
 
 		// Find and replace text key listener
-		this.findText.setOnKeyListener(new OnKeyListener() {
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_UP
-						&& keyCode == KeyEvent.KEYCODE_ENTER) {
-					EditorActivity.this.executeFindWrapAction(true);
-					return true;
-				} else if (EditorActivity.this.documentListDrawer
-						.getVisibility() == View.VISIBLE
-						&& event.getAction() == KeyEvent.ACTION_UP
-						&& keyCode == KeyEvent.KEYCODE_BACK) {
-					EditorActivity.this.documentListDrawer.close();
-					return true;
-				} else {
-					EditorActivity.this.updateReplaceState();
-					return false;
-				}
-			}
-		});
-		this.replaceText.setOnKeyListener(new OnKeyListener() {
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (EditorActivity.this.documentListDrawer.getVisibility() == View.VISIBLE
-						&& event.getAction() == KeyEvent.ACTION_UP
-						&& keyCode == KeyEvent.KEYCODE_BACK) {
-					EditorActivity.this.documentListDrawer.close();
-					return true;
-				}
-				EditorActivity.this.updateReplaceState();
+		this.findText.setOnKeyListener((v, keyCode, event) -> {
+			if (event.getAction() == KeyEvent.ACTION_UP
+					&& keyCode == KeyEvent.KEYCODE_ENTER) {
+				executeFindWrapAction(true);
+				return true;
+			} else if (documentListDrawer
+					.getVisibility() == View.VISIBLE
+					&& event.getAction() == KeyEvent.ACTION_UP
+					&& keyCode == KeyEvent.KEYCODE_BACK) {
+				documentListDrawer.close();
+				return true;
+			} else {
+				updateReplaceState();
 				return false;
 			}
 		});
-
+		this.replaceText.setOnKeyListener((v, keyCode, event) -> {
+			if (documentListDrawer.getVisibility() == View.VISIBLE
+					&& event.getAction() == KeyEvent.ACTION_UP
+					&& keyCode == KeyEvent.KEYCODE_BACK) {
+				documentListDrawer.close();
+				return true;
+			}
+			updateReplaceState();
+			return false;
+		});
 	}
 
 	private int getInverseColor(int background) {
@@ -647,8 +630,7 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 				this.lineDivider.setVisibility(View.VISIBLE);
 				String digits = "";
 				for (int i = 0; i < nd; i++) {
-					digits = new StringBuilder(String.valueOf(digits)).append(
-							"9").toString();
+					digits = digits + "9";
 				}
 				this.previousMaxDigits = nd;
 				lp1.width = ((int) this.textEditor.getPaint().measureText(
@@ -763,8 +745,8 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 
 					@Override
 					public void afterProcess() {
-						EditorActivity.this.updateSaveState();
-						EditorActivity.this.modifySaved = true;
+						updateSaveState();
+						modifySaved = true;
 						setResult();
 					}
 
@@ -774,10 +756,11 @@ public class EditorActivity extends CustomizedLangActivity implements OnClickLis
 
 	// Work in ROOT mode, copy back to real path when saved
 	protected void copyBack2RealPath() {
-		RefInvoke.invokeStaticMethod(
-				"com.mcal.appdm.util.FileCopyUtil", "copyBack",
-				new Class<?>[] { Context.class, String.class, String.class, boolean.class },
-				new Object[] { this, filePath, realFilePath, isRootMode });
+		try {
+			com.mcal.common.utils.FileCopyUtils.copyBack(this, filePath, realFilePath, isRootMode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Make parent activity aware the modification

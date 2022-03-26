@@ -52,9 +52,9 @@ import com.mcal.apkeditor.dialogs.SmaliMethodsDialogs;
 import com.mcal.apkeditor.editor.HtmlViewDialog;
 import com.mcal.apkeditor.inf.IJavaExtractor;
 import com.mcal.apkeditor.utils.AndroidBug5497Workaround;
-import com.mcal.common.utils.ActivityUtil;
-import com.mcal.common.utils.ClipboardUtil;
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityUtils;
+import com.mcal.common.utils.ClipboardUtils;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.Display;
 import com.mcal.common.utils.Pair;
 import com.mcal.common.utils.SDCard;
@@ -290,22 +290,22 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
 
         // Get data from intent
         Intent intent = getIntent();
-        String filePath = ActivityUtil.getParam(intent, "xmlPath");
-        this.apkPath = ActivityUtil.getParam(intent, "apkPath");
-        this.searchString = ActivityUtil.getParam(intent, "searchString");
+        String filePath = ActivityUtils.getParam(intent, "xmlPath");
+        this.apkPath = ActivityUtils.getParam(intent, "apkPath");
+        this.searchString = ActivityUtils.getParam(intent, "searchString");
         try {
             // Open a single file
             if (filePath != null) {
                 this.batchMode = false;
 
                 int startLine = -1;
-                String strLine = ActivityUtil.getParam(intent, "startLine");
+                String strLine = ActivityUtils.getParam(intent, "startLine");
                 if (strLine != null) {
                     startLine = Integer.parseInt(strLine);
                 }
-                String syntaxFileName = ActivityUtil.getParam(intent, "syntaxFileName");
-                String extraString = ActivityUtil.getParam(intent, "extraString");
-                this.displayName = ActivityUtil.getParam(intent, "displayFileName");
+                String syntaxFileName = ActivityUtils.getParam(intent, "syntaxFileName");
+                String extraString = ActivityUtils.getParam(intent, "extraString");
+                this.displayName = ActivityUtils.getParam(intent, "displayFileName");
 
                 // Put values to list container
                 this.fileList = new ArrayList<>(1);
@@ -320,11 +320,11 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
             // Open multiple files
             else {
                 this.batchMode = true;
-                this.fileList = ActivityUtil.getStringArray(intent, "fileList");
-                this.curFileIndex = ActivityUtil.getIntParam(intent, "curFileIndex");
-                this.startLineList = ActivityUtil.getIntArray(intent, "startLineList");
-                this.syntaxFileList = ActivityUtil.getStringArray(intent, "syntaxFileList");
-                this.extraStringList = ActivityUtil.getStringArray(intent, "extraStringList");
+                this.fileList = ActivityUtils.getStringArray(intent, "fileList");
+                this.curFileIndex = ActivityUtils.getIntParam(intent, "curFileIndex");
+                this.startLineList = ActivityUtils.getIntArray(intent, "startLineList");
+                this.syntaxFileList = ActivityUtils.getStringArray(intent, "syntaxFileList");
+                this.extraStringList = ActivityUtils.getStringArray(intent, "extraStringList");
 
                 // Set the default value if not passed to us
                 if (startLineList == null) {
@@ -672,12 +672,7 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
             String errMessage;
 
             @Override
-            public void process() throws Exception {
-                /*IJavaExtractor extractor = (IJavaExtractor)
-                        RefInvoke.createInstance("com.mcal.apkeditor.pro.JavaExtractor",
-                                new Class[]{String.class, String.class, String.class, String.class},
-                                new Object[]{apkPath, dexName, className, workingDirectory});*/
-
+            public void process() {
                 IJavaExtractor extractor  = new JavaExtractor(apkPath, dexName, className, workingDirectory);
 
                 if (extractor != null) {
@@ -792,7 +787,7 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
     @Override
     public void onColorChange(int argb) {
         String strColor = String.format("#%08x", argb);
-        ClipboardUtil.copyToClipboard(this, strColor);
+        ClipboardUtils.copyToClipboard(this, strColor);
         String message = String.format(getString(R.string.copied_to_clipboard), strColor);
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }

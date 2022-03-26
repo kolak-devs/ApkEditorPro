@@ -24,7 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.apkeditor.R;
-import com.mcal.common.utils.RefInvoke;
 import com.mcal.seticon.SetIcon;
 
 import java.util.ArrayList;

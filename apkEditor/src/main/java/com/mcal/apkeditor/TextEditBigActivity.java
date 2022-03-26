@@ -34,13 +34,13 @@ import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
 import com.mcal.apkeditor.editor.HtmlViewDialog;
 import com.mcal.apkeditor.ui.LayoutObListView;
-import com.mcal.common.utils.ClipboardUtil;
+import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.Display;
-import com.mcal.common.utils.FileUtil;
+import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.ICommonCallback;
-import com.mcal.common.utils.PathUtil;
+import com.mcal.common.utils.PathUtils;
 import com.mcal.common.utils.SDCard;
-import com.mcal.neweditor.ColorTheme;
+import com.mcal.neweditor.data.ColorTheme;
 import com.mcal.neweditor.Document;
 
 import java.io.File;
@@ -204,7 +204,7 @@ public class TextEditBigActivity extends TextEditBase
             String unsavedFilePath;
             try {
                 unsavedFilePath = SDCard.makeWorkingDir(this) +
-                        PathUtil.getNameFromPath(getCurrentFilePath()) + ".tmp";
+                        PathUtils.getNameFromPath(getCurrentFilePath()) + ".tmp";
             } catch (Exception ignored) {
                 unsavedFilePath = getCurrentFilePath() + ".tmp";
             }
@@ -467,7 +467,7 @@ public class TextEditBigActivity extends TextEditBase
     private void doCopySelectedText() {
         String selected = strSelected;
         if (selected != null && !selected.equals("")) {
-            ClipboardUtil.copyToClipboard(this, selected);
+            ClipboardUtils.copyToClipboard(this, selected);
             if (selected.contains("\n")) {
                 Toast.makeText(this, R.string.selected_str_copied, Toast.LENGTH_SHORT).show();
             } else {
@@ -478,7 +478,7 @@ public class TextEditBigActivity extends TextEditBase
     }
 
     private void doPaste() {
-        String text = ClipboardUtil.getText(this);
+        String text = ClipboardUtils.getText(this);
         if (text == null) {
             Toast.makeText(this, R.string.clipboard_no_text, Toast.LENGTH_SHORT).show();
             return;
@@ -653,7 +653,7 @@ public class TextEditBigActivity extends TextEditBase
                     public void process() throws Exception {
                         // As the content in document is not correct, do not use it
                         //curDocument.save(TextEditBigActivity.this, false);
-                        FileUtil.writeToFile(getCurrentFilePath(), textEditor.getTextLines());
+                        FileUtils.writeToFile(getCurrentFilePath(), textEditor.getTextLines());
                         curDocument.setChanged(false);
                     }
 

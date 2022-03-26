@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -19,9 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.mcal.apkeditor.ce.IApkMaking;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ITaskCallback;
-import com.mcal.common.utils.RefInvoke;
 import com.mcal.seticon.SetIcon;
 
 import java.io.BufferedReader;
@@ -82,25 +80,25 @@ public class ApkComposeService extends Service implements ITaskCallback {
             return super.onStartCommand(intent, flags, startId);
         }
 
-        this.decodeRootPath = ActivityUtil.getParam(intent, "decodeRootPath");
-        this.srcApkPath = ActivityUtil.getParam(intent, "srcApkPath");
-        this.targetApkPath = ActivityUtil.getParam(intent, "targetApkPath");
-        String str = ActivityUtil.getParam(intent, "stringModified");
+        this.decodeRootPath = ActivityUtils.getParam(intent, "decodeRootPath");
+        this.srcApkPath = ActivityUtils.getParam(intent, "srcApkPath");
+        this.targetApkPath = ActivityUtils.getParam(intent, "targetApkPath");
+        String str = ActivityUtils.getParam(intent, "stringModified");
         this.stringModified = Boolean.valueOf(str);
-        str = ActivityUtil.getParam(intent, "manifestModified");
+        str = ActivityUtils.getParam(intent, "manifestModified");
         this.manifestModified = Boolean.valueOf(str);
-        str = ActivityUtil.getParam(intent, "resFileModified");
+        str = ActivityUtils.getParam(intent, "resFileModified");
         this.resFileModified = Boolean.valueOf(str);
-        this.modifiedSmaliFolders = ActivityUtil.getStringArray(intent, "modifiedSmaliFolders");
-        this.signAPK = ActivityUtil.getBoolParam(intent, "signAPK");
+        this.modifiedSmaliFolders = ActivityUtils.getStringArray(intent, "modifiedSmaliFolders");
+        this.signAPK = ActivityUtils.getBoolParam(intent, "signAPK");
 
-        this.addedFiles = ActivityUtil.getMapParam(intent, "addedFiles");
-        this.replacedFiles = ActivityUtil.getMapParam(intent, "replacedFiles");
+        this.addedFiles = ActivityUtils.getMapParam(intent, "addedFiles");
+        this.replacedFiles = ActivityUtils.getMapParam(intent, "replacedFiles");
         this.deletedFiles = new HashSet<>();
-        List<String> delEntries = ActivityUtil.getStringArray(intent, "deletedFiles");
+        List<String> delEntries = ActivityUtils.getStringArray(intent, "deletedFiles");
         this.deletedFiles.addAll(delEntries);
 
-        String passedFile = ActivityUtil.getParam(intent, "fileEntry2ZipEntry");
+        String passedFile = ActivityUtils.getParam(intent, "fileEntry2ZipEntry");
         if (passedFile != null) {
             this.fileEntry2ZipEntry = getMapFromFile(passedFile);
         }

@@ -19,8 +19,8 @@ import com.common.colormixer.ColorMixer;
 import com.common.colormixer.ColorMixerDialog;
 import com.common.colormixer.ColorValue;
 import com.common.colormixer.ColorValueAdapter;
-import com.mcal.common.utils.CustomizedLangActivity;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -50,7 +50,7 @@ public class ColorXmlActivity extends CustomizedLangActivity
         }
         setContentView(R.layout.activity_colors_xml);
 
-        this.xmlPath = ActivityUtil
+        this.xmlPath = ActivityUtils
                 .getParam(getIntent(), "xmlPath");
 
         initData();
@@ -169,13 +169,13 @@ public class ColorXmlActivity extends CustomizedLangActivity
         String displayFileName = "colors.xml";
 
         Intent intent = TextEditor.getEditorIntent(this, this.xmlPath, null);
-        ActivityUtil.attachParam(intent,
+        ActivityUtils.attachParam(intent,
                 "syntaxFileName", syntaxFileName);
         if (displayFileName != null) {
-            ActivityUtil.attachParam(intent,
+            ActivityUtils.attachParam(intent,
                     "displayFileName", displayFileName);
         }
-        ActivityUtil.attachParam(intent, "extraString",
+        ActivityUtils.attachParam(intent, "extraString",
                 ENTRYNAME);
         startActivityForResult(intent, 0);
     }

@@ -9,10 +9,9 @@ import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.pro.ResourceDecoder;
 import com.mcal.apklib.ManifestInfoCollector;
-import com.mcal.common.utils.FileUtil;
+import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.LOGGER;
-import com.mcal.common.utils.RefInvoke;
 import com.mcal.common.utils.SDCard;
 import com.mcal.common.data.Preferences;
 import com.mcal.androlib.ResSmaliIdProvider;
@@ -150,7 +149,7 @@ public class ApkParseThread extends Thread {
             // CommandRunner cr = new CommandRunner();
             // String[] command = { "sh", "-c", "rm -rf " + decodeRootPath };
             // cr.runCommand(command, null, 10000);
-            FileUtil.deleteAll(new File(decodeRootPath));
+            FileUtils.deleteAll(new File(decodeRootPath));
             // LOGGER.info(decodeRootPath + " deleted!", true);
 
             File outDir = new File(decodeRootPath);

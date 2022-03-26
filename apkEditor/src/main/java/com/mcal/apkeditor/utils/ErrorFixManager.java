@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.ApkComposeActivity;
 import com.mcal.apkeditor.R;
-import com.mcal.common.utils.ProcessingDialog;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.view.ProcessingDialog;
+import com.mcal.common.utils.RandomUtils;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class ErrorFixManager {
                     || (c >= 'A' && c <= 'Z') || c == '_' || c == '.') {
                 sb.append(c);
             } else {
-                String str = RandomUtil.getRandomString(4);
+                String str = RandomUtils.getRandomString(4);
                 sb.append(str);
             }
         }

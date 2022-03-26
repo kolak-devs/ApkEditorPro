@@ -77,20 +77,20 @@ import com.mcal.apkeditor.translate.PossibleLanguages;
 import com.mcal.apkeditor.translate.TranslateItem;
 import com.mcal.apkeditor.ui.AddFolderDialog;
 import com.mcal.apkeditor.utils.AndroidBug5497Workaround;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
-import com.mcal.common.utils.CustomizedLangActivity;
-import com.mcal.common.utils.FileUtil;
+import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.LOGGER;
-import com.mcal.common.utils.PathUtil;
-import com.mcal.common.utils.PreferenceUtil;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.PathUtils;
+import com.mcal.common.utils.PreferenceUtils;
+import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
 import com.mcal.common.utils.ServiceUtil;
 import com.mcal.common.utils.TextFileReader;
-import com.mcal.common.utils.UriUtil;
-import com.mcal.common.utils.ZipUtil;
+import com.mcal.common.utils.UriUtils;
+import com.mcal.common.utils.ZipUtils;
 import com.mcal.folderlist.FileRecord;
 import com.mcal.folderlist.util.OpenFiles;
 import com.mcal.httpserver.HttpServiceManager;
@@ -423,7 +423,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }
 
         // If projectName is not null, means recover from a project
-        this.projectName = ActivityUtil.getParam(getIntent(), "projectName");
+        this.projectName = ActivityUtils.getParam(getIntent(), "projectName");
 
         ProjectInfo prjInfo = null;
         if (projectName != null) {
@@ -463,13 +463,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     MainActivity.it(this, this.getPackageName(), this.getFilesDir().getPath(), apkPath);
                 } catch (Exception ignored) {
                 }*/
-                this.apkPath = UriUtil.getAbsolutePath(this, uri);
+                this.apkPath = UriUtils.getAbsolutePath(this, uri);
             }
             // Get it from Intent
             if (this.apkPath == null) {
-                this.apkPath = ActivityUtil.getParam(getIntent(), "apkPath");
+                this.apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
             }
-            this.decodeRootPath = ActivityUtil.getParam(getIntent(), "decodeRootPath");
+            this.decodeRootPath = ActivityUtils.getParam(getIntent(), "decodeRootPath");
             if (this.decodeRootPath == null) {
                 String decodeDir = SettingActivity.getDecodeDirectory(this);
                 if (decodeDir != null) {
@@ -509,7 +509,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 return;
             }
         } else {
-            this.isFullDecoding = ActivityUtil.getBoolParam(getIntent(), "isFullDecoding");
+            this.isFullDecoding = ActivityUtils.getBoolParam(getIntent(), "isFullDecoding");
             this.parseThread = new ApkParseThread(this, this, apkPath, decodeRootPath, isFullDecoding);
             parseThread.start();
         }
@@ -985,7 +985,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 }
 
                 // Rename decoded folder (as currently always in a fixed directory)
-                String targetFolder = PathUtil.replaceNameWith(decodeRootPath, projectName);
+                String targetFolder = PathUtils.replaceNameWith(decodeRootPath, projectName);
                 targetDir = new File(targetFolder);
                 if (targetDir.exists()) {
                     targetDir = FileCopyDialog.getTargetNonExistFile(targetFolder, true);
@@ -1145,7 +1145,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             File oldFile = new File(filePath);
             String newPath = pathRemovedType.substring(0,
                     pathRemovedType.length() - TMP_EDITOR_FILE.length())
-                    + RandomUtil.getRandomString(8);
+                    + RandomUtils.getRandomString(8);
             File newFile = new File(newPath);
             if (oldFile.renameTo(newFile)) {
                 filePath = newPath;
@@ -1396,7 +1396,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // Image of dex2smali
         else if (id == R.id.imageview_dex2smali) {
-            boolean showed = PreferenceUtil.getBoolean(this, "smali_license_showed", false);
+            boolean showed = PreferenceUtils.getBoolean(this, "smali_license_showed", false);
             if (!showed) {
                 new SmaliNoticeDialog(this).show();
             }
@@ -1565,9 +1565,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
         this.resFileModified = false;
         Set<String> modifiedDex = new HashSet<>();
 
-        long resModifyTime = FileUtil.recursiveModifiedTime(new File(decodeRootPath + "/res"));
+        long resModifyTime = FileUtils.recursiveModifiedTime(new File(decodeRootPath + "/res"));
         Log.d("DEBUG", "resModifyTime=" + resModifyTime);
-        long manifestModifyTime = FileUtil.recursiveModifiedTime(new File(decodeRootPath + "/AndroidManifest.xml"));
+        long manifestModifyTime = FileUtils.recursiveModifiedTime(new File(decodeRootPath + "/AndroidManifest.xml"));
         Log.d("DEBUG", "manifestTime=" + manifestModifyTime);
 
         // Collect modified files
@@ -1774,33 +1774,33 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 filename = (bSign && BuildConfig.WITH_SIGN) ? "gen_signed" : "gen_unsigned";
                 break;
         }
-        filename = FileUtil.reviseFileName(filename);
+        filename = FileUtils.reviseFileName(filename);
 
         String targetApkPath = createOutputPath(apkPath, outputDir, filename);
 
         Intent intent = new Intent(this, ApkComposeService.class);
-        ActivityUtil.attachParam(intent, "decodeRootPath", decodeRootPath);
+        ActivityUtils.attachParam(intent, "decodeRootPath", decodeRootPath);
         // For full decoding, do NOT pass apkPath, so the builder will know that situation
         if (!this.isFullDecoding) {
-            ActivityUtil.attachParam(intent, "srcApkPath", apkPath);
+            ActivityUtils.attachParam(intent, "srcApkPath", apkPath);
         }
-        ActivityUtil.attachParam(intent, "targetApkPath", targetApkPath);
-        ActivityUtil.attachParam(intent, "stringModified",
+        ActivityUtils.attachParam(intent, "targetApkPath", targetApkPath);
+        ActivityUtils.attachParam(intent, "stringModified",
                 stringModified ? "true" : "false");
-        ActivityUtil.attachParam(intent, "manifestModified",
+        ActivityUtils.attachParam(intent, "manifestModified",
                 manifestModified ? "true" : "false");
-        ActivityUtil.attachParam(intent, "resFileModified",
+        ActivityUtils.attachParam(intent, "resFileModified",
                 resFileModified ? "true" : "false");
-        ActivityUtil.attachParam(intent, "modifiedSmaliFolders", smaliFolders);
-        ActivityUtil.attachParam(intent, "addedFiles", addedFiles);
-        ActivityUtil.attachParam(intent, "deletedFiles", deletedFiles);
-        ActivityUtil.attachParam(intent, "replacedFiles", replacedFiles);
-        ActivityUtil.attachBoolParam(intent, "signAPK", bSign);
+        ActivityUtils.attachParam(intent, "modifiedSmaliFolders", smaliFolders);
+        ActivityUtils.attachParam(intent, "addedFiles", addedFiles);
+        ActivityUtils.attachParam(intent, "deletedFiles", deletedFiles);
+        ActivityUtils.attachParam(intent, "replacedFiles", replacedFiles);
+        ActivityUtils.attachBoolParam(intent, "signAPK", bSign);
 
         // It is too big to pass it to another activity
         // So we save it to file
         String mapFileName = serialize2File(fileEntry2ZipEntry);
-        ActivityUtil.attachParam(intent, "fileEntry2ZipEntry", mapFileName);
+        ActivityUtils.attachParam(intent, "fileEntry2ZipEntry", mapFileName);
 
         startService(intent);
 
@@ -1817,7 +1817,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private String serialize2File(Map<String, String> fileEntry2ZipEntry2) {
         try {
             String filepath = SDCard.makeWorkingDir(this)
-                    + RandomUtil.getRandomString(8);
+                    + RandomUtils.getRandomString(8);
             BufferedOutputStream bos = new BufferedOutputStream(
                     new FileOutputStream(filepath));
             for (Entry<String, String> entry : fileEntry2ZipEntry2
@@ -2465,7 +2465,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }
 
         // Write back to file
-        FileUtil.writeToFile(filePath, newLines);
+        FileUtils.writeToFile(filePath, newLines);
     }
 
     @SuppressLint("DefaultLocale")
@@ -2767,7 +2767,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 this.modifiedTimeBeforeOpen = f.lastModified();
                 if (fileName.endsWith(".png")) {
                     Intent intent = new Intent(this, PngEditActivity.class);
-                    ActivityUtil.attachParam(intent, "filePath", filePath);
+                    ActivityUtils.attachParam(intent, "filePath", filePath);
                     startActivityForResult(intent, RC_OPEN_EXTERNAL);
                 } else {
                     OpenFiles.openFile(this, filePath, RC_OPEN_EXTERNAL);
@@ -2839,17 +2839,17 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // Open the color editor
         if ("res/values/colors.xml".equals(entryName)) {
             Intent intent = new Intent(this, ColorXmlActivity.class);
-            ActivityUtil.attachParam(intent, "xmlPath", filePath);
+            ActivityUtils.attachParam(intent, "xmlPath", filePath);
             startActivityForResult(intent, RC_COLOR_EDITOR);
             return;
         }
 
         Intent intent = TextEditor.getEditorIntent(this, filePath, this.apkPath);
-        ActivityUtil.attachParam(intent, "syntaxFileName", syntaxFileName);
+        ActivityUtils.attachParam(intent, "syntaxFileName", syntaxFileName);
         if (displayFileName != null) {
-            ActivityUtil.attachParam(intent, "displayFileName", displayFileName);
+            ActivityUtils.attachParam(intent, "displayFileName", displayFileName);
         }
-        ActivityUtil.attachParam(intent, "extraString", entryName);
+        ActivityUtils.attachParam(intent, "extraString", entryName);
         startActivityForResult(intent, RC_FILE_EDITOR);
     }
 
@@ -3049,7 +3049,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             if (zipEntry != null) {
                 entryName = zipEntry;
             }
-            ZipUtil.unzipFileTo(this.apkPath, entryName, dstPath);
+            ZipUtils.unzipFileTo(this.apkPath, entryName, dstPath);
             return dstPath;
         } catch (Exception e1) {
             return null;

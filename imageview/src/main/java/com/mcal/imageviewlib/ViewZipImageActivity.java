@@ -16,8 +16,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
-import com.mcal.common.utils.ActivityUtil;
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityUtils;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.polites.android.GestureImageView;
 
 public class ViewZipImageActivity extends CustomizedLangActivity {
@@ -48,9 +48,9 @@ public class ViewZipImageActivity extends CustomizedLangActivity {
 
         setContentView(R.layout.imageviewlib_activity_empty);
 
-        this.zipFilePath = ActivityUtil.getParam(intent, "zipFilePath");
-        this.entryName = ActivityUtil.getParam(intent, "entryName");
-        this.imageFilePath = ActivityUtil.getParam(intent, "imageFilePath");
+        this.zipFilePath = ActivityUtils.getParam(intent, "zipFilePath");
+        this.entryName = ActivityUtils.getParam(intent, "entryName");
+        this.imageFilePath = ActivityUtils.getParam(intent, "imageFilePath");
 
         // Decode bitmap
         Bitmap bitmap = decodeBitmap();

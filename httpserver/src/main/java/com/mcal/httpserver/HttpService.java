@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 
 public class HttpService extends Service {
 
@@ -51,8 +51,8 @@ public class HttpService extends Service {
             return super.onStartCommand(intent, flags, startId);
         }
 
-        this.projectDirectory = ActivityUtil.getParam(intent, "projectDirectory");
-        this.httpDirectory = ActivityUtil.getParam(intent, "httpDirectory");
+        this.projectDirectory = ActivityUtils.getParam(intent, "projectDirectory");
+        this.httpDirectory = ActivityUtils.getParam(intent, "httpDirectory");
 
         startHttpServer();
 

@@ -35,7 +35,7 @@
 -keep class com.mcal.apkeditor.pro.** { *; }
 -keep class com.mcal.apkeditor.translate.TranslateDialog { *; }
 -keep class com.mcal.neweditor.Token { *; }
--keep class com.mcal.appdm.util.FileCopyUtil { *; }
+-keep class com.mcal.appdm.utils.FileCopyUtils { *; }
 -keep class com.mcal.apkeditor.translate.** { *; }
 
 # For project persistence

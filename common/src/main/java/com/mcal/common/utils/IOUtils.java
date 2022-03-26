@@ -1,5 +1,7 @@
 package com.mcal.common.utils;
 
+import androidx.annotation.NonNull;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -16,7 +18,7 @@ import java.util.zip.ZipFile;
 
 public class IOUtils {
 
-    public static void copy(InputStream in, OutputStream out)
+    public static void copy(@NonNull InputStream in, OutputStream out)
             throws IOException {
         byte[] buffer = new byte[4096];
         int count = 0;
@@ -26,7 +28,7 @@ public class IOUtils {
     }
 
     // Copy all files inside srcDir to targetDir
-    public static void copy(File targetDir, File srcDir) {
+    public static void copy(File targetDir, @NonNull File srcDir) {
         File[] files = srcDir.listFiles();
         if (files != null) {
             for (File file : files) {
@@ -51,6 +53,7 @@ public class IOUtils {
         }
     }
 
+    @NonNull
     public static byte[] toByteArray(InputStream in) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         copy(in, output);
@@ -74,8 +77,8 @@ public class IOUtils {
             out.write(buffer, 0, remain);
         }
     }
-    
-    public static void readFully(InputStream is, byte[] buf) throws IOException {
+
+    public static void readFully(InputStream is, @NonNull byte[] buf) throws IOException {
         int read = 0;
         while (read < buf.length) {
             int ret = is.read(buf, read, buf.length - read);
@@ -121,7 +124,8 @@ public class IOUtils {
         }
         return result;
     }
-    
+
+    @NonNull
     public static String readString(InputStream input) throws IOException {
         StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(input));
@@ -132,7 +136,7 @@ public class IOUtils {
             line = br.readLine();
         }
         return sb.toString();
-        
+
     }
 
     public static void closeQuietly(Closeable c) {
@@ -153,7 +157,7 @@ public class IOUtils {
         }
     }
 
-    public static void writeToFile(String targetFile, String content) throws IOException {
+    public static void writeToFile(String targetFile, @NonNull String content) throws IOException {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(targetFile);

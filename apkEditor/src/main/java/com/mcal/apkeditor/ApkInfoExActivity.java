@@ -2,7 +2,6 @@ package com.mcal.apkeditor;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +20,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import com.mcal.apkeditor.ac.AutoCompleteAdapter;
-import com.mcal.common.utils.ClipboardUtil;
+import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.IOUtils;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
-import com.mcal.common.utils.ZipUtil;
+import com.mcal.common.utils.ZipUtils;
 import com.mcal.folderlist.FileRecord;
 
 import java.io.Closeable;
@@ -400,7 +399,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             } else {
                 extractBtn.setOnClickListener(v -> {
                     try {
-                        ZipUtil.unzipFileTo(apkPath, _entry, "/sdcard/axml");
+                        ZipUtils.unzipFileTo(apkPath, _entry, "/sdcard/axml");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -449,7 +448,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             infoDlg.setNeutralButton(R.string.copy_file_path,
                     (dialog, which) -> {
                         Context ctx = ApkInfoExActivity.this;
-                        ClipboardUtil.copyToClipboard(ctx, relativePath);
+                        ClipboardUtils.copyToClipboard(ctx, relativePath);
                         String msg = ctx
                                 .getString(R.string.copied_to_clipboard);
                         msg = String.format(msg, relativePath);
@@ -515,7 +514,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 }
 
                 tmpFilePath = SDCard.makeWorkingDir(ApkInfoExActivity.this)
-                        + RandomUtil.getRandomString(6);
+                        + RandomUtils.getRandomString(6);
                 out = new FileOutputStream(tmpFilePath);
                 IOUtils.copy(input, out);
             } catch (Exception e) {

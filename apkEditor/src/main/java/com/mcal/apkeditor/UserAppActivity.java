@@ -35,8 +35,8 @@ import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.se.SimpleEditActivity;
 import com.mcal.apkeditor.utils.FileUtils;
 import com.mcal.appdm.PrefOverallActivity;
-import com.mcal.common.utils.ActivityUtil;
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityUtils;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.data.Preferences;
 
@@ -85,9 +85,9 @@ public class UserAppActivity extends CustomizedLangActivity implements OnItemCli
     // mode = "0" means full editing
     public static void startFullEditActivity(Context ctx, String filePath, String mode) {
         Intent intent = new Intent(ctx, ApkInfoExActivity.class);
-        ActivityUtil.attachParam(intent, "apkPath", filePath);
+        ActivityUtils.attachParam(intent, "apkPath", filePath);
         boolean fullDecoding = "0".equals(mode);
-        ActivityUtil.attachBoolParam(intent, "isFullDecoding", fullDecoding);
+        ActivityUtils.attachBoolParam(intent, "isFullDecoding", fullDecoding);
         ctx.startActivity(intent);
     }
 
@@ -511,7 +511,7 @@ public class UserAppActivity extends CustomizedLangActivity implements OnItemCli
         }
 
         if (intent != null) {
-            ActivityUtil.attachParam(intent, "apkPath", filePath);
+            ActivityUtils.attachParam(intent, "apkPath", filePath);
             startActivity(intent);
 
             this.finish();

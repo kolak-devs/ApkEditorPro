@@ -28,7 +28,7 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import com.mcal.apkeditor.ac.AutoCompleteAdapter;
 import com.mcal.apkeditor.dialogs.MatchedLineItem;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -315,7 +315,7 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
                     intent = TextEditor.getEditorIntent(activity, filePath, activity.getApkPath());
                 }
 
-                ActivityUtil.attachParam(intent, "searchString", keyword);
+                ActivityUtils.attachParam(intent, "searchString", keyword);
 
                 activityRef.get().startActivityForResult(intent, 0);
             }

@@ -3,7 +3,7 @@ package com.mcal.apkeditor.patch;
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.IOUtils;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
 
 import java.io.FileOutputStream;
@@ -83,7 +83,7 @@ class PatchRule_AddFiles extends PatchRule {
             // Source is a zip file
             else {
                 String tmpDir = SDCard.makeDir(activity, "tmp");
-                String path = tmpDir + RandomUtil.getRandomString(6);
+                String path = tmpDir + RandomUtils.getRandomString(6);
                 fos = new FileOutputStream(path);
                 IOUtils.copy(input, fos);
                 fos.close();

@@ -1,5 +1,7 @@
 package com.mcal.neweditor;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Change implements Serializable {
@@ -17,7 +19,7 @@ public class Change implements Serializable {
         REPLACE
     }
 
-    public Change(int start, String oldText, String newText) {
+    public Change(int start, @NonNull String oldText, String newText) {
         this.start = start;
         this.oldText = oldText;
         this.newText = newText;

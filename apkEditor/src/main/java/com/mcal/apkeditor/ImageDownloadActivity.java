@@ -25,7 +25,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.common.utils.IOUtils;
-import com.mcal.common.utils.PathUtil;
+import com.mcal.common.utils.PathUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -238,7 +238,7 @@ public class ImageDownloadActivity extends Activity implements ProcessingDialog.
         String path = targetDir + "/" + name + (isPng ? ".png" : ".jpg");
         File targetFile = new File(path);
         if (targetFile.exists()) {
-            targetFile = PathUtil.getTargetNonExistFile(path, false);
+            targetFile = PathUtils.getTargetNonExistFile(path, false);
         }
         downloadPath = targetFile.getPath();
         boolean ret = new File(tmpPath).renameTo(targetFile);

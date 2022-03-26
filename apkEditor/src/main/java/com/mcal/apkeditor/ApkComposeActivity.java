@@ -44,11 +44,11 @@ import com.mcal.apkeditor.utils.AxmlStringModifier;
 import com.mcal.apkeditor.utils.ErrorFixManager;
 import com.mcal.apkeditor.utils.OdexPatcher;
 import com.mcal.common.utils.ApkInfoParser;
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ITaskCallback;
-import com.mcal.common.utils.PackageUtil;
-import com.mcal.common.utils.PreferenceUtil;
-import com.mcal.common.utils.ClipboardUtil;
+import com.mcal.common.utils.PackageUtils;
+import com.mcal.common.utils.PreferenceUtils;
+import com.mcal.common.utils.ClipboardUtils;
 
 import org.jetbrains.annotations.Contract;
 
@@ -462,10 +462,10 @@ public class ApkComposeActivity extends CustomizedLangActivity
             // this.finish();
         } else if (id == R.id.btn_remove) {
             if (this.packageName != null) {
-                PackageUtil.uninstallPackage(this, packageName);
+                PackageUtils.uninstallPackage(this, packageName);
             }
         } else if (id == R.id.btn_copy_errmsg) {
-            ClipboardUtil.copyToClipboard(this,
+            ClipboardUtils.copyToClipboard(this,
                     errMessage);
             Toast.makeText(this, R.string.errmsg_copied, Toast.LENGTH_SHORT)
                     .show();
@@ -630,7 +630,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
                         }
                         // Remember the option and save to preference
                         if (cb.isChecked()) {
-                            PreferenceUtil.setBoolean(
+                            PreferenceUtils.setBoolean(
                                     ApkComposeActivity.this, "donot_show_compose_tip", true);
                         }
                     }
@@ -677,7 +677,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
         if (binder != null && binder.isRunning()) {
             // For pro version, show tip if needed
             if (BuildConfig.IS_PRO) {
-                if (!PreferenceUtil.getBoolean(this, "donot_show_compose_tip", false)) {
+                if (!PreferenceUtils.getBoolean(this, "donot_show_compose_tip", false)) {
                     showTipDialog();
                 } else {
                     this.finish();

@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
-import com.mcal.common.utils.ActivityUtil;
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityUtils;
+import com.mcal.common.activities.CustomizedLangActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,8 +43,8 @@ public class ApkSearchActivity extends CustomizedLangActivity implements OnItemC
         setContentView(R.layout.activity_apksearch);
 
         Intent intent = getIntent();
-        this.keyword = ActivityUtil.getParam(intent, "Keyword");
-        this.searchPath = ActivityUtil.getParam(intent, "Path");
+        this.keyword = ActivityUtils.getParam(intent, "Keyword");
+        this.searchPath = ActivityUtils.getParam(intent, "Path");
 
         initView();
 
@@ -146,7 +146,7 @@ public class ApkSearchActivity extends CustomizedLangActivity implements OnItemC
         }
 
         if (intent != null) {
-            ActivityUtil.attachParam(intent, "apkPath", extraStr);
+            ActivityUtils.attachParam(intent, "apkPath", extraStr);
             startActivity(intent);
         }
     }

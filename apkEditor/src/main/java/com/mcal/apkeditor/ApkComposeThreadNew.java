@@ -7,14 +7,12 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.pro.DexEncoder;
 import com.mcal.apkeditor.ce.IApkMaking;
-import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.smali.ISmaliAssembleCallback;
 import com.mcal.apkeditor.utils.AssetsInstaller;
-import com.mcal.apkeditor.utils.FileUtils;
 import com.mcal.apksigner.ApkSigner;
 import com.mcal.common.fastzip.FastZip;
 import com.mcal.common.utils.CommandRunner;
-import com.mcal.common.utils.FileUtil;
+import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.ITaskCallback;
 import com.mcal.common.utils.ITaskCallback.TaskStepInfo;
 import com.mcal.common.utils.LOGGER;
@@ -265,7 +263,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
                 long dexTime2 = getLastModifyTime(
                         new File(decodedFilePath + "/build/" + dexName));
                 long dexTime = (Math.max(dexTime2, dexTime1));
-                long smaliTime = FileUtil.recursiveModifiedTime(f);
+                long smaliTime = FileUtils.recursiveModifiedTime(f);
                 // Means smali code is modified
                 if (smaliTime > dexTime) {
                     this.modifiedSmaliFolders.add(dirName);
@@ -446,7 +444,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         // To check if need to build the resource
         File apkFile = new File(resourceApkPath);
         if (apkFile.isFile() && apkFile.exists()) {
-            long resModifyTime = FileUtil.recursiveModifiedTime(new File[]{
+            long resModifyTime = FileUtils.recursiveModifiedTime(new File[]{
                     new File(decodedFilePath + "/res"),
                     new File(decodedFilePath + "/AndroidManifest.xml")});
             long apkTime = apkFile.lastModified();
@@ -529,7 +527,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         File resPath = new File(decodedFilePath, "build");
         resPath.mkdir();
 
-        File outputPath = FileUtils.createNewFile(resPath, "resources.zip");
+        File outputPath = com.mcal.apkeditor.utils.FileUtils.createNewFile(resPath, "resources.zip");
 
         args.add(outputPath.getAbsolutePath());
 

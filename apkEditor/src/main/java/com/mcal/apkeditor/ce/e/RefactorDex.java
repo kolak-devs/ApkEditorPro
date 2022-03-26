@@ -6,9 +6,9 @@ import android.content.Context;
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.dex.DexStringEditor;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
-import com.mcal.common.utils.ZipUtil;
+import com.mcal.common.utils.ZipUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,10 +27,10 @@ public class RefactorDex implements IApkMaking, Serializable {
     public void prepareReplaces(Context ctx, String apkFilePath,
                                 Map<String, String> allReplaces,
                                 IDescriptionUpdate updater) throws Exception {
-        List<String> entryLsit = ZipUtil.listFiles(apkFilePath, "");
+        List<String> entryLsit = ZipUtils.listFiles(apkFilePath, "");
         for (String entry : entryLsit) {
             if (entry.endsWith(".dex")) {
-                String savePath = SDCard.makeWorkingDir(ctx) + RandomUtil.getRandomString(6) + ".dex";
+                String savePath = SDCard.makeWorkingDir(ctx) + RandomUtils.getRandomString(6) + ".dex";
                 DexStringEditor editor = new DexStringEditor(apkFilePath, entry);
                 if (editor.refactorPackageName(oldPath, newPath, savePath)) {
                     allReplaces.put(entry, savePath);

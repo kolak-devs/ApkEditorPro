@@ -1,5 +1,7 @@
 package com.mcal.common.utils;
 
+import android.os.Environment;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,44 +13,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import android.os.Environment;
-
 public class StorageUtils {
 
     // private static final String TAG = "StorageUtils";
-
-    public static class StorageInfo {
-
-        public final String path;
-        public final boolean internal;
-        public final boolean readonly;
-        public final boolean isVold;
-        public final int display_number;
-
-        StorageInfo(String path, boolean internal, boolean readonly,
-                boolean isVold, int display_number) {
-            this.path = path;
-            this.internal = internal;
-            this.readonly = readonly;
-            this.isVold = isVold;
-            this.display_number = display_number;
-        }
-
-        public String getDisplayName() {
-            StringBuilder res = new StringBuilder();
-            if (internal) {
-                res.append("Internal SD card");
-            } else if (display_number > 1) {
-                res.append("SD card " + display_number);
-            } else {
-                res.append("SD card");
-            }
-            if (readonly) {
-                res.append(" (Read only)");
-            }
-            return res.toString();
-        }
-    }
 
     public static List<StorageInfo> getStorageList() {
 
@@ -129,5 +96,38 @@ public class StorageUtils {
             }
         }
         return list;
+    }
+
+    public static class StorageInfo {
+
+        public final String path;
+        public final boolean internal;
+        public final boolean readonly;
+        public final boolean isVold;
+        public final int display_number;
+
+        StorageInfo(String path, boolean internal, boolean readonly,
+                    boolean isVold, int display_number) {
+            this.path = path;
+            this.internal = internal;
+            this.readonly = readonly;
+            this.isVold = isVold;
+            this.display_number = display_number;
+        }
+
+        public String getDisplayName() {
+            StringBuilder res = new StringBuilder();
+            if (internal) {
+                res.append("Internal SD card");
+            } else if (display_number > 1) {
+                res.append("SD card " + display_number);
+            } else {
+                res.append("SD card");
+            }
+            if (readonly) {
+                res.append(" (Read only)");
+            }
+            return res.toString();
+        }
     }
 }

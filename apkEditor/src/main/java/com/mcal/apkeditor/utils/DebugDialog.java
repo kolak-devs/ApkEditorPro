@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.view.ViewDialog;
-import com.mcal.common.utils.ClipboardUtil;
+import com.mcal.common.utils.ClipboardUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -44,7 +44,7 @@ public class DebugDialog extends ViewDialog implements View.OnClickListener {
     public void onClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.btn_copy) {
-            ClipboardUtil.copyToClipboard(contextRef.get(), strLog);
+            ClipboardUtils.copyToClipboard(contextRef.get(), strLog);
         } else if (id == R.id.btn_close) {
             this.dismiss();
         }

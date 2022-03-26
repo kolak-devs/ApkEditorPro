@@ -6,6 +6,8 @@ import com.mcal.common.utils.RefInvoke;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 public class ColorValue {
 
     public String name;
@@ -59,19 +61,17 @@ public class ColorValue {
                         this.parsed = true;
                     }
                 } catch (Throwable e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
     
+    @NonNull
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("    <color name=\"");
-        sb.append(name);
-        sb.append("\">");
-        sb.append(strColorValue);
-        sb.append("</color>");
-        return sb.toString();
+        return "    <color name=\"" + name + "\">" +
+                strColorValue +
+                "</color>";
     }
 }

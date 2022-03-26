@@ -44,15 +44,15 @@ import androidx.appcompat.app.AlertDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
 import com.mcal.apkeditor.editor.HtmlViewDialog;
-import com.mcal.common.utils.ClipboardUtil;
+import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.Display;
 import com.mcal.common.utils.ICommonCallback;
-import com.mcal.common.utils.PathUtil;
+import com.mcal.common.utils.PathUtils;
 import com.mcal.common.utils.SDCard;
-import com.mcal.neweditor.ColorTheme;
+import com.mcal.neweditor.data.ColorTheme;
 import com.mcal.neweditor.Document;
-import com.mcal.neweditor.ObEditText;
-import com.mcal.neweditor.ObScrollView;
+import com.mcal.neweditor.view.ObEditText;
+import com.mcal.neweditor.view.ObScrollView;
 import com.mcal.neweditor.ScrollViewListener;
 import com.mcal.neweditor.TextSelectionListener;
 
@@ -216,7 +216,7 @@ public class TextEditNormalActivity extends TextEditBase
             String unsavedFilePath;
             try {
                 unsavedFilePath = SDCard.makeWorkingDir(this) +
-                        PathUtil.getNameFromPath(getCurrentFilePath()) + ".tmp";
+                        PathUtils.getNameFromPath(getCurrentFilePath()) + ".tmp";
             } catch (Exception ignored) {
                 unsavedFilePath = getCurrentFilePath() + ".tmp";
             }
@@ -738,7 +738,7 @@ public class TextEditNormalActivity extends TextEditBase
         int end = textEditor.getSelectionEnd();
         String selected = textEditor.getText().toString().substring(start, end);
         if (selected != null && !selected.equals("")) {
-            ClipboardUtil.copyToClipboard(this, selected);
+            ClipboardUtils.copyToClipboard(this, selected);
             if (selected.contains("\n")) {
                 Toast.makeText(this, R.string.selected_str_copied, Toast.LENGTH_SHORT).show();
             } else {
@@ -749,7 +749,7 @@ public class TextEditNormalActivity extends TextEditBase
     }
 
     private void doPaste() {
-        String text = ClipboardUtil.getText(this);
+        String text = ClipboardUtils.getText(this);
         if (text == null) {
             Toast.makeText(this, R.string.clipboard_no_text, Toast.LENGTH_SHORT).show();
             return;

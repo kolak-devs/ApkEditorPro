@@ -8,68 +8,68 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.mcal.appdm.base.R;
-import com.mcal.appdm.util.StringPair;
+import com.mcal.appdm.utils.StringPair;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class NameAndPathAdapter extends BaseAdapter {
 
-	private final WeakReference<Activity> activityRef;
-	private final List<StringPair> data;
+    private final WeakReference<Activity> activityRef;
+    private final List<StringPair> data;
 
-	public NameAndPathAdapter(Activity activity, List<StringPair> data) {
-		this.activityRef = new WeakReference<Activity>(activity);
-		this.data = data;
-	}
+    public NameAndPathAdapter(Activity activity, List<StringPair> data) {
+        this.activityRef = new WeakReference<>(activity);
+        this.data = data;
+    }
 
-	@Override
-	public int getCount() {
-		return data.size();
-	}
+    @Override
+    public int getCount() {
+        return data.size();
+    }
 
-	@Override
-	public Object getItem(int position) {
-		return data.get(position);
-	}
+    @Override
+    public Object getItem(int position) {
+        return data.get(position);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		final StringPair info = (StringPair) getItem(position);
-		if (info == null) {
-			return null;
-		}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final StringPair info = (StringPair) getItem(position);
+        if (info == null) {
+            return null;
+        }
 
-		ViewHolder viewHolder = null;
-		// sawsem theme
-		if (convertView == null) {
-			convertView = LayoutInflater.from(activityRef.get()).inflate(
-					(R.layout.appdm_item_nameandpath), null);
+        ViewHolder viewHolder;
+        // sawsem theme
+        if (convertView == null) {
+            convertView = LayoutInflater.from(activityRef.get()).inflate(
+                    (R.layout.appdm_item_nameandpath), null);
 
-			viewHolder = new ViewHolder();
-			viewHolder.firstTv = (TextView) convertView
-					.findViewById(R.id.tv_first);
-			viewHolder.secondTv = (TextView) convertView
-					.findViewById(R.id.tv_second);
-			convertView.setTag(viewHolder);
-		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
-		}
+            viewHolder = new ViewHolder();
+            viewHolder.firstTv = (TextView) convertView
+                    .findViewById(R.id.tv_first);
+            viewHolder.secondTv = (TextView) convertView
+                    .findViewById(R.id.tv_second);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
-		viewHolder.firstTv.setText(info.first);
-		viewHolder.secondTv.setText(info.second);
+        viewHolder.firstTv.setText(info.first);
+        viewHolder.secondTv.setText(info.second);
 
-		return convertView;
+        return convertView;
 
-	}
+    }
 
-	static class ViewHolder {
-		public TextView firstTv;
-		public TextView secondTv;
-	}
+    static class ViewHolder {
+        public TextView firstTv;
+        public TextView secondTv;
+    }
 }

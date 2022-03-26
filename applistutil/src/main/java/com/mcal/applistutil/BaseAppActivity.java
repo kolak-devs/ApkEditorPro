@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.util.applist.R;
 
 import java.util.ArrayList;

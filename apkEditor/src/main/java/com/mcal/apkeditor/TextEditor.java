@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,9 +30,9 @@ public class TextEditor {
         } else {
             intent = new Intent(ctx, TextEditNormalActivity.class);
         }
-        ActivityUtil.attachParam(intent, "xmlPath", filepath);
+        ActivityUtils.attachParam(intent, "xmlPath", filepath);
         if (apkPath != null) {
-            ActivityUtil.attachParam(intent, "apkPath", apkPath);
+            ActivityUtils.attachParam(intent, "apkPath", apkPath);
         }
         return intent;
     }
@@ -44,10 +44,10 @@ public class TextEditor {
         } else {
             intent = new Intent(ctx, TextEditNormalActivity.class);
         }
-        ActivityUtil.attachParam(intent, "fileList", filePathList);
-        ActivityUtil.attachParam(intent, "curFileIndex", index);
+        ActivityUtils.attachParam(intent, "fileList", filePathList);
+        ActivityUtils.attachParam(intent, "curFileIndex", index);
         if (apkPath != null) {
-            ActivityUtil.attachParam(intent, "apkPath", apkPath);
+            ActivityUtils.attachParam(intent, "apkPath", apkPath);
         }
         return intent;
     }

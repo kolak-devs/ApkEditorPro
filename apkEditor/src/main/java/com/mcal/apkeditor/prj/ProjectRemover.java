@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
-import com.mcal.common.utils.FileUtil;
+import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.SDCard;
 
 import java.io.File;
@@ -30,14 +30,14 @@ class ProjectRemover implements ProcessingDialog.ProcessingInterface {
 
         // Remove the decoded directory
         try {
-            FileUtil.deleteAll(new File(itemInfo.decodeDirectory));
+            FileUtils.deleteAll(new File(itemInfo.decodeDirectory));
         } catch (IOException ignored) {
         }
 
         // Remove the project index files
         try {
             String projectFolder = SDCard.makeDir(actRef.get(), ".projects");
-            FileUtil.deleteAll(new File(projectFolder + itemInfo.name));
+            FileUtils.deleteAll(new File(projectFolder + itemInfo.name));
             this.result = true;
         } catch (Exception e) {
             this.errMessage = e.getMessage();

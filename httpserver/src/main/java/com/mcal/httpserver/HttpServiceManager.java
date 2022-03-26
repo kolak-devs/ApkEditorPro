@@ -13,9 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.IOUtils;
-import com.mcal.common.utils.ZipUtil;
+import com.mcal.common.utils.ZipUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,7 +55,7 @@ public class HttpServiceManager {
                     output = new FileOutputStream(tmpFile);
                     IOUtils.copy(input, output);
                     httpDir.mkdir();
-                    ZipUtil.unzip(tmpFile.getPath(), httpDir.getPath());
+                    ZipUtils.unzip(tmpFile.getPath(), httpDir.getPath());
                     tmpFile.delete();
                 } catch (Exception e) {
                     Toast.makeText(activity, "Init Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -67,8 +67,8 @@ public class HttpServiceManager {
             }
 
             Intent intent = new Intent(activity, HttpService.class);
-            ActivityUtil.attachParam(intent, "httpDirectory", httpDir.getPath());
-            ActivityUtil.attachParam(intent, "projectDirectory", projectDirectory);
+            ActivityUtils.attachParam(intent, "httpDirectory", httpDir.getPath());
+            ActivityUtils.attachParam(intent, "projectDirectory", projectDirectory);
             activity.startService(intent);
             activity.bindService(intent, new MyServiceConnection(activity), Context.BIND_AUTO_CREATE);
         } else {

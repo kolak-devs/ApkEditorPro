@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.mcal.common.utils.DynamicExpandListView
+    <com.mcal.common.view.DynamicExpandListView
         android:id="@+id/images_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

@@ -25,11 +25,11 @@ import com.mcal.apkeditor.se.ApkCreateActivity;
 import com.mcal.apkeditor.se.IDirChanged;
 import com.mcal.apkeditor.se.ZipFileListAdapter;
 import com.mcal.apkeditor.se.ZipHelper;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.CommandRunner;
-import com.mcal.common.utils.CustomizedLangActivity;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.RandomUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -65,7 +65,7 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-        this.apkPath = ActivityUtil.getParam(getIntent(), "apkPath");
+        this.apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
 
         try {
             this.apkInfo = new ApkInfoParser().parse(this, apkPath);
@@ -218,10 +218,10 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
         Map<String, String> fileReplaces = filesAdapter.getReplaces();
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
-        ActivityUtil.attachParam(intent, "apkPath", this.apkPath);
-        ActivityUtil.attachParam(intent, "packageName", apkInfo.packageName);
+        ActivityUtils.attachParam(intent, "apkPath", this.apkPath);
+        ActivityUtils.attachParam(intent, "packageName", apkInfo.packageName);
         if (!fileReplaces.isEmpty()) {
-            ActivityUtil.attachParam(intent, "otherReplaces", fileReplaces);
+            ActivityUtils.attachParam(intent, "otherReplaces", fileReplaces);
         }
 
         startActivity(intent);
@@ -298,7 +298,7 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
             this.xmlPath = filePath;
             this.axmlPath = filePath + ".bin";
             this.entryName = entryName;
-            this.tempPath = filePath + RandomUtil.getRandomString(6);
+            this.tempPath = filePath + RandomUtils.getRandomString(6);
         }
 
         @Override

@@ -29,7 +29,7 @@ public class CRC32Utils {
         CRC32 crc = new CRC32();
         int bytesRead;
         byte[] buffer = new byte[8192];
-        while((bytesRead = input.read(buffer)) != -1) {
+        while ((bytesRead = input.read(buffer)) != -1) {
             crc.update(buffer, 0, bytesRead);
         }
         return crc;

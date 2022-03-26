@@ -20,15 +20,15 @@ import android.widget.Toast;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
 import com.mcal.apkeditor.se.ZipImageZoomer;
-import com.mcal.common.utils.FileUtil;
+import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.ImageZoomer;
-import com.mcal.common.utils.PathUtil;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.PathUtils;
+import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
 import com.mcal.folderlist.FileRecord;
 import com.mcal.folderlist.FilenameComparator;
-import com.mcal.common.utils.StringUtil;
+import com.mcal.common.utils.StringUtils;
 
 import java.io.Closeable;
 import java.io.File;
@@ -280,12 +280,12 @@ public class ResListAdapter extends BaseAdapter implements
         }
         // Special case: in the parent path of SD card (like /storage/emulated/0)
         // As on some phones, we cannot access the directory like /storage/emulated
-        else if (PathUtil.isParentFolderOf(path, SDCard.getRootDirectory())) {
+        else if (PathUtils.isParentFolderOf(path, SDCard.getRootDirectory())) {
             fileList.clear();
 
             SDCard.getRootDirectory();
             FileRecord fr = new FileRecord();
-            fr.fileName = PathUtil.getSubFolder(path, SDCard.getRootDirectory());
+            fr.fileName = PathUtils.getSubFolder(path, SDCard.getRootDirectory());
             fr.isDir = true;
             fileList.add(fr);
 
@@ -630,7 +630,7 @@ public class ResListAdapter extends BaseAdapter implements
             } else {
                 // Copy to the working path
                 targetPath = SDCard.makeWorkingDir(ctxRef.get())
-                        + RandomUtil.getRandomString(8);
+                        + RandomUtils.getRandomString(8);
                 FileOutputStream out = new FileOutputStream(targetPath);
                 IOUtils.copy(input, out);
                 out.close();
@@ -780,8 +780,8 @@ public class ResListAdapter extends BaseAdapter implements
             try {
                 // Copy file to working directory
                 String targetPath = SDCard.makeWorkingDir(ctxRef.get())
-                        + RandomUtil.getRandomString(8);
-                FileUtil.copyFile(newPath, targetPath);
+                        + RandomUtils.getRandomString(8);
+                FileUtils.copyFile(newPath, targetPath);
 
                 // Record replacement and show toast
                 recordFileReplace(entryPath, targetPath);
@@ -830,7 +830,7 @@ public class ResListAdapter extends BaseAdapter implements
                     }
                     // Copy to the working directory (not decoded path)
                     String targetFolder = SDCard.makeWorkingDir(ctxRef.get())
-                            + RandomUtil.getRandomString(6);
+                            + RandomUtils.getRandomString(6);
                     Map<String, String> added = copyAllFiles(new File(newPath),
                             new File(targetFolder), entry);
                     // Record and update the zip nodes
@@ -866,7 +866,7 @@ public class ResListAdapter extends BaseAdapter implements
                 String name = f.getName();
                 if (f.isFile()) { // Copy a single file
                     File dstFile = new File(dstFolder, f.getName());
-                    FileUtil.copyFile(f, dstFile);
+                    FileUtils.copyFile(f, dstFile);
                     String filepath = dstFile.getPath();
                     addedEntries.put(entryName + "/" + name, filepath);
                 } else { // Copy the sub folder
@@ -1324,14 +1324,14 @@ public class ResListAdapter extends BaseAdapter implements
                     if (target.isFile) {
                         parentNode.deleteChild(target);
                         List<String> deletedEntries = new ArrayList<String>();
-                        String delPath = StringUtil
+                        String delPath = StringUtils
                                 .join("/", paths);
                         deletedEntries.add(delPath);
                         return deletedEntries;
                     } else {
                         List<String> deletedEntries = target.enumFiles();
                         if (deletedEntries != null) {
-                            String delRootPath = StringUtil
+                            String delRootPath = StringUtils
                                     .join("/", paths);
                             for (int i = 0; i < deletedEntries.size(); i++) {
                                 deletedEntries.set(i, delRootPath + "/"

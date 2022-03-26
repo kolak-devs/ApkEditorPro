@@ -5,13 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -95,7 +93,7 @@ public class ApkComposeFailAdapter extends BaseAdapter {
                     ApkComposeActivity activity = activityRef.get();
                     Intent intent = TextEditor.getEditorIntent(activity, filePath, activity.srcApkPath);
                     if (lineIndex > 0) {
-                        ActivityUtil.attachParam(intent, "startLine", "" + lineIndex);
+                        ActivityUtils.attachParam(intent, "startLine", "" + lineIndex);
                     }
                     activity.startActivity(intent);
                 });

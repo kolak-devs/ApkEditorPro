@@ -31,7 +31,7 @@ import com.mcal.apkeditor.ac.AutoCompleteAdapter;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
 import com.mcal.apkeditor.view.ViewDialog;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -141,12 +141,12 @@ public class SearchTextDialog
             String filePath = filePathList.get(groupPos);
             ApkInfoActivity activity = activityRef.get();
             intent = TextEditor.getEditorIntent(activity, filePath, activity.getApkPath());
-            ActivityUtil.attachParam(intent, "startLine", "" + item.lineIndex);
+            ActivityUtils.attachParam(intent, "startLine", "" + item.lineIndex);
         } else {
             ApkInfoActivity activity = activityRef.get();
             intent = TextEditor.getEditorIntent(activity, filePathList, groupPos, activity.getApkPath());
-            ActivityUtil.attachParam(intent, "fileList", filePathList);
-            ActivityUtil.attachParam(intent, "curFileIndex", groupPos);
+            ActivityUtils.attachParam(intent, "fileList", filePathList);
+            ActivityUtils.attachParam(intent, "curFileIndex", groupPos);
 
             ArrayList<Integer> startLineList = new ArrayList<>(filePathList.size());
             for (int i = 0; i < groupPos; ++i) {
@@ -156,10 +156,10 @@ public class SearchTextDialog
             for (int i = groupPos + 1; i < filePathList.size(); ++i) {
                 startLineList.add(-1);
             }
-            ActivityUtil.attachParam2(intent, "startLineList", startLineList);
+            ActivityUtils.attachParam2(intent, "startLineList", startLineList);
         }
 
-        ActivityUtil.attachParam(intent, "searchString", keyword);
+        ActivityUtils.attachParam(intent, "searchString", keyword);
 
         activityRef.get().startActivityForResult(intent, 0);
 

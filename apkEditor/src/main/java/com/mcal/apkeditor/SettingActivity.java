@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
 import com.mcal.common.utils.CommandRunner;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
 
 import java.io.File;
@@ -129,7 +129,7 @@ public class SettingActivity extends PreferenceActivity
     private static boolean dirCanWrite(String dir) {
         File f = new File(dir);
         if (f.exists() && f.isDirectory()) {
-            String rand = RandomUtil.getRandomString(8);
+            String rand = RandomUtils.getRandomString(8);
             File tryF = new File(f, rand);
             boolean ret = tryF.mkdir();
             if (ret) {

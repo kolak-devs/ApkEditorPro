@@ -27,7 +27,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.common.utils.SDCard;
-import com.mcal.common.utils.ZipUtil;
+import com.mcal.common.utils.ZipUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -141,7 +141,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
         // Upzip
         if (!extractedAudios.contains(entryName)) {
             String name = getNameByPath(entryName);
-            ZipUtil.unzipFileTo(zipHelper.getFilePath(), entryName, workingDir + name);
+            ZipUtils.unzipFileTo(zipHelper.getFilePath(), entryName, workingDir + name);
             extractedAudios.add(entryName);
         }
 

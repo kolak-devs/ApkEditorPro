@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.view.ViewDialog;
-import com.mcal.common.utils.PreferenceUtil;
+import com.mcal.common.utils.PreferenceUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -75,7 +75,7 @@ public class SmaliNoticeDialog implements
     public void onClick(View v) {
         CheckBox cb = (CheckBox) view.findViewById(R.id.cb_show_once);
         if (cb.isChecked()) {
-            PreferenceUtil.setBoolean(context, "smali_license_showed", true);
+            PreferenceUtils.setBoolean(context, "smali_license_showed", true);
         }
         dialog.dismiss();
     }

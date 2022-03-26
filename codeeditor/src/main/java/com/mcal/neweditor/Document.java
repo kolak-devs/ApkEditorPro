@@ -21,10 +21,13 @@ import org.xml.sax.XMLReader;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.style.CharacterStyle;
-import android.util.Log;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.neweditor.TokenMarker.LineContext;
+import com.mcal.neweditor.data.ColorTheme;
 
 public class Document implements Serializable {
     public static final String LINE_SEPARATOR_UNIX = "\n";
@@ -37,16 +40,16 @@ public class Document implements Serializable {
     private int lastSHLineEnd;
     private int lastSHLineStart;
     private File mFile;
-    private Vector<Change> redo = new Vector<Change>();
+    private final Vector<Change> redo = new Vector<>();
     private int scrollPositionX = 0;
     private int scrollPositionY = 0;
     private int selectionEnd;
     private int selectionStart;
     protected String text = null;
-    private Vector<Change> undo = new Vector<Change>();
+    private final Vector<Change> undo = new Vector<>();
 
     private transient TokenMarker mTokenMarker;
-    private ColorTheme colorTheme;
+    private final ColorTheme colorTheme;
 
     public Document(Context context, File file, String syntaxFileName) {
         this.mFile = file;
@@ -73,6 +76,7 @@ public class Document implements Serializable {
                     parser.parse(isrc);
                     this.mTokenMarker = xmh.getTokenMarker();
                 } catch (Throwable th) {
+                    th.printStackTrace();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -82,10 +86,10 @@ public class Document implements Serializable {
         } catch (ParserConfigurationException e2) {
             e2.printStackTrace();
         }
-
     }
 
-    private String getSyntaxName(String fileName) {
+    @NonNull
+    private String getSyntaxName(@NonNull String fileName) {
         int pos = fileName.lastIndexOf('.');
         if (pos != -1) {
             String suffix = fileName.substring(pos + 1);
@@ -128,6 +132,7 @@ public class Document implements Serializable {
             this.redo.clear();
             this.changed = true;
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -188,6 +193,7 @@ public class Document implements Serializable {
 //        this.text = text;
 //    }
 
+    @NonNull
     public String toString() {
         if (this.changed) {
             return getName() + " *";
@@ -216,10 +222,10 @@ public class Document implements Serializable {
             change = (Change) this.undo.lastElement();
             this.undo.removeElement(change);
             String textBefore = this.text.substring(0, change.getStart());
-            this.text = new StringBuilder(String.valueOf(textBefore))
-                    .append(change.getOldText())
-                    .append(this.text.substring(change.getStart()
-                            + change.getNewText().length())).toString();
+            this.text = textBefore +
+                    change.getOldText() +
+                    this.text.substring(change.getStart()
+                            + change.getNewText().length());
             this.redo.insertElementAt(change, 0);
             this.changed = true;
             selection = change.getStart() + change.getOldText().length();
@@ -236,10 +242,10 @@ public class Document implements Serializable {
             change = (Change) this.redo.firstElement();
             this.redo.removeElement(change);
             String textBefore = this.text.substring(0, change.getStart());
-            this.text = new StringBuilder(String.valueOf(textBefore))
-                    .append(change.getNewText())
-                    .append(this.text.substring(change.getStart()
-                            + change.getOldText().length())).toString();
+            this.text = textBefore +
+                    change.getNewText() +
+                    this.text.substring(change.getStart()
+                            + change.getOldText().length());
             this.undo.addElement(change);
             this.changed = true;
             selection = change.getStart() + change.getNewText().length();
@@ -266,7 +272,7 @@ public class Document implements Serializable {
     }
 
     public void save(String path, Context context) throws IOException {
-        FileOutputStream fos = new FileOutputStream(new File(path));
+        FileOutputStream fos = new FileOutputStream(path);
 
         OutputStreamWriter osw = new OutputStreamWriter(fos,
                 Encoding.DEFAULT_CHARSET_NAME);
@@ -277,7 +283,7 @@ public class Document implements Serializable {
         fos.close();
     }
 
-    public void syntaxHighlight(EditText textEditor, /* Theme theme, */
+    public void syntaxHighlight(EditText textEditor,
                                 int start, int end, int lstart, int lend, boolean change,
                                 Context context) {
         try {
@@ -415,6 +421,7 @@ public class Document implements Serializable {
         }
     }
 
+    @Nullable
     private LineContext getBaseToken(int line) {
         if (this.baseToken == null) {
             this.baseToken = new ArrayList();
@@ -425,17 +432,17 @@ public class Document implements Serializable {
         return (LineContext) this.baseToken.get(line);
     }
 
-    private void setSpan(Spannable spannable, CharacterStyle style, int i,
+    private void setSpan(@NonNull Spannable spannable, CharacterStyle style, int i,
                          int j, int flags) {
         spannable.setSpan(style, i, j, flags);
     }
 
-    public void clearSyntaxHighlighting(EditText textEditor) {
+    public void clearSyntaxHighlighting(@NonNull EditText textEditor) {
         clearSyntaxHighlighting(textEditor.getText(), 0, this.text.length());
         // clearBaseTokens();
     }
 
-    public void clearSyntaxHighlighting(Spannable spannable, int start, int end) {
+    public void clearSyntaxHighlighting(@NonNull Spannable spannable, int start, int end) {
         Object[] toRemoveSpans = spannable.getSpans(start, end,
                 SyntaxHighlightSpan.class);
         for (Object removeSpan : toRemoveSpans) {
@@ -500,8 +507,8 @@ public class Document implements Serializable {
             }
             i++;
         }
-        return new StringBuilder(String.valueOf(lines)).append(" / ")
-                .append(words).append(" / ").append(end - start).toString();
+        return lines + " / " +
+                words + " / " + (end - start);
     }
 
     public void setScrollPosition(int x, int y) {

@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.mcal.apkeditor.ApkInfoExActivity;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -51,7 +51,7 @@ class ProjectListAdapter extends BaseAdapter
             Toast.makeText(activityRef.get(), errMessage, Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent(activityRef.get(), ApkInfoExActivity.class);
-            ActivityUtil.attachParam(intent, "projectName", projectItems.get(i).name);
+            ActivityUtils.attachParam(intent, "projectName", projectItems.get(i).name);
             activityRef.get().startActivity(intent);
         }
     }

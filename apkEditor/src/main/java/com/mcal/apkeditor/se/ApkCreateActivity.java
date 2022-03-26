@@ -37,11 +37,11 @@ import com.mcal.apkeditor.ce.e.ResourceEditor;
 import com.mcal.apkeditor.dex.DexStringEditor;
 import com.mcal.apkeditor.utils.SignHelper;
 import com.mcal.apklib.sign.ImageTools;
-import com.mcal.common.utils.ActivityUtil;
+import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
-import com.mcal.common.utils.CheckUtil;
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.utils.CheckUtils;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.SDCard;
 
 import org.jetbrains.annotations.Contract;
@@ -126,10 +126,10 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
             this.errorMessage = savedInstanceState.getString("errorMessage");
         } else {
             Intent intent = getIntent();
-            this.apkPath = ActivityUtil.getParam(intent, "apkPath");
-            this.packageName = ActivityUtil.getParam(intent, "packageName");
-            this.imgReplaces = ActivityUtil.getMapParam(intent, "imageReplaces");
-            Map<String, String> otherReplaces = ActivityUtil.getMapParam(intent, "otherReplaces");
+            this.apkPath = ActivityUtils.getParam(intent, "apkPath");
+            this.packageName = ActivityUtils.getParam(intent, "packageName");
+            this.imgReplaces = ActivityUtils.getMapParam(intent, "imageReplaces");
+            Map<String, String> otherReplaces = ActivityUtils.getMapParam(intent, "otherReplaces");
             // Extra preparing interface
             Bundle bundle = intent.getExtras();
             this.makeInterfaces = (ArrayList<IApkMaking>) bundle.getSerializable("interfaces");
@@ -142,10 +142,10 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
             } catch (Exception ignored) {
             }
 
-            this.oldAppNameInArsc = ActivityUtil.getParam(intent, "oldAppNameInArsc");
-            this.newAppNameInArsc = ActivityUtil.getParam(intent, "newAppNameInArsc");
-            this.newPackageNameInArsc = ActivityUtil.getParam(intent, "newPackageNameInArsc");
-            this.clsNameReplaces = ActivityUtil.getMapParam(intent, "classRenames");
+            this.oldAppNameInArsc = ActivityUtils.getParam(intent, "oldAppNameInArsc");
+            this.newAppNameInArsc = ActivityUtils.getParam(intent, "newAppNameInArsc");
+            this.newPackageNameInArsc = ActivityUtils.getParam(intent, "newPackageNameInArsc");
+            this.clsNameReplaces = ActivityUtils.getMapParam(intent, "classRenames");
         }
 
         try {
@@ -374,8 +374,8 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
     }
 
     private boolean isSameSignature() {
-        String signature = CheckUtil.getSign(this, apkInfo.packageName);
-        return CheckUtil.isRevisedSignature(signature);
+        String signature = CheckUtils.getSign(this, apkInfo.packageName);
+        return CheckUtils.isRevisedSignature(signature);
     }
 
     @Override

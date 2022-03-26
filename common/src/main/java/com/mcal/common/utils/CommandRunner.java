@@ -1,24 +1,27 @@
 package com.mcal.common.utils;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
-import android.util.Log;
 
 public class CommandRunner implements CommandInterface {
 
     // The first one is stdout, second is stderr
     // private String stdout;
     // private String stderr;
-    private String[] outputs = new String[2];
+    private final String[] outputs = new String[2];
 
     public static Process runWithEnv(String command, String[] env,
-            String directory) throws IOException {
+                                     String directory) throws IOException {
         Map<String, String> environment = System.getenv();
         String[] envArray = new String[environment.size()
                 + (env != null ? env.length : 0)];
@@ -42,7 +45,7 @@ public class CommandRunner implements CommandInterface {
      * Check whether a process is still alive. We use this as a naive way to
      * implement timeouts.
      */
-    public static boolean isProcessAlive(Process p) {
+    public static boolean isProcessAlive(@NonNull Process p) {
         try {
             p.exitValue();
             return false;
@@ -51,6 +54,7 @@ public class CommandRunner implements CommandInterface {
         }
     }
 
+    @NonNull
     static String readStream(InputStream stream) throws IOException {
         final char[] buffer = new char[8192];
         StringBuilder out = new StringBuilder();
@@ -75,7 +79,7 @@ public class CommandRunner implements CommandInterface {
     }
 
     public boolean runCommand(String[] commands, String[] env,
-            Integer timeout) {
+                              Integer timeout) {
         return runCommand(commands, env, null, timeout, false);
     }
 
@@ -86,52 +90,12 @@ public class CommandRunner implements CommandInterface {
 
     @Override
     public boolean runCommand(String command, String[] env, Integer timeout,
-            boolean readWhileExec) {
+                              boolean readWhileExec) {
         return runCommand(command, env, null, timeout, readWhileExec);
     }
 
-    private static class StreamReadThread extends Thread {
-        private InputStream input;
-        private String[] outputs;
-        private int index;
-
-        public StreamReadThread(InputStream input, String[] outputs,
-                int index) {
-            this.input = input;
-            this.outputs = outputs;
-            this.index = index;
-        }
-
-        @Override
-        public void run() {
-            final char[] buffer = new char[128];
-            StringBuilder out = new StringBuilder();
-            try {
-                Reader in = new InputStreamReader(input, "UTF-8");
-                int read;
-                do {
-                    read = in.read(buffer, 0, buffer.length);
-                    if (read > 0) {
-                        out.append(buffer, 0, read);
-                    }
-                } while (read >= 0);
-            } catch (Exception e) {
-            }
-
-            outputs[index] = out.toString();
-        }
-
-        public void close() {
-            this.interrupt();
-            try {
-                input.close();
-            } catch (IOException e) {
-            }
-        }
-    }
-
     public boolean runCommand(Object command, String[] env, String currentDir,
-            Integer timeout, boolean readWhileExec) {
+                              Integer timeout, boolean readWhileExec) {
         Process process = null;
         try {
             if (command instanceof String) {
@@ -223,6 +187,7 @@ public class CommandRunner implements CommandInterface {
             try {
                 input.close();
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -235,5 +200,47 @@ public class CommandRunner implements CommandInterface {
     @Override
     public String getStdError() {
         return outputs[1];
+    }
+
+    private static class StreamReadThread extends Thread {
+        private final InputStream input;
+        private final String[] outputs;
+        private final int index;
+
+        public StreamReadThread(InputStream input, String[] outputs,
+                                int index) {
+            this.input = input;
+            this.outputs = outputs;
+            this.index = index;
+        }
+
+        @Override
+        public void run() {
+            final char[] buffer = new char[128];
+            StringBuilder out = new StringBuilder();
+            try {
+                Reader in = new InputStreamReader(input, StandardCharsets.UTF_8);
+                int read;
+                do {
+                    read = in.read(buffer, 0, buffer.length);
+                    if (read > 0) {
+                        out.append(buffer, 0, read);
+                    }
+                } while (read >= 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            outputs[index] = out.toString();
+        }
+
+        public void close() {
+            this.interrupt();
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

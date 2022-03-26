@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import com.mcal.apkeditor.XmlDecoder.IReferenceDecoder;
 import com.mcal.apkeditor.utils.TimeDumper;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
-import com.mcal.common.utils.FileUtil;
+import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.LOGGER;
 import com.mcal.androlib.KXmlSerializer;
 
@@ -122,7 +122,7 @@ public class ApkDecoderMine implements IReferenceDecoder, IReferenceDecode {
         // CommandRunner cr = new CommandRunner();
         // cr.runCommand(new String[] {"sh", "-c", command}, null, 10 * 1000);
         try {
-            FileUtil.deleteAll(new File(outDir.getPath() + "/res"));
+            FileUtils.deleteAll(new File(outDir.getPath() + "/res"));
         } catch (Exception e) {
             e.printStackTrace();
         }

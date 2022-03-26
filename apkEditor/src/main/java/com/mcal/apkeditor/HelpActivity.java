@@ -15,7 +15,7 @@ import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.mcal.common.utils.CustomizedLangActivity;
+import com.mcal.common.activities.CustomizedLangActivity;
 
 import java.util.Locale;
 

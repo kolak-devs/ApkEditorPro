@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.R;
-import com.mcal.common.utils.RandomUtil;
+import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.TextFileReader;
 
 import java.io.BufferedReader;
@@ -273,7 +273,7 @@ class FixInvalidSymbol extends FixInvalid {
             // Create a new valid name
             @NonNull
             private String createNewName() {
-                return name + "_" + RandomUtil.getRandomString(4);
+                return name + "_" + RandomUtils.getRandomString(4);
             }
         }
     }

@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.view.ViewDialog;
-import com.mcal.common.utils.InputUtil;
+import com.mcal.common.utils.InputUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -88,7 +88,7 @@ public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.I
         folderNameEt = (EditText) view.findViewById(R.id.et_folder_name);
         folderPathEt = (EditText) view.findViewById(R.id.et_folder_path);
 
-        InputFilter filter = InputUtil.getFileNameFilter();
+        InputFilter filter = InputUtils.getFileNameFilter();
         folderNameEt.setFilters(new InputFilter[]{filter});
 
         newTv.setOnClickListener(this);

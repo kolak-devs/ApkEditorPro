@@ -2,7 +2,7 @@ package com.mcal.apkeditor.patch;
 
 import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.R;
-import com.mcal.common.utils.HexUtil;
+import com.mcal.common.utils.HexUtils;
 import com.mcal.common.utils.IOUtils;
 
 import java.io.BufferedInputStream;
@@ -103,7 +103,7 @@ class PatchRule_ReviseSig extends PatchRule {
         }
 
         if (output != null) {
-            return HexUtil.bytesToHexString(output.toByteArray());
+            return HexUtils.bytesToHexString(output.toByteArray());
         } else {
             return null;
         }
