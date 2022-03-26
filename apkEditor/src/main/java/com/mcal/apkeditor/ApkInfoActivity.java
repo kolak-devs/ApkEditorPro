@@ -76,7 +76,7 @@ import com.mcal.apkeditor.smali.AsyncDecodeTask.IDecodeTaskCallback;
 import com.mcal.apkeditor.translate.PossibleLanguages;
 import com.mcal.apkeditor.translate.TranslateItem;
 import com.mcal.apkeditor.ui.AddFolderDialog;
-import com.mcal.apkeditor.util.AndroidBug5497Workaround;
+import com.mcal.apkeditor.utils.AndroidBug5497Workaround;
 import com.mcal.common.utils.ActivityUtil;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.CustomizedLangActivity;

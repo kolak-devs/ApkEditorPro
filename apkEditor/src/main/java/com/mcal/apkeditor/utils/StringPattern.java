@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.util;
+package com.mcal.apkeditor.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;

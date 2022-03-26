@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -32,7 +31,7 @@ import com.mcal.apkeditor.dialogs.AppAgreementDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.prj.ProjectListActivity;
 import com.mcal.apkeditor.prj.ProjectListActivity2;
-import com.mcal.apkeditor.util.OnlineMessage;
+import com.mcal.apkeditor.utils.OnlineMessage;
 import com.mcal.common.utils.FileUtil;
 import com.mcal.httpserver.HttpServiceManager;
 

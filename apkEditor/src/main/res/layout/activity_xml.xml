@@ -65,7 +65,7 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <com.mcal.apkeditor.util.LineEditText
+            <com.mcal.apkeditor.utils.LineEditText
                 android:id="@+id/editText_xml"
                 android:layout_width="fill_parent"
                 android:layout_height="0dip"

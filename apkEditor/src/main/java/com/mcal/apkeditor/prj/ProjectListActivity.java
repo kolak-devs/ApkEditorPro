@@ -19,7 +19,7 @@ import com.mcal.apkeditor.ApkInfoActivity;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
-import com.mcal.apkeditor.util.FileUtils;
+import com.mcal.apkeditor.utils.FileUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ScopedStorage;

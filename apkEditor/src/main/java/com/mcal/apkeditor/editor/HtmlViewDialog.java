@@ -16,9 +16,9 @@ import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.TextEditNormalActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.SmaliMethodsDialogs;
-import com.mcal.apkeditor.util.Smali2Html;
-import com.mcal.apkeditor.util.ValuesXml2Html;
-import com.mcal.apkeditor.util.Xml2Html;
+import com.mcal.apkeditor.utils.Smali2Html;
+import com.mcal.apkeditor.utils.ValuesXml2Html;
+import com.mcal.apkeditor.utils.Xml2Html;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.TextFileReader;
 

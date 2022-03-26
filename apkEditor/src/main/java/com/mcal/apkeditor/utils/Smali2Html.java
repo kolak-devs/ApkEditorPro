@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.util;
+package com.mcal.apkeditor.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
-import com.mcal.apkeditor.util.OdexPatcher;
+import com.mcal.apkeditor.utils.OdexPatcher;
 import com.mcal.common.utils.ApkInfoParser;
 
 import org.jetbrains.annotations.NotNull;

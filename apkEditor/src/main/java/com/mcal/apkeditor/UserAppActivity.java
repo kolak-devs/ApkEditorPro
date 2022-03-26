@@ -33,7 +33,7 @@ import androidx.core.widget.ContentLoadingProgressBar;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.se.SimpleEditActivity;
-import com.mcal.apkeditor.util.FileUtils;
+import com.mcal.apkeditor.utils.FileUtils;
 import com.mcal.appdm.PrefOverallActivity;
 import com.mcal.common.utils.ActivityUtil;
 import com.mcal.common.utils.CustomizedLangActivity;

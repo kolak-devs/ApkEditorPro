@@ -51,7 +51,7 @@ import com.mcal.apkeditor.dialogs.SmaliCodeDialog;
 import com.mcal.apkeditor.dialogs.SmaliMethodsDialogs;
 import com.mcal.apkeditor.editor.HtmlViewDialog;
 import com.mcal.apkeditor.inf.IJavaExtractor;
-import com.mcal.apkeditor.util.AndroidBug5497Workaround;
+import com.mcal.apkeditor.utils.AndroidBug5497Workaround;
 import com.mcal.common.utils.ActivityUtil;
 import com.mcal.common.utils.ClipboardUtil;
 import com.mcal.common.utils.CustomizedLangActivity;

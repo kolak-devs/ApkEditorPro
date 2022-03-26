@@ -35,7 +35,7 @@ import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.ce.e.ResourceEditor;
 import com.mcal.apkeditor.dex.DexStringEditor;
-import com.mcal.apkeditor.util.SignHelper;
+import com.mcal.apkeditor.utils.SignHelper;
 import com.mcal.apklib.sign.ImageTools;
 import com.mcal.common.utils.ActivityUtil;
 import com.mcal.common.utils.ApkInfoParser;

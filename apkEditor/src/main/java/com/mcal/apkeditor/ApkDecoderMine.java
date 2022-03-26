@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.XmlDecoder.IReferenceDecoder;
-import com.mcal.apkeditor.util.TimeDumper;
+import com.mcal.apkeditor.utils.TimeDumper;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
 import com.mcal.common.utils.FileUtil;
 import com.mcal.common.utils.LOGGER;

@@ -5,7 +5,7 @@
     <PreferenceCategory
         android:key="Appearance"
         android:title="@string/appearance">
-        <com.mcal.apkeditor.util.IconPickerPreference
+        <com.mcal.apkeditor.utils.IconPickerPreference
             android:entries="@array/appicon_key"
             android:entryValues="@array/appicon_value"
             android:key="MyIcon"

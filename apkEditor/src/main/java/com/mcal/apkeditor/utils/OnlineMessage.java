@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.util;
+package com.mcal.apkeditor.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
