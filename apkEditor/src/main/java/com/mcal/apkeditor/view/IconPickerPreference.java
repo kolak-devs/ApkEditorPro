@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.utils;
+package com.mcal.apkeditor.view;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;

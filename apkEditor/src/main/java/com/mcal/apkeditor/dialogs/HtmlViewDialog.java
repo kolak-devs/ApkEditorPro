@@ -1,24 +1,23 @@
-package com.mcal.apkeditor.editor;
+package com.mcal.apkeditor.dialogs;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.apkeditor.GlobalConfig;
-import com.mcal.apkeditor.TextEditNormalActivity;
+import com.mcal.apkeditor.activities.TextEditNormalActivity;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.dialogs.SmaliMethodsDialogs;
 import com.mcal.apkeditor.utils.Smali2Html;
 import com.mcal.apkeditor.utils.ValuesXml2Html;
 import com.mcal.apkeditor.utils.Xml2Html;
+import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.TextFileReader;
 
@@ -31,17 +30,19 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class HtmlViewDialog extends Dialog implements
+public class HtmlViewDialog extends ViewDialog implements
         View.OnClickListener, SmaliMethodsDialogs.ISmaliMethodClicked {
 
-    private TextView filenameTv;
+    private AppCompatTextView filenameTv;
     private View methodMenu;
     private WebView webView;
     private String filePath; // Text file path
     private File htmlFile;
-    private WeakReference<Activity> activityRef;
-    private MyHandler handler = new MyHandler(this);
-    private SmaliMethodsDialogs popupWindowHelper = new SmaliMethodsDialogs(this);
+    private final WeakReference<Activity> activityRef;
+    @NonNull
+    private final MyHandler handler = new MyHandler(this);
+    @NonNull
+    private final SmaliMethodsDialogs popupWindowHelper = new SmaliMethodsDialogs(this);
 
     public HtmlViewDialog(Activity activity) {
         super(activity);
@@ -64,10 +65,10 @@ public class HtmlViewDialog extends Dialog implements
     }
 
     private void init() {
-        this.filenameTv = (TextView) this.findViewById(R.id.filename);
-        this.methodMenu = this.findViewById(R.id.menu_methods);
-        this.webView = (WebView) this.findViewById(R.id.webView);
-        View editorBtn = this.findViewById(R.id.editorBtn);
+        this.filenameTv = findViewById(R.id.filename);
+        this.methodMenu = findViewById(R.id.menu_methods);
+        this.webView = (WebView) findViewById(R.id.webView);
+        View editorBtn = findViewById(R.id.editorBtn);
 
         methodMenu.setOnClickListener(this);
         editorBtn.setOnClickListener(this);
@@ -85,19 +86,17 @@ public class HtmlViewDialog extends Dialog implements
     }
 
     private void convert2Html(final String filePath) {
-        new Thread() {
-            public void run() {
-                boolean ret = false;
-                if (TextEditNormalActivity.isXml(filePath)) {
-                    ret = convertXml2Html(filePath);
-                } else if (TextEditNormalActivity.isSmali(filePath)) {
-                    ret = convertSmali2Html(filePath);
-                }
-                if (ret) {
-                    handler.sendEmptyMessage(MyHandler.HTML_LOADED);
-                }
+        new Thread(() -> {
+            boolean ret = false;
+            if (TextEditNormalActivity.isXml(filePath)) {
+                ret = convertXml2Html(filePath);
+            } else if (TextEditNormalActivity.isSmali(filePath)) {
+                ret = convertSmali2Html(filePath);
             }
-        }.start();
+            if (ret) {
+                handler.sendEmptyMessage(MyHandler.HTML_LOADED);
+            }
+        }).start();
     }
 
     // Convert the file to html format
@@ -213,12 +212,10 @@ public class HtmlViewDialog extends Dialog implements
 
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what) {
-                case HTML_LOADED:
-                    if (dlgRef.get() != null) {
-                        dlgRef.get().loadHtml(-1);
-                    }
-                    break;
+            if (msg.what == HTML_LOADED) {
+                if (dlgRef.get() != null) {
+                    dlgRef.get().loadHtml(-1);
+                }
             }
         }
     }

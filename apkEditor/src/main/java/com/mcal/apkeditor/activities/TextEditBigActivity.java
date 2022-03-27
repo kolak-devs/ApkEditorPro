@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -27,12 +27,17 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ViewAnimator;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.mcal.SelectionChangedListener;
+import com.mcal.apkeditor.editor.MoreEditorOptionAdapter;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.editor.TextEditBase;
+import com.mcal.apkeditor.editor.TextEditBigListHelper;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
-import com.mcal.apkeditor.editor.HtmlViewDialog;
+import com.mcal.apkeditor.dialogs.HtmlViewDialog;
 import com.mcal.apkeditor.ui.LayoutObListView;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.Display;
@@ -1023,6 +1028,7 @@ public class TextEditBigActivity extends TextEditBase
             }
         }
 
+        @Nullable
         @Override
         protected Boolean doInBackground(Void... params) {
             Document doc = new Document(TextEditBigActivity.this, new File(curFilePath),

@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,9 @@ import com.common.colormixer.ColorMixer;
 import com.common.colormixer.ColorMixerDialog;
 import com.common.colormixer.ColorValue;
 import com.common.colormixer.ColorValueAdapter;
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ActivityUtils;
 

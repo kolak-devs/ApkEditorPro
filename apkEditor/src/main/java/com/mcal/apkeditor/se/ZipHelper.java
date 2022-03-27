@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.se;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.se.ZipFileListAdapter.FileInfo;
 
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class ZipHelper {
 
     // Audio information
     List<String> audioPathList = new ArrayList<>();
-    private String zipFilePath;
+    private final String zipFilePath;
 
     public ZipHelper(String apkPath) {
         this.zipFilePath = apkPath;
@@ -31,7 +33,7 @@ public class ZipHelper {
 
     // Check if the file is audio/video
     public static boolean isAudio(String path) {
-        String fileExts[] = {".wav", ".mp2", ".mp3", ".ogg", ".aac",
+        String[] fileExts = {".wav", ".mp2", ".mp3", ".ogg", ".aac",
                 ".mpg", ".mpeg", ".mid", ".midi", ".smf", ".jet", ".rtttl",
                 ".imy", ".xmf", ".mp4", ".m4a", ".m4v", ".3gp", ".3gpp",
                 ".3g2", ".3gpp2", ".amr", ".awb", ".wma", ".wmv"};
@@ -103,14 +105,15 @@ public class ZipHelper {
         }
     }
 
-    private void forceClose(ZipFile c) {
+    private void forceClose(@NonNull ZipFile c) {
         try {
             c.close();
         } catch (IOException ignored) {
         }
     }
 
-    private String getQualifier(String path, String name) {
+    @NonNull
+    private String getQualifier(@NonNull String path, @NonNull String name) {
         int end = path.length() - name.length() - 1;
         if (end > 0) {
             return path.substring(0, end);
@@ -129,7 +132,7 @@ public class ZipHelper {
     }
 
     // Check if the path like res/drawable-hdpi/icon.png
-    private boolean isDrawableImage(String path) {
+    private boolean isDrawableImage(@NonNull String path) {
         int secondSlash = path.indexOf('/', 11);
         if (secondSlash != -1) {
             // There is no third slash
@@ -143,7 +146,8 @@ public class ZipHelper {
         return false;
     }
 
-    private String getFilename(String name) {
+    @NonNull
+    private String getFilename(@NonNull String name) {
         int pos = name.lastIndexOf('/');
         if (pos != -1) {
             return name.substring(pos + 1);

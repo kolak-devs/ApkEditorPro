@@ -520,7 +520,7 @@ public class ResListAdapter extends BaseAdapter implements
     }
 
     // Removed several list items
-    protected void listItemsDeleted(List<Integer> positions) {
+    public void listItemsDeleted(List<Integer> positions) {
         Iterator<FileRecord> it = fileList.iterator();
         int index = 0;
         while (it.hasNext()) {
@@ -879,7 +879,7 @@ public class ResListAdapter extends BaseAdapter implements
         return addedEntries;
     }
 
-    protected void dumpChangedFiles() {
+    public void dumpChangedFiles() {
         // Log.d("DEBUG", "Added Entry: ");
         // for (Map.Entry<String, String> entry : allFileAdded.entrySet()) {
         // Log.d("DEBUG", "\t" + entry.getKey() + " --> " + entry.getValue());
@@ -982,7 +982,7 @@ public class ResListAdapter extends BaseAdapter implements
 
     // Delete a file or directory in a directory
     // The item to be deleted can in file system or zip file
-    protected void deleteFile(List<Integer> positions) {
+    public void deleteFile(List<Integer> positions) {
         List<FileRecord> records = new ArrayList<FileRecord>();
         String dirPath = getData(records);
 

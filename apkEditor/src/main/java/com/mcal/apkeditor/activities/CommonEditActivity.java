@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +33,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ce.ApkParser;
 import com.mcal.apkeditor.ce.DexDecode;
 import com.mcal.apkeditor.ce.DexEncode;

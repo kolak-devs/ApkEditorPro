@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.ApkInfoActivity;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ce.ManifestInfo;
 import com.mcal.apkeditor.ce.ManifestParser;

@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ac.AutoCompleteAdapter;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.IOUtils;
@@ -588,7 +589,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         private void deleteSelectedResources() {
             resListAdapter.dumpChangedFiles(); // Debug
 
-            Set<Integer> checked = ApkInfoExActivity.this.resListAdapter
+            Set<Integer> checked = resListAdapter
                     .getCheckedItems();
             if (checked.isEmpty()) {
                 return;
@@ -602,7 +603,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         }
 
         private void saveResourcesTo() {
-            Set<Integer> checked = ApkInfoExActivity.this.resListAdapter
+            Set<Integer> checked = resListAdapter
                     .getCheckedItems();
             if (checked.isEmpty()) {
                 return;

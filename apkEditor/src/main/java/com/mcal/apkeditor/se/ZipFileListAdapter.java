@@ -21,7 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.GlobalConfig;
-import com.mcal.apkeditor.TextEditor;
+import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileCopyDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;

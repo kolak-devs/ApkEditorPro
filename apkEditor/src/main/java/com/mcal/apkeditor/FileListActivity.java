@@ -26,6 +26,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.mcal.apkeditor.activities.ApkSearchActivity;
+import com.mcal.apkeditor.activities.AxmlEditActivity;
+import com.mcal.apkeditor.activities.CommonEditActivity;
+import com.mcal.apkeditor.activities.MainActivity;
+import com.mcal.apkeditor.activities.UserAppActivity;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
 import com.mcal.common.utils.ActivityUtils;

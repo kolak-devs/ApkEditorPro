@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -56,6 +56,19 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 
+import com.mcal.apkeditor.ApkComposeService;
+import com.mcal.apkeditor.ApkParseConsumer;
+import com.mcal.apkeditor.ApkParseThread;
+import com.mcal.apkeditor.BuildConfig;
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.IGeneralCallback;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.ResListAdapter;
+import com.mcal.apkeditor.ResNavigationMgr;
+import com.mcal.apkeditor.ResSelectionChangeListener;
+import com.mcal.apkeditor.SomethingChangedListener;
+import com.mcal.apkeditor.StringListAdapter;
+import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.apkeditor.ac.AutoCompleteAdapter;
 import com.mcal.apkeditor.adapters.IManifestChangeCallback;
 import com.mcal.apkeditor.adapters.LineRecord;

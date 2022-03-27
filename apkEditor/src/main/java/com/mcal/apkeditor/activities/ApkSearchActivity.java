@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.mcal.apkeditor.ApkListAdapter;
+import com.mcal.apkeditor.BuildConfig;
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
 import com.mcal.common.utils.ActivityUtils;

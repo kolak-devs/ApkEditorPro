@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.utils.OdexPatcher;

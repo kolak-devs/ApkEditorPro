@@ -1,9 +1,11 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
 import com.mcal.common.activities.CustomizedLangActivity;
 
 public class EditorHelpActivity extends CustomizedLangActivity {

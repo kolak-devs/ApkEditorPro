@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
 import com.mcal.common.activities.CustomizedLangActivity;
 
 import java.io.BufferedReader;

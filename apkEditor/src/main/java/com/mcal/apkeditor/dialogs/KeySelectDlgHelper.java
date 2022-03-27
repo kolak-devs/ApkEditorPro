@@ -15,8 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.mcal.apkeditor.KeyListPreference;
-import com.mcal.apkeditor.SettingActivity;
+import com.mcal.apkeditor.view.KeyListPreference;
+import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 

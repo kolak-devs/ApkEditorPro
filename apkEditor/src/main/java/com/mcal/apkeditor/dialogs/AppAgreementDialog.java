@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mcal.apkeditor.MainActivity;
+import com.mcal.apkeditor.activities.MainActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.view.ViewDialog;
 

@@ -1,10 +1,9 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -14,10 +13,17 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.mcal.apkeditor.BuildConfig;
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
 import com.mcal.common.utils.CommandRunner;
@@ -94,7 +100,7 @@ public class SettingActivity extends PreferenceActivity
 
         int ret = 1;
         try {
-            ret = Integer.valueOf(strNameRule);
+            ret = Integer.parseInt(strNameRule);
         } catch (Exception ignored) {
         }
         return ret;
@@ -119,7 +125,7 @@ public class SettingActivity extends PreferenceActivity
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         String str = sp.getString(fileRenameKey, "1");
         try {
-            return Integer.valueOf(str);
+            return Integer.parseInt(str);
         } catch (Exception ignored) {
             return -1;
         }
@@ -140,6 +146,7 @@ public class SettingActivity extends PreferenceActivity
         return false;
     }
 
+    @Nullable
     public static String getDecodeDirectory(Context ctx) {
         if (BuildConfig.PARSER_ONLY) {
             return SDCard.getRootDirectory() + "/ApkParser";
@@ -160,6 +167,7 @@ public class SettingActivity extends PreferenceActivity
         return null;
     }
 
+    @NonNull
     public static String getDecodeMode(Context ctx) {
         // "0" means Full Decoding
         if (BuildConfig.PARSER_ONLY) {
@@ -268,7 +276,7 @@ public class SettingActivity extends PreferenceActivity
 
         // Full screen
         {
-            CheckBoxPreference checkBox = (CheckBoxPreference) findPreference("FullScreen");
+            SwitchPreference checkBox = (SwitchPreference) findPreference("FullScreen");
             boolean b = GlobalConfig.instance(SettingActivity.this).isFullScreen();
             checkBox.setChecked(b);
             checkBox.setOnPreferenceChangeListener(
@@ -295,7 +303,7 @@ public class SettingActivity extends PreferenceActivity
         }
 
         // Smali editing
-        CheckBoxPreference smaliPref = (CheckBoxPreference) findPreference(
+        SwitchPreference smaliPref = (SwitchPreference) findPreference(
                 dex2smaliEnabledKey);
         if (isFreeVersion()) {
             PreferenceCategory category = (PreferenceCategory) findPreference(
@@ -311,7 +319,7 @@ public class SettingActivity extends PreferenceActivity
                         @Override
                         public boolean onPreferenceChange(Preference arg0,
                                                           Object newValue) {
-                            CheckBoxPreference cb = (CheckBoxPreference) arg0;
+                            SwitchPreference cb = (SwitchPreference) arg0;
                             boolean val = (Boolean) newValue;
                             cb.setChecked(val);
                             cb.setSummary(val ? R.string.smali_edit_summary
@@ -323,7 +331,7 @@ public class SettingActivity extends PreferenceActivity
 
         // Rebuild confirmation
         {
-            CheckBoxPreference confirmPref = (CheckBoxPreference) findPreference(
+            SwitchPreference confirmPref = (SwitchPreference) findPreference(
                     confirmEnabledKey);
             boolean enabled = isRebuildConfirmEnabled(this);
             confirmPref.setChecked(enabled);
@@ -334,7 +342,7 @@ public class SettingActivity extends PreferenceActivity
                         @Override
                         public boolean onPreferenceChange(Preference arg0,
                                                           Object newValue) {
-                            CheckBoxPreference cb = (CheckBoxPreference) arg0;
+                            SwitchPreference cb = (SwitchPreference) arg0;
                             boolean val = (Boolean) newValue;
                             cb.setChecked(val);
                             cb.setSummary(val

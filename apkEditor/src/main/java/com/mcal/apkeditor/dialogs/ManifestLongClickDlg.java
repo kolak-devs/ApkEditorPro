@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-import com.mcal.apkeditor.ApkInfoActivity;
-import com.mcal.apkeditor.TextEditor;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.apkeditor.adapters.IManifestChangeCallback;
 import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.BuildConfig;

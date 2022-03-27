@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBoxPreference
-        android:key="LineWrap"
-        android:title="@string/line_wrap" />
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="Editor">
 
-    <CheckBoxPreference
-        android:key="ShowLineNumbers"
-        android:title="@string/show_line_numbers" />
+        <SwitchPreference
+            android:key="LineWrap"
+            android:title="@string/line_wrap" />
 
-    <EditTextPreference
-        android:inputType="number"
-        android:key="FontSize"
-        android:title="@string/font_size" />
+        <SwitchPreference
+            android:key="ShowLineNumbers"
+            android:title="@string/show_line_numbers" />
 
-    <EditTextPreference
-        android:dialogMessage="@string/use_bfe_message"
-        android:inputType="number"
-        android:key="BigFileSize"
-        android:title="@string/when_use_bfe" />
+        <EditTextPreference
+            android:inputType="number"
+            android:key="FontSize"
+            android:title="@string/font_size" />
 
-    <CheckBoxPreference
-        android:key="SymbolInput"
-        android:summary="@string/symbol_input_summary"
-        android:title="@string/symbol_input" />
+        <EditTextPreference
+            android:dialogMessage="@string/use_bfe_message"
+            android:inputType="number"
+            android:key="BigFileSize"
+            android:title="@string/when_use_bfe" />
+
+        <SwitchPreference
+            android:key="SymbolInput"
+            android:summary="@string/symbol_input_summary"
+            android:title="@string/symbol_input" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

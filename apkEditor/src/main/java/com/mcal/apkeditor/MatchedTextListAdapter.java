@@ -27,7 +27,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import com.mcal.apkeditor.ac.AutoCompleteAdapter;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.dialogs.MatchedLineItem;
+import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.common.utils.ActivityUtils;
 
 import java.io.Closeable;

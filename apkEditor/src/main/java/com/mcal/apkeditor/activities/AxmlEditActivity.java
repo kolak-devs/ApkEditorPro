@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 
 import android.content.Intent;
@@ -20,6 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import com.mcal.apkeditor.ApkComposeThread;
+import com.mcal.apkeditor.BuildConfig;
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.se.ApkCreateActivity;
 import com.mcal.apkeditor.se.IDirChanged;

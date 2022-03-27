@@ -31,7 +31,7 @@ public class StringListAdapter extends BaseAdapter implements
     // Current configuration (which language)
     private String curConfig;
 
-    StringListAdapter(Activity activity) {
+    public StringListAdapter(Activity activity) {
         this.activityRef = new WeakReference<>(activity);
         this.curConfig = null;
     }
@@ -105,7 +105,7 @@ public class StringListAdapter extends BaseAdapter implements
     }
 
     // Update a new display
-    void updateData(String curConfig, List<StringItem> list) {
+    public void updateData(String curConfig, List<StringItem> list) {
         synchronized (valueList) {
             this.curConfig = curConfig;
             valueList.clear();
@@ -176,11 +176,11 @@ public class StringListAdapter extends BaseAdapter implements
         }
     }
 
-    Map<String, Map<String, String>> getChangedValues() {
+    public Map<String, Map<String, String>> getChangedValues() {
         return changedValues;
     }
 
-    void setChangedValues(Map<String, Map<String, String>> changedStringValues) {
+    public void setChangedValues(Map<String, Map<String, String>> changedStringValues) {
         changedValues = changedStringValues;
     }
 

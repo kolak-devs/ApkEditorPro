@@ -39,7 +39,7 @@ public class AboutActivity extends CustomizedLangActivity {
     }
 
     public void openTelegram(@NonNull View view) {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/apkeditor2021")));
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/apkeditorproofficial")));
     }
 
     public void openGitHub(@NonNull View view) {
@@ -70,6 +70,17 @@ public class AboutActivity extends CustomizedLangActivity {
 
     public void donatePayPal(@NonNull View view) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.me/timscriptov")));
+    }
+
+    public void openJaDX(@NonNull View view) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/skylot/jadx")));
+    }
+
+    public void openApkTool(@NonNull View view) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iBotPeaches/Apktool")));
+    }
+    public void openSmali(@NonNull View view) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/JesusFreke/smali")));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -30,6 +30,10 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.ContentLoadingProgressBar;
 
+import com.mcal.apkeditor.AppInfo;
+import com.mcal.apkeditor.AppListAdapter;
+import com.mcal.apkeditor.BuildConfig;
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.se.SimpleEditActivity;

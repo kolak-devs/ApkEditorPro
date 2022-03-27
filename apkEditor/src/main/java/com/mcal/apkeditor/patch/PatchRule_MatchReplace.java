@@ -2,7 +2,7 @@ package com.mcal.apkeditor.patch;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.ApkInfoActivity;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 
 import java.io.BufferedOutputStream;

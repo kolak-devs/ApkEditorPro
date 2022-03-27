@@ -1,19 +1,16 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.editor;
 
-import static com.mcal.apkeditor.MoreEditorOptionAdapter.CMD_CODE_SNIPPET;
-import static com.mcal.apkeditor.MoreEditorOptionAdapter.CMD_COLORPAD;
-import static com.mcal.apkeditor.MoreEditorOptionAdapter.CMD_COMMENT_LINES;
-import static com.mcal.apkeditor.MoreEditorOptionAdapter.CMD_DELETE_LINES;
-import static com.mcal.apkeditor.MoreEditorOptionAdapter.CMD_HELP;
-import static com.mcal.apkeditor.MoreEditorOptionAdapter.CMD_HTML;
-import static com.mcal.apkeditor.MoreEditorOptionAdapter.CMD_SETTINGS;
-import static com.mcal.apkeditor.MoreEditorOptionAdapter.CMD_TO_JAVA;
-import static com.mcal.apkeditor.TextEditBase.isSmali;
-import static com.mcal.apkeditor.TextEditBase.isXml;
+import static com.mcal.apkeditor.editor.MoreEditorOptionAdapter.CMD_CODE_SNIPPET;
+import static com.mcal.apkeditor.editor.MoreEditorOptionAdapter.CMD_COLORPAD;
+import static com.mcal.apkeditor.editor.MoreEditorOptionAdapter.CMD_COMMENT_LINES;
+import static com.mcal.apkeditor.editor.MoreEditorOptionAdapter.CMD_DELETE_LINES;
+import static com.mcal.apkeditor.editor.MoreEditorOptionAdapter.CMD_HELP;
+import static com.mcal.apkeditor.editor.MoreEditorOptionAdapter.CMD_HTML;
+import static com.mcal.apkeditor.editor.MoreEditorOptionAdapter.CMD_SETTINGS;
+import static com.mcal.apkeditor.editor.MoreEditorOptionAdapter.CMD_TO_JAVA;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -25,11 +22,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -39,24 +33,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.common.colormixer.ColorMixer;
 import com.common.colormixer.ColorMixerDialog;
-import com.mcal.apkeditor.pro.JavaExtractor;
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.EditorHelpActivity;
+import com.mcal.apkeditor.activities.SettingEditorActivity;
+import com.mcal.apkeditor.dialogs.HtmlViewDialog;
 import com.mcal.apkeditor.dialogs.LinesOpDialogHelper;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.dialogs.SmaliCodeDialog;
 import com.mcal.apkeditor.dialogs.SmaliMethodsDialogs;
-import com.mcal.apkeditor.editor.HtmlViewDialog;
 import com.mcal.apkeditor.inf.IJavaExtractor;
+import com.mcal.apkeditor.pro.JavaExtractor;
 import com.mcal.apkeditor.utils.AndroidBug5497Workaround;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ClipboardUtils;
-import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.Display;
-import com.mcal.common.utils.Pair;
 import com.mcal.common.utils.SDCard;
 import com.mcal.neweditor.Document;
 import com.mcal.neweditor.InputMethodWatcher;
@@ -66,118 +61,6 @@ import org.jetbrains.annotations.Contract;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-// Adapter for the more options
-class MoreEditorOptionAdapter extends BaseAdapter {
-    static final int CMD_HTML = 0;
-    static final int CMD_COLORPAD = 1;
-    static final int CMD_DELETE_LINES = 2;
-    static final int CMD_SETTINGS = 3;
-    static final int CMD_HELP = 4;
-    static final int CMD_COMMENT_LINES = 5;
-    static final int CMD_CODE_SNIPPET = 6;
-    static final int CMD_TO_JAVA = 7;
-
-    private final Context ctx;
-
-    // Commands recorded for all the position
-    private final List<Integer> commands = new ArrayList<>();
-
-    // Pair contains image resource id and string id
-    private final List<Pair<Integer, Integer>> optionResIds = new ArrayList<>();
-
-    MoreEditorOptionAdapter(Context ctx, String filePath) {
-        this.ctx = ctx;
-
-        if (isSmali(filePath) || isXml(filePath)) {
-            optionResIds.add(new Pair<>(R.drawable.round_html_24, R.string.html));
-            commands.add(CMD_HTML);
-        }
-
-        optionResIds.add(new Pair<>(R.drawable.round_palette_24, R.string.colorpad));
-        commands.add(CMD_COLORPAD);
-
-        if (isSmali(filePath)) { // Code snippet
-            optionResIds.add(new Pair<>(R.drawable.round_content_paste_24, R.string.code_snippet));
-            commands.add(CMD_CODE_SNIPPET);
-        }
-
-        optionResIds.add(new Pair<>(R.drawable.round_delete_24, R.string.delete_lines));
-        commands.add(CMD_DELETE_LINES);
-
-        if (isSmali(filePath)) { // Comment lines & to java code
-            optionResIds.add(new Pair<>(R.drawable.round_grid_3x3_24, R.string.comment_lines));
-            commands.add(CMD_COMMENT_LINES);
-
-            if (BuildConfig.IS_PRO) {
-                optionResIds.add(new Pair<>(R.drawable.round_code_24, R.string.java_code));
-                commands.add(CMD_TO_JAVA);
-            }
-        }
-
-        optionResIds.add(new Pair<>(R.drawable.round_settings_24, R.string.settings));
-        commands.add(CMD_SETTINGS);
-
-        optionResIds.add(new Pair<>(R.drawable.round_info_24, R.string.help));
-        commands.add(CMD_HELP);
-    }
-
-    // Get option number
-    public int getOptions() {
-        return optionResIds.size();
-    }
-
-    public int getCommandByPosition(int position) {
-        if (position < commands.size()) {
-            return commands.get(position);
-        }
-        return -1;
-    }
-
-    @Override
-    public int getCount() {
-        return optionResIds.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return optionResIds.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(ctx).inflate(R.layout.item_more_option, null);
-            holder = new ViewHolder();
-            holder.image = (AppCompatImageView) convertView.findViewById(R.id.menu_icon);
-            holder.title = (AppCompatTextView) convertView.findViewById(R.id.menu_title);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        Pair<Integer, Integer> data = optionResIds.get(position);
-        if (data.first > 0) {
-            holder.image.setImageResource(data.first);
-        } else {
-            holder.image.setImageBitmap(null);
-        }
-        holder.title.setText(data.second);
-
-        return convertView;
-    }
-
-    private static class ViewHolder {
-        public AppCompatImageView image;
-        public AppCompatTextView title;
-    }
-}
 
 public abstract class TextEditBase extends CustomizedLangActivity implements ColorMixer.OnColorChangedListener, SmaliMethodsDialogs.ISmaliMethodClicked, LinesOpDialogHelper.ILinesOperation {
     // For big file or not
@@ -385,16 +268,13 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
 
         View switchView = findViewById(R.id.switch_view);
         if (SettingEditorActivity.symbolInputEnabled(this)) {
-            switchView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (menuLayout.getVisibility() == View.VISIBLE) {
-                        specialCharLayout.setVisibility(View.VISIBLE);
-                        menuLayout.setVisibility(View.INVISIBLE);
-                    } else {
-                        menuLayout.setVisibility(View.VISIBLE);
-                        specialCharLayout.setVisibility(View.INVISIBLE);
-                    }
+            switchView.setOnClickListener(v -> {
+                if (menuLayout.getVisibility() == View.VISIBLE) {
+                    specialCharLayout.setVisibility(View.VISIBLE);
+                    menuLayout.setVisibility(View.INVISIBLE);
+                } else {
+                    menuLayout.setVisibility(View.VISIBLE);
+                    specialCharLayout.setVisibility(View.INVISIBLE);
                 }
             });
         } else {
@@ -428,12 +308,9 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
             tv.setTextColor(0xffffffff);
             tv.setGravity(Gravity.CENTER);
             tv.setTag(i);
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int idx = (Integer) v.getTag();
-                    specialCharClicked(idx);
-                }
+            tv.setOnClickListener(v -> {
+                int idx1 = (Integer) v.getTag();
+                specialCharClicked(idx1);
             });
 
             parentView.addView(tv, param);
@@ -512,25 +389,22 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
 
     protected void setupInputMethodMonitor(final InputMethodWatcher watcher) {
         final View contentView = this.findViewById(android.R.id.content);
-        contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
+        contentView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
 
-                Rect r = new Rect();
-                contentView.getWindowVisibleDisplayFrame(r);
-                int screenHeight = contentView.getRootView().getHeight();
+            Rect r = new Rect();
+            contentView.getWindowVisibleDisplayFrame(r);
+            int screenHeight = contentView.getRootView().getHeight();
 
-                // r.bottom is the position above soft keypad or device button.
-                // if keypad is shown, the r.bottom is smaller than that before.
-                int keypadHeight = screenHeight - r.bottom;
+            // r.bottom is the position above soft keypad or device button.
+            // if keypad is shown, the r.bottom is smaller than that before.
+            int keypadHeight = screenHeight - r.bottom;
 
-                // 0.15 ratio is perhaps enough to determine keypad height.
-                bInputMethodShown = (keypadHeight > screenHeight * 0.15);
+            // 0.15 ratio is perhaps enough to determine keypad height.
+            bInputMethodShown = (keypadHeight > screenHeight * 0.15);
 
-                watcher.setInputMethodVisible(bInputMethodShown);
+            watcher.setInputMethodVisible(bInputMethodShown);
 
-                updateBottomMenu(bInputMethodShown);
-            }
+            updateBottomMenu(bInputMethodShown);
         });
     }
 
@@ -553,46 +427,41 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
         int width = Display.getWidth(this) / 2;
         final PopupWindow popupWindow = new PopupWindow(view, width, height);
 
-        lv_group.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv_group.setOnItemClickListener((adapterView, view1, position, id) -> {
+            int cmd = adapter.getCommandByPosition(position);
+            switch (cmd) {
+                case CMD_HTML:
+                    showHtmlDialog();
+                    break;
+                case CMD_SETTINGS:
+                    Intent intent = new Intent(TextEditBase.this, SettingEditorActivity.class);
+                    startActivity(intent);
+                    break;
+                case CMD_COLORPAD:
+                    new ColorMixerDialog(TextEditBase.this, 0xffffffff, TextEditBase.this).show();
+                    break;
+                case CMD_CODE_SNIPPET:
+                    new SmaliCodeDialog(TextEditBase.this, curFilePath).show();
+                    break;
+                case CMD_DELETE_LINES:
+                    TextEditBase.this.linesOP = CMD_DELETE_LINES;
+                    new LinesOpDialogHelper().showDialog(TextEditBase.this, R.string.delete_lines, TextEditBase.this);
+                    break;
+                case CMD_TO_JAVA:
+                    showJavaCodeWithTip();
+                    break;
+                case CMD_COMMENT_LINES:
+                    TextEditBase.this.linesOP = CMD_COMMENT_LINES;
+                    new LinesOpDialogHelper().showDialog(TextEditBase.this, R.string.comment_lines, TextEditBase.this);
+                    break;
+                case CMD_HELP:
+                    Intent it = new Intent(TextEditBase.this, EditorHelpActivity.class);
+                    startActivity(it);
+                    break;
+            }
 
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view,
-                                    int position, long id) {
-                int cmd = adapter.getCommandByPosition(position);
-                switch (cmd) {
-                    case CMD_HTML:
-                        showHtmlDialog();
-                        break;
-                    case CMD_SETTINGS:
-                        Intent intent = new Intent(TextEditBase.this, SettingEditorActivity.class);
-                        startActivity(intent);
-                        break;
-                    case CMD_COLORPAD:
-                        new ColorMixerDialog(TextEditBase.this, 0xffffffff, TextEditBase.this).show();
-                        break;
-                    case CMD_CODE_SNIPPET:
-                        new SmaliCodeDialog(TextEditBase.this, curFilePath).show();
-                        break;
-                    case CMD_DELETE_LINES:
-                        TextEditBase.this.linesOP = CMD_DELETE_LINES;
-                        new LinesOpDialogHelper().showDialog(TextEditBase.this, R.string.delete_lines, TextEditBase.this);
-                        break;
-                    case CMD_TO_JAVA:
-                        showJavaCodeWithTip();
-                        break;
-                    case CMD_COMMENT_LINES:
-                        TextEditBase.this.linesOP = CMD_COMMENT_LINES;
-                        new LinesOpDialogHelper().showDialog(TextEditBase.this, R.string.comment_lines, TextEditBase.this);
-                        break;
-                    case CMD_HELP:
-                        Intent it = new Intent(TextEditBase.this, EditorHelpActivity.class);
-                        startActivity(it);
-                        break;
-                }
-
-                if (popupWindow != null) {
-                    popupWindow.dismiss();
-                }
+            if (popupWindow != null) {
+                popupWindow.dismiss();
             }
         });
 
@@ -629,12 +498,7 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
             AlertDialog.Builder tipDlg = new AlertDialog.Builder(this)
                     .setTitle(R.string.please_note)
                     .setMessage(R.string.java_code_edit_tip)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            showJavaCode();
-                        }
-                    });
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> showJavaCode());
             tipDlg.show();
             SharedPreferences.Editor editor = sp.edit();
             editor.putBoolean(key, true);
@@ -673,7 +537,7 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
 
             @Override
             public void process() {
-                IJavaExtractor extractor  = new JavaExtractor(apkPath, dexName, className, workingDirectory);
+                IJavaExtractor extractor = new JavaExtractor(apkPath, dexName, className, workingDirectory);
 
                 if (extractor != null) {
                     succeed = extractor.extract();

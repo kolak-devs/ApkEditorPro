@@ -15,7 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.mcal.apkeditor.ApkInfoActivity;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.Display;
 

@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -15,6 +15,9 @@ import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.data.Constants;
 import com.mcal.common.activities.CustomizedLangActivity;
 
 import java.util.Locale;
@@ -46,19 +49,6 @@ public class HelpActivity extends CustomizedLangActivity {
         v.loadUrl(url);
     }
 
-}
-
-
-class Constants {
-    public interface ACTION {
-        public static String MAIN_ACTION = "com.mcal.action.apkcompose";
-        public static String STARTFOREGROUND_ACTION = "com.mcal.action.startforeground";
-        public static String STOPFOREGROUND_ACTION = "com.mcal.action.stopforeground";
-    }
-
-    public interface NOTIFICATION_ID {
-        public static int FOREGROUND_SERVICE = 8001;
-    }
 }
 
 class ForegroundService extends Service {

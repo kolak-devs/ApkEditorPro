@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.PathUtils;

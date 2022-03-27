@@ -25,10 +25,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.ApkInfoActivity;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.GlobalConfig;
-import com.mcal.apkeditor.MainActivity;
-import com.mcal.apkeditor.SettingActivity;
+import com.mcal.apkeditor.activities.MainActivity;
+import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ce.IApkMaking;

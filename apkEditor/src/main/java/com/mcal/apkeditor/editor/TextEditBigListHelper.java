@@ -1,6 +1,7 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.editor;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 
 import com.mcal.SelectionChangedListener;
 import com.mcal.apkeditor.R;
@@ -23,8 +26,10 @@ import java.util.List;
 public class TextEditBigListHelper {
 
     private static final int MSG_SELECTION = 1000;
-    private LayoutObListView textList;
-    private TextEditBigListAdapter adapter;
+    private final LayoutObListView textList;
+    private final TextEditBigListAdapter adapter;
+    @NonNull
+    private final MyHandler myHandler = new MyHandler();
     private int inputType;
     private int backgroundColor;
     private int textColor;
@@ -32,7 +37,6 @@ public class TextEditBigListHelper {
     // Font size
     private int complexUnitSp;
     private float fontSize;
-    private MyHandler myHandler = new MyHandler();
 
     public TextEditBigListHelper(Context ctx, LayoutObListView textList) {
         this.textList = textList;
@@ -144,7 +148,7 @@ public class TextEditBigListHelper {
         return adapter.getText();
     }
 
-    public void setText(String text) {
+    public void setText(@NonNull String text) {
         String[] lines = text.split("\\r?\\n");
         adapter.setText(Arrays.asList(lines));
         adapter.notifyDataSetChanged();
@@ -245,6 +249,7 @@ public class TextEditBigListHelper {
         adapter.setSelectionChangedListener(listener);
     }
 
+    @SuppressLint("HandlerLeak")
     class MyHandler extends Handler {
         private int itemPosition;
         private int selStart;
@@ -258,16 +263,14 @@ public class TextEditBigListHelper {
         }
 
         @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_SELECTION:
-                    EditText et = getEditTextByPosition(itemPosition);
-                    if (et != null) {
-                        // Need to request focus then set selection
-                        et.requestFocus();
-                        et.setSelection(selStart, selEnd);
-                    }
-                    break;
+        public void handleMessage(@NonNull Message msg) {
+            if (msg.what == MSG_SELECTION) {
+                EditText et = getEditTextByPosition(itemPosition);
+                if (et != null) {
+                    // Need to request focus then set selection
+                    et.requestFocus();
+                    et.setSelection(selStart, selEnd);
+                }
             }
         }
     }

@@ -1,16 +1,19 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+
+import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.R;
 
 public class SettingEditorActivity extends PreferenceActivity implements
@@ -33,22 +36,24 @@ public class SettingEditorActivity extends PreferenceActivity implements
         return sp.getBoolean(key, true);
     }
 
-    private static int getFontSize(SharedPreferences sp) {
+    private static int getFontSize(@NonNull SharedPreferences sp) {
         String strFontSize = sp.getString("FontSize", "12");
         int fontSize = 12;
         try {
-            fontSize = Integer.valueOf(strFontSize);
+            fontSize = Integer.parseInt(strFontSize);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return fontSize;
     }
 
-    private static int getBigFileThreshold(SharedPreferences sp) {
+    private static int getBigFileThreshold(@NonNull SharedPreferences sp) {
         String strThreshold = sp.getString("BigFileSize", "64");
         int threshold = 64;
         try {
-            threshold = Integer.valueOf(strThreshold);
+            threshold = Integer.parseInt(strThreshold);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return threshold;
     }
@@ -90,7 +95,7 @@ public class SettingEditorActivity extends PreferenceActivity implements
         // Line wrap
         {
             String key = "LineWrap";
-            CheckBoxPreference checkbox = (CheckBoxPreference) findPreference(key);
+            SwitchPreference checkbox = (SwitchPreference) findPreference(key);
             checkbox.setOnPreferenceChangeListener(this);
             boolean enabled = sp.getBoolean(key, true);
             if (enabled) {
@@ -125,7 +130,7 @@ public class SettingEditorActivity extends PreferenceActivity implements
         // Line numbers
         {
             String key = "ShowLineNumbers";
-            CheckBoxPreference checkbox = (CheckBoxPreference) findPreference(key);
+            SwitchPreference checkbox = (SwitchPreference) findPreference(key);
             checkbox.setOnPreferenceChangeListener(this);
             boolean enabled = sp.getBoolean(key, true);
             if (enabled) {
@@ -140,14 +145,14 @@ public class SettingEditorActivity extends PreferenceActivity implements
         // Symbol Input
         {
             String key = "SymbolInput";
-            CheckBoxPreference checkbox = (CheckBoxPreference) findPreference(key);
+            SwitchPreference checkbox = (SwitchPreference) findPreference(key);
             boolean enabled = sp.getBoolean(key, true);
             checkbox.setChecked(enabled);
         }
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
+    public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
         String key = preference.getKey();
 
         if ("LineWrap".equals(key)) {
@@ -161,7 +166,7 @@ public class SettingEditorActivity extends PreferenceActivity implements
             String strFontSize = (String) newValue;
             int fontSize;
             try {
-                fontSize = Integer.valueOf(strFontSize);
+                fontSize = Integer.parseInt(strFontSize);
             } catch (Exception e) {
                 fontSize = getFontSize(this);
             }
@@ -171,7 +176,7 @@ public class SettingEditorActivity extends PreferenceActivity implements
             String strSize = (String) newValue;
             int fileSize;
             try {
-                fileSize = Integer.valueOf(strSize);
+                fileSize = Integer.parseInt(strSize);
             } catch (Exception e) {
                 fileSize = getBigFileThreshold(this);
             }
@@ -187,9 +192,6 @@ public class SettingEditorActivity extends PreferenceActivity implements
                 preference.setSummary(R.string.line_numbers_disabled);
             }
         }
-
         return true;
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import static java.lang.Math.abs;
 
@@ -41,9 +41,12 @@ import android.widget.ViewAnimator;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.mcal.apkeditor.editor.MoreEditorOptionAdapter;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.editor.TextEditBase;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
-import com.mcal.apkeditor.editor.HtmlViewDialog;
+import com.mcal.apkeditor.dialogs.HtmlViewDialog;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.Display;
 import com.mcal.common.utils.ICommonCallback;

@@ -27,7 +27,7 @@ void zip_modify(JNIEnv *env, jobject thiz, jstring _tname, jstring _sname,
                 jstring _added, int len1, jstring _removed, int len2, jstring _replaced, int len3);
 
 JNIEXPORT void JNICALL
-Java_com_mcal_apkeditor_MainActivity_md(JNIEnv *env, jclass clazz, jstring target,
+Java_com_mcal_apkeditor_activities_MainActivity_modifyZip(JNIEnv *env, jclass clazz, jstring target,
                                                 jstring source, jstring added, jint len1,
                                                 jstring removed, jint len2, jstring replaced,
                                                 jint len3) {

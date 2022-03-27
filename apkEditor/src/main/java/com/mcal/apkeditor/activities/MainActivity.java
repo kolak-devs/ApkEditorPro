@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -26,7 +26,12 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.balsikandar.crashreporter.ui.CrashReporterActivity;
-import com.mcal.apkeditor.activities.AboutActivity;
+import com.mcal.apkeditor.ApkComposeService;
+import com.mcal.apkeditor.BuildConfig;
+import com.mcal.apkeditor.FileListActivity;
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.MenuListAdapter;
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.data.Dialogs;
 import com.mcal.apkeditor.dialogs.AppAgreementDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
@@ -50,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // Native library
     static {
-        System.loadLibrary("syscheck");
+        System.loadLibrary("apkeditorpro");
     }
 
     // Used to show a dialog
@@ -61,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements
     private ActionBarDrawerToggle mDrawerToggle;
 
     // modify a zip file
-    public static native void md(String target, String source, String added,
+    public static native void modifyZip(String target, String source, String added,
                                  int len1, String removed, int len2, String replaced, int len3);
 
     // Verify certificate

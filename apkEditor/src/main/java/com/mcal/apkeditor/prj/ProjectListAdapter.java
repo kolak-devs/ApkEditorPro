@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mcal.apkeditor.ApkInfoExActivity;
+import com.mcal.apkeditor.activities.ApkInfoExActivity;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.ActivityUtils;

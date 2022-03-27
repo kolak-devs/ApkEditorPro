@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.mcal.apkeditor.ApkInfoActivity;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;

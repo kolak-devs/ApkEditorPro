@@ -1,9 +1,15 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.editor;
 
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.SettingEditorActivity;
+import com.mcal.apkeditor.activities.TextEditBigActivity;
+import com.mcal.apkeditor.activities.TextEditNormalActivity;
 import com.mcal.common.utils.ActivityUtils;
 
 import java.io.File;
@@ -13,7 +19,7 @@ public class TextEditor {
     private static boolean isBigFile(Context ctx, String filepath) {
         boolean isBigFile = false;
         File f = new File(filepath);
-        if (f.exists() && f.length() > SettingEditorActivity.getBigFileThreshold(ctx) * 1024) {
+        if (f.exists() && f.length() > SettingEditorActivity.getBigFileThreshold(ctx) * 1024L) {
             isBigFile = true;
         }
         if (isBigFile) {
@@ -23,6 +29,7 @@ public class TextEditor {
     }
 
 
+    @NonNull
     public static Intent getEditorIntent(Context ctx, String filepath, String apkPath) {
         Intent intent;
         if (isBigFile(ctx, filepath)) {
@@ -37,7 +44,8 @@ public class TextEditor {
         return intent;
     }
 
-    public static Intent getEditorIntent(Context ctx, ArrayList<String> filePathList, int index, String apkPath) {
+    @NonNull
+    public static Intent getEditorIntent(Context ctx, @NonNull ArrayList<String> filePathList, int index, String apkPath) {
         Intent intent;
         if (isBigFile(ctx, filePathList.get(index))) {
             intent = new Intent(ctx, TextEditBigActivity.class);

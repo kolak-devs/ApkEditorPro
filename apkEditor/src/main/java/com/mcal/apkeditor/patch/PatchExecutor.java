@@ -3,7 +3,7 @@ package com.mcal.apkeditor.patch;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.ApkInfoActivity;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.IGeneralCallback;
 import com.mcal.apkeditor.R;
 

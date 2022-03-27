@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.ApkComposeActivity;
+import com.mcal.apkeditor.activities.ApkComposeActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.common.view.ProcessingDialog;
 import com.mcal.common.utils.RandomUtils;

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

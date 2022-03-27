@@ -14,6 +14,7 @@
 
 package com.common.colormixer;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -31,6 +32,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+
+import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
 
@@ -212,12 +215,12 @@ public class ColorMixer extends RelativeLayout implements TextWatcher {
 
         setProgressBarColor(state.getInt(COLOR));
     }
-    
+
+    @SuppressLint("HandlerLeak")
     Handler hander = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-            case 0:
+        public void handleMessage(@NonNull Message msg) {
+            if (msg.what == 0) {
                 int color = getColor();
 
                 // Not set the text if it is from that
@@ -231,13 +234,12 @@ public class ColorMixer extends RelativeLayout implements TextWatcher {
                 if (listener != null) {
                     listener.onColorChange(color);
                 }
-                break;
             }
         }
     };
 
     // Make changes from progress bar to text
-    private SeekBar.OnSeekBarChangeListener onMix = new SeekBar.OnSeekBarChangeListener() {
+    private final SeekBar.OnSeekBarChangeListener onMix = new SeekBar.OnSeekBarChangeListener() {
         public void onProgressChanged(SeekBar seekBar, int progress,
                 boolean fromUser) {
             hander.removeMessages(0);
@@ -273,6 +275,7 @@ public class ColorMixer extends RelativeLayout implements TextWatcher {
         try {
             updateColorFromText();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

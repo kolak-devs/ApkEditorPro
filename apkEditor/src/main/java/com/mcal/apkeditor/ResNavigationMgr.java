@@ -8,7 +8,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

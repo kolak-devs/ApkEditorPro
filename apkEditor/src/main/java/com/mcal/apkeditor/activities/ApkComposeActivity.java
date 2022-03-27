@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -37,7 +37,13 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.mcal.apkeditor.ApkComposeFailAdapter;
+import com.mcal.apkeditor.ApkComposeService;
+import com.mcal.apkeditor.BuildConfig;
+import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ce.IApkMaking;
+import com.mcal.apkeditor.data.Constants;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.se.ApkInstaller;
 import com.mcal.apkeditor.utils.AxmlStringModifier;
@@ -66,7 +72,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
     // Created from notification or not (by clicking at notification)
     public boolean createdFromNotification = false;
     // Generated apk path, Package name of the apk file
-    protected String srcApkPath;
+    public String srcApkPath;
     // View related
     private LinearLayout composingLayout;
     private LinearLayout composedLayout;

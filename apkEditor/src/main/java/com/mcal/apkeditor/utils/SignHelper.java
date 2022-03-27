@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.SettingActivity;
+import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apklib.sign.SignApk;
 
 import java.io.FileInputStream;

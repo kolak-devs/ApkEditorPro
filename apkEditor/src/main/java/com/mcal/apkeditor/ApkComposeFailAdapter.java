@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.mcal.apkeditor.activities.ApkComposeActivity;
+import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.common.utils.ActivityUtils;
 
 import java.io.File;

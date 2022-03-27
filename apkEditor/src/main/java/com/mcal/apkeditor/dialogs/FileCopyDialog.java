@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.SettingActivity;
+import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.FileUtils;

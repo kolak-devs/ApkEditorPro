@@ -1,6 +1,6 @@
 package com.mcal.apkeditor.patch;
 
-import com.mcal.apkeditor.ApkInfoActivity;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;

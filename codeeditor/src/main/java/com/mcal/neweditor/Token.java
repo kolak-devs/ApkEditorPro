@@ -1,5 +1,7 @@
 package com.mcal.neweditor;
 
+import androidx.annotation.NonNull;
+
 public class Token {
 	public static final byte COMMENT1 = (byte) 1;
 	public static final byte COMMENT2 = (byte) 2;
@@ -52,6 +54,7 @@ public class Token {
 		this.rules = rules;
 	}
 
+	@NonNull
 	public String toString() {
 		return "[id=" + this.id + ",offset=" + this.offset + ",length="
 				+ this.length + "]";

@@ -11,8 +11,8 @@
 
         <LinearLayout
             android:id="@+id/layout_apk_composing"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@color/apked_white"
             android:gravity="center"
             android:orientation="vertical">
@@ -46,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dip"
+                style="@style/Base.Widget.AppCompat.Button.Colored"
                 android:text="@string/put_to_background" />
 
         </LinearLayout>

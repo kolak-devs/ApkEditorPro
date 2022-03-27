@@ -106,7 +106,7 @@ public class ViewDialog extends Dialog {
 
     @Override
     public void dismiss() {
-        if(mContentFrame != null) {
+        /*if(mContentFrame != null) {
             mContentFrame = null;
         }
         if(mCaption != null) {
@@ -121,6 +121,7 @@ public class ViewDialog extends Dialog {
         if(mNeutral != null) {
             mNeutral = null;
         }
+        super.dismiss();*/
         super.dismiss();
     }
 }

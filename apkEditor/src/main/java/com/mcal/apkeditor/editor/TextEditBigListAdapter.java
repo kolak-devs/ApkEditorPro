@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.editor;
 
 import android.content.Context;
 import android.os.Handler;
@@ -12,11 +12,15 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.SelectionChangedListener;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ui.EditTextRememberCursor;
 import com.mcal.apkeditor.ui.LayoutObListView;
 import com.mcal.neweditor.Document;
+
+import org.jetbrains.annotations.Contract;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -24,27 +28,23 @@ import java.util.List;
 
 
 public class TextEditBigListAdapter extends BaseAdapter {
-    private Context ctx;
-    private List<String> lines;
-    private WeakReference<LayoutObListView> listRef;
-
+    private final Context ctx;
+    private final List<String> lines;
+    private final WeakReference<LayoutObListView> listRef;
+    // Deal with messages
+    @NonNull
+    private final MyHandler handler = new MyHandler();
     // Font appearance
     private int complexUnitSp;
     private float fontSize;
     private int textColor = -1; // foreground color
     private boolean bShowLineNumbers = true; // show line # or not
-
     // For text highlight
     private Document document;
-
     // To track the text change, so that can update save button
     private TextWatcher textChangeListener;
-
     // Text selection change listener
     private WeakReference<SelectionChangedListener> selectionListenerRef;
-
-    // Deal with messages
-    private MyHandler handler = new MyHandler();
 
     public TextEditBigListAdapter(Context ctx, LayoutObListView list) {
         this.ctx = ctx;
@@ -157,6 +157,8 @@ public class TextEditBigListAdapter extends BaseAdapter {
         return nd;
     }
 
+    @NonNull
+    @Contract(pure = true)
     private String getPaddingString(int digits) {
         switch (digits) {
             case 1:
@@ -176,6 +178,7 @@ public class TextEditBigListAdapter extends BaseAdapter {
         }
     }
 
+    @NonNull
     private String getNumString(int num) {
         int digits = getNumberDigits(lines.size());
         int cur = getNumberDigits(num);
@@ -205,7 +208,7 @@ public class TextEditBigListAdapter extends BaseAdapter {
     }
 
     // Set the new data
-    public void setText(List<String> text) {
+    public void setText(@NonNull List<String> text) {
         lines.clear();
         for (String line : text) {
             lines.add(line);
@@ -248,7 +251,7 @@ public class TextEditBigListAdapter extends BaseAdapter {
         EditTextRememberCursor et;
     }
 
-    class MyHandler extends Handler {
+    static class MyHandler extends Handler {
         View target;
 
         public void setTargetView(EditText target) {
@@ -256,19 +259,15 @@ public class TextEditBigListAdapter extends BaseAdapter {
         }
 
         @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    target.requestFocus();
-                    break;
-                default:
-                    break;
+        public void handleMessage(@NonNull Message msg) {
+            if (msg.what == 0) {
+                target.requestFocus();
             }
         }
     }
 
     private class CustomTextWatcher implements TextWatcher {
-        private int position;
+        private final int position;
         private boolean isSetInitialText;
 
         public CustomTextWatcher(int position) {
