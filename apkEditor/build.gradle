@@ -12,8 +12,8 @@ android {
         minSdk 14
         //noinspection ExpiredTargetSdkVersion
         targetSdk 26
-        versionCode 1111
-        versionName "1.11.1"
+        versionCode 1112
+        versionName "1.11.2"
         multiDexEnabled true
         ndk {
             abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a', 'x86_64'
