@@ -1,5 +1,7 @@
 package com.mcal.apkeditor;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -25,7 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import brut.androlib.Androlib;
 import brut.androlib.AndrolibException;
+import brut.androlib.ApkDecoder;
 import brut.androlib.err.CantFind9PatchChunkException;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResResSpec;
@@ -104,11 +108,33 @@ public class ApkDecoderMine implements IReferenceDecoder, IReferenceDecode {
         return fileEntry2ZipEntry;
     }
 
+    public void decode(Activity activity, String apkPath, String decodeRootPath) {
+        try {
+            Androlib lib = new Androlib();
+            lib.installFramework(new File(activity.getFilesDir() + "/bin/android-framework.jar"));
+            ApkDecoder decoder = new ApkDecoder(new File(apkPath), lib);
+            decoder.setApkFile(new File(apkPath));
+            decoder.setBaksmaliDebugMode(false);
+            decoder.setFrameworkDir(activity.getFilesDir() + "/bin"); //android-framework.jar
+            //decoder.setDecodeAssets(ApkDecoder.DECODE_ASSETS_FULL);
+            decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_FULL);
+            //decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_NONE);
+            //decoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_SMALI);
+            decoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_NONE);
+            decoder.setOutDir(new File(decodeRootPath));
+            decoder.setApiLevel(14);
+            decoder.setForceDelete(true);
+            decoder.decode();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // Root interface of the decode
     public void decode(@NonNull ExtFile apkFile, File outDir) throws Exception {
         Directory inApk = apkFile.getDirectory();
         if (!inApk.containsDir("res")) {
-            this.xmlDecoder.setApkProtected(true);
+            //this.xmlDecoder.setApkProtected(true);
         }
 
         TimeDumper timer = new TimeDumper(false);

@@ -36,7 +36,7 @@ public class XmlDecoder implements ResStreamDecoder {
     //private KXmlSerializer ser;
     private AXmlResourceParser par;
     // Is the apk protected or not
-    private boolean apkProtected = false;
+    //private boolean apkProtected = false;
 
     public XmlDecoder(IReferenceDecoder refDecoder, ResPackage resPackage) {
         this.refDecoder = refDecoder;
@@ -334,10 +334,10 @@ public class XmlDecoder implements ResStreamDecoder {
         }
     }
 
-    public void setApkProtected(boolean b) {
+    /*public void setApkProtected(boolean b) {
         this.apkProtected = b;
         par.setApkProtected(apkProtected);
-    }
+    }*/
 
 
     public static interface IReferenceDecoder {

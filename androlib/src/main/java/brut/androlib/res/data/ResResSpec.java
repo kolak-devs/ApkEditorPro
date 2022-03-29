@@ -116,4 +116,8 @@ public class ResResSpec {
     public String toString() {
         return mId.toString() + " " + mType.toString() + "/" + mName;
     }
+
+    public Map<ResConfigFlags, ResResource> getAllResources() {
+        return mResources;
+    }
 }

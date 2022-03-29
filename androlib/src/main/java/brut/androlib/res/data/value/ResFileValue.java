@@ -40,4 +40,8 @@ public class ResFileValue extends ResIntBasedValue {
     public String toString() {
         return mPath;
     }
+
+    public String getPath() {
+        return mPath;
+    }
 }

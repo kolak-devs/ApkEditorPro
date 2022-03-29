@@ -2121,7 +2121,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // Create a ResConfigFlags
     // Please note qualifier always starts with '-'
-    public ResConfigFlags createConfigFlags(@NonNull String qualifier) {
+    /*public ResConfigFlags createConfigFlags(@NonNull String qualifier) {
         int pos = qualifier.indexOf("-r", 1);
         if (pos != -1 && pos + 3 < qualifier.length()) {
             return new ResConfigFlags(qualifier.charAt(1), qualifier.charAt(2),
@@ -2129,7 +2129,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         } else {
             return new ResConfigFlags(qualifier.charAt(1), qualifier.charAt(2));
         }
-    }
+    }*/
 
     // Start a new translation, it may be called by the translation dialog
     // Show the language selection dialog

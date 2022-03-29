@@ -388,7 +388,7 @@ public class StringBlock {
         return (array[offset + 1] & 0xff) << 8 | array[offset] & 0xff;
     }
 
-    private static int[] getUtf8(byte[] array, int offset) {
+    public static int[] getUtf8(byte[] array, int offset) {
         int val = array[offset];
         int length;
         // We skip the utf16 length of the string
@@ -410,7 +410,7 @@ public class StringBlock {
         return new int[] { offset, length};
     }
 
-    private static int[] getUtf16(byte[] array, int offset) {
+    public static int[] getUtf16(byte[] array, int offset) {
         int val = ((array[offset + 1] & 0xFF) << 8 | array[offset] & 0xFF);
 
         if ((val & 0x8000) != 0) {

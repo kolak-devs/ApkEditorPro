@@ -494,7 +494,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                         sb.append('\n');
                         replaceLen += key.getBytes().length + value.getBytes().length + 2;
                     }
-                    MainActivity.md(outputApkPath, apkPath, "", 0, "", 0, sb.toString(), replaceLen);
+                    MainActivity.modifyZip(outputApkPath, apkPath, "", 0, "", 0, sb.toString(), replaceLen);
                 }
 
                 activity.handler.sendEmptyMessage(0);
