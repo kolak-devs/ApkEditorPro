@@ -20,13 +20,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
@@ -36,7 +30,7 @@ public class MetaInfo {
     public String apkFileName;
     public boolean isFrameworkApk;
     public UsesFramework usesFramework;
-    public Map<String, String> sdkInfo;
+    public  Map<String, String> sdkInfo;
     public PackageInfo packageInfo;
     public VersionInfo versionInfo;
     public boolean compressionType;
@@ -56,10 +50,6 @@ public class MetaInfo {
         return new Yaml(new ClassSafeConstructor(), representer, options);
     }
 
-    public static MetaInfo load(InputStream is) {
-        return getYaml().loadAs(is, MetaInfo.class);
-    }
-
     public void save(Writer output) {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
@@ -67,12 +57,16 @@ public class MetaInfo {
     }
 
     public void save(File file) throws IOException {
-        try (
+        try(
                 FileOutputStream fos = new FileOutputStream(file);
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
                 Writer writer = new BufferedWriter(outputStreamWriter)
         ) {
             save(writer);
         }
+    }
+
+    public static MetaInfo load(InputStream is) {
+        return getYaml().loadAs(is, MetaInfo.class);
     }
 }

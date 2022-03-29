@@ -40,9 +40,4 @@ public class ResFileValue extends ResIntBasedValue {
     public String toString() {
         return mPath;
     }
-
-    // TODO: FOR APK EDITOR
-    public String getPath() {
-        return mPath;
-    }
 }

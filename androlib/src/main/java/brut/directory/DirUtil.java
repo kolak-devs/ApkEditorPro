@@ -16,17 +16,14 @@
  */
 package brut.directory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.logging.Logger;
-
 import brut.common.BrutException;
 import brut.common.InvalidUnknownFileException;
 import brut.common.RootUnknownFileException;
 import brut.common.TraversalUnknownFileException;
 import brut.util.BrutIO;
 import brut.util.OS;
+import java.io.*;
+import java.util.logging.Logger;
 
 public class DirUtil {
     private static final Logger LOGGER = Logger.getLogger("");
@@ -43,7 +40,7 @@ public class DirUtil {
     }
 
     public static void copyToDir(Directory in, Directory out,
-                                 String[] fileNames) throws DirectoryException {
+            String[] fileNames) throws DirectoryException {
         for (String fileName : fileNames) {
             copyToDir(in, out, fileName);
         }

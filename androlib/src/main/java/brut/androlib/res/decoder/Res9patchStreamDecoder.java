@@ -22,7 +22,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.common.utils.IOUtils;
+
+import org.jetbrains.annotations.Contract;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
@@ -105,6 +109,7 @@ public class Res9patchStreamDecoder implements ResStreamDecoder {
         }
     }
 
+    @NonNull
     private NinePatch getNinePatch(byte[] data) throws AndrolibException,
             IOException {
         ExtDataInput di = new ExtDataInput(new ByteArrayInputStream(data));
@@ -112,7 +117,7 @@ public class Res9patchStreamDecoder implements ResStreamDecoder {
         return NinePatch.decode(di);
     }
 
-    private void find9patchChunk(DataInput di) throws AndrolibException,
+    private void find9patchChunk(@NonNull DataInput di) throws AndrolibException,
             IOException {
         di.skipBytes(8);
         while (true) {
@@ -155,7 +160,9 @@ public class Res9patchStreamDecoder implements ResStreamDecoder {
             this.yDivs = yDivs;
         }
 
-        public static NinePatch decode(ExtDataInput di) throws IOException {
+        @NonNull
+        @Contract("_ -> new")
+        public static NinePatch decode(@NonNull ExtDataInput di) throws IOException {
             di.skipBytes(1);
             byte numXDivs = di.readByte();
             byte numYDivs = di.readByte();

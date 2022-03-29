@@ -20,16 +20,10 @@ public class App extends Application {
     public static SharedPreferences preferences;
 
     public static Context getContext() {
-        if (context == null) {
-            context = new App();
-        }
         return context;
     }
 
     public static SharedPreferences getPreferences() {
-        if (preferences == null) {
-            preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        }
         return preferences;
     }
 

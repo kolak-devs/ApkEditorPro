@@ -16,28 +16,16 @@
  */
 package brut.androlib.res.data;
 
-import androidx.annotation.NonNull;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.logging.Logger;
-
 import brut.androlib.AndrolibException;
 import brut.androlib.err.UndefinedResObjectException;
 import brut.androlib.res.data.value.ResFileValue;
 import brut.androlib.res.data.value.ResValueFactory;
 import brut.androlib.res.xml.ResValuesXmlSerializable;
 import brut.util.Duo;
+import java.util.*;
+import java.util.logging.Logger;
 
 public class ResPackage {
-    private final static Logger LOGGER = Logger.getLogger(ResPackage.class.getName());
     private final ResTable mResTable;
     private final int mId;
     private final String mName;
@@ -45,6 +33,7 @@ public class ResPackage {
     private final Map<ResConfigFlags, ResType> mConfigs = new LinkedHashMap<>();
     private final Map<String, ResTypeSpec> mTypes = new LinkedHashMap<>();
     private final Set<ResID> mSynthesizedRes = new HashSet<>();
+
     private ResValueFactory mValueFactory;
 
     public ResPackage(ResTable resTable, int id, String name) {
@@ -138,7 +127,7 @@ public class ResPackage {
         return mSynthesizedRes.contains(resId);
     }
 
-    public void removeResSpec(@NonNull ResResSpec spec) {
+    public void removeResSpec(ResResSpec spec) {
         mResSpecs.remove(spec.getId());
     }
 
@@ -148,7 +137,7 @@ public class ResPackage {
         }
     }
 
-    public void addType(@NonNull ResTypeSpec type) {
+    public void addType(ResTypeSpec type) {
         if (mTypes.containsKey(type.getName())) {
             LOGGER.warning("Multiple types detected! " + type + " ignored!");
         } else {
@@ -160,7 +149,6 @@ public class ResPackage {
         mSynthesizedRes.add(new ResID(resId));
     }
 
-    @NonNull
     @Override
     public String toString() {
         return mName;
@@ -195,4 +183,6 @@ public class ResPackage {
         }
         return mValueFactory;
     }
+
+    private final static Logger LOGGER = Logger.getLogger(ResPackage.class.getName());
 }

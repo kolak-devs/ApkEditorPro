@@ -54,7 +54,7 @@ public class AssetsInstaller {
             copyAapt2(assets, path);
             copyAaptZ(assets, path);
             copyZipAlign(assets, path);
-            copyAndroidjar(path);
+            copyAndroidJar(assets, path);
             copyMycp(assets);
             createWorkFiles();
 
@@ -162,24 +162,13 @@ public class AssetsInstaller {
     }
 
     // Copy android.jar
-    private void copyAndroidjar(@NonNull File binRootPath) throws IOException {
-        // Copy to tmp.zip
-        InputStream input = context.getAssets().open("android.zip");
-        String zipFilePath = binRootPath + "/tmp.zip";
-        FileOutputStream output = new FileOutputStream(
-                binRootPath + "/tmp.zip");
-        IOUtils.copy(input, output);
-        input.close();
-        output.close();
-
-        // unzip
-        ZipUtils.unzipNoThrow(zipFilePath, binRootPath.getPath());
-
-        // Delete tmp.zip
-        File f = new File(zipFilePath);
-        f.delete();
-
-        // unzip again
-        ZipUtils.unzipNoThrow(binRootPath + "/android.jar", binRootPath.getPath());
+    private void copyAndroidJar(@NonNull AssetManager assets, File outDir) throws IOException {
+        File aapt2 = new File(outDir, "android-framework.jar");
+        InputStream aapt2_in = assets.open(Build.CPU_ABI + "/android-framework.jar");
+        OutputStream aapt2_out = new FileOutputStream(aapt2);
+        IOUtils.copy(aapt2_in, aapt2_out);
+        aapt2_in.close();
+        aapt2_out.close();
+        aapt2.setExecutable(true);
     }
 }

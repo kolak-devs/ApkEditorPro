@@ -16,12 +16,6 @@
  */
 package brut.androlib.res.decoder;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import brut.androlib.AndrolibException;
 import brut.androlib.err.CantFind9PatchChunkException;
 import brut.androlib.err.RawXmlEncounteredException;
@@ -32,16 +26,11 @@ import brut.directory.DirUtil;
 import brut.directory.Directory;
 import brut.directory.DirectoryException;
 
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ResFileDecoder {
-    private final static Logger LOGGER = Logger.getLogger(ResFileDecoder.class.getName());
-    private final static String[] RAW_IMAGE_EXTENSIONS = new String[]{
-            "m4a", // apple
-            "qmg", // samsung
-    };
-    private final static String[] RAW_9PATCH_IMAGE_EXTENSIONS = new String[]{
-            "qmg", // samsung
-            "spi", // samsung
-    };
     private final ResStreamDecoderContainer mDecoders;
 
     public ResFileDecoder(ResStreamDecoderContainer decoders) {
@@ -172,4 +161,16 @@ public class ResFileDecoder {
             throw new AndrolibException(ex);
         }
     }
+
+    private final static Logger LOGGER = Logger.getLogger(ResFileDecoder.class.getName());
+
+    private final static String[] RAW_IMAGE_EXTENSIONS = new String[] {
+        "m4a", // apple
+        "qmg", // samsung
+    };
+
+    private final static String[] RAW_9PATCH_IMAGE_EXTENSIONS = new String[] {
+        "qmg", // samsung
+        "spi", // samsung
+    };
 }
