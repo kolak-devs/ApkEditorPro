@@ -161,7 +161,7 @@ public class AssetsInstaller {
         aapt2.setExecutable(true);
     }
 
-    // Copy android.jar
+    // Copy android-framework.jar
     private void copyAndroidJar(@NonNull AssetManager assets, File outDir) throws IOException {
         File aapt2 = new File(outDir, "android-framework.jar");
         InputStream aapt2_in = assets.open("android-framework.jar");

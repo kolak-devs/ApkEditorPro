@@ -75,7 +75,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         this.binRootPath = rootDirectory + "/bin";
         this.aaptPath = binRootPath + "/aapt";
         this.aaptPath2 = binRootPath + "/aapt2";
-        this.androidJarPath = binRootPath + "/android.jar";
+        this.androidJarPath = binRootPath + "/android-framework.jar";
         this.decodedFilePath = decodedFilePath;
         this.targetApkPath = apkPath;
         this.resourceApkPath = decodedFilePath + "/build/resource.apk";

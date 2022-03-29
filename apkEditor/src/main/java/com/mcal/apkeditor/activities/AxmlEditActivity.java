@@ -309,7 +309,7 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
         public void process() throws Exception {
             String binaryPath = getBinaryPath();
             String aaptPath = binaryPath + "aaptz";
-            String androidPath = binaryPath + "android.jar";
+            String androidPath = binaryPath + "android-framework.jar";
             CommandRunner cr = new CommandRunner();
             cr.runCommand(aaptPath + " z -I " + androidPath + " " + xmlPath + " " + tempPath + " " + getApkPath(), null, 5000, false);
             this.outMessage = cr.getStdOut();

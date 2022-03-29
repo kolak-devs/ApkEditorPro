@@ -92,8 +92,8 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
         this.binRootPath = rootDirectory + "/bin";
         this.aaptPath = binRootPath + "/aapt";
         this.aaptPath2 = binRootPath + "/aapt2";
-        this.androidJarPath = binRootPath + "/android.jar";
-        // this.androidJarPath = SDCard.getRootDirectory() + "/android.jar";
+        this.androidJarPath = binRootPath + "/android-framework.jar";
+        // this.androidJarPath = SDCard.getRootDirectory() + "/android-framework.jar";
         this.decodedFilePath = decodedFilePath;
         this.srcApkPath = srcApkPath;
         this.targetApkPath = apkPath;
@@ -162,7 +162,7 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
         }
     }
 
-    // Copy aapt & android.jar
+    // Copy aapt & android-framework.jar
     private static boolean copyFiles(Context ctx) throws Exception {
         try {
             try {
