@@ -16,6 +16,8 @@
  */
 package brut.androlib;
 
+import androidx.annotation.NonNull;
+
 import brut.androlib.meta.MetaInfo;
 import brut.androlib.meta.UsesFramework;
 import brut.androlib.options.BuildOptions;
@@ -256,7 +258,7 @@ public class Androlib {
         }
     }
 
-    public void writeMetaFile(File mOutDir, MetaInfo meta)
+    public void writeMetaFile(File mOutDir, @NonNull MetaInfo meta)
             throws AndrolibException {
         try {
             meta.save(new File(mOutDir, "apktool.yml"));

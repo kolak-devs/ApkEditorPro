@@ -114,18 +114,24 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
 
         if (Preferences.isApkToolCompiler()) {
             do {
-                this.stepInfo.stepTotal = 4;
-
                 BuildOptions options = new BuildOptions();
                 options.useAapt2 = Preferences.isAapt2(ctx);
-                //options.aaptPath = ctx.getFilesDir() + "/bin";
+                options.aaptPath = ctx.getFilesDir() + "/bin/" + (Preferences.isAapt2(ctx) ? "aapt2" : "aapt");
+                options.frameworkFolderLocation = ctx.getFilesDir() + "/bin";
                 Androlib androlib = new Androlib(options);
 
                 try {
-                    File tmp = File.createTempFile("APKTOOL", null);
+                    File tmp = File.createTempFile("ApkEditor", null);
+
+                    if(!new File(ctx.getFilesDir() + "/bin/1.apk").exists()) {
+                        this.stepInfo.stepTotal = 5;
+                        setNextStep("Installing Framework...");
+                        androlib.installFramework(new File(ctx.getFilesDir() + "/bin/android-framework.jar"));
+                    } else {
+                        this.stepInfo.stepTotal = 4;
+                    }
 
                     setNextStep("Compiling...");
-                    //androlib.installFramework(new File(ctx.getFilesDir() + "/bin/android-framework.jar"));
                     androlib.build(new File(decodedFilePath), tmp);
 
                     setNextStep("Building...");

@@ -953,7 +953,7 @@ final public class AndrolibResources {
         }
     }
 
-    public File getFrameworkDir() throws AndrolibException {
+    public File getFrameworkDir() {
         /*if (mFrameworkDirectory != null) {
             return mFrameworkDirectory;
         }
@@ -1009,7 +1009,7 @@ final public class AndrolibResources {
 
         mFrameworkDirectory = dir;
         return dir;*/
-        return new File("data/data/com.mcal.apkeditor.pro/files/bin");
+        return new File(buildOptions.frameworkFolderLocation);
     }
 
     private File getAaptBinaryFile() throws AndrolibException {

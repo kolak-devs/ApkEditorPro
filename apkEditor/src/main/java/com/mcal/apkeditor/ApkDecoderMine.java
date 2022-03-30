@@ -31,6 +31,7 @@ import brut.androlib.Androlib;
 import brut.androlib.AndrolibException;
 import brut.androlib.ApkDecoder;
 import brut.androlib.err.CantFind9PatchChunkException;
+import brut.androlib.options.BuildOptions;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResResSpec;
 import brut.androlib.res.data.ResResource;
@@ -110,8 +111,12 @@ public class ApkDecoderMine implements IReferenceDecoder, IReferenceDecode {
 
     public void decode(Activity activity, String apkPath, String decodeRootPath) {
         try {
-            Androlib lib = new Androlib();
-            lib.installFramework(new File(activity.getFilesDir() + "/bin/android-framework.jar"));
+            BuildOptions options = new BuildOptions();
+            options.frameworkFolderLocation = activity.getFilesDir() + "/bin";
+            Androlib lib = new Androlib(options);
+            if(!new File(activity.getFilesDir() + "/bin/1.apk").exists()) {
+                lib.installFramework(new File(activity.getFilesDir() + "/bin/android-framework.jar"));
+            }
             ApkDecoder decoder = new ApkDecoder(new File(apkPath), lib);
             decoder.setApkFile(new File(apkPath));
             decoder.setBaksmaliDebugMode(false);
