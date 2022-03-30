@@ -1651,13 +1651,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 dlg.setTitle(R.string.warning);
                 dlg.setMessage(errMsg + "\nAre you sure to continue?");
                 dlg.setPositiveButton(R.string.yes,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                launchBuildActivityAndService(bSign);
-                            }
-                        });
+                        (dialog, which) -> launchBuildActivityAndService(bSign));
                 dlg.setNegativeButton(android.R.string.cancel, null);
                 dlg.show();
                 return;
@@ -1726,7 +1720,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             private String errorMessage = null;
 
             @Override
-            public void process() throws Exception {
+            public void process() {
                 File srcDir = new File(folderPath);
                 String folderName = srcDir.getName();
                 File curDir = new File(dirPath);
@@ -1938,12 +1932,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
         if (ret) {
             this.bStringPrepared = prepareStringList();
             if (bStringPrepared) {
-                this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showStringList();
-                        setupClickListener();
-                    }
+                this.runOnUiThread(() -> {
+                    showStringList();
+                    setupClickListener();
                 });
             }
         } else {
@@ -1975,24 +1966,21 @@ public class ApkInfoActivity extends CustomizedLangActivity
             this.bStringPrepared = prepareStringList();
         }
 
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (stringShowNeeded) {
-                    showStringList();
-                    setupClickListener();
-                }
-                showDecodedFileList();
-                webserverMenu.setVisibility(View.VISIBLE);
-                rotateMenu.setVisibility(View.VISIBLE);
-                if (isPro()) {
-                    patchMenu.setVisibility(View.VISIBLE);
-                } else {
-                    patchMenu.setVisibility(View.GONE);
-                }
-                if (!BuildConfig.PARSER_ONLY) {
-                    saveBtn.setVisibility(View.VISIBLE);
-                }
+        this.runOnUiThread(() -> {
+            if (stringShowNeeded) {
+                showStringList();
+                setupClickListener();
+            }
+            showDecodedFileList();
+            webserverMenu.setVisibility(View.VISIBLE);
+            rotateMenu.setVisibility(View.VISIBLE);
+            if (isPro()) {
+                patchMenu.setVisibility(View.VISIBLE);
+            } else {
+                patchMenu.setVisibility(View.GONE);
+            }
+            if (!BuildConfig.PARSER_ONLY) {
+                saveBtn.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -2804,7 +2792,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             return "java.xml";
         } else if (fileName.endsWith(".json")) {
             return "json.xml";
-        } else if (fileName.endsWith(".txt")) {
+        } else if (fileName.endsWith(".txt") || fileName.endsWith(".yml")) {
             return "txt.xml";
         } else if (fileName.endsWith(".js")) {
             return "js.xml";

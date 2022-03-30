@@ -439,7 +439,7 @@ final public class AndrolibResources {
             cmd.add("-x");
         }
 
-        if (buildOptions.doNotCompress != null && !customAapt) {
+        /*if (buildOptions.doNotCompress != null && !customAapt) {
             // Use custom -e option to avoid limits on commandline length.
             // Can only be used when custom aapt binary is not used.
             String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
@@ -455,7 +455,7 @@ final public class AndrolibResources {
         if (!buildOptions.resourcesAreCompressed) {
             cmd.add("-0");
             cmd.add("arsc");
-        }
+        }*/
 
         if (include != null) {
             for (File file : include) {
@@ -514,10 +514,10 @@ final public class AndrolibResources {
         }
         // force package id so that some frameworks build with correct id
         // disable if user adds own aapt (can't know if they have this feature)
-        if (mPackageId != null && ! customAapt && ! mSharedLibrary) {
+        /*if (mPackageId != null && ! customAapt && ! mSharedLibrary) {
             cmd.add("--forced-package-id");
             cmd.add(mPackageId);
-        }
+        }*/
         if (mSharedLibrary) {
             cmd.add("--shared-lib");
         }
@@ -561,7 +561,7 @@ final public class AndrolibResources {
             cmd.add("-x");
         }
 
-        if (buildOptions.doNotCompress != null && !customAapt) {
+        /*if (buildOptions.doNotCompress != null && !customAapt) {
             // Use custom -e option to avoid limits on commandline length.
             // Can only be used when custom aapt binary is not used.
             String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
@@ -577,7 +577,7 @@ final public class AndrolibResources {
         if (!buildOptions.resourcesAreCompressed) {
             cmd.add("-0");
             cmd.add("arsc");
-        }
+        }*/
 
         if (include != null) {
             for (File file : include) {

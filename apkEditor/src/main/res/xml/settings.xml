@@ -70,7 +70,14 @@
         android:title="@string/apk_building">
 
         <SwitchPreference
+            android:key="apkToolCompiler"
+            android:defaultValue="true"
+            android:summary="Use aapt2 to compile resources"
+            android:title="ApkTool Compiler" />
+
+        <SwitchPreference
             android:key="aapt2"
+            android:defaultValue="true"
             android:summary="Use aapt2 to compile resources"
             android:title="Aapt2" />
 

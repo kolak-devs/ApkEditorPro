@@ -156,7 +156,7 @@ class ModificationAdapter extends BaseExpandableListAdapter {
         }
 
         int left = Display.dip2px(ctx, 32);
-        ((TextView) convertView).setPadding(left, left / 8, 0, 0);
+        convertView.setPadding(left, left / 8, 0, 0);
         ((TextView) convertView).setTypeface(null, Typeface.BOLD);
         ((TextView) convertView).setText(text);
 
@@ -174,7 +174,7 @@ class ModificationAdapter extends BaseExpandableListAdapter {
         }
 
         int left = Display.dip2px(ctx, 48);
-        ((TextView) convertView).setPadding(left, 0, 0, 0);
+        convertView.setPadding(left, 0, 0, 0);
         ((TextView) convertView).setText(text);
 
         return convertView;
@@ -356,16 +356,16 @@ public class RebuildConfirmDialog {
         // Initialize the expandable list view
         View layout = LayoutInflater.from(ctx)
                 .inflate(R.layout.dlg_rebuild_confirm, null);
-        ExpandableListView list = (ExpandableListView) layout
+        ExpandableListView list = layout
                 .findViewById(R.id.modificationList);
         List<ModificationCategory> modList = getModifications();
         list.setAdapter(new ModificationAdapter(ctx, modList));
         for (int i = 0; i < modList.size(); ++i) {
             list.expandGroup(i);
         }
-        this.dexCb = (CheckBox) layout.findViewById(R.id.cb_rebuild_dex);
-        this.resCb = (CheckBox) layout.findViewById(R.id.cb_rebuild_res);
-        this.signCb = (CheckBox) layout.findViewById(R.id.cb_resign);
+        this.dexCb = layout.findViewById(R.id.cb_rebuild_dex);
+        this.resCb = layout.findViewById(R.id.cb_rebuild_res);
+        this.signCb = layout.findViewById(R.id.cb_resign);
         this.dexCb.setChecked(!this.smaliFolders.isEmpty());
         this.resCb.setChecked(this.stringModified || this.manifestModified
                 || this.resFileModified);

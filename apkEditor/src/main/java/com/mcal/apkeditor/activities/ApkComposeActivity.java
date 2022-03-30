@@ -381,7 +381,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
             this.failedLv.setDivider(null);
             this.failedLv.setAdapter(new ApkComposeFailAdapter(this, errMessage));
-            Log.d("error", errMessage);
+            //Log.d("error", errMessage);
             resultImgView.setImageResource(R.drawable.round_close_red_24);
 
             // Show "Hide Warnings" button or not

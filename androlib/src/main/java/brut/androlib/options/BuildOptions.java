@@ -16,6 +16,7 @@
  */
 package brut.androlib.options;
 
+import java.io.File;
 import java.util.Collection;
 
 public class BuildOptions {

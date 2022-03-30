@@ -27,7 +27,7 @@ public class Preferences {
 
     public static boolean isAapt2(Context ctx) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getBoolean("aapt2", false);
+        return sp.getBoolean("aapt2", true);
     }
 
     /**
@@ -94,5 +94,9 @@ public class Preferences {
 
     public static boolean isFixMultiRes() {
         return App.getPreferences().getBoolean("fixMultiRes", true);
+    }
+
+    public static boolean isApkToolCompiler() {
+        return App.getPreferences().getBoolean("apkToolCompiler", true);
     }
 }
