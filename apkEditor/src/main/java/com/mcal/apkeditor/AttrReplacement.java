@@ -64,7 +64,7 @@ public class AttrReplacement {
 	private static Map<String, IGetAttrName> replaces = new HashMap<String, IGetAttrName>();
 	static {
 		AttrReplacement_Common replace = new AttrReplacement_Common();
-		replace.add(-1, "fill_parent");
+		replace.add(-1, "match_parent");
 		replace.add(-2, "wrap_content");
 		replaces.put("layout_width", replace);
 		replaces.put("layout_height", replace);

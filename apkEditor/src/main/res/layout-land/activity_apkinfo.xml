@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="horizontal">
 
     <RadioGroup
@@ -61,7 +61,7 @@
 
         <LinearLayout
             android:id="@+id/header_layout"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -76,7 +76,7 @@
 
             <LinearLayout
                 android:layout_width="0.0dip"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1.0"
                 android:focusable="true"
@@ -86,7 +86,7 @@
 
                 <TextView
                     android:id="@+id/app_name"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:padding="2.0dip"
@@ -96,7 +96,7 @@
 
                 <TextView
                     android:id="@+id/app_pkgpath"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dip"
                     android:ellipsize="marquee"
@@ -152,7 +152,7 @@
             </RelativeLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/save_button"
+                android:id="@+id/btn_build_apk"
                 style="@style/Base.Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
         </LinearLayout>
 
         <FrameLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="0.0dip"
             android:layout_weight="1.0"
             android:background="#ffffffff">
@@ -174,12 +174,12 @@
 
             <LinearLayout
                 android:id="@+id/string_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -218,7 +218,7 @@
 
                 <ListView
                     android:id="@+id/string_list"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="0dip"
                     android:layout_margin="4.0dip"
                     android:layout_weight="1"
@@ -273,8 +273,8 @@
 
             <LinearLayout
                 android:id="@+id/resource_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <FrameLayout
@@ -370,7 +370,7 @@
 
                 <ListView
                     android:id="@+id/resource_list"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="0dip"
                     android:layout_marginLeft="4.0dip"
                     android:layout_marginRight="4.0dip"
@@ -381,7 +381,7 @@
 
                 <FrameLayout
                     android:id="@+id/dex_decode_layout"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -456,7 +456,7 @@
                     android:background="#ffe3e3e3" />
 
                 <FrameLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <!-- Resource menu -->
@@ -470,7 +470,7 @@
 
                     <LinearLayout
                         android:id="@+id/res_search_layout"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dip"
                         android:gravity="center_vertical"
@@ -570,13 +570,13 @@
 
             <LinearLayout
                 android:id="@+id/manifest_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <ListView
                     android:id="@+id/manifest_list"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="0dip"
                     android:layout_marginLeft="4.0dip"
                     android:layout_marginRight="4.0dip"
@@ -591,7 +591,7 @@
 
                     <TextView
                         android:id="@+id/tv_not_support"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#ffffffd5"
                         android:gravity="center"
@@ -648,8 +648,8 @@
 
             <LinearLayout
                 android:id="@+id/layout_loading"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@color/apked_white"
                 android:focusable="false"
                 android:gravity="center"

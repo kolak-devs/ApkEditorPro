@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/search_frame"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_margin="5.0dip">
 
     <LinearLayout
         android:id="@+id/input_layout"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/findEdit"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:hint="@string/find"
@@ -28,7 +28,7 @@
 
         <EditText
             android:id="@+id/replaceEdit"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:hint="@string/replace"
@@ -39,14 +39,14 @@
 
     <LinearLayout
         android:id="@+id/option_layout"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/input_layout"
         android:orientation="horizontal">
 
         <ToggleButton
             android:id="@+id/checkBoxRegexp"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:contentDescription="@string/regexp"
@@ -58,7 +58,7 @@
 
         <ToggleButton
             android:id="@+id/checkBoxIgnoreCase"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:drawableTop="@drawable/edit_ignorecase"
@@ -70,7 +70,7 @@
 
     <LinearLayout
         android:id="@+id/action_layout"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="4dip"

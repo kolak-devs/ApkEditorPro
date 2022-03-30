@@ -1499,7 +1499,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         resRadio.setOnClickListener(v -> resRadioClicked());
         manifestRadio.setOnClickListener(v -> manifestRadioClicked());
 
-        this.saveBtn = this.findViewById(R.id.save_button);
+        this.saveBtn = this.findViewById(R.id.btn_build_apk);
         if (BuildConfig.PARSER_ONLY) {
             this.saveBtn.setVisibility(View.GONE);
         } else {
