@@ -1196,12 +1196,12 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     private void initView() {
         Resources res = getResources();
-        this.textIcon = res.getDrawable(R.drawable.round_g_translate_accent_24);
-        this.textIconGrey = res.getDrawable(R.drawable.round_g_translate_24);
-        this.resIcon = res.getDrawable(R.drawable.round_folder_blue_24);
-        this.resIconGrey = res.getDrawable(R.drawable.round_folder_24);
-        this.manifestIcon = res.getDrawable(R.drawable.round_article_blue_24);
-        this.manifestIconGrey = res.getDrawable(R.drawable.round_article_24);
+        this.textIcon = ContextCompat.getDrawable(this, R.drawable.round_g_translate_accent_24);
+        this.textIconGrey = ContextCompat.getDrawable(this, R.drawable.round_g_translate_24);
+        this.resIcon = ContextCompat.getDrawable(this, R.drawable.round_folder_blue_24);
+        this.resIconGrey = ContextCompat.getDrawable(this, R.drawable.round_folder_24);
+        this.manifestIcon = ContextCompat.getDrawable(this, R.drawable.round_article_blue_24);
+        this.manifestIconGrey = ContextCompat.getDrawable(this, R.drawable.round_article_24);
 
         this.apkIcon = this.findViewById(R.id.app_icon);
         this.apkLabel = this.findViewById(R.id.app_name);

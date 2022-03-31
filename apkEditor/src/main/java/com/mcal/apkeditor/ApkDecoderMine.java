@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.XmlDecoder.IReferenceDecoder;
+import com.mcal.apkeditor.utils.AssetsInstaller;
 import com.mcal.apkeditor.utils.TimeDumper;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
 import com.mcal.common.utils.FileUtils;
@@ -109,18 +110,29 @@ public class ApkDecoderMine implements IReferenceDecoder, IReferenceDecode {
         return fileEntry2ZipEntry;
     }
 
-    public void decode(Activity activity, String apkPath, String decodeRootPath) {
+    public void decode(@NonNull Activity activity, String apkPath, String decodeRootPath) {
+        //File framework = new File(activity.getFilesDir() + "/bin/android-framework.jar");
+        //File frameworkApk = new File(activity.getFilesDir() + "/bin/1.apk");
+        File binFolder = new File(activity.getFilesDir() + "/bin");
+
+        // Preparing
+        try {
+            new AssetsInstaller(activity).install();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         try {
             BuildOptions options = new BuildOptions();
-            options.frameworkFolderLocation = activity.getFilesDir() + "/bin";
+            options.frameworkFolderLocation = binFolder.getPath();
             Androlib lib = new Androlib(options);
-            if(!new File(activity.getFilesDir() + "/bin/1.apk").exists()) {
-                lib.installFramework(new File(activity.getFilesDir() + "/bin/android-framework.jar"));
-            }
+            //if(!frameworkApk.exists() && frameworkApk.length() != 0) {
+            //    lib.installFramework(framework);
+            //}
             ApkDecoder decoder = new ApkDecoder(new File(apkPath), lib);
             decoder.setApkFile(new File(apkPath));
             decoder.setBaksmaliDebugMode(false);
-            decoder.setFrameworkDir(activity.getFilesDir() + "/bin"); //android-framework.jar
+            decoder.setFrameworkDir(binFolder.getPath()); //android-framework.jar
             //decoder.setDecodeAssets(ApkDecoder.DECODE_ASSETS_FULL);
             decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_FULL);
             //decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_NONE);
@@ -138,9 +150,6 @@ public class ApkDecoderMine implements IReferenceDecoder, IReferenceDecode {
     // Root interface of the decode
     public void decode(@NonNull ExtFile apkFile, File outDir) throws Exception {
         Directory inApk = apkFile.getDirectory();
-        if (!inApk.containsDir("res")) {
-            //this.xmlDecoder.setApkProtected(true);
-        }
 
         TimeDumper timer = new TimeDumper(false);
         if (!stopRunning) {

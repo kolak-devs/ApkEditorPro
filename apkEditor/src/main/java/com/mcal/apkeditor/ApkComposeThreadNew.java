@@ -114,21 +114,32 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
 
         if (Preferences.isApkToolCompiler()) {
             do {
+                //File framework = new File(ctx.getFilesDir() + "/bin/android-framework.jar");
+                //File frameworkApk = new File(ctx.getFilesDir() + "/bin/1.apk");
+                File binFolder = new File(ctx.getFilesDir() + "/bin");
+
                 BuildOptions options = new BuildOptions();
                 options.useAapt2 = Preferences.isAapt2(ctx);
-                options.aaptPath = ctx.getFilesDir() + "/bin/" + (Preferences.isAapt2(ctx) ? "aapt2" : "aapt");
-                options.frameworkFolderLocation = ctx.getFilesDir() + "/bin";
+                options.aaptPath = binFolder + File.separator + (Preferences.isAapt2(ctx) ? "aapt2" : "aapt");
+                options.frameworkFolderLocation = binFolder.getPath();
                 Androlib androlib = new Androlib(options);
 
                 try {
-                    File tmp = File.createTempFile("ApkEditor", null);
+                    File tmp = File.createTempFile("APKTOOL", null);
 
-                    if(!new File(ctx.getFilesDir() + "/bin/1.apk").exists()) {
+                    //if(!frameworkApk.exists() && frameworkApk.length() != 0) {
+                    //    this.stepInfo.stepTotal = 5;
+                    //    setNextStep("Installing Framework...");
+                    //    androlib.installFramework(framework);
+                    //} else {
                         this.stepInfo.stepTotal = 5;
-                        setNextStep("Installing Framework...");
-                        androlib.installFramework(new File(ctx.getFilesDir() + "/bin/android-framework.jar"));
-                    } else {
-                        this.stepInfo.stepTotal = 4;
+                    //}
+
+                    try {
+                        setNextStep("Preparing...");
+                        new AssetsInstaller(ctx).install();
+                    } catch (Exception e) {
+                        this.errMessage = e.getMessage();
                     }
 
                     setNextStep("Compiling...");
@@ -160,6 +171,9 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
 
             this.stepInfo.stepTotal = 0;
 
+            // Prepare
+            stepInfo.stepTotal += 1;
+
             // Need to build resource
             if (rebuildResource) {
                 stepInfo.stepTotal += 1;
@@ -186,8 +200,11 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
                     }
                     setNextStep(ctx.getString(R.string.compose));
 
-                    if (!prepare()) {
-                        break;
+                    try {
+                        setNextStep("Preparing...");
+                        new AssetsInstaller(ctx).install();
+                    } catch (Exception e) {
+                        this.errMessage = e.getMessage();
                     }
 
                     // Compose resource and extract files
@@ -540,7 +557,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
     }
 
     private boolean aapt() {
-        boolean noVersionVectorOption = ApkComposeThread.getNoVersionVectorOption(ctx, aaptPath);
+        boolean noVersionVectorOption = Preferences.getNoVersionVectorOption(aaptPath);
 
         List<String> paramList = new ArrayList<>();
         paramList.add(aaptPath);
@@ -573,7 +590,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
     }
 
     public boolean aapt2() throws IOException {
-        boolean noVersionVectorOption = ApkComposeThread.getNoVersionVectorOption(ctx, aaptPath2);
+        boolean noVersionVectorOption = Preferences.getNoVersionVectorOption(aaptPath2);
 
         ArrayList<String> args = new ArrayList<>();
         //compile resources
@@ -658,17 +675,6 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
             return false;
         }
         return true;
-    }
-
-    // This method will extract the necessary files
-    private boolean prepare() {
-        try {
-            new AssetsInstaller(ctx).install();
-            return true;
-        } catch (Exception e) {
-            this.errMessage = e.getMessage();
-            return false;
-        }
     }
 
     @Override

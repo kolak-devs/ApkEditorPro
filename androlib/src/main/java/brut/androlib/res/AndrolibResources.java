@@ -16,6 +16,11 @@
  */
 package brut.androlib.res;
 
+import android.util.Log;
+
+import com.mcal.common.utils.CommandRunner;
+import com.mcal.common.utils.LOGGER;
+
 import brut.androlib.AndrolibException;
 import brut.androlib.options.BuildOptions;
 import brut.androlib.err.CantFindFrameworkResException;
@@ -439,13 +444,20 @@ final public class AndrolibResources {
             cmd.add("-x");
         }
 
-        /*if (buildOptions.doNotCompress != null && !customAapt) {
-            // Use custom -e option to avoid limits on commandline length.
-            // Can only be used when custom aapt binary is not used.
-            String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
-            cmd.add("-e");
-            cmd.add(extensionsFilePath);
-        } else if (buildOptions.doNotCompress != null) {
+//        if (buildOptions.doNotCompress != null && !customAapt) {
+//            // Use custom -e option to avoid limits on commandline length.
+//            // Can only be used when custom aapt binary is not used.
+//            String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
+//            cmd.add("-e");
+//            cmd.add(extensionsFilePath);
+//        } else if (buildOptions.doNotCompress != null) {
+//            for (String file : buildOptions.doNotCompress) {
+//                cmd.add("-0");
+//                cmd.add(file);
+//            }
+//        }
+
+        if (buildOptions.doNotCompress != null) {
             for (String file : buildOptions.doNotCompress) {
                 cmd.add("-0");
                 cmd.add(file);
@@ -455,7 +467,7 @@ final public class AndrolibResources {
         if (!buildOptions.resourcesAreCompressed) {
             cmd.add("-0");
             cmd.add("arsc");
-        }*/
+        }
 
         if (include != null) {
             for (File file : include) {
@@ -485,11 +497,24 @@ final public class AndrolibResources {
             cmd.add(resourcesZip.getAbsolutePath());
         }
 
+//        try {
+//            OS.exec(cmd.toArray(new String[0]));
+//            LOGGER.fine("aapt2 link command ran: ");
+//            LOGGER.fine(cmd.toString());
+//        } catch (BrutException ex) {
+//            throw new AndrolibException(ex);
+//        }
+
+        CommandRunner start = new CommandRunner();
         try {
-            OS.exec(cmd.toArray(new String[0]));
+            start.runCommand(cmd.toArray(new String[0]),
+                null, null, 300 * 1000, true);
+
             LOGGER.fine("aapt2 link command ran: ");
             LOGGER.fine(cmd.toString());
-        } catch (BrutException ex) {
+            LOGGER.info("Info: " + start.getStdOut());
+        } catch (Exception ex) {
+            LOGGER.warning("Warning: " + start.getStdError());
             throw new AndrolibException(ex);
         }
     }
@@ -514,10 +539,10 @@ final public class AndrolibResources {
         }
         // force package id so that some frameworks build with correct id
         // disable if user adds own aapt (can't know if they have this feature)
-        /*if (mPackageId != null && ! customAapt && ! mSharedLibrary) {
-            cmd.add("--forced-package-id");
-            cmd.add(mPackageId);
-        }*/
+//        if (mPackageId != null && ! customAapt && ! mSharedLibrary) {
+//            cmd.add("--forced-package-id");
+//            cmd.add(mPackageId);
+//        }
         if (mSharedLibrary) {
             cmd.add("--shared-lib");
         }
@@ -561,23 +586,23 @@ final public class AndrolibResources {
             cmd.add("-x");
         }
 
-        /*if (buildOptions.doNotCompress != null && !customAapt) {
-            // Use custom -e option to avoid limits on commandline length.
-            // Can only be used when custom aapt binary is not used.
-            String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
-            cmd.add("-e");
-            cmd.add(extensionsFilePath);
-        } else if (buildOptions.doNotCompress != null) {
-            for (String file : buildOptions.doNotCompress) {
-                cmd.add("-0");
-                cmd.add(file);
-            }
-        }
+//        if (buildOptions.doNotCompress != null && !customAapt) {
+//            // Use custom -e option to avoid limits on commandline length.
+//            // Can only be used when custom aapt binary is not used.
+//            String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
+//            cmd.add("-e");
+//            cmd.add(extensionsFilePath);
+//        } else if (buildOptions.doNotCompress != null) {
+//            for (String file : buildOptions.doNotCompress) {
+//                cmd.add("-0");
+//                cmd.add(file);
+//            }
+//        }
 
         if (!buildOptions.resourcesAreCompressed) {
             cmd.add("-0");
             cmd.add("arsc");
-        }*/
+        }
 
         if (include != null) {
             for (File file : include) {
@@ -600,11 +625,24 @@ final public class AndrolibResources {
         if (rawDir != null) {
             cmd.add(rawDir.getAbsolutePath());
         }
+//        try {
+//            OS.exec(cmd.toArray(new String[0]));
+//            LOGGER.fine("command ran: ");
+//            LOGGER.fine(cmd.toString());
+//        } catch (BrutException ex) {
+//            throw new AndrolibException(ex);
+//        }
+
+        CommandRunner start = new CommandRunner();
         try {
-            OS.exec(cmd.toArray(new String[0]));
+            start.runCommand(cmd.toArray(new String[0]),
+                    null, null, 300 * 1000, true);
+
             LOGGER.fine("command ran: ");
             LOGGER.fine(cmd.toString());
-        } catch (BrutException ex) {
+            LOGGER.info("Info: " + start.getStdOut());
+        } catch (Exception ex) {
+            LOGGER.warning("Warning: " + start.getStdError());
             throw new AndrolibException(ex);
         }
     }
@@ -1028,7 +1066,7 @@ final public class AndrolibResources {
     }
 
     public InputStream getAndroidFrameworkResourcesAsStream() {
-        return Jar.class.getResourceAsStream("/brut/androlib/android-framework.jar");
+        return Jar.class.getResourceAsStream("assets/android-framework.jar");
     }
 
     public void close() throws IOException {

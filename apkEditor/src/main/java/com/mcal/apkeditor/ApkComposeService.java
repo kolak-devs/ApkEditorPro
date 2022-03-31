@@ -20,11 +20,14 @@ import androidx.core.app.NotificationCompat;
 import com.mcal.apkeditor.activities.ApkComposeActivity;
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.data.Constants;
+import com.mcal.apkeditor.utils.AssetsInstaller;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ITaskCallback;
 import com.mcal.seticon.SetIcon;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,6 +38,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import brut.androlib.Androlib;
+import brut.androlib.options.BuildOptions;
 
 public class ApkComposeService extends Service implements ITaskCallback {
     private final ComposeResult composeResult = new ComposeResult();

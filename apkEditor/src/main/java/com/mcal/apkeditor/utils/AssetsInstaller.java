@@ -54,7 +54,8 @@ public class AssetsInstaller {
             copyAapt2(assets, path);
             copyAaptZ(assets, path);
             copyZipAlign(assets, path);
-            copyAndroidJar(assets, path);
+            copyFramework(assets, path);
+            copyFrameworkApk(assets, path);
             copyMycp(assets);
             createWorkFiles();
 
@@ -162,8 +163,18 @@ public class AssetsInstaller {
     }
 
     // Copy android-framework.jar
-    private void copyAndroidJar(@NonNull AssetManager assets, File outDir) throws IOException {
+    private void copyFramework(@NonNull AssetManager assets, File outDir) throws IOException {
         File aapt2 = new File(outDir, "android-framework.jar");
+        InputStream aapt2_in = assets.open("android-framework.jar");
+        OutputStream aapt2_out = new FileOutputStream(aapt2);
+        IOUtils.copy(aapt2_in, aapt2_out);
+        aapt2_in.close();
+        aapt2_out.close();
+        aapt2.setExecutable(true);
+    }
+
+    private void copyFrameworkApk(@NonNull AssetManager assets, File outDir) throws IOException {
+        File aapt2 = new File(outDir, "1.apk");
         InputStream aapt2_in = assets.open("android-framework.jar");
         OutputStream aapt2_out = new FileOutputStream(aapt2);
         IOUtils.copy(aapt2_in, aapt2_out);

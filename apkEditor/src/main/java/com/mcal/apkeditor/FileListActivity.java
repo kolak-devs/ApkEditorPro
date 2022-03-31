@@ -296,7 +296,7 @@ public class FileListActivity extends CustomizedLangActivity implements IListEve
 
             parseThread.addApk(path);
 
-            return getResources().getDrawable(R.drawable.round_android_24);
+            return ContextCompat.getDrawable(this, R.drawable.round_android_24);
         }
         return null;
     }

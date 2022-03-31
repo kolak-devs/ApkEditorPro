@@ -6,9 +6,36 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 import com.mcal.common.App;
+import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.utils.ScopedStorage;
 
 public class Preferences {
+    // Some aapt must pass "--no-version-vectors" option to get the correct result
+    public static boolean getNoVersionVectorOption(String aaptPath) {
+        String configKey = "aapt-no-version-vectors";
+        SharedPreferences sp = android.preference.PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        int intVal = sp.getInt(configKey, -1);
+        if (intVal == 1) {
+            return true;
+        } else if (intVal == 0) {
+            return false;
+        }
+
+        String[] command = {aaptPath};
+        CommandRunner cr = new CommandRunner();
+        cr.runCommand(command, null, null, 5 * 1000, false);
+        String strOut = cr.getStdOut();
+        String strError = cr.getStdError();
+        boolean option = ((strOut != null && strOut.contains("--no-version-vectors")) ||
+                (strError != null && strError.contains("--no-version-vectors")));
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(configKey, option ? 1 : 0);
+        editor.apply();
+        return option;
+    }
+
+
+    // Assets Installer
     public static boolean getInitialized() {
         return App.getPreferences().getBoolean("initialized", false);
     }
