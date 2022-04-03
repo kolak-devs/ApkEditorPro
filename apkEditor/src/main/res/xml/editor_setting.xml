@@ -1,34 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:layout="@layout/preferences_category"
         android:title="Editor">
 
-        <SwitchPreference
+        <androidx.preference.SwitchPreference
             android:key="LineWrap"
             android:title="@string/line_wrap" />
 
-        <SwitchPreference
+        <androidx.preference.SwitchPreference
             android:key="ShowLineNumbers"
             android:title="@string/show_line_numbers" />
 
-        <EditTextPreference
+        <androidx.preference.EditTextPreference
             android:inputType="number"
             android:key="FontSize"
             android:title="@string/font_size" />
 
-        <EditTextPreference
+        <androidx.preference.EditTextPreference
             android:dialogMessage="@string/use_bfe_message"
             android:inputType="number"
             android:key="BigFileSize"
             android:title="@string/when_use_bfe" />
 
-        <SwitchPreference
+        <androidx.preference.SwitchPreference
             android:key="SymbolInput"
             android:summary="@string/symbol_input_summary"
             android:title="@string/symbol_input" />
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-</PreferenceScreen>
+    <androidx.preference.PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="Color Theme">
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorBackground"
+            android:key="editorBackground"
+            android:title="Background"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorNormal"
+            android:key="editorNormal"
+            android:title="Normal"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorReserved"
+            android:key="editorReserved"
+            android:title="Reserved"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorType"
+            android:key="editorType"
+            android:title="Type"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorLiteral"
+            android:key="editorLiteral"
+            android:title="Literal"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorIdentifier"
+            android:key="editorIdentifier"
+            android:title="Identifier"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorPreprocessor"
+            android:key="editorPreprocessor"
+            android:title="Preprocessor"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorComment"
+            android:key="editorComment"
+            android:title="Comment"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorError"
+            android:key="editorError"
+            android:title="Error"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorFunction"
+            android:key="editorFunction"
+            android:title="Function"/>
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/editorOperator"
+            android:key="editorOperator"
+            android:title="Operator"/>
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

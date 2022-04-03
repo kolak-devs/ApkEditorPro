@@ -47,6 +47,7 @@ import com.mcal.apkeditor.dialogs.SmaliCodeDialog;
 import com.mcal.apkeditor.dialogs.SmaliMethodsDialogs;
 import com.mcal.apkeditor.inf.IJavaExtractor;
 import com.mcal.apkeditor.pro.JavaExtractor;
+import com.mcal.apkeditor.pro.activities.SettingsEditorActivity;
 import com.mcal.apkeditor.utils.AndroidBug5497Workaround;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ActivityUtils;
@@ -434,7 +435,7 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
                     showHtmlDialog();
                     break;
                 case CMD_SETTINGS:
-                    Intent intent = new Intent(TextEditBase.this, SettingEditorActivity.class);
+                    Intent intent = new Intent(TextEditBase.this, SettingsEditorActivity.class);
                     startActivity(intent);
                     break;
                 case CMD_COLORPAD:
