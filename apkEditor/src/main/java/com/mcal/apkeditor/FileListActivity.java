@@ -259,7 +259,7 @@ public class FileListActivity extends CustomizedLangActivity implements IListEve
 
             if (BuildConfig.PARSER_ONLY) {
                 UserAppActivity.startFullEditActivity(this, filePath);
-            } else if (BuildConfig.LIMIT_NEW_VERSION && !MainActivity.upgradedFromOldVersion(this)) {
+            } else if (BuildConfig.LIMIT_NEW_VERSION && MainActivity.upgradedFromOldVersion(this)) {
                 startFullEditActivity(filePath);
             } else {
                 new EditModeView(this, this, filePath, null).showFileEditDialog(view);

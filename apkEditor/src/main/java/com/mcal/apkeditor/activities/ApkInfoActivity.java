@@ -1537,7 +1537,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     protected void composeApkFile() {
-        if (BuildConfig.LIMIT_NEW_VERSION && !MainActivity.upgradedFromOldVersion(this)) {
+        if (BuildConfig.LIMIT_NEW_VERSION && MainActivity.upgradedFromOldVersion(this)) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle(R.string.please_note);
             alert.setMessage(R.string.build_not_support_tip);

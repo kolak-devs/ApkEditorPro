@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.activities.ApkComposeActivity;
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.data.Constants;
@@ -178,24 +180,35 @@ public class ApkComposeService extends Service implements ITaskCallback {
     }
 
     private void startComposeThread() {
-        if (srcApkPath != null) {
-            this.composeThread = new ApkComposeThread(this, decodeRootPath,
-                    srcApkPath, targetApkPath);
+        if(Preferences.isApkToolCompiler()) {
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
+            dialog.setTitle("Build Mode");
+            //dialog.setView("");
+            dialog.setPositiveButton("Build", (dialogInterface, i) -> startBuild());
+            dialog.setNegativeButton(android.R.string.cancel, null);
+        } else {
+            startBuild();
         }
-        // srcApkPath == null, means currently is a full decoding
-        else {
-            this.composeThread = new ApkComposeThreadNew(this, decodeRootPath, targetApkPath);
-        }
+    }
 
-        if (extraMaker != null) {
-            composeThread.setExtraMaker(extraMaker);
-        }
-        composeThread.setModification(this.stringModified,
-                this.manifestModified, this.resFileModified,
-                this.modifiedSmaliFolders, this.addedFiles, this.replacedFiles,
-                this.deletedFiles, this.fileEntry2ZipEntry, this.signAPK);
-        composeThread.setTaskCallback(this);
-        composeThread.start();
+    public void startBuild() {
+            if (srcApkPath != null) {
+                this.composeThread = new ApkComposeThread(this, decodeRootPath,
+                        srcApkPath, targetApkPath);
+            } else {
+                // srcApkPath == null, means currently is a full decoding
+                this.composeThread = new ApkComposeThreadNew(this, decodeRootPath, targetApkPath);
+            }
+
+            if (extraMaker != null) {
+                composeThread.setExtraMaker(extraMaker);
+            }
+            composeThread.setModification(this.stringModified,
+                    this.manifestModified, this.resFileModified,
+                    this.modifiedSmaliFolders, this.addedFiles, this.replacedFiles,
+                    this.deletedFiles, this.fileEntry2ZipEntry, this.signAPK);
+            composeThread.setTaskCallback(this);
+            composeThread.start();
     }
 
     @NonNull

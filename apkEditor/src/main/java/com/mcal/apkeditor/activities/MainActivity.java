@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
@@ -38,11 +36,11 @@ import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.prj.ProjectListActivity;
 import com.mcal.apkeditor.prj.ProjectListActivity2;
 import com.mcal.apkeditor.utils.OnlineMessage;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.FileUtils;
 import com.mcal.httpserver.HttpServiceManager;
 
 import java.io.File;
-import java.util.Locale;
 
 /**
  * For apktool, look into:
@@ -50,7 +48,7 @@ import java.util.Locale;
  * <p>
  * And then look into: brut.androlib.res.AndrolibResources
  */
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends CustomizedLangActivity implements
         AdapterView.OnItemClickListener, ProcessingDialog.ProcessingInterface {
 
     // Native library
@@ -75,10 +73,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public static boolean upgradedFromOldVersion(@NonNull Context ctx) {
         File f = new File(ctx.getFilesDir(), "work.xml");
-        if (f.exists()) {
-            return true;
-        }
-        return true;
+        return !f.exists();
     }
 
     @Override
@@ -91,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-        setupLanguage();
         setContentView(R.layout.activity_main);
         setupToolbar(getString(R.string.app_name));
 
@@ -119,19 +113,6 @@ public class MainActivity extends AppCompatActivity implements
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
-    }
-
-    private void setupLanguage() {
-        String languageToLoad =
-                PreferenceManager.getDefaultSharedPreferences(this).getString("Language", "");
-        if (!languageToLoad.equals("")) {
-            Locale locale = new Locale(languageToLoad);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.setLocale(locale);
-            getBaseContext().getResources().updateConfiguration(config,
-                    getBaseContext().getResources().getDisplayMetrics());
-        }
     }
 
     @Override

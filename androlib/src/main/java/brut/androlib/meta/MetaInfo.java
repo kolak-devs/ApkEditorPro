@@ -16,6 +16,9 @@
  */
 package brut.androlib.meta;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.Contract;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
@@ -39,6 +42,8 @@ public class MetaInfo {
     public Map<String, String> unknownFiles;
     public Collection<String> doNotCompress;
 
+    @NonNull
+    @Contract(" -> new")
     private static Yaml getYaml() {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);

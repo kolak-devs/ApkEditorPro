@@ -321,7 +321,7 @@ public class UserAppActivity extends CustomizedLangActivity implements OnItemCli
 
             if (BuildConfig.PARSER_ONLY) {
                 UserAppActivity.startFullEditActivity(this, _apkPath);
-            } else if (BuildConfig.LIMIT_NEW_VERSION && !MainActivity.upgradedFromOldVersion(this)) {
+            } else if (BuildConfig.LIMIT_NEW_VERSION && MainActivity.upgradedFromOldVersion(this)) {
                 startFullEditActivity(this, _apkPath);
             } else {
                 new EditModeView(this, this, _apkPath, moreInfo.packageName).showAppEditDialog(view);
