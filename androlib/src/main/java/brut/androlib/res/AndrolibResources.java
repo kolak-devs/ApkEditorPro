@@ -18,15 +18,15 @@ package brut.androlib.res;
 
 import android.util.Log;
 
+import com.mcal.androlib.meta.MetaInfo;
+import com.mcal.androlib.meta.PackageInfo;
+import com.mcal.androlib.meta.VersionInfo;
 import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.utils.LOGGER;
 
 import brut.androlib.AndrolibException;
 import brut.androlib.options.BuildOptions;
 import brut.androlib.err.CantFindFrameworkResException;
-import brut.androlib.meta.MetaInfo;
-import brut.androlib.meta.PackageInfo;
-import brut.androlib.meta.VersionInfo;
 import brut.androlib.res.data.*;
 import brut.androlib.res.decoder.*;
 import brut.androlib.res.decoder.ARSCDecoder.ARSCData;

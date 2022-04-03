@@ -16,10 +16,9 @@
  */
 package brut.androlib;
 
-import androidx.annotation.NonNull;
+import com.mcal.androlib.meta.MetaInfo;
+import com.mcal.androlib.meta.UsesFramework;
 
-import brut.androlib.meta.MetaInfo;
-import brut.androlib.meta.UsesFramework;
 import brut.androlib.options.BuildOptions;
 import brut.androlib.res.AndrolibResources;
 import brut.androlib.res.data.ResPackage;
@@ -37,6 +36,7 @@ import brut.util.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.jf.dexlib2.iface.DexFile;
+import org.json.JSONException;
 
 import java.io.*;
 import java.util.*;
@@ -258,7 +258,28 @@ public class Androlib {
         }
     }
 
-    public void writeMetaFile(File mOutDir, @NonNull MetaInfo meta)
+    public void writeMetaFile(File mOutDir, MetaInfo meta)
+            throws AndrolibException {
+        try {
+            meta.save(new File(mOutDir, "apktool.json"));
+        } catch (IOException| JSONException ex) {
+            throw new AndrolibException(ex);
+        }
+    }
+
+    public MetaInfo readMetaFile(ExtFile appDir)
+            throws AndrolibException {
+        try {
+            InputStream in = appDir.getDirectory().getFileInput("apktool.json");
+            MetaInfo meta = MetaInfo.load(in);
+            in.close();
+            return meta;
+        } catch (DirectoryException | IOException |JSONException ex) {
+            throw new AndrolibException(ex);
+        }
+    }
+
+    /*public void writeMetaFile(File mOutDir, @NonNull MetaInfo meta)
             throws AndrolibException {
         try {
             meta.save(new File(mOutDir, "apktool.yml"));
@@ -276,7 +297,7 @@ public class Androlib {
         } catch (DirectoryException | IOException ex) {
             throw new AndrolibException(ex);
         }
-    }
+    }*/
 
     public void build(File appDir, File outFile) throws BrutException {
         build(new ExtFile(appDir), outFile);

@@ -16,6 +16,7 @@ import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -137,7 +138,7 @@ public class ApkComposeService extends Service implements ITaskCallback {
         composeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, composeIntent, 0);
 
-        int iconId = (int) SetIcon.getIconId();
+        int iconId = SetIcon.getIconId();
         Bitmap icon = BitmapFactory.decodeResource(getResources(), iconId);
         String appName = getString(R.string.app_name);
 
@@ -180,15 +181,15 @@ public class ApkComposeService extends Service implements ITaskCallback {
     }
 
     private void startComposeThread() {
-        if(Preferences.isApkToolCompiler()) {
-            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
-            dialog.setTitle("Build Mode");
-            //dialog.setView("");
-            dialog.setPositiveButton("Build", (dialogInterface, i) -> startBuild());
-            dialog.setNegativeButton(android.R.string.cancel, null);
-        } else {
+//        if(Preferences.isApkToolCompiler()) {
+//            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+//            dialog.setTitle("Build Mode");
+//            //dialog.setView("");
+//            dialog.setPositiveButton("Build", (dialogInterface, i) -> startBuild());
+//            dialog.setNegativeButton(android.R.string.cancel, null);
+//        } else {
             startBuild();
-        }
+//        }
     }
 
     public void startBuild() {

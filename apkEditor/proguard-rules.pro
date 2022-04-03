@@ -11,7 +11,10 @@
     native <methods>;
 }
 
--keep class brut.androlib.meta.MetaInfo.** {*;}
+#-keep class brut.androlib.meta.MetaInfo.** {*;}
+#-keep class brut.androlib.meta.PackageInfo.** {*;}
+#-keep class brut.androlib.meta.UsesFramework.** {*;}
+#-keep class brut.androlib.meta.VersionInfo.** {*;}
 
 #-keep class javax.annotation.** { *; }
 #-keep class android.** { *; }
