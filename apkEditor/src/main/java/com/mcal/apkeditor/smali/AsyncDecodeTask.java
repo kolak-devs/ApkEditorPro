@@ -3,6 +3,7 @@ package com.mcal.apkeditor.smali;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -192,9 +193,16 @@ public class AsyncDecodeTask extends AsyncTask<Void, Integer, Boolean> {
     protected void onPostExecute(Boolean result) {
         if (callback != null) {
             if (result) {
-                callback.dexDecodingFinished(true, null, this.strWarning);
+                for (File file : new File(decodeRootPath).listFiles()) {
+                    if (file.getName().endsWith(".dex")) {
+                       if(file.delete()) {
+                           Log.e(getClass().getName(), file + " deleted");
+                       }
+                    }
+                }
+                callback.dexDecodingFinished(true, null, strWarning);
             } else {
-                callback.dexDecodingFinished(false, this.strError, null);
+                callback.dexDecodingFinished(false, strError, null);
             }
         }
     }

@@ -55,10 +55,6 @@ public class ApkDecoderMine implements IReferenceDecoder, IReferenceDecode {
     private final static String[] APK_STANDARD_FILES = new String[]{
             "classes.dex", "AndroidManifest.xml", "resources.arsc",
     };
-    //    private final static String[] APK_STANDARD_DIRS = new String[]{
-//            "res", "r", "R",
-//            "lib", "libs", "assets", "META-INF", "kotlin",
-//    };
     private final static String[] APK_STANDARD_DIRS = new String[]{
             "res", "r", "R",
             "lib", "libs", "assets", "kotlin",

@@ -1987,18 +1987,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     public void decodeDex(IGeneralCallback dexDecodedCallback) {
         this.dexDecodedCallback = dexDecodedCallback;
-        new AsyncDecodeTask(this, this.apkPath, decodeRootPath, this).execute();
+        new AsyncDecodeTask(this, apkPath, decodeRootPath, this).execute();
         this.dexDecoded = true;
     }
 
     public void decodeFailed(final String errMessage) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(ApkInfoActivity.this, errMessage,
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+        this.runOnUiThread(() -> Toast.makeText(ApkInfoActivity.this, errMessage,
+                Toast.LENGTH_LONG).show());
     }
 
     // Collect all the string information
