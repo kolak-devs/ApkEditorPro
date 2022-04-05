@@ -48,7 +48,7 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
     private final String srcApkPath;
     private final String targetApkPath; // Target APK path
     // Record all the dex file replaces
-    private final Map<String, String> dexReplaces = new HashMap<String, String>();
+    private final Map<String, String> dexReplaces = new HashMap<>();
     private final TaskStepInfo stepInfo;
     // Last time updating the smali assemble info
     private final long lastUpdateAssembleTime = 0;

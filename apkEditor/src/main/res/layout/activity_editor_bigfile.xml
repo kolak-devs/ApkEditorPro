@@ -93,6 +93,7 @@
                 android:scrollbars="vertical" />
 
             <include layout="@layout/included_editor_menu" />
+
         </LinearLayout>
 
         <include layout="@layout/included_find_panel" />

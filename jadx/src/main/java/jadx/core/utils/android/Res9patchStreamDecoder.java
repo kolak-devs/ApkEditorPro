@@ -112,7 +112,7 @@ public class Res9patchStreamDecoder  {
 	}
 
 	@NonNull
-	private NinePatch getNinePatch(byte[] data) throws IOException,
+	private NinePatch getNinePatch(byte[] data) throws
 			IOException {
 		ExtDataInput di = new ExtDataInput(new ByteArrayInputStream(data));
 		find9patchChunk(di, NP_CHUNK_TYPE);
@@ -120,14 +120,14 @@ public class Res9patchStreamDecoder  {
 	}
 
 	@NonNull
-	private OpticalInset getOpticalInset(byte[] data) throws IOException,
+	private OpticalInset getOpticalInset(byte[] data) throws
 			IOException {
 		ExtDataInput di = new ExtDataInput(new ByteArrayInputStream(data));
 		find9patchChunk(di, OI_CHUNK_TYPE);
 		return OpticalInset.decode(di);
 	}
 
-	private boolean find9patchChunk(@NonNull DataInput di, int magic) throws IOException,
+	private boolean find9patchChunk(@NonNull DataInput di, int magic) throws
 			IOException {
 		di.skipBytes(8);
 		while (true) {
@@ -202,7 +202,8 @@ public class Res9patchStreamDecoder  {
 			this.layoutBoundsBottom = layoutBoundsBottom;
 		}
 
-		public static OpticalInset decode(ExtDataInput di) throws IOException {
+		@NonNull
+		public static OpticalInset decode(@NonNull ExtDataInput di) throws IOException {
 			int layoutBoundsLeft = Integer.reverseBytes(di.readInt());
 			int layoutBoundsTop = Integer.reverseBytes(di.readInt());
 			int layoutBoundsRight = Integer.reverseBytes(di.readInt());
