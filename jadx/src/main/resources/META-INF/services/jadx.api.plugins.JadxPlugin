@@ -1,1 +1,1 @@
-jadx.plugins.input.smali.SmaliInputPlugin
+jadx.plugins.input.dex.DexInputPlugin

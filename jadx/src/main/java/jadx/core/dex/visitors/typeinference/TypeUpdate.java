@@ -513,18 +513,7 @@ public final class TypeUpdate {
 
 	private TypeUpdateResult arrayGetListener(TypeUpdateInfo updateInfo, InsnNode insn, InsnArg arg, ArgType candidateType) {
 		if (isAssign(insn, arg)) {
-			TypeUpdateResult result = updateTypeChecked(updateInfo, insn.getArg(0), ArgType.array(candidateType));
-			if (result == REJECT) {
-				ArgType arrType = insn.getArg(0).getType();
-				if (arrType.isTypeKnown() && arrType.isArray() && arrType.getArrayElement().isPrimitive()) {
-					TypeCompareEnum compResult = comparator.compareTypes(candidateType, arrType.getArrayElement());
-					if (compResult == TypeCompareEnum.WIDER) {
-						// allow implicit upcast for primitive types (int a = byteArr[n])
-						return CHANGED;
-					}
-				}
-			}
-			return result;
+			return updateTypeChecked(updateInfo, insn.getArg(0), ArgType.array(candidateType));
 		}
 		InsnArg arrArg = insn.getArg(0);
 		if (arrArg == arg) {
@@ -532,18 +521,7 @@ public final class TypeUpdate {
 			if (arrayElement == null) {
 				return REJECT;
 			}
-			TypeUpdateResult result = updateTypeChecked(updateInfo, insn.getResult(), arrayElement);
-			if (result == REJECT) {
-				ArgType resType = insn.getResult().getType();
-				if (resType.isTypeKnown() && resType.isPrimitive()) {
-					TypeCompareEnum compResult = comparator.compareTypes(resType, arrayElement);
-					if (compResult == TypeCompareEnum.WIDER) {
-						// allow implicit upcast for primitive types (int a = byteArr[n])
-						return CHANGED;
-					}
-				}
-			}
-			return result;
+			return updateTypeChecked(updateInfo, insn.getResult(), arrayElement);
 		}
 		// index argument
 		return SAME;
@@ -560,10 +538,10 @@ public final class TypeUpdate {
 			TypeUpdateResult result = updateTypeChecked(updateInfo, putArg, arrayElement);
 			if (result == REJECT) {
 				ArgType putType = putArg.getType();
-				if (putType.isTypeKnown()) {
+				if (putType.isTypeKnown() && !putType.isPrimitive()) {
 					TypeCompareEnum compResult = comparator.compareTypes(arrayElement, putType);
 					if (compResult == TypeCompareEnum.WIDER || compResult == TypeCompareEnum.WIDER_BY_GENERIC) {
-						// allow wider result (i.e. allow put any objects in Object[] or byte in int[])
+						// allow wider result (i.e allow put in Object[] any objects)
 						return CHANGED;
 					}
 				}

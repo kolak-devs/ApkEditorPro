@@ -1,5 +1,7 @@
 package jadx.plugins.input.dex.utils;
 
+import androidx.annotation.NonNull;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 public class SmaliUtils {
 	private static final Logger LOG = LoggerFactory.getLogger(SmaliUtils.class);
 
+	@NonNull
 	public static String getSmaliCode(byte[] dexBuf, int clsDefOffset) {
 		StringWriter stringWriter = new StringWriter();
 		try {

@@ -42,7 +42,7 @@ public class JavaExtractor implements IJavaExtractor {
     public boolean extract() {
         if (extractDex()) {
             String dexPath = workingDirectory + "/extracted.dex";
-            return Smali2Java.decompile(dexPath, workingDirectory);
+            return Smali2Java.decompile(errorMessage, dexPath, workingDirectory);
         }
         return false;
     }

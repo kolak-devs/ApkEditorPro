@@ -1,5 +1,9 @@
 package jadx.plugins.input.javaconvert;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Path;
 
@@ -11,7 +15,8 @@ public class DxConverter {
 
 	private static class DxArgs extends com.android.dx.command.dexer.Main.Arguments {
 		public DxArgs(DxContext context, String dexDir, String[] input) {
-			super(context);
+			// TODO: FOR APK EDITOR
+			/*super(context);
 			outName = dexDir;
 			fileNames = input;
 			jarOutput = false;
@@ -23,12 +28,14 @@ public class DxConverter {
 
 			debug = true;
 			warnings = true;
-			minSdkVersion = 28;
+			minSdkVersion = 28;*/
 		}
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.O)
 	public static void run(Path path, Path tempDirectory) {
-		int result;
+		// TODO: FOR APK EDITOR
+		/*int result;
 		String dxErrors;
 		try (ByteArrayOutputStream out = new ByteArrayOutputStream();
 				ByteArrayOutputStream errOut = new ByteArrayOutputStream()) {
@@ -44,6 +51,6 @@ public class DxConverter {
 		}
 		if (result != 0) {
 			throw new RuntimeException("Java to dex conversion error, code: " + result + ", errors: " + dxErrors);
-		}
+		}*/
 	}
 }
