@@ -87,7 +87,7 @@ public class PatchDialog
         saveExamplesTv.setOnClickListener(this);
 
         this.webView = (WebView) view.findViewById(R.id.web_instructions);
-        webView.loadUrl("file:///android_res/raw/about_patch.htm");
+        webView.loadUrl("file:///android_res/raw/about_patch.html");
         this.logLayout = view.findViewById(R.id.log_layout);
         this.logTv = (TextView) view.findViewById(R.id.tv_patchlog);
 

@@ -1,18 +1,27 @@
 package com.mcal.apkeditor.activities;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 
 import com.mcal.apkeditor.GlobalConfig;
@@ -20,10 +29,13 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.data.Constants;
 import com.mcal.common.activities.CustomizedLangActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Locale;
 
 public class HelpActivity extends CustomizedLangActivity {
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,75 +45,35 @@ public class HelpActivity extends CustomizedLangActivity {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-        this.setContentView(R.layout.activity_help);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(0, 0, 0, 0);
+        ll.setLayoutParams(layoutParams);
 
-        WebView v = this.findViewById(R.id.helpWeb);
-        String url = "file:///android_res/raw/help.htm";
+        Toolbar toolbar = new Toolbar(this);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.help);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        Locale locale = Locale.getDefault();
-        String language = locale.getLanguage();
+        ll.addView(toolbar);
 
-        if ("de".equals(language) || "es".equals(language)
-                || "hu".equals(language) || "iw".equals(language)) {
-            url = "file:///android_res/raw/help.htm";
+        WebView webView = new WebView(this);
+        webView.loadUrl("file:///android_res/raw/help.html");
+
+        ll.addView(webView);
+
+        setContentView(ll);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+        // Respond to the action bar's Up/Home button
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
-
-        v.loadUrl(url);
-    }
-
-}
-
-class ForegroundService extends Service {
-    private static final String LOG_TAG = "ForegroundService";
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
-        if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
-            Log.i(LOG_TAG, "Received Start Foreground Intent ");
-            Intent notificationIntent = new Intent(this, ApkComposeActivity.class);
-            notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                    notificationIntent, 0);
-
-            Bitmap icon = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.editorpro);
-
-            Notification notification = new NotificationCompat.Builder(this)
-                    .setContentTitle("Truiton Music Player")
-                    .setTicker("Truiton Music Player")
-                    .setContentText("My Music")
-                    //.setSmallIcon(R.drawable.apkeditor)
-                    .setLargeIcon(
-                            Bitmap.createScaledBitmap(icon, 128, 128, false))
-                    .setContentIntent(pendingIntent)
-                    .setOngoing(true)
-                    .build();
-            startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,
-                    notification);
-        } else if (intent.getAction().equals(
-                Constants.ACTION.STOPFOREGROUND_ACTION)) {
-            Log.i(LOG_TAG, "Received Stop Foreground Intent");
-            stopForeground(true);
-            stopSelf();
-        }
-        return START_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(LOG_TAG, "In onDestroy");
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        // Used only in case of bound services.
-        return null;
+        return super.onOptionsItemSelected(item);
     }
 }

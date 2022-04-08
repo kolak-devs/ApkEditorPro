@@ -1,10 +1,12 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta
                 content="text/html; charset=utf-8"
                 http-equiv="Content-Type">
-        <style>
-.Обычный
+    </head>
+    <style>
+.baseStyle
 {margin:0.0pt;
 margin-top:0.0pt;
 margin-bottom:0.0pt;
@@ -234,15 +236,13 @@ font-weight:normal;
 }
 
 
-
         </style>
-    </head>
     <body
             alink="Red"
             bgcolor="White"
             link="blue"
             vlink="Purple">
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <u>
                     <span style='font-weight:bold;'>О патчах</span>
@@ -250,17 +250,17 @@ font-weight:normal;
             </b>
         </p>
 
-        <p class=Обычный>Патчи в APK Editor Pro поддерживаются начиная с версии 1.6.0. В общем, патч
+        <p class=baseStyle>Патчи в APK Editor Pro поддерживаются начиная с версии 1.6.0. В общем, патч
             представляет собой zip-архив, который содержит
             patch.txt и другие необходимые файлы. Patch.txt внутри zip-архива определяет правила
             патча, а другие файлы предоставляют ресурсы.
         </p>
 
-        <p class=Обычный>Патчи находятся в стадии становления, пожалуйста, будьте осторожны при
+        <p class=baseStyle>Патчи находятся в стадии становления, пожалуйста, будьте осторожны при
             совмещении с другими модификациями.
         </p>
 
-        <p class=Обычный>Также есть редактор патчей (проект с открытым исходным кодом):
+        <p class=baseStyle>Также есть редактор патчей (проект с открытым исходным кодом):
             <u>
                 <a href="https://github.com/SnowVolf/PCompiler">
                     https://github.com/SnowVolf/PCompiler
@@ -268,9 +268,9 @@ font-weight:normal;
             </u>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <u>
                     <span style='font-weight:bold;'>Формат патча</span>
@@ -278,74 +278,74 @@ font-weight:normal;
             </b>
         </p>
 
-        <p class=Обычный>Патч состоит в основном из правил. На текущий момент поддерживается 9
+        <p class=baseStyle>Патч состоит в основном из правил. На текущий момент поддерживается 9
             правил:
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>ADD_FILES</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>REMOVE_FILES</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>MATCH_REPLACE</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>MATCH_ASSIGN</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>MATCH_GOTO</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>GOTO</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>MERGE</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>EXECUTE_DEX</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>DUMMY</span>
         </p>
 
-        <p class=Обычный>Внутри правила каждая строка, начинающаяся с символа # означает, что это
+        <p class=baseStyle>Внутри правила каждая строка, начинающаяся с символа # означает, что это
             комментарий. Каждый параметр начинается
             с новой строки.
         </p>
 
-        <p class=Обычный>Пожалуйста, изучите следующие примеры, чтобы понять, как создавать
+        <p class=baseStyle>Пожалуйста, изучите следующие примеры, чтобы понять, как создавать
             patch.txt. Также имеются примеры патчей, которые
             вы можете сохранить и изучить.
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>[ADD_FILES] (Добавление файлов)</p>
+        <p class=baseStyle>[ADD_FILES] (Добавление файлов)</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Используется для добавления файлов в
                 приложение.
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>NAME</span>
             </b>
             <span style='font-family:"Courier New";'>: определяет имя правила.</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>SOURCE</span>
             </b>
@@ -354,7 +354,7 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>TARGET</span>
             </b>
@@ -363,24 +363,24 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>[REMOVE_FILES] (Удаление файлов)</p>
+        <p class=baseStyle>[REMOVE_FILES] (Удаление файлов)</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Используется для удаления файлов или папок из
                 приложения.
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>NAME</span>
             </b>
             <span style='font-family:"Courier New";'>: определяет имя правила.</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>TARGET</span>
             </b>
@@ -392,47 +392,47 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Например:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>[REMOVE_FILES]</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>TARGET:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>res/values-ru</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>res/values-hz</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>res/values</span>
             <span style='font-family:"Cambria Math";'>​​</span>
             <span style='font-family:"Courier New";'>/strings.xml</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>[/REMOVE_FILES]</span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный> [MATCH_REPLACE] (Поиск и замена)</p>
+        <p class=baseStyle> [MATCH_REPLACE] (Поиск и замена)</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Используется для поиска и замены найденного
                 результата.
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>NAME</span>
             </b>
@@ -442,7 +442,7 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>TARGET</span>
             </b>
@@ -452,14 +452,14 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>MATCH</span>
             </b>
             <span style='font-family:"Courier New";'>: определяет текст, который нужно найти.</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>REGEX</span>
             </b>
@@ -469,7 +469,7 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>REPLACE</span>
             </b>
@@ -478,15 +478,15 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>[MATCH_ASSIGN] (Определение переменных)</p>
+        <p class=baseStyle>[MATCH_ASSIGN] (Определение переменных)</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Используется для определения переменных.</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>NAME</span>
             </b>
@@ -496,7 +496,7 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>TARGET</span>
             </b>
@@ -506,14 +506,14 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>MATCH</span>
             </b>
             <span style='font-family:"Courier New";'>: определяет текст, который нужно найти.</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>REGEX</span>
             </b>
@@ -523,7 +523,7 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>ASSIGN</span>
             </b>
@@ -534,31 +534,31 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>[MATCH_GOTO] (Если да, то…)</p>
+        <p class=baseStyle>[MATCH_GOTO] (Если да, то…)</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Используется для поиска текста в файле и в
                 случае обнаружения будет выполнено правило,
                 прописанное в поле «GOTO».
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Если же текст не найден, то выполняется
                 правило, прописанное сразу после него.
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>NAME</span>
             </b>
             <span style='font-family:"Courier New";'>: указывает имя правила.</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>TARGET</span>
             </b>
@@ -568,14 +568,14 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>MATCH</span>
             </b>
             <span style='font-family:"Courier New";'>: определяет текст, который нужно найти.</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>REGEX</span>
             </b>
@@ -585,7 +585,7 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>GOTO</span>
             </b>
@@ -595,41 +595,41 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный> [GOTO] (Перенаправление к какому-либо правилу)</p>
+        <p class=baseStyle> [GOTO] (Перенаправление к какому-либо правилу)</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Используется для перехода к другому правилу.
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>GOTO</span>
             </b>
             <span style='font-family:"Courier New";'>: определяет имя следующего правила.</span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>[MERGE] (Объединение ресурсов)</p>
+        <p class=baseStyle>[MERGE] (Объединение ресурсов)</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Это мощное правило, которое объединит указанный
                 ресурс с текущим приложением. Это означает,
                 что ресурс будет добавлен с перестройкой ID, чтобы избежать конфликта ресурсов.
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>NAME</span>
             </b>
             <span style='font-family:"Courier New";'>: определяет имя правила.</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>SOURCE</span>
             </b>
@@ -638,17 +638,17 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>[EXECUTE_DEX] (Выполнение dex-скрипта)</p>
+        <p class=baseStyle>[EXECUTE_DEX] (Выполнение dex-скрипта)</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Правило используется для выполнения
                 специального скрипта.
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>SCRIPT</span>
             </b>
@@ -658,19 +658,19 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>&nbsp; javac -source 1.7 -target 1.7
                 test/AddDebugInfo.java
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>&nbsp; dx --dex --output=script.dex
                 test/AddDebugInfo.class
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>SMALI_NEEDED</span>
             </b>
@@ -680,14 +680,14 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>MAIN_CLASS</span>
             </b>
             <span style='font-family:"Courier New";'>: путь к классу, который содержит вход</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>ENTRANCE</span>
             </b>
@@ -696,7 +696,7 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>PARAM</span>
             </b>
@@ -705,30 +705,30 @@ font-weight:normal;
             </span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>[DUMMY] (Пустое правило)</p>
+        <p class=baseStyle>[DUMMY] (Пустое правило)</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>Пустое правило. Оно больше похоже на метку,
                 которая содержит только поле «NAME» (имя). К нему
                 можно перейти из правил «MATCH_GOTO» или «GOTO».
             </span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>Несколько примеров:</p>
+        <p class=baseStyle>Несколько примеров:</p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Требуемая минимальная версия приложения 1.6.8
                 и движка патчей 2
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='color:Red;font-family:"Courier New";font-weight:bold;'>
                     [MIN_ENGINE_VER]
@@ -736,152 +736,152 @@ font-weight:normal;
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>1</span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Автор данного патча</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='color:Red;font-family:"Courier New";font-weight:bold;'>[AUTHOR]</span>
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>apkeditor</span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Для какого имени пакета</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='color:Red;font-family:"Courier New";font-weight:bold;'>[PACKAGE]</span>
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>*</span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Добавить файлы в папку назначения</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='color:Red;font-family:"Courier New";font-weight:bold;'>[ADD_FILES]
                 </span>
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>SOURCE</span>
             </b>
             <span style='font-family:"Courier New";'>:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>   layout.zip</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>TARGET</span>
             </b>
             <span style='font-family:"Courier New";'>:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>   res/layout</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>EXTRACT</span>
             </b>
             <span style='font-family:"Courier New";'>:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>   true</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>[/ADD_FILES]</span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Удаление файлов</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Могут быть определены несколько файлов
                 назначения
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='color:Red;font-family:"Courier New";font-weight:bold;'>[REMOVE_FILES]
                 </span>
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>TARGET:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>res/values-xx</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>res/values-yy</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>[/REMOVE_FILES]</span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Замена совпадающего содержимого внутри файла
                 назначения; будьте осторожны при REGEX=true
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Будут заменены все совпадения</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Если REGEX=true, содержание MATCH должно быть
                 в одну строку
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Посмотрите пример удаления разрешения
                 internet в приложении
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='color:Red;font-family:"Courier New";font-weight:bold;'>
                     [MATCH_REPLACE]
@@ -889,131 +889,131 @@ font-weight:normal;
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>TARGET</span>
             </b>
             <span style='font-family:"Courier New";'>:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>   AndroidManifest.xml</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>MATCH</span>
             </b>
             <span style='font-family:"Courier New";'>:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>   &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot;
                 /&gt;
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>REGEX</span>
             </b>
             <span style='font-family:"Courier New";'>:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>   false</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>REPLACE</span>
             </b>
             <span style='font-family:"Courier New";'>:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>[/MATCH_REPLACE]</span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># MERGE предназначен для объединения ресурсов и
                 кода из других apk-файлов
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>#</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Объедините ресурсы и smali-файлы внутри
                 extra.zip
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># res/values/public.xml должен быть определён
                 внутри extra.zip
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Движок патча будет пытаться перебрать все
                 добавленные идентификаторы
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'># Учтите, что добавляемые идентификаторы должны
                 отличаться от уже существующих
             </span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='color:Red;font-family:"Courier New";font-weight:bold;'>[MERGE]</span>
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <b>
                 <span style='font-family:"Courier New";font-weight:bold;'>SOURCE</span>
             </b>
             <span style='font-family:"Courier New";'>:</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>   extra.zip</span>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <span style='font-family:"Courier New";'>[/MERGE]</span>
         </p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
-        <p class=Обычный>&nbsp;</p>
+        <p class=baseStyle>&nbsp;</p>
 
         <p
                 align=center
-                class=Обычный
+                class=baseStyle
                 style='text-align:center;'>
             <b>
                 <span style='font-size:18.0pt;font-weight:bold;'>Справка по написанию патчей</span>
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <br>
         </p>
 
         <p
                 align=center
-                class=Обычный
+                class=baseStyle
                 style='text-align:center;'>
             <b>
                 <u>
@@ -1022,7 +1022,7 @@ font-weight:normal;
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <br>
             <b>
                 <span style='color:#2C6D86;font-weight:bold;'>[MIN_ENGINE_VER]
@@ -1054,7 +1054,7 @@ font-weight:normal;
 
         <p
                 align=center
-                class=Обычный
+                class=baseStyle
                 style='text-align:center;'>
             <b>
                 <u>
@@ -1063,7 +1063,7 @@ font-weight:normal;
             </b>
         </p>
 
-        <p class=Обычный>
+        <p class=baseStyle>
             <br>
             <b>
                 <span style='color:#2C6D86;font-weight:bold;'>[MATCH_GOTO]</span>
@@ -1508,7 +1508,7 @@ font-weight:normal;
 
         <p
                 align=center
-                class=Обычный
+                class=baseStyle
                 style='text-align:center;'>
             <i>В данной справке были использованы материалы с ресурса 4pda.ru, такие как справка по
                 правилам

@@ -6,7 +6,11 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
     <application
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network"
         android:allowBackup="true"
         android:name="com.mcal.common.App"
         android:icon="@mipmap/ic_launcher"
@@ -301,6 +305,9 @@
         <activity android:name="com.mcal.sqliteutil.SqliteTableListActivity" />
         <activity android:name="com.mcal.sqliteutil.SqliteTableViewActivity" />
         <activity android:name="com.mcal.sqliteutil.SqliteRowViewActivity" />
+
+        <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="true" />
     </application>
 
 </manifest>
