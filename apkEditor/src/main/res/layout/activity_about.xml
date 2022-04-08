@@ -97,7 +97,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="1.11.1" />
+                                android:text="1.11.7" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -125,7 +125,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Сообщество"
+                        android:text="@string/about_community"
                         android:textStyle="bold"
                         android:layout_marginBottom="10dp"/>
 
@@ -162,7 +162,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="Telegram channel" />
+                                android:text="@string/about_telegram_channel" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -201,7 +201,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="Source code" />
+                                android:text="@string/about_source_code" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -229,7 +229,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:text="Пожертвования"
+                        android:text="@string/about_donate"
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat

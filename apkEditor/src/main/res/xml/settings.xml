@@ -48,8 +48,8 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="fixMultiRes"
-            android:summary="Fix decode multi resources"
-            android:title="Multi Package" />
+            android:summary="@string/pref_summary_multi_package"
+            android:title="@string/pref_title_multi_package" />
 
         <ListPreference
             android:entries="@array/decode_mode_key"
@@ -72,14 +72,14 @@
         <SwitchPreference
             android:key="apkToolCompiler"
             android:defaultValue="true"
-            android:summary="Use ApkTool for Build Apk"
-            android:title="ApkTool Compiler" />
+            android:summary="@string/pref_summary_apktool_compiler"
+            android:title="@string/pref_title_apktool_compiler" />
 
         <SwitchPreference
             android:key="aapt2"
             android:defaultValue="true"
-            android:summary="Use aapt2 to compile resources"
-            android:title="Aapt2" />
+            android:summary="@string/pref_summary_aapt2"
+            android:title="@string/pref_title_aapt2" />
 
         <ListPreference
             android:entries="@array/compression_level_key"

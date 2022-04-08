@@ -33,7 +33,7 @@
 
     <androidx.preference.PreferenceCategory
         android:layout="@layout/preferences_category"
-        android:title="Color Theme">
+        android:title="@string/pref_title_color_theme">
 
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
             android:defaultValue="@color/editorBackground"
