@@ -39,6 +39,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ViewAnimator;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.mcal.apkeditor.editor.MoreEditorOptionAdapter;
@@ -153,7 +155,7 @@ public class TextEditNormalActivity extends TextEditBase
     // For Debug only
     //private DebugDialog debugDialog;
 
-    public static boolean isValuesXml(String filePath) {
+    public static boolean isValuesXml(@NonNull String filePath) {
         String[] folders = filePath.split("/");
         if (folders.length > 2) {
             String folder = folders[folders.length - 2];
@@ -226,7 +228,8 @@ public class TextEditNormalActivity extends TextEditBase
             try {
                 curDocument.save(unsavedFilePath, this);
                 outState.putString("unsavedFilePath", unsavedFilePath);
-            } catch (IOException ignored) {
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -376,20 +379,13 @@ public class TextEditNormalActivity extends TextEditBase
         this.lineNumbers.setOnLongClickListener(null);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @SuppressWarnings("deprecation")
     private void setupOnclickListener() {
         this.documentListDrawer
-                .setOnDrawerOpenListener(new OnDrawerOpenListener() {
-                    public void onDrawerOpened() {
-                        TextEditNormalActivity.this.adjustOpenedDrawer();
-                    }
-                });
+                .setOnDrawerOpenListener(() -> TextEditNormalActivity.this.adjustOpenedDrawer());
         this.documentListDrawer
-                .setOnDrawerCloseListener(new OnDrawerCloseListener() {
-                    public void onDrawerClosed() {
-                        TextEditNormalActivity.this.adjustClosedDrawer();
-                    }
-                });
+                .setOnDrawerCloseListener(() -> TextEditNormalActivity.this.adjustClosedDrawer());
 
         // Selection change listener
         this.textEditor.setTextSelectionListener(this);
@@ -400,52 +396,47 @@ public class TextEditNormalActivity extends TextEditBase
         this.textEditor.addTextChangedListener(textWatcher);
 
         // When scroll, redraw the highlighting
-        this.editorScrollView.setScrollViewListener(new ScrollViewListener() {
-            public void onScrollChanged(ObScrollView scrollView, int x, int y,
-                                        int oldx, int oldy) {
+        this.editorScrollView.setScrollViewListener((scrollView, x, y, oldx, oldy) -> {
 //                if (curDocument.isBigFile()) {
 //                    partialLoadDisplay();
 //                }
-                debug("posted scroll message to do syntax highlight");
-                TextEditNormalActivity.this.syntaxHighlight(-1, -1, false);
-            }
+            debug("posted scroll message to do syntax highlight");
+            TextEditNormalActivity.this.syntaxHighlight(-1, -1, false);
         });
 
         // Find and replace text key listener
-        this.findText.setOnKeyListener(new OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP
-                        && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    TextEditNormalActivity.this.executeFindWrapAction(true);
-                    return true;
-                } else if (TextEditNormalActivity.this.documentListDrawer
-                        .getVisibility() == View.VISIBLE
-                        && event.getAction() == KeyEvent.ACTION_UP
-                        && keyCode == KeyEvent.KEYCODE_BACK) {
-                    TextEditNormalActivity.this.documentListDrawer.close();
-                    return true;
-                } else {
-                    TextEditNormalActivity.this.updateReplaceState();
-                    return false;
-                }
-            }
-        });
-        this.replaceText.setOnKeyListener(new OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (TextEditNormalActivity.this.documentListDrawer
-                        .getVisibility() == View.VISIBLE
-                        && event.getAction() == KeyEvent.ACTION_UP
-                        && keyCode == KeyEvent.KEYCODE_BACK) {
-                    TextEditNormalActivity.this.documentListDrawer.close();
-                    return true;
-                }
+        this.findText.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_UP
+                    && keyCode == KeyEvent.KEYCODE_ENTER) {
+                TextEditNormalActivity.this.executeFindWrapAction(true);
+                return true;
+            } else if (TextEditNormalActivity.this.documentListDrawer
+                    .getVisibility() == View.VISIBLE
+                    && event.getAction() == KeyEvent.ACTION_UP
+                    && keyCode == KeyEvent.KEYCODE_BACK) {
+                TextEditNormalActivity.this.documentListDrawer.close();
+                return true;
+            } else {
                 TextEditNormalActivity.this.updateReplaceState();
                 return false;
             }
         });
+        this.replaceText.setOnKeyListener((v, keyCode, event) -> {
+            if (TextEditNormalActivity.this.documentListDrawer
+                    .getVisibility() == View.VISIBLE
+                    && event.getAction() == KeyEvent.ACTION_UP
+                    && keyCode == KeyEvent.KEYCODE_BACK) {
+                TextEditNormalActivity.this.documentListDrawer.close();
+                return true;
+            }
+            TextEditNormalActivity.this.updateReplaceState();
+            return false;
+        });
 
         // When click on the selection, show keyboard (if not shown)
+
         this.textEditor.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
             private boolean bPossibleEvent = false;
             private float downX;
             private float downY;
@@ -711,27 +702,14 @@ public class TextEditNormalActivity extends TextEditBase
 
         new AlertDialog.Builder(this).setMessage(R.string.save_changes_tip)
                 .setPositiveButton(R.string.save,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                executeSaveAction(new ICommonCallback() {
-                                    @Override
-                                    public void doCallback() {
-                                        curFileIndex += fileIdxOffset;
-                                        new TextLoader().execute();
-                                    }
-                                });
-                            }
-                        })
+                        (dialog, which) -> executeSaveAction(() -> {
+                            curFileIndex += fileIdxOffset;
+                            new TextLoader().execute();
+                        }))
                 .setNegativeButton(R.string.donot_save,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                curFileIndex += fileIdxOffset;
-                                new TextLoader().execute();
-                            }
+                        (dialog, which) -> {
+                            curFileIndex += fileIdxOffset;
+                            new TextLoader().execute();
                         })
                 .setNeutralButton(android.R.string.cancel, null).show();
     }
@@ -763,7 +741,7 @@ public class TextEditNormalActivity extends TextEditBase
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@NonNull View v) {
         int id = v.getId();
         // To edit next file
         if (id == R.id.menu_next) {
@@ -876,8 +854,9 @@ public class TextEditNormalActivity extends TextEditBase
         // Go to the line index
         int lineNO;
         try {
-            lineNO = Integer.valueOf(str);
+            lineNO = Integer.parseInt(str);
         } catch (Exception e) {
+            e.printStackTrace();
             return;
         }
 
@@ -1173,26 +1152,9 @@ public class TextEditNormalActivity extends TextEditBase
 
         new AlertDialog.Builder(this).setMessage(R.string.save_changes_tip)
                 .setPositiveButton(R.string.save,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                executeSaveAction(new ICommonCallback() {
-                                    @Override
-                                    public void doCallback() {
-                                        TextEditNormalActivity.this.finish();
-                                    }
-                                });
-                            }
-                        })
+                        (dialog, which) -> executeSaveAction(() -> TextEditNormalActivity.this.finish()))
                 .setNegativeButton(R.string.donot_save,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                TextEditNormalActivity.this.finish();
-                            }
-                        })
+                        (dialog, which) -> TextEditNormalActivity.this.finish())
                 .setNeutralButton(android.R.string.cancel, null).show();
     }
 
@@ -1311,7 +1273,8 @@ public class TextEditNormalActivity extends TextEditBase
                 } else {
                     updateNoWrap();
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             TextEditNormalActivity.this.previousLineCount = TextEditNormalActivity.this.textEditor
                     .getLineCount();
@@ -1504,12 +1467,14 @@ public class TextEditNormalActivity extends TextEditBase
                     TextEditNormalActivity.this.enableSyntaxHighlight = false;
                 }
                 // timer.lastTime("Highlight Time");
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
     // Load text from file and show it in EditText
+    @SuppressLint("StaticFieldLeak")
     private class TextLoader extends AsyncTask<Void, Integer, Boolean> {
         private String syntaxFileName;
         private boolean loadSucceed;
@@ -1545,6 +1510,7 @@ public class TextEditNormalActivity extends TextEditBase
             }
         }
 
+        @Nullable
         @Override
         protected Boolean doInBackground(Void... params) {
             Document doc = new Document(TextEditNormalActivity.this, new File(curFilePath),
