@@ -75,21 +75,21 @@ public class PatchDialog
 
         View view = LayoutInflater.from(activity).inflate(R.layout.dlg_patch, null);
 
-        this.curPatchTv = (TextView) view.findViewById(R.id.tv_curpatch);
+        this.curPatchTv = view.findViewById(R.id.tv_curpatch);
         curPatchTv.setOnClickListener(this);
-        this.patchPathTv = (TextView) view.findViewById(R.id.tv_patch_path);
-        Button closeBtn = (Button) view.findViewById(R.id.btn_close);
+        this.patchPathTv = view.findViewById(R.id.tv_patch_path);
+        Button closeBtn = view.findViewById(R.id.btn_close);
         closeBtn.setOnClickListener(this);
-        this.selectApplyBtn = (Button) view.findViewById(R.id.btn_select_apply);
+        this.selectApplyBtn = view.findViewById(R.id.btn_select_apply);
         selectApplyBtn.setOnClickListener(this);
-        this.saveExamplesTv = (TextView) view
+        this.saveExamplesTv = view
                 .findViewById(R.id.tv_save_patches);
         saveExamplesTv.setOnClickListener(this);
 
-        this.webView = (WebView) view.findViewById(R.id.web_instructions);
+        this.webView = view.findViewById(R.id.web_instructions);
         webView.loadUrl("file:///android_res/raw/about_patch.html");
         this.logLayout = view.findViewById(R.id.log_layout);
-        this.logTv = (TextView) view.findViewById(R.id.tv_patchlog);
+        this.logTv = view.findViewById(R.id.tv_patchlog);
 
         dialog = new ViewDialog(activity);
         dialog.setTitle(R.string.patch_capital);
