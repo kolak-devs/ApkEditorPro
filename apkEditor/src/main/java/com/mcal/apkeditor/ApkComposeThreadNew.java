@@ -132,7 +132,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
                     //    setNextStep("Installing Framework...");
                     //    androlib.installFramework(framework);
                     //} else {
-                        this.stepInfo.stepTotal = 5;
+                        this.stepInfo.stepTotal = 4;
                     //}
 
                     try {
@@ -145,11 +145,11 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
                     setNextStep("Compiling...");
                     androlib.build(new File(decodedFilePath), tmp);
 
-                    setNextStep("Building...");
-                    androlib.buildApk(new File(decodedFilePath), new File(targetApkPath.replace(".apk", "_unsigned.apk")));
+                    //setNextStep("Building...");
+                    //androlib.buildApk(new File(decodedFilePath), new File(targetApkPath.replace(".apk", "_unsigned.apk")));
 
                     setNextStep("Signing...");
-                    signApk(targetApkPath.replace(".apk", "_unsigned.apk"));
+                    signApk(tmp.getPath());
                 } catch (Exception e) {
                     e.printStackTrace();
                     this.errMessage = e.getMessage();

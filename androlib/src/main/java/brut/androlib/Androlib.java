@@ -16,6 +16,8 @@
  */
 package brut.androlib;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.UsesFramework;
 
@@ -680,7 +682,7 @@ public class Androlib {
         }
     }
 
-    private void copyExistingFiles(ZipFile inputFile, ZipOutputStream outputFile) throws IOException {
+    private void copyExistingFiles(@NonNull ZipFile inputFile, ZipOutputStream outputFile) throws IOException {
         // First, copy the contents from the existing outFile:
         Enumeration<? extends ZipEntry> entries = inputFile.entries();
         while (entries.hasMoreElements()) {
@@ -699,7 +701,7 @@ public class Androlib {
         }
     }
 
-    private void copyUnknownFiles(File appDir, ZipOutputStream outputFile, Map<String, String> files)
+    private void copyUnknownFiles(File appDir, ZipOutputStream outputFile, @NonNull Map<String, String> files)
             throws BrutException, IOException {
         File unknownFileDir = new File(appDir, UNK_DIRNAME);
 
