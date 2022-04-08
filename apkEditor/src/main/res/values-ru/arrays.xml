@@ -31,10 +31,6 @@
         <item>8</item>
         <item>9 (максимальное сжатие)</item>
     </string-array>
-    <string-array name="decode_dir_key">
-        <item>Внутренняя папка</item>
-        <item>Пользовательская папка</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Авто (добавление числового суффикса)</item>
         <item>Перезапись</item>
@@ -72,11 +68,6 @@
         <item>testkey</item>
         <item>ключ, созданный APK Editor</item>
         <item>пользовательский ключ</item>
-    </string-array>
-    <string-array name="theme_key">
-        <item>Светлая тема</item>
-        <item>Тёмная тема 1</item>
-        <item>Тёмная тема 2</item>
     </string-array>
     <string-array name="output_apkname_key">
         <item>{имя пакета}_[un]signed.apk</item>

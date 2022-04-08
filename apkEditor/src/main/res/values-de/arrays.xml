@@ -100,14 +100,6 @@
         <item>editorkey</item>
         <item>customkey</item>
     </string-array>
-    <string-array name="decode_dir_key">
-        <item>Internes Verzeichnis</item>
-        <item>Eigenes Verzeichnis</item>
-    </string-array>
-    <string-array name="decode_dir_value">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Automatisch (mit fortlaufender Nummer am Ende)</item>
         <item>&#220;berschreiben</item>
@@ -164,16 +156,6 @@
         <item>{App-Name}_[un]signed.apk</item>
     </string-array>
     <string-array name="output_apkname_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="theme_key">
-        <item>Helles Design</item>
-        <item>Dunkles Design #1</item>
-        <item>Dunkles Design #2</item>
-    </string-array>
-    <string-array name="theme_value">
         <item>0</item>
         <item>1</item>
         <item>2</item>

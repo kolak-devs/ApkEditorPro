@@ -95,14 +95,6 @@
         <item>chiave creata da APK Editor</item>
         <item>chiave personalizzata</item>
     </string-array>
-    <string-array name="decode_dir_key">
-        <item>Cartella interna</item>
-        <item>Cartella specifica</item>
-    </string-array>
-    <string-array name="decode_dir_value">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Auto (aggiunta suffisso nuemrico)</item>
         <item>Sovrascrivi</item>
@@ -161,16 +153,6 @@
         <item>"{app name}_[un]signed.apk"</item>
     </string-array>
     <string-array name="output_apkname_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="theme_key">
-        <item>Tema chiaro</item>
-        <item>Tema scuro 1</item>
-        <item>Tema scuro 2</item>
-    </string-array>
-    <string-array name="theme_value">
         <item>0</item>
         <item>1</item>
         <item>2</item>

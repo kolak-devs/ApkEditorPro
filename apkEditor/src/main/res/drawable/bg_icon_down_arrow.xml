@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:drawable="@drawable/round_keyboard_arrow_down_24" android:state_pressed="true" />
-    <item android:drawable="@drawable/round_keyboard_arrow_down_24" android:state_focused="true" />
-    <item android:drawable="@drawable/round_keyboard_arrow_down_blue_24" />
-
-</selector>

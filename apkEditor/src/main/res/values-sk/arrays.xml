@@ -91,10 +91,6 @@
         <item>kľúč vytvoril APK Editor</item>
         <item>vlastný kľúč</item>
     </string-array>
-    <string-array name="decode_dir_key">
-        <item>Interný slovník</item>
-        <item>Vlastný slovník</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Auto (pridá číselnú príponu)</item>
         <item>Prepísať</item>
@@ -124,10 +120,5 @@
         <item>{package name}_[ne]podpisane.apk</item>
         <item>gen_[ne]podpisane.apk</item>
         <item>{app name}_[ne]podpisane.apk</item>
-    </string-array>
-    <string-array name="theme_key">
-        <item>Svetlá téma</item>
-        <item>Tmavá téma 1</item>
-        <item>Tmavá téma 2</item>
     </string-array>
 </resources>

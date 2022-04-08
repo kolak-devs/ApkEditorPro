@@ -31,10 +31,6 @@
         <item>8</item>
         <item>9 (Chậm nhất)</item>
     </string-array>
-    <string-array name="decode_dir_key">
-        <item>Thư mục nội bộ</item>
-        <item>Thư mục tuỳ chỉnh</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Tự động (bằng cách thêm một số hậu tố)</item>
         <item>Ghi đè lên</item>
@@ -68,11 +64,6 @@
         <item>Key thử nghiệm</item>
         <item>Key được tạo bởi APK Editor</item>
         <item>Key thông thường</item>
-    </string-array>
-    <string-array name="theme_key">
-        <item>Chủ đề sáng</item>
-        <item>Chủ đề tối 1</item>
-        <item>Chủ đề tối 2</item>
     </string-array>
     <string-array name="decode_mode_key">
         <item>@string/decode_all_files</item>

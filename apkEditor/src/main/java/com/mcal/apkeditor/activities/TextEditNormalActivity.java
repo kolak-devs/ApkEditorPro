@@ -608,7 +608,7 @@ public class TextEditNormalActivity extends TextEditBase
                 this.previousMaxDigits = nd;
                 lp1.width = ((int) this.textEditor.getPaint()
                         .measureText(digits))
-                        + ((int) TypedValue.applyDimension(1, 6.0f,
+                        + ((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6.0f,
                         getResources().getDisplayMetrics()));
                 lp2.width = 1;
             } else {

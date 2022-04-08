@@ -1,30 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="abc_action_bar_home_description">Điều hướng trang chủ</string>
-    <string name="abc_action_bar_home_description_format">%1$s, %2$s</string>
-    <string name="abc_action_bar_home_subtitle_description_format">%1$s, %2$s, %3$s</string>
-    <string name="abc_action_bar_up_description">Điều hướng lên</string>
-    <string name="abc_action_menu_overflow_description">Lựa chọn khác</string>
-    <string name="abc_action_mode_done">Làm xong</string>
-    <string name="abc_activity_chooser_view_see_all">Xem tất cả</string>
-    <string name="abc_activitychooserview_choose_application">Chọn một ứng dụng</string>
-    <string name="abc_capital_off">TẮT</string>
-    <string name="abc_capital_on">BẬT</string>
-    <string name="abc_search_hint">Tìm kiếm…</string>
-    <string name="abc_searchview_description_clear">Xóa truy vấn</string>
-    <string name="abc_searchview_description_query">Truy vấn tìm kiếm</string>
-    <string name="abc_searchview_description_search">Tìm kiếm</string>
-    <string name="abc_searchview_description_submit">Gửi câu hỏi</string>
-    <string name="abc_searchview_description_voice">Tìm kiếm bằng giọng nói</string>
-    <string name="abc_shareactionprovider_share_with">Chia sẻ với</string>
-    <string name="abc_shareactionprovider_share_with_application">Chia sẻ với %s</string>
-    <string name="abc_toolbar_collapse_description">Thu gọn</string>
-    <string name="search_menu_title">Tìm kiếm</string>
-    <string name="status_bar_notification_info_overflow">999+</string>
     <string name="about">Giới thiệu</string>
     <string name="action_settings">Cài đặt</string>
     <string name="add_a_file">Thêm một tập tin</string>
-    <string name="add_a_language">Thêm ngôn ngữ</string>
     <string name="add_key_value">Thêm một key/value:</string>
     <string name="all_rules_applied">Áp dụng tất cả các quy tắc.</string>
     <string name="apk_building">Chỉnh sửa APK</string>
@@ -38,7 +16,6 @@
     <string name="assemble_dex_file">Lắp ráp tập tin DEX</string>
     <string name="audio_summary">%d âm thanh</string>
     <string name="audios_captical">ÂM THANH</string>
-    <string name="auto_translation">Tự động dịch</string>
     <string name="cannot_find_ext_sdcard">Không tìm ra thẻ SD</string>
     <string name="cannot_parse_apk">Không thể phân tích các tập tin apk</string>
     <string name="clean_garbage">Xóa sạch rác</string>
@@ -55,7 +32,6 @@
     <string name="colormixer_set">Thiết đặt</string>
     <string name="common_edit">Chỉnh sửa thông thường</string>
     <string name="compose">Biên soạn</string>
-    <string name="compose_error">Biên soạn bị lỗi:</string>
     <string name="compression_level">Mức độ nén</string>
     <string name="compression_level_summary">Chọn mức độ cao thấp sẽ ảnh hưởng đến thời gian nén,chất lượng và kích cỡ tập tin Apk đầu ra.</string>
     <string name="confirm_dir_replace">Xác nhận thư mục thay thế</string>
@@ -64,8 +40,6 @@
     <string name="copy_file_path">Sao chép đường dẫn tập tin</string>
     <string name="current_patch"><u>Patch hiện tại:</u></string>
     <string name="custom_key_setting">Tùy chỉnh thiết lập key</string>
-    <string name="dark_theme">Nền màu đen</string>
-    <string name="dark_theme_desc">Kích hoạt nền màu đen cho giao diện ứng dụng.</string>
     <string name="decode_dex_file">Giải mã tập tin DEX …</string>
     <string name="delete">Xóa bỏ</string>
     <string name="delete_this_line">Xóa dòng này</string>
@@ -73,7 +47,6 @@
     <string name="detail">Chi tiết</string>
     <string name="donot_show_again">Không hiển thị lại</string>
     <string name="dummy" />
-    <string name="edit">Chỉnh sửa</string>
     <string name="edit_data_root">Chỉnh sửa Data [ROOT]</string>
     <string name="edit_string_value">Chỉnh sửa Value</string>
     <string name="empty_input_tip">Đầu vào không thể để trống.</string>
@@ -84,14 +57,11 @@
     <string name="error_file_too_big">Tập tin quá lớn để mở.</string>
     <string name="error_filepath_empty">Đường dẫn tập tin không thể để trống.</string>
     <string name="error_filepath_notexist">Tập tin không tồn tại.</string>
-    <string name="error_no_string_tosave">Không string đã dịch để lưu lại.</string>
-    <string name="error_no_string_totranslate">Không string đã dịch để lưu lại.</string>
     <string name="exit">Thoát ra</string>
     <string name="extract">Xuất ra</string>
     <string name="failed">Thất bại</string>
     <string name="failed_1">Thất bại: %s</string>
     <string name="failed_create_dir">Không thể tạo thư mục: %s</string>
-    <string name="failed_format">%d strings thất bại</string>
     <string name="file_added">Tập tin thêm: %s</string>
     <string name="file_already_exist">"'%s' đã tồn tại!"</string>
     <string name="file_replaced">Đã thay thế tập tin.</string>
@@ -103,13 +73,10 @@
     <string name="folder_replace_tip" formatted="false">Bạn có chắc chắn để thay thế %s với %s?</string>
     <string name="folder_replaced">Đã thay thế thư mục</string>
     <string name="font_size">Kích cỡ phông chữ</string>
-    <string name="font_size_summary">Phông chữ hiện tại: %d</string>
     <string name="full_edit">Chỉnh sửa chuyên sâu</string>
     <string name="full_screen_desc">Chọn để bật toàn màn hình</string>
     <string name="general_error">Lỗi: %s</string>
-    <string name="hello_world">Hello world!</string>
     <string name="help">Trợ giúp</string>
-    <string name="hide">Ẩn</string>
     <string name="hide_smali_tip">Hãy nhấp và giữ vào DEX - Smali để ẩn nó.</string>
     <string name="icon_changed_tip">Biểu tượng thay đổi, nhưng nó có thể không có hiệu lực cho đến khi bạn khởi động lại điện thoại của bạn.</string>
     <string name="image_summary">%d hình ảnh</string>
@@ -127,8 +94,6 @@
     <string name="line_data">DỮ LIỆU TRỰC TUYẾN:</string>
     <string name="line_number">Số dòng</string>
     <string name="line_wrap">Ngắt dòng</string>
-    <string name="line_wrap_disabled">Ngắt dòng bị vô hiệu hóa. Yêu cầu khởi động lại nếu có thay đổi.</string>
-    <string name="line_wrap_enabled">Ngắt dòng được kích hoạt. Cần khởi động lại nếu thay đổi.</string>
     <string name="loading">Đang tải</string>
     <string name="location_0">Mặc định (Không rõ)</string>
     <string name="location_1">Tự động (Hệ điều hành OS Quyết định)</string>
@@ -138,9 +103,7 @@
     <string name="manifest">Manifest</string>
     <string name="manifest_edit_not_support">Chỉnh sửa không được hỗ trợ trong phiên bản miễn phí!</string>
     <string name="merge">Hợp nhất</string>
-    <string name="merge_error">Hợp nhất lỗi: %s</string>
     <string name="mf_search_ret">%d Tìm thấy dòng</string>
-    <string name="must_allow_non_market_app">Cài đặt ứng dụng không rõ nguồn phải được cho phép!</string>
     <string name="name">Tên</string>
     <string name="new_folder">Thêm một thư mục</string>
     <string name="no">KHÔNG</string>
@@ -175,7 +138,6 @@
     <string name="patch_start_parse">Phân tích cú pháp bên trong patch.txt …</string>
     <string name="path">Đường dẫn</string>
     <string name="pkg_rename_as_plugin">Làm cho nó như một plugin</string>
-    <string name="pkg_rename_cheat">Giả lập tên gói</string>
     <string name="pkg_rename_direct">Đổi tên trực tiếp</string>
     <string name="pkg_rename_notice">Xin lưu ý: Thay đổi tên gói có nhiều khả năng không hoạt động, tùy thuộc vào cách ứng dụng được viết (hoặc thậm chí được bảo vệ).</string>
     <string name="pls_input_filename">Hãy nhập tên tập tin:</string>
@@ -183,7 +145,6 @@
     <string name="pls_input_keyword">Đầu vào từ khóa tìm kiếm</string>
     <string name="private_key_label">"Key Riêng tư
 (.pk8)"</string>
-    <string name="pro_mode">PRO</string>
     <string name="promote_msg">" Chỉnh sửa chỉ được hỗ trợ trong phiên bản chuyên nghiệp. Kích vào 'Xem phiên bản Pro' để có được phiên bản chuyên nghiệp?"</string>
     <string name="public_key_label">"Key Công cộng
 (.x509.pem)"</string>
@@ -202,18 +163,12 @@
     <string name="replace_all_ret">%d Sự kiện (s) được thay thế</string>
     <string name="resolution">Phân tích</string>
     <string name="resource">Resource</string>
-    <string name="resource_replaced">Thay thế Resource.</string>
-    <string name="retranslate">Dịch mới</string>
     <string name="sample_code">Mã mẫu</string>
     <string name="save">Lưu lại</string>
     <string name="save_patch_example"><u>Lưu ví dụ patch vào sd card</u></string>
     <string name="save_succeed_1">Thành công: Lưu vào %s</string>
     <string name="save_succeed_tip">Lưu lại %d Strings.</string>
-    <string name="save_translation_msg">Bản dịch chưa được lưu. Lưu nó trước khi có hoạt động khác?</string>
-    <string name="save_translation_title">Lưu bản dịch?</string>
-    <string name="saved">Đã lưu.</string>
     <string name="search">Tìm kiếm</string>
-    <string name="search_file_content">Tìm kiếm trong nội dung tập tin</string>
     <string name="search_file_names">Tìm kiếm trong tên tập tin</string>
     <string name="searching">Đang tìm kiếm</string>
     <string name="section_undeletable">Phần này có thể không thể xóa!</string>
@@ -229,8 +184,6 @@
     <string name="select_target_lang">Chọn một ngôn ngữ để dịch</string>
     <string name="settings">Cài đặt</string>
     <string name="show_a_toast">Hiện một Toast</string>
-    <string name="show_ad">Hiện QC</string>
-    <string name="show_ad_tip">Thành công! Xin lỗi để hiển thị quảng cáo.</string>
     <string name="sign">Đăng ký</string>
     <string name="sign_apk_with">Đăng ký APK với</string>
     <string name="sign_apk_with_summary">Chọn Key tương thích để đăng ký cho tập tin APK</string>
@@ -243,7 +196,6 @@
     <string name="smali_edit_summary">Đang KÍCH HOẠT - Sẽ hiển thị hình ảnh DEX -> Smali trong Chỉnh sửa chuyên sâu.</string>
     <string name="smali_editing">Chỉnh sửa Smali</string>
     <string name="step">Tiến trình</string>
-    <string name="stop">Dừng lại</string>
     <string name="str_app_name">Tên ứng dụng</string>
     <string name="str_files_found" formatted="false">"%d Tập tin tìm thấy - '%s'"</string>
     <string name="str_modified">Sửa đổi</string>
@@ -252,37 +204,27 @@
     <string name="str_num_modified_file">%d tập tin(s) sửa đổi</string>
     <string name="str_num_removed_file">%d tập tin(s) loại bỏ</string>
     <string name="string">String</string>
-    <string name="string_notsaved_msg">%d strings loại bỏ.</string>
     <string name="succeed">Đã hoàn tất</string>
     <string name="succeed_with_warning">Thành công với các cảnh báo.</string>
     <string name="sure_to_exit_editing">Bạn có chắc chắn để thoát ra?</string>
     <string name="system_apps">Ứng dụng hệ thống</string>
     <string name="temp_file_cleaned">Tập tin tạm đã được xoá bỏ.</string>
     <string name="translate_plugin">Plugin dịch</string>
-    <string name="translate_plugin_notfound_tip">Không thể tìm thấy bất kỳ plugin dịch nào. Nếu bạn muốn phát triển plugin, vui lòng tham khảo các hướng dẫn sau:</string>
-    <string name="translated">Đã dịch</string>
-    <string name="translated_format">%d dịch strings</string>
-    <string name="translating">Đang dịch</string>
     <string name="unknown_error">Lỗi không xác định.</string>
-    <string name="untranslated_format">%d strings chưa được dịch</string>
     <string name="user_apps">Ứng dụng người dùng</string>
     <string name="value">Value</string>
     <string name="version_code">Mã phiên bản</string>
     <string name="version_name">Tên phiên bản</string>
     <string name="view">Xem</string>
-    <string name="view_pro_version">Xem phiên bản Pro</string>
     <string name="wait_for_decoding">Xin vui lòng chờ một thời gian cho đến khi giải mã kết thúc.</string>
     <string name="warning">Cảnh báo</string>
-    <string name="warning_keyword_empty">Đầu vào không thể để trống.</string>
     <string name="yes">CÓ</string>
     <string name="apk_decoding">Giải mã APK</string>
-    <string name="app_theme">Chủ đề ứng dụng</string>
     <string name="build">Xây dựng</string>
     <string name="cannot_load_project_info">Không thể tải thông tin dự án.</string>
     <string name="cannot_rename_decode_folder">Không thể đổi tên thư mục giải mã.</string>
     <string name="cannot_save_project">Không thể lưu dự án vào tập tin.</string>
     <string name="case_insensitive">Trường hợp không nhạy cảm</string>
-    <string name="copy_string_name">Sao chép tên String</string>
     <string name="decode_dir">Thư mục giải mã</string>
     <string name="decode_dir_summary_may_change">Không được thiết lập. Sẽ sử dụng mặc định lưu trữ nội bộ.</string>
     <string name="dex_decode_succeed">Đã giải mã thành công tập tin DEX(s).</string>
@@ -305,8 +247,6 @@
     <string name="invalid_directory">Thư mục không hợp lệ: %s</string>
     <string name="label_replace_with_same_setting">Thay thế như vậy trong thời gian thiết lập tiếp theo và không hiển thị hộp thoại này nữa.</string>
     <string name="launch">Khởi động</string>
-    <string name="line_numbers_disabled">Sẽ không hiển thị số dòng.</string>
-    <string name="line_numebrs_enabled">Sẽ hiển thị số dòng bên trái.</string>
     <string name="max_sdk_version">Phiên bản SDK tối đa</string>
     <string name="min_sdk_version">Phiên bản SDK tối thiểu</string>
     <string name="output_apk_name">Tên APK đầu ra</string>
@@ -324,7 +264,6 @@
     <string name="print_stack_trace">In dấu vết ngăn xếp</string>
     <string name="prj_error_apk_notfound">Không thể tìm thấy tập tin APK: %s</string>
     <string name="prj_error_decode_dir_notfound">Không thể tìm thấy thư mục giải mã: %s</string>
-    <string name="project_num">%d Dự án</string>
     <string name="project_removed">Loại bỏ \"%s\" dự án.</string>
     <string name="projects">Dự án</string>
     <string name="rename_in_dex">Đổi tên gói trong tập tin dex (s) [Trong phiên bản beta. Để cải thiện tỷ lệ thành công, xin vui lòng giữ độ dài không thay đổi, và hãy tạo sự thay đổi nhỏ nhất có thể, như thay đổi com.android thành com.androie]</string>
@@ -332,7 +271,6 @@
     <string name="save_as_project">Lưu như dự án</string>
     <string name="save_changes_tip">Bạn có muốn lưu các thay đổi?</string>
     <string name="select_language_desc">Vui lòng chọn ngôn ngữ ưa thích của bạn.</string>
-    <string name="select_theme_desc">Vui lòng chọn chủ đề ưa thích của bạn.</string>
     <string name="show_line_numbers">Hiển thị số dòng</string>
     <string name="str_fix_failed">Rất tiếc, không thể khắc phục sự cố.</string>
     <string name="str_num_renamed_file">%d tập tin(s) đã đổi tên</string>
@@ -358,7 +296,6 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="colorpad">Màu đệm</string>
     <string name="comment_lines">Dòng bình luận</string>
     <string name="delete_lines">Xóa dòng</string>
-    <string name="donate">Tặng</string>
     <string name="download">Tải về</string>
     <string name="download_image_tip1">Để tải về hình ảnh, xin vui lòng nhập một số từ khóa như Mục tiêu PNG \" để tìm kiếm. Xin lưu ý: tìm kiếm hình ảnh được cung cấp bởi Google, và những hình ảnh có thể phải chịu bản quyền.</string>
     <string name="download_image_tip2">Vui lòng nhấn và giữ hình ảnh và nhấp vào Lưu hình ảnh \" để tải xuống.</string>
@@ -391,7 +328,6 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="save_image">Lưu hình ảnh</string>
     <string name="sd_card">Thẻ nhớ SD</string>
     <string name="selected_str_copied">Đã sao chép chuỗi đã chọn.</string>
-    <string name="smali">Smali</string>
     <string name="sure_to_stop_build">Xây dựng đang chạy, bạn có chắc chắn dừng nó không? (Có thể bạn có thể chờ một thời gian hoặc cho nó chạy nền)</string>
     <string name="symbol_input">Nhập biểu tượng</string>
     <string name="symbol_input_summary">Bật đầu vào biểu tượng hoặc không.</string>
@@ -399,22 +335,9 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="to_line_no">Đến dòng SỐ.</string>
     <string name="use_bfe_message">"Trình chỉnh sửa tập tin lớn được thiết kế để tải các tập tin lớn nhanh hơn nhiều. Tuy nhiên, nó chỉ có thể hỗ trợ chỉnh sửa từng dòng.
 Ở đây bạn có thể xác định giá trị ngưỡng để sử dụng trình soạn thảo tập tin lớn (trong đơn vị Kbytes):"</string>
-    <string name="use_bfe_summary">Sử dụng trình chỉnh sửa tập tin lớn khi kích thước tập tin lớn hơn %dK bytes.</string>
     <string name="use_bfe_tip">Như tập tin là quá lớn, lớn tập tin biên tập được sử dụng. Bạn có thể thay đổi khi sử dụng trình soạn thảo tập tin lớn trong cài đặt trình soạn thảo.</string>
     <string name="when_use_bfe">Sử dụng trình chỉnh sửa tập tin lớn</string>
     <string name="xml_file_edit">CHỈNH SỬA XML(BETA)</string>
-    <string name="abc_font_family_body_1_material">sans-serif</string>
-    <string name="abc_font_family_body_2_material">sans-serif-medium</string>
-    <string name="abc_font_family_button_material">sans-serif-medium</string>
-    <string name="abc_font_family_caption_material">sans-serif</string>
-    <string name="abc_font_family_display_1_material">sans-serif</string>
-    <string name="abc_font_family_display_2_material">sans-serif</string>
-    <string name="abc_font_family_display_3_material">sans-serif</string>
-    <string name="abc_font_family_display_4_material">sans-serif-light</string>
-    <string name="abc_font_family_headline_material">sans-serif</string>
-    <string name="abc_font_family_menu_material">sans-serif</string>
-    <string name="abc_font_family_subhead_material">sans-serif</string>
-    <string name="abc_font_family_title_material">sans-serif-medium</string>
     <string name="decode_all_files">Giải mã tất cả các tập tin</string>
     <string name="decode_mode">Chế độ giải mã</string>
     <string name="decode_partial_files">Giải mã một phần tập tin</string>

@@ -44,10 +44,6 @@
         <item>(16)</item>
         <item>(17)</item>
     </string-array>
-    <string-array name="decode_dir_key">
-        <item>"Унутраны каталог "</item>
-        <item>"Адвольны каталог "</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Аўтаматычна (дадаваць суфікс ліку)</item>
         <item>Перазапісаць</item>
@@ -77,10 +73,5 @@
         <item>testkey</item>
         <item>editorkey</item>
         <item>customkey</item>
-    </string-array>
-    <string-array name="theme_key">
-        <item>Светлая тэма</item>
-        <item>Цёмная тэма 1</item>
-        <item>Цёмная тэма 2</item>
     </string-array>
 </resources>

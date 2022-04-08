@@ -31,10 +31,6 @@
         <item>8</item>
         <item>9 (Legjobb tömörítés)</item>
     </string-array>
-    <string-array name="decode_dir_key">
-        <item>Belső könyvtár</item>
-        <item>Egyéni könyvtár</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Automatikus (egy szám utótag hozzáadásával)</item>
         <item>Felülírás</item>
@@ -71,11 +67,6 @@
         <item>Egyéni kulcs</item>
     </string-array>
 
-    <string-array name="theme_key">
-        <item>Világos téma</item>
-        <item>Sötét téma #1</item>
-        <item>Sötét téma #2</item>
-    </string-array>
     <string-array name="compression_level_value">
         <item>0</item>
         <item>1</item>
@@ -165,10 +156,6 @@
         <item>16</item>
         <item>17</item>
     </string-array>
-    <string-array name="decode_dir_value">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string-array name="file_extract_rename_value">
         <item>0</item>
         <item>1</item>
@@ -200,11 +187,6 @@
         <item>{Alkalmazásnév}_[un]signed.apk</item>
     </string-array>
     <string-array name="output_apkname_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="theme_value">
         <item>0</item>
         <item>1</item>
         <item>2</item>

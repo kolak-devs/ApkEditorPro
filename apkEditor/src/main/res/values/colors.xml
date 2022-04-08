@@ -5,25 +5,14 @@
     <color name="colorPrimaryDark">#FFF</color>
     <color name="colorSecondary">#2962FF</color>
     <color name="colorGray">#FF1F1F1F</color>
-    <color name="colorSearch">#6D6D6D</color>
     <color name="string_name">#DFDFDF</color>
-    <color name="string_value">#FFF</color>
-    <color name="background">#FFFFFF</color>
     <color name="yellow">#FF9800</color>
 
     <color name="apked_white">#fff6fcf5</color>
     <color name="white">#ffffffff</color>
-    <color name="skyblue">#ff1ca1d4</color>
     <color name="grey">#ffb4cae9</color>
-    <color name="blue">#ff0000ee</color>
-    <color name="deepblue">#ff28649c</color>
-    <color name="blue_transparent">#805997c4</color>
     <color name="green">#ff4cb648</color>
-    <color name="half_transparent">#80ffffff</color>
     <color name="lightblack">#ff303030</color>
-    <color name="black">#ff000000</color>
     <color name="darkblue">#ff1122cc</color>
     <color name="littleblue">#ffe9f2fc</color>
-    <color name="red">#ffee0000</color>
-    <color name="divider_dark">#ff808080</color>
 </resources>

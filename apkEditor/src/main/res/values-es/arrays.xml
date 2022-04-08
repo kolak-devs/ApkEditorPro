@@ -31,10 +31,6 @@
         <item>8</item>
         <item>9 (Mejor Compresión)</item>
     </string-array>
-    <string-array name="decode_dir_key">
-        <item>Directorio Predeterminado</item>
-        <item>Directorio Personalizado</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Automático (Con sufijo numérico)</item>
         <item>Sobreescribir</item>
@@ -77,11 +73,6 @@
         <item>testkey</item>
         <item>editorkey</item>
         <item>customkey</item>
-    </string-array>
-    <string-array name="theme_key">
-        <item>Tema Claro</item>
-        <item>Tema Oscuro 1</item>
-        <item>Tema Oscuro 2</item>
     </string-array>
     <string-array name="compression_level_value">
         <item>0</item>
@@ -172,10 +163,6 @@
         <item>16</item>
         <item>17</item>
     </string-array>
-    <string-array name="decode_dir_value">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string-array name="file_extract_rename_value">
         <item>0</item>
         <item>1</item>
@@ -206,11 +193,6 @@
         <item>gen_[un]signed.apk</item>
     </string-array>
     <string-array name="output_apkname_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="theme_value">
         <item>0</item>
         <item>1</item>
         <item>2</item>

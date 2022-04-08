@@ -95,14 +95,6 @@
         <item>Apk editor imzası</item>
         <item>Özel imza</item>
     </string-array>
-    <string-array name="decode_dir_key">
-        <item>Dahili dizin</item>
-        <item>Özel dizin</item>
-    </string-array>
-    <string-array name="decode_dir_value">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Otomatik (bir sayı ekle)</item>
         <item>Üzerine yaz</item>
@@ -159,16 +151,6 @@
         <item>Uygulama adı (imzasız).apk</item>
     </string-array>
     <string-array name="output_apkname_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="theme_key">
-        <item>Beyaz tema</item>
-        <item>Koyu tema 1</item>
-        <item>Koyu tema 2</item>
-    </string-array>
-    <string-array name="theme_value">
         <item>0</item>
         <item>1</item>
         <item>2</item>

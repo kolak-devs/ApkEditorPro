@@ -3,7 +3,6 @@
 
     <string name="app_name">APK Editor Pro</string>
     <string name="action_settings">设置</string>
-    <string name="hello_world">Hello world!</string>
     <string name="loading">加载中 &#8230;</string>
     <string name="string">字符串</string>
     <string name="resource">资源</string>
@@ -11,13 +10,11 @@
     <string name="save">保存</string>
     <string name="cannot_parse_apk">不能解析APK文件.</string>
     <string name="resolution">分辨率</string>
-    <string name="pro_mode">PRO</string>
     <string name="search">搜索</string>
     <string name="delete">删除</string>
     <string name="delete_this_line">删除该行</string>
     <string name="help">帮助</string>
     <string name="exit">退出</string>
-    <string name="edit">编辑</string>
     <string name="view">查看</string>
     <string name="succeed">成功</string>
     <string name="key">Key</string>
@@ -30,21 +27,16 @@
     <string name="line_data">LINE DATA:</string>
     <string name="description">描述:</string>
     <string name="in_progress">工作中 &#8230;</string>
-    <string name="select_image_to_replace">选择一张图片进行替换</string>
     <string name="pls_input_keyword">输入关键字进行搜索</string>
     <string name="manifest_edit_not_support">Editing is not supported in free version!</string>
     <string name="promote_msg">编辑功能只在专业版提供.&#x0a;点击 \'查看专业版\' ?</string>
     <string name="not_available">不可用</string>
-    <string name="view_pro_version">查看专业版</string>
     <string name="add_key_value">添加键值对:</string>
     <string name="open_in_new_window">在新窗口中打开</string>
     <string name="edit_string_value">修改</string>
-    <string name="add_a_language">添加一种语言</string>
     <string name="language">Language:</string>
     <string name="code">Code:</string>
     <string name="replace">替换</string>
-    <string name="resource_replaced">资源文件已替换.</string>
-    <string name="show_ad">显示广告</string>
     <string name="sure_to_exit_editing">确定要退出编辑吗？</string>
     <string name="yes">是的</string>
     <string name="no">取消</string>
@@ -64,8 +56,6 @@
     <string name="launcher_icon">启动图标</string>
     <string name="full_screen">全屏显示</string>
     <string name="full_screen_desc">勾中开启全屏显示</string>
-    <string name="dark_theme">暗系主题</string>
-    <string name="dark_theme_desc">勾中使用暗系主题</string>
 
     <!-- added 20150501 -->
     <string name="save_succeed_1">成功: 已保存到 %s</string>
@@ -74,7 +64,6 @@
     <string name="system_apps">系统应用</string>
     <string name="icon_changed_tip">图标已更改 (不过部分手机需要重启才能生效)</string>
     <string name="empty_key_tip">Key不能为空!</string>
-    <string name="show_ad_tip">成功! 抱歉会显示一条广告。</string>
     <string name="apk_savedas_1">APK 已保存至 %s</string>
     <string name="invalid_lang_code">无效语言代码!</string>
     <string name="wait_for_decoding">请等待解码完成.</string>
@@ -90,14 +79,11 @@
     <string name="images_capital">IMAGES</string>
     <string name="audios_captical">AUDIOS</string>
     <string name="size">大小</string>
-    <string name="saved">saved.</string>
     <string name="image_summary">%d 图片</string>
     <string name="audio_summary">%d 音频</string>
     <string name="compose">Compose</string>
     <string name="sign">签名</string>
-    <string name="compose_error">Compose Error: </string>
     <string name="sign_error">签名出错: </string>
-    <string name="must_allow_non_market_app">需要开启\"允许安装未知来源应用\"!</string>
     <string name="apk_building">APK Building</string>
     <string name="compression_level">压缩级别</string>
     <string name="compression_level_summary">低的压缩级别速度更快，但压缩率不高 (意味着更大的APK文件)</string>
@@ -119,7 +105,6 @@
     <!-- added in version 1.3.4 -->
     <string name="step">Step</string>
     <string name="merge">合并</string>
-    <string name="merge_error">合并出错: %s</string>
     <string name="cleanup">清理</string>
 
     <!-- version 1.3.6 -->
@@ -141,27 +126,12 @@
     <string name="temp_file_cleaned">临时文件已清理.</string>
 
     <!-- version 1.3.20 -->
-    <string name="auto_translation">自动翻译</string>
     <string name="select_target_lang">"选择一种翻译的目标语言"</string>
-    <string name="stop">停止</string>
-    <string name="hide">隐藏</string>
-    <string name="retranslate"><u>New Translate</u></string>
-    <string name="translating">翻译中 &#8230;</string>
-    <string name="translated">已翻译</string>
-    <string name="translated_format">已翻译 %d 个字符串</string>
-    <string name="failed_format">%d 个字符串翻译失败</string>
-    <string name="untranslated_format">%d 个字符串未翻译</string>
-    <string name="error_no_string_totranslate">找不到需要翻译的字符串.</string>
-    <string name="error_no_string_tosave">未检测到需要保存的字符串.</string>
     <string name="general_error">错误: %s</string>
     <string name="save_succeed_tip">已保存 %d 个字符串.</string>
-    <string name="save_translation_title">保存翻译的字符串吗?</string>
-    <string name="save_translation_msg">翻译出的字符串未保存. 保存它们吗?</string>
-    <string name="string_notsaved_msg">忽略了 %d 个字符串.</string>
 
     <!-- version 1.3.21 -->
     <string name="apk_saved_tip">成功! APK 已保存至: %s</string>
-    <string name="warning_keyword_empty">输入不能为空.</string>
 
     <!-- version 1.3.25 -->
     <string name="error_file_too_big">文件实在太大了.</string>
@@ -171,10 +141,7 @@
     <string name="not_found">未找到</string>
     <string name="file_saved">文件已保存.</string>
     <string name="font_size">字体大小</string>
-    <string name="font_size_summary">当前字体大小: %d</string>
     <string name="line_wrap">自动换行</string>
-    <string name="line_wrap_enabled">已启用自动换行. (更改需重启文本编辑器才能生效)</string>
-    <string name="line_wrap_disabled">已禁用自动换行. (更改需重启文本编辑器才能生效)</string>
     <string name="cannot_find_ext_sdcard">找不到外置SD卡.</string>
     <string name="rename_in_resources">修改 resources.arsc 中的包名</string>
     <string name="sign_apk_with">签名密钥</string>
@@ -231,7 +198,6 @@
     <string name="pkg_rename_notice">请注意: 重命名包名称可能会无法正常工作, 取决于应用的代码构建方式.</string>
     <string name="package_rename_method">重命名方法</string>
     <string name="pkg_rename_direct">直接重命名</string>
-    <string name="pkg_rename_cheat">欺骗方式</string>
     <string name="pkg_rename_as_plugin">插件方式</string>
 
     <!-- 1.5.0 -->
@@ -255,7 +221,6 @@
     <string name="copy_error_msg">拷贝错误信息</string>
     <string name="errmsg_copied">错误信息已拷贝到剪贴板.</string>
     <string name="search_file_names">在文件名中搜索</string>
-    <string name="search_file_content">在文件内容中搜索</string>
     <string name="patch_capital">PATCH</string>
     <string name="select_patch">选择一个补丁文件</string>
     <string name="apply_the_patch">应用补丁</string>
@@ -282,7 +247,6 @@
 
     <!-- 1.6.2 -->
     <string name="translate_plugin">翻译插件</string>
-    <string name="translate_plugin_notfound_tip">找不到翻译插件。如需开发翻译插件，请参照下面的说明：</string>
 
     <string name="open_in_editor">在编辑器中打开</string>
     <string name="about">关于</string>
@@ -330,10 +294,6 @@
 
     <!-- 1.7.4 -->
     <string name="fix_invalid_symbol_tip">修正\'invalid symbol\'的问题？</string>
-    <string name="smali">Smali</string>
-    <string name="copy_string_name">复制字符串名称</string>
-    <string name="select_theme_desc">请选择一种主题 (外观).</string>
-    <string name="app_theme">应用主题</string>
 
     <string name="output_apk_name">APK 命名方式</string>
     <string name="output_apk_name_summary">指定生成 APK 的命名方式.</string>
@@ -356,8 +316,6 @@
 
     <!-- 1.8.1 -->
     <string name="show_line_numbers">显示行号</string>
-    <string name="line_numebrs_enabled">在编辑器的左边显示行号.</string>
-    <string name="line_numbers_disabled">不显示行号.</string>
     <string name="print_stack_trace">打印调用栈信息</string>
 
     <!-- 1.8.4 -->
@@ -371,7 +329,6 @@
     <!-- 1.8.6 -->
     <string name="build">Build</string>
     <string name="projects">项目</string>
-    <string name="project_num">%d 个项目</string>
     <string name="save_as_project">保存至项目</string>
     <string name="cannot_rename_decode_folder">不能重命名解码目录.</string>
     <string name="cannot_save_project">不能保存项目文件.</string>
@@ -396,7 +353,6 @@
 
     <!-- 1.8.15 -->
     <string name="when_use_bfe">何时使用大文件编辑器</string>
-    <string name="use_bfe_summary">当文件大于 %dK 字节时, 使用大文件编辑器.</string>
     <string name="use_bfe_message">大文件编辑器可以更快的加载大文件, 但是仅支持一行一行的编辑.\n在此您可以定义一个极限值规定何时使用大文件编辑器:</string>
     <string name="use_bfe_tip">文件较大，将使用大文件编辑器. (注: 您可以在编辑器设置中更改何时使用大文本编辑器)</string>
 
@@ -441,7 +397,6 @@
     <string name="cannot_find_java_file">找不到解码后的java文件.</string>
     <string name="java_code_edit_tip">Java 代码可以帮助我们更好的理解代码逻辑, 但修改的Java代码并不会保存到APK文件.</string>
 
-    <string name="donate">捐一点</string>
     <string name="input_agree_tip">输入 \"accept\" 同意上述条款.</string>
     <string name="input_agree_toast">如需继续，请输入 \"accept\"</string>
     <string name="not_signed_tip">请注意: apk文件未签名, 因此不能安装.</string>
