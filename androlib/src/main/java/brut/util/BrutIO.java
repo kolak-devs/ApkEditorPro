@@ -16,22 +16,19 @@
  */
 package brut.util;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.zip.CRC32;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
+import androidx.annotation.NonNull;
 
 import brut.common.BrutException;
 import brut.common.InvalidUnknownFileException;
 import brut.common.RootUnknownFileException;
 import brut.common.TraversalUnknownFileException;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
+import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 public class BrutIO {
     public static void copyAndClose(InputStream in, OutputStream out)
@@ -44,7 +41,7 @@ public class BrutIO {
         }
     }
 
-    public static long recursiveModifiedTime(File[] files) {
+    public static long recursiveModifiedTime(@NonNull File[] files) {
         long modified = 0;
         for (File file : files) {
             long submodified = recursiveModifiedTime(file);
@@ -55,7 +52,7 @@ public class BrutIO {
         return modified;
     }
 
-    public static long recursiveModifiedTime(File file) {
+    public static long recursiveModifiedTime(@NonNull File file) {
         long modified = file.lastModified();
         if (file.isDirectory()) {
             File[] subfiles = file.listFiles();
@@ -69,17 +66,19 @@ public class BrutIO {
         return modified;
     }
 
-    public static CRC32 calculateCrc(InputStream input) throws IOException {
+    @NonNull
+    public static CRC32 calculateCrc(@NonNull InputStream input) throws IOException {
         CRC32 crc = new CRC32();
         int bytesRead;
         byte[] buffer = new byte[8192];
-        while ((bytesRead = input.read(buffer)) != -1) {
+        while((bytesRead = input.read(buffer)) != -1) {
             crc.update(buffer, 0, bytesRead);
         }
         return crc;
     }
 
-    public static String sanitizeUnknownFile(final File directory, final String entry) throws IOException, BrutException {
+    @NonNull
+    public static String sanitizeUnknownFile(final File directory, @NonNull final String entry) throws IOException, BrutException {
         if (entry.length() == 0) {
             throw new InvalidUnknownFileException("Invalid Unknown File");
         }
@@ -117,7 +116,7 @@ public class BrutIO {
         }
     }
 
-    public static void copy(ZipFile inputFile, ZipOutputStream outputFile, ZipEntry entry) throws IOException {
+    public static void copy(@NonNull ZipFile inputFile, ZipOutputStream outputFile, ZipEntry entry) throws IOException {
         try (
                 InputStream is = inputFile.getInputStream(entry)
         ) {

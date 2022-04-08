@@ -55,9 +55,9 @@ public class ApkParser {
             ZipEntry entry = zipFile.getEntry("resources.arsc");
             arscStream = zipFile.getInputStream(entry);
 
-            ResTable resTable = new ResTable(ctx.getApplicationContext(), false);
+            ResTable resTable = new ResTable();
             ARSCDecoder.ARSCData arscData = ARSCDecoder.decode(arscStream, false, false,
-                    resTable, null, false);
+                    resTable);
             ResPackage[] packages = arscData.getPackages();
 
             for (ResPackage pkg : packages) {

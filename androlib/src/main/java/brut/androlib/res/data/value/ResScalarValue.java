@@ -16,15 +16,14 @@
  */
 package brut.androlib.res.data.value;
 
-import org.xmlpull.v1.XmlSerializer;
-
-import java.io.IOException;
-
 import brut.androlib.AndrolibException;
 import brut.androlib.res.data.ResResource;
 import brut.androlib.res.xml.ResValuesXmlSerializable;
 import brut.androlib.res.xml.ResXmlEncodable;
 import brut.androlib.res.xml.ResXmlEncoders;
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.IOException;
 
 public abstract class ResScalarValue extends ResIntBasedValue implements
         ResXmlEncodable, ResValuesXmlSerializable {
@@ -58,7 +57,7 @@ public abstract class ResScalarValue extends ResIntBasedValue implements
     }
 
     public String encodeAsResXmlNonEscapedItemValue() throws AndrolibException {
-        return encodeAsResXmlValue().replace("&amp;", "&").replace("&lt;", "<");
+        return encodeAsResXmlValue().replace("&amp;", "&").replace("&lt;","<");
     }
 
     public boolean hasMultipleNonPositionalSubstitutions() {
@@ -122,7 +121,6 @@ public abstract class ResScalarValue extends ResIntBasedValue implements
 
     protected abstract String encodeAsResXml() throws AndrolibException;
 
-    // TODO: FOR APK EDITOR
     public String getRawValue() {
         return mRawValue;
     }

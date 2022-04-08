@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,16 +16,21 @@ import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.activities.ApkComposeActivity;
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.data.Constants;
+import com.mcal.apkeditor.utils.AssetsInstaller;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ITaskCallback;
 import com.mcal.seticon.SetIcon;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,6 +41,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import brut.androlib.Androlib;
+import brut.androlib.options.BuildOptions;
 
 public class ApkComposeService extends Service implements ITaskCallback {
     private final ComposeResult composeResult = new ComposeResult();
@@ -129,7 +138,7 @@ public class ApkComposeService extends Service implements ITaskCallback {
         composeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, composeIntent, 0);
 
-        int iconId = (int) SetIcon.getIconId();
+        int iconId = SetIcon.getIconId();
         Bitmap icon = BitmapFactory.decodeResource(getResources(), iconId);
         String appName = getString(R.string.app_name);
 
@@ -172,24 +181,35 @@ public class ApkComposeService extends Service implements ITaskCallback {
     }
 
     private void startComposeThread() {
-        if (srcApkPath != null) {
-            this.composeThread = new ApkComposeThread(this, decodeRootPath,
-                    srcApkPath, targetApkPath);
-        }
-        // srcApkPath == null, means currently is a full decoding
-        else {
-            this.composeThread = new ApkComposeThreadNew(this, decodeRootPath, targetApkPath);
-        }
+//        if(Preferences.isApkToolCompiler()) {
+//            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+//            dialog.setTitle("Build Mode");
+//            //dialog.setView("");
+//            dialog.setPositiveButton("Build", (dialogInterface, i) -> startBuild());
+//            dialog.setNegativeButton(android.R.string.cancel, null);
+//        } else {
+            startBuild();
+//        }
+    }
 
-        if (extraMaker != null) {
-            composeThread.setExtraMaker(extraMaker);
-        }
-        composeThread.setModification(this.stringModified,
-                this.manifestModified, this.resFileModified,
-                this.modifiedSmaliFolders, this.addedFiles, this.replacedFiles,
-                this.deletedFiles, this.fileEntry2ZipEntry, this.signAPK);
-        composeThread.setTaskCallback(this);
-        composeThread.start();
+    public void startBuild() {
+            if (srcApkPath != null) {
+                this.composeThread = new ApkComposeThread(this, decodeRootPath,
+                        srcApkPath, targetApkPath);
+            } else {
+                // srcApkPath == null, means currently is a full decoding
+                this.composeThread = new ApkComposeThreadNew(this, decodeRootPath, targetApkPath);
+            }
+
+            if (extraMaker != null) {
+                composeThread.setExtraMaker(extraMaker);
+            }
+            composeThread.setModification(this.stringModified,
+                    this.manifestModified, this.resFileModified,
+                    this.modifiedSmaliFolders, this.addedFiles, this.replacedFiles,
+                    this.deletedFiles, this.fileEntry2ZipEntry, this.signAPK);
+            composeThread.setTaskCallback(this);
+            composeThread.start();
     }
 
     @NonNull

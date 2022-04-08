@@ -16,22 +16,17 @@
  */
 package brut.androlib.res.data.value;
 
+import brut.androlib.AndrolibException;
+import brut.androlib.res.data.ResResource;
+import brut.androlib.res.xml.ResValuesXmlSerializable;
+import brut.util.Duo;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-import brut.androlib.AndrolibException;
-import brut.androlib.res.data.ResResource;
-import brut.androlib.res.xml.ResValuesXmlSerializable;
-import brut.util.Duo;
-
 public class ResArrayValue extends ResBagValue implements
         ResValuesXmlSerializable {
-
-    public static final int BAG_KEY_ARRAY_START = 0x02000000;
-    private final ResScalarValue[] mItems;
-    private final String[] AllowedArrayTypes = {"string", "integer"};
 
     ResArrayValue(ResReferenceValue parent, Duo<Integer, ResScalarValue>[] items) {
         super(parent);
@@ -95,4 +90,9 @@ public class ResArrayValue extends ResBagValue implements
         }
         return type;
     }
+
+    private final ResScalarValue[] mItems;
+    private final String[] AllowedArrayTypes = {"string", "integer"};
+
+    public static final int BAG_KEY_ARRAY_START = 0x02000000;
 }

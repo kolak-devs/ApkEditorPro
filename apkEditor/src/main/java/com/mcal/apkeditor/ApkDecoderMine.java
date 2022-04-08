@@ -1,9 +1,12 @@
 package com.mcal.apkeditor;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.XmlDecoder.IReferenceDecoder;
+import com.mcal.apkeditor.utils.AssetsInstaller;
 import com.mcal.apkeditor.utils.TimeDumper;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
 import com.mcal.common.utils.FileUtils;
@@ -25,8 +28,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import brut.androlib.Androlib;
 import brut.androlib.AndrolibException;
+import brut.androlib.ApkDecoder;
 import brut.androlib.err.CantFind9PatchChunkException;
+import brut.androlib.options.BuildOptions;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResResSpec;
 import brut.androlib.res.data.ResResource;
@@ -49,10 +55,6 @@ public class ApkDecoderMine implements IReferenceDecoder, IReferenceDecode {
     private final static String[] APK_STANDARD_FILES = new String[]{
             "classes.dex", "AndroidManifest.xml", "resources.arsc",
     };
-    //    private final static String[] APK_STANDARD_DIRS = new String[]{
-//            "res", "r", "R",
-//            "lib", "libs", "assets", "META-INF", "kotlin",
-//    };
     private final static String[] APK_STANDARD_DIRS = new String[]{
             "res", "r", "R",
             "lib", "libs", "assets", "kotlin",
@@ -104,12 +106,46 @@ public class ApkDecoderMine implements IReferenceDecoder, IReferenceDecode {
         return fileEntry2ZipEntry;
     }
 
+    public void decode(@NonNull Activity activity, String apkPath, String decodeRootPath) {
+        //File framework = new File(activity.getFilesDir() + "/bin/android-framework.jar");
+        //File frameworkApk = new File(activity.getFilesDir() + "/bin/1.apk");
+        File binFolder = new File(activity.getFilesDir() + "/bin");
+
+        // Preparing
+        try {
+            new AssetsInstaller(activity).install();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            BuildOptions options = new BuildOptions();
+            options.frameworkFolderLocation = binFolder.getPath();
+            Androlib lib = new Androlib(options);
+            //if(!frameworkApk.exists() && frameworkApk.length() != 0) {
+            //    lib.installFramework(framework);
+            //}
+            ApkDecoder decoder = new ApkDecoder(new File(apkPath), lib);
+            decoder.setApkFile(new File(apkPath));
+            decoder.setBaksmaliDebugMode(false);
+            decoder.setFrameworkDir(binFolder.getPath()); //android-framework.jar
+            //decoder.setDecodeAssets(ApkDecoder.DECODE_ASSETS_FULL);
+            decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_FULL);
+            //decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_NONE);
+            //decoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_SMALI);
+            decoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_NONE);
+            decoder.setOutDir(new File(decodeRootPath));
+            decoder.setApiLevel(14);
+            decoder.setForceDelete(true);
+            decoder.decode();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // Root interface of the decode
     public void decode(@NonNull ExtFile apkFile, File outDir) throws Exception {
         Directory inApk = apkFile.getDirectory();
-        if (!inApk.containsDir("res")) {
-            this.xmlDecoder.setApkProtected(true);
-        }
 
         TimeDumper timer = new TimeDumper(false);
         if (!stopRunning) {

@@ -7,7 +7,7 @@
 
     <com.mcal.apkeditor.neweditor.ObScrollView
         android:id="@+id/editorScrollview"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1.0"
         android:fillViewport="true"
@@ -15,8 +15,8 @@
 
         <LinearLayout
             android:id="@+id/editorLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="horizontal">
@@ -24,7 +24,7 @@
             <EditText
                 android:id="@+id/lineNumbers"
                 android:layout_width="40.0dip"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:focusable="false"
                 android:gravity="center|right|top"
                 android:padding="2.0dip"
@@ -34,7 +34,7 @@
             <View
                 android:id="@+id/divider"
                 android:layout_width="1.0px"
-                android:layout_height="fill_parent" />
+                android:layout_height="match_parent" />
 
             <com.mcal.apkeditor.neweditor.ObEditText
                 android:id="@+id/editor"

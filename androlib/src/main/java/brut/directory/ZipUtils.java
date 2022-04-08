@@ -16,21 +16,16 @@
  */
 package brut.directory;
 
+import brut.common.BrutException;
+import brut.util.BrutIO;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collection;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import brut.common.BrutException;
-import brut.util.BrutIO;
 
 public class ZipUtils {
 

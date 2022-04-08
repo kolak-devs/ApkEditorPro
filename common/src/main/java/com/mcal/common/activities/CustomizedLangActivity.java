@@ -9,10 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
 
-/**
- * Created by phe3 on 1/29/2017.
- */
-
 public class CustomizedLangActivity extends AppCompatActivity {
 
     @Override

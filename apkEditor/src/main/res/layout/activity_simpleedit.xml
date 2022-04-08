@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/overview_layout"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -44,26 +44,26 @@
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:background="#ffffffff">
 
         <LinearLayout
             android:id="@+id/center_layout"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff7f7f7">
 
                 <TextView
                     android:id="@+id/files_label"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:paddingTop="6dip"
@@ -73,8 +73,8 @@
 
                 <TextView
                     android:id="@+id/images_label"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:paddingTop="6dip"
@@ -84,8 +84,8 @@
 
                 <TextView
                     android:id="@+id/audio_label"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:paddingTop="6dip"
@@ -95,12 +95,12 @@
             </LinearLayout>
 
             <FrameLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff7f7f7">
 
                 <ImageView
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:contentDescription="@android:string/no"
                     android:scaleType="fitXY"
@@ -108,7 +108,7 @@
 
                 <ImageView
                     android:id="@+id/cursor"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:contentDescription="@android:string/no"
                     android:scaleType="matrix"
@@ -118,7 +118,7 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/pagerView"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:flipInterval="30"
                 android:persistentDrawingCache="animation" />
@@ -135,7 +135,7 @@
 
     <LinearLayout
         android:id="@+id/bottom_layout"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 

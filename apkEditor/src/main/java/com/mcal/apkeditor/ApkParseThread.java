@@ -26,7 +26,9 @@ import java.lang.ref.WeakReference;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import brut.androlib.Androlib;
 import brut.androlib.AndrolibException;
+import brut.androlib.ApkDecoder;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResTable;
 import brut.androlib.res.decoder.ARSCDecoder;
@@ -112,7 +114,7 @@ public class ApkParseThread extends Thread {
 
             ExtFile apkFile = new ExtFile(new File(apkPath));
 
-            // Possible protected by AndResGuard
+            /*// Possible protected by AndResGuard
             Directory apkDir = apkFile.getDirectory();
             this.mApkProtected = !apkDir.containsDir("res");
             if (mApkProtected && (apkDir.containsDir("r") || apkDir.containsDir("R"))) {
@@ -136,7 +138,8 @@ public class ApkParseThread extends Thread {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
+
 
             // After decoding resource table, show string list
             this.resTable = getResTable(apkFile, true);
@@ -159,7 +162,7 @@ public class ApkParseThread extends Thread {
             }
 
             // File outDir = new File("/storage/emulated/0/decoded/");
-            decoder.decode(apkFile, outDir);
+            decoder.decode(activity, apkFile.getPath(), outDir.getPath());
             if (consumerRef.get() != null) {
                 consumerRef.get()
                         .resourceDecoded(decoder.getFileEntry2ZipEntry());
@@ -177,8 +180,7 @@ public class ApkParseThread extends Thread {
     @NonNull
     private ResTable getResTable(ExtFile apkFile, boolean loadMainPkg)
             throws AndrolibException {
-        Activity activity = activityRef.get();
-        ResTable resTable = new ResTable(activity.getApplicationContext(), mApkProtected);
+        ResTable resTable = new ResTable();
         if (loadMainPkg) {
             if(Preferences.isFixMultiRes()) {
                 loadOneMainPkg(resTable, apkFile);
@@ -273,7 +275,7 @@ public class ApkParseThread extends Thread {
 
                 ais = new ByteArrayInputStream(data);
                 return ARSCDecoder
-                        .decode(ais, false, keepBroken, resTable, idProvider, mApkProtected)
+                        .decode(ais, false, keepBroken, resTable)
                         .getOnePackage();
             }
         } catch (IOException e) {
@@ -320,7 +322,7 @@ public class ApkParseThread extends Thread {
 
                 ais = new ByteArrayInputStream(data);
                 return ARSCDecoder
-                        .decode(ais, false, keepBroken, resTable, idProvider, mApkProtected)
+                        .decode(ais, false, keepBroken, resTable)
                         .getPackages();
             }
         } catch (IOException e) {

@@ -5,11 +5,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.pro.DexEncoder;
 import com.mcal.apkeditor.ce.IApkMaking;
+import com.mcal.apkeditor.pro.DexEncoder;
 import com.mcal.apkeditor.smali.ISmaliAssembleCallback;
 import com.mcal.apkeditor.utils.AssetsInstaller;
 import com.mcal.apksigner.ApkSigner;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.fastzip.FastZip;
 import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.utils.FileUtils;
@@ -17,7 +18,6 @@ import com.mcal.common.utils.ITaskCallback;
 import com.mcal.common.utils.ITaskCallback.TaskStepInfo;
 import com.mcal.common.utils.LOGGER;
 import com.mcal.common.utils.SDCard;
-import com.mcal.common.data.Preferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +27,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import brut.androlib.Androlib;
+import brut.androlib.options.BuildOptions;
 
 public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssembleCallback {
 
@@ -75,7 +78,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         this.binRootPath = rootDirectory + "/bin";
         this.aaptPath = binRootPath + "/aapt";
         this.aaptPath2 = binRootPath + "/aapt2";
-        this.androidJarPath = binRootPath + "/android.jar";
+        this.androidJarPath = binRootPath + "/android-framework.jar";
         this.decodedFilePath = decodedFilePath;
         this.targetApkPath = apkPath;
         this.resourceApkPath = decodedFilePath + "/build/resource.apk";
@@ -104,136 +107,196 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         // Make sure build directory is created
         File buildDir = new File(decodedFilePath + "/build");
         if (!buildDir.exists()) {
-            if(buildDir.mkdir()) {
+            if (buildDir.mkdir()) {
                 Log.e(getClass().getName(), buildDir + " created");
             }
         }
 
-        boolean rebuildResource = needRebuildResource();
-        checkSmaliModification();
+        if (Preferences.isApkToolCompiler()) {
+            do {
+                //File framework = new File(ctx.getFilesDir() + "/bin/android-framework.jar");
+                //File frameworkApk = new File(ctx.getFilesDir() + "/bin/1.apk");
+                File binFolder = new File(ctx.getFilesDir() + "/bin");
 
-        this.stepInfo.stepTotal = 0;
+                BuildOptions options = new BuildOptions();
+                options.useAapt2 = Preferences.isAapt2(ctx);
+                options.aaptPath = binFolder + File.separator + (Preferences.isAapt2(ctx) ? "aapt2" : "aapt");
+                options.frameworkFolderLocation = binFolder.getPath();
+                Androlib androlib = new Androlib(options);
 
-        // Need to build resource
-        if (rebuildResource) {
-            stepInfo.stepTotal += 1;
-        }
-        // Merge
-        stepInfo.stepTotal += 1;
-        // For DEX assembling
-        if (!modifiedSmaliFolders.isEmpty()) {
-            stepInfo.stepTotal += modifiedSmaliFolders.size();
-        }
-        // Sign
-        if (BuildConfig.WITH_SIGN && bSignApk) {
-            this.stepInfo.stepTotal += 1;
-        }
-        // Cleanup
-        this.stepInfo.stepTotal += 1;
+                try {
+                    File tmp = File.createTempFile("APKTOOL", null);
 
-        do {
-            // XML/String/Manifest modified, requires re-compiling
-            if (rebuildResource) {
-                if (stopFlag) {
-                    this.errMessage = "User request to stop";
-                    break;
-                }
-                setNextStep(ctx.getString(R.string.compose));
+                    //if(!frameworkApk.exists() && frameworkApk.length() != 0) {
+                    //    this.stepInfo.stepTotal = 5;
+                    //    setNextStep("Installing Framework...");
+                    //    androlib.installFramework(framework);
+                    //} else {
+                        this.stepInfo.stepTotal = 4;
+                    //}
 
-                if (!prepare()) {
-                    break;
-                }
-
-                // Compose resource and extract files
-                if (stopFlag) {
-                    this.errMessage = "User request to stop";
-                    break;
-                }
-                if (!composeResource()) {
-                    break;
-                }
-            }
-
-            // Assemble DEX files
-            builtDexFiles.clear();
-            if (!modifiedSmaliFolders.isEmpty()) {
-                boolean assembleError = false;
-                for (String smaliFolder : modifiedSmaliFolders) {
-
-                    String smaliPath = decodedFilePath + "/" + smaliFolder;
-                    String dexName = getDexNameBySmaliFolder(smaliFolder);
-                    setNextStep(ctx.getString(R.string.assemble_dex_file) + ": " + dexName);
                     try {
-                        // Log.d("DEBUG", "Assemble " + smaliPath + " to " + dexName);
-                        assembleSmali(smaliPath, dexName);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
+                        setNextStep("Preparing...");
+                        new AssetsInstaller(ctx).install();
+                    } catch (Exception e) {
                         this.errMessage = e.getMessage();
-                        assembleError = true;
-                        break;
                     }
 
+                    setNextStep("Compiling...");
+                    androlib.build(new File(decodedFilePath), tmp);
+
+                    //setNextStep("Building...");
+                    //androlib.buildApk(new File(decodedFilePath), new File(targetApkPath.replace(".apk", "_unsigned.apk")));
+
+                    setNextStep("Signing...");
+                    signApk(tmp.getPath());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    this.errMessage = e.getMessage();
+                    break;
+                }
+                // Clean up
+                if (stopFlag) {
+                    this.errMessage = "User request to stop";
+                    break;
+                }
+                setNextStep(ctx.getString(R.string.cleanup));
+                cleanup();
+                this.succeed = true;
+            } while (false);
+        } else {
+            boolean rebuildResource = needRebuildResource();
+
+            checkSmaliModification();
+
+            this.stepInfo.stepTotal = 0;
+
+            // Prepare
+            stepInfo.stepTotal += 1;
+
+            // Need to build resource
+            if (rebuildResource) {
+                stepInfo.stepTotal += 1;
+            }
+            // Merge
+            stepInfo.stepTotal += 1;
+            // For DEX assembling
+            if (!modifiedSmaliFolders.isEmpty()) {
+                stepInfo.stepTotal += modifiedSmaliFolders.size();
+            }
+            // Sign
+            if (BuildConfig.WITH_SIGN && bSignApk) {
+                this.stepInfo.stepTotal += 1;
+            }
+            // Cleanup
+            this.stepInfo.stepTotal += 1;
+
+            do {
+                // XML/String/Manifest modified, requires re-compiling
+                if (rebuildResource) {
                     if (stopFlag) {
                         this.errMessage = "User request to stop";
-                        assembleError = true;
+                        break;
+                    }
+                    setNextStep(ctx.getString(R.string.compose));
+
+                    try {
+                        setNextStep("Preparing...");
+                        new AssetsInstaller(ctx).install();
+                    } catch (Exception e) {
+                        this.errMessage = e.getMessage();
+                    }
+
+                    // Compose resource and extract files
+                    if (stopFlag) {
+                        this.errMessage = "User request to stop";
+                        break;
+                    }
+                    if (!composeResource()) {
                         break;
                     }
                 }
 
-                if (assembleError)
-                    break;
-            }
+                // Assemble DEX files
+                builtDexFiles.clear();
+                if (!modifiedSmaliFolders.isEmpty()) {
+                    boolean assembleError = false;
+                    for (String smaliFolder : modifiedSmaliFolders) {
 
-            // Merge
-            if (stopFlag) {
-                this.errMessage = "User request to stop";
-                break;
-            }
-            setNextStep(ctx.getString(R.string.merge));
+                        String smaliPath = decodedFilePath + "/" + smaliFolder;
+                        String dexName = getDexNameBySmaliFolder(smaliFolder);
+                        setNextStep(ctx.getString(R.string.assemble_dex_file) + ": " + dexName);
+                        try {
+                            // Log.d("DEBUG", "Assemble " + smaliPath + " to " + dexName);
+                            assembleSmali(smaliPath, dexName);
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                            this.errMessage = e.getMessage();
+                            assembleError = true;
+                            break;
+                        }
 
-            try {
-                mergeApk();
-            } catch (Exception e) {
-                e.printStackTrace();
-                this.errMessage = ctx.getString(R.string.merge) + ": " + e.getMessage();
-                break;
-            }
+                        if (stopFlag) {
+                            this.errMessage = "User request to stop";
+                            assembleError = true;
+                            break;
+                        }
+                    }
 
-            // Sign or not
-            if (BuildConfig.WITH_SIGN && bSignApk) {
+                    if (assembleError)
+                        break;
+                }
+
+                // Merge
                 if (stopFlag) {
                     this.errMessage = "User request to stop";
                     break;
                 }
-                setNextStep(ctx.getString(R.string.sign));
-                if (!signApk()) {
+                setNextStep(ctx.getString(R.string.merge));
+
+                try {
+                    mergeApk();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    this.errMessage = ctx.getString(R.string.merge) + ": " + e.getMessage();
                     break;
                 }
-            }
 
-            // Clean up
-            if (stopFlag) {
-                this.errMessage = "User request to stop";
-                break;
-            }
-            setNextStep(ctx.getString(R.string.cleanup));
-            cleanup();
-
-            // For free version, make sure it longer enough, so that ad could be loaded
-            if (!BuildConfig.IS_PRO) {
-                long curTime = System.currentTimeMillis();
-                if (curTime - startTime < 7500) {
-                    try {
-                        Thread.sleep(7500 - (curTime - startTime));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                // Sign or not
+                if (BuildConfig.WITH_SIGN && bSignApk) {
+                    if (stopFlag) {
+                        this.errMessage = "User request to stop";
+                        break;
+                    }
+                    setNextStep(ctx.getString(R.string.sign));
+                    if (!signApk(targetApkPath.replace(".apk", "_unsigned.apk"))) {
+                        break;
                     }
                 }
-            }
 
-            this.succeed = true;
-        } while (false);
+                // Clean up
+                if (stopFlag) {
+                    this.errMessage = "User request to stop";
+                    break;
+                }
+                setNextStep(ctx.getString(R.string.cleanup));
+                cleanup();
 
+                // For free version, make sure it longer enough, so that ad could be loaded
+                if (!BuildConfig.IS_PRO) {
+                    long curTime = System.currentTimeMillis();
+                    if (curTime - startTime < 7500) {
+                        try {
+                            Thread.sleep(7500 - (curTime - startTime));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                this.succeed = true;
+            } while (false);
+        }
         if (!stopFlag) {
             if (succeed) {
                 taskCallback.taskSucceed();
@@ -302,7 +365,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         File decodeDir = new File(decodedFilePath);
         File buildDir = new File(decodeDir, "build");
         if (!buildDir.exists()) {
-            if(buildDir.mkdir()) {
+            if (buildDir.mkdir()) {
                 Log.e(getClass().getName(), buildDir + " created");
             }
         }
@@ -469,10 +532,10 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         return buildResource;
     }
 
-    private boolean signApk() {
+    private boolean signApk(String inApk) {
         try {
-            new ApkSigner().signApk(targetApkPath.replace(".apk", "_unsigned.apk"), targetApkPath);
-            if(new File(targetApkPath.replace(".apk", "_unsigned.apk")).delete()) {
+            new ApkSigner().signApk(inApk, targetApkPath);
+            if (new File(inApk).delete()) {
                 Log.e(getClass().getName(), new File(targetApkPath.replace(".apk", "_unsigned.apk")) + "deleted");
             }
             return true;
@@ -494,7 +557,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
     }
 
     private boolean aapt() {
-        boolean noVersionVectorOption = ApkComposeThread.getNoVersionVectorOption(ctx, aaptPath);
+        boolean noVersionVectorOption = Preferences.getNoVersionVectorOption(aaptPath);
 
         List<String> paramList = new ArrayList<>();
         paramList.add(aaptPath);
@@ -527,7 +590,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
     }
 
     public boolean aapt2() throws IOException {
-        boolean noVersionVectorOption = ApkComposeThread.getNoVersionVectorOption(ctx, aaptPath2);
+        boolean noVersionVectorOption = Preferences.getNoVersionVectorOption(aaptPath2);
 
         ArrayList<String> args = new ArrayList<>();
         //compile resources
@@ -539,7 +602,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
         args.add("-o");
 
         File resPath = new File(decodedFilePath, "build");
-        if(resPath.mkdir()) {
+        if (resPath.mkdir()) {
             Log.e(getClass().getName(), new File(decodedFilePath, "build") + "created");
         }
 
@@ -612,17 +675,6 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
             return false;
         }
         return true;
-    }
-
-    // This method will extract the necessary files
-    private boolean prepare() {
-        try {
-            new AssetsInstaller(ctx).install();
-            return true;
-        } catch (Exception e) {
-            this.errMessage = e.getMessage();
-            return false;
-        }
     }
 
     @Override

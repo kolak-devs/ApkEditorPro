@@ -16,13 +16,7 @@
  */
 package brut.directory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -40,7 +34,7 @@ public class FileDirectory extends AbstractDirectory {
 
     public FileDirectory(File dir) throws DirectoryException {
         super();
-        if (!dir.isDirectory()) {
+        if (! dir.isDirectory()) {
             throw new DirectoryException("file must be a directory: " + dir);
         }
         mDir = dir;
@@ -50,7 +44,7 @@ public class FileDirectory extends AbstractDirectory {
     public long getSize(String fileName)
             throws DirectoryException {
         File file = new File(generatePath(fileName));
-        if (!file.isFile()) {
+        if (! file.isFile()) {
             throw new DirectoryException("file must be a file: " + file);
         }
         return file.length();
@@ -118,8 +112,7 @@ public class FileDirectory extends AbstractDirectory {
                 // IMPOSSIBLE_EXCEPTION
                 try {
                     mDirs.put(file.getName(), new FileDirectory(file));
-                } catch (DirectoryException ignored) {
-                }
+                } catch (DirectoryException ignored) {}
             }
         }
     }

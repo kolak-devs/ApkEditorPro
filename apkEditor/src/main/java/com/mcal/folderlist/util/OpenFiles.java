@@ -7,11 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
+import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 
+import org.jetbrains.annotations.Contract;
+
 public class OpenFiles {
+	@NonNull
 	private static Intent getHtmlFileIntent(Uri uri) {
 //		uri = uri.buildUpon()
 //				.encodedAuthority("com.android.htmlfileprovider")
@@ -21,6 +27,7 @@ public class OpenFiles {
 		return intent;
 	}
 
+	@NonNull
 	private static Intent getImageFileIntent(Uri uri) {
 		Intent intent = new Intent("android.intent.action.VIEW");
 		intent.addCategory("android.intent.category.DEFAULT");
@@ -28,6 +35,7 @@ public class OpenFiles {
 		return intent;
 	}
 
+	@NonNull
 	private static Intent getPdfFileIntent(Uri uri) {
 		Intent intent = new Intent("android.intent.action.VIEW");
 		intent.addCategory("android.intent.category.DEFAULT");
@@ -35,6 +43,7 @@ public class OpenFiles {
 		return intent;
 	}
 
+	@NonNull
 	private static Intent getTextFileIntent(Uri uri) {
 		Intent intent = new Intent("android.intent.action.VIEW");
 		intent.addCategory("android.intent.category.DEFAULT");
@@ -42,6 +51,7 @@ public class OpenFiles {
 		return intent;
 	}
 
+	@NonNull
 	private static Intent getAudioFileIntent(Uri uri) {
 		Intent intent = new Intent("android.intent.action.VIEW");
 		intent.putExtra("oneshot", 0);
@@ -50,6 +60,7 @@ public class OpenFiles {
 		return intent;
 	}
 
+	@NonNull
 	private static Intent getVideoFileIntent(Uri uri) {
 		Intent intent = new Intent("android.intent.action.VIEW");
 		intent.putExtra("oneshot", 0);
@@ -65,6 +76,7 @@ public class OpenFiles {
 //		return intent;
 //	}
 
+	@NonNull
 	private static Intent getWordFileIntent(Uri uri) {
 		Intent intent = new Intent("android.intent.action.VIEW");
 		intent.addCategory("android.intent.category.DEFAULT");
@@ -72,29 +84,33 @@ public class OpenFiles {
 		return intent;
 	}
 
-    private static Intent getExcelFileIntent(Uri uri) {
+    @NonNull
+	private static Intent getExcelFileIntent(Uri uri) {
 		Intent intent = new Intent("android.intent.action.VIEW");
 		intent.addCategory("android.intent.category.DEFAULT");
 		intent.setDataAndType(uri, "application/vnd.ms-excel");
 		return intent;
 	}
 
-    private static Intent getPPTFileIntent(Uri uri) {
+    @NonNull
+	private static Intent getPPTFileIntent(Uri uri) {
 		Intent intent = new Intent("android.intent.action.VIEW");
 		intent.addCategory("android.intent.category.DEFAULT");
 		intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
 		return intent;
 	}
 
-    private static Intent getApkFileIntent(Uri uri) {
+    @NonNull
+	private static Intent getApkFileIntent(Uri uri) {
 		Intent intent = new Intent();
 		intent.setAction(android.content.Intent.ACTION_VIEW);
 		intent.setDataAndType(uri, "application/vnd.android.package-archive");
 		return intent;
 	}
 
+	@Contract(pure = true)
 	private static boolean checkEndsWithInStringArray(String checkItsEnd,
-													  String[] fileTypes) {
+													  @NonNull String[] fileTypes) {
 		for (String aEnd : fileTypes) {
 			if (checkItsEnd.endsWith(aEnd))
 				return true;
@@ -102,12 +118,12 @@ public class OpenFiles {
 		return false;
 	}
 
+	@Nullable
 	public static Intent getIntent(Context ctx, String filePath) {
 		Intent intent;
         Uri uri = null;
         try {
-			String authorityName = ctx.getPackageName() + ".fileprovider";
-            uri = FileProvider.getUriForFile(ctx, authorityName, new File(filePath));
+            uri = FileProvider.getUriForFile(ctx, BuildConfig.APPLICATION_ID, new File(filePath));
         } catch (Throwable e) {
         	e.printStackTrace();
         }

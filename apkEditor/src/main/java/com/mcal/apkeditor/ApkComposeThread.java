@@ -48,7 +48,7 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
     private final String srcApkPath;
     private final String targetApkPath; // Target APK path
     // Record all the dex file replaces
-    private final Map<String, String> dexReplaces = new HashMap<String, String>();
+    private final Map<String, String> dexReplaces = new HashMap<>();
     private final TaskStepInfo stepInfo;
     // Last time updating the smali assemble info
     private final long lastUpdateAssembleTime = 0;
@@ -92,8 +92,8 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
         this.binRootPath = rootDirectory + "/bin";
         this.aaptPath = binRootPath + "/aapt";
         this.aaptPath2 = binRootPath + "/aapt2";
-        this.androidJarPath = binRootPath + "/android.jar";
-        // this.androidJarPath = SDCard.getRootDirectory() + "/android.jar";
+        this.androidJarPath = binRootPath + "/android-framework.jar";
+        // this.androidJarPath = SDCard.getRootDirectory() + "/android-framework.jar";
         this.decodedFilePath = decodedFilePath;
         this.srcApkPath = srcApkPath;
         this.targetApkPath = apkPath;
@@ -104,30 +104,6 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
         LOGGER.info("decodedFilePath: " + this.decodedFilePath);
 
         this.stepInfo = new ITaskCallback.TaskStepInfo();
-    }
-
-    // Some aapt must pass "--no-version-vectors" option to get the correct result
-    protected static boolean getNoVersionVectorOption(Context ctx, String aaptPath) {
-        String configKey = "aapt-no-version-vectors";
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        int intVal = sp.getInt(configKey, -1);
-        if (intVal == 1) {
-            return true;
-        } else if (intVal == 0) {
-            return false;
-        }
-
-        String[] command = {aaptPath};
-        CommandRunner cr = new CommandRunner();
-        cr.runCommand(command, null, null, 5 * 1000, false);
-        String strOut = cr.getStdOut();
-        String strError = cr.getStdError();
-        boolean option = ((strOut != null && strOut.contains("--no-version-vectors")) ||
-                (strError != null && strError.contains("--no-version-vectors")));
-        Editor editor = sp.edit();
-        editor.putInt(configKey, option ? 1 : 0);
-        editor.apply();
-        return option;
     }
 
     // This method will extract the necessary files
@@ -162,7 +138,7 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
         }
     }
 
-    // Copy aapt & android.jar
+    // Copy aapt & android-framework.jar
     private static boolean copyFiles(Context ctx) throws Exception {
         try {
             try {
@@ -604,7 +580,7 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
     }
 
     public boolean aapt() {
-        boolean noVersionVectorOption = ApkComposeThread.getNoVersionVectorOption(ctx, aaptPath);
+        boolean noVersionVectorOption = Preferences.getNoVersionVectorOption(aaptPath);
 
         List<String> paramList = new ArrayList<>();
         paramList.add(aaptPath);
@@ -638,7 +614,7 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
     }
 
     public boolean aapt2() throws IOException {
-        boolean noVersionVectorOption = ApkComposeThread.getNoVersionVectorOption(ctx, aaptPath2);
+        boolean noVersionVectorOption = Preferences.getNoVersionVectorOption(aaptPath2);
 
         ArrayList<String> args = new ArrayList<>();
         //compile resources

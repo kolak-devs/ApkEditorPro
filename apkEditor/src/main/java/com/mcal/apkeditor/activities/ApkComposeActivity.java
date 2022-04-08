@@ -380,23 +380,29 @@ public class ApkComposeActivity extends CustomizedLangActivity
             this.findViewById(R.id.failed_view).setVisibility(View.VISIBLE);
 
             this.failedLv.setDivider(null);
-            this.failedLv.setAdapter(new ApkComposeFailAdapter(this, errMessage));
-            Log.d("error", errMessage);
+            if(errMessage != null) {
+                this.failedLv.setAdapter(new ApkComposeFailAdapter(this, errMessage));
+                Log.d("error", errMessage);
+            }
             resultImgView.setImageResource(R.drawable.round_close_red_24);
 
             // Show "Hide Warnings" button or not
-            if (errMessage.contains("warning:")) {
-                this.hideWarningBtn.setVisibility(View.VISIBLE);
-            } else {
-                this.hideWarningBtn.setVisibility(View.GONE);
+            if(errMessage != null) {
+                if (errMessage.contains("warning:")) {
+                    this.hideWarningBtn.setVisibility(View.VISIBLE);
+                } else {
+                    this.hideWarningBtn.setVisibility(View.GONE);
+                }
             }
 
             // Auto fix
-            errFixer.setErrMessage(errMessage);
-            if (errFixer.isErrorFixable()) {
-                int resId = getTipResourceId();
-                fixTipTv.setText(resId);
-                fixLayout.setVisibility(View.VISIBLE);
+            if(errMessage != null) {
+                errFixer.setErrMessage(errMessage);
+                if (errFixer.isErrorFixable()) {
+                    int resId = getTipResourceId();
+                    fixTipTv.setText(resId);
+                    fixLayout.setVisibility(View.VISIBLE);
+                }
             }
 
             // Update button

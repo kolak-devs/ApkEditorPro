@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/layout_apk_generating"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/apked_white"
         android:gravity="center"
         android:orientation="vertical">
@@ -34,8 +34,8 @@
 
     <LinearLayout
         android:id="@+id/layout_apk_reinstall"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/apked_white"
         android:gravity="center"
         android:orientation="vertical">
@@ -47,7 +47,7 @@
             android:src="@drawable/round_done_green_24" />
 
         <ScrollView
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1">
 
@@ -65,7 +65,7 @@
 
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="4dip">

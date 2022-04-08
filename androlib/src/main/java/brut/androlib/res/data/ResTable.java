@@ -16,38 +16,31 @@
  */
 package brut.androlib.res.data;
 
-import android.content.Context;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import com.mcal.androlib.meta.VersionInfo;
 
 import brut.androlib.AndrolibException;
 import brut.androlib.err.UndefinedResObjectException;
-import brut.androlib.meta.VersionInfo;
 import brut.androlib.res.AndrolibResources;
 import brut.androlib.res.data.value.ResValue;
+import java.util.*;
 
 public class ResTable {
+    private final AndrolibResources mAndRes;
+
     private final Map<Integer, ResPackage> mPackagesById = new HashMap<>();
     private final Map<String, ResPackage> mPackagesByName = new HashMap<>();
     private final Set<ResPackage> mMainPackages = new LinkedHashSet<>();
     private final Set<ResPackage> mFramePackages = new LinkedHashSet<>();
-    private final Map<String, String> mSdkInfo = new LinkedHashMap<>();
-    private final VersionInfo mVersionInfo = new VersionInfo();
-    private AndrolibResources mAndRes;
+
     private String mPackageRenamed;
     private String mPackageOriginal;
     private int mPackageId;
     private boolean mAnalysisMode = false;
     private boolean mSharedLibrary = false;
     private boolean mSparseResources = false;
-    // TODO: MOD FOR APK EDITOR
-    private String mFrameTag;
-    private Context ctx;
-    private boolean mApkProtected = false;
+
+    private final Map<String, String> mSdkInfo = new LinkedHashMap<>();
+    private final VersionInfo mVersionInfo = new VersionInfo();
 
     public ResTable() {
         mAndRes = null;
@@ -55,12 +48,6 @@ public class ResTable {
 
     public ResTable(AndrolibResources andRes) {
         mAndRes = andRes;
-    }
-
-    // TODO: MOD FOR APK EDITOR
-    public ResTable(Context ctx, boolean apkProtected) {
-        this.ctx = ctx;
-        this.mApkProtected = apkProtected;
     }
 
     public ResResSpec getResSpec(int resID) throws AndrolibException {
@@ -86,13 +73,7 @@ public class ResTable {
         return mFramePackages;
     }
 
-    // TODO: FOR APK EDITOR
-    public void setFrameTag(String tag) {
-        mFrameTag = tag;
-    }
-
-    // TODO: FOR APK EDITOR
-    /*public ResPackage getPackage(int id) throws AndrolibException {
+    public ResPackage getPackage(int id) throws AndrolibException {
         ResPackage pkg = mPackagesById.get(id);
         if (pkg != null) {
             return pkg;
@@ -101,23 +82,6 @@ public class ResTable {
             return mAndRes.loadFrameworkPkg(this, id, mAndRes.buildOptions.frameworkTag);
         }
         throw new UndefinedResObjectException(String.format("package: id=%d", id));
-    }*/
-
-    // TODO: FOR APK EDITOR
-    public ResPackage getPackage(int id) throws AndrolibException {
-        ResPackage pkg = mPackagesById.get(id);
-        if (pkg != null) {
-            return pkg;
-        }
-
-        if (mPackagesById.get(1) == null) {
-            try {
-                return AndrolibResources.loadFrameworkPkg(ctx, this, id, mFrameTag);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
     public ResPackage getHighestSpecPackage() throws AndrolibException {
@@ -177,6 +141,30 @@ public class ResTable {
         }
     }
 
+    public void setAnalysisMode(boolean mode) {
+        mAnalysisMode = mode;
+    }
+
+    public void setPackageRenamed(String pkg) {
+        mPackageRenamed = pkg;
+    }
+
+    public void setPackageOriginal(String pkg) {
+        mPackageOriginal = pkg;
+    }
+
+    public void setPackageId(int id) {
+        mPackageId = id;
+    }
+
+    public void setSharedLibrary(boolean flag) {
+        mSharedLibrary = flag;
+    }
+
+    public void setSparseResources(boolean flag) {
+        mSparseResources = flag;
+    }
+
     public void clearSdkInfo() {
         mSdkInfo.clear();
     }
@@ -205,47 +193,23 @@ public class ResTable {
         return mAnalysisMode;
     }
 
-    public void setAnalysisMode(boolean mode) {
-        mAnalysisMode = mode;
-    }
-
     public String getPackageRenamed() {
         return mPackageRenamed;
-    }
-
-    public void setPackageRenamed(String pkg) {
-        mPackageRenamed = pkg;
     }
 
     public String getPackageOriginal() {
         return mPackageOriginal;
     }
 
-    public void setPackageOriginal(String pkg) {
-        mPackageOriginal = pkg;
-    }
-
     public int getPackageId() {
         return mPackageId;
-    }
-
-    public void setPackageId(int id) {
-        mPackageId = id;
     }
 
     public boolean getSharedLibrary() {
         return mSharedLibrary;
     }
 
-    public void setSharedLibrary(boolean flag) {
-        mSharedLibrary = flag;
-    }
-
     public boolean getSparseResources() {
         return mSparseResources;
-    }
-
-    public void setSparseResources(boolean flag) {
-        mSparseResources = flag;
     }
 }

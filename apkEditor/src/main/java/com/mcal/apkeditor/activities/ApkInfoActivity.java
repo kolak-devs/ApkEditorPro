@@ -1196,12 +1196,12 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     private void initView() {
         Resources res = getResources();
-        this.textIcon = res.getDrawable(R.drawable.round_g_translate_accent_24);
-        this.textIconGrey = res.getDrawable(R.drawable.round_g_translate_24);
-        this.resIcon = res.getDrawable(R.drawable.round_folder_blue_24);
-        this.resIconGrey = res.getDrawable(R.drawable.round_folder_24);
-        this.manifestIcon = res.getDrawable(R.drawable.round_article_blue_24);
-        this.manifestIconGrey = res.getDrawable(R.drawable.round_article_24);
+        this.textIcon = ContextCompat.getDrawable(this, R.drawable.round_g_translate_accent_24);
+        this.textIconGrey = ContextCompat.getDrawable(this, R.drawable.round_g_translate_24);
+        this.resIcon = ContextCompat.getDrawable(this, R.drawable.round_folder_blue_24);
+        this.resIconGrey = ContextCompat.getDrawable(this, R.drawable.round_folder_24);
+        this.manifestIcon = ContextCompat.getDrawable(this, R.drawable.round_article_blue_24);
+        this.manifestIconGrey = ContextCompat.getDrawable(this, R.drawable.round_article_24);
 
         this.apkIcon = this.findViewById(R.id.app_icon);
         this.apkLabel = this.findViewById(R.id.app_name);
@@ -1499,7 +1499,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         resRadio.setOnClickListener(v -> resRadioClicked());
         manifestRadio.setOnClickListener(v -> manifestRadioClicked());
 
-        this.saveBtn = this.findViewById(R.id.save_button);
+        this.saveBtn = this.findViewById(R.id.btn_build_apk);
         if (BuildConfig.PARSER_ONLY) {
             this.saveBtn.setVisibility(View.GONE);
         } else {
@@ -1537,7 +1537,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     protected void composeApkFile() {
-        if (BuildConfig.LIMIT_NEW_VERSION && !MainActivity.upgradedFromOldVersion(this)) {
+        if (BuildConfig.LIMIT_NEW_VERSION && MainActivity.upgradedFromOldVersion(this)) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle(R.string.please_note);
             alert.setMessage(R.string.build_not_support_tip);
@@ -1651,13 +1651,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 dlg.setTitle(R.string.warning);
                 dlg.setMessage(errMsg + "\nAre you sure to continue?");
                 dlg.setPositiveButton(R.string.yes,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                launchBuildActivityAndService(bSign);
-                            }
-                        });
+                        (dialog, which) -> launchBuildActivityAndService(bSign));
                 dlg.setNegativeButton(android.R.string.cancel, null);
                 dlg.show();
                 return;
@@ -1726,7 +1720,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             private String errorMessage = null;
 
             @Override
-            public void process() throws Exception {
+            public void process() {
                 File srcDir = new File(folderPath);
                 String folderName = srcDir.getName();
                 File curDir = new File(dirPath);
@@ -1938,12 +1932,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
         if (ret) {
             this.bStringPrepared = prepareStringList();
             if (bStringPrepared) {
-                this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showStringList();
-                        setupClickListener();
-                    }
+                this.runOnUiThread(() -> {
+                    showStringList();
+                    setupClickListener();
                 });
             }
         } else {
@@ -1975,42 +1966,34 @@ public class ApkInfoActivity extends CustomizedLangActivity
             this.bStringPrepared = prepareStringList();
         }
 
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (stringShowNeeded) {
-                    showStringList();
-                    setupClickListener();
-                }
-                showDecodedFileList();
-                webserverMenu.setVisibility(View.VISIBLE);
-                rotateMenu.setVisibility(View.VISIBLE);
-                if (isPro()) {
-                    patchMenu.setVisibility(View.VISIBLE);
-                } else {
-                    patchMenu.setVisibility(View.GONE);
-                }
-                if (!BuildConfig.PARSER_ONLY) {
-                    saveBtn.setVisibility(View.VISIBLE);
-                }
+        this.runOnUiThread(() -> {
+            if (stringShowNeeded) {
+                showStringList();
+                setupClickListener();
+            }
+            showDecodedFileList();
+            webserverMenu.setVisibility(View.VISIBLE);
+            rotateMenu.setVisibility(View.VISIBLE);
+            if (isPro()) {
+                patchMenu.setVisibility(View.VISIBLE);
+            } else {
+                patchMenu.setVisibility(View.GONE);
+            }
+            if (!BuildConfig.PARSER_ONLY) {
+                saveBtn.setVisibility(View.VISIBLE);
             }
         });
     }
 
     public void decodeDex(IGeneralCallback dexDecodedCallback) {
         this.dexDecodedCallback = dexDecodedCallback;
-        new AsyncDecodeTask(this, this.apkPath, decodeRootPath, this).execute();
+        new AsyncDecodeTask(this, apkPath, decodeRootPath, this).execute();
         this.dexDecoded = true;
     }
 
     public void decodeFailed(final String errMessage) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(ApkInfoActivity.this, errMessage,
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+        this.runOnUiThread(() -> Toast.makeText(ApkInfoActivity.this, errMessage,
+                Toast.LENGTH_LONG).show());
     }
 
     // Collect all the string information
@@ -2121,7 +2104,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // Create a ResConfigFlags
     // Please note qualifier always starts with '-'
-    public ResConfigFlags createConfigFlags(@NonNull String qualifier) {
+    /*public ResConfigFlags createConfigFlags(@NonNull String qualifier) {
         int pos = qualifier.indexOf("-r", 1);
         if (pos != -1 && pos + 3 < qualifier.length()) {
             return new ResConfigFlags(qualifier.charAt(1), qualifier.charAt(2),
@@ -2129,7 +2112,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         } else {
             return new ResConfigFlags(qualifier.charAt(1), qualifier.charAt(2));
         }
-    }
+    }*/
 
     // Start a new translation, it may be called by the translation dialog
     // Show the language selection dialog
@@ -2804,7 +2787,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             return "java.xml";
         } else if (fileName.endsWith(".json")) {
             return "json.xml";
-        } else if (fileName.endsWith(".txt")) {
+        } else if (fileName.endsWith(".txt") || fileName.endsWith(".yml")) {
             return "txt.xml";
         } else if (fileName.endsWith(".js")) {
             return "js.xml";

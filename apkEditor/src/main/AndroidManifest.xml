@@ -259,7 +259,7 @@
         <activity android:name="com.mcal.apkeditor.activities.HelpActivity"/>
         <activity
             android:name="com.mcal.apkeditor.activities.SettingActivity" />
-        <activity android:name="com.mcal.apkeditor.activities.SettingEditorActivity" />
+        <activity android:name="com.mcal.apkeditor.pro.activities.SettingsEditorActivity" />
         <activity
             android:name="com.mcal.apkeditor.activities.TextEditNormalActivity"
             android:windowSoftInputMode="adjustResize" />
@@ -285,7 +285,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.mcal.apkeditor.pro.provider"
+            android:authorities="${applicationId}"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

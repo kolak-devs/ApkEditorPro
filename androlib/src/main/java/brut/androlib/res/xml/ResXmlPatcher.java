@@ -16,16 +16,12 @@
  */
 package brut.androlib.res.xml;
 
+import brut.androlib.AndrolibException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,21 +31,13 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
-import brut.androlib.AndrolibException;
+import javax.xml.xpath.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.logging.Logger;
 
 public final class ResXmlPatcher {
-
-    private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
-    private static final String ACCESS_EXTERNAL_SCHEMA = "http://javax.xml.XMLConstants/property/accessExternalSchema";
-    private static final String FEATURE_LOAD_DTD = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
-    private static final String FEATURE_DISABLE_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
-    private static final Logger LOGGER = Logger.getLogger(ResXmlPatcher.class.getName());
 
     /**
      * Removes "debug" tag from file
@@ -114,7 +102,7 @@ public final class ResXmlPatcher {
      * build, thus preventing the application from installing. This is from a bug/error
      * in AOSP where public resources cannot be part of an authorities attribute within
      * a provider tag.
-     * <p>
+     *
      * This finds any reference and replaces it with the literal value found in the
      * res/values/strings.xml file.
      *
@@ -168,7 +156,7 @@ public final class ResXmlPatcher {
                     saveDocument(file, doc);
                 }
 
-            } catch (SAXException | ParserConfigurationException | IOException |
+            }  catch (SAXException | ParserConfigurationException | IOException |
                     XPathExpressionException | TransformerException ignored) {
             }
         }
@@ -177,8 +165,8 @@ public final class ResXmlPatcher {
     /**
      * Checks if the replacement was properly made to a node.
      *
-     * @param file     File we are searching for value
-     * @param saved    boolean on whether we need to save
+     * @param file File we are searching for value
+     * @param saved boolean on whether we need to save
      * @param provider Node we are attempting to replace
      * @return boolean
      */
@@ -197,11 +185,11 @@ public final class ResXmlPatcher {
      * Finds key in strings.xml file and returns text value
      *
      * @param directory Root directory of apk
-     * @param key       String reference (ie @string/foo)
+     * @param key String reference (ie @string/foo)
      * @return String|null
      */
     public static String pullValueFromStrings(File directory, String key) {
-        if (key == null || !key.contains("@")) {
+        if (key == null || ! key.contains("@")) {
             return null;
         }
 
@@ -220,7 +208,7 @@ public final class ResXmlPatcher {
                     return (String) result;
                 }
 
-            } catch (SAXException | ParserConfigurationException | IOException | XPathExpressionException ignored) {
+            }  catch (SAXException | ParserConfigurationException | IOException | XPathExpressionException ignored) {
             }
         }
 
@@ -231,11 +219,11 @@ public final class ResXmlPatcher {
      * Finds key in integers.xml file and returns text value
      *
      * @param directory Root directory of apk
-     * @param key       Integer reference (ie @integer/foo)
+     * @param key Integer reference (ie @integer/foo)
      * @return String|null
      */
     public static String pullValueFromIntegers(File directory, String key) {
-        if (key == null || !key.contains("@")) {
+        if (key == null || ! key.contains("@")) {
             return null;
         }
 
@@ -254,7 +242,7 @@ public final class ResXmlPatcher {
                     return (String) result;
                 }
 
-            } catch (SAXException | ParserConfigurationException | IOException | XPathExpressionException ignored) {
+            }  catch (SAXException | ParserConfigurationException | IOException | XPathExpressionException ignored) {
             }
         }
 
@@ -291,7 +279,7 @@ public final class ResXmlPatcher {
     /**
      * Replaces package value with passed packageOriginal string
      *
-     * @param file            File for AndroidManifest.xml
+     * @param file File for AndroidManifest.xml
      * @param packageOriginal Package name to replace
      */
     public static void renameManifestPackage(File file, String packageOriginal) {
@@ -312,6 +300,7 @@ public final class ResXmlPatcher {
     }
 
     /**
+     *
      * @param file File to load into Document
      * @return Document
      * @throws IOException
@@ -341,8 +330,9 @@ public final class ResXmlPatcher {
     }
 
     /**
+     *
      * @param file File to save Document to (ie AndroidManifest.xml)
-     * @param doc  Document being saved
+     * @param doc Document being saved
      * @throws IOException
      * @throws SAXException
      * @throws ParserConfigurationException
@@ -357,4 +347,11 @@ public final class ResXmlPatcher {
         StreamResult result = new StreamResult(file);
         transformer.transform(source, result);
     }
+
+    private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
+    private static final String ACCESS_EXTERNAL_SCHEMA = "http://javax.xml.XMLConstants/property/accessExternalSchema";
+    private static final String FEATURE_LOAD_DTD = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
+    private static final String FEATURE_DISABLE_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
+
+    private static final Logger LOGGER = Logger.getLogger(ResXmlPatcher.class.getName());
 }

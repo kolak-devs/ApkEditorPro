@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
+import com.mcal.apkeditor.BuildConfig;
 import com.mcal.common.utils.IOUtils;
 
 import java.io.File;
@@ -30,7 +31,7 @@ public class ApkInstaller {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
-            inputStream = new FileInputStream(new File(targetApkPath));
+            inputStream = new FileInputStream(targetApkPath);
             outputStream = new FileOutputStream(apk);
             IOUtils.copy(inputStream, outputStream);
         } catch (Exception e) {
@@ -41,9 +42,8 @@ public class ApkInstaller {
             IOUtils.closeQuietly(outputStream);
         }
         try {
-            String authorityName = ctx.getPackageName() + ".fileprovider";
             fileUri = FileProvider.getUriForFile(
-                    ctx, authorityName, apk);
+                    ctx, BuildConfig.APPLICATION_ID, apk);
         } catch (Throwable ignored) {
         }
         if (fileUri != null) {
@@ -53,8 +53,8 @@ public class ApkInstaller {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 ctx.startActivity(intent);
-            } catch (Throwable ignored) {
-                ignored.printStackTrace();
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         }
     }

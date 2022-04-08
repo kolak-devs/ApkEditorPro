@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="editorBackground">#FFEAF4</color>
+    <color name="editorNormal">#9C27B0</color>
+    <color name="editorReserved">#8BC34A</color>
+    <color name="editorType">#81D4FA</color>
+    <color name="editorLiteral">#03A9F4</color>
+    <color name="editorIdentifier">#9C27B0</color>
+    <color name="editorPreprocessor">#F44336</color>
+    <color name="editorComment">#586E75</color>
+    <color name="editorError">#DC322F</color>
+    <color name="editorFunction">#268BD2</color>
+    <color name="editorOperator">#93A1A1</color>
+</resources>
