@@ -181,7 +181,7 @@ public class MainActivity extends CustomizedLangActivity implements
         } else {
             openAppBtn.setText(R.string.settings);
             openAppBtn.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
             });
         }
@@ -235,7 +235,7 @@ public class MainActivity extends CustomizedLangActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent i = new Intent(this, SettingActivity.class);
+            Intent i = new Intent(this, SettingsActivity.class);
             startActivity(i);
             return true;
         } else if (id == R.id.action_about) {
@@ -328,7 +328,7 @@ public class MainActivity extends CustomizedLangActivity implements
                 break;
             }
             case MenuListAdapter.ITEM_SETTING: {
-                Intent intent = new Intent(this, SettingActivity.class);
+                Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
             }

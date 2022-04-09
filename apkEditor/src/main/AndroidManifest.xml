@@ -262,7 +262,7 @@
         <activity android:name="com.mcal.apkeditor.activities.UserAppActivity"/>
         <activity android:name="com.mcal.apkeditor.activities.HelpActivity"/>
         <activity
-            android:name="com.mcal.apkeditor.activities.SettingActivity" />
+            android:name="com.mcal.apkeditor.activities.SettingsActivity" />
         <activity android:name="com.mcal.apkeditor.pro.activities.SettingsEditorActivity" />
         <activity
             android:name="com.mcal.apkeditor.activities.TextEditNormalActivity"

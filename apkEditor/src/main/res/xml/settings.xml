@@ -7,19 +7,20 @@
         android:layout="@layout/preferences_category"
         android:title="@string/appearance">
 
-        <com.mcal.apkeditor.view.IconPickerPreference
+        <!-- com.mcal.apkeditor.view.IconPickerPreference
             android:entries="@array/appicon_key"
             android:entryValues="@array/appicon_value"
             android:key="MyIcon"
             android:layout="@layout/item_iconlistpref"
-            android:title="@string/launcher_icon" />
+            android:title="@string/launcher_icon" / -->
 
-        <SwitchPreference
+        <!-- SwitchPreference
             android:key="FullScreen"
             android:summary="@string/full_screen_desc"
-            android:title="@string/full_screen" />
+            android:title="@string/full_screen" / -->
 
         <ListPreference
+            android:defaultValue=""
             android:entries="@array/language_key"
             android:entryValues="@array/language_value"
             android:key="Language"
@@ -51,11 +52,12 @@
             android:summary="@string/pref_summary_multi_package"
             android:title="@string/pref_title_multi_package" />
 
-        <ListPreference
+        <!-- ListPreference
+            android:defaultValue="0"
             android:entries="@array/decode_mode_key"
             android:entryValues="@array/decode_mode_value"
             android:key="DecodeMode"
-            android:title="@string/decode_mode" />
+            android:title="@string/decode_mode" / -->
 
         <EditTextPreference
             android:key="DecodeDirectory"
@@ -81,19 +83,20 @@
             android:summary="@string/pref_summary_aapt2"
             android:title="@string/pref_title_aapt2" />
 
-        <ListPreference
+        <!-- ListPreference
+            android:defaultValue="0"
             android:entries="@array/compression_level_key"
             android:entryValues="@array/compression_level_value"
             android:key="CompressionLevel"
             android:summary="@string/compression_level_summary"
-            android:title="@string/compression_level" />
+            android:title="@string/compression_level" / -->
 
-        <com.mcal.apkeditor.view.KeyListPreference
+        <!-- com.mcal.apkeditor.view.KeyListPreference
             android:entries="@array/signer_key"
             android:entryValues="@array/signer_value_dont_translate"
             android:key="SignApkWith"
             android:summary="@string/sign_apk_with_summary"
-            android:title="@string/sign_apk_with" />
+            android:title="@string/sign_apk_with" / -->
 
         <ListPreference
             android:entries="@array/output_apkname_key"
@@ -124,6 +127,7 @@
             android:title="@string/clean_garbage" />
 
         <ListPreference
+            android:defaultValue="0"
             android:entries="@array/file_extract_rename_key"
             android:entryValues="@array/file_extract_rename_value"
             android:key="FileRenameOption"
