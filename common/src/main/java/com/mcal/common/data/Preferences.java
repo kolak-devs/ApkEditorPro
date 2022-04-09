@@ -126,4 +126,21 @@ public class Preferences {
     public static boolean isApkToolCompiler() {
         return App.getPreferences().getBoolean("apkToolCompiler", true);
     }
+
+    // PATCH CODE VIEW
+    public static boolean isArtaSyntaxAllowed() {
+        return false;
+    }
+
+    public static boolean isMonospaceFontAllowed() {
+        return true;
+    }
+
+    public static int getFontSize() {
+        return 12;
+    }
+
+    public static boolean isNightModeEnabled() {
+        return false;
+    }
 }

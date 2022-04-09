@@ -10,9 +10,9 @@ import android.text.Layout;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import com.mcal.apkeditor.common.App;
+import com.mcal.common.App;
+import com.mcal.common.data.Preferences;
 import com.mcal.patchview.R;
-import com.mcal.patchview.settings.Preferences;
 
 /**
  * Created by Snow Volf on 03.11.2017, 16:23
@@ -33,11 +33,11 @@ public class CodeText extends ShaderText {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
-        if (Preferences.INSTANCE.isMonospaceFontAllowed()){
+        if (Preferences.isMonospaceFontAllowed()){
             setTypeface(ResourcesCompat.getFont(getContext(), R.font.mono));
         }
-        setTextSize(Preferences.INSTANCE.getFontSize());
-        paint.setColor(Color.parseColor(!com.mcal.apkeditor.common.data.Preferences.isNightModeEnabled() ? "#000000" : "#fafafa"));
+        setTextSize(Preferences.getFontSize());
+        paint.setColor(Color.parseColor(!Preferences.isNightModeEnabled() ? "#000000" : "#fafafa"));
         paint.setTextSize(getPixels(14));
         getViewTreeObserver().addOnGlobalLayoutListener(() -> layout = getLayout());
     }

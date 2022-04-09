@@ -27,6 +27,7 @@ import com.mcal.apkeditor.patch.PatchExecutor;
 import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.SDCard;
+import com.mcal.patchview.ui.CodeText;
 
 import java.io.Closeable;
 import java.io.File;
@@ -58,7 +59,7 @@ public class PatchDialog
     private AppCompatButton selectApplyBtn;
     private WebView webView;
     private View logLayout;
-    private AppCompatTextView logTv;
+    private CodeText logTv;
     // Manifest info parsed from original apk
     private ManifestInfo manifestInfo;
     // Record executor as the parse is done there
@@ -155,7 +156,7 @@ public class PatchDialog
         // Check the directory exist or not
         if (this.exampleDir == null) {
             try {
-                exampleDir = SDCard.makeDir(activityRef.get(), "examples");
+                exampleDir = SDCard.makeDir(activityRef.get(), "patches");
             } catch (Exception e1) {
                 e1.printStackTrace();
             }

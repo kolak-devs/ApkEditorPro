@@ -135,6 +135,7 @@ dependencies {
     implementation project(':apksigner')
     implementation project(':dataeditor')
     implementation project(':crashreporter')
+    implementation project(':patchview')
 
     implementation project(':libraries')
 

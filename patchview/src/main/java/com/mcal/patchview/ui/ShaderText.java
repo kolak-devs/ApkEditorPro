@@ -20,8 +20,8 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
 
+import com.mcal.common.data.Preferences;
 import com.mcal.patchview.R;
-import com.mcal.patchview.settings.Preferences;
 import com.mcal.patchview.utils.RegexPattern;
 
 import java.util.regex.Matcher;
@@ -84,7 +84,7 @@ public class ShaderText extends AppCompatTextView {
     private static void clearSpans(@NonNull Editable e) {
         // remove foreground color spans
         {
-            ForegroundColorSpan spans[] = e.getSpans(
+            ForegroundColorSpan[] spans = e.getSpans(
                     0,
                     e.length(),
                     ForegroundColorSpan.class);
@@ -95,7 +95,7 @@ public class ShaderText extends AppCompatTextView {
 
         // remove background color spans
         {
-            BackgroundColorSpan spans[] = e.getSpans(
+            BackgroundColorSpan[] spans = e.getSpans(
                     0,
                     e.length(),
                     BackgroundColorSpan.class);
@@ -238,18 +238,17 @@ public class ShaderText extends AppCompatTextView {
     }
 
     private void setSyntaxColors() {
-        colorNumber = Preferences.INSTANCE.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
+        colorNumber = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
                 R.color.syntax_arta_num) : ContextCompat.getColor(getContext(), R.color.syntax_num);
-        colorKeyword = Preferences.INSTANCE.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
+        colorKeyword = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
                 R.color.syntax_arta_keyword) : ContextCompat.getColor(getContext(), R.color.syntax_keyword);
         colorBuiltin = ContextCompat.getColor(getContext(), R.color.syntax_sub_element);
-        colorComment = Preferences.INSTANCE.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
+        colorComment = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
                 R.color.syntax_arta_string) : ContextCompat.getColor(getContext(), R.color.syntax_string);
-        colorAttr = Preferences.INSTANCE.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
+        colorAttr = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
                 R.color.syntax_arta_element) : ContextCompat.getColor(getContext(), R.color.syntax_element);
-        colorOperator = Preferences.INSTANCE.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
+        colorOperator = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
                 R.color.syntax_arta_num_attribute) : ContextCompat.getColor(getContext(), R.color.syntax_num_attribute);
-
     }
 
     private void cancelUpdate() {
@@ -287,15 +286,15 @@ public class ShaderText extends AppCompatTextView {
                 e.setSpan(new ForegroundColorSpan(colorOperator), m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            for(Matcher m = Pattern.compile("\\\"(.*?)\\\"|\\\'(.*?)\\\'").matcher(e); m.find(); ) {
-                ForegroundColorSpan spans[] = e.getSpans(m.start(), m.end(), ForegroundColorSpan.class);
+            for(Matcher m = Pattern.compile("\"(.*?)\"|'(.*?)'").matcher(e); m.find(); ) {
+                ForegroundColorSpan[] spans = e.getSpans(m.start(), m.end(), ForegroundColorSpan.class);
                 for(ForegroundColorSpan span : spans)
                     e.removeSpan(span);
                 e.setSpan(new ForegroundColorSpan(Color.parseColor("#81C784")), m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             for (Matcher m = PATTERN_COMMENTS_STRING.matcher(e); m.find(); ) {
-                ForegroundColorSpan spans[] = e.getSpans(m.start(), m.end(), ForegroundColorSpan.class);
+                ForegroundColorSpan[] spans = e.getSpans(m.start(), m.end(), ForegroundColorSpan.class);
                 for(ForegroundColorSpan span : spans)
                     e.removeSpan(span);
                 e.setSpan(new ForegroundColorSpan(colorComment), m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -310,6 +309,7 @@ public class ShaderText extends AppCompatTextView {
         return e;
     }
 
+    @NonNull
     private CharSequence autoIndent(
             CharSequence source,
             Spanned dest,
