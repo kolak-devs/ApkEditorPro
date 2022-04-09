@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
@@ -245,6 +246,7 @@ public class PatchDialog
         this.selectApplyBtn.setText(R.string.apply_the_patch);
     }
 
+    @Nullable
     private String getPatchConfig(String filePath) {
         ZipFile zfile = null;
         InputStream input = null;
@@ -297,25 +299,22 @@ public class PatchDialog
 
     private void appendText(final String txt, final boolean bold,
                             final boolean red) {
-        activityRef.get().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (red) {
-                    SpannableString spanString = new SpannableString(txt);
-                    ForegroundColorSpan span = new ForegroundColorSpan(
-                            Color.RED);
-                    spanString.setSpan(span, 0, txt.length(),
-                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    logTv.append(spanString);
-                } else if (bold) {
-                    SpannableString spanString = new SpannableString(txt);
-                    StyleSpan span = new StyleSpan(Typeface.BOLD);
-                    spanString.setSpan(span, 0, txt.length(),
-                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    logTv.append(spanString);
-                } else {
-                    logTv.append(txt);
-                }
+        activityRef.get().runOnUiThread(() -> {
+            if (red) {
+                SpannableString spanString = new SpannableString(txt);
+                ForegroundColorSpan span = new ForegroundColorSpan(
+                        Color.RED);
+                spanString.setSpan(span, 0, txt.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                logTv.append(spanString);
+            } else if (bold) {
+                SpannableString spanString = new SpannableString(txt);
+                StyleSpan span = new StyleSpan(Typeface.BOLD);
+                spanString.setSpan(span, 0, txt.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                logTv.append(spanString);
+            } else {
+                logTv.append(txt);
             }
         });
     }
@@ -337,12 +336,9 @@ public class PatchDialog
 
     @Override
     public void patchFinished() {
-        activityRef.get().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                selectApplyBtn.setText(R.string.patch_applied);
-                selectApplyBtn.setBackgroundColor(0xff606060);
-            }
+        activityRef.get().runOnUiThread(() -> {
+            selectApplyBtn.setText(R.string.patch_applied);
+            selectApplyBtn.setBackgroundColor(0xff606060);
         });
     }
 
@@ -463,7 +459,8 @@ public class PatchDialog
     }
 
     // Get real component name
-    private String getComponentName(ManifestInfo manifestInfo, int index) {
+    @Nullable
+    private String getComponentName(@NonNull ManifestInfo manifestInfo, int index) {
         if (manifestInfo.targetActivityIdxs != null
                 && manifestInfo.targetActivityIdxs.containsKey(index)) {
             index = manifestInfo.targetActivityIdxs.get(index);
