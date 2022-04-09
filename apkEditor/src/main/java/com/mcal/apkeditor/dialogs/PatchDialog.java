@@ -121,14 +121,25 @@ public class PatchDialog
         }
         // Extract and save the examples
         else if (id == R.id.tv_save_patches) {
-            boolean ret = extractExamples("patch_app_rename.zip");
-            ret |= extractExamples("patch_data_editor.zip");
-            ret |= extractExamples("patch_new_entrance.zip");
-            ret |= extractExamples("patch_my_font.zip");
-            ret |= extractExamples("patch_mem_editor.zip");
-            ret |= extractExamples("patch_bypass_sigcheck.zip");
-            ret |= extractExamples("patch_launcher_toast.zip");
-            ret |= extractExamples("patch_script_example.zip");
+            // ApkEditor Patches
+            boolean ret = extractExamples("patch_AE_app_rename.zip");
+            ret |= extractExamples("patch_AE_bypass_sign_check.zip");
+            ret |= extractExamples("patch_AE_data_editor.zip");
+            ret |= extractExamples("patch_AE_launcher_toast.zip");
+            ret |= extractExamples("patch_AE_mem_editor.zip");
+            ret |= extractExamples("patch_AE_my_font.zip");
+            ret |= extractExamples("patch_AE_new_entrance.zip");
+            ret |= extractExamples("patch_AE_script_example.zip");
+
+            // Kubarev Patches
+            ret |= extractExamples("patch_Bin_SignHook.zip");
+            ret |= extractExamples("patch_CNFIX_3.0_SignHook.zip");
+            ret |= extractExamples("patch_Heavenly_SignHook.zip");
+            ret |= extractExamples("patch_LP_DexSignHook.zip");
+            ret |= extractExamples("patch_LP_SignHook.zip");
+            ret |= extractExamples("patch_R3Tools_SignHook.zip");
+            ret |= extractExamples("patch_Ultima_SignHook.zip");
+            ret |= extractExamples("patch_Ultima_VipSignHook.zip");
             if (ret) {
                 String message = String.format(
                         activityRef.get()
@@ -160,7 +171,7 @@ public class PatchDialog
         InputStream input = null;
         FileOutputStream output = null;
         try {
-            input = am.open(filename);
+            input = am.open("patches" + File.separator + filename);
             output = new FileOutputStream(path);
             IOUtils.copy(input, output);
 
