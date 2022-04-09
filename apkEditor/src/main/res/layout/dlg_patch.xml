@@ -7,12 +7,12 @@
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_select_apply"
             style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="0dip"
@@ -20,7 +20,7 @@
             android:layout_weight="1"
             android:text="@string/select_patch" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_close"
             style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="0dip"
@@ -34,8 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_layout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginLeft="4dip"
         android:layout_marginRight="4dip"
         android:layout_marginBottom="4dip"
@@ -43,7 +43,7 @@
         android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_curpatch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,21 +51,22 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/colorAccent" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_patch_path"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dip"
+            android:layout_marginStart="2dip"
             android:text="@string/no_patch_selected" />
+
     </LinearLayout>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_save_patches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/patchinfo_layout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="4dip"
         android:text="@string/save_patch_example"
         android:textColor="@color/colorAccent" />
@@ -74,8 +75,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/tv_save_patches"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:background="#ffffffff">
 
         <WebView
@@ -97,15 +98,18 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_patchlog"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4.0dip"
                     android:layout_marginRight="4.0dip"
                     android:textSize="12sp" />
+
             </LinearLayout>
+
         </ScrollView>
+
     </FrameLayout>
 
 </RelativeLayout>

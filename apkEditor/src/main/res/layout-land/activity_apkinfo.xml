@@ -16,7 +16,7 @@
             android:layout_height="0dip"
             android:layout_weight="1" />
 
-        <RadioButton
+        <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/tab_string"
             style="@style/main_tab_left"
             android:checked="true"
@@ -28,7 +28,7 @@
             android:layout_height="0dip"
             android:layout_weight="1" />
 
-        <RadioButton
+        <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/tab_resource"
             style="@style/main_tab_left"
             android:checked="false"
@@ -40,7 +40,7 @@
             android:layout_height="0dip"
             android:layout_weight="1" />
 
-        <RadioButton
+        <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/tab_manifest"
             style="@style/main_tab_left"
             android:checked="false"
@@ -51,6 +51,7 @@
             android:layout_width="4dip"
             android:layout_height="0dip"
             android:layout_weight="1" />
+
     </RadioGroup>
 
     <LinearLayout
@@ -65,7 +66,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/app_icon"
                 android:layout_width="48.0dip"
                 android:layout_height="48.0dip"
@@ -84,7 +85,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/app_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -94,7 +95,7 @@
                     android:textSize="16.0sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/app_pkgpath"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -113,7 +114,7 @@
                 android:layout_height="48dp"
                 android:visibility="invisible">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_centerInParent="true"
@@ -128,7 +129,7 @@
                 android:layout_height="48dp"
                 android:visibility="invisible">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_centerInParent="true"
@@ -143,7 +144,7 @@
                 android:layout_height="48dp"
                 android:visibility="invisible">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_centerInParent="true"
@@ -296,7 +297,7 @@
                             android:paddingTop="4dip"
                             android:paddingBottom="4dip">
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:layout_width="32dip"
                                 android:layout_height="32dip"
                                 android:layout_centerInParent="true"
@@ -305,7 +306,7 @@
 
                         </RelativeLayout>
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/selection_tip"
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
@@ -320,7 +321,7 @@
                             android:paddingTop="4dip"
                             android:paddingBottom="4dip">
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:layout_width="32dip"
                                 android:layout_height="32dip"
                                 android:layout_centerInParent="true"
@@ -349,7 +350,7 @@
                                 android:paddingTop="4dip"
                                 android:paddingBottom="4dip">
 
-                                <ImageView
+                                <androidx.appcompat.widget.AppCompatImageView
                                     android:layout_width="32dip"
                                     android:layout_height="32dip"
                                     android:layout_centerInParent="true"
@@ -422,7 +423,7 @@
                                 android:layout_height="1px"
                                 android:background="#ffe3e3e3" />
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:layout_width="24dip"
                                 android:layout_height="12dip"
                                 android:layout_marginTop="8dip"
@@ -433,21 +434,24 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="1px"
                                 android:background="#ffe3e3e3" />
+
                         </LinearLayout>
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/decode_result_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/colorAccent" />
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/decode_result_detail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:visibility="gone" />
+
                     </LinearLayout>
+
                 </FrameLayout>
 
                 <View
@@ -482,11 +486,12 @@
                             android:layout_height="40dip"
                             android:background="@drawable/selector_menu_light">
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:layout_width="32dip"
                                 android:layout_height="32dip"
                                 android:layout_centerInParent="true"
                                 android:src="@drawable/round_add_24" />
+
                         </RelativeLayout>
 
                         <View
@@ -500,7 +505,7 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/selector_menu_light">
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:layout_width="32dip"
                                 android:layout_height="32dip"
                                 android:layout_centerInParent="true"
@@ -522,7 +527,7 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/selector_menu_light">
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/imageview_insensitive_check"
                                 android:layout_width="32dip"
                                 android:layout_height="32dip"
@@ -537,7 +542,7 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/selector_menu_light">
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/imageview_text_check"
                                 android:layout_width="32dip"
                                 android:layout_height="32dip"
@@ -553,11 +558,12 @@
                             android:layout_marginRight="4dip"
                             android:background="@drawable/selector_menu_light">
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:layout_width="32dip"
                                 android:layout_height="32dip"
                                 android:layout_centerInParent="true"
                                 android:src="@drawable/round_search_24" />
+
                         </RelativeLayout>
 
                     </LinearLayout>
@@ -589,7 +595,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_not_support"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -655,14 +661,14 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ProgressBar
+                <androidx.core.widget.ContentLoadingProgressBar
                     android:id="@+id/progress_bar"
                     style="?android:attr/progressBarStyleLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

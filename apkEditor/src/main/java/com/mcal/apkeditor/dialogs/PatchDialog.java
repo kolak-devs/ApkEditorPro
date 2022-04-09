@@ -10,12 +10,12 @@ import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
@@ -52,13 +52,13 @@ public class PatchDialog
     private final Map<String, String> globalVariableValues = new HashMap<String, String>();
     private String exampleDir = null;
     private String patchPath = null;
-    private TextView curPatchTv;
-    private TextView patchPathTv;
-    private TextView saveExamplesTv;
-    private Button selectApplyBtn;
+    private AppCompatTextView curPatchTv;
+    private AppCompatTextView patchPathTv;
+    private AppCompatTextView saveExamplesTv;
+    private AppCompatButton selectApplyBtn;
     private WebView webView;
     private View logLayout;
-    private TextView logTv;
+    private AppCompatTextView logTv;
     // Manifest info parsed from original apk
     private ManifestInfo manifestInfo;
     // Record executor as the parse is done there
@@ -79,7 +79,7 @@ public class PatchDialog
         this.curPatchTv = view.findViewById(R.id.tv_curpatch);
         curPatchTv.setOnClickListener(this);
         this.patchPathTv = view.findViewById(R.id.tv_patch_path);
-        Button closeBtn = view.findViewById(R.id.btn_close);
+        AppCompatButton closeBtn = view.findViewById(R.id.btn_close);
         closeBtn.setOnClickListener(this);
         this.selectApplyBtn = view.findViewById(R.id.btn_select_apply);
         selectApplyBtn.setOnClickListener(this);
