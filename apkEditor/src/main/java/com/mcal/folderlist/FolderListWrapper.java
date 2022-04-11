@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.InputUtils;
@@ -151,7 +152,7 @@ public class FolderListWrapper implements OnItemClickListener,
 	}
 
 	private void showRenameDlg(int position) {
-		AlertDialog.Builder renameDlg = new AlertDialog.Builder(ctx);
+		MaterialAlertDialogBuilder renameDlg = new MaterialAlertDialogBuilder(ctx);
 
 		renameDlg.setTitle(R.string.rename);
 		renameDlg.setMessage(R.string.pls_input_filename);
@@ -214,7 +215,7 @@ public class FolderListWrapper implements OnItemClickListener,
 	private void createFile() {
 		final String dirPath = adapter.getData(null);
 
-		AlertDialog.Builder inputDlg = new AlertDialog.Builder(ctx);
+		MaterialAlertDialogBuilder inputDlg = new MaterialAlertDialogBuilder(ctx);
 		inputDlg.setTitle(R.string.new_file);
 		inputDlg.setMessage(R.string.pls_input_filename);
 

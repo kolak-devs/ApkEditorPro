@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 
@@ -30,7 +31,7 @@ public class Dialogs {
 
         ll.addView(msg);
 
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        final MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
         dialog.setTitle(R.string.app_name);
         dialog.setView(ll);
         dialog.setPositiveButton("OK", null);

@@ -56,6 +56,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.ApkComposeService;
 import com.mcal.apkeditor.ApkParseConsumer;
 import com.mcal.apkeditor.ApkParseThread;
@@ -876,7 +877,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             return;
         }
 
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.sure_to_exit_editing)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
@@ -1538,7 +1539,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     protected void composeApkFile() {
         if (BuildConfig.LIMIT_NEW_VERSION && MainActivity.upgradedFromOldVersion(this)) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(this);
             alert.setTitle(R.string.please_note);
             alert.setMessage(R.string.build_not_support_tip);
             alert.show();
@@ -1647,7 +1648,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         if (stringModified || manifestModified || resFileModified) {
             String errMsg = getKnownResourceError();
             if (errMsg != null) {
-                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(this);
                 dlg.setTitle(R.string.warning);
                 dlg.setMessage(errMsg + "\nAre you sure to continue?");
                 dlg.setPositiveButton(R.string.yes,
@@ -1700,7 +1701,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     private void showCannotStartBuildDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.build_in_progress_tip)
                 .setTitle(R.string.please_note)
                 .setPositiveButton(android.R.string.ok, null);

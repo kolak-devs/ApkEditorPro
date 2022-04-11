@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.apkeditor.adapters.IManifestChangeCallback;
@@ -125,7 +126,7 @@ public class ManifestLongClickDlg {
         String desc = getDescription();
         descTv.setText(desc != null ? desc : "");
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(activityRef.get());
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(activityRef.get());
         dialog.setTitle("Menu");
         dialog.setView(view);
         dialog.setItems(new String[]{activityRef.get().getString(R.string.delete_this_line),

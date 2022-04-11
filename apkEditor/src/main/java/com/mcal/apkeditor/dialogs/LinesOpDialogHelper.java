@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 
 public class LinesOpDialogHelper {
@@ -35,7 +36,7 @@ public class LinesOpDialogHelper {
         View content = inflater.inflate(R.layout.dlg_lines_op, nullParent);
         initView(content);
 
-        this.d = new AlertDialog.Builder(context)
+        this.d = new MaterialAlertDialogBuilder(context)
                 .setView(content)
                 .setTitle(titleResId)
                 .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick

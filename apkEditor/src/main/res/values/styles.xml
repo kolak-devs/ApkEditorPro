@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorOnSecondary">?android:textColorPrimaryInverse</item>
@@ -12,31 +12,31 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">?isLightTheme</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">#66808080</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/google_sans</item>
-        <item name="alertDialogTheme">@style/MD.AlertDialog</item>
-        <item name="android:alertDialogTheme">@style/MD.AlertDialog</item>
-        <item name="materialAlertDialogTheme">@style/MD.AlertDialog</item>
-        <item name="android:dialogTheme">@style/MD.AlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogMaterialTheme</item>
+        <item name="android:dialogTheme">@style/AlertDialogMaterialTheme</item>
     </style>
 
-    <style name="MD.AlertDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog.Alert">
-        <item name="android:buttonStyle">@style/MD.Button.Borderless</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowTitleStyle">@style/Base.TextAppearance.AppCompat.Title</item>
-        <item name="android:windowElevation">4.0dip</item>
-        <item name="android:colorEdgeEffect">@color/colorAccent</item>
-        <item name="buttonBarNegativeButtonStyle">@style/MD.Button.Borderless.Dialog</item>
-        <item name="buttonBarNeutralButtonStyle">@style/MD.Button.Borderless.Dialog</item>
-        <item name="buttonBarPositiveButtonStyle">@style/MD.Button.Borderless.Dialog</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AlertDialogMaterialTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Alert.Button.Negative</item>
     </style>
 
-    <style name="MD.Button.Borderless" parent="@style/Base.Widget.AppCompat.Button.Borderless.Colored">
+    <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:backgroundTint">#0054BB</item>
+        <item name="android:fillColor">#0054BB</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="rippleColor">@color/colorAccent</item>
     </style>
 
-    <style name="MD.Button.Borderless.Dialog" parent="@style/MD.Button.Borderless">
-        <item name="android:minWidth">64.0dip</item>
-        <item name="android:minHeight">48.0dip</item>
+    <style name="Alert.Button.Negative" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">#0054BB</item>
+        <item name="android:textColor">#0054BB</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="rippleColor">@color/colorAccent</item>
     </style>
 
     <style name="main_tab_bottom">

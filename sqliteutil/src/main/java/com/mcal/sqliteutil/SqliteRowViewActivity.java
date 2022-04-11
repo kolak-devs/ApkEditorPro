@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.sqliteutil.util.MySimpleAdapter;
@@ -280,7 +281,7 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
 
 	@SuppressLint("NewApi")
 	private void showDeleteDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
 		Dialog alertDialog = builder
 				.setTitle("Sure to Delete?")
 				.setMessage("Are you sure to delete the record?")

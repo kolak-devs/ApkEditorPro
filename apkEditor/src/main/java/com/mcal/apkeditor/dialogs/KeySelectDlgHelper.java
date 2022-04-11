@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.view.KeyListPreference;
 import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apkeditor.R;
@@ -42,7 +43,7 @@ public class KeySelectDlgHelper implements OnClickListener, IFileSelection {
         this.view = inflater.inflate(R.layout.dlg_keyselect, null, false);
         initView();
 
-        AlertDialog.Builder db = new AlertDialog.Builder(context);
+        MaterialAlertDialogBuilder db = new MaterialAlertDialogBuilder(context);
         db.setView(view);
         db.setTitle(R.string.custom_key_setting);
         db.setPositiveButton(android.R.string.ok,

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="4dip">
 
@@ -25,9 +26,11 @@
             android:layout_weight="1"
             android:textSize="14sp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/btn_rename"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rename" />
@@ -72,7 +75,10 @@
             android:editable="false"
             android:textSize="14sp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/btn_extract"
             android:layout_width="wrap_content"
             android:layout_height="40dip"

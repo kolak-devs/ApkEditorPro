@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <!-- Title -->
@@ -38,8 +39,10 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <Button
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dip"
@@ -49,9 +52,11 @@
             android:text="@null"
             android:visibility="invisible"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/close"
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dip"
@@ -60,9 +65,11 @@
             android:layout_weight="1"
             android:text="@android:string/cancel" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/confirm"
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="4dip"

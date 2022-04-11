@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.ApkComposeThread;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.GlobalConfig;
@@ -341,7 +342,7 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
                 if (errMessage != null && !errMessage.equals("")) {
                     message = errMessage;
                 }
-                new AlertDialog.Builder(AxmlEditActivity.this)
+                new MaterialAlertDialogBuilder(AxmlEditActivity.this)
                         .setTitle(R.string.error)
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok, null)

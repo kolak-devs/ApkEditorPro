@@ -182,7 +182,7 @@ public class ApkComposeService extends Service implements ITaskCallback {
 
     private void startComposeThread() {
 //        if(Preferences.isApkToolCompiler()) {
-//            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+//            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
 //            dialog.setTitle("Build Mode");
 //            //dialog.setView("");
 //            dialog.setPositiveButton("Build", (dialogInterface, i) -> startBuild());

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.ac.AutoCompleteAdapter;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.dialogs.MatchedLineItem;
@@ -340,7 +341,7 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
     }
 
     private void showReplaceDialog(final int index) {
-        AlertDialog.Builder inputDlg = new AlertDialog.Builder(
+        MaterialAlertDialogBuilder inputDlg = new MaterialAlertDialogBuilder(
                 activityRef.get());
         inputDlg.setTitle(R.string.replace);
         String msg = String.format(

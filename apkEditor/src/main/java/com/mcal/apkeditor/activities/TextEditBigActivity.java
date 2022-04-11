@@ -30,6 +30,7 @@ import android.widget.ViewAnimator;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.SelectionChangedListener;
 import com.mcal.apkeditor.editor.MoreEditorOptionAdapter;
 import com.mcal.apkeditor.R;
@@ -442,7 +443,7 @@ public class TextEditBigActivity extends TextEditBase
             return;
         }
 
-        new AlertDialog.Builder(this).setMessage(R.string.save_changes_tip)
+        new MaterialAlertDialogBuilder(this).setMessage(R.string.save_changes_tip)
                 .setPositiveButton(R.string.save,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -848,7 +849,7 @@ public class TextEditBigActivity extends TextEditBase
             return;
         }
 
-        new AlertDialog.Builder(this).setMessage(R.string.save_changes_tip)
+        new MaterialAlertDialogBuilder(this).setMessage(R.string.save_changes_tip)
                 .setPositiveButton(R.string.save,
                         new DialogInterface.OnClickListener() {
                             @Override

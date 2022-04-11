@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -102,7 +103,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
                 android:id="@+id/btn_browse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,12 +118,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/content"
-        android:background="@color/littleblue"
+        android:background="@color/colorPrimaryDark"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/btn_cancel"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dip"
@@ -128,14 +134,17 @@
             android:layout_weight="1"
             android:text="@android:string/cancel" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/btn_confirm"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="4dip"
             android:layout_weight="1"
             android:text="@android:string/ok" />
+
     </LinearLayout>
 
 </RelativeLayout>

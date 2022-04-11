@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.ZipUtils;
@@ -105,7 +106,7 @@ public class HttpServiceManager {
         String format = activity.getString(R.string.web_server_started);
         String message = String.format(format, strURL);
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(activity);
         dialog.setTitle(R.string.web_server);
         dialog.setMessage(message);
         dialog.setPositiveButton("Open", new DialogInterface.OnClickListener() {

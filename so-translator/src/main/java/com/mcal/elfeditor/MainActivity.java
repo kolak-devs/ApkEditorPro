@@ -69,6 +69,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mcal.translator.R;
@@ -89,7 +90,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UnknownFormatConversionException;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
     // 存储资源种类的集合
@@ -192,8 +192,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 显示信息的方法
-    public static AlertDialog.Builder showMessage(Context activity, String message) {
-        return new AlertDialog.Builder(activity).setMessage(message).setNegativeButton(R.string.ok, null)
+    @NonNull
+    public static MaterialAlertDialogBuilder showMessage(Context activity, String message) {
+        return new MaterialAlertDialogBuilder(activity).setMessage(message).setNegativeButton(R.string.ok, null)
                 .setCancelable(false).setTitle(R.string.error);
     }
 
@@ -297,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View arg0) {
             // 点击了资源类型的文本框
             if (arg0.getId() == R.id.textCategory) {// 弹出一个对话框，列出所有的资源类型
-                new AlertDialog.Builder(MainActivity.this).setTitle("")
+                new MaterialAlertDialogBuilder(MainActivity.this).setTitle("")
                         .setItems(mTypes.toArray(new String[mTypes.size()]), (arg01, arg1) -> {
                             textCategory.setText(mTypes.get(arg1));
                             textCategory.setIcon(getResources().getDrawable(R.drawable.ic_box_green));
@@ -370,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
      * 显示保存文件的对话框
      **/
     private void showSaveDialog(final boolean exit) {
-        new AlertDialog.Builder(this).setMessage(R.string.ensure_save)
+        new MaterialAlertDialogBuilder(this).setMessage(R.string.ensure_save)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     File file = new File(filePath);
                     File bak = new File(filePath + ".bak");
@@ -424,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
             TextInputLayout etl = view.findViewById(R.id.inputLayout);
             etl.setHint(1 + " - " + txtOriginal.size());
 
-            new AlertDialog.Builder(this).
+            new MaterialAlertDialogBuilder(this).
                     setView(view).
                     setTitle(R.string.go_to).
                     setPositiveButton(R.string.ok, (p1, p2) -> {
@@ -826,7 +827,7 @@ public class MainActivity extends AppCompatActivity {
                         View views = LayoutInflater.from(mContext).inflate(R.layout.text_item, null);
                         AppCompatEditText et = views.findViewById(R.id.inputEditText);
                         et.setText(b64d);
-                        new AlertDialog.Builder(mContext).
+                        new MaterialAlertDialogBuilder(mContext).
                                 setView(views).
                                 setTitle(R.string.b64).
                                 setPositiveButton(R.string.ok, null).

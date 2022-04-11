@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.common.utils.IOUtils;
@@ -123,7 +124,7 @@ public class ImageDownloadActivity extends Activity implements ProcessingDialog.
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    AlertDialog.Builder db = new AlertDialog.Builder(ImageDownloadActivity.this);
+                    MaterialAlertDialogBuilder db = new MaterialAlertDialogBuilder(ImageDownloadActivity.this);
                     db.setMessage(messageId);
                     db.setTitle(R.string.tip);
                     db.setPositiveButton(android.R.string.ok, null);

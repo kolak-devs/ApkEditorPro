@@ -43,6 +43,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.editor.MoreEditorOptionAdapter;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.editor.TextEditBase;
@@ -700,7 +701,7 @@ public class TextEditNormalActivity extends TextEditBase
             return;
         }
 
-        new AlertDialog.Builder(this).setMessage(R.string.save_changes_tip)
+        new MaterialAlertDialogBuilder(this).setMessage(R.string.save_changes_tip)
                 .setPositiveButton(R.string.save,
                         (dialog, which) -> executeSaveAction(() -> {
                             curFileIndex += fileIdxOffset;
@@ -1150,7 +1151,7 @@ public class TextEditNormalActivity extends TextEditBase
             return;
         }
 
-        new AlertDialog.Builder(this).setMessage(R.string.save_changes_tip)
+        new MaterialAlertDialogBuilder(this).setMessage(R.string.save_changes_tip)
                 .setPositiveButton(R.string.save,
                         (dialog, which) -> executeSaveAction(() -> TextEditNormalActivity.this.finish()))
                 .setNegativeButton(R.string.donot_save,

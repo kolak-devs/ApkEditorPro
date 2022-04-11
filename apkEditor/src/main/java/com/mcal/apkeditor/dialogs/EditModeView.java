@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apksigner.ApkSigner;
@@ -33,7 +34,7 @@ public class EditModeView {
     }
 
     public void showFileEditDialog(View view) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(context.get());
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context.get());
         dialog.setTitle("Menu");
         dialog.setItems(new String[]{context.get().getString(R.string.full_edit),
                 context.get().getString(R.string.simple_edit),
@@ -120,7 +121,7 @@ public class EditModeView {
     }
 
     public void showAppEditDialog(View view) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(context.get());
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context.get());
         dialog.setTitle("Menu");
         dialog.setItems(new String[]{context.get().getString(R.string.full_edit),
                 context.get().getString(R.string.simple_edit),

@@ -13,6 +13,8 @@ import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -99,7 +101,7 @@ public class OnlineMessage {
 
         if ((System.currentTimeMillis() - lastShow > 24 * 3600 * 1000L) &&
                 (num > 0) && !"".equals(savedMsg)) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(activityRef.get());
+            MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(activityRef.get());
             alert.setTitle("Message");
 
             WebView wv = new WebView(activityRef.get());

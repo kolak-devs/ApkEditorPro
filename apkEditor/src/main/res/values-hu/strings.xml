@@ -351,4 +351,6 @@ Ha korábban vásárolta az APK Editor Pro programot, és ez nem az, amit szeret
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
     <string name="about_source_code">Source code</string>
+    <string name="app_translator">Translator</string>
+    <string name="open_binary_translator">Open binary translator?</string>
 </resources>

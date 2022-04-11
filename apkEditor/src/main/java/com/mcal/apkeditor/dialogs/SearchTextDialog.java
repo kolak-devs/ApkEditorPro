@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.MatchedTextListAdapter;
 import com.mcal.apkeditor.ResListAdapter;
@@ -197,7 +198,7 @@ public class SearchTextDialog
 
         final String strReplace = etReplaceAll.getText().toString();
 
-        AlertDialog.Builder comfirmDlg = new AlertDialog.Builder(activityRef.get());
+        MaterialAlertDialogBuilder comfirmDlg = new MaterialAlertDialogBuilder(activityRef.get());
         String msg = String.format(
                 activityRef.get().getString(R.string.sure_to_replace_all),
                 this.keyword, strReplace);

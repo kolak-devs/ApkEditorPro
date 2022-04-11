@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.view.ViewDialog;
@@ -195,7 +196,7 @@ public class FileSelectDialog implements OnItemClickListener,
     private void createFolder() {
         final String dirPath = fileListAdapter.getData(null);
 
-        AlertDialog.Builder inputDlg = new AlertDialog.Builder(ctx);
+        MaterialAlertDialogBuilder inputDlg = new MaterialAlertDialogBuilder(ctx);
         inputDlg.setTitle(R.string.new_folder);
         inputDlg.setMessage(R.string.pls_input_foldername);
 
@@ -320,7 +321,7 @@ public class FileSelectDialog implements OnItemClickListener,
             final String curDir = fileListAdapter.getData(null);
 
             if (showConfirmDlg) {
-                new AlertDialog.Builder(this.ctx)
+                new MaterialAlertDialogBuilder(this.ctx)
                         .setTitle(R.string.confirm_dir_replace)
                         .setMessage(callback.getConfirmMessage(curDir, extraStr))
                         .setPositiveButton(R.string.yes,

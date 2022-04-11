@@ -36,6 +36,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.common.colormixer.ColorMixer;
 import com.common.colormixer.ColorMixerDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.EditorHelpActivity;
@@ -496,7 +497,7 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
         boolean shown = sp.getBoolean(key, false);
 
         if (!shown) {
-            AlertDialog.Builder tipDlg = new AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder tipDlg = new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.please_note)
                     .setMessage(R.string.java_code_edit_tip)
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> showJavaCode());

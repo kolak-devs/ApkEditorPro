@@ -2,6 +2,8 @@ package com.mcal.apkeditor.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -26,6 +28,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.EditModeView;
@@ -268,10 +271,18 @@ public class FileListActivity extends CustomizedLangActivity implements IListEve
             String directory = filePath.substring(0, filePath.lastIndexOf('/'));
             Preferences.setLastDirectory(directory);
 
-            Intent intent = new Intent(this, com.mcal.elfeditor.MainActivity.class);
-            intent.putExtra("file_path", filePath);
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
+            dialog.setTitle(R.string.app_translator);
+            dialog.setMessage(R.string.open_binary_translator);
+            dialog.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                Intent intent = new Intent(FileListActivity.this, com.mcal.elfeditor.MainActivity.class);
+                intent.putExtra("file_path", filePath);
 
-            startActivity(intent);
+                startActivity(intent);
+                dialogInterface.dismiss();
+            });
+            dialog.setNegativeButton(android.R.string.cancel, null);
+            dialog.show();
             return true;
         }
         return false;

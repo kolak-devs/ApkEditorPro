@@ -251,7 +251,7 @@ public class PrefDetailActivity extends CustomizedLangActivity implements ITable
     // // layout.setDialog(dialog);
     // dialog.show();
     //
-    // // new AlertDialog.Builder(this)
+    // // new MaterialAlertDialogBuilder(this)
     // // .setView(layout)
     // // .setPositiveButton(R.string.save,
     // // new DialogInterface.OnClickListener() {

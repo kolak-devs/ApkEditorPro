@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/overview_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/littleblue"
+        android:background="@color/colorPrimaryDark"
         android:orientation="horizontal">
 
         <ImageView
@@ -70,12 +71,14 @@
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/littleblue"
+        android:background="@color/colorPrimaryDark"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/btn_save"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="4.0dip"
@@ -85,9 +88,11 @@
             android:textSize="14.0dip"
             android:visibility="invisible" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/btn_close"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="4.0dip"

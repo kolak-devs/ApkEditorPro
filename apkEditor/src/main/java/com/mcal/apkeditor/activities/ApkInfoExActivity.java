@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ac.AutoCompleteAdapter;
 import com.mcal.common.utils.ClipboardUtils;
@@ -248,7 +249,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         }
 
         private void inputKeywordAndSearch() {
-            AlertDialog.Builder inputDlg = new AlertDialog.Builder(
+            MaterialAlertDialogBuilder inputDlg = new MaterialAlertDialogBuilder(
                     ApkInfoExActivity.this);
             inputDlg.setTitle(R.string.search);
             inputDlg.setMessage(R.string.pls_input_keyword);
@@ -430,7 +431,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 }
                 // If file extension is changed, show tip
                 if (!record.isDir && isExtensionChanged(record.fileName, newName)) {
-                    AlertDialog.Builder dlg = new AlertDialog.Builder(
+                    MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(
                             ApkInfoExActivity.this);
                     dlg.setMessage(R.string.extension_changed_tip);
                     dlg.setPositiveButton(R.string.yes,
@@ -443,7 +444,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 }
             });
 
-            AlertDialog.Builder infoDlg = new AlertDialog.Builder(ApkInfoExActivity.this);
+            MaterialAlertDialogBuilder infoDlg = new MaterialAlertDialogBuilder(ApkInfoExActivity.this);
             infoDlg.setTitle(R.string.detail);
             infoDlg.setView(view);
             infoDlg.setNeutralButton(R.string.copy_file_path,

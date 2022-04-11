@@ -80,7 +80,7 @@ public class LogMessageActivity extends AppCompatActivity {
     private void shareCrashReport(String filePath) {
         Uri logUri = FileProvider.getUriForFile(
                 this,
-                "com.mcal.apkeditor.pro.provider",
+                "com.mcal.apkeditor.pro",
                 new File(filePath));
 
         Intent shareIntent = new Intent();

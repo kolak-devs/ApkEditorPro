@@ -365,4 +365,6 @@
     <string name="about_donate">Пожертвования</string>
     <string name="about_telegram_channel">Telegram канал</string>
     <string name="about_source_code">Исходный код</string>
+    <string name="app_translator">Переводчик</string>
+    <string name="open_binary_translator">Открыть переводчик C++ библиотек?</string>
 </resources>

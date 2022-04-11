@@ -458,6 +458,8 @@
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
     <string name="about_source_code">Source code</string>
+    <string name="app_translator">Translator</string>
+    <string name="open_binary_translator">Open binary translator?</string>
     <!--
     <string name="sure_to_exit_tip">Are you sure to exit?\nSorry, edit is not supported any more as some of the policy reason. You could save it as project which will be located at %s.</string>
     -->

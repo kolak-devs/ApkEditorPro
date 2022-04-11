@@ -1,7 +1,7 @@
 package com.mcal.apkeditor.view;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -119,7 +119,7 @@ public class IconPickerPreference extends ListPreference {
     }
 
     @Override
-    protected void onPrepareDialogBuilder(@NonNull Builder builder) {
+    protected void onPrepareDialogBuilder(@NonNull AlertDialog.Builder builder) {
 
         builder.setNegativeButton(android.R.string.cancel, null);
         builder.setPositiveButton(null, null);
