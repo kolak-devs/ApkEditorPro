@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -26,11 +26,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.mcal.apkeditor.activities.ApkSearchActivity;
-import com.mcal.apkeditor.activities.AxmlEditActivity;
-import com.mcal.apkeditor.activities.CommonEditActivity;
-import com.mcal.apkeditor.activities.MainActivity;
-import com.mcal.apkeditor.activities.UserAppActivity;
+import com.mcal.apkeditor.BuildConfig;
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
 import com.mcal.common.utils.ActivityUtils;
@@ -264,6 +261,17 @@ public class FileListActivity extends CustomizedLangActivity implements IListEve
             } else {
                 new EditModeView(this, this, filePath, null).showFileEditDialog(view);
             }
+            return true;
+        }
+        if (filePath.endsWith(".so")) {
+            // Save the directory
+            String directory = filePath.substring(0, filePath.lastIndexOf('/'));
+            Preferences.setLastDirectory(directory);
+
+            Intent intent = new Intent(this, com.mcal.elfeditor.MainActivity.class);
+            intent.putExtra("file_path", filePath);
+
+            startActivity(intent);
             return true;
         }
         return false;

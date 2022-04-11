@@ -33,5 +33,6 @@ include ':smali'
 include ':smali-legacy'
 include ':jadx'
 include ':jadx-legacy'
+include ':so-translator'
 
 include ':libraries'

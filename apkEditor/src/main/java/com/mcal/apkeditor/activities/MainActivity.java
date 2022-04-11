@@ -26,7 +26,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.balsikandar.crashreporter.ui.CrashReporterActivity;
 import com.mcal.apkeditor.ApkComposeService;
 import com.mcal.apkeditor.BuildConfig;
-import com.mcal.apkeditor.FileListActivity;
 import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.MenuListAdapter;
 import com.mcal.apkeditor.R;

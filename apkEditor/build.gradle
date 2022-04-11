@@ -4,7 +4,6 @@ plugins {
 }
 
 android {
-
     compileSdk 32
 
     defaultConfig {
@@ -12,8 +11,8 @@ android {
         minSdk 14
         //noinspection ExpiredTargetSdkVersion
         targetSdk 26
-        versionCode 1118
-        versionName "1.11.8"
+        versionCode 1119
+        versionName "1.11.9"
         multiDexEnabled true
         ndk {
             abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a', 'x86_64'
@@ -136,6 +135,7 @@ dependencies {
     implementation project(':dataeditor')
     implementation project(':crashreporter')
     implementation project(':patchview')
+    implementation project(':so-translator')
 
     implementation project(':libraries')
 

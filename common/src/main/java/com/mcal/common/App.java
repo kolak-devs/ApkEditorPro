@@ -30,7 +30,7 @@ public class App extends Application {
     @ColorInt
     public static int getColorFromAttr(@NonNull Context context, @AttrRes int attr) {
         TypedValue typedValue = new TypedValue();
-        if (context != null && context.getTheme().resolveAttribute(attr, typedValue, true))
+        if (context.getTheme().resolveAttribute(attr, typedValue, true))
             return typedValue.data;
         else
             return Color.WHITE;

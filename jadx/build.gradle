@@ -34,9 +34,9 @@ dependencies {
 
     // Plugins
     implementation 'com.google.guava:guava:31.1-android'
-    implementation 'com.beust:jcommander:1.81'
+    implementation 'com.beust:jcommander:1.82'
     implementation('com.jakewharton.android.repackaged:dalvik-dx:11.0.0_r3')
-    implementation('com.android.tools:r8:3.1.51')
+    implementation('com.android.tools:r8:3.3.28')
     implementation 'org.ow2.asm:asm:9.2'
 
     // Raung asm
@@ -45,7 +45,7 @@ dependencies {
 
     // JaDX Core
     implementation 'com.google.code.gson:gson:2.9.0'
-    implementation 'com.android.tools.build:aapt2-proto:4.2.1-7147631'
+    implementation 'com.android.tools.build:aapt2-proto:4.2.2-7147631'
     constraints {
         // Force protobuf version to prevent Java-7 issue
         implementation 'com.google.protobuf:protobuf-java:3.11.4'

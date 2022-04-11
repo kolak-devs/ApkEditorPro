@@ -258,7 +258,7 @@
             android:name="com.mcal.apkeditor.activities.ApkComposeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name="com.mcal.apkeditor.FileListActivity"/>
+        <activity android:name="com.mcal.apkeditor.activities.FileListActivity"/>
         <activity android:name="com.mcal.apkeditor.activities.UserAppActivity"/>
         <activity android:name="com.mcal.apkeditor.activities.HelpActivity"/>
         <activity
@@ -305,6 +305,10 @@
         <activity android:name="com.mcal.sqliteutil.SqliteTableListActivity" />
         <activity android:name="com.mcal.sqliteutil.SqliteTableViewActivity" />
         <activity android:name="com.mcal.sqliteutil.SqliteRowViewActivity" />
+
+        <activity
+            android:name="com.mcal.elfeditor.MainActivity"
+            android:label="Translator"/>
 
         <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
             android:value="true" />

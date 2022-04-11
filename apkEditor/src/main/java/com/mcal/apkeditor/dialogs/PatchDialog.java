@@ -142,8 +142,7 @@ public class PatchDialog
             ret |= extractExamples("patch_Ultima_SignHook.zip");
             ret |= extractExamples("patch_Ultima_VipSignHook.zip");
             if (ret) {
-                String message = String.format(
-                        activityRef.get()
+                String message = String.format(activityRef.get()
                                 .getString(R.string.patch_examples_copied),
                         this.exampleDir);
                 Toast.makeText(activityRef.get(), message, Toast.LENGTH_SHORT)
@@ -192,7 +191,8 @@ public class PatchDialog
         if (c != null) {
             try {
                 c.close();
-            } catch (IOException ignored) {
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -201,7 +201,8 @@ public class PatchDialog
         if (zfile != null) {
             try {
                 zfile.close();
-            } catch (IOException ignored) {
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
