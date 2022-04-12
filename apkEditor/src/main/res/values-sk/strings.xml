@@ -22,7 +22,7 @@
     <string name="clean_garbage_summary">Pre vymazanie dočasných súborov, kliknite sem.</string>
     <string name="cleanup">Vyčistiť</string>
     <string name="close">Zavrieť</string>
-    <string name="code">Kód:</string>
+    <string name="code">Kód</string>
     <string name="color">Farba</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
@@ -250,4 +250,5 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

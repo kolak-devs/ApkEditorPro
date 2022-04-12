@@ -22,7 +22,7 @@
     <string name="clean_garbage_summary">Nhấp vào đây để xóa các tập tin tạm thời.</string>
     <string name="cleanup">Dọn dẹp</string>
     <string name="close">Đóng lại</string>
-    <string name="code">Mã:</string>
+    <string name="code">Mã</string>
     <string name="color">Màu sắc</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
@@ -368,4 +368,5 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

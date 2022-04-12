@@ -59,7 +59,7 @@
                 android:textColor="@color/colorAccent" />
         </RelativeLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:backgroundTint="@color/colorAccent"
             android:textColor="@color/colorPrimaryDark"
@@ -120,7 +120,7 @@
             android:layout_weight="1"
             android:inputType="text" />
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:backgroundTint="@color/colorAccent"
             android:textColor="@color/colorPrimaryDark"
@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:text="@string/appdm_search" />
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:backgroundTint="@color/colorAccent"
             android:textColor="@color/colorPrimaryDark"

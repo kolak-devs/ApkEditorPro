@@ -12,7 +12,7 @@
     android:paddingRight="6.0dip"
     android:paddingBottom="5.0dip">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/app_icon"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="@android:dimen/app_icon_size"
@@ -28,7 +28,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,40 +36,27 @@
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/darkblue" />
+            android:textColor="@color/colorAccent" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/app_desc1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="-4.0dip"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#ff666666" />
+            android:textAppearance="?android:textAppearanceSmall" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/app_desc2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="-2.0dip"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#ff666666"
             android:visibility="gone" />
+
     </LinearLayout>
 
-
-    <!-- 
-    <ImageView
-        android:id="@+id/operation_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="5.0dip"
-        android:layout_marginRight="11.0dip"
-        android:contentDescription="@android:string/no"
-        android:src="@drawable/delete" />
-         -->
     <RelativeLayout
         android:id="@+id/menu_delete"
         android:layout_width="40dip"
@@ -79,7 +66,7 @@
         android:paddingBottom="4dip"
         android:visibility="gone">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="32dip"
             android:layout_height="32dip"
             android:layout_centerInParent="true"

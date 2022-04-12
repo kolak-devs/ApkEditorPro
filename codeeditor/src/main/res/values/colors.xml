@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="editorBackground">#FFEAF4</color>
+    <color name="editorBackground">#FFF9FC</color>
     <color name="editorNormal">#9C27B0</color>
     <color name="editorReserved">#8BC34A</color>
     <color name="editorType">#81D4FA</color>

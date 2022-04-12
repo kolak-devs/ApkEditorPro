@@ -2,22 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <!-- Title -->
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:minHeight="?attr/actionBarSize"
         android:padding="8dip"
         android:text="@string/select_file_replace"
-        android:textColor="@color/colorAccent"
         android:textSize="16sp" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,24 +39,9 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dip"
-            android:layout_marginTop="4dip"
-            android:layout_marginBottom="4dip"
-            android:layout_weight="1"
-            android:text="@null"
-            android:visibility="invisible"/>
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/close"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dip"
@@ -65,11 +50,9 @@
             android:layout_weight="1"
             android:text="@android:string/cancel" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirm"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="4dip"
@@ -78,7 +61,7 @@
 
     </LinearLayout>
 
-    <CheckBox
+    <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/cb_edit_before_replace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

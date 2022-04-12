@@ -6,11 +6,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.view.ViewDialog;
@@ -143,13 +143,13 @@ public class FileCopyDialog extends ViewDialog implements
         setTitle("Copying");
         setView(view);
 
-        Button closeBtn = view.findViewById(R.id.close_button);
+        AppCompatButton closeBtn = view.findViewById(R.id.close_button);
         closeBtn.setOnClickListener(this);
     }
 
     // File copy succeed
     public void succeed() {
-        TextView resultTv = view.findViewById(R.id.result_tv);
+        AppCompatTextView resultTv = view.findViewById(R.id.result_tv);
 
         // When just copy one file, show the full path
         if (copySources.size() == 1) {
@@ -163,7 +163,7 @@ public class FileCopyDialog extends ViewDialog implements
 
     // File copy failed
     public void failed(String msg) {
-        TextView resultTv = view.findViewById(R.id.result_tv);
+        AppCompatTextView resultTv = view.findViewById(R.id.result_tv);
         resultTv.setText(String.format(failedStr, msg));
 
         view.findViewById(R.id.layout_done).setVisibility(View.VISIBLE);

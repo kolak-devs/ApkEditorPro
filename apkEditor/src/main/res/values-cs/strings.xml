@@ -42,7 +42,7 @@
     <string name="open_in_new_window">Otevřít v novém okně</string>
     <string name="edit_string_value">Upravit value</string>
     <string name="language">Jazyk:</string>
-    <string name="code">Kód:</string>
+    <string name="code">Kód</string>
     <string name="sure_to_exit_editing">Opravdu chcete ukončit úpravu?</string>
     <string name="yes">ANO</string>
     <string name="no">NE</string>
@@ -176,4 +176,5 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

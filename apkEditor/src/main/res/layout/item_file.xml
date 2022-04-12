@@ -9,7 +9,7 @@
     android:paddingRight="6.0dip"
     android:paddingBottom="5.0dip">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/file_icon"
         android:layout_width="32.0dip"
         android:layout_height="32.0dip"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/filename"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,18 +32,17 @@
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/lightblack"
             android:textStyle="bold" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/detail1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="-4.0dip"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/lightblack"
             android:textSize="5.0pt" />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -41,8 +41,8 @@
                         android:padding="24dp">
 
                         <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:id="@+id/tv_select_apkfile"
+                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -50,8 +50,8 @@
                             android:text="@string/select_apk_file" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:id="@+id/tv_select_appfile"
+                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -59,8 +59,8 @@
                             android:text="@string/select_apk_from_app" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:id="@+id/tv_odex_patcher"
+                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -68,8 +68,8 @@
                             android:text="Odex Patcher" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:id="@+id/tv_help"
+                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -77,8 +77,8 @@
                             android:text="@string/help" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:id="@+id/tv_exit"
+                            style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"

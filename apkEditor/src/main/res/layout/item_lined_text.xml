@@ -4,19 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/line_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="2dip"
         android:paddingRight="2dip"
-        android:textColor="@color/white"
         android:textSize="12sp" />
 
     <View
-        android:layout_width="1px"
+        android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@android:color/white" />
+        android:background="@color/colorGray" />
 
     <com.mcal.apkeditor.ui.EditTextRememberCursor
         android:id="@+id/text"
@@ -26,7 +25,7 @@
         android:imeOptions="flagNoExtractUi"
         android:paddingLeft="2dip"
         android:paddingRight="2dip"
-        android:textColor="@android:color/white"
         android:textSize="12sp"
         android:typeface="monospace" />
+
 </LinearLayout>

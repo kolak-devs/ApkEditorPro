@@ -22,7 +22,7 @@
     <string name="clean_garbage_summary">Geçici dosyaları temizlemek için buraya tıklayın.</string>
     <string name="cleanup">Tamamlandı</string>
     <string name="close">Kapat</string>
-    <string name="code">Kod:</string>
+    <string name="code">Kod</string>
     <string name="color">Renk</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
@@ -302,4 +302,5 @@ Başarı oranını yükseltmek için lütfen mümkün olduğunca küçük deği�
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:paddingLeft="32.0dip">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_filepath"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
@@ -15,11 +15,10 @@
         android:layout_weight="1"
         android:focusable="false"
         android:padding="2.0dip"
-        android:textColor="@color/lightblack"
         android:textSize="16.0sp"
         android:textStyle="bold" />
 
-    <ProgressBar
+    <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/progressbar_loading"
         android:layout_width="20dip"
         android:layout_height="20dip"
@@ -32,12 +31,13 @@
         android:layout_height="54dip"
         android:background="@drawable/selector_menu_light">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_replace"
             android:layout_width="24dip"
             android:layout_height="24dip"
             android:layout_centerInParent="true"
             android:src="@drawable/round_content_copy_24" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -46,12 +46,13 @@
         android:layout_height="54dip"
         android:background="@drawable/selector_menu_light">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_edit"
             android:layout_width="24dip"
             android:layout_height="24dip"
             android:layout_centerInParent="true"
             android:src="@drawable/round_edit_24" />
+
     </RelativeLayout>
 
 </LinearLayout>

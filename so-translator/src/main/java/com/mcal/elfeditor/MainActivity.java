@@ -71,7 +71,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.mcal.translator.R;
 
 import java.io.ByteArrayInputStream;
@@ -422,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
             AppCompatEditText et = view.findViewById(R.id.inputEditText);
             et.setSingleLine(true);
             et.setInputType(InputType.TYPE_CLASS_NUMBER);
-            TextInputLayout etl = view.findViewById(R.id.inputLayout);
+            AppCompatTextView etl = view.findViewById(R.id.inputLayout);
             etl.setHint(1 + " - " + txtOriginal.size());
 
             new MaterialAlertDialogBuilder(this).

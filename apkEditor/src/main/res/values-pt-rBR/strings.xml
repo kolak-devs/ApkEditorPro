@@ -42,7 +42,7 @@
     <string name="open_in_new_window">Abrir em uma nova janela</string>
     <string name="edit_string_value">Editar valor</string>
     <string name="language">Idioma:</string>
-    <string name="code">Código:</string>
+    <string name="code">Código</string>
     <string name="sure_to_exit_editing">Tem certeza de que deseja sair da edição?</string>
     <string name="yes">SIM</string>
     <string name="no">NÃO</string>
@@ -254,5 +254,6 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 
 </resources>

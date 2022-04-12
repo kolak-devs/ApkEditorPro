@@ -11,8 +11,8 @@ android {
         minSdk 14
         //noinspection ExpiredTargetSdkVersion
         targetSdk 26
-        versionCode 1119
-        versionName "1.11.9"
+        versionCode 1120
+        versionName "1.12.0"
         multiDexEnabled true
         ndk {
             abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a', 'x86_64'
@@ -136,6 +136,7 @@ dependencies {
     implementation project(':crashreporter')
     implementation project(':patchview')
     implementation project(':so-translator')
+    implementation project(':color-picker')
 
     implementation project(':libraries')
 
@@ -150,8 +151,6 @@ dependencies {
 
     implementation 'com.google.guava:guava:31.1-android'
     implementation 'org.antlr:antlr-runtime:3.5.2'
-
-    implementation 'com.jaredrummler:colorpicker:1.1.0'
 
     //coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }

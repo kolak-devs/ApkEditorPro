@@ -41,7 +41,7 @@
     <string name="open_in_new_window">Abrir em uma nova janela</string>
     <string name="edit_string_value">Editar o Valor</string>
     <string name="language">Linguagem:</string>
-    <string name="code">Código:</string>
+    <string name="code">Código</string>
     <string name="replace">Substituir</string>
     <string name="sure_to_exit_editing">Tem certeza que quer sair da edição?</string>
     <string name="yes">SIM</string>
@@ -127,4 +127,5 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

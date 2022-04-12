@@ -42,7 +42,7 @@
     <string name="open_in_new_window">Bearbeiten</string>
     <string name="edit_string_value">Wert bearbeiten</string>
     <string name="language">Sprache:</string>
-    <string name="code">Code:</string>
+    <string name="code">Code</string>
     <string name="sure_to_exit_editing">Sind Sie sicher, dass Sie die Bearbeitung der App jetzt abbrechen m&#246;chten?</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
@@ -381,4 +381,5 @@ Wenn sie APK Editor Pro bereits gekauft haben, und dies nicht erw&#252;nscht ist
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

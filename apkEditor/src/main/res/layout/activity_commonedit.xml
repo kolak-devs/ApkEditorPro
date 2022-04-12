@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -11,9 +10,10 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:minHeight="?attr/actionBarSize"
         android:orientation="horizontal">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/apk_icon"
             android:layout_width="20.0dip"
             android:layout_height="20.0dip"
@@ -24,23 +24,23 @@
             android:layout_marginBottom="4dip"
             android:contentDescription="@android:string/no" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/apk_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="2.0dip"
             android:singleLine="true"
-            android:textColor="@color/lightblack"
             android:textSize="16.0sp"
             android:textStyle="bold" />
+
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:background="#ffffffff"
+        android:background="@color/colorPrimaryDark"
         android:paddingLeft="8dip"
         android:paddingRight="8dip">
 
@@ -54,51 +54,61 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/launcher_icon"
-                    android:textColor="@color/colorAccent"
                     android:textSize="14sp" />
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/launcher_icon"
                     android:layout_width="@android:dimen/app_icon_size"
                     android:layout_height="@android:dimen/app_icon_size"
                     android:layout_marginLeft="8.0dip"
                     android:contentDescription="@android:string/no"
                     android:scaleType="fitCenter" />
+
             </LinearLayout>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
                 android:text="@string/str_app_name"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"></TextView>
+                android:textSize="14sp" />
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_appname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_search"
+                android:gravity="left|center"
                 android:inputType="text"
+                android:minHeight="45dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:textSize="14sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
                 android:text="@string/package_name"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"></TextView>
+                android:textSize="14sp" />
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_pkgname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_search"
+                android:gravity="left|center"
                 android:inputType="textNoSuggestions"
+                android:minHeight="45dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:textSize="14sp" />
 
             <LinearLayout
@@ -107,172 +117,192 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_rename_notice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/pkg_rename_notice"
-                    android:textColor="@color/colorAccent"
                     android:textSize="12sp"
-                    android:textStyle="italic"></TextView>
+                    android:textStyle="italic" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_rename_method"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dip"
                     android:text="@string/package_rename_method"
-                    android:textColor="@color/colorAccent"
                     android:textSize="14sp"
-                    android:visibility="gone"></TextView>
+                    android:visibility="gone" />
 
-                <Spinner
+                <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/rename_method_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:visibility="gone" />
 
-                <CheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/cb_rename_resource"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/rename_in_resources"
-                    android:textColor="@color/colorAccent"
                     android:textSize="14sp" />
 
-                <CheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/cb_rename_dex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
                     android:text="@string/rename_in_dex"
-                    android:textColor="@color/colorAccent"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
                 android:text="@string/install_location"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"></TextView>
+                android:textSize="14sp" />
 
-            <Spinner
+            <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/location_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
                 android:text="@string/version_code"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"></TextView>
+                android:textSize="14sp" />
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_vercode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_search"
+                android:gravity="left|center"
                 android:inputType="number"
+                android:minHeight="45dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:textSize="14sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_vername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
                 android:text="@string/version_name"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"></TextView>
+                android:textSize="14sp" />
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_vername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_search"
+                android:gravity="left|center"
                 android:inputType="text"
+                android:minHeight="45dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:textSize="14sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_minSdkVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
                 android:text="@string/min_sdk_version"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"></TextView>
+                android:textSize="14sp" />
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_minSdkVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_search"
+                android:gravity="left|center"
                 android:inputType="number"
+                android:minHeight="45dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:textSize="14sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_targetSdkVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
                 android:text="@string/target_sdk_version"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"></TextView>
+                android:textSize="14sp" />
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_targetSdkVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_search"
+                android:gravity="left|center"
                 android:inputType="number"
+                android:minHeight="45dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:textSize="14sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_maxSdkVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
                 android:text="@string/max_sdk_version"
-                android:textColor="@color/colorAccent"
                 android:textSize="14sp"
-                android:visibility="gone"></TextView>
+                android:visibility="gone" />
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_maxSdkVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_search"
+                android:gravity="left|center"
                 android:inputType="number"
+                android:minHeight="45dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:textSize="14sp"
                 android:visibility="gone" />
+
         </LinearLayout>
+
     </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/littleblue">
+        android:background="@color/colorPrimaryDark">
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_close"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/close" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_save"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/save" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
-            android:id="@+id/btn_close"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/close" />
     </LinearLayout>
 
 </LinearLayout>

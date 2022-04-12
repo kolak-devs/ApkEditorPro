@@ -43,10 +43,10 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_bg"
+                style="@style/Base.Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dip"
-                style="@style/Base.Widget.AppCompat.Button.Colored"
                 android:text="@string/put_to_background" />
 
         </LinearLayout>
@@ -129,8 +129,8 @@
                     android:text="@string/fix_invalid_name_tip" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    style="@style/Base.Widget.AppCompat.Button.Colored"
                     android:id="@+id/btn_fix"
+                    style="@style/Base.Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="40dip"
                     android:text="@string/fix" />
@@ -156,8 +156,8 @@
                     android:text="@string/patch_code_cache_tip" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    style="@style/Base.Widget.AppCompat.Button.Colored"
                     android:id="@+id/btn_patch"
+                    style="@style/Base.Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="40dip"
                     android:text="@string/patch" />
@@ -173,9 +173,9 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_remove"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    style="@style/Base.Widget.AppCompat.Button.Colored"
                     android:layout_marginEnd="4dip"
                     android:layout_weight="1"
                     android:text="@string/remove"
@@ -183,30 +183,34 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_copy_errmsg"
-                    style="@style/Base.Widget.AppCompat.Button.Colored"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                     android:layout_width="0dip"
-                    android:layout_height="40dip"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:layout_marginEnd="4dip"
                     android:layout_weight="2"
                     android:text="@string/copy_error_msg"
                     android:visibility="gone" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_close"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:text="@string/close" />
+
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_install"
                     style="@style/Base.Widget.AppCompat.Button.Colored"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:layout_marginEnd="4dip"
                     android:layout_weight="1"
                     android:text="@string/install" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_close"
-                    style="@style/Base.Widget.AppCompat.Button.Colored"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/close" />
             </LinearLayout>
 
         </LinearLayout>

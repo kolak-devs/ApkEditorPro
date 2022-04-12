@@ -23,7 +23,7 @@
             android:focusableInTouchMode="true"
             android:orientation="horizontal">
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/lineNumbers"
                 android:layout_width="40.0dip"
                 android:layout_height="match_parent"
@@ -57,9 +57,13 @@
                     android:padding="2.0dip"
                     android:textSize="12.0sp"
                     android:typeface="monospace" />
+
             </com.mcal.neweditor.view.ObHorizontalScrollView>
+
         </LinearLayout>
+
     </com.mcal.neweditor.view.ObScrollView>
 
     <include layout="@layout/included_editor_menu" />
+
 </LinearLayout>

@@ -12,13 +12,16 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">?isLightTheme</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">#66808080</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/google_sans</item>
+        <item name="alertDialogTheme">@style/AlertDialogMaterialTheme</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogMaterialTheme</item>
         <item name="materialAlertDialogTheme">@style/AlertDialogMaterialTheme</item>
         <item name="android:dialogTheme">@style/AlertDialogMaterialTheme</item>
     </style>
 
-    <style name="AlertDialogMaterialTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="AlertDialogMaterialTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
         <item name="buttonBarNegativeButtonStyle">@style/Alert.Button.Negative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Alert.Button.Negative</item>
     </style>
 
     <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.UnelevatedButton">

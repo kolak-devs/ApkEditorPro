@@ -94,7 +94,7 @@
             android:textColor="@color/lightblack"
             android:singleLine="true" />
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:backgroundTint="@color/colorAccent"
             android:textColor="@color/colorPrimaryDark"
@@ -106,7 +106,7 @@
             android:enabled="false"
             android:text="@string/find" />
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:backgroundTint="@color/colorAccent"
             android:textColor="@color/colorPrimaryDark"

@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:backgroundTint="@color/colorAccent"
             android:textColor="@color/colorPrimaryDark"
@@ -61,7 +61,7 @@
             android:layout_weight="1"
             android:text="@string/delete" />
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:backgroundTint="@color/colorAccent"
             android:textColor="@color/colorPrimaryDark"

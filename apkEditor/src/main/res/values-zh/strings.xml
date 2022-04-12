@@ -35,7 +35,7 @@
     <string name="open_in_new_window">在新窗口中打开</string>
     <string name="edit_string_value">修改</string>
     <string name="language">Language:</string>
-    <string name="code">Code:</string>
+    <string name="code">Code</string>
     <string name="replace">替换</string>
     <string name="sure_to_exit_editing">确定要退出编辑吗？</string>
     <string name="yes">是的</string>
@@ -445,5 +445,6 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 
 </resources>

@@ -15,7 +15,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerInParent="true"
@@ -31,20 +31,19 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/filename"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/colorAccent" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <RelativeLayout
                 android:id="@+id/menu_methods"
                 android:layout_width="48dip"
                 android:layout_height="40dip">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="24dip"
                     android:layout_height="24dip"
                     android:layout_centerInParent="true"
@@ -60,7 +59,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerInParent="true"

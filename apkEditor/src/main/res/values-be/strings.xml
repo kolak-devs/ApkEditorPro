@@ -23,7 +23,7 @@
     <string name="clean_garbage_summary">Націсніце сюды каб ачысціць часовыя файлы.</string>
     <string name="cleanup">"Ачысціць "</string>
     <string name="close">Закрыць</string>
-    <string name="code">Код:</string>
+    <string name="code">Код</string>
     <string name="color">Колер</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">Б</string>
@@ -299,4 +299,5 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

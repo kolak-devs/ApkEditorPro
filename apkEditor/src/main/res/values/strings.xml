@@ -36,7 +36,7 @@
     <string name="open_in_new_window">Open in a new window</string>
     <string name="edit_string_value">Edit the Value</string>
     <string name="language">Language:</string>
-    <string name="code">Code:</string>
+    <string name="code">Code</string>
     <string name="replace">Replace</string>
     <string name="sure_to_exit_editing">Are you sure to exit the editing?</string>
     <string name="yes">YES</string>
@@ -460,6 +460,7 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
     <!--
     <string name="sure_to_exit_tip">Are you sure to exit?\nSorry, edit is not supported any more as some of the policy reason. You could save it as project which will be located at %s.</string>
     -->

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,36 +11,37 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ProgressBar
+        <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progressBar1"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20.0dip"
             android:text="@string/in_progress"
             android:textColor="@color/lightblack" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12.0dip"
-            android:textColor="@color/lightblack" />
+            android:textColor="@color/colorAccent" />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_apk_reinstall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/apked_white"
+        android:background="@color/colorPrimaryDark"
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/result_image"
             android:layout_width="128dp"
             android:layout_height="128dp"
@@ -52,7 +52,7 @@
             android:layout_height="0dip"
             android:layout_weight="1">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,11 +71,9 @@
             android:orientation="horizontal"
             android:padding="4dip">
 
-            <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_uninstall"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dip"
@@ -83,27 +81,25 @@
                 android:text="@string/remove"
                 android:visibility="gone" />
 
-            <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_close"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/close" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_reinstall"
+                style="@style/Base.Widget.AppCompat.Button.Colored"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dip"
                 android:layout_weight="1"
                 android:text="@string/install" />
 
-            <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
-                android:id="@+id/button_close"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/close" />
         </LinearLayout>
+
     </LinearLayout>
 
 </merge>

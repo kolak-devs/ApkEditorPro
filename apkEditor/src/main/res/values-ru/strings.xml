@@ -22,7 +22,7 @@
     <string name="clean_garbage_summary">Нажмите здесь, чтобы очистить временные файлы.</string>
     <string name="cleanup">Очистка</string>
     <string name="close">Закрыть</string>
-    <string name="code">Код:</string>
+    <string name="code">Код</string>
     <string name="color">Цвет</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
@@ -367,4 +367,5 @@
     <string name="about_source_code">Исходный код</string>
     <string name="app_translator">Переводчик</string>
     <string name="open_binary_translator">Открыть переводчик C++ библиотек?</string>
+    <string name="copy">Copy</string>
 </resources>

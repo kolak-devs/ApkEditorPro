@@ -44,7 +44,7 @@
     <string name="open_in_new_window">فتح في نافذة جديدة</string>
     <string name="edit_string_value">قم بتحرير قيمة</string>
     <string name="language">اللغة:</string>
-    <string name="code">كود:</string>
+    <string name="code">كود</string>
     <string name="sure_to_exit_editing">هل أنت متأكد من الخروج من التحرير؟</string>
     <string name="yes">نعم</string>
     <string name="no">لا</string>
@@ -258,4 +258,5 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

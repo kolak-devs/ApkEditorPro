@@ -22,7 +22,7 @@
     <string name="clean_garbage_summary">Kattintson ide az ideiglenes fájlok törléséhez.</string>
     <string name="cleanup">Tisztítás</string>
     <string name="close">Bezárás</string>
-    <string name="code">Kód:</string>
+    <string name="code">Kód</string>
     <string name="color">Szín</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
@@ -353,4 +353,5 @@ Ha korábban vásárolta az APK Editor Pro programot, és ez nem az, amit szeret
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

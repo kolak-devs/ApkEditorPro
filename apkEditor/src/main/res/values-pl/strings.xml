@@ -22,7 +22,7 @@
     <string name="clean_garbage_summary">Kliknij tu, aby usunąć pliki tymczasowe.</string>
     <string name="cleanup">Wyczyść</string>
     <string name="close">Zamknij</string>
-    <string name="code">Kod:</string>
+    <string name="code">Kod</string>
     <string name="color">Kolor</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
@@ -268,4 +268,5 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 </resources>

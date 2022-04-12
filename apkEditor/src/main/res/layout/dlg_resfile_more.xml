@@ -2,38 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="4dip">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="textNoSuggestions"
-            android:minWidth="48dip"
-            android:text="@string/name" />
-
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/filename"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:hint="@string/name"
+            android:layout_margin="5dp"
+            android:background="@drawable/background_search"
+            android:gravity="center|left"
+            android:minHeight="45dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:textSize="14sp" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_rename"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rename" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -41,49 +39,52 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minWidth="48dip"
-            android:text="@string/path" />
-
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/filepath"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:editable="false"
+            android:hint="@string/path"
+            android:layout_margin="5dp"
+            android:background="@drawable/background_search"
+            android:gravity="center|left"
+            android:minHeight="45dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:textSize="14sp" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/entry_in_apk" />
-
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/fileentry"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:editable="false"
+            android:hint="@string/entry_in_apk"
+            android:layout_margin="5dp"
+            android:background="@drawable/background_search"
+            android:gravity="center|left"
+            android:minHeight="45dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:textSize="14sp" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_extract"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
-            android:layout_height="40dip"
+            android:layout_height="wrap_content"
             android:text="@string/extract"
             android:visibility="gone" />
+
     </LinearLayout>
 
 </LinearLayout>

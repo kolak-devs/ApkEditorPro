@@ -36,7 +36,7 @@
     <string name="open_in_new_window">פתח בחלונית חדשה</string>
     <string name="edit_string_value">ערוך את הערך</string>
     <string name="language">שפה:</string>
-    <string name="code">קוד:</string>
+    <string name="code">קוד</string>
     <string name="replace">החלף</string>
     <string name="sure_to_exit_editing">אתה בטוח שברצונך לצאת מהעריכה?</string>
     <string name="yes">כן</string>
@@ -138,5 +138,6 @@
     <string name="about_source_code">Source code</string>
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
+    <string name="copy">Copy</string>
 
 </resources>
