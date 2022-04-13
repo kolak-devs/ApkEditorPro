@@ -149,7 +149,9 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
                     //androlib.buildApk(new File(decodedFilePath), new File(targetApkPath.replace(".apk", "_unsigned.apk")));
 
                     setNextStep("Signing...");
-                    signApk(tmp.getPath());
+                    if (!signApk(tmp.getPath())) {
+                        break;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     this.errMessage = e.getMessage();

@@ -12,8 +12,9 @@
 }
 
 -keep class kellinwood.** { *; }
-
--keep class org.spongycastle.** { *; }
+#-keep class org.spongycastle.** { *; }
+#-keep class com.android.apksig.** { *; }
+#-keep class com.android.apksigner.** { *; }
 
 #-keep class brut.androlib.meta.MetaInfo.** {*;}
 #-keep class brut.androlib.meta.PackageInfo.** {*;}
