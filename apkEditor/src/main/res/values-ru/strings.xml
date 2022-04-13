@@ -367,5 +367,8 @@
     <string name="about_source_code">Исходный код</string>
     <string name="app_translator">Переводчик</string>
     <string name="open_binary_translator">Открыть переводчик C++ библиотек?</string>
-    <string name="copy">Copy</string>
+    <string name="copy">Копировать</string>
+    <string name="pref_summary_signature_key">Выберите ключ для подписи APK</string>
+    <string name="pref_title_signature_key">Ключ</string>
+    <string name="pref_category_title_apksigner">Подпись Apk</string>
 </resources>

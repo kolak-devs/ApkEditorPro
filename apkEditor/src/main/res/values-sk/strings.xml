@@ -251,4 +251,7 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
+    <string name="pref_summary_signature_key">Select your Signature Key</string>
+    <string name="pref_title_signature_key">Signature Key</string>
+    <string name="pref_category_title_apksigner">Apk Signer</string>
 </resources>

@@ -461,6 +461,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
+    <string name="pref_summary_signature_key">Select your Signature Key</string>
+    <string name="pref_title_signature_key">Signature Key</string>
+    <string name="pref_category_title_apksigner">Apk Signer</string>
     <!--
     <string name="sure_to_exit_tip">Are you sure to exit?\nSorry, edit is not supported any more as some of the policy reason. You could save it as project which will be located at %s.</string>
     -->
