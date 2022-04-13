@@ -535,9 +535,6 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
     private boolean signApk(String inApk) {
         try {
             new ApkSigner().signApk(inApk, targetApkPath);
-            if (new File(inApk).delete()) {
-                Log.e(getClass().getName(), new File(targetApkPath.replace(".apk", "_unsigned.apk")) + "deleted");
-            }
             return true;
         } catch (Exception e) {
             String strHeader = ctx.getResources().getString(R.string.sign_error);

@@ -20,6 +20,8 @@ import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.google.android.material.snackbar.Snackbar;
+import com.mcal.apksigner.view.CustomSignDialog;
+import com.mcal.apksigner.view.CustomSignDialog2;
 import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.ScopedStorage;
@@ -126,8 +128,26 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             Preference pref = manager.findPreference("ApkBuilding");
             root.removePreference(pref);
         }
+        apkSigner();
 
         clean();
+    }
+
+    public void apkSigner() {
+        ListPreference apkSigner = manager.findPreference("signatureKey");
+        apkSigner.setOnPreferenceChangeListener((preference, newValue) -> {
+            switch ((String) newValue) {
+                case "0":
+                    break;
+                case "1":
+                    new CustomSignDialog(getContext(), null).show();
+                    break;
+                case "2":
+                    new CustomSignDialog2(getContext(), null).show();
+                    break;
+            }
+            return true;
+        });
     }
 
     // Clean the ApkEditor folder except backups

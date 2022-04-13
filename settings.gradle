@@ -35,5 +35,6 @@ include ':jadx'
 include ':jadx-legacy'
 include ':so-translator'
 include ':color-picker'
+include ':filepicker'
 
 include ':libraries'

@@ -78,6 +78,18 @@ public class Preferences {
         return App.getPreferences().getString("signaturePass", "");
     }
 
+    public static void setSignatureAlias(String key) {
+        App.getPreferences().edit().putString("signatureAlias", key).apply();
+    }
+
+    public static void setCertPassword(String key) {
+        App.getPreferences().edit().putString("certPass", key).apply();
+    }
+
+    public static void setSignaturePassword(String key) {
+        App.getPreferences().edit().putString("signaturePass", key).apply();
+    }
+
     public static String getPk8() {
         return App.getPreferences().getString("pk8Path", "");
     }
@@ -102,6 +114,11 @@ public class Preferences {
         App.getPreferences().edit().putString("signaturePath", key).apply();
     }
 
+
+    /**
+     *
+     * @return
+     */
     public static String getLastDirectory() {
         String rootDir = ScopedStorage.getStorageDirectory().getPath();
         return App.getPreferences().getString("apkDirectory", rootDir);
@@ -143,4 +160,5 @@ public class Preferences {
     public static boolean isNightModeEnabled() {
         return false;
     }
+
 }
