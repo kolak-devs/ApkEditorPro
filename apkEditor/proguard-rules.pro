@@ -11,6 +11,10 @@
     native <methods>;
 }
 
+-keep class kellinwood.** { *; }
+
+-keep class org.spongycastle.** { *; }
+
 #-keep class brut.androlib.meta.MetaInfo.** {*;}
 #-keep class brut.androlib.meta.PackageInfo.** {*;}
 #-keep class brut.androlib.meta.UsesFramework.** {*;}
@@ -30,9 +34,9 @@
 
 #-keepattributes LineNumberTable
 
-#-obfuscationdictionary proguard-bin.txt
-#-packageobfuscationdictionary proguard-bin.txt
-#-classobfuscationdictionary proguard-bin.txt
+-obfuscationdictionary proguard-bin.txt
+-packageobfuscationdictionary proguard-bin.txt
+-classobfuscationdictionary proguard-bin.txt
 
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     public static void checkExpressionValueIsNotNull(java.lang.Object, java.lang.String);
