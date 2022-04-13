@@ -48,8 +48,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.app.ActivityCompat;
@@ -69,8 +67,9 @@ import com.mcal.apkeditor.ResNavigationMgr;
 import com.mcal.apkeditor.ResSelectionChangeListener;
 import com.mcal.apkeditor.SomethingChangedListener;
 import com.mcal.apkeditor.StringListAdapter;
+import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 import com.mcal.apkeditor.editor.TextEditor;
-import com.mcal.apkeditor.ac.AutoCompleteAdapter;
+import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.adapters.IManifestChangeCallback;
 import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.adapters.ManifestListAdapter;
@@ -1298,7 +1297,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         updateSearchOption();
 
         // keyword auto complete
-        AppCompatAutoCompleteTextView editView = findViewById(
+        AutoCompleteTextView editView = findViewById(
                 R.id.keyword_edit);
         this.strKeywordAdapter = new AutoCompleteAdapter(
                 getApplicationContext(), "string_keywords");

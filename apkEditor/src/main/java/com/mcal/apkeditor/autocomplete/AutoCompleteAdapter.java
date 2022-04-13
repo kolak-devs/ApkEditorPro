@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.ac;
+package com.mcal.apkeditor.autocomplete;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,19 +10,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.apkeditor.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
 
     private static final int MAX_RECORDS = 32;
     public List<String> filteredData;
-    private Context ctx;
-    private String tag;
+    private final Context ctx;
+    private final String tag;
     private String[] historyWords;
     private ItemFilter filter;
 
@@ -46,10 +49,8 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
             this.historyWords = new String[0];
         }
 
-        this.filteredData = new ArrayList<String>();
-        for (String word : historyWords) {
-            this.filteredData.add(word);
-        }
+        this.filteredData = new ArrayList<>();
+        this.filteredData.addAll(Arrays.asList(historyWords));
     }
 
     @Override
@@ -76,18 +77,18 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         String word = filteredData.get(position);
-        ViewHolder viewHolder = null;
+        AutoCompleteViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(ctx).inflate(
                     R.layout.item_autocomplete, null);
 
-            viewHolder = new ViewHolder();
-            viewHolder.filename = (TextView) convertView
+            viewHolder = new AutoCompleteViewHolder();
+            viewHolder.filename = (AppCompatTextView) convertView
                     .findViewById(R.id.filename);
 
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (AutoCompleteViewHolder) convertView.getTag();
         }
 
         viewHolder.filename.setText(word);
@@ -131,14 +132,15 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
         this.historyWords = updatedHistory.toArray(new String[updatedHistory
                 .size()]);
         editor.putString(this.tag, sb.toString());
-        editor.commit();
+        editor.apply();
     }
 
-    static class ViewHolder {
-        public TextView filename;
+    static class AutoCompleteViewHolder {
+        public AppCompatTextView filename;
     }
 
     private class ItemFilter extends Filter {
+        @NonNull
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             if (constraint == null) {
@@ -158,7 +160,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
             FilterResults results = new FilterResults();
 
             int count = historyWords.length;
-            final ArrayList<String> nlist = new ArrayList<String>(count);
+            final ArrayList<String> nlist = new ArrayList<>(count);
 
             String filterableString;
 
@@ -178,7 +180,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint,
-                                      FilterResults results) {
+                                      @NonNull FilterResults results) {
             filteredData = (ArrayList<String>) results.values;
             notifyDataSetChanged();
         }

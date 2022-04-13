@@ -17,11 +17,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.ac.AutoCompleteAdapter;
+import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
+import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.RandomUtils;
@@ -263,7 +263,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                     LayoutParams.WRAP_CONTENT));
 
-            final AppCompatAutoCompleteTextView input = new AppCompatAutoCompleteTextView(ApkInfoExActivity.this);
+            final AutoCompleteTextView input = new AutoCompleteTextView(ApkInfoExActivity.this);
             input.setAdapter(adapter);
             layout.addView(input, new LayoutParams(LayoutParams.MATCH_PARENT,
                     LayoutParams.WRAP_CONTENT));

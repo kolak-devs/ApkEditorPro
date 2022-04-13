@@ -23,11 +23,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.apkeditor.ac.AutoCompleteAdapter;
+import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.dialogs.MatchedLineItem;
 import com.mcal.apkeditor.editor.TextEditor;

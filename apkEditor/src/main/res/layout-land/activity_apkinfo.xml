@@ -245,7 +245,7 @@
                     android:orientation="horizontal"
                     android:padding="5dp">
 
-                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
                         android:id="@+id/keyword_edit"
                         style="@style/TextAppearance.AppCompat.Medium"
                         android:layout_width="0dp"
@@ -623,7 +623,7 @@
                         android:padding="5dp"
                         android:visibility="gone">
 
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
                             android:id="@+id/mf_keyword"
                             style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="0dip"

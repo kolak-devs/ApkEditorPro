@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -28,7 +27,7 @@ import com.mcal.apkeditor.MatchedTextListAdapter;
 import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.SomethingChangedListener;
 import com.mcal.apkeditor.editor.TextEditor;
-import com.mcal.apkeditor.ac.AutoCompleteAdapter;
+import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
 import com.mcal.apkeditor.view.ViewDialog;
