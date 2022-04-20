@@ -11,8 +11,8 @@ android {
         minSdk 14
         //noinspection ExpiredTargetSdkVersion
         targetSdk 26
-        versionCode 1121
-        versionName "1.12.1"
+        versionCode 1122
+        versionName "1.12.2"
         multiDexEnabled true
         ndk {
             abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a', 'x86_64'
@@ -33,6 +33,7 @@ android {
     // Specifies one flavor dimension.
     flavorDimensions "version"
     productFlavors {
+        // TODO: Deprecated legacy-version
         legacy {
             // Assigns this product flavor to the "version" flavor dimension.
             // If you are using only one dimension, this property is optional,

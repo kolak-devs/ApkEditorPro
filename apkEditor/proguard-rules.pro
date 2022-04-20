@@ -35,9 +35,9 @@
 
 #-keepattributes LineNumberTable
 
--obfuscationdictionary proguard-bin.txt
--packageobfuscationdictionary proguard-bin.txt
--classobfuscationdictionary proguard-bin.txt
+#-obfuscationdictionary proguard-bin.txt
+#-packageobfuscationdictionary proguard-bin.txt
+#-classobfuscationdictionary proguard-bin.txt
 
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     public static void checkExpressionValueIsNotNull(java.lang.Object, java.lang.String);

@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import com.balsikandar.crashreporter.CrashReporter;
@@ -30,10 +31,11 @@ public class App extends Application {
     @ColorInt
     public static int getColorFromAttr(@NonNull Context context, @AttrRes int attr) {
         TypedValue typedValue = new TypedValue();
-        if (context.getTheme().resolveAttribute(attr, typedValue, true))
+        if (context.getTheme().resolveAttribute(attr, typedValue, true)) {
             return typedValue.data;
-        else
+        } else {
             return Color.WHITE;
+        }
     }
 
     public void onCreate() {
@@ -46,5 +48,6 @@ public class App extends Application {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }*/
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 }

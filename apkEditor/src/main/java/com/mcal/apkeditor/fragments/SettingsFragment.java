@@ -1,6 +1,7 @@
 package com.mcal.apkeditor.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -16,13 +17,16 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.mcal.apksigner.view.CustomSignDialog;
 import com.mcal.apksigner.view.CustomSignDialog2;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.CommandRunner;
+import com.mcal.common.utils.PreferenceUtils;
 import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.ScopedStorage;
 
@@ -130,7 +134,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
         apkSigner();
 
-        clean();
+        cleanData();
+
+        cleanHistory();
     }
 
     public void apkSigner() {
@@ -207,12 +213,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         sp.registerOnSharedPreferenceChangeListener(this);
     }
 
-    public void clean() {
+    public void cleanData() {
         final String path = getContext().getFilesDir().getAbsolutePath();
         cleanKey = findPreference("CleanGarbage");
-        cleanKey.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
+        cleanKey.setOnPreferenceClickListener(preference -> {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
+            builder.setTitle(R.string.title_clear_data);
+            builder.setMessage(R.string.message_clear_data);
+            builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
                 ProcessingDialog dlg = new ProcessingDialog(getActivity(),
                         new ProcessingDialog.ProcessingInterface() {
                             @Override
@@ -229,8 +237,43 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
                         }, R.string.temp_file_cleaned);
                 dlg.show();
-                return true;
-            }
+                dialog.cancel();
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.show();
+
+            return true;
+        });
+    }
+
+    public void cleanHistory() {
+        cleanKey = findPreference("pref_clear_history");
+        cleanKey.setOnPreferenceClickListener(preference -> {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
+            builder.setTitle(R.string.title_clear_history);
+            builder.setMessage(R.string.message_clear_history);
+            builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
+                ProcessingDialog dlg = new ProcessingDialog(getActivity(),
+                        new ProcessingDialog.ProcessingInterface() {
+                            @Override
+                            public void process() {
+                                Preferences.setMfKeywordHistory("");
+                                Preferences.setStringKeywordHistory("");
+                                Preferences.setResKeywordHistory("");
+                            }
+
+                            @Override
+                            public void afterProcess() {
+                            }
+
+                        }, android.R.string.ok);
+                dlg.show();
+                dialog.cancel();
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+            builder.show();
+
+            return true;
         });
     }
 }

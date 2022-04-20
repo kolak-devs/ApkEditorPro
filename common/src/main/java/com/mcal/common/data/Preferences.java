@@ -161,4 +161,18 @@ public class Preferences {
         return false;
     }
 
+    /**
+     * SEARCH HISTORY
+     */
+    public static void setResKeywordHistory(String directory) {
+        App.getPreferences().edit().putString("res_keywords", directory).apply();
+    }
+
+    public static void setMfKeywordHistory(String directory) {
+        App.getPreferences().edit().putString("mf_keywords", directory).apply();
+    }
+
+    public static void setStringKeywordHistory(String directory) {
+        App.getPreferences().edit().putString("string_keywords", directory).apply();
+    }
 }

@@ -137,6 +137,11 @@
         android:title="@string/others">
 
         <Preference
+            android:key="pref_clear_history"
+            android:summary="@string/pref_summary_clear_history"
+            android:title="@string/title_clear_history" />
+
+        <Preference
             android:key="CleanGarbage"
             android:summary="@string/clean_garbage_summary"
             android:title="@string/clean_garbage" />
