@@ -14,6 +14,11 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.zip.ZipFile;
 
 public class IOUtils {
@@ -157,7 +162,14 @@ public class IOUtils {
         }
     }
 
-    public static void writeToFile(String targetFile, @NonNull String content) throws IOException {
+    public static void writeToFile(String text, String targetFilePath) throws IOException
+    {
+        Path targetPath = Paths.get(targetFilePath);
+        byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
+        Files.write(targetPath, bytes, StandardOpenOption.CREATE);
+    }
+
+    /*public static void writeToFile(String targetFile, @NonNull String content) throws IOException {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(targetFile);
@@ -165,5 +177,5 @@ public class IOUtils {
         } finally {
             closeQuietly(fos);
         }
-    }
+    }*/
 }

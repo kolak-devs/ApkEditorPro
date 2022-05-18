@@ -3,8 +3,10 @@ package com.mcal.apkeditor.pro;
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.inf.IJavaExtractor;
-import com.mcal.jadx.Smali2Java;
+import com.mcal.common.utils.IOUtils;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.iface.ClassDef;
@@ -12,8 +14,16 @@ import org.jf.dexlib2.iface.DexFile;
 import org.jf.dexlib2.immutable.ImmutableDexFile;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import jadx.api.JadxArgs;
+import jadx.api.JadxDecompiler;
+import jadx.api.JavaClass;
+import jadx.plugins.input.dex.DexInputPlugin;
 
 public class JavaExtractor implements IJavaExtractor {
 
@@ -21,7 +31,7 @@ public class JavaExtractor implements IJavaExtractor {
     private final String dexName;
     private final String className;
     private String interestedName;
-    private final String workingDirectory;
+    private final File workingDirectory;
 
     private String errorMessage = null;
 
@@ -29,7 +39,7 @@ public class JavaExtractor implements IJavaExtractor {
         this.apkPath = apkPath;
         this.dexName = dexName;
         this.className = className;
-        this.workingDirectory = workingDirectory;
+        this.workingDirectory = new File(workingDirectory);
 
         this.interestedName = className;
         int position = className.lastIndexOf('$');
@@ -38,11 +48,48 @@ public class JavaExtractor implements IJavaExtractor {
         }
     }
 
+    public boolean decompile(File code, File targetFilePath) {
+        try {
+            JadxArgs args = new JadxArgs();
+            args.setSkipResources(true);
+            args.setShowInconsistentCode(true);
+            args.setInputFile(code);
+            args.setOutDirSrc(targetFilePath);
+
+            JadxDecompiler decompiler = new JadxDecompiler(args);
+            decompiler.load();
+            decompiler.saveSources();
+
+            writeDexFile(code, targetFilePath);
+            return true;
+        } catch (Exception|StackOverflowError e) {
+            e.printStackTrace();
+            errorMessage="Cannot decompile java code: " + e.getMessage();
+            return false;
+        }
+    }
+
+    public void writeDexFile(File dex, File targetFilePath) throws IOException {
+        try (JadxDecompiler jadx = new JadxDecompiler();
+             InputStream in = new FileInputStream(dex)) {
+            jadx.addCustomLoad(new DexInputPlugin().loadDexFromInputStream(in, "input"));
+            jadx.load();
+            for (JavaClass cls : jadx.getClasses()) {
+                File path =new File(targetFilePath + File.separator + cls.getPackage().replace(".", "/"));
+                if(!path.exists()) {
+                    path.mkdirs();
+                }
+                IOUtils.writeToFile(cls.getCode(), path + File.separator + cls.getName() + ".java");
+            }
+            MatcherAssert.assertThat(jadx.getClasses(), Matchers.hasSize(1));
+        }
+    }
+
     @Override
     public boolean extract() {
         if (extractDex()) {
-            String dexPath = workingDirectory + "/extracted.dex";
-            return Smali2Java.decompile(errorMessage, dexPath, workingDirectory);
+            File dexPath = new File(workingDirectory + "/extracted.dex");
+            return decompile(dexPath, workingDirectory);
         }
         return false;
     }
@@ -72,7 +119,7 @@ public class JavaExtractor implements IJavaExtractor {
         }
 
         // Check directory
-        File dir = new File(workingDirectory);
+        File dir = workingDirectory;
         if (!dir.exists()) {
             dir.mkdirs();
         }

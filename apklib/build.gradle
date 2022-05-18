@@ -18,3 +18,5 @@ android {
     }
     namespace 'com.mcal.apklibrary'
 }
+dependencies {
+}
