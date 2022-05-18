@@ -16,6 +16,9 @@
 #-keep class com.android.apksig.** { *; }
 #-keep class com.android.apksigner.** { *; }
 
+-keep class brut.** { *; }
+-keep class jadx.** { *; }
+
 #-keep class brut.androlib.meta.MetaInfo.** {*;}
 #-keep class brut.androlib.meta.PackageInfo.** {*;}
 #-keep class brut.androlib.meta.UsesFramework.** {*;}

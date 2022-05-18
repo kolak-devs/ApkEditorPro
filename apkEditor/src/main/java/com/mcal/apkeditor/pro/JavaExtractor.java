@@ -73,7 +73,7 @@ public class JavaExtractor implements IJavaExtractor {
     public void writeDexFile(File dex, File targetFilePath) throws IOException {
         try (JadxDecompiler jadx = new JadxDecompiler();
              InputStream in = new FileInputStream(dex)) {
-            jadx.addCustomLoad(new DexInputPlugin().loadDexFromInputStream(in, "ApkEditor Pro " + BuildConfig.VERSION_NAME));
+            jadx.addCustomLoad(new DexInputPlugin().loadDexFromInputStream(in, "JaDX " + BuildConfig.JADX_VERSION));
             jadx.load();
             for (JavaClass cls : jadx.getClasses()) {
                 File path =new File(targetFilePath + File.separator + cls.getPackage().replace(".", "/"));
