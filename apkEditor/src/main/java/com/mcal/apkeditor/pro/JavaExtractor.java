@@ -2,6 +2,7 @@ package com.mcal.apkeditor.pro;
 
 import androidx.annotation.NonNull;
 
+import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.inf.IJavaExtractor;
 import com.mcal.common.utils.IOUtils;
 
@@ -72,7 +73,7 @@ public class JavaExtractor implements IJavaExtractor {
     public void writeDexFile(File dex, File targetFilePath) throws IOException {
         try (JadxDecompiler jadx = new JadxDecompiler();
              InputStream in = new FileInputStream(dex)) {
-            jadx.addCustomLoad(new DexInputPlugin().loadDexFromInputStream(in, "input"));
+            jadx.addCustomLoad(new DexInputPlugin().loadDexFromInputStream(in, "ApkEditor Pro " + BuildConfig.VERSION_NAME));
             jadx.load();
             for (JavaClass cls : jadx.getClasses()) {
                 File path =new File(targetFilePath + File.separator + cls.getPackage().replace(".", "/"));
