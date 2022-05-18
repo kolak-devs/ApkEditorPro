@@ -16,13 +16,12 @@
  */
 package brut.androlib;
 
-import androidx.annotation.NonNull;
-
 import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.UsesFramework;
 
 import brut.androlib.options.BuildOptions;
 import brut.androlib.res.AndrolibResources;
+import brut.androlib.res.data.ResConfigFlags;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResTable;
 import brut.androlib.res.data.ResUnknownFiles;
@@ -39,7 +38,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.jf.dexlib2.iface.DexFile;
 import org.json.JSONException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
@@ -260,6 +262,7 @@ public class Androlib {
         }
     }
 
+    // TODO: For ApkEditor
     public void writeMetaFile(File mOutDir, MetaInfo meta)
             throws AndrolibException {
         try {
@@ -269,6 +272,7 @@ public class Androlib {
         }
     }
 
+    // TODO: For ApkEditor
     public MetaInfo readMetaFile(ExtFile appDir)
             throws AndrolibException {
         try {
@@ -280,26 +284,6 @@ public class Androlib {
             throw new AndrolibException(ex);
         }
     }
-
-    /*public void writeMetaFile(File mOutDir, @NonNull MetaInfo meta)
-            throws AndrolibException {
-        try {
-            meta.save(new File(mOutDir, "apktool.yml"));
-        } catch (IOException ex) {
-            throw new AndrolibException(ex);
-        }
-    }
-
-    public MetaInfo readMetaFile(ExtFile appDir)
-            throws AndrolibException {
-        try(
-                InputStream in = appDir.getDirectory().getFileInput("apktool.yml")
-        ) {
-            return MetaInfo.load(in);
-        } catch (DirectoryException | IOException ex) {
-            throw new AndrolibException(ex);
-        }
-    }*/
 
     public void build(File appDir, File outFile) throws BrutException {
         build(new ExtFile(appDir), outFile);
@@ -511,6 +495,23 @@ public class Androlib {
                     }
                 }
 
+                if (buildOptions.netSecConf) {
+                    MetaInfo meta = readMetaFile(new ExtFile(appDir));
+                    if (meta.sdkInfo != null && meta.sdkInfo.get("targetSdkVersion") != null) {
+                        if (Integer.parseInt(meta.sdkInfo.get("targetSdkVersion")) < ResConfigFlags.SDK_NOUGAT) {
+                            LOGGER.warning("Target SDK version is lower than 24! Network Security Configuration might be ignored!");
+                        }
+                    }
+                    File netSecConfOrig = new File(appDir, "res/xml/network_security_config.xml");
+                    if (netSecConfOrig.exists()) {
+                        LOGGER.info("Replacing existing network_security_config.xml!");
+                        netSecConfOrig.delete();
+                    }
+                    ResXmlPatcher.modNetworkSecurityConfig(netSecConfOrig);
+                    ResXmlPatcher.setNetworkSecurityConfig(new File(appDir, "AndroidManifest.xml"));
+                    LOGGER.info("Added permissive network security config in manifest");
+                }
+
                 File apkFile = File.createTempFile("APKTOOL", null);
                 apkFile.delete();
                 resourceFile.delete();
@@ -543,7 +544,7 @@ public class Androlib {
                 apkFile.delete();
             }
             return true;
-        } catch (IOException | BrutException ex) {
+        } catch (IOException | BrutException | ParserConfigurationException | TransformerException | SAXException ex) {
             throw new AndrolibException(ex);
         }
     }
@@ -682,7 +683,7 @@ public class Androlib {
         }
     }
 
-    private void copyExistingFiles(@NonNull ZipFile inputFile, ZipOutputStream outputFile) throws IOException {
+    private void copyExistingFiles(ZipFile inputFile, ZipOutputStream outputFile) throws IOException {
         // First, copy the contents from the existing outFile:
         Enumeration<? extends ZipEntry> entries = inputFile.entries();
         while (entries.hasMoreElements()) {
@@ -701,7 +702,7 @@ public class Androlib {
         }
     }
 
-    private void copyUnknownFiles(File appDir, ZipOutputStream outputFile, @NonNull Map<String, String> files)
+    private void copyUnknownFiles(File appDir, ZipOutputStream outputFile, Map<String, String> files)
             throws BrutException, IOException {
         File unknownFileDir = new File(appDir, UNK_DIRNAME);
 

@@ -91,6 +91,11 @@ public class ResFileDecoder {
                         decode(inDir, inFileName, outDir, outFileName, "9patch");
                         return;
                     } catch (CantFind9PatchChunkException ex) {
+                        LOGGER.log(
+                                Level.WARNING,
+                                String.format(
+                                        "Cant find 9patch chunk in file: \"%s\". Renaming it to *.png.",
+                                        inFileName), ex);
                         outDir.removeFile(outFileName);
                         outFileName = outResName + ext;
                     }
@@ -111,25 +116,26 @@ public class ResFileDecoder {
             }
 
             decode(inDir, inFileName, outDir, outFileName, "xml");
-        } //catch (RawXmlEncounteredException ex) {
-        // If we got an error to decode XML, lets assume the file is in raw format.
-        // This is a large assumption, that might increase runtime, but will save us for situations where
-        // XSD files are AXML`d on aapt1, but left in plaintext in aapt2.
-        //  decode(inDir, inFileName, outDir, outFileName, "raw");
-        // }
-        catch (AndrolibException ex) {
+        } catch (RawXmlEncounteredException ex) {
+            // If we got an error to decode XML, lets assume the file is in raw format.
+            // This is a large assumption, that might increase runtime, but will save us for situations where
+            // XSD files are AXML`d on aapt1, but left in plaintext in aapt2.
+            decode(inDir, inFileName, outDir, outFileName, "raw");
+        } catch (AndrolibException ex) {
+            LOGGER.log(Level.SEVERE, String.format(
+                    "Could not decode file, replacing by FALSE value: %s",
+                    inFileName), ex);
             res.replace(new ResBoolValue(false, 0, null));
         }
     }
 
     public void decode(Directory inDir, String inFileName, Directory outDir,
                        String outFileName, String decoder) throws AndrolibException {
-        try {
-            InputStream in = inDir.getFileInput(inFileName);
-            OutputStream out = outDir.getFileOutput(outFileName);
+        try (
+                InputStream in = inDir.getFileInput(inFileName);
+                OutputStream out = outDir.getFileOutput(outFileName)
+        ) {
             mDecoders.decode(in, out, decoder);
-            in.close();
-            out.close();
         } catch (DirectoryException | IOException ex) {
             throw new AndrolibException(ex);
         }
@@ -146,24 +152,25 @@ public class ResFileDecoder {
 
     public void decodeManifest(Directory inDir, String inFileName,
                                Directory outDir, String outFileName) throws AndrolibException {
-        try {
-            InputStream in = inDir.getFileInput(inFileName);
-            OutputStream out = outDir.getFileOutput(outFileName);
+        try (
+                InputStream in = inDir.getFileInput(inFileName);
+                OutputStream out = outDir.getFileOutput(outFileName)
+        ) {
             ((XmlPullStreamDecoder) mDecoders.getDecoder("xml")).decodeManifest(in, out);
-            in.close();
-            out.close();
         } catch (DirectoryException | IOException ex) {
             throw new AndrolibException(ex);
         }
     }
 
+    private final static Logger LOGGER = Logger.getLogger(ResFileDecoder.class.getName());
+
     private final static String[] RAW_IMAGE_EXTENSIONS = new String[] {
-            "m4a", // apple
-            "qmg", // samsung
+        "m4a", // apple
+        "qmg", // samsung
     };
 
     private final static String[] RAW_9PATCH_IMAGE_EXTENSIONS = new String[] {
-            "qmg", // samsung
-            "spi", // samsung
+        "qmg", // samsung
+        "spi", // samsung
     };
 }

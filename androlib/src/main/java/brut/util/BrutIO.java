@@ -16,8 +16,6 @@
  */
 package brut.util;
 
-import androidx.annotation.NonNull;
-
 import brut.common.BrutException;
 import brut.common.InvalidUnknownFileException;
 import brut.common.RootUnknownFileException;
@@ -41,7 +39,7 @@ public class BrutIO {
         }
     }
 
-    public static long recursiveModifiedTime(@NonNull File[] files) {
+    public static long recursiveModifiedTime(File[] files) {
         long modified = 0;
         for (File file : files) {
             long submodified = recursiveModifiedTime(file);
@@ -52,7 +50,7 @@ public class BrutIO {
         return modified;
     }
 
-    public static long recursiveModifiedTime(@NonNull File file) {
+    public static long recursiveModifiedTime(File file) {
         long modified = file.lastModified();
         if (file.isDirectory()) {
             File[] subfiles = file.listFiles();
@@ -66,8 +64,7 @@ public class BrutIO {
         return modified;
     }
 
-    @NonNull
-    public static CRC32 calculateCrc(@NonNull InputStream input) throws IOException {
+    public static CRC32 calculateCrc(InputStream input) throws IOException {
         CRC32 crc = new CRC32();
         int bytesRead;
         byte[] buffer = new byte[8192];
@@ -77,8 +74,7 @@ public class BrutIO {
         return crc;
     }
 
-    @NonNull
-    public static String sanitizeUnknownFile(final File directory, @NonNull final String entry) throws IOException, BrutException {
+    public static String sanitizeUnknownFile(final File directory, final String entry) throws IOException, BrutException {
         if (entry.length() == 0) {
             throw new InvalidUnknownFileException("Invalid Unknown File");
         }
@@ -116,7 +112,7 @@ public class BrutIO {
         }
     }
 
-    public static void copy(@NonNull ZipFile inputFile, ZipOutputStream outputFile, ZipEntry entry) throws IOException {
+    public static void copy(ZipFile inputFile, ZipOutputStream outputFile, ZipEntry entry) throws IOException {
         try (
                 InputStream is = inputFile.getInputStream(entry)
         ) {

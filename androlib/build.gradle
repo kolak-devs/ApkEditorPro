@@ -8,6 +8,7 @@ android {
     defaultConfig {
         minSdk 26
         targetSdk 32
+        // version 18.05.2022
     }
 
     buildTypes {

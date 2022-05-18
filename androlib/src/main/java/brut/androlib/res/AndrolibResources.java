@@ -16,13 +16,9 @@
  */
 package brut.androlib.res;
 
-import android.util.Log;
-
 import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.PackageInfo;
 import com.mcal.androlib.meta.VersionInfo;
-import com.mcal.common.utils.CommandRunner;
-import com.mcal.common.utils.LOGGER;
 
 import brut.androlib.AndrolibException;
 import brut.androlib.options.BuildOptions;
@@ -457,13 +453,6 @@ final public class AndrolibResources {
 //            }
 //        }
 
-        if (buildOptions.doNotCompress != null) {
-            for (String file : buildOptions.doNotCompress) {
-                cmd.add("-0");
-                cmd.add(file);
-            }
-        }
-
         if (!buildOptions.resourcesAreCompressed) {
             cmd.add("-0");
             cmd.add("arsc");
@@ -497,24 +486,11 @@ final public class AndrolibResources {
             cmd.add(resourcesZip.getAbsolutePath());
         }
 
-//        try {
-//            OS.exec(cmd.toArray(new String[0]));
-//            LOGGER.fine("aapt2 link command ran: ");
-//            LOGGER.fine(cmd.toString());
-//        } catch (BrutException ex) {
-//            throw new AndrolibException(ex);
-//        }
-
-        CommandRunner start = new CommandRunner();
         try {
-            start.runCommand(cmd.toArray(new String[0]),
-                null, null, 300 * 1000, true);
-
+            OS.exec(cmd.toArray(new String[0]));
             LOGGER.fine("aapt2 link command ran: ");
             LOGGER.fine(cmd.toString());
-            LOGGER.info("Info: " + start.getStdOut());
-        } catch (Exception ex) {
-            LOGGER.warning("Warning: " + start.getStdError());
+        } catch (BrutException ex) {
             throw new AndrolibException(ex);
         }
     }
@@ -625,24 +601,11 @@ final public class AndrolibResources {
         if (rawDir != null) {
             cmd.add(rawDir.getAbsolutePath());
         }
-//        try {
-//            OS.exec(cmd.toArray(new String[0]));
-//            LOGGER.fine("command ran: ");
-//            LOGGER.fine(cmd.toString());
-//        } catch (BrutException ex) {
-//            throw new AndrolibException(ex);
-//        }
-
-        CommandRunner start = new CommandRunner();
         try {
-            start.runCommand(cmd.toArray(new String[0]),
-                    null, null, 300 * 1000, true);
-
+            OS.exec(cmd.toArray(new String[0]));
             LOGGER.fine("command ran: ");
             LOGGER.fine(cmd.toString());
-            LOGGER.info("Info: " + start.getStdOut());
-        } catch (Exception ex) {
-            LOGGER.warning("Warning: " + start.getStdError());
+        } catch (BrutException ex) {
             throw new AndrolibException(ex);
         }
     }
@@ -991,62 +954,62 @@ final public class AndrolibResources {
         }
     }
 
-    public File getFrameworkDir() {
-        /*if (mFrameworkDirectory != null) {
-            return mFrameworkDirectory;
-        }
-
-        String path;
-
-        // if a framework path was specified on the command line, use it
-        if (buildOptions.frameworkFolderLocation != null) {
-            path = buildOptions.frameworkFolderLocation;
-        } else {
-            File parentPath = new File(System.getProperty("user.home"));
-
-            if (OSDetection.isMacOSX()) {
-                path = parentPath.getAbsolutePath() + String.format("%1$sLibrary%1$sapktool%1$sframework", File.separatorChar);
-            } else if (OSDetection.isWindows()) {
-                path = parentPath.getAbsolutePath() + String.format("%1$sAppData%1$sLocal%1$sapktool%1$sframework", File.separatorChar);
-            } else {
-                path = parentPath.getAbsolutePath() + String.format("%1$s.local%1$sshare%1$sapktool%1$sframework", File.separatorChar);
-            }
-        }
-
-        File dir = new File(path);
-
-        if (!dir.isDirectory() && dir.isFile()) {
-            throw new AndrolibException("--frame-path is set to a file, not a directory.");
-        }
-
-        if (dir.getParentFile() != null && dir.getParentFile().isFile()) {
-            throw new AndrolibException("Please remove file at " + dir.getParentFile());
-        }
-
-        if (! dir.exists()) {
-            if (! dir.mkdirs()) {
-                if (buildOptions.frameworkFolderLocation != null) {
-                    LOGGER.severe("Can't create Framework directory: " + dir);
-                }
-                throw new AndrolibException(String.format(
-                        "Can't create directory: (%s). Pass a writable path with --frame-path {DIR}. ", dir
-                ));
-            }
-        }
-
-        if (buildOptions.frameworkFolderLocation == null) {
-            if (! dir.canWrite()) {
-                LOGGER.severe(String.format("WARNING: Could not write to (%1$s), using %2$s instead...",
-                        dir.getAbsolutePath(), System.getProperty("java.io.tmpdir")));
-                LOGGER.severe("Please be aware this is a volatile directory and frameworks could go missing, " +
-                        "please utilize --frame-path if the default storage directory is unavailable");
-
-                dir = new File(System.getProperty("java.io.tmpdir"));
-            }
-        }
-
-        mFrameworkDirectory = dir;
-        return dir;*/
+    public File getFrameworkDir() throws AndrolibException {
+//        if (mFrameworkDirectory != null) {
+//            return mFrameworkDirectory;
+//        }
+//
+//        String path;
+//
+//        // if a framework path was specified on the command line, use it
+//        if (buildOptions.frameworkFolderLocation != null) {
+//            path = buildOptions.frameworkFolderLocation;
+//        } else {
+//            File parentPath = new File(System.getProperty("user.home"));
+//
+//            if (OSDetection.isMacOSX()) {
+//                path = parentPath.getAbsolutePath() + String.format("%1$sLibrary%1$sapktool%1$sframework", File.separatorChar);
+//            } else if (OSDetection.isWindows()) {
+//                path = parentPath.getAbsolutePath() + String.format("%1$sAppData%1$sLocal%1$sapktool%1$sframework", File.separatorChar);
+//            } else {
+//                path = parentPath.getAbsolutePath() + String.format("%1$s.local%1$sshare%1$sapktool%1$sframework", File.separatorChar);
+//            }
+//        }
+//
+//        File dir = new File(path);
+//
+//        if (!dir.isDirectory() && dir.isFile()) {
+//            throw new AndrolibException("--frame-path is set to a file, not a directory.");
+//        }
+//
+//        if (dir.getParentFile() != null && dir.getParentFile().isFile()) {
+//            throw new AndrolibException("Please remove file at " + dir.getParentFile());
+//        }
+//
+//        if (! dir.exists()) {
+//            if (! dir.mkdirs()) {
+//                if (buildOptions.frameworkFolderLocation != null) {
+//                    LOGGER.severe("Can't create Framework directory: " + dir);
+//                }
+//                throw new AndrolibException(String.format(
+//                        "Can't create directory: (%s). Pass a writable path with --frame-path {DIR}. ", dir
+//                ));
+//            }
+//        }
+//
+//        if (buildOptions.frameworkFolderLocation == null) {
+//            if (! dir.canWrite()) {
+//                LOGGER.severe(String.format("WARNING: Could not write to (%1$s), using %2$s instead...",
+//                        dir.getAbsolutePath(), System.getProperty("java.io.tmpdir")));
+//                LOGGER.severe("Please be aware this is a volatile directory and frameworks could go missing, " +
+//                        "please utilize --frame-path if the default storage directory is unavailable");
+//
+//                dir = new File(System.getProperty("java.io.tmpdir"));
+//            }
+//        }
+//
+//        mFrameworkDirectory = dir;
+//        return dir;
         return new File(buildOptions.frameworkFolderLocation);
     }
 
@@ -1066,7 +1029,7 @@ final public class AndrolibResources {
     }
 
     public InputStream getAndroidFrameworkResourcesAsStream() {
-        return Jar.class.getResourceAsStream("assets/android-framework.jar");
+        return Jar.class.getResourceAsStream("/brut/androlib/android-framework.jar");
     }
 
     public void close() throws IOException {

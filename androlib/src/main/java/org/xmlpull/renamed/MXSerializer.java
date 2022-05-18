@@ -16,9 +16,6 @@
  */
 package org.xmlpull.renamed;
 
-import androidx.annotation.NonNull;
-
-import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
@@ -333,8 +330,6 @@ public class MXSerializer implements XmlSerializer {
         }
 	}
 
-	@NonNull
-	@Contract(pure = true)
 	private String getLocation() {
 		return location != null ? " @" + location : "";
 	}
@@ -820,7 +815,7 @@ public class MXSerializer implements XmlSerializer {
 
 	// --- utility methods
 
-	protected void writeAttributeValue(@NonNull String value, Writer out)
+	protected void writeAttributeValue(String value, Writer out)
 			throws IOException {
 		// .[apostrophe and <, & escaped],
 		final char quot = attributeUseApostrophe ? '\'' : '"';
@@ -998,7 +993,6 @@ public class MXSerializer implements XmlSerializer {
 		}
 	}
 
-	@NonNull
 	protected static String printable(String s) {
 		if (s == null) {
 			return "null";
@@ -1012,7 +1006,6 @@ public class MXSerializer implements XmlSerializer {
 		return retval.toString();
 	}
 
-	@NonNull
 	protected static String printable(char ch) {
 		StringBuffer retval = new StringBuffer();
 		addPrintable(retval, ch);

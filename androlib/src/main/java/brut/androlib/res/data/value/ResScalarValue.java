@@ -115,13 +115,14 @@ public abstract class ResScalarValue extends ResIntBasedValue implements
         return mType;
     }
 
+    // TODO: For ApkEditor
+    public String getRawValue() {
+        return mRawValue;
+    }
+
     protected void serializeExtraXmlAttrs(XmlSerializer serializer,
                                           ResResource res) throws IOException {
     }
 
     protected abstract String encodeAsResXml() throws AndrolibException;
-
-    public String getRawValue() {
-        return mRawValue;
-    }
 }

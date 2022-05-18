@@ -206,6 +206,7 @@ public final class ResXmlEncoders {
         return new Duo<>(nonPositional, positional);
     }
 
+    // TODO: For ApkEditor
     private static boolean isPrintableChar(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
         return !Character.isISOControl(c) && c != -1

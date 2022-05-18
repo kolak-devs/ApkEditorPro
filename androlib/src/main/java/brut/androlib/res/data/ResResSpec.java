@@ -112,12 +112,13 @@ public class ResResSpec {
         }
     }
 
+    // TODO: For ApkEditor
+    public Map<ResConfigFlags, ResResource> getAllResources() {
+        return mResources;
+    }
+
     @Override
     public String toString() {
         return mId.toString() + " " + mType.toString() + "/" + mName;
-    }
-
-    public Map<ResConfigFlags, ResResource> getAllResources() {
-        return mResources;
     }
 }
