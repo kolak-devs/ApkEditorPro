@@ -11,15 +11,15 @@ import org.slf4j.LoggerFactory;
 
 import jadx.api.CommentsLevel;
 import jadx.api.ICodeWriter;
-import jadx.api.data.annotations.InsnCodeOffset;
-import jadx.api.data.annotations.VarDeclareRef;
-import jadx.api.data.annotations.VarRef;
+import jadx.api.metadata.annotations.InsnCodeOffset;
+import jadx.api.metadata.annotations.VarNode;
 import jadx.api.plugins.input.data.MethodHandleType;
 import jadx.core.dex.attributes.AFlag;
 import jadx.core.dex.attributes.AType;
 import jadx.core.dex.attributes.nodes.FieldReplaceAttr;
 import jadx.core.dex.attributes.nodes.GenericInfoAttr;
 import jadx.core.dex.attributes.nodes.LoopLabelAttr;
+import jadx.core.dex.attributes.nodes.MethodReplaceAttr;
 import jadx.core.dex.attributes.nodes.SkipMethodArgsAttr;
 import jadx.core.dex.info.ClassInfo;
 import jadx.core.dex.info.FieldInfo;
@@ -50,6 +50,7 @@ import jadx.core.dex.instructions.args.RegisterArg;
 import jadx.core.dex.instructions.args.SSAVar;
 import jadx.core.dex.instructions.mods.ConstructorInsn;
 import jadx.core.dex.instructions.mods.TernaryInsn;
+import jadx.core.dex.nodes.BlockNode;
 import jadx.core.dex.nodes.ClassNode;
 import jadx.core.dex.nodes.FieldNode;
 import jadx.core.dex.nodes.InsnNode;
@@ -107,7 +108,7 @@ public class InsnGen {
 		if (arg.isRegister()) {
 			RegisterArg reg = (RegisterArg) arg;
 			if (code.isMetadataSupported()) {
-				code.attachAnnotation(VarRef.get(mth, reg));
+				code.attachAnnotation(VarNode.getRef(mth, reg));
 			}
 			code.add(mgen.getNameGen().useArg(reg));
 		} else if (arg.isLiteral()) {
@@ -160,8 +161,15 @@ public class InsnGen {
 		}
 		useType(code, codeVar.getType());
 		code.add(' ');
+		defVar(code, codeVar);
+	}
+
+	/**
+	 * Variable definition without type, only var name
+	 */
+	private void defVar(ICodeWriter code, CodeVar codeVar) {
 		if (code.isMetadataSupported()) {
-			code.attachDefinition(VarDeclareRef.get(mth, codeVar));
+			code.attachDefinition(VarNode.get(mth, codeVar));
 		}
 		code.add(mgen.getNameGen().assignArg(codeVar));
 	}
@@ -517,7 +525,7 @@ public class InsnGen {
 				code.add(' ');
 				code.add(ifInsn.getOp().getSymbol()).add(' ');
 				addArg(code, insn.getArg(1));
-				code.add(") goto ").add(MethodGen.getLabelName(ifInsn.getTarget()));
+				code.add(") goto ").add(MethodGen.getLabelName(ifInsn));
 				break;
 
 			case GOTO:
@@ -538,13 +546,24 @@ public class InsnGen {
 				code.add(") {");
 				code.incIndent();
 				int[] keys = sw.getKeys();
-				int[] targets = sw.getTargets();
-				for (int i = 0; i < keys.length; i++) {
-					code.startLine("case ").add(Integer.toString(keys[i])).add(": goto ");
-					code.add(MethodGen.getLabelName(targets[i])).add(';');
+				int size = keys.length;
+				BlockNode[] targetBlocks = sw.getTargetBlocks();
+				if (targetBlocks != null) {
+					for (int i = 0; i < size; i++) {
+						code.startLine("case ").add(Integer.toString(keys[i])).add(": goto ");
+						code.add(MethodGen.getLabelName(targetBlocks[i])).add(';');
+					}
+					code.startLine("default: goto ");
+					code.add(MethodGen.getLabelName(sw.getDefTargetBlock())).add(';');
+				} else {
+					int[] targets = sw.getTargets();
+					for (int i = 0; i < size; i++) {
+						code.startLine("case ").add(Integer.toString(keys[i])).add(": goto ");
+						code.add(MethodGen.getLabelName(targets[i])).add(';');
+					}
+					code.startLine("default: goto ");
+					code.add(MethodGen.getLabelName(sw.getDefaultCaseOffset())).add(';');
 				}
-				code.startLine("default: goto ");
-				code.add(MethodGen.getLabelName(sw.getDefaultCaseOffset())).add(';');
 				code.decIndent();
 				code.startLine('}');
 				break;
@@ -682,19 +701,27 @@ public class InsnGen {
 			throw new JadxRuntimeException("Constructor 'self' invoke must be removed!");
 		}
 		MethodNode callMth = mth.root().resolveMethod(insn.getCallMth());
+		MethodNode refMth = callMth;
+		if (callMth != null) {
+			MethodReplaceAttr replaceAttr = callMth.get(AType.METHOD_REPLACE);
+			if (replaceAttr != null) {
+				refMth = replaceAttr.getReplaceMth();
+			}
+		}
+
 		if (insn.isSuper()) {
-			code.attachAnnotation(callMth);
+			code.attachAnnotation(refMth);
 			code.add("super");
 		} else if (insn.isThis()) {
-			code.attachAnnotation(callMth);
+			code.attachAnnotation(refMth);
 			code.add("this");
 		} else {
 			code.add("new ");
-			if (callMth == null || callMth.contains(AFlag.DONT_GENERATE)) {
+			if (refMth == null || refMth.contains(AFlag.DONT_GENERATE)) {
 				// use class reference if constructor method is missing (default constructor)
 				code.attachAnnotation(mth.root().resolveClass(insn.getCallMth().getDeclClass()));
 			} else {
-				code.attachAnnotation(callMth);
+				code.attachAnnotation(refMth);
 			}
 			mgen.getClassGen().addClsName(code, insn.getClassType());
 			GenericInfoAttr genericInfoAttr = insn.get(AType.GENERIC_INFO);
@@ -918,7 +945,7 @@ public class InsnGen {
 					code.add(", ");
 				}
 				CodeVar argCodeVar = callArgs.get(i).getSVar().getCodeVar();
-				code.add(nameGen.assignArg(argCodeVar));
+				defVar(code, argCodeVar);
 			}
 		}
 		// force set external arg names into call method args
@@ -926,7 +953,8 @@ public class InsnGen {
 		int startArg = customNode.getHandleType() == MethodHandleType.INVOKE_STATIC ? 0 : 1; // skip 'this' arg
 		for (int i = startArg; i < extArgsCount; i++) {
 			RegisterArg extArg = (RegisterArg) customNode.getArg(i);
-			callArgs.get(i).setName(extArg.getName());
+			RegisterArg callRegArg = callArgs.get(i);
+			callRegArg.getSVar().setCodeVar(extArg.getSVar().getCodeVar());
 		}
 		code.add(" -> {");
 		code.incIndent();

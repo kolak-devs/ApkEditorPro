@@ -65,8 +65,8 @@ android {
             buildConfigField "String", "SMALI_VERSION", "\"2.5.2\""
 
             dependencies {
-                proImplementation project(':androlib')
-                proApi project(':jadx-master')
+                proApi project(':androlib')
+                proApi project(':jadx')
                 proApi project(':smali')
             }
         }
