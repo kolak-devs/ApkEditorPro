@@ -18,6 +18,7 @@
 
 -keep class brut.** { *; }
 -keep class jadx.** { *; }
+-keep class org.hamcrest.** { *; }
 
 #-keep class brut.androlib.meta.MetaInfo.** {*;}
 #-keep class brut.androlib.meta.PackageInfo.** {*;}
