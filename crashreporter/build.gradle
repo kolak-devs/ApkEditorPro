@@ -1,11 +1,13 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
 
 android {
-    compileSdkVersion 32
+    compileSdk 32
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 32
+        minSdk 14
+        targetSdk 32
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
@@ -16,6 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.balsikandar.crashreporter'
 }
 
 dependencies {
@@ -25,6 +28,6 @@ dependencies {
     })
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
     testImplementation 'junit:junit:4.13.2'
 }

@@ -1,11 +1,13 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
 
 android {
     compileSdk 32
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 32
+        minSdk 14
+        targetSdk 32
     }
 
     buildTypes {
@@ -14,4 +16,5 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    namespace 'com.mcal.apklibrary'
 }
