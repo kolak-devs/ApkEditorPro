@@ -2,17 +2,18 @@ package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.view.ViewDialog;
 
 import java.lang.ref.WeakReference;
 
-public class ProcessingDialog extends Dialog implements
+public class ProcessingDialog extends ViewDialog implements
         android.view.View.OnClickListener {
 
     private final WeakReference<Activity> activityRef;
@@ -22,17 +23,15 @@ public class ProcessingDialog extends Dialog implements
     @SuppressLint("InflateParams")
     public ProcessingDialog(Activity activity, ProcessingInterface processor,
                             int okTipResId) {
-        super(activity, R.style.Dialog_No_Border_2);
+        super(activity);
         this.activityRef = new WeakReference<>(activity);
         this.processor = processor;
         this.successTipResId = okTipResId;
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         LayoutInflater inflater = LayoutInflater.from(activity);
         View layout = inflater.inflate(R.layout.dlg_processing, null);
-        super.setContentView(layout);
-        super.setCancelable(false);
+        setView(layout);
+        setCancelable(false);
 
         // Start processing thread
         ProcessingThread thread = new ProcessingThread(this);
@@ -43,21 +42,18 @@ public class ProcessingDialog extends Dialog implements
     protected void processCompleted(final String errMsg) {
         Activity activity = activityRef.get();
         if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    // Call back to the task which is mainly for UI change
-                    processor.afterProcess();
+            activity.runOnUiThread(() -> {
+                // Call back to the task which is mainly for UI change
+                processor.afterProcess();
 
-                    if (errMsg != null) {
-                        showTip("Failed: " + errMsg);
-                    } else {
-                        showTip(successTipResId);
-                    }
+                if (errMsg != null) {
+                    showTip("Failed: " + errMsg);
+                } else {
+                    showTip(successTipResId);
+                }
 
-                    if (ProcessingDialog.this.isShowing()) {
-                        dismissWithoutThrow();
-                    }
+                if (ProcessingDialog.this.isShowing()) {
+                    dismissWithoutThrow();
                 }
             });
         }
@@ -66,8 +62,9 @@ public class ProcessingDialog extends Dialog implements
     // Don't know why occurred, but it appears on google play
     private void dismissWithoutThrow() {
         try {
-            this.dismiss();
-        } catch (Exception ignored) {
+            dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -88,21 +85,21 @@ public class ProcessingDialog extends Dialog implements
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.close_button) {
             dismissWithoutThrow();
         }
     }
 
-    public static interface ProcessingInterface {
-        public void process() throws Exception;
+    public interface ProcessingInterface {
+        void process() throws Exception;
 
-        public void afterProcess();
+        void afterProcess();
     }
 
     static class ProcessingThread extends Thread {
-        private WeakReference<ProcessingDialog> dlgRef;
+        private final WeakReference<ProcessingDialog> dlgRef;
 
         public ProcessingThread(ProcessingDialog dlg) {
             this.dlgRef = new WeakReference<>(dlg);
@@ -122,6 +119,5 @@ public class ProcessingDialog extends Dialog implements
                 dlg.processCompleted(errMsg);
             }
         }
-
     }
 }
