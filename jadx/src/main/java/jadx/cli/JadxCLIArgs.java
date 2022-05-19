@@ -173,13 +173,6 @@ public class JadxCLIArgs {
 	)
 	protected CommentsLevel commentsLevel = CommentsLevel.INFO;
 
-	@Parameter(
-			names = { "--log-level" },
-			description = "set log level, values: quiet, progress, error, warn, info, debug",
-			converter = LogHelper.LogLevelConverter.class
-	)
-	protected LogHelper.LogLevelEnum logLevel = LogHelper.LogLevelEnum.PROGRESS;
-
 	@Parameter(names = { "-v", "--verbose" }, description = "verbose output (set --log-level to DEBUG)")
 	protected boolean verbose = false;
 
@@ -435,10 +428,6 @@ public class JadxCLIArgs {
 
 	public CommentsLevel getCommentsLevel() {
 		return commentsLevel;
-	}
-
-	public LogHelper.LogLevelEnum getLogLevel() {
-		return logLevel;
 	}
 
 	public Map<String, String> getPluginOptions() {

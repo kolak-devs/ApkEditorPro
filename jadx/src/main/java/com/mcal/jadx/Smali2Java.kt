@@ -12,14 +12,17 @@ object Smali2Java {
         try {
             val dexInputFile = File(dexPath)
             val javaOutputDir = File(outputDir)
+
             val args = JadxArgs()
             args.outDirSrc = javaOutputDir
             args.isSkipResources = true
             args.isShowInconsistentCode = true
             args.setInputFile(dexInputFile)
+
             val decompiler = JadxDecompiler(args)
             decompiler.load()
             decompiler.saveSources()
+
             val javaClass = decompiler.classes.iterator().next()
             javaClass.decompile()
             //javaClass.getCode();
