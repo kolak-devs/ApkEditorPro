@@ -22,7 +22,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true" />
 
-        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
             android:id="@+id/et_replaceall"
             android:layout_width="0dip"
             android:layout_height="match_parent"

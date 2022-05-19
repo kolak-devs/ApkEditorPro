@@ -26,6 +26,7 @@ import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ZipUtils;
 import com.mcal.folderlist.FileRecord;
 
@@ -302,10 +303,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                         }
                     });
 
-            inputDlg.setNegativeButton(android.R.string.cancel,
-                    (dialog, whichButton) -> {
-                        // Canceled.
-                    });
+            inputDlg.setNegativeButton(android.R.string.cancel,null);
 
             inputDlg.show();
         }
@@ -401,7 +399,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             } else {
                 extractBtn.setOnClickListener(v -> {
                     try {
-                        ZipUtils.unzipFileTo(apkPath, _entry, "/sdcard/axml");
+                        ZipUtils.unzipFileTo(apkPath, _entry, ScopedStorage.getStorageDirectory()+File.separator+"axml");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

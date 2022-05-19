@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
-        android:listSelector="@drawable/list_selector"
+        android:listSelector="?android:attr/selectableItemBackground"
         android:paddingLeft="10.0dip"
         android:paddingTop="2dip"
         android:paddingRight="10.0dip"

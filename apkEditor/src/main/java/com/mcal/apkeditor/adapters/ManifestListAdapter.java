@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
@@ -197,7 +199,17 @@ public class ManifestListAdapter extends BaseAdapter implements
                 }
             }
         }
+    }
 
+    private Drawable getImageDrawable(@NonNull LineRecord lineRec) {
+        Drawable drawable;
+        if (!lineRec.collapsed) {
+            drawable = ContextCompat.getDrawable(activityRef.get(), R.drawable.round_expand_more_24);
+        } else {
+            drawable = ContextCompat.getDrawable(activityRef.get(), R.drawable.round_chevron_right_24);
+        }
+
+        return drawable;
     }
 
     private Bitmap getImage(@NonNull LineRecord lineRec) {
@@ -220,7 +232,7 @@ public class ManifestListAdapter extends BaseAdapter implements
             Canvas c = new Canvas(b);
             Paint paint = new Paint();
             // paint.setColor(Color.WHITE);
-            c.drawBitmap(arrow, width - 40, 8, paint);
+            c.drawBitmap(arrow, width - 48, 0, paint);
         }
 
         return b;

@@ -3,9 +3,9 @@ package com.mcal.apkeditor.autocomplete;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
 
-public class AutoCompleteTextView extends AppCompatAutoCompleteTextView {
+public class AutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
 
     public AutoCompleteTextView(Context context) {
         super(context);

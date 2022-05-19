@@ -90,6 +90,7 @@
             android:layout_marginLeft="4.0dip"
             android:layout_marginRight="4.0dip"
             android:fadingEdge="none"
+            android:divider="@null"
             android:groupIndicator="@null" />
 
         <LinearLayout

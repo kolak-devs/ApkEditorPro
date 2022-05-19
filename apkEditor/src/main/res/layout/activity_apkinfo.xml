@@ -170,8 +170,7 @@
                 android:divider="@null"
                 android:fadingEdge="none"
                 android:focusable="false"
-                android:groupIndicator="@null"
-                android:listSelector="@drawable/list_selector" />
+                android:groupIndicator="@null" />
 
             <View
                 android:layout_width="match_parent"
@@ -401,10 +400,9 @@
                 android:layout_marginLeft="4.0dip"
                 android:layout_marginRight="4.0dip"
                 android:layout_weight="1"
-                android:cacheColorHint="#00000000"
+                android:divider="@null"
                 android:fadingEdge="none"
-                android:groupIndicator="@null"
-                android:listSelector="@drawable/list_selector" />
+                android:groupIndicator="@null" />
 
             <View
                 android:layout_width="match_parent"
@@ -546,10 +544,9 @@
                 android:layout_marginLeft="4.0dip"
                 android:layout_marginRight="4.0dip"
                 android:layout_weight="1"
-                android:cacheColorHint="#00000000"
+                android:divider="@null"
                 android:fadingEdge="none"
-                android:groupIndicator="@null"
-                android:listSelector="@drawable/list_selector" />
+                android:groupIndicator="@null" />
 
             <FrameLayout
                 android:layout_width="match_parent"

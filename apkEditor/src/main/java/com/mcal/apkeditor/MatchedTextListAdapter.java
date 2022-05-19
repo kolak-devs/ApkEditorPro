@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
@@ -357,7 +357,7 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
         layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT));
 
-        final AppCompatAutoCompleteTextView input = new AppCompatAutoCompleteTextView(
+        final AutoCompleteTextView input = new AutoCompleteTextView(
                 activityRef.get().getApplicationContext());
         input.setAdapter(adapter);
         layout.addView(input, new LayoutParams(LayoutParams.MATCH_PARENT,

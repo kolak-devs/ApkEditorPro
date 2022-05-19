@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20.0dip"

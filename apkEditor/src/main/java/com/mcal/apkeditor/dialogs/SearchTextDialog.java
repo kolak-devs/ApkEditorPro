@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
@@ -54,7 +54,7 @@ public class SearchTextDialog
     private final boolean caseSensitive;
     // Record matched files
     private final ArrayList<String> matchedFiles = new ArrayList<>();
-    private AppCompatAutoCompleteTextView etReplaceAll;
+    private AutoCompleteTextView etReplaceAll;
     private ExpandableListView listView;
     private MatchedTextListAdapter listAdapter;
     private LinearLayout searchingLayout;
@@ -87,7 +87,7 @@ public class SearchTextDialog
     private void init(Activity activity) {
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_txt_searchresult, null);
 
-        this.etReplaceAll = (AppCompatAutoCompleteTextView) view.findViewById(R.id.et_replaceall);
+        this.etReplaceAll = (AutoCompleteTextView) view.findViewById(R.id.et_replaceall);
         this.listView = (ExpandableListView) view.findViewById(R.id.lv_matchedfiles);
         this.searchingLayout = (LinearLayout) view.findViewById(R.id.searching_layout);
         listView.setVisibility(View.INVISIBLE);
@@ -100,7 +100,7 @@ public class SearchTextDialog
         view.findViewById(R.id.btn_replaceall).setOnClickListener(this);
         this.adapter = new AutoCompleteAdapter(
                 activity.getApplicationContext(), "search_replace_with");
-        AppCompatAutoCompleteTextView etReplaceAll = (AppCompatAutoCompleteTextView) view.findViewById(R.id.et_replaceall);
+        AutoCompleteTextView etReplaceAll = (AutoCompleteTextView) view.findViewById(R.id.et_replaceall);
         etReplaceAll.setAdapter(adapter);
 
         dialog = new ViewDialog(activity);

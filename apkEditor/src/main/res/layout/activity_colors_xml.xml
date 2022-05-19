@@ -40,6 +40,7 @@
         android:layout_height="0dip"
         android:layout_margin="4.0dip"
         android:layout_weight="1"
+        android:divider="@null"
         android:focusable="false" />
 
     <LinearLayout
