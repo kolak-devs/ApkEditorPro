@@ -11,7 +11,7 @@ public class SettingEditorActivity {
     public static boolean isLineWrap(Context ctx) {
         String key = "LineWrap";
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getBoolean(key, true);
+        return sp.getBoolean(key, false);
     }
 
     public static int getFontSize(Context ctx) {

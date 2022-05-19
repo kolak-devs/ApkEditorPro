@@ -11,21 +11,25 @@
 
         <androidx.preference.SwitchPreference
             android:key="ShowLineNumbers"
+            android:defaultValue="true"
             android:title="@string/show_line_numbers" />
 
         <androidx.preference.EditTextPreference
             android:inputType="number"
             android:key="FontSize"
+            android:defaultValue="12"
             android:title="@string/font_size" />
 
         <androidx.preference.EditTextPreference
             android:dialogMessage="@string/use_bfe_message"
             android:inputType="number"
             android:key="BigFileSize"
+            android:defaultValue="64"
             android:title="@string/when_use_bfe" />
 
         <androidx.preference.SwitchPreference
             android:key="SymbolInput"
+            android:defaultValue="true"
             android:summary="@string/symbol_input_summary"
             android:title="@string/symbol_input" />
 
