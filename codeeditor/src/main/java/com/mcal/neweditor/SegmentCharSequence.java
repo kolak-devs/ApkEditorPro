@@ -3,8 +3,8 @@ package com.mcal.neweditor;
 import java.io.Serializable;
 
 public class SegmentCharSequence implements CharSequence, Serializable {
-	private static final long serialVersionUID = -8718409144053615735L;
-	private int length;
+    private static final long serialVersionUID = -8718409144053615735L;
+    private int length;
     private int offset;
     private Segment seg;
 

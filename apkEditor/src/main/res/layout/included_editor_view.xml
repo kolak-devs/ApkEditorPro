@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.mcal.neweditor.view.ObScrollView
+    <com.mcal.neweditor.view.CodeScrollView
         android:id="@+id/editorScrollview"
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -39,13 +39,13 @@
                 android:layout_width="1.0px"
                 android:layout_height="match_parent" />
 
-            <com.mcal.neweditor.view.ObHorizontalScrollView
+            <com.mcal.neweditor.view.CodeHorizontalScrollView
                 android:id="@+id/hScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true">
 
-                <com.mcal.neweditor.view.ObEditText
+                <com.mcal.neweditor.view.CodeEditor
                     android:id="@+id/editor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -58,11 +58,11 @@
                     android:textSize="12.0sp"
                     android:typeface="monospace" />
 
-            </com.mcal.neweditor.view.ObHorizontalScrollView>
+            </com.mcal.neweditor.view.CodeHorizontalScrollView>
 
         </LinearLayout>
 
-    </com.mcal.neweditor.view.ObScrollView>
+    </com.mcal.neweditor.view.CodeScrollView>
 
     <include layout="@layout/included_editor_menu" />
 

@@ -10,6 +10,19 @@ import java.util.regex.Pattern;
 
 public class ParserRuleSet {
     private static final ParserRuleSet[] standard = new ParserRuleSet[19];
+
+    static {
+        for (byte i = (byte) 0; i < Token.ID_COUNT; i = (byte) (i + 1)) {
+            standard[i] = new ParserRuleSet(null, null);
+            standard[i].setDefault(i);
+            standard[i].builtIn = true;
+        }
+    }
+
+    private final List<ParserRuleSet> imports;
+    private final String modeName;
+    private final Map<Character, List<ParserRule>> ruleMap;
+    private final String setName;
     private String _noWordSep;
     private boolean builtIn;
     private byte defaultToken;
@@ -17,25 +30,21 @@ public class ParserRuleSet {
     private ParserRule escapeRule;
     private boolean highlightDigits;
     private boolean ignoreCase = true;
-    private final List<ParserRuleSet> imports;
     private KeywordMap keywords;
-    private final String modeName;
     private String noWordSep;
     private Hashtable<String, String> props;
     private int ruleCount;
-    private final Map<Character, List<ParserRule>> ruleMap;
-    private final String setName;
     private int terminateChar = -1;
-
-    public static ParserRuleSet getStandardRuleSet(byte id) {
-        return standard[id];
-    }
 
     public ParserRuleSet(String modeName, String setName) {
         this.modeName = modeName;
         this.setName = setName;
         this.ruleMap = new HashMap();
         this.imports = new ArrayList();
+    }
+
+    public static ParserRuleSet getStandardRuleSet(byte id) {
+        return standard[id];
     }
 
     public String getModeName() {
@@ -242,13 +251,5 @@ public class ParserRuleSet {
 
     public String toString() {
         return new StringBuilder(String.valueOf(getClass().getName())).append('[').append(this.modeName).append("::").append(this.setName).append(']').toString();
-    }
-
-    static {
-        for (byte i = (byte) 0; i < Token.ID_COUNT; i = (byte) (i + 1)) {
-            standard[i] = new ParserRuleSet(null, null);
-            standard[i].setDefault(i);
-            standard[i].builtIn = true;
-        }
     }
 }

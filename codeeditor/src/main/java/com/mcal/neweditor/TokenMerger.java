@@ -10,7 +10,7 @@ public class TokenMerger {
         Token head = token;
         Token previous = token;
         Token curToken = token.next;
-        
+
         while (curToken != null) {
             // The same type and continuous, merge it
             if (curToken.id == previous.id
@@ -22,13 +22,13 @@ public class TokenMerger {
                 previous.next = curToken;
                 previous = curToken;
             }
-            
+
             // iterate next
             curToken = curToken.next;
         }
-        
+
         previous.next = null;
-        
+
         return head;
     }
 

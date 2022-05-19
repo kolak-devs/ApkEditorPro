@@ -1,5 +1,20 @@
 package com.mcal.neweditor;
 
+import android.content.Context;
+import android.text.Spannable;
+import android.text.style.CharacterStyle;
+import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.mcal.neweditor.TokenMarker.LineContext;
+import com.mcal.neweditor.data.ColorTheme;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,42 +29,26 @@ import java.util.Vector;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-
-import android.content.Context;
-import android.text.Spannable;
-import android.text.style.CharacterStyle;
-import android.widget.EditText;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.mcal.neweditor.TokenMarker.LineContext;
-import com.mcal.neweditor.data.ColorTheme;
-
 public class Document implements Serializable {
     public static final String LINE_SEPARATOR_UNIX = "\n";
     public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
 
     private static int undoLevel = 64;
-    private transient ArrayList<LineContext> baseToken;
+    private final Vector<Change> redo = new Vector<>();
+    private final Vector<Change> undo = new Vector<>();
+    private final ColorTheme colorTheme;
     protected boolean changed = false;
+    protected String text = null;
+    private transient ArrayList<LineContext> baseToken;
     private boolean clearNext;
     private int lastSHLineEnd;
     private int lastSHLineStart;
     private File mFile;
-    private final Vector<Change> redo = new Vector<>();
     private int scrollPositionX = 0;
     private int scrollPositionY = 0;
     private int selectionEnd;
     private int selectionStart;
-    protected String text = null;
-    private final Vector<Change> undo = new Vector<>();
-
     private transient TokenMarker mTokenMarker;
-    private final ColorTheme colorTheme;
 
     public Document(Context context, File file, String syntaxFileName) {
         this.mFile = file;
@@ -88,6 +87,10 @@ public class Document implements Serializable {
         }
     }
 
+    public static void setUndoLevel(int undoLevel) {
+        undoLevel = undoLevel;
+    }
+
     @NonNull
     private String getSyntaxName(@NonNull String fileName) {
         int pos = fileName.lastIndexOf('.');
@@ -114,6 +117,10 @@ public class Document implements Serializable {
         return this.selectionEnd;
     }
 
+    // public void load(Context context, boolean rootMode) throws Exception {
+    // load(context, this.mFile.getAbsolutePath());
+    // }
+
     public void textChanged(CharSequence s, int start, int before, int count) {
         try {
             String oldText = this.text;
@@ -136,9 +143,9 @@ public class Document implements Serializable {
         }
     }
 
-    // public void load(Context context, boolean rootMode) throws Exception {
-    // load(context, this.mFile.getAbsolutePath());
-    // }
+//    public boolean isBigFile() {
+//        return text != null && text.length() > 128 * 1024;
+//    }
 
     // stringId = R.string.error_file_too_big
     public void load(Context context, String path, int stringId)
@@ -166,10 +173,6 @@ public class Document implements Serializable {
         fis.close();
     }
 
-//    public boolean isBigFile() {
-//        return text != null && text.length() > 128 * 1024;
-//    }
-
     private boolean isLetter(int i) {
         char c = this.text.charAt(i);
         return Character.isLetter(c)
@@ -185,13 +188,13 @@ public class Document implements Serializable {
         return true;
     }
 
-    public String getText() {
-        return this.text;
-    }
-
 //    public void setText(String text) {
 //        this.text = text;
 //    }
+
+    public String getText() {
+        return this.text;
+    }
 
     @NonNull
     public String toString() {
@@ -448,10 +451,6 @@ public class Document implements Serializable {
         for (Object removeSpan : toRemoveSpans) {
             spannable.removeSpan(removeSpan);
         }
-    }
-
-    public static void setUndoLevel(int undoLevel) {
-        undoLevel = undoLevel;
     }
 
     public String getExtension() {

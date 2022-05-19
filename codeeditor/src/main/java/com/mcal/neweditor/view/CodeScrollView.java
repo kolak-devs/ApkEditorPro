@@ -6,19 +6,18 @@ import android.widget.ScrollView;
 
 import com.mcal.neweditor.ScrollViewListener;
 
-// ObservableScrollView
-public class ObScrollView extends ScrollView {
+public class CodeScrollView extends ScrollView {
     private ScrollViewListener scrollViewListener = null;
 
-    public ObScrollView(Context context) {
+    public CodeScrollView(Context context) {
         super(context);
     }
 
-    public ObScrollView(Context context, AttributeSet attrs, int defStyle) {
+    public CodeScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public ObScrollView(Context context, AttributeSet attrs) {
+    public CodeScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

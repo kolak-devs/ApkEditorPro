@@ -4,7 +4,6 @@ import static java.lang.Math.abs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -21,7 +20,6 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -32,8 +30,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.SlidingDrawer;
-import android.widget.SlidingDrawer.OnDrawerCloseListener;
-import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -41,7 +37,6 @@ import android.widget.ViewAnimator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.editor.MoreEditorOptionAdapter;
@@ -57,9 +52,8 @@ import com.mcal.common.utils.PathUtils;
 import com.mcal.common.utils.SDCard;
 import com.mcal.neweditor.data.ColorTheme;
 import com.mcal.neweditor.Document;
-import com.mcal.neweditor.view.ObEditText;
-import com.mcal.neweditor.view.ObScrollView;
-import com.mcal.neweditor.ScrollViewListener;
+import com.mcal.neweditor.view.CodeEditor;
+import com.mcal.neweditor.view.CodeScrollView;
 import com.mcal.neweditor.TextSelectionListener;
 
 import java.io.File;
@@ -83,7 +77,7 @@ public class TextEditNormalActivity extends TextEditBase
     // changed state
     private final boolean lastUndoState = true;
     public int previousLineCount;
-    protected ObEditText textEditor;
+    protected CodeEditor textEditor;
     UpdateLineCount ulcTask = new UpdateLineCount();
     SyntaxHighLight shTask = new SyntaxHighLight();
     private boolean hlChange = false;
@@ -96,7 +90,7 @@ public class TextEditNormalActivity extends TextEditBase
     private EditText lineNumbers;
     private HorizontalScrollView editorHorizontalLayout;
     private View lineDivider;
-    private ObScrollView editorScrollView;
+    private CodeScrollView editorScrollView;
     private ViewAnimator docFindAnim;
     private SlidingDrawer documentListDrawer;
     private EditText findText;

@@ -20,12 +20,12 @@ public class Segment implements Cloneable, CharacterIterator, CharSequence {
         this.partialReturn = false;
     }
 
-    public void setPartialReturn(boolean p) {
-        this.partialReturn = p;
-    }
-
     public boolean isPartialReturn() {
         return this.partialReturn;
+    }
+
+    public void setPartialReturn(boolean p) {
+        this.partialReturn = p;
     }
 
     public String toString() {

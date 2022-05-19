@@ -5,24 +5,14 @@ import java.util.Comparator;
 import java.util.Stack;
 
 public class StandardUtilities {
-	public static final char DIR_SEPARATOR_WINDOWS = '\\';
-	public static final char PACKAGE_SEPARATOR_CHAR = '.';
+    public static final char DIR_SEPARATOR_WINDOWS = '\\';
+    public static final char PACKAGE_SEPARATOR_CHAR = '.';
 
 
-	
     public static final DecimalFormat KB_FORMAT = new DecimalFormat("#.# kB");
     public static final DecimalFormat MB_FORMAT = new DecimalFormat("#.# MB");
 
-    public static class StringCompare<E> implements Comparator<E> {
-        private boolean icase;
-
-        public StringCompare(boolean icase) {
-            this.icase = icase;
-        }
-
-        public int compare(E obj1, E obj2) {
-            return StandardUtilities.compareStrings(obj1.toString(), obj2.toString(), this.icase);
-        }
+    private StandardUtilities() {
     }
 
     public static String charsToEscapes(String str) {
@@ -389,7 +379,16 @@ public class StandardUtilities {
         return MB_FORMAT.format((((double) length) / 1024.0d) / 1024.0d);
     }
 
-    private StandardUtilities() {
+    public static class StringCompare<E> implements Comparator<E> {
+        private boolean icase;
+
+        public StringCompare(boolean icase) {
+            this.icase = icase;
+        }
+
+        public int compare(E obj1, E obj2) {
+            return StandardUtilities.compareStrings(obj1.toString(), obj2.toString(), this.icase);
+        }
     }
 
 }

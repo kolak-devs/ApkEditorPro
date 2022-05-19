@@ -1,9 +1,9 @@
 package com.mcal.neweditor;
 
-import java.io.Serializable;
-
 import android.text.TextPaint;
 import android.text.style.CharacterStyle;
+
+import java.io.Serializable;
 
 public class SyntaxHighlightSpan extends CharacterStyle implements Serializable {
     private static final long serialVersionUID = 218554000863866749L;

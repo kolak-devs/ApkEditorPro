@@ -6,18 +6,11 @@ import java.io.Serializable;
 
 public class Change implements Serializable {
 
-	private static final long serialVersionUID = -7699630768546704654L;
-	private String newText;
+    private static final long serialVersionUID = -7699630768546704654L;
+    private String newText;
     private String oldText;
     private int start;
     private ChangeType type = ChangeType.NONE;
-
-    enum ChangeType {
-        NONE,
-        ADD,
-        REMOVE,
-        REPLACE
-    }
 
     public Change(int start, @NonNull String oldText, String newText) {
         this.start = start;
@@ -80,5 +73,12 @@ public class Change implements Serializable {
             this.oldText = change.getOldText() + this.oldText;
             this.start = change.getStart();
         }
+    }
+
+    enum ChangeType {
+        NONE,
+        ADD,
+        REMOVE,
+        REPLACE
     }
 }
