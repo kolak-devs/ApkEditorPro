@@ -114,28 +114,28 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    packagingOptions {
-        resources.excludes += 'api_database/*'
-        resources.excludes += 'com/android/tools/r8/*'
-        resources.excludes += 'export/*'
-        resources.excludes += 'google/protobuf/*'
-        resources.excludes += 'junit/*'
-        resources.excludes += 'keys/*'
-        resources.excludes += 'kotlin/*'
-        resources.excludes += 'org/conscrypt/*'
-        resources.excludes += 'properties/*'
-        resources.excludes += 'androidsupportmultidexversion.txt'
-        resources.excludes += 'baksmali.properties'
-        resources.excludes += 'configuration.proto'
-        resources.excludes += 'kotlin-tooling-metadata.json'
-        resources.excludes += 'LICENSE-junit.txt'
-        resources.excludes += 'logback.xml'
-        resources.excludes += 'Resources.proto'
-        resources.excludes += 'ResourcesInternal.proto'
-        resources.excludes += 'Configuration.proto'
-        resources.excludes += 'DebugProbesKt.bin'
-        resources.excludes += 'smali.properties'
-    }
+//    packagingOptions {
+//        resources.excludes += 'api_database/*'
+//        resources.excludes += 'com/android/tools/r8/*'
+//        resources.excludes += 'export/*'
+//        resources.excludes += 'google/protobuf/*'
+//        resources.excludes += 'junit/*'
+//        resources.excludes += 'keys/*'
+//        resources.excludes += 'kotlin/*'
+//        resources.excludes += 'org/conscrypt/*'
+//        resources.excludes += 'properties/*'
+//        resources.excludes += 'androidsupportmultidexversion.txt'
+//        resources.excludes += 'baksmali.properties'
+//        resources.excludes += 'configuration.proto'
+//        resources.excludes += 'kotlin-tooling-metadata.json'
+//        resources.excludes += 'LICENSE-junit.txt'
+//        resources.excludes += 'logback.xml'
+//        resources.excludes += 'Resources.proto'
+//        resources.excludes += 'ResourcesInternal.proto'
+//        resources.excludes += 'Configuration.proto'
+//        resources.excludes += 'DebugProbesKt.bin'
+//        resources.excludes += 'smali.properties'
+//    }
     lint {
         abortOnError false
         checkReleaseBuilds false

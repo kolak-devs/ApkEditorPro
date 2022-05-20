@@ -9,9 +9,9 @@ import android.text.Layout;
 import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
-public class LineEditText extends AppCompatMultiAutoCompleteTextView {
+public class LineEditText extends AppCompatAutoCompleteTextView {
     private final Rect mRect;
     private final Paint mPaint;
 

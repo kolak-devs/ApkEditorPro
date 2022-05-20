@@ -11,14 +11,14 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import com.mcal.SelectionChangedListener;
 import com.mcal.apkeditor.R;
 
 import java.lang.ref.WeakReference;
 
-public class EditTextRememberCursor extends AppCompatMultiAutoCompleteTextView {
+public class EditTextRememberCursor extends AppCompatAutoCompleteTextView {
     private int selStart;
     private int selEnd;
 
