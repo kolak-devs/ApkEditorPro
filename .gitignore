@@ -4,3 +4,5 @@
 apkEditorPro/release/
 build/
 .gradle/
+local.properties
+apkEditor/.cxx/
