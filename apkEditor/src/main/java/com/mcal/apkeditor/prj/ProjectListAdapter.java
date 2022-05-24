@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.prj;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -7,9 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.apkeditor.activities.ApkInfoExActivity;
 import com.mcal.apkeditor.BuildConfig;
@@ -21,22 +25,18 @@ import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 
 class ProjectListAdapter extends BaseAdapter
         implements AdapterView.OnItemClickListener {
     private final List<ItemInfo> projectItems = new ArrayList<>();
-    private WeakReference<ProjectListActivity> activityRef;
+    private final WeakReference<ProjectListActivity> activityRef;
     private SimpleDateFormat formatter;
 
     ProjectListAdapter(ProjectListActivity activity, List<ItemInfo> items) {
         this.activityRef = new WeakReference<>(activity);
-        for (ItemInfo item : items) {
-            this.projectItems.add(item);
-        }
+        this.projectItems.addAll(items);
     }
 
     int getProjectNum() {
@@ -56,7 +56,7 @@ class ProjectListAdapter extends BaseAdapter
         }
     }
 
-    private String getErrorDescription(ItemInfo info) {
+    private String getErrorDescription(@NonNull ItemInfo info) {
         String errMessage = null;
         if (!new File(info.decodeDirectory).exists()) {
             String fmt = activityRef.get().getString(R.string.prj_error_decode_dir_notfound);
@@ -72,7 +72,7 @@ class ProjectListAdapter extends BaseAdapter
         return errMessage;
     }
 
-    void setProjectIcon(Map<String, Drawable> icons) {
+    void setProjectIcon(@NonNull Map<String, Drawable> icons) {
         for (Map.Entry<String, Drawable> entry : icons.entrySet()) {
             String path = entry.getKey();
             for (ItemInfo item : projectItems) {
@@ -84,13 +84,9 @@ class ProjectListAdapter extends BaseAdapter
     }
 
     // When remove a project, need to update it
-    void updateData(List<ItemInfo> items) {
-        Iterator<ItemInfo> it = this.projectItems.iterator();
-        while (it.hasNext()) {
-            if (!items.contains(it.next())) { // should remove
-                it.remove();
-            }
-        }
+    void updateData(@NonNull List<ItemInfo> items) {
+        // should remove
+        this.projectItems.removeIf(itemInfo -> !items.contains(itemInfo));
 
         for (ItemInfo item : items) {
             if (!this.projectItems.contains(item)) { // should add it
@@ -122,10 +118,10 @@ class ProjectListAdapter extends BaseAdapter
         if (view == null) {
             view = LayoutInflater.from(activityRef.get()).inflate(R.layout.item_applist, null);
             holder = new ViewHolder();
-            holder.icon = (ImageView) view.findViewById(R.id.app_icon);
-            holder.title = (TextView) view.findViewById(R.id.app_name);
-            holder.subTitle1 = (TextView) view.findViewById(R.id.app_desc1);
-            holder.subTitle2 = (TextView) view.findViewById(R.id.app_desc2);
+            holder.icon = view.findViewById(R.id.app_icon);
+            holder.title = view.findViewById(R.id.app_name);
+            holder.subTitle1 = view.findViewById(R.id.app_desc1);
+            holder.subTitle2 = view.findViewById(R.id.app_desc2);
             holder.delMenu = view.findViewById(R.id.menu_delete);
             view.setTag(holder);
         } else {
@@ -167,6 +163,8 @@ class ProjectListAdapter extends BaseAdapter
         return view;
     }
 
+    @NonNull
+    @SuppressLint("SimpleDateFormat")
     private String getTimeDesc(long time) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);
@@ -177,11 +175,11 @@ class ProjectListAdapter extends BaseAdapter
     }
 
     private static class ViewHolder {
-        ImageView icon;
-        TextView title;
-        TextView subTitle1;
-        TextView subTitle2;
-        View delMenu;
+        AppCompatImageView icon;
+        AppCompatTextView title;
+        AppCompatTextView subTitle1;
+        AppCompatTextView subTitle2;
+        AppCompatImageButton delMenu;
     }
 
     static class ItemInfo {

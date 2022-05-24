@@ -23,9 +23,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -42,14 +44,14 @@ import com.polites.android.GestureImageViewListener;
 public class PngEditActivity extends AppCompatActivity implements
         View.OnClickListener, SeekBar.OnSeekBarChangeListener, GestureImageViewListener {
 
-    private int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
+    private final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
 
     private String filepath;
     private String filename;
 
     // Views in action bar
     private AppCompatTextView scaleTv;
-    private ImageView saveImage;
+    private AppCompatImageButton saveImage;
     private View normalButtons;
     private View editButtons;
 
@@ -133,34 +135,34 @@ public class PngEditActivity extends AppCompatActivity implements
         }
 
         // Views in action bar
-        AppCompatTextView filenameTv = (AppCompatTextView) findViewById(R.id.tv_filename);
+        AppCompatTextView filenameTv = findViewById(R.id.tv_filename);
         filenameTv.setText(filename);
-        this.scaleTv = (AppCompatTextView) findViewById(R.id.tv_scale);
+        scaleTv = findViewById(R.id.tv_scale);
         scaleTv.setPaintFlags(scaleTv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         scaleTv.setOnClickListener(this);
-        this.saveImage = (ImageView) findViewById(R.id.btn_save);
-        this.normalButtons = findViewById(R.id.normal_action_layout);
-        this.editButtons = findViewById(R.id.edit_action_layout);
+        saveImage = findViewById(R.id.btn_save);
+        normalButtons = findViewById(R.id.normal_action_layout);
+        editButtons = findViewById(R.id.edit_action_layout);
         findViewById(R.id.btn_save).setOnClickListener(this);
         findViewById(R.id.btn_confirm).setOnClickListener(this);
         findViewById(R.id.btn_cancel).setOnClickListener(this);
 
         //// Views in tools layout
-        this.toolsLayout = findViewById(R.id.tools_layout);
-        this.removeBgLayout = findViewById(R.id.remove_bg_layout);
-        this.resizeLayout = findViewById(R.id.resize_layout);
-        this.transparencyLayout = findViewById(R.id.transparency_layout);
+        toolsLayout = findViewById(R.id.tools_layout);
+        removeBgLayout = findViewById(R.id.remove_bg_layout);
+        resizeLayout = findViewById(R.id.resize_layout);
+        transparencyLayout = findViewById(R.id.transparency_layout);
 
-        this.toleranceTv = (TextView) findViewById(R.id.tv_tolerance);
-        this.toleranceSeekbar = (SeekBar) findViewById(R.id.seekbar_tolerance);
+        toleranceTv = findViewById(R.id.tv_tolerance);
+        toleranceSeekbar = findViewById(R.id.seekbar_tolerance);
         toleranceSeekbar.setOnSeekBarChangeListener(this);
-        this.transparencyTv = (TextView) findViewById(R.id.tv_transparency);
-        this.transparencySeekbar = (SeekBar) findViewById(R.id.seekbar_transparency);
+        transparencyTv = findViewById(R.id.tv_transparency);
+        transparencySeekbar = findViewById(R.id.seekbar_transparency);
         transparencySeekbar.setOnSeekBarChangeListener(this);
 
         // Resize related
-        this.widthValueTv = (TextView) findViewById(R.id.tv_width_value);
-        this.heightValueTv = (TextView) findViewById(R.id.tv_height_value);
+        widthValueTv = findViewById(R.id.tv_width_value);
+        heightValueTv = findViewById(R.id.tv_height_value);
         widthValueTv.setPaintFlags(widthValueTv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         heightValueTv.setPaintFlags(heightValueTv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         findViewById(R.id.width_labelvalue).setOnClickListener(this);
@@ -177,7 +179,7 @@ public class PngEditActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             onBackPressed();
@@ -208,19 +210,11 @@ public class PngEditActivity extends AppCompatActivity implements
             if (imageModified) {
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                         .setMessage(R.string.image_save_tip)
-                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                saveTheImage();
-                                PngEditActivity.this.finish();
-                            }
+                        .setPositiveButton(R.string.save, (dialogInterface, i) -> {
+                            saveTheImage();
+                            PngEditActivity.this.finish();
                         })
-                        .setNegativeButton(R.string.discard, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                PngEditActivity.this.finish();
-                            }
-                        })
+                        .setNegativeButton(R.string.discard, (dialogInterface, i) -> PngEditActivity.this.finish())
                         .setNeutralButton(android.R.string.cancel, null);
                 builder.show();
             } else {
@@ -235,7 +229,7 @@ public class PngEditActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int id = view.getId();
 
         // Open edit layout: remove background
@@ -314,13 +308,10 @@ public class PngEditActivity extends AppCompatActivity implements
         if (editor.isModified()) {
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.image_modified_tip)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // Revert to original bitmap
-                            gestureView.setImageBitmap(imageBitmap);
-                            switchToNormalLayout();
-                        }
+                    .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+                        // Revert to original bitmap
+                        gestureView.setImageBitmap(imageBitmap);
+                        switchToNormalLayout();
                     })
                     .setNegativeButton(android.R.string.no, null);
             builder.show();
@@ -340,25 +331,22 @@ public class PngEditActivity extends AppCompatActivity implements
     private void showScaleOptionPopupWindow(View parent) {
         if (this.scaleOptionWindow == null) {
             View view = View.inflate(this, R.layout.pngeditor_scale_options, null);
-            View.OnClickListener scaleBtnListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    float scale = 1;
-                    int id = view.getId();
-                    if (id == R.id.btn_scale_fit) {
-                        scale = gestureView.getFitScale();
-                    } else if (id == R.id.btn_scale_100) {
-                        scale = 1;
-                    } else if (id == R.id.btn_scale_200) {
-                        scale = 2;
-                    } else if (id == R.id.btn_scale_400) {
-                        scale = 4;
-                    }
-                    gestureView.setScale(scale);
-                    gestureView.redraw();
-                    onScale(scale);
-                    scaleOptionWindow.dismiss();
+            View.OnClickListener scaleBtnListener = view1 -> {
+                float scale = 1;
+                int id = view1.getId();
+                if (id == R.id.btn_scale_fit) {
+                    scale = gestureView.getFitScale();
+                } else if (id == R.id.btn_scale_100) {
+                    scale = 1;
+                } else if (id == R.id.btn_scale_200) {
+                    scale = 2;
+                } else if (id == R.id.btn_scale_400) {
+                    scale = 4;
                 }
+                gestureView.setScale(scale);
+                gestureView.redraw();
+                onScale(scale);
+                scaleOptionWindow.dismiss();
             };
             view.findViewById(R.id.btn_scale_fit).setOnClickListener(scaleBtnListener);
             view.findViewById(R.id.btn_scale_100).setOnClickListener(scaleBtnListener);
@@ -375,14 +363,9 @@ public class PngEditActivity extends AppCompatActivity implements
     private void showBgColorWindow() {
         if (this.bgColorWindow == null) {
             View view = View.inflate(this, R.layout.pngeditor_bgcolor, null);
-            View.OnClickListener btnListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    bgColorWindow.dismiss();
-                }
-            };
+            View.OnClickListener btnListener = view1 -> bgColorWindow.dismiss();
             view.findViewById(R.id.btn_close).setOnClickListener(btnListener);
-            SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekbar_bgcolor);
+            SeekBar seekBar = view.findViewById(R.id.seekbar_bgcolor);
             seekBar.setOnSeekBarChangeListener(PngEditActivity.this);
             view.measure(0, 0);
             int height = view.getMeasuredHeight();
@@ -396,8 +379,8 @@ public class PngEditActivity extends AppCompatActivity implements
     // To input the resized width and height
     private void showWidthHeightInputDialog(int index) {
         View view = View.inflate(this, R.layout.pngeditor_dlg_size_input, null);
-        final EditText widthEt = (EditText) view.findViewById(R.id.et_width);
-        final EditText heightEt = (EditText) view.findViewById(R.id.et_height);
+        final EditText widthEt = view.findViewById(R.id.et_width);
+        final EditText heightEt = view.findViewById(R.id.et_height);
         widthEt.setText(widthValueTv.getText());
         heightEt.setText(heightValueTv.getText());
         switch (index) {
@@ -412,27 +395,24 @@ public class PngEditActivity extends AppCompatActivity implements
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.input_new_size)
                 .setView(view)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Check the input
-                        String strWidth = widthEt.getText().toString();
-                        String strHeight = heightEt.getText().toString();
-                        boolean isValid = false;
-                        try {
-                            int width = Integer.valueOf(strWidth);
-                            int height = Integer.valueOf(strHeight);
-                            isValid = (width > 0 && height > 0 && width < 32768 && height < 32768);
-                        } catch (Exception ignored) {
-                        }
-                        if (isValid) {
-                            widthValueTv.setText(strWidth);
-                            heightValueTv.setText(strHeight);
-                        } else {
-                            Toast.makeText(PngEditActivity.this,
-                                    R.string.invalid_input,
-                                    Toast.LENGTH_LONG).show();
-                        }
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                    // Check the input
+                    String strWidth = widthEt.getText().toString();
+                    String strHeight = heightEt.getText().toString();
+                    boolean isValid = false;
+                    try {
+                        int width = Integer.parseInt(strWidth);
+                        int height = Integer.parseInt(strHeight);
+                        isValid = (width > 0 && height > 0 && width < 32768 && height < 32768);
+                    } catch (Exception ignored) {
+                    }
+                    if (isValid) {
+                        widthValueTv.setText(strWidth);
+                        heightValueTv.setText(strHeight);
+                    } else {
+                        Toast.makeText(PngEditActivity.this,
+                                R.string.invalid_input,
+                                Toast.LENGTH_LONG).show();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null);
@@ -443,13 +423,13 @@ public class PngEditActivity extends AppCompatActivity implements
     private void doResize() {
         String strWidth = widthValueTv.getText().toString();
         String strHeight = heightValueTv.getText().toString();
-        CheckBox cb = (CheckBox) findViewById(R.id.cb_without_zoom);
+        CheckBox cb = findViewById(R.id.cb_without_zoom);
         boolean withoutZoom = cb.isChecked();
 
         // Get width
         int width;
         try {
-            width = Integer.valueOf(strWidth);
+            width = Integer.parseInt(strWidth);
         } catch (Exception ignored) {
             return;
         }
@@ -457,7 +437,7 @@ public class PngEditActivity extends AppCompatActivity implements
         // Get height
         int height;
         try {
-            height = Integer.valueOf(strHeight);
+            height = Integer.parseInt(strHeight);
         } catch (Exception ignored) {
             return;
         }
@@ -472,7 +452,7 @@ public class PngEditActivity extends AppCompatActivity implements
         }
     }
 
-    private void switchToEditLayout(ImageEditor editor, View editLayout) {
+    private void switchToEditLayout(ImageEditor editor, @NonNull View editLayout) {
         this.editor = editor;
 
         editLayout.setVisibility(View.VISIBLE);
@@ -502,7 +482,7 @@ public class PngEditActivity extends AppCompatActivity implements
 
     ////////////////////////////////////////////////////////////////////////////////
     // For seek bar
-    public static void setMargins(View v, int l, int t, int r, int b) {
+    public static void setMargins(@NonNull View v, int l, int t, int r, int b) {
         if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
             p.setMargins(l, t, r, b);
@@ -511,7 +491,7 @@ public class PngEditActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+    public void onProgressChanged(@NonNull SeekBar seekBar, int progress, boolean fromUser) {
         int id = seekBar.getId();
 
         int leftPad = seekBar.getPaddingLeft();
@@ -567,6 +547,7 @@ public class PngEditActivity extends AppCompatActivity implements
     ////////////////////////////////////////////////////////////////////////////////
 
 
+    @SuppressLint("StaticFieldLeak")
     class ImageLoadTask extends AsyncTask<Void, Integer, Boolean> {
 
         @Override
@@ -576,7 +557,7 @@ public class PngEditActivity extends AppCompatActivity implements
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(@NonNull Boolean result) {
             if (result) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -587,7 +568,7 @@ public class PngEditActivity extends AppCompatActivity implements
                 gestureView.setLayoutParams(params);
                 gestureView.setStartingScale(1);
 
-                LinearLayout layout = (LinearLayout) findViewById(R.id.image_layout);
+                LinearLayout layout = findViewById(R.id.image_layout);
 
                 layout.addView(gestureView);
 

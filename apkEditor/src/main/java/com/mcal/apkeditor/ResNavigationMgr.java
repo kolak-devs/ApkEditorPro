@@ -8,6 +8,10 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageButton;
+
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.lang.ref.WeakReference;
@@ -17,18 +21,18 @@ import java.util.List;
 // Control the resource navigation
 public class ResNavigationMgr implements OnClickListener {
 
-    private WeakReference<ApkInfoActivity> activityRef;
-    private String rootDir;
+    private final WeakReference<ApkInfoActivity> activityRef;
+    private final String rootDir;
     private String currDir;
-    private LinearLayout viewContainer;
-    private HorizontalScrollView scrollView;
+    private final LinearLayout viewContainer;
+    private final HorizontalScrollView scrollView;
 
     // All the added directory tabs
-    private List<View> addedViewList = new ArrayList<>();
+    private final List<View> addedViewList = new ArrayList<>();
 
     public ResNavigationMgr(ApkInfoActivity ctx, String rootDir,
                             LinearLayout container, HorizontalScrollView scrollView) {
-        this.activityRef = new WeakReference<ApkInfoActivity>(ctx);
+        this.activityRef = new WeakReference<>(ctx);
         this.rootDir = rootDir;
         this.currDir = rootDir;
         this.viewContainer = container;
@@ -36,7 +40,7 @@ public class ResNavigationMgr implements OnClickListener {
     }
 
     // Navigate to a new directory
-    public void gotoDirectory(String path) {
+    public void gotoDirectory(@NonNull String path) {
         if (path.endsWith("/")) {
             path = path.substring(0, path.length() - 1);
         }
@@ -75,34 +79,30 @@ public class ResNavigationMgr implements OnClickListener {
         }
 
         //scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-        scrollView.postDelayed(new Runnable() {
-            public void run() {
-                scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-            }
-        }, 100L);
+        scrollView.postDelayed(() -> scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT), 100L);
     }
 
+    @NonNull
     @SuppressLint("InflateParams")
     private View createTab(String path) {
         View view = LayoutInflater.from(activityRef.get()).inflate(R.layout.item_navigation_dir, null);
 
-        View tab = view.findViewById(R.id.menu_dirtab);
+        AppCompatButton tab = view.findViewById(R.id.menu_dirtab);
         tab.setTag(path);
         tab.setOnClickListener(this);
-
-        TextView titleTv = (TextView) view.findViewById(R.id.dirname);
-        titleTv.setText(getNameByPath(path));
+        tab.setText(getNameByPath(path));
 
         return view;
     }
 
-    private String getNameByPath(String path) {
+    @NonNull
+    private String getNameByPath(@NonNull String path) {
         int pos = path.lastIndexOf('/');
         return path.substring(pos + 1);
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@NonNull View v) {
         String path = (String) v.getTag();
         if (path == null) {
             return;
@@ -120,7 +120,7 @@ public class ResNavigationMgr implements OnClickListener {
 
     // Get how many level is up
     // The new path is in the parent path
-    private int getUpLevel(String oldPath, String newPath) {
+    private int getUpLevel(@NonNull String oldPath, String newPath) {
         if (oldPath.startsWith(newPath + "/")) {
             String unusedPath = oldPath.substring(newPath.length() + 1);
             String[] dirs = unusedPath.split("/");

@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@color/white"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
-    android:padding="4dip" >
+    android:padding="4dip">
 
     <ProgressBar
         android:id="@+id/progressBar1"

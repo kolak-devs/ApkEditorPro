@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 
 import com.mcal.apkeditor.BuildConfig;
@@ -25,6 +28,7 @@ import com.mcal.apkeditor.dialogs.ManifestLongClickDlg;
 import com.mcal.apkeditor.dialogs.XmlLineDialog;
 import com.mcal.apkeditor.dialogs.XmlLineDialog.IXmlLineChanged;
 import com.mcal.common.utils.BitmapUtils;
+import com.mcal.patchview.ui.CodeText;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -137,9 +141,9 @@ public class ManifestListAdapter extends BaseAdapter implements
             convertView = LayoutInflater.from(activityRef.get()).inflate(R.layout.item_manifestline, null);
 
             viewHolder = new ViewHolder();
-            viewHolder.collapseImage = (ImageView) convertView
+            viewHolder.collapseImage = convertView
                     .findViewById(R.id.collapse_icon);
-            viewHolder.lineData = (TextView) convertView
+            viewHolder.lineData = convertView
                     .findViewById(R.id.line_data);
 
             convertView.setTag(viewHolder);
@@ -148,6 +152,7 @@ public class ManifestListAdapter extends BaseAdapter implements
         }
 
         viewHolder.lineData.setText(rec.lineData);
+        viewHolder.lineData.setShowLineNumber(false);
         // setContentClickable(viewHolder.lineData, rec);
         if (rec.indent > 0) {
             viewHolder.collapseImage.setVisibility(View.VISIBLE);
@@ -160,17 +165,12 @@ public class ManifestListAdapter extends BaseAdapter implements
         return convertView;
     }
 
-    private void setCollapsable(ImageView collapseImage,
+    private void setCollapsable(@NonNull ImageView collapseImage,
                                 final LineRecord lineRec) {
-        collapseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                collapseOrExpand(lineRec);
-            }
-        });
+        collapseImage.setOnClickListener(v -> collapseOrExpand(lineRec));
     }
 
-    private void collapseOrExpand(LineRecord lineRec) {
+    private void collapseOrExpand(@NonNull LineRecord lineRec) {
         synchronized (xmlLines) {
             lineRec.collapsed = !lineRec.collapsed;
             updateDisplayLineData();
@@ -201,41 +201,28 @@ public class ManifestListAdapter extends BaseAdapter implements
         }
     }
 
-    private Drawable getImageDrawable(@NonNull LineRecord lineRec) {
-        Drawable drawable;
-        if (!lineRec.collapsed) {
-            drawable = ContextCompat.getDrawable(activityRef.get(), R.drawable.round_expand_more_24);
-        } else {
-            drawable = ContextCompat.getDrawable(activityRef.get(), R.drawable.round_chevron_right_24);
-        }
-
-        return drawable;
-    }
-
     private Bitmap getImage(@NonNull LineRecord lineRec) {
         int indent = lineRec.indent;
         final int height = 48;
         int width = 48 * indent;
-        Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ALPHA_8);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ALPHA_8);
 
         if (lineRec.sectionEnd != lineRec.lineIndex) {
             Bitmap arrow;
             if (!lineRec.collapsed) {
-                arrow = BitmapUtils.getBitmapFromVectorDrawable(activityRef.get(),
-                        R.drawable.round_expand_more_24);
+                arrow = BitmapUtils.getBitmapFromVectorDrawable(activityRef.get(),R.drawable.manifest_chevron_down);
             } else {
-                arrow = BitmapUtils.getBitmapFromVectorDrawable(activityRef.get(),
-                        R.drawable.round_chevron_right_24);
+                arrow = BitmapUtils.getBitmapFromVectorDrawable(activityRef.get(),R.drawable.manifest_chevron_right);
             }
 
             // Draw the arrow
-            Canvas c = new Canvas(b);
+            Canvas canvas = new Canvas(bitmap);
             Paint paint = new Paint();
-            // paint.setColor(Color.WHITE);
-            c.drawBitmap(arrow, width - 48, 0, paint);
+            //paint.setColor(ContextCompat.getColor(activityRef.get(),R.color.colorGray));
+            canvas.drawBitmap(arrow, width - 48, 0, paint);
         }
 
-        return b;
+        return bitmap;
     }
 
     @Override
@@ -389,7 +376,7 @@ public class ManifestListAdapter extends BaseAdapter implements
     }
 
     private static class ViewHolder {
-        TextView lineData;
-        ImageView collapseImage;
+        CodeText lineData;
+        AppCompatImageView collapseImage;
     }
 }

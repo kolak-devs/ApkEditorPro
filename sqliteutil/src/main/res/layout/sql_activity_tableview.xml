@@ -2,60 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
-    
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:fillViewport="true"
-        android:scrollbars="horizontal|vertical" >
+        android:scrollbars="horizontal|vertical">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true"
-            android:scrollbars="horizontal|vertical" >
+            android:scrollbars="horizontal|vertical">
 
             <TableLayout
                 android:id="@+id/valueTable"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:stretchColumns="*" >
-            </TableLayout>
+                android:stretchColumns="*"></TableLayout>
         </HorizontalScrollView>
     </ScrollView>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/button_prepage"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
             android:layout_margin="2dp"
+            android:layout_weight="0.5"
             android:text="@string/pre_page"
-            android:visibility="gone" />
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorAccent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
             android:id="@+id/button_nextpage"
-            android:layout_margin="2dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="0.5"
-            android:text="@string/next_page" />
+            android:text="@string/next_page"
+            android:textColor="@color/colorPrimary"
+            app:backgroundTint="@color/colorAccent" />
     </LinearLayout>
 
 </LinearLayout>

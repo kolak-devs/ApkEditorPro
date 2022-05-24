@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import android.text.Layout;
 import android.util.AttributeSet;
@@ -67,20 +68,27 @@ public class CodeText extends ShaderText {
         }
 
         //the y position starts at the baseline of the first line
-        int positionY = getBaseline() + (layout.getLineBaseline(firstLine) - layout.getLineBaseline(0));
-        drawLineNumber(canvas, layout, positionY, firstLine);
-        for (int i = firstLine + 1; i <= lastLine; i++) {
-            //get the next y position using the difference between the current and last baseline
-            positionY += layout.getLineBaseline(i) - layout.getLineBaseline(i - 1);
-            drawLineNumber(canvas, layout, positionY, i);
+        if(isShowLineNumber) {
+            int positionY = getBaseline() + (layout.getLineBaseline(firstLine) - layout.getLineBaseline(0));
+            drawLineNumber(canvas, layout, positionY, firstLine);
+            for (int i = firstLine + 1; i <= lastLine; i++) {
+                //get the next y position using the difference between the current and last baseline
+                positionY += layout.getLineBaseline(i) - layout.getLineBaseline(i - 1);
+                drawLineNumber(canvas, layout, positionY, i);
+            }
         }
         super.onDraw(canvas);
     }
 
-    private void drawLineNumber(Canvas canvas, Layout layout, int positionY, int line) {
+    private boolean isShowLineNumber=true;
+
+    public void setShowLineNumber(boolean value) {
+        isShowLineNumber=value;
+    }
+
+    private void drawLineNumber(@NonNull Canvas canvas, @NonNull Layout layout, int positionY, int line) {
         int positionX = (int) layout.getLineLeft(line);
         canvas.drawText(String.valueOf(line + 1), positionX + getPixels(2), positionY, paint);
-
     }
 
     private float getPixels(int dp) {

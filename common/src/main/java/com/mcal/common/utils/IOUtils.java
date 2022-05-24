@@ -1,6 +1,9 @@
 package com.mcal.common.utils;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -162,14 +165,15 @@ public class IOUtils {
         }
     }
 
-    public static void writeToFile(String text, String targetFilePath) throws IOException
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void writeToFile(String text, File targetFilePath) throws IOException
     {
-        Path targetPath = Paths.get(targetFilePath);
+        Path targetPath = Paths.get(targetFilePath.getPath());
         byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
         Files.write(targetPath, bytes, StandardOpenOption.CREATE);
     }
 
-    /*public static void writeToFile(String targetFile, @NonNull String content) throws IOException {
+    public static void writeToFile(String targetFile, @NonNull String content) throws IOException {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(targetFile);
@@ -177,5 +181,5 @@ public class IOUtils {
         } finally {
             closeQuietly(fos);
         }
-    }*/
+    }
 }

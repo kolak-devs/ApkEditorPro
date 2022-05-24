@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
@@ -36,6 +37,7 @@ import com.mcal.apkeditor.prj.ProjectListActivity;
 import com.mcal.apkeditor.prj.ProjectListActivity2;
 import com.mcal.apkeditor.utils.OnlineMessage;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.FileUtils;
 import com.mcal.httpserver.HttpServiceManager;
 
@@ -242,6 +244,16 @@ public class MainActivity extends CustomizedLangActivity implements
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
             return true;
+        } else if (item.getItemId() == R.id.action_night_mode) {
+            if (Preferences.isNightModeEnabled()) {
+                Preferences.setNightModeEnabled(false);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                getDelegate().applyDayNight();
+            } else {
+                Preferences.setNightModeEnabled(true);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                getDelegate().applyDayNight();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

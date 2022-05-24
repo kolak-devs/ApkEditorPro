@@ -2,23 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dip"
-            android:layout_marginRight="4dip"
             android:layout_marginTop="4dip"
-            android:textColor="@color/colorAccent"
+            android:layout_marginRight="4dip"
+            android:textColor="@color/colorGray"
             android:textSize="16sp" />
 
         <TextView
@@ -28,19 +27,17 @@
             android:layout_marginLeft="4dip"
             android:layout_marginRight="4dip"
             android:layout_marginBottom="4dip"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorGray"
             android:textSize="14sp" />
 
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorPrimaryDark"
         android:id="@+id/btn_operation"
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:gravity="center" />
 
 </LinearLayout>

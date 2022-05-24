@@ -57,20 +57,12 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/menu_delete"
-        android:layout_width="40dip"
-        android:layout_height="match_parent"
-        android:background="@drawable/selector_menu_light"
-        android:paddingTop="4dip"
-        android:paddingBottom="4dip"
-        android:visibility="gone">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="32dip"
-            android:layout_height="32dip"
-            android:layout_centerInParent="true"
-            android:src="@drawable/round_delete_24" />
-    </RelativeLayout>
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/round_delete_24"
+        android:visibility="gone" />
 
 </LinearLayout>

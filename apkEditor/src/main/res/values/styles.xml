@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorOnSecondary">?android:textColorPrimaryInverse</item>
@@ -18,7 +18,7 @@
         <item name="android:dialogTheme">@style/AlertDialogMaterialTheme</item>
     </style>
 
-    <style name="AlertDialogMaterialTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+    <style name="AlertDialogMaterialTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
         <item name="buttonBarNegativeButtonStyle">@style/Alert.Button.Negative</item>
         <item name="buttonBarNeutralButtonStyle">@style/Alert.Button.Negative</item>
@@ -27,7 +27,7 @@
     <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:backgroundTint">#0054BB</item>
         <item name="android:fillColor">#0054BB</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/color_white</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">14sp</item>
         <item name="rippleColor">@color/colorAccent</item>

@@ -15,8 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.ContextCompat;
 
 import com.mcal.apkeditor.R;
+import com.mcal.common.utils.BitmapUtils;
+import com.mcal.patchview.ui.CodeText;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -26,9 +30,9 @@ import java.util.List;
 import java.util.Stack;
 
 interface ISectionDeleteCallback {
-    public boolean sectionDeleted(LineRecord lineRec);
+    boolean sectionDeleted(LineRecord lineRec);
 
-    public String getUndeletableReason();
+    String getUndeletableReason();
 }
 
 class LineRecord {
@@ -131,17 +135,17 @@ public class SimpleManifestAdapter extends BaseAdapter implements
         ISectionDeleteCallback {
 
     private static final String hanging = "\t";
-    private List<LineRecord> allXmlLines;
-    private List<LineRecord> xmlLines;
-    private Activity ctx;
-    private ISectionDeleteCallback callback;
+    private final List<LineRecord> allXmlLines;
+    private final List<LineRecord> xmlLines;
+    private final Activity ctx;
+    private final ISectionDeleteCallback callback;
 
     public SimpleManifestAdapter(Activity ctx, String xmlPath,
                                  ISectionDeleteCallback callback) {
         this.ctx = ctx;
         this.callback = callback;
-        allXmlLines = new ArrayList<LineRecord>();
-        xmlLines = new ArrayList<LineRecord>();
+        allXmlLines = new ArrayList<>();
+        xmlLines = new ArrayList<>();
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(xmlPath));
@@ -154,6 +158,7 @@ public class SimpleManifestAdapter extends BaseAdapter implements
             }
             br.close();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // Scan to initialize the line record
@@ -162,7 +167,7 @@ public class SimpleManifestAdapter extends BaseAdapter implements
 
     private void initXmlLines() {
         try {
-            Stack<LineRecord> stack = new Stack<LineRecord>();
+            Stack<LineRecord> stack = new Stack<>();
             for (int i = 0; i < xmlLines.size(); i++) {
                 LineRecord lr = xmlLines.get(i);
                 if (lr.indent <= 0) {
@@ -219,9 +224,9 @@ public class SimpleManifestAdapter extends BaseAdapter implements
                     R.layout.item_manifestline, null);
 
             viewHolder = new ViewHolder();
-            viewHolder.collapseImage = (ImageView) convertView
+            viewHolder.collapseImage = convertView
                     .findViewById(R.id.collapse_icon);
-            viewHolder.lineData = (TextView) convertView
+            viewHolder.lineData = convertView
                     .findViewById(R.id.line_data);
 
             convertView.setTag(viewHolder);
@@ -230,6 +235,7 @@ public class SimpleManifestAdapter extends BaseAdapter implements
         }
 
         viewHolder.lineData.setText(rec.lineData);
+        viewHolder.lineData.setShowLineNumber(false);
         setContentClickable(viewHolder.lineData, rec);
         if (rec.indent > 0) {
             viewHolder.collapseImage.setVisibility(View.VISIBLE);
@@ -242,7 +248,7 @@ public class SimpleManifestAdapter extends BaseAdapter implements
         return convertView;
     }
 
-    private void setContentClickable(TextView lineData, final LineRecord lineRec) {
+    private void setContentClickable(@NonNull TextView lineData, final LineRecord lineRec) {
         lineData.setClickable(true);
         lineData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,17 +266,12 @@ public class SimpleManifestAdapter extends BaseAdapter implements
 
     }
 
-    private void setCollapsable(ImageView collapseImage,
+    private void setCollapsable(@NonNull ImageView collapseImage,
                                 final LineRecord lineRec) {
-        collapseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                collapseOrExpand(lineRec);
-            }
-        });
+        collapseImage.setOnClickListener(v -> collapseOrExpand(lineRec));
     }
 
-    protected void collapseOrExpand(LineRecord lineRec) {
+    protected void collapseOrExpand(@NonNull LineRecord lineRec) {
         synchronized (this) {
             lineRec.collapsed = !lineRec.collapsed;
             updateDisplayLineData();
@@ -303,26 +304,24 @@ public class SimpleManifestAdapter extends BaseAdapter implements
         int indent = lineRec.indent;
         final int height = 48;
         int width = 48 * indent;
-        Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ALPHA_8);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ALPHA_8);
 
         if (lineRec.sectionEnd != lineRec.lineIndex) {
-            Bitmap arrow = null;
+            Bitmap arrow;
             if (!lineRec.collapsed) {
-                arrow = BitmapFactory.decodeResource(ctx.getResources(),
-                        R.drawable.round_expand_more_24);
+                arrow = BitmapUtils.getBitmapFromVectorDrawable(ctx,R.drawable.manifest_chevron_down);
             } else {
-                arrow = BitmapFactory.decodeResource(ctx.getResources(),
-                        R.drawable.round_chevron_right_24);
+                arrow = BitmapUtils.getBitmapFromVectorDrawable(ctx,R.drawable.manifest_chevron_right);
             }
 
             // Draw the arrow
-            Canvas c = new Canvas(b);
+            Canvas canvas = new Canvas(bitmap);
             Paint paint = new Paint();
-            // paint.setColor(Color.WHITE);
-            c.drawBitmap(arrow, width - 40, 8, paint);
+            //paint.setColor(ContextCompat.getColor(ctx,R.color.colorGray));
+            canvas.drawBitmap(arrow, width - 48, 0, paint);
         }
 
-        return b;
+        return bitmap;
     }
 
     @Override
@@ -358,7 +357,7 @@ public class SimpleManifestAdapter extends BaseAdapter implements
     }
 
     // Check whether the section can be deleted
-    private boolean isSectionDeletable(LineRecord lineRec) {
+    private boolean isSectionDeletable(@NonNull LineRecord lineRec) {
         String tag = lineRec.getSectionTag();
         if ("manifest".equals(tag) || "application".equals(tag)) {
             return false;
@@ -377,7 +376,7 @@ public class SimpleManifestAdapter extends BaseAdapter implements
 
     // Check whether contain main action inside the section represented by
     // lineRec
-    private boolean containMainAction(LineRecord lineRec) {
+    private boolean containMainAction(@NonNull LineRecord lineRec) {
         for (int i = lineRec.sectionStart; i < lineRec.sectionEnd; i++) {
             LineRecord rec = allXmlLines.get(i);
             // This is the main activity
@@ -395,9 +394,7 @@ public class SimpleManifestAdapter extends BaseAdapter implements
     }
 
     private static class ViewHolder {
-
-        public TextView lineData;
-        public ImageView collapseImage;
-
+        public CodeText lineData;
+        public AppCompatImageView collapseImage;
     }
 }

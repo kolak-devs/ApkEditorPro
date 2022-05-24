@@ -9,7 +9,7 @@
         <item name="android:gravity">center_horizontal</item>
         <!-- 该处引用drawable下面的一个xml文档(selector) -->
         <item name="android:paddingTop">5dp</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1.0</item>
         <!-- 每个按钮的权重，相等则平分尺寸 -->

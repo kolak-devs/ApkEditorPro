@@ -168,8 +168,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
     protected String apkPath;
     protected String decodeRootPath; // not ends with "/"
     protected ResNavigationMgr navigationMgr;
-    protected ImageView searchOptionImage;
-    protected ImageView searchOptionCase;
+    protected AppCompatImageButton searchOptionImage;
+    protected AppCompatImageButton searchOptionCase;
     // Current state
     protected boolean searchTextContent = true;
     protected boolean searchResSensitive = true;
@@ -218,9 +218,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private ListView manifestList;
     private ManifestListAdapter mfListAdapter;
     private LinearLayout loadingLayout;
-    private View webserverMenu;
-    private View rotateMenu;
-    private View patchMenu;
+    private AppCompatImageButton webserverMenu;
+    private AppCompatImageButton rotateMenu;
+    private AppCompatImageButton patchMenu;
     private AppCompatButton saveBtn;
     // APK parser
     private ApkParseThread parseThread;

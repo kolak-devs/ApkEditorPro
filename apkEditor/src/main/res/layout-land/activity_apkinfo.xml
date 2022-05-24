@@ -107,50 +107,29 @@
 
             </LinearLayout>
 
-            <RelativeLayout
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/menu_webserver"
                 style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:visibility="invisible">
+                android:src="@drawable/round_public_24"
+                android:visibility="invisible" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/round_public_24" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/menu_rotate"
                 style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:visibility="invisible">
+                android:src="@drawable/round_rotate_right_24"
+                android:visibility="invisible" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/round_rotate_right_24" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/menu_apply_patch"
                 style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:visibility="invisible">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/round_patch_24" />
-
-            </RelativeLayout>
+                android:src="@drawable/round_patch_24"
+                android:visibility="invisible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_build_apk"
@@ -168,8 +147,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0.0dip"
-            android:layout_weight="1.0"
-            android:background="#ffffffff">
+            android:layout_weight="1.0">
 
             <!-- String -->
 
@@ -194,7 +172,7 @@
                         android:src="@drawable/round_add_24" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
@@ -227,22 +205,13 @@
                     android:focusable="false"
                     android:groupIndicator="@null" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/colorGray" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_margin="5dp"
                     android:background="@drawable/background_search"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:orientation="horizontal">
 
                     <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
                         android:id="@+id/keyword_edit"
@@ -288,85 +257,143 @@
                         android:orientation="horizontal"
                         android:visibility="invisible">
 
-                        <RelativeLayout
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/menu_done"
-                            android:layout_width="48dip"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/selector_menu_light"
-                            android:paddingTop="4dip"
-                            android:paddingBottom="4dip">
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="32dip"
-                                android:layout_height="32dip"
-                                android:layout_centerInParent="true"
-                                android:adjustViewBounds="true"
-                                android:src="@drawable/round_done_24" />
-
-                        </RelativeLayout>
+                            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/round_done_24" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/selection_tip"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:layout_weight="1" />
 
-                        <RelativeLayout
+                        <androidx.appcompat.widget.AppCompatImageButton
                             android:id="@+id/menu_select"
-                            android:layout_width="48dip"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/selector_menu_light"
-                            android:paddingTop="4dip"
-                            android:paddingBottom="4dip">
+                            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/round_select_all_24" />
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="32dip"
-                                android:layout_height="32dip"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/round_select_all_24" />
-
-                        </RelativeLayout>
 
                     </LinearLayout>
 
-                    <HorizontalScrollView
-                        android:id="@+id/res_navi_scrollView"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:id="@+id/res_header_navigation"
-                            android:layout_width="wrap_content"
+                        <HorizontalScrollView
+                            android:id="@+id/res_navi_scrollView"
+                            android:layout_width="0dip"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_weight="1">
 
-                            <RelativeLayout
-                                android:id="@+id/menu_home"
-                                android:layout_width="40dip"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/selector_menu_light"
-                                android:paddingTop="4dip"
-                                android:paddingBottom="4dip">
+                            <LinearLayout
+                                android:id="@+id/res_header_navigation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
 
-                                <androidx.appcompat.widget.AppCompatImageView
-                                    android:layout_width="32dip"
-                                    android:layout_height="32dip"
-                                    android:layout_centerInParent="true"
+                                <androidx.appcompat.widget.AppCompatImageButton
+                                    android:id="@+id/menu_home"
+                                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
                                     android:src="@drawable/round_home_24" />
 
-                            </RelativeLayout>
+                            </LinearLayout>
 
-                        </LinearLayout>
+                        </HorizontalScrollView>
 
-                    </HorizontalScrollView>
+                        <FrameLayout
+                            android:id="@+id/dex_decode_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center|right">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/imageview_dex2smali"
+                                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:clickable="true"
+                                android:text="smali" />
+
+                            <androidx.core.widget.ContentLoadingProgressBar
+                                android:id="@+id/progressbar_dex2smali"
+                                style="?android:attr/progressBarStyleLarge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:visibility="invisible" />
+
+                            <LinearLayout
+                                android:id="@+id/decode_result_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:visibility="invisible">
+
+                                <LinearLayout
+                                    android:id="@+id/down_arrow_container"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/selector_menu_light"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1px"
+                                        android:background="@color/colorPrimary" />
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="24dip"
+                                        android:layout_height="12dip"
+                                        android:layout_marginTop="8dip"
+                                        android:layout_marginBottom="8dip"
+                                        android:background="@drawable/round_keyboard_arrow_down_24" />
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1px"
+                                        android:background="@color/colorPrimary" />
+
+                                </LinearLayout>
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/decode_result_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textColor="@color/colorAccent" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/decode_result_detail"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+                        </FrameLayout>
+
+                    </LinearLayout>
 
                 </FrameLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="#ffe3e3e3" />
+                    android:background="@color/colorPrimary" />
 
                 <ListView
                     android:id="@+id/resource_list"
@@ -378,84 +405,10 @@
                     android:divider="@null"
                     android:groupIndicator="@null" />
 
-                <FrameLayout
-                    android:id="@+id/dex_decode_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/imageview_dex2smali"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:clickable="true"
-                        android:text="smali" />
-
-                    <androidx.core.widget.ContentLoadingProgressBar
-                        android:id="@+id/progressbar_dex2smali"
-                        style="?android:attr/progressBarStyleLarge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:visibility="invisible" />
-
-                    <LinearLayout
-                        android:id="@+id/decode_result_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:visibility="invisible">
-
-                        <LinearLayout
-                            android:id="@+id/down_arrow_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/selector_menu_light"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1px"
-                                android:background="#ffe3e3e3" />
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="24dip"
-                                android:layout_height="12dip"
-                                android:layout_marginTop="8dip"
-                                android:layout_marginBottom="8dip"
-                                android:background="@drawable/round_keyboard_arrow_down_24" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1px"
-                                android:background="#ffe3e3e3" />
-
-                        </LinearLayout>
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/decode_result_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/decode_result_detail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone" />
-
-                    </LinearLayout>
-
-                </FrameLayout>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="#ffe3e3e3" />
+                    android:background="@color/colorPrimary" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -478,91 +431,65 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <RelativeLayout
+                        <androidx.appcompat.widget.AppCompatImageButton
                             android:id="@+id/menu_addfile"
-                            android:layout_width="48dip"
-                            android:layout_height="40dip"
-                            android:background="@drawable/selector_menu_light">
+                            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/round_add_24" />
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="32dip"
-                                android:layout_height="32dip"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/round_add_24" />
-
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="1px"
-                            android:layout_height="match_parent"
-                            android:background="#ffe3e3e3" />
-
-                        <RelativeLayout
+                        <androidx.appcompat.widget.AppCompatImageButton
                             android:id="@+id/menu_addfolder"
-                            android:layout_width="48dip"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/selector_menu_light">
+                            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/round_create_new_folder_24" />
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="32dip"
-                                android:layout_height="32dip"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/round_create_new_folder_24" />
-                        </RelativeLayout>
-
-                        <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
-                            android:id="@+id/et_res_keyword"
-                            android:layout_width="0dip"
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
                             android:layout_weight="1"
-                            android:ems="10"
-                            android:hint="@string/pls_input_keyword"
-                            android:maxLines="5" />
+                            android:background="@drawable/background_search"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                        <RelativeLayout
-                            android:id="@+id/menu_caseinsensitive"
-                            android:layout_width="40dip"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/selector_menu_light">
+                            <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
+                                android:id="@+id/et_res_keyword"
+                                style="@style/TextAppearance.AppCompat.Medium"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="6dp"
+                                android:layout_marginEnd="6dp"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="@string/pls_input_keyword"
+                                android:inputType="textNoSuggestions"
+                                android:singleLine="true" />
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imageview_insensitive_check"
-                                android:layout_width="32dip"
-                                android:layout_height="32dip"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/round_text_format_blue_24" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/menu_searchoptions"
-                            android:layout_width="40dip"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/selector_menu_light">
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imageview_text_check"
-                                android:layout_width="32dip"
-                                android:layout_height="32dip"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/round_feed_24" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/menu_search_res"
-                            android:layout_width="48dip"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dip"
-                            android:background="@drawable/selector_menu_light">
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="32dip"
-                                android:layout_height="32dip"
-                                android:layout_centerInParent="true"
+                            <androidx.appcompat.widget.AppCompatImageButton
+                                android:id="@+id/menu_search_res"
+                                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
                                 android:src="@drawable/round_search_24" />
 
-                        </RelativeLayout>
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/imageview_insensitive_check"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/round_text_format_blue_24" />
+
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/imageview_text_check"
+                            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/round_feed_24" />
 
                     </LinearLayout>
 
@@ -582,8 +509,6 @@
                     android:id="@+id/manifest_list"
                     android:layout_width="match_parent"
                     android:layout_height="0dip"
-                    android:layout_marginLeft="4.0dip"
-                    android:layout_marginRight="4.0dip"
                     android:layout_weight="1"
                     android:divider="@null"
                     android:groupIndicator="@null" />
@@ -596,35 +521,27 @@
                         android:id="@+id/tv_not_support"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#ffffffd5"
+                        android:background="@color/colorPrimary"
                         android:gravity="center"
                         android:text="@string/manifest_edit_not_support"
-                        android:textColor="#ff222222" />
+                        android:textColor="@color/textColorPrimary" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="@color/colorGray" />
 
                     <LinearLayout
                         android:id="@+id/layout_search_mf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_margin="5dp"
                         android:background="@drawable/background_search"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="5dp"
                         android:visibility="gone">
 
                         <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
                             android:id="@+id/mf_keyword"
                             style="@style/TextAppearance.AppCompat.Medium"
                             android:layout_width="0dip"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginStart="6dp"
                             android:layout_marginEnd="6dp"
                             android:layout_weight="1"
@@ -636,9 +553,8 @@
                         <androidx.appcompat.widget.AppCompatImageButton
                             android:id="@+id/btn_search_mf"
                             style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                            android:layout_width="40dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:src="@drawable/round_search_24" />
 
                     </LinearLayout>
@@ -653,7 +569,7 @@
                 android:id="@+id/layout_loading"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/apked_white"
+                android:background="@color/colorPrimary"
                 android:focusable="false"
                 android:gravity="center"
                 android:orientation="vertical">

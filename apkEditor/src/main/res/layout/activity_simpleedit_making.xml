@@ -7,7 +7,7 @@
         android:id="@+id/layout_apk_generating"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/apked_white"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20.0dip"
             android:text="@string/in_progress"
-            android:textColor="@color/lightblack" />
+            android:textColor="@color/colorAccent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_detail"
@@ -37,7 +37,7 @@
         android:id="@+id/layout_apk_reinstall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:orientation="vertical">
 

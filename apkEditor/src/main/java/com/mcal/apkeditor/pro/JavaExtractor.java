@@ -78,7 +78,7 @@ public class JavaExtractor implements IJavaExtractor {
                 if(!path.exists()) {
                     path.mkdirs();
                 }
-                IOUtils.writeToFile(cls.getCode(), path + File.separator + cls.getName() + ".java");
+                IOUtils.writeToFile(cls.getCode(), new File(path + File.separator + cls.getName() + ".java"));
             }
         }
     }

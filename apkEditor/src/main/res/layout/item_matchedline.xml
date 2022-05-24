@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingLeft="32.0dip">
+    android:paddingLeft="48dp">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_line"

@@ -73,17 +73,17 @@ public class ZipFileListAdapter extends BaseAdapter implements
             }
         }
     };
-    private Activity ctx;
-    private IDirChanged dirChangeIf;
+    private final Activity ctx;
+    private final IDirChanged dirChangeIf;
     private String curDir;
     private List<FileInfo> curFileList;
-    private Map<String, List<FileInfo>> dir2Files;
+    private final Map<String, List<FileInfo>> dir2Files;
     // Record all the replaces (entry name -> file path)
-    private Map<String, String> fileReplaces = new HashMap<>();
+    private final Map<String, String> fileReplaces = new HashMap<>();
     // For AXML editing
     private boolean xmlEditMode = false;
     // Image cache
-    private LruCache<String, Bitmap> imageBitmaps = new LruCache<String, Bitmap>(
+    private final LruCache<String, Bitmap> imageBitmaps = new LruCache<String, Bitmap>(
             32) {
         protected void entryRemoved(boolean evicted, String key,
                                     Bitmap oldValue, Bitmap newValue) {
@@ -91,7 +91,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
         }
     };
     // Help to resolve the image
-    private ZipHelper zipHelper;
+    private final ZipHelper zipHelper;
     private ZipFile zfile;
     private ZipImageZoomer zipImageZoomer;
 
@@ -152,7 +152,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
         // Select a target folder to extract
         String dlgTitle = ctx.getString(R.string.select_folder);
         IFileSelection callback = new IFileSelection() {
-            private WeakReference<Activity> ctxRef = new WeakReference<>(ctx);
+            private final WeakReference<Activity> ctxRef = new WeakReference<>(ctx);
 
             @Override
             // filePath is the target directory
@@ -267,9 +267,9 @@ public class ZipFileListAdapter extends BaseAdapter implements
             convertView = LayoutInflater.from(ctx).inflate(R.layout.item_zipfile, null);
 
             viewHolder = new ViewHolder();
-            viewHolder.icon = (ImageView) convertView.findViewById(R.id.file_icon);
-            viewHolder.filename = (TextView) convertView.findViewById(R.id.filename);
-            viewHolder.desc1 = (TextView) convertView.findViewById(R.id.detail1);
+            viewHolder.icon = convertView.findViewById(R.id.file_icon);
+            viewHolder.filename = convertView.findViewById(R.id.filename);
+            viewHolder.desc1 = convertView.findViewById(R.id.detail1);
             viewHolder.editMenu = convertView.findViewById(R.id.menu_edit);
             viewHolder.saveMenu = convertView.findViewById(R.id.menu_save);
 

@@ -23,6 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageButton;
+
 import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -36,6 +39,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,16 +48,21 @@ import java.util.Map;
 public class MatchedTextListAdapter extends BaseExpandableListAdapter
         implements OnClickListener {
 
-    // File path -> matched lines
-    private final Map<String, List<MatchedLineItem>> matchedContents;
     // Do not show path prefix in the group label
     private String pathPrefix;
     private String keyword;
     private ArrayList<String> filePathList;
     private WeakReference<ApkInfoActivity> activityRef;
     private WeakReference<ExpandableListView> listviewRef;
+
     private boolean[] replaceClicked;
     private boolean[] editClicked;
+
+    // File path -> matched lines
+    private final Map<String, List<MatchedLineItem>> matchedContents;
+
+    private int themeId;
+    private boolean isDark;
 
     // To decide how many chars to cut
     private int lineTotalWidth = 0;
@@ -111,7 +120,17 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) activityRef.get()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_matchedline, null);
+            int resId = R.layout.item_matchedline;
+            // sawsem theme
+//            switch (themeId) {
+//                case GlobalConfig.THEME_DARK_DEFAULT:
+//                    resId = R.layout.item_matchedline_dark;
+//                    break;
+//                case GlobalConfig.THEME_DARK_RUSSIAN:
+//                    resId = R.layout.item_matchedline_dark_ru;
+//                    break;
+//            }
+            convertView = layoutInflater.inflate(resId, null);
             viewHolder = new ViewHolder();
             viewHolder.matchedLine = (TextView) convertView
                     .findViewById(R.id.tv_line);
@@ -212,7 +231,17 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) activityRef.get()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_matchedfile, null);
+            // sawsem theme
+            int resId = R.layout.item_matchedfile;
+//            switch (themeId) {
+//                case GlobalConfig.THEME_DARK_DEFAULT:
+//                    resId = R.layout.item_matchedfile_dark;
+//                    break;
+//                case GlobalConfig.THEME_DARK_RUSSIAN:
+//                    resId = R.layout.item_matchedfile_dark_ru;
+//                    break;
+//            }
+            convertView = layoutInflater.inflate(resId, null);
             viewHolder = new GroupViewHolder();
             viewHolder.groupLabel = (TextView) convertView
                     .findViewById(R.id.tv_filepath);
@@ -228,6 +257,21 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
         } else {
             viewHolder = (GroupViewHolder) convertView.getTag();
         }
+//
+//        int editResId = this.editClicked[groupPosition] ? R.drawable.pencil_blue
+//                : (this.isDark ? R.drawable.pencil_white : R.drawable.pencil);
+//        viewHolder.editImage.setImageResource(editResId);
+
+//        int replaceId = this.replaceClicked[groupPosition]
+//                ? R.drawable.ic_replace_blue
+//                : (this.isDark ? R.drawable.ic_replace_white
+//                : R.drawable.ic_replace);
+//        viewHolder.replaceImage.setImageResource(replaceId);
+
+
+
+
+
 
         int editResId = this.editClicked[groupPosition] ? R.drawable.round_edit_blue_24
                 : (R.drawable.round_edit_24);
@@ -237,6 +281,14 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
                 ? R.drawable.round_content_copy_blue_24
                 : (R.drawable.round_content_copy_24);
         viewHolder.replaceImage.setImageResource(replaceId);
+
+
+
+
+
+
+
+
 
         TextView groupTextView = viewHolder.groupLabel;
         groupTextView.setTypeface(null, Typeface.BOLD);
@@ -260,6 +312,18 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
 
     public ArrayList<String> getFileList() {
         return filePathList;
+    }
+
+    private static class ViewHolder {
+        TextView matchedLine;
+    }
+
+    private static class GroupViewHolder {
+        TextView groupLabel;
+        View replaceMenu;
+        View editMenu;
+        ImageView replaceImage;
+        ImageView editImage;
     }
 
     public String getKeyword() {
@@ -340,7 +404,7 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
     }
 
     private void showReplaceDialog(final int index) {
-        MaterialAlertDialogBuilder inputDlg = new MaterialAlertDialogBuilder(
+        AlertDialog.Builder inputDlg = new AlertDialog.Builder(
                 activityRef.get());
         inputDlg.setTitle(R.string.replace);
         String msg = String.format(
@@ -462,17 +526,5 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
             this.matchedContents.remove(path);
             this.notifyDataSetChanged();
         }
-    }
-
-    private static class ViewHolder {
-        TextView matchedLine;
-    }
-
-    private static class GroupViewHolder {
-        TextView groupLabel;
-        View replaceMenu;
-        View editMenu;
-        ImageView replaceImage;
-        ImageView editImage;
     }
 }

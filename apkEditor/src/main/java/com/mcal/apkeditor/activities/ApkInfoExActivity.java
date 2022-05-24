@@ -90,8 +90,8 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         this.menuItem_select = this.findViewById(R.id.menu_select);
         this.menuItem_addFile = this.findViewById(R.id.menu_addfile);
         this.menuItem_addDir = this.findViewById(R.id.menu_addfolder);
-        this.menuItem_searchOptions = findViewById(R.id.menu_searchoptions);
-        this.menuItem_searchCaseS = findViewById(R.id.menu_caseinsensitive);
+        this.menuItem_searchOptions = findViewById(R.id.imageview_text_check);
+        this.menuItem_searchCaseS = findViewById(R.id.imageview_insensitive_check);
         menuItem_home.setOnClickListener(clickListener);
         menuItem_done.setOnClickListener(clickListener);
         menuItem_select.setOnClickListener(clickListener);
@@ -218,9 +218,9 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 ApkInfoExActivity.this.createFolder(0);
             }
             // Search option (text or filename)
-            else if (id == R.id.menu_searchoptions) {
+            else if (id == R.id.imageview_text_check) {
                 ApkInfoExActivity.this.reverseSearchOption();
-            } else if (id == R.id.menu_caseinsensitive) {
+            } else if (id == R.id.imageview_insensitive_check) {
                 ApkInfoExActivity.this.reverseSearchCaseSensitive();
             }
 

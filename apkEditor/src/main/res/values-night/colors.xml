@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#2962FF</color>
+    <color name="colorPrimary">#FF202125</color>
+    <color name="colorPrimaryDark">#FF202125</color>
+    <color name="colorSecondary">#2962FF</color>
+    <color name="colorGray">#FAFAFA</color>
+    <color name="string_name">#FF202125</color>
+    <color name="yellow">#FF9800</color>
+
+    <color name="color_white">#FF202125</color>
+    <color name="color_grey">#FAFAFA</color>
+    <color name="color_green">#ff4cb648</color>
+</resources>

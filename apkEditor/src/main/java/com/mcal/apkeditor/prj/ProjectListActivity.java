@@ -128,9 +128,7 @@ public class ProjectListActivity extends AppCompatActivity implements View.OnCli
 
     protected List<ProjectListAdapter.ItemInfo> listProjects(String projectFolder) {
         File prjDir = new File(projectFolder);
-
         List<ProjectListAdapter.ItemInfo> items = new ArrayList<>();
-
         do {
             File[] files = prjDir.listFiles();
             if (files == null) {
@@ -158,14 +156,7 @@ public class ProjectListActivity extends AppCompatActivity implements View.OnCli
 
         if (!items.isEmpty()) {
             Comparator<ProjectListAdapter.ItemInfo> comparator =
-                    new Comparator<ProjectListAdapter.ItemInfo>() {
-                        @Contract(pure = true)
-                        @Override
-                        public int compare(@NonNull ProjectListAdapter.ItemInfo arg0,
-                                           @NonNull ProjectListAdapter.ItemInfo arg1) {
-                            return arg0.lastModified < arg1.lastModified ? 1 : -1;
-                        }
-                    };
+                    (arg0, arg1) -> arg0.lastModified < arg1.lastModified ? 1 : -1;
             Collections.sort(items, comparator);
         }
 
@@ -212,13 +203,11 @@ public class ProjectListActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what) {
-                case 0:
-                    synchronized (icons) {
-                        actRef.get().adapter.setProjectIcon(icons);
-                    }
-                    actRef.get().adapter.notifyDataSetChanged();
-                    break;
+            if (msg.what == 0) {
+                synchronized (icons) {
+                    actRef.get().adapter.setProjectIcon(icons);
+                }
+                actRef.get().adapter.notifyDataSetChanged();
             }
         }
     }
@@ -240,7 +229,8 @@ public class ProjectListActivity extends AppCompatActivity implements View.OnCli
                     ApkInfoParser.AppInfo info =
                             parser.parse(ProjectListActivity.this, item.apkPath);
                     handler.setIcon(item.apkPath, info.icon);
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 index += 1;
             }

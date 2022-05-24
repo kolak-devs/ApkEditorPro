@@ -17,17 +17,17 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/round_save_24"
                 android:visibility="invisible" />
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btn_save"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="@drawable/pngeditor_clickable_img_bg"
                 android:src="@drawable/round_save_24" />
 
         </LinearLayout>
@@ -40,18 +40,18 @@
             android:orientation="horizontal"
             android:visibility="invisible">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btn_confirm"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="@drawable/pngeditor_clickable_img_bg"
                 android:src="@drawable/round_check_24" />
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btn_cancel"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="@drawable/pngeditor_clickable_img_bg"
                 android:src="@drawable/round_close_24" />
 
         </LinearLayout>
@@ -64,9 +64,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:maxLines="1"
         android:maxWidth="@android:dimen/thumbnail_width"
-        android:textColor="@color/white" />
+        android:maxLines="1"
+        android:textColor="@color/colorGray" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_scale"
@@ -76,6 +76,6 @@
         android:layout_marginLeft="8dip"
         android:layout_marginRight="8dip"
         android:layout_toStartOf="@+id/button_layout"
-        android:textColor="@color/white" />
+        android:textColor="@color/colorGray" />
 
 </RelativeLayout>

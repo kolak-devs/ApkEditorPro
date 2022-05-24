@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="right"
     android:layout_marginBottom="48.0dip"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimary"
     android:content="@+id/panel_content"
     android:focusable="false"
     android:handle="@+id/panel_button"

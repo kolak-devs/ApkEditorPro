@@ -4,11 +4,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatImageButton;
+
 public class ViewHolder {
     ImageView icon;
     TextView filename;
     TextView desc1;
 
-    View editMenu;
-    View saveMenu;
+    AppCompatImageButton editMenu;
+    AppCompatImageButton saveMenu;
 }

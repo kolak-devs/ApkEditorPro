@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import com.balsikandar.crashreporter.CrashReporter;
+import com.mcal.common.data.Preferences;
 
 public class App extends Application {
     @SuppressLint("StaticFieldLeak")
@@ -43,11 +44,10 @@ public class App extends Application {
         context = getApplicationContext();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         CrashReporter.initialize(this);
-        /*if (Preferences.isNightModeEnabled()) {
+        if (Preferences.isNightModeEnabled()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }*/
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 }
