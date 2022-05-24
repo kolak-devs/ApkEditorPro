@@ -3,5 +3,6 @@
 *.idea
 apkEditorPro/release/
 build/
-gradle/
 .gradle/
+local.properties
+apkEditor/.cxx/
