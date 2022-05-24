@@ -2,8 +2,8 @@ package com.mcal.apkeditor.patch;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.io.IOException;
 import java.util.zip.ZipFile;

@@ -18,8 +18,8 @@ import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
-import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityUtils;
 
 import java.io.File;
 import java.util.ArrayList;

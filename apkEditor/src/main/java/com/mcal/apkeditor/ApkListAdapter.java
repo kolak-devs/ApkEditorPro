@@ -18,7 +18,6 @@ import java.util.List;
 public class ApkListAdapter extends BaseAdapter {
 
     private final Context ctx;
-    List<String> fileList = new ArrayList<>();
     private final LruCache<String, ApkInfoParser.AppInfo> apkInfoCache = new LruCache<String, ApkInfoParser.AppInfo>(
             64) {
 //		protected void entryRemoved(boolean evicted, String key,
@@ -31,6 +30,7 @@ public class ApkListAdapter extends BaseAdapter {
 //			}
 //		}
     };
+    List<String> fileList = new ArrayList<>();
 
     public ApkListAdapter(Context ctx) {
         this.ctx = ctx;

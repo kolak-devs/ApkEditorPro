@@ -32,8 +32,6 @@
     <string name="colormixer_set">Establecer</string>
     <string name="common_edit">EDICIÓN RÁPIDA</string>
     <string name="compose">Componiendo…</string>
-    <string name="compression_level">Nivel de Compresión</string>
-    <string name="compression_level_summary">Tenga en cuenta que un nivel bajo de compresión proporciona una mayor velocidad de procesado, pero no confiere una buena tasa de compresión, por lo que el tamaño del APK creado resultará mayor.</string>
     <string name="confirm_dir_replace">Confirme el Directorio a Reemplazar</string>
     <string name="copied_to_clipboard">"\"%s\" Copiado al Portapapeles"</string>
     <string name="copy_error_msg">Copiar Mensaje de Error</string>
@@ -74,7 +72,6 @@
     <string name="folder_replaced">Carpeta Reemplazada</string>
     <string name="font_size">Tamaño de la Fuente</string>
     <string name="full_edit">EDICIÓN COMPLETA</string>
-    <string name="full_screen_desc">Esta opción ocultará la Barra de Notificaciones del Sistema para trabajar con APK Editor Pro a pantalla completa.</string>
     <string name="general_error">¡ERROR!: %s</string>
     <string name="help">Ayuda</string>
     <string name="hide_smali_tip">Por favor; PULSE PROLONGADAMENTE sobre el icono DEX -> Smali para ocultarlo.</string>
@@ -185,8 +182,6 @@
     <string name="settings">Ajustes</string>
     <string name="show_a_toast">Mostrar un Mensaje Emergente</string>
     <string name="sign">Firmando…</string>
-    <string name="sign_apk_with">Firmado del APK</string>
-    <string name="sign_apk_with_summary">Esta opción permite determinar la Clave que se usará para firmar el nuevo APK modificado.</string>
     <string name="sign_error">Error al Firmar:&#160;</string>
     <string name="sign_the_apk">Firmar el APK</string>
     <string name="simple_edit">EDICIÓN BÁSICA</string>
@@ -242,7 +237,6 @@
     <string name="fix_invalid_name_tip">¿Desea intentar corregir el/los problema(s) relacionado(s) con los Nombres inválidos?</string>
     <string name="fix_invalid_symbol_tip">¿Desea intentar corregir el/los problema(s) relacionado(s) con los Símbolos inválidos?</string>
     <string name="fix_invalid_token_tip">¿Desea intentar corregir el/los problema(s) relacionado(s) con los Signos inválidos?</string>
-    <string name="full_screen">Pantalla Completa</string>
     <string name="hide_warnings">Ocultar</string>
     <string name="invalid_directory">Directorio Inválido: %s</string>
     <string name="label_replace_with_same_setting">"La próxima vez, reemplazar con esta misma Configuración y no volver a mostrar más este diálogo."</string>

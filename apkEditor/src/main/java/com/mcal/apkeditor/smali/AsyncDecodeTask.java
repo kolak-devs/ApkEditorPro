@@ -195,9 +195,9 @@ public class AsyncDecodeTask extends AsyncTask<Void, Integer, Boolean> {
             if (result) {
                 for (File file : new File(decodeRootPath).listFiles()) {
                     if (file.getName().endsWith(".dex")) {
-                       if(file.delete()) {
-                           Log.e(getClass().getName(), file + " deleted");
-                       }
+                        if (file.delete()) {
+                            Log.e(getClass().getName(), file + " deleted");
+                        }
                     }
                 }
                 callback.dexDecodingFinished(true, null, strWarning);
@@ -211,6 +211,6 @@ public class AsyncDecodeTask extends AsyncTask<Void, Integer, Boolean> {
         void dexDecodingStarted();
 
         void dexDecodingFinished(boolean result, String strError,
-                                        String strWarning);
+                                 String strWarning);
     }
 }

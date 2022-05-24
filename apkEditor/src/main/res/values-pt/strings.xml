@@ -53,8 +53,6 @@
     <string name="failed">Falhou</string>
     <string name="appearance">Aparência</string>
     <string name="launcher_icon">Mudar Ícone</string>
-    <string name="full_screen">Tela cheia</string>
-    <string name="full_screen_desc">Selecione para permitir tela cheia</string>
     <string name="save_succeed_1">Sucesso: salvado para %s</string>
     <string name="failed_1">Falhou: %s</string>
     <string name="user_apps">Apps do usuário</string>
@@ -80,8 +78,6 @@
     <string name="sign">Assinar</string>
     <string name="sign_error">Assinar Erro:</string>
     <string name="apk_building">APK Building</string>
-    <string name="compression_level">Nível de Compressão</string>
-    <string name="compression_level_summary">Nível inferior tem melhor velocidade, mas com mau taxa de compressão, assim fazer um APK maior.</string>
     <string name="str_app_name">App Name</string>
     <string name="common_edit">Edição Comum</string>
     <string name="package_name">Nome do Pacote</string>

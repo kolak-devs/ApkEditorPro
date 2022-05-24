@@ -6,11 +6,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatImageButton;
 
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 
@@ -23,12 +21,11 @@ public class ResNavigationMgr implements OnClickListener {
 
     private final WeakReference<ApkInfoActivity> activityRef;
     private final String rootDir;
-    private String currDir;
     private final LinearLayout viewContainer;
     private final HorizontalScrollView scrollView;
-
     // All the added directory tabs
     private final List<View> addedViewList = new ArrayList<>();
+    private String currDir;
 
     public ResNavigationMgr(ApkInfoActivity ctx, String rootDir,
                             LinearLayout container, HorizontalScrollView scrollView) {

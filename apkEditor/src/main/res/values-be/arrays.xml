@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="compression_level_key">
-        <item>0 (Без сціскання)</item>
-        <item>1 (Найлепшая хуткасць)</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5 (Сярэдне)</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9 (Найлепшае сцісканне)</item>
-    </string-array>
     <string-array name="order_key">
         <item>"Па назве дадатка "</item>
         <item>Па часе ўсталёўкі</item>
@@ -68,10 +56,5 @@
         <item>"Турэцкая "</item>
         <item>Украінская</item>
         <item>В’етнамская</item>
-    </string-array>
-    <string-array name="signer_value_dont_translate">
-        <item>testkey</item>
-        <item>editorkey</item>
-        <item>customkey</item>
     </string-array>
 </resources>

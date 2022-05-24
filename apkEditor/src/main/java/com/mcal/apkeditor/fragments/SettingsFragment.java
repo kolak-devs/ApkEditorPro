@@ -1,12 +1,8 @@
 package com.mcal.apkeditor.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,12 +17,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
-import com.google.android.material.snackbar.Snackbar;
 import com.mcal.apksigner.view.CustomSignDialog;
 import com.mcal.apksigner.view.CustomSignDialog2;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.CommandRunner;
-import com.mcal.common.utils.PreferenceUtils;
 import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.ScopedStorage;
 

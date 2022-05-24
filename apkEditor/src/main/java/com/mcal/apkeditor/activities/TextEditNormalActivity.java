@@ -39,22 +39,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.apkeditor.editor.MoreEditorOptionAdapter;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.editor.TextEditBase;
+import com.mcal.apkeditor.dialogs.HtmlViewDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.dialogs.ProcessingDialog.ProcessingInterface;
-import com.mcal.apkeditor.dialogs.HtmlViewDialog;
+import com.mcal.apkeditor.editor.MoreEditorOptionAdapter;
+import com.mcal.apkeditor.editor.TextEditBase;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.Display;
 import com.mcal.common.utils.ICommonCallback;
 import com.mcal.common.utils.PathUtils;
 import com.mcal.common.utils.SDCard;
-import com.mcal.neweditor.data.ColorTheme;
 import com.mcal.neweditor.Document;
+import com.mcal.neweditor.TextSelectionListener;
+import com.mcal.neweditor.data.ColorTheme;
 import com.mcal.neweditor.view.CodeEditor;
 import com.mcal.neweditor.view.CodeScrollView;
-import com.mcal.neweditor.TextSelectionListener;
 
 import java.io.File;
 import java.io.IOException;

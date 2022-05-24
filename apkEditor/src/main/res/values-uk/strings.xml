@@ -53,8 +53,6 @@
     <string name="failed">Помилка</string>
     <string name="appearance">Зовнішній вигляд</string>
     <string name="launcher_icon">Піктограма додатку</string>
-    <string name="full_screen">На весь екран</string>
-    <string name="full_screen_desc">Виберіть для увімкнення повноекранного режиму.</string>
     <string name="save_succeed_1">Збережено успішно. Шлях %s</string>
     <string name="failed_1">Помилка: %s</string>
     <string name="user_apps">Користувацькі</string>
@@ -80,8 +78,6 @@
     <string name="sign">Підписування</string>
     <string name="sign_error">Помилка підпису:</string>
     <string name="apk_building">Рекомпіляція APK</string>
-    <string name="compression_level">Рівень стиснення</string>
-    <string name="compression_level_summary">При мінімальному рівні стиснення створюється APK більшого розміру, але збільшується швидкість роботи додатку.</string>
     <string name="str_app_name">Назва додатку</string>
     <string name="common_edit">Редагування реквізитів</string>
     <string name="package_name">Назва пакету</string>
@@ -120,8 +116,6 @@
     <string name="line_wrap">Перенесення рядків</string>
     <string name="cannot_find_ext_sdcard">Зовнішню SD-карту не знайдено.</string>
     <string name="rename_in_resources">Змінити назву пакету в resources.arsc</string>
-    <string name="sign_apk_with">Підписування APK</string>
-    <string name="sign_apk_with_summary">Вкажіть ключ для підписування АПК.</string>
     <string name="str_files_found" formatted="false">"%d файл(-ів) знайдено - '%s'"</string>
     <string name="files">Файли</string>
     <string name="smali_editing">Редактор smali</string>

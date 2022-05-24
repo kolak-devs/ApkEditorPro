@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.R;
 
 import java.lang.ref.WeakReference;
@@ -79,15 +78,15 @@ public class ColorValueAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private static final class ViewHolder {
-        View colorView;
-        TextView nameTv;
-        TextView valueTv;
-    }
-
     public void updateData(ArrayList<ColorValue> colorValues) {
         this.values.clear();
         this.values.addAll(colorValues);
         this.notifyDataSetChanged();
+    }
+
+    private static final class ViewHolder {
+        View colorView;
+        TextView nameTv;
+        TextView valueTv;
     }
 }

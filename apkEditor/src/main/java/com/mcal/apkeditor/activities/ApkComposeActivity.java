@@ -31,7 +31,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -50,12 +49,12 @@ import com.mcal.apkeditor.se.ApkInstaller;
 import com.mcal.apkeditor.utils.AxmlStringModifier;
 import com.mcal.apkeditor.utils.ErrorFixManager;
 import com.mcal.apkeditor.utils.OdexPatcher;
-import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.ApkInfoParser;
+import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.ITaskCallback;
 import com.mcal.common.utils.PackageUtils;
 import com.mcal.common.utils.PreferenceUtils;
-import com.mcal.common.utils.ClipboardUtils;
 
 import org.jetbrains.annotations.Contract;
 
@@ -381,14 +380,14 @@ public class ApkComposeActivity extends CustomizedLangActivity
             this.findViewById(R.id.failed_view).setVisibility(View.VISIBLE);
 
             this.failedLv.setDivider(null);
-            if(errMessage != null) {
+            if (errMessage != null) {
                 this.failedLv.setAdapter(new ApkComposeFailAdapter(this, errMessage));
                 Log.d("error", errMessage);
             }
             resultImgView.setImageResource(R.drawable.round_close_red_24);
 
             // Show "Hide Warnings" button or not
-            if(errMessage != null) {
+            if (errMessage != null) {
                 if (errMessage.contains("warning:")) {
                     this.hideWarningBtn.setVisibility(View.VISIBLE);
                 } else {
@@ -397,7 +396,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
             }
 
             // Auto fix
-            if(errMessage != null) {
+            if (errMessage != null) {
                 errFixer.setErrMessage(errMessage);
                 if (errFixer.isErrorFixable()) {
                     int resId = getTipResourceId();

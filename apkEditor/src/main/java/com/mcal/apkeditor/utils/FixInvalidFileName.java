@@ -19,10 +19,9 @@ import java.util.Map;
 public class FixInvalidFileName extends FixInvalid {
     private final static String err_InvalidFile = ": Invalid file name: must contain only ";
     //private final static String err_InvalidFile2 = ": Invalid file name: must contain only [a-z0-9_.]";
-
+    private final List<InvalidFileRecord> invalidFiles = new ArrayList<>();
     private int renamedFiles = 0;
     private int modifiedFiles = 0;
-    private final List<InvalidFileRecord> invalidFiles = new ArrayList<>();
 
     public FixInvalidFileName(String decodeRootPath, String message) {
         super(decodeRootPath, message);

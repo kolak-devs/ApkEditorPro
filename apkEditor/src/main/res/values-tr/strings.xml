@@ -32,8 +32,6 @@
     <string name="colormixer_set">Ayarla</string>
     <string name="common_edit">Düzenle</string>
     <string name="compose">Sıkıştırılıyor</string>
-    <string name="compression_level">Sıkıştırma düzeyi</string>
-    <string name="compression_level_summary">Alt seviye daha hızlıdır ama kötü sıkıştırma nedeniyle APK boyutu büyük olabilir.</string>
     <string name="confirm_dir_replace">Dizin değiştirmeyi onayla</string>
     <string name="copied_to_clipboard">"'%s' Panoya kopyalandı"</string>
     <string name="copy_error_msg">Hata mesajını kopyala</string>
@@ -74,7 +72,6 @@
     <string name="folder_replaced">Klasör değiştirildi</string>
     <string name="font_size">Font boyutu</string>
     <string name="full_edit">Tam düzenleme (kaynak değiştirme)</string>
-    <string name="full_screen_desc">Tam ekran kullan</string>
     <string name="general_error">Hata: %s</string>
     <string name="help">Yardım</string>
     <string name="hide_smali_tip">DEX Gizlemek için basılı tutun</string>
@@ -189,8 +186,6 @@ Eskisini kaldırıp daha sonra yenisini yükle"</string>
     <string name="settings">Ayarlar</string>
     <string name="show_a_toast">Tekrar göster</string>
     <string name="sign">İmzalanıyor</string>
-    <string name="sign_apk_with">Apk imzalama</string>
-    <string name="sign_apk_with_summary">APK imzalama türünü seçin</string>
     <string name="sign_error">İmzalama başarısız:</string>
     <string name="sign_the_apk">"APK'yı imzala"</string>
     <string name="simple_edit">Basit düzenleme (dosya değiştirme)</string>
@@ -223,7 +218,6 @@ Eskisini kaldırıp daha sonra yenisini yükle"</string>
     <string name="wait_for_decoding">İşlem tamamlanana kadar bekleyin.</string>
     <string name="warning">Dikkat!</string>
     <string name="yes">Evet</string>
-    <string name="full_screen">Tam ekran</string>
     <string name="apk_decoding">Apk ayrıştırma</string>
     <string name="build">Kaydet</string>
     <string name="cannot_load_project_info">Proje bilgileri yüklenemiyor.</string>

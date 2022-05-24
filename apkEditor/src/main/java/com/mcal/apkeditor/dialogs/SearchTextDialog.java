@@ -188,6 +188,182 @@ public class SearchTextDialog extends Dialog
         searchingLayout.setVisibility(View.INVISIBLE);
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btn_replaceall) {
+            showConfirmDialog();
+        }
+    }
+
+    private void showConfirmDialog() {
+
+        final String strReplace = etReplaceAll.getText().toString();
+
+        AlertDialog.Builder comfirmDlg = new AlertDialog.Builder(activityRef.get());
+        String msg = String.format(
+                activityRef.get().getString(R.string.sure_to_replace_all),
+                this.keyword, strReplace);
+        comfirmDlg.setMessage(msg);
+
+        comfirmDlg.setPositiveButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int whichButton) {
+                        if (!"".equals(strReplace.trim())) {
+                            adapter.addInputHistory(strReplace);
+                        }
+                        doReplaceAll(strReplace);
+                    }
+                });
+
+        comfirmDlg.setNegativeButton(android.R.string.cancel,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int whichButton) {
+                        // Canceled.
+                    }
+                });
+
+        comfirmDlg.show();
+    }
+
+    protected void doReplaceAll(final String strReplace) {
+        new ProcessingDialog(activityRef.get(), new ProcessingDialog.ProcessingInterface() {
+            int failedNum = 0;
+            String failMessage = "";
+
+            @Override
+            public void process() throws Exception {
+                for (String f : matchedFiles) {
+                    try {
+                        listAdapter.replaceWith(f, strReplace);
+                        addModification(f);
+                    } catch (Exception e) {
+                        failMessage += "\n" + String.format(
+                                activityRef.get().getString(R.string.failed_to_modify), f);
+                        failedNum += 1;
+                    }
+                }
+            }
+
+            @Override
+            public void afterProcess() {
+                for (int i = 0; i < listAdapter.getGroupCount(); ++i) {
+                    listView.collapseGroup(i);
+                    listAdapter.removeSearchResult(i);
+                }
+
+                String msg = activityRef.get().getString(R.string.str_num_modified_file);
+                msg = String.format(msg, matchedFiles.size() - failedNum);
+
+                if (failedNum > 0) {
+                    msg += failMessage;
+                    Toast.makeText(activityRef.get(), msg, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(activityRef.get(), msg, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }, -1);
+    }
+
+    // Mark the file as modified
+    public void addModification(String filePath) {
+        activityRef.get().dealWithModifiedFile(filePath, null);
+    }
+
+    // Long click on list item
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                   int position, long id) {
+        int itemType = ExpandableListView.getPackedPositionType(id);
+        if (itemType != ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+            return true;
+        }
+
+        final int groupIdx = ExpandableListView.getPackedPositionGroup(id);
+        parent.setOnCreateContextMenuListener(
+                new View.OnCreateContextMenuListener() {
+                    public void onCreateContextMenu(ContextMenu menu, View v,
+                                                    ContextMenu.ContextMenuInfo menuInfo) {
+
+                        // Delete
+                        MenuItem item1 = menu.add(0, Menu.FIRST, 0,
+                                R.string.delete);
+                        item1.setOnMenuItemClickListener(
+                                new MenuItem.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(
+                                            MenuItem item) {
+                                        deleteItem(groupIdx);
+                                        return true;
+                                    }
+                                });
+                        // Extract
+                        MenuItem item2 = menu.add(0, Menu.FIRST + 1, 0,
+                                R.string.extract);
+                        item2.setOnMenuItemClickListener(
+                                new MenuItem.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(
+                                            MenuItem item) {
+                                        extractItem(groupIdx);
+                                        return true;
+                                    }
+                                });
+                        // Replace the file
+                        MenuItem item3 = menu.add(0, Menu.FIRST + 2, 0,
+                                R.string.replace);
+                        MenuItem.OnMenuItemClickListener listener = new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                replaceItem(groupIdx);
+                                return true;
+                            }
+                        };
+                        item3.setOnMenuItemClickListener(listener);
+                    }
+                });
+
+        return false;
+    }
+
+    private void deleteItem(int position) {
+        ResListAdapter resManager = activityRef.get().getResListAdapter();
+
+        // Use ResListAdapter to delete it
+        String filepath = this.matchedFiles.get(position);
+        int pos = filepath.lastIndexOf('/');
+        String dirPath = (pos != -1) ? filepath.substring(0, pos) : "";
+        String fileName = filepath.substring(pos + 1);
+        resManager.deleteFile(dirPath, fileName, false);
+
+        // Update UI
+        listAdapter.removeItem(position);
+    }
+
+    private void extractItem(int position) {
+        if (position < matchedFiles.size()) {
+            String filepath = matchedFiles.get(position);
+            activityRef.get().extractFileOrDir(filepath);
+        }
+    }
+
+    private void replaceItem(final int position) {
+        if (position < matchedFiles.size()) {
+            String filepath = matchedFiles.get(position);
+            activityRef.get().replaceFile(filepath,
+                    new SomethingChangedListener() {
+                        @Override
+                        public void somethingChanged() {
+                            listView.collapseGroup(position);
+                            listAdapter.removeSearchResult(position);
+                        }
+                    });
+        }
+    }
+
     // Search all the files inside the folder
     private class AsyncFolderSearchTask
             extends AsyncTask<Object, Void, List<String>> {
@@ -368,183 +544,6 @@ public class SearchTextDialog extends Dialog
                 listAdapter.addSearchResult(result.filePath, result.matchList);
             }
             listView.expandGroup(groupPosition);
-        }
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.btn_replaceall) {
-            showConfirmDialog();
-        }
-    }
-
-    private void showConfirmDialog() {
-
-        final String strReplace = etReplaceAll.getText().toString();
-
-        AlertDialog.Builder comfirmDlg = new AlertDialog.Builder(activityRef.get());
-        String msg = String.format(
-                activityRef.get().getString(R.string.sure_to_replace_all),
-                this.keyword, strReplace);
-        comfirmDlg.setMessage(msg);
-
-        comfirmDlg.setPositiveButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        if (!"".equals(strReplace.trim())) {
-                            adapter.addInputHistory(strReplace);
-                        }
-                        doReplaceAll(strReplace);
-                    }
-                });
-
-        comfirmDlg.setNegativeButton(android.R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        // Canceled.
-                    }
-                });
-
-        comfirmDlg.show();
-    }
-
-    protected void doReplaceAll(final String strReplace) {
-        new ProcessingDialog(activityRef.get(), new ProcessingDialog.ProcessingInterface() {
-            int failedNum = 0;
-            String failMessage = "";
-
-            @Override
-            public void process() throws Exception {
-                for (String f : matchedFiles) {
-                    try {
-                        listAdapter.replaceWith(f, strReplace);
-                        addModification(f);
-                    } catch (Exception e) {
-                        failMessage += "\n" + String.format(
-                                activityRef.get().getString(R.string.failed_to_modify), f);
-                        failedNum += 1;
-                    }
-                }
-            }
-
-            @Override
-            public void afterProcess() {
-                for (int i = 0; i < listAdapter.getGroupCount(); ++i) {
-                    listView.collapseGroup(i);
-                    listAdapter.removeSearchResult(i);
-                }
-
-                String msg = activityRef.get().getString(R.string.str_num_modified_file);
-                msg = String.format(msg, matchedFiles.size() - failedNum);
-
-                if (failedNum > 0) {
-                    msg += failMessage;
-                    Toast.makeText(activityRef.get(), msg, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(activityRef.get(), msg, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        }, -1);
-    }
-
-    // Mark the file as modified
-    public void addModification(String filePath) {
-        activityRef.get().dealWithModifiedFile(filePath, null);
-    }
-
-    // Long click on list item
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                   int position, long id) {
-        int itemType = ExpandableListView.getPackedPositionType(id);
-        if (itemType != ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-            return true;
-        }
-
-        final int groupIdx = ExpandableListView.getPackedPositionGroup(id);
-        parent.setOnCreateContextMenuListener(
-                new View.OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                                                    ContextMenu.ContextMenuInfo menuInfo) {
-
-                        // Delete
-                        MenuItem item1 = menu.add(0, Menu.FIRST, 0,
-                                R.string.delete);
-                        item1.setOnMenuItemClickListener(
-                                new MenuItem.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(
-                                            MenuItem item) {
-                                        deleteItem(groupIdx);
-                                        return true;
-                                    }
-                                });
-                        // Extract
-                        MenuItem item2 = menu.add(0, Menu.FIRST + 1, 0,
-                                R.string.extract);
-                        item2.setOnMenuItemClickListener(
-                                new MenuItem.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(
-                                            MenuItem item) {
-                                        extractItem(groupIdx);
-                                        return true;
-                                    }
-                                });
-                        // Replace the file
-                        MenuItem item3 = menu.add(0, Menu.FIRST + 2, 0,
-                                R.string.replace);
-                        MenuItem.OnMenuItemClickListener listener = new MenuItem.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                replaceItem(groupIdx);
-                                return true;
-                            }
-                        };
-                        item3.setOnMenuItemClickListener(listener);
-                    }
-                });
-
-        return false;
-    }
-
-    private void deleteItem(int position) {
-        ResListAdapter resManager = activityRef.get().getResListAdapter();
-
-        // Use ResListAdapter to delete it
-        String filepath = this.matchedFiles.get(position);
-        int pos = filepath.lastIndexOf('/');
-        String dirPath = (pos != -1) ? filepath.substring(0, pos) : "";
-        String fileName = filepath.substring(pos + 1);
-        resManager.deleteFile(dirPath, fileName, false);
-
-        // Update UI
-        listAdapter.removeItem(position);
-    }
-
-    private void extractItem(int position) {
-        if (position < matchedFiles.size()) {
-            String filepath = matchedFiles.get(position);
-            activityRef.get().extractFileOrDir(filepath);
-        }
-    }
-
-    private void replaceItem(final int position) {
-        if (position < matchedFiles.size()) {
-            String filepath = matchedFiles.get(position);
-            activityRef.get().replaceFile(filepath,
-                    new SomethingChangedListener() {
-                        @Override
-                        public void somethingChanged() {
-                            listView.collapseGroup(position);
-                            listAdapter.removeSearchResult(position);
-                        }
-                    });
         }
     }
 }

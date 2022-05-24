@@ -2,8 +2,8 @@ package com.mcal.apkeditor.patch;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,13 +16,12 @@ class PatchRule_FuncReplace extends PatchRule {
     private static final String TARGET = "TARGET:";
     private static final String FUNCTION = "FUNCTION:";
     private static final String REPLACE = "REPLACE:";
-
+    private final List<String> replaceContents;
+    private final List<String> keywords;
     // Target file
     private String targetFile;
     // If the source is a zip, extract or not
     private String strFunction;
-    private final List<String> replaceContents;
-    private final List<String> keywords;
 
     PatchRule_FuncReplace() {
         replaceContents = new ArrayList<>();

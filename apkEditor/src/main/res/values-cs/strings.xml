@@ -53,8 +53,6 @@
     <string name="failed">Neúspěšné</string>
     <string name="appearance">Vzhled</string>
     <string name="launcher_icon">Ikona v Launcheru</string>
-    <string name="full_screen">Celá obrazovka</string>
-    <string name="full_screen_desc">Vyberte zobrazení na celou obrazovku</string>
     <string name="save_succeed_1">Úspěch: uloženo do %s</string>
     <string name="failed_1">Selhalo: %s</string>
     <string name="user_apps">Uživatelská aplikace</string>
@@ -80,8 +78,6 @@
     <string name="sign">Podpis</string>
     <string name="sign_error">Chyba Podpisu:</string>
     <string name="apk_building">Sestavení APK</string>
-    <string name="compression_level">Úroveň komprese</string>
-    <string name="compression_level_summary">Metoda nízké komprese je rychlejší, ale špatná pro kompresní poměr. Taková APK je větší.</string>
     <string name="str_app_name">Jméno Aplikace</string>
     <string name="common_edit">Upravit info v aplikaci</string>
     <string name="package_name">Jméno Balíčku</string>
@@ -120,8 +116,6 @@
     <string name="line_wrap">Zalamovat</string>
     <string name="cannot_find_ext_sdcard">Nelze najít externí SD kartu.</string>
     <string name="rename_in_resources">Přejmenovat název balíčku v resources.arsc</string>
-    <string name="sign_apk_with">Přihlásit se k APK</string>
-    <string name="sign_apk_with_summary">Určete, který klíč použít k úspěšnému podepsání APK.</string>
     <string name="str_files_found" formatted="false">"%d souborů nalezeno - '%s'"</string>
     <string name="files">Soubory</string>
     <string name="smali_editing">Úprava Smali</string>

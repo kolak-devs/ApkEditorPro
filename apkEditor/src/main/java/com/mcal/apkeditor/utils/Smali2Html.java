@@ -11,11 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Smali2Html {
+    private final List<String> lines = new ArrayList<>();
     private BufferedReader reader;
     private BufferedWriter writer;
-
-    private final List<String> lines = new ArrayList<>();
-
     // Current dealing content is inside a string
     private boolean inString = false;
     ;

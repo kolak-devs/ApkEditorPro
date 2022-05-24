@@ -53,8 +53,6 @@
     <string name="failed">Fehlgeschlagen</string>
     <string name="appearance">Aussehen</string>
     <string name="launcher_icon">Programmstartsymbol</string>
-    <string name="full_screen">Vollbild</string>
-    <string name="full_screen_desc">Aktiviert den Volbildmodus</string>
     <string name="save_succeed_1">Erfolgreich gespeichert unter:\n%s</string>
     <string name="failed_1">Fehlgeschlagen: %s</string>
     <string name="user_apps">Benutzer-Apps</string>
@@ -80,8 +78,6 @@
     <string name="sign">Signieren</string>
     <string name="sign_error">Signier-Fehler:</string>
     <string name="apk_building">APK-Erstellung</string>
-    <string name="compression_level">Kompressionsmethode</string>
-    <string name="compression_level_summary">Eine niedrige Kompressionsmethode ist schneller, aber schlecht f&#252;r die Kompressionsrate. Dadurch wird die APK-Datei gr&#246;&#223;er.</string>
     <string name="str_app_name">Name der App</string>
     <string name="common_edit">App-Infos bearbeiten</string>
     <string name="package_name">Paketname</string>
@@ -120,8 +116,6 @@
     <string name="line_wrap">Zeilenumbruch</string>
     <string name="cannot_find_ext_sdcard">Die externe SD-Karte konnte nicht gefunden werden.</string>
     <string name="rename_in_resources">Paketname in resources.arsc Datei umbenennen</string>
-    <string name="sign_apk_with">APK-Datei signieren mit</string>
-    <string name="sign_apk_with_summary">Legt fest, mit welchem Schl&#252;ssel die APK-Datei signiert werden soll.</string>
     <string name="str_files_found" formatted="false">"%d Datei(en) gefunden - \"%s\""</string>
     <string name="files">Dateien</string>
     <string name="smali_editing">Smali-Bearbeitung</string>
@@ -350,9 +344,6 @@ Wenn sie APK Editor Pro bereits gekauft haben, und dies nicht erw&#252;nscht ist
     <string name="backup">Sicherung</string>
     <string name="symbol_input">Symbol-Eingabeleiste</string>
     <string name="symbol_input_summary">Aktiviert die Symbol-Eingabeleiste oder nicht.</string>
-    <string name="decode_all_files">Alle Dateien entschl&#252;sseln</string>
-    <string name="decode_mode">Entschl&#252;sselungsmodus</string>
-    <string name="decode_partial_files">Teildateien entschl&#252;sseln</string>
     <string name="error_path_xxx_not_exist">"Fehler: Der Pfad \"%s\" existiert nicht."</string>
     <string name="folder_path">Ordnerpfad:</string>
     <string name="import_folder">Ordner importieren</string>

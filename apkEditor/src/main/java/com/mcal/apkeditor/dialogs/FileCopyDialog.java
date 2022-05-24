@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
-import com.mcal.apkeditor.activities.SettingActivity;
+
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.SDCard;

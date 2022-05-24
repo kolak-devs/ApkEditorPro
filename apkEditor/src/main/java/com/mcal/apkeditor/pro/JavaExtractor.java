@@ -2,7 +2,6 @@ package com.mcal.apkeditor.pro;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.inf.IJavaExtractor;
 import com.mcal.common.utils.IOUtils;
 
@@ -29,9 +28,8 @@ public class JavaExtractor implements IJavaExtractor {
     private final String apkPath;
     private final String dexName;
     private final String className;
-    private String interestedName;
     private final File workingDirectory;
-
+    private String interestedName;
     private String errorMessage = null;
 
     public JavaExtractor(String apkPath, String dexName, @NonNull String className, String workingDirectory) {
@@ -61,9 +59,9 @@ public class JavaExtractor implements IJavaExtractor {
 
             writeDexFile(code, targetFilePath);
             return true;
-        } catch (Exception|StackOverflowError e) {
+        } catch (Exception | StackOverflowError e) {
             e.printStackTrace();
-            errorMessage="Cannot decompile java code: " + e.getMessage();
+            errorMessage = "Cannot decompile java code: " + e.getMessage();
             return false;
         }
     }
@@ -74,8 +72,8 @@ public class JavaExtractor implements IJavaExtractor {
             jadx.addCustomLoad(new DexInputPlugin().loadDexFromInputStream(in, workingDirectory + "/extracted.dex"));
             jadx.load();
             for (JavaClass cls : jadx.getClasses()) {
-                File path =new File(targetFilePath + File.separator + cls.getPackage().replace(".", "/"));
-                if(!path.exists()) {
+                File path = new File(targetFilePath + File.separator + cls.getPackage().replace(".", "/"));
+                if (!path.exists()) {
                     path.mkdirs();
                 }
                 IOUtils.writeToFile(cls.getCode(), new File(path + File.separator + cls.getName() + ".java"));

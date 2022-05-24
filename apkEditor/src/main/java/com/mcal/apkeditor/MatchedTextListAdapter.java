@@ -24,13 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatImageButton;
 
-import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
+import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 import com.mcal.apkeditor.dialogs.MatchedLineItem;
 import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.common.utils.ActivityUtils;
@@ -39,7 +36,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.ref.WeakReference;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,19 +44,16 @@ import java.util.Map;
 public class MatchedTextListAdapter extends BaseExpandableListAdapter
         implements OnClickListener {
 
+    // File path -> matched lines
+    private final Map<String, List<MatchedLineItem>> matchedContents;
     // Do not show path prefix in the group label
     private String pathPrefix;
     private String keyword;
     private ArrayList<String> filePathList;
     private WeakReference<ApkInfoActivity> activityRef;
     private WeakReference<ExpandableListView> listviewRef;
-
     private boolean[] replaceClicked;
     private boolean[] editClicked;
-
-    // File path -> matched lines
-    private final Map<String, List<MatchedLineItem>> matchedContents;
-
     private int themeId;
     private boolean isDark;
 
@@ -269,10 +262,6 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
 //        viewHolder.replaceImage.setImageResource(replaceId);
 
 
-
-
-
-
         int editResId = this.editClicked[groupPosition] ? R.drawable.round_edit_blue_24
                 : (R.drawable.round_edit_24);
         viewHolder.editImage.setImageResource(editResId);
@@ -281,13 +270,6 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
                 ? R.drawable.round_content_copy_blue_24
                 : (R.drawable.round_content_copy_24);
         viewHolder.replaceImage.setImageResource(replaceId);
-
-
-
-
-
-
-
 
 
         TextView groupTextView = viewHolder.groupLabel;
@@ -312,18 +294,6 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
 
     public ArrayList<String> getFileList() {
         return filePathList;
-    }
-
-    private static class ViewHolder {
-        TextView matchedLine;
-    }
-
-    private static class GroupViewHolder {
-        TextView groupLabel;
-        View replaceMenu;
-        View editMenu;
-        ImageView replaceImage;
-        ImageView editImage;
     }
 
     public String getKeyword() {
@@ -526,5 +496,17 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
             this.matchedContents.remove(path);
             this.notifyDataSetChanged();
         }
+    }
+
+    private static class ViewHolder {
+        TextView matchedLine;
+    }
+
+    private static class GroupViewHolder {
+        TextView groupLabel;
+        View replaceMenu;
+        View editMenu;
+        ImageView replaceImage;
+        ImageView editImage;
     }
 }

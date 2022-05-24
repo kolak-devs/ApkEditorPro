@@ -19,18 +19,6 @@
         <item>(16)</item>
         <item>(17)</item>
     </string-array>
-    <string-array name="compression_level_key">
-        <item>0 (без сжатия)</item>
-        <item>1 (лучшая скорость)</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5 (среднее сжатие)</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9 (максимальное сжатие)</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Авто (добавление числового суффикса)</item>
         <item>Перезапись</item>
@@ -73,10 +61,5 @@
         <item>{имя пакета}_[un]signed.apk</item>
         <item>gen_[un]signed.apk</item>
         <item>{имя приложения}_[un]signed.apk</item>
-    </string-array>
-    <string-array name="decode_mode_key">
-        <item>@string/decode_all_files</item>
-        <item>@string/decode_partial_files</item>
-        <item>Выбор перед декодированием</item>
     </string-array>
 </resources>

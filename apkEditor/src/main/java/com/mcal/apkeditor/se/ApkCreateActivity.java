@@ -25,23 +25,23 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.GlobalConfig;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.activities.MainActivity;
 import com.mcal.apkeditor.activities.SettingActivity;
-import com.mcal.apkeditor.BuildConfig;
-import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.ce.e.ResourceEditor;
 import com.mcal.apkeditor.dex.DexStringEditor;
 import com.mcal.apkeditor.utils.SignHelper;
 import com.mcal.apklib.sign.ImageTools;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utils.CheckUtils;
-import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.SDCard;
 
 import org.jetbrains.annotations.Contract;

@@ -55,6 +55,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.mcal.androlib.KXmlSerializer;
+import com.mcal.androlib.LanguageMapping;
 import com.mcal.apkeditor.ApkComposeService;
 import com.mcal.apkeditor.ApkParseConsumer;
 import com.mcal.apkeditor.ApkParseThread;
@@ -67,12 +69,11 @@ import com.mcal.apkeditor.ResNavigationMgr;
 import com.mcal.apkeditor.ResSelectionChangeListener;
 import com.mcal.apkeditor.SomethingChangedListener;
 import com.mcal.apkeditor.StringListAdapter;
-import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
-import com.mcal.apkeditor.editor.TextEditor;
-import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.adapters.IManifestChangeCallback;
 import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.adapters.ManifestListAdapter;
+import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
+import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 import com.mcal.apkeditor.dialogs.AboutPluginDialog;
 import com.mcal.apkeditor.dialogs.FileCopyDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
@@ -84,15 +85,16 @@ import com.mcal.apkeditor.dialogs.RebuildConfirmDialog;
 import com.mcal.apkeditor.dialogs.SearchFilenameDialog;
 import com.mcal.apkeditor.dialogs.SearchTextDialog;
 import com.mcal.apkeditor.dialogs.SmaliNoticeDialog;
+import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.apkeditor.smali.AsyncDecodeTask;
 import com.mcal.apkeditor.smali.AsyncDecodeTask.IDecodeTaskCallback;
 import com.mcal.apkeditor.translate.PossibleLanguages;
 import com.mcal.apkeditor.translate.TranslateItem;
 import com.mcal.apkeditor.ui.AddFolderDialog;
 import com.mcal.apkeditor.utils.AndroidBug5497Workaround;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
-import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.LOGGER;
@@ -108,8 +110,6 @@ import com.mcal.folderlist.FileRecord;
 import com.mcal.folderlist.util.OpenFiles;
 import com.mcal.httpserver.HttpServiceManager;
 import com.mcal.pngeditor.PngEditActivity;
-import com.mcal.androlib.KXmlSerializer;
-import com.mcal.androlib.LanguageMapping;
 
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlSerializer;
@@ -3123,13 +3123,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 // Selected path contains working dir
                 if (workingDir.startsWith(filePath)) {
                     Toast.makeText(ApkInfoActivity.this,
-                            R.string.select_folder_err2, Toast.LENGTH_LONG)
+                                    R.string.select_folder_err2, Toast.LENGTH_LONG)
                             .show();
                 }
                 // Selected path inside working dir
                 else if (filePath.startsWith(workingDir)) {
                     Toast.makeText(ApkInfoActivity.this,
-                            R.string.select_folder_err1, Toast.LENGTH_LONG)
+                                    R.string.select_folder_err1, Toast.LENGTH_LONG)
                             .show();
                 } else {
                     resListAdapter.replaceFolder(decodedPath, filePath);

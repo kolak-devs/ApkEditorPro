@@ -1,12 +1,13 @@
 package com.common.colormixer;
 
-import java.util.List;
-
-import com.mcal.common.utils.RefInvoke;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+
+import com.mcal.common.utils.RefInvoke;
+
+import java.util.List;
 
 public class ColorValue {
 
@@ -66,7 +67,7 @@ public class ColorValue {
             }
         }
     }
-    
+
     @NonNull
     @Override
     public String toString() {

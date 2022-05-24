@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -24,7 +23,7 @@ public class Dialogs {
         try {
             PackageInfo pInfo = context.getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0);
-            msg.setText("\nVersion: " + pInfo.versionName + "\n\nSmali: " + BuildConfig.SMALI_VERSION + "\nJaDX: " + BuildConfig.JADX_VERSION + "\nApkTool: " +  BuildConfig.APKTOOL_VERSION + "\nAndroid API: v32\n\nCreated by Russian with ❤️\n© Copyright 2021-2022 Тимашков Иван");
+            msg.setText("\nVersion: " + pInfo.versionName + "\n\nSmali: " + BuildConfig.SMALI_VERSION + "\nJaDX: " + BuildConfig.JADX_VERSION + "\nApkTool: " + BuildConfig.APKTOOL_VERSION + "\nAndroid API: v32\n\nCreated by Russian with ❤️\n© Copyright 2021-2022 Тимашков Иван");
         } catch (Exception e) {
             e.printStackTrace();
         }

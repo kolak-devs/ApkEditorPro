@@ -32,7 +32,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import com.common.colormixer.ColorMixer;
 import com.common.colormixer.ColorMixerDialog;

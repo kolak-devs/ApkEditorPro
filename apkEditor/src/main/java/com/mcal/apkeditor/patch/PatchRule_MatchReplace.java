@@ -2,8 +2,8 @@ package com.mcal.apkeditor.patch;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -23,17 +23,14 @@ class PatchRule_MatchReplace extends PatchRule {
     private static final String REGEX = "REGEX:";
     private static final String REPLACE = "REPLACE:";
     private static final String DOTALL = "DOTALL:";
-
-    // private String targetFile;
-    private PathFinder pathFinder;
     private final List<String> matches;
     private final List<String> replaces;
+    private final List<String> keywords;
+    // private String targetFile;
+    private PathFinder pathFinder;
     private String replacingStr = null; // concat all lines in replaces
     private boolean bRegex = false;
     private boolean bDotall = false;
-
-    private final List<String> keywords;
-
     // The target file name is specified by wildchar or not
     private boolean isWildMatch;
 

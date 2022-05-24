@@ -303,7 +303,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                         }
                     });
 
-            inputDlg.setNegativeButton(android.R.string.cancel,null);
+            inputDlg.setNegativeButton(android.R.string.cancel, null);
 
             inputDlg.show();
         }
@@ -399,7 +399,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             } else {
                 extractBtn.setOnClickListener(v -> {
                     try {
-                        ZipUtils.unzipFileTo(apkPath, _entry, ScopedStorage.getStorageDirectory()+File.separator+"axml");
+                        ZipUtils.unzipFileTo(apkPath, _entry, ScopedStorage.getStorageDirectory() + File.separator + "axml");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -547,7 +547,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                     if (rec != null) {
                         resListAdapter.listItemAdded(dirPath, rec);
                         Toast.makeText(ApkInfoExActivity.this,
-                                R.string.file_renamed, Toast.LENGTH_SHORT)
+                                        R.string.file_renamed, Toast.LENGTH_SHORT)
                                 .show();
                     }
                 }

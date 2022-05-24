@@ -51,8 +51,6 @@
     <string name="failed">&#201;chec</string>
     <string name="appearance">Apparence</string>
     <string name="launcher_icon">Ic&#244;ne du lanceur</string>
-    <string name="full_screen">Plein &#233;cran</string>
-    <string name="full_screen_desc">S&#233;lectionner pour activer le mode plein &#233;cran</string>
     <string name="save_succeed_1">Succ&#232;s: enregistr&#233; dans %s</string>
     <string name="failed_1">Echec: %s</string>
     <string name="user_apps">Applications utilisateur</string>
@@ -78,8 +76,6 @@
     <string name="sign">Signature</string>
     <string name="sign_error">Erreur signature:</string>
     <string name="apk_building">Construction APK</string>
-    <string name="compression_level">Niveau de compression</string>
-    <string name="compression_level_summary">Un niveau inf&#233;rieur aura une meilleur vitesse, mais un mauvais taux de compression, pr&#233;f&#233;rez le niveau sup&#233;rieur</string>
     <string name="str_app_name">Nom application</string>
     <string name="common_edit">&#201;dition des propri&#233;t&#233;s</string>
     <string name="package_name">Nom du paquet</string>
@@ -111,8 +107,6 @@
     <string name="file_saved">Fichier enregistr&#233;.</string>
     <string name="font_size">Taille de police</string>
     <string name="line_wrap">"Retour &#224; la ligne "</string>
-    <string name="sign_apk_with">Signer APK avec</string>
-    <string name="sign_apk_with_summary">"Specifier la cl&#233; &#224; utliser pour signer l'APK."</string>
     <string name="files">Fichiers</string>
     <string name="smali_editing">Edition Smali</string>
     <string name="smali_edit_summary">Activ&#233;. Vous pouvez afficher image DEX vers smali dans &#233;dition complete.</string>

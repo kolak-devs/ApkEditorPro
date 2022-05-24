@@ -20,12 +20,10 @@ import java.util.Map;
 
 public class FixInvalidToken extends FixInvalid {
     private final static String err_InvalidToken = ": error: Error parsing XML: not well-formed (invalid token)";
-
-    private int modifiedFiles = 0;
-
     // Record modification for each files
     private final Map<String, Map<String, String>> fileModifications = new HashMap<String, Map<String, String>>();
     private final List<InvalidTokenRecord> invalidRecords = new ArrayList<InvalidTokenRecord>();
+    private int modifiedFiles = 0;
 
     public FixInvalidToken(String decodeRootPath, String message) {
         super(decodeRootPath, message);

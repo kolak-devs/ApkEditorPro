@@ -8,18 +8,6 @@
         <item>Nová ikona 5</item>
         <item>Stará ikona</item>
     </string-array>
-    <string-array name="compression_level_key">
-        <item>0 (bez kompresie)</item>
-        <item>0 (najlepšia rýchlosť)</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5 (priemerná)</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9 (najvyššia kompresia)</item>
-    </string-array>
     <string-array name="fileTypeAudio">
         <item>.mp3</item>
         <item>.wav</item>

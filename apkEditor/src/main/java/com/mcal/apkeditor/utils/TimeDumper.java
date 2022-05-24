@@ -8,9 +8,8 @@ import java.util.Map;
 public class TimeDumper {
     private final boolean bDump;
     private final long startTime;
-    private long lastTime;
-
     private final Map<String, Long[]> tag2Time = new HashMap<>();
+    private long lastTime;
 
     public TimeDumper(boolean bDump) {
         this.bDump = bDump;

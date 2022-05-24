@@ -16,16 +16,14 @@ import java.util.zip.ZipFile;
 public class ZipHelper {
 
     private static final String[] drawablePrefixes = {"res/drawable", "res/mipmap"};
+    private final String zipFilePath;
     // Drawable information
     List<String> drawableNameList = new ArrayList<>();
     HashMap<String, DrawableEntry> drawableEntries = new HashMap<>();
-
     // Directory hierarchical information
     Map<String, List<FileInfo>> dir2Files = new HashMap<>();
-
     // Audio information
     List<String> audioPathList = new ArrayList<>();
-    private final String zipFilePath;
 
     public ZipHelper(String apkPath) {
         this.zipFilePath = apkPath;

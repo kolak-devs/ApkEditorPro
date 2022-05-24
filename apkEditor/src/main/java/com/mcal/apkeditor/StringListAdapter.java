@@ -9,7 +9,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.StringValueDialog;
 
 import java.lang.ref.WeakReference;

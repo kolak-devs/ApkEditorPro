@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.apkeditor.GlobalConfig;
-import com.mcal.apkeditor.activities.TextEditNormalActivity;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.TextEditNormalActivity;
 import com.mcal.apkeditor.utils.Smali2Html;
 import com.mcal.apkeditor.utils.ValuesXml2Html;
 import com.mcal.apkeditor.utils.Xml2Html;
@@ -33,16 +33,16 @@ import java.util.ArrayList;
 public class HtmlViewDialog extends ViewDialog implements
         View.OnClickListener, SmaliMethodsDialogs.ISmaliMethodClicked {
 
-    private AppCompatTextView filenameTv;
-    private View methodMenu;
-    private WebView webView;
-    private String filePath; // Text file path
-    private File htmlFile;
     private final WeakReference<Activity> activityRef;
     @NonNull
     private final MyHandler handler = new MyHandler(this);
     @NonNull
     private final SmaliMethodsDialogs popupWindowHelper = new SmaliMethodsDialogs(this);
+    private AppCompatTextView filenameTv;
+    private View methodMenu;
+    private WebView webView;
+    private String filePath; // Text file path
+    private File htmlFile;
 
     public HtmlViewDialog(Activity activity) {
         super(activity);

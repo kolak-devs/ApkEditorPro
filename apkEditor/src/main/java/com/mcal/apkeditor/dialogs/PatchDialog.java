@@ -17,8 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.ce.ManifestInfo;
 import com.mcal.apkeditor.ce.ManifestParser;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;

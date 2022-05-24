@@ -23,9 +23,9 @@ import java.util.List;
 public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
 
     private static final int MAX_RECORDS = 32;
-    public List<String> filteredData;
     private final Context ctx;
     private final String tag;
+    public List<String> filteredData;
     private String[] historyWords;
     private ItemFilter filter;
 

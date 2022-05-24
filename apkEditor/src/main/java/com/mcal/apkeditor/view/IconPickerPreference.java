@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
-import android.os.Build;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -34,15 +32,15 @@ public class IconPickerPreference extends ListPreference {
     private static final String KEY = "MyIcon";
     private final Context context;
     private final int[] iconResIds;
+    private final SharedPreferences preferences;
+    private final Resources resources;
+    private final String defaultIconValue;
     private CharSequence[] iconNames; // android:entries
     private CharSequence[] iconValues; // android:entryValues
     // Make it as the original list preference, no icon
     // private ImageView icon;
     private List<IconItem> icons;
-    private final SharedPreferences preferences;
-    private final Resources resources;
     private String selectedIconValue;
-    private final String defaultIconValue;
     private AppCompatTextView summary;
 
     public IconPickerPreference(Context context, AttributeSet attrs) {
@@ -65,11 +63,11 @@ public class IconPickerPreference extends ListPreference {
     protected void onBindView(View view) {
         super.onBindView(view);
 
-        AppCompatTextView titleTv = (AppCompatTextView) view.findViewById(R.id.title);
+        AppCompatTextView titleTv = view.findViewById(R.id.title);
         titleTv.setText(R.string.launcher_icon);
 
         // Set summary as selected icon
-        summary = (AppCompatTextView) view.findViewById(R.id.summary);
+        summary = view.findViewById(R.id.summary);
         for (int i = 0; i < iconValues.length; i++) {
             if (this.selectedIconValue.equals(iconValues[i])) {
                 summary.setText(this.iconNames[i]);
@@ -147,9 +145,9 @@ public class IconPickerPreference extends ListPreference {
 
     private static class IconItem {
         private final int iconResId;
-        private boolean isChecked;
         private final String name;
         private final String value;
+        private boolean isChecked;
 
         public IconItem(@NonNull CharSequence name, @NonNull CharSequence value, int iconResId,
                         boolean isChecked) {
@@ -192,9 +190,9 @@ public class IconPickerPreference extends ListPreference {
                 convertView = inflater.inflate(resource, parent, false);
 
                 holder = new ViewHolder();
-                holder.iconName = (TextView) convertView.findViewById(R.id.iconName);
-                holder.iconImage = (ImageView) convertView.findViewById(R.id.iconImage);
-                holder.radioButton = (RadioButton) convertView.findViewById(R.id.iconRadio);
+                holder.iconName = convertView.findViewById(R.id.iconName);
+                holder.iconImage = convertView.findViewById(R.id.iconImage);
+                holder.radioButton = convertView.findViewById(R.id.iconRadio);
 
                 convertView.setTag(holder);
             } else {
@@ -209,10 +207,7 @@ public class IconPickerPreference extends ListPreference {
             convertView.setOnClickListener(v -> {
                 // ViewHolder holder = (ViewHolder) v.getTag();
                 for (int i = 0; i < icons.size(); i++) {
-                    if (i == position)
-                        icons.get(i).isChecked = true;
-                    else
-                        icons.get(i).isChecked = false;
+                    icons.get(i).isChecked = i == position;
                 }
                 getDialog().dismiss();
             });

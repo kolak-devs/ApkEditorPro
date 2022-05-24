@@ -26,9 +26,9 @@ import com.mcal.common.utils.ImageZoomer;
 import com.mcal.common.utils.PathUtils;
 import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
+import com.mcal.common.utils.StringUtils;
 import com.mcal.folderlist.FileRecord;
 import com.mcal.folderlist.FilenameComparator;
-import com.mcal.common.utils.StringUtils;
 
 import java.io.Closeable;
 import java.io.File;

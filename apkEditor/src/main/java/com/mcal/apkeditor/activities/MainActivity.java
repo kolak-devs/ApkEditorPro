@@ -66,7 +66,7 @@ public class MainActivity extends CustomizedLangActivity implements
 
     // modify a zip file
     public static native void modifyZip(String target, String source, String added,
-                                 int len1, String removed, int len2, String replaced, int len3);
+                                        int len1, String removed, int len2, String replaced, int len3);
 
     // Verify certificate
     // When report error of "Cannot register", to make sure it is called

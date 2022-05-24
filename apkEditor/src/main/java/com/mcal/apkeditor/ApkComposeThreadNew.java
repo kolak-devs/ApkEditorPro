@@ -132,7 +132,7 @@ public class ApkComposeThreadNew extends ComposeThread implements ISmaliAssemble
                     //    setNextStep("Installing Framework...");
                     //    androlib.installFramework(framework);
                     //} else {
-                        this.stepInfo.stepTotal = 4;
+                    this.stepInfo.stepTotal = 4;
                     //}
 
                     try {

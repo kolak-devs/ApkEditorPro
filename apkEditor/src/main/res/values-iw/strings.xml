@@ -54,8 +54,6 @@
     <string name="app_list_order">סדר רשימת האפליקציות</string>
     <string name="appearance">תצוגה</string>
     <string name="launcher_icon">סמל אפליקצייה</string>
-    <string name="full_screen">מסך מלא</string>
-    <string name="full_screen_desc">לחץ לאיפשוא מסך מלא</string>
 
     <!-- added 20150501 -->
     <string name="save_succeed_1">הצליח: נשמר אל %s</string>
@@ -85,8 +83,6 @@
     <string name="sign">חותם</string>
     <string name="sign_error">שגיאה בחתימה: </string>
     <string name="apk_building">בונה קובץ APK</string>
-    <string name="compression_level">רמת דחיסה</string>
-    <string name="compression_level_summary">רמה נמוכה מהירה יותר, אך בדחיסה נמוכה, הקובץ גדול יותר.</string>
 
     <!-- added in version 1.3.2 -->
     <string name="str_app_name">שם אפליקציה</string>

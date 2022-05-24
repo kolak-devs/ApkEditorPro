@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -18,8 +17,8 @@ public class AndroidBug5497Workaround {
     private final int screenHeight;
     private final int screenWidth;
     private final View mChildOfContent;
-    private int usableHeightPrevious;
     private final FrameLayout.LayoutParams frameLayoutParams;
+    private int usableHeightPrevious;
 
     private AndroidBug5497Workaround(Activity activity) {
         actRef = new WeakReference<>(activity);

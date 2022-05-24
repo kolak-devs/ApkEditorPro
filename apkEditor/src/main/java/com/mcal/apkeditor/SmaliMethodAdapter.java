@@ -8,8 +8,6 @@ import android.widget.BaseAdapter;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.apkeditor.R;
-
 import java.util.List;
 
 /**

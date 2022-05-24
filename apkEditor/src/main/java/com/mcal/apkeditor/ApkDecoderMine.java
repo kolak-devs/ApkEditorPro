@@ -5,13 +5,13 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mcal.androlib.KXmlSerializer;
 import com.mcal.apkeditor.XmlDecoder.IReferenceDecoder;
 import com.mcal.apkeditor.utils.AssetsInstaller;
 import com.mcal.apkeditor.utils.TimeDumper;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
 import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.LOGGER;
-import com.mcal.androlib.KXmlSerializer;
 
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlSerializer;

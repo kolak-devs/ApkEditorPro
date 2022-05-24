@@ -7,33 +7,25 @@ import android.content.res.AssetManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mcal.apkeditor.pro.ResourceDecoder;
-import com.mcal.apklib.ManifestInfoCollector;
+import com.mcal.androlib.ResSmaliIdProvider;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.FileUtils;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.LOGGER;
-import com.mcal.common.utils.SDCard;
-import com.mcal.common.data.Preferences;
-import com.mcal.androlib.ResSmaliIdProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import brut.androlib.Androlib;
 import brut.androlib.AndrolibException;
-import brut.androlib.ApkDecoder;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResTable;
 import brut.androlib.res.decoder.ARSCDecoder;
 import brut.androlib.res.util.ExtFile;
-import brut.directory.Directory;
 
 public class ApkParseThread extends Thread {
 
@@ -182,7 +174,7 @@ public class ApkParseThread extends Thread {
             throws AndrolibException {
         ResTable resTable = new ResTable();
         if (loadMainPkg) {
-            if(Preferences.isFixMultiRes()) {
+            if (Preferences.isFixMultiRes()) {
                 loadOneMainPkg(resTable, apkFile);
             } else {
                 loadMainPkg(resTable, apkFile);
@@ -252,7 +244,7 @@ public class ApkParseThread extends Thread {
 
     @Nullable
     private ResPackage getOneResPackagesFromApk(ExtFile apkFile,
-                                               ResTable resTable, boolean keepBroken) throws AndrolibException {
+                                                ResTable resTable, boolean keepBroken) throws AndrolibException {
         // try {
         // InputStream fis =
         // apkFile.getDirectory().getFileInput("resources.arsc");

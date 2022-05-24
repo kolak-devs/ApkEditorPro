@@ -1,13 +1,9 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.app.Activity;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
-
-import androidx.appcompat.widget.Toolbar;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.view.ViewDialog;

@@ -20,12 +20,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.MatchedFilenameAdapter;
+import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.ResSelectionChangeListener;
 import com.mcal.apkeditor.SomethingChangedListener;
-import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.view.ViewDialog;
 
 import java.io.File;

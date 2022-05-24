@@ -51,14 +51,14 @@ import com.mcal.apkeditor.ce.e.RefactorLayout;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.se.ApkCreateActivity;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
-import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.FileEncrypter;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
-import com.mcal.common.utils.FileEncrypter;
 
 import java.io.File;
 import java.io.FileOutputStream;

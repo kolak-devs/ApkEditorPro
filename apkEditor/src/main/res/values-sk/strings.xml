@@ -32,8 +32,6 @@
     <string name="colormixer_set">Nastaviť</string>
     <string name="common_edit">Bežné úpravy</string>
     <string name="compose">Zložiť</string>
-    <string name="compression_level">Úroveň kompresie</string>
-    <string name="compression_level_summary">Nižšia úroveň znamená vyššiu rýchlosť, ale so zlým kompresným pomerom bude veľkosť APK súboru väčšia.</string>
     <string name="confirm_dir_replace">Potvrdenie nahradenie priečinka</string>
     <string name="copied_to_clipboard">"%s skopírované do schránky."</string>
     <string name="copy_error_msg">Kopírovať chybovú správu</string>
@@ -72,7 +70,6 @@
     <string name="folder_replaced">Priečinok bol nahradený</string>
     <string name="font_size">Veľkosť písma</string>
     <string name="full_edit">Plná úprava (zdroj bude znovuzostavený)</string>
-    <string name="full_screen_desc">Vyberte pre povolenie celej obrazovky</string>
     <string name="general_error">Chyba: %s</string>
     <string name="help">Nápoveda</string>
     <string name="hide_smali_tip">Dlhé podržanie na DEX -> Smali ho skryje.</string>
@@ -179,8 +176,6 @@
     <string name="settings">Nastavenia</string>
     <string name="show_a_toast">Zobraziť toast</string>
     <string name="sign">Podpísať</string>
-    <string name="sign_apk_with">Podpísať APK s</string>
-    <string name="sign_apk_with_summary">Vyberte, ktorý kľúč sa má použiť pre podpis APK.</string>
     <string name="sign_error">Chyba podpisu:</string>
     <string name="simple_edit">Jednoduchá úprava (náhrada súboru)</string>
     <string name="size">Veľkosť</string>
@@ -207,7 +202,6 @@
     <string name="wait_for_decoding">Počkajte chvíľu, kým dekódovanie neskončí.</string>
     <string name="warning">Upozornenie</string>
     <string name="yes">ÁNO</string>
-    <string name="full_screen">Celá obrazovka</string>
     <string name="cannot_load_project_info">Nie je možné načítať informácie o projekte.</string>
     <string name="cannot_save_project">Nepodarilo sa uložiť projekt do súboru.</string>
     <string name="file_extract_rename_summary">Vyberte si spôsob, akým budú zdrojové súbory v prípade potreby premenované. (pre rozbalenie)</string>

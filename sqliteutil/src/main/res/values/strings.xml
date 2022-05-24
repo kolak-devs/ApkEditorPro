@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="table_record">Table Record</string>
-    <string name="previous">Previous</string>
-    <string name="next">Next</string>
     <string name="tables_of">Tables of</string>
     <string name="name">Name</string>
     <string name="value">Value</string>

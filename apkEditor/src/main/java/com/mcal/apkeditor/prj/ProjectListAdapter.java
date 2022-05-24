@@ -15,9 +15,9 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.apkeditor.activities.ApkInfoExActivity;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoExActivity;
 import com.mcal.common.utils.ActivityUtils;
 
 import java.io.File;

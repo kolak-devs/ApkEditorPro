@@ -55,7 +55,6 @@
     <string name="failed">فشل</string>
     <string name="appearance">المظهر</string>
     <string name="launcher_icon">رمز المشغل</string>
-    <string name="full_screen_desc">حدد هذا الخيار لتمكين شاشة كاملة</string>
     <string name="save_succeed_1">نجح: الحفظ إلى %s</string>
     <string name="failed_1">فشل: %s</string>
     <string name="user_apps">تطبيقات المستخدم</string>
@@ -82,8 +81,6 @@
     <string name="sign_error">
 	خطأ في علامة :</string>
     <string name="apk_building">بناء أية بي كيه</string>
-    <string name="compression_level">مستوى الضغط</string>
-    <string name="compression_level_summary">انخفاض مستوى أفضل بسرعة، ولكن مع نسبة ضغط سيئة، مما جعل أية بي كيه أكبر.</string>
     <string name="str_app_name">اسم التطبيق</string>
     <string name="common_edit">تحرير المشتركة</string>
     <string name="package_name">اسم الحزمة</string>
@@ -123,8 +120,6 @@
     <string name="line_wrap">التفاف الأسطر</string>
     <string name="cannot_find_ext_sdcard">لا يمكن العثور على بطاقة sd الخارجية.</string>
     <string name="rename_in_resources">إعادة تسمية اسم الحزمة في resources.arsc</string>
-    <string name="sign_apk_with">توقيع أية بي كيه مع</string>
-    <string name="sign_apk_with_summary">تحديد المفتاح الذي يتم استخدامه للتوقيع أية بي كيه.</string>
     <string name="str_files_found" formatted="false">"%d الملف(s) العثور على - '%s'"</string>
     <string name="files">الملفات</string>
     <string name="smali_editing">تحرير سمالي</string>

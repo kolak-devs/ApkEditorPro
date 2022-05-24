@@ -4,8 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.SDCard;
 
@@ -37,15 +37,13 @@ class PatchRule_ExecDex extends PatchRule {
     private static final String MAIN_CLASS = "MAIN_CLASS:";
     private static final String ENTRANCE = "ENTRANCE:";
     private static final String PARAM = "PARAM:";
-
+    private final List<String> keywords;
     private String scriptName;
     private String mainClass;
     private String entranceFunc;
     private String param;
     private boolean smaliNeeded = false;
     private int ifVersion = 1;
-
-    private final List<String> keywords;
 
     PatchRule_ExecDex() {
         keywords = new ArrayList<>();

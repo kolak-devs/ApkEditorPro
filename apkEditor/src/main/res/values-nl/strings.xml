@@ -48,8 +48,6 @@
     <string name="app_list_order">App lijst orderen bij</string>
     <string name="appearance">zichtbaarheid</string>
     <string name="launcher_icon">Launcher icoon</string>
-    <string name="full_screen">Vol scherm</string>
-    <string name="full_screen_desc">Selecteer om vol scherm te activeren</string>
     <string name="save_succeed_1">gelukt: opgeslagen naar %s</string>
     <string name="failed_1">Mislukt: %s</string>
     <string name="user_apps">Gebruiker apps</string>
@@ -75,8 +73,6 @@
     <string name="sign">Signeer</string>
     <string name="sign_error">Signeer Error:</string>
     <string name="apk_building">APK Bouwen</string>
-    <string name="compression_level">Compressie niveau</string>
-    <string name="compression_level_summary">Lager niveau maakt het APK bestand groter.</string>
     <string name="str_app_name">App Naam</string>
     <string name="common_edit">Algemeen Bewerken</string>
     <string name="package_name">Pakket naam</string>

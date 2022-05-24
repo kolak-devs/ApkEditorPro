@@ -19,18 +19,6 @@
         <item>(16)</item>
         <item>(17)</item>
     </string-array>
-    <string-array name="compression_level_key">
-        <item>0 (Nincs tömörítés)</item>
-        <item>1 (Gyors)</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5 (Közepes)</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9 (Legjobb tömörítés)</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Automatikus (egy szám utótag hozzáadásával)</item>
         <item>Felülírás</item>
@@ -67,18 +55,6 @@
         <item>Egyéni kulcs</item>
     </string-array>
 
-    <string-array name="compression_level_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
     <string-array name="fileTypeAudio">
         <item>.mp3</item>
         <item>.wav</item>

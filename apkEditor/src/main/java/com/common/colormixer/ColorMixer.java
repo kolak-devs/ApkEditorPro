@@ -1,15 +1,15 @@
 /***
-  Copyright (c) 2008-2013 CommonsWare, LLC
-  
-  Licensed under the Apache License, Version 2.0 (the "License"); you may
-  not use this file except in compliance with the License. You may obtain
-  a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+ Copyright (c) 2008-2013 CommonsWare, LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License"); you may
+ not use this file except in compliance with the License. You may obtain
+ a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
  */
 
 package com.common.colormixer;
@@ -51,6 +51,43 @@ public class ColorMixer extends RelativeLayout implements TextWatcher {
     // Record last time of value change
     private int valueFromText;
     private int valueFromBar;
+    @SuppressLint("HandlerLeak")
+    Handler hander = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            if (msg.what == 0) {
+                int color = getColor();
+
+                // Not set the text if it is from that
+                if (color != valueFromText) {
+                    //Log.d("DEBUG", "update color from progress bar: " + color);
+                    setTextColorValue(color);
+                }
+
+                swatch.setBackgroundColor(color);
+
+                if (listener != null) {
+                    listener.onColorChange(color);
+                }
+            }
+        }
+    };
+    // Make changes from progress bar to text
+    private final SeekBar.OnSeekBarChangeListener onMix = new SeekBar.OnSeekBarChangeListener() {
+        public void onProgressChanged(SeekBar seekBar, int progress,
+                                      boolean fromUser) {
+            hander.removeMessages(0);
+            hander.sendEmptyMessageDelayed(0, 100);
+        }
+
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            // unused
+        }
+
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            // unused
+        }
+    };
 
     public ColorMixer(Context context) {
         super(context);
@@ -96,7 +133,7 @@ public class ColorMixer extends RelativeLayout implements TextWatcher {
         String strColor = colorEt.getText().toString();
 
         Long value = Long.parseLong(strColor, 16);
-        
+
         // Text is updated by progress bar, do not update progress bar again
         if (value.intValue() == this.valueFromBar) {
             return;
@@ -145,7 +182,7 @@ public class ColorMixer extends RelativeLayout implements TextWatcher {
         colorEt.addTextChangedListener(this);
         InputFilter filter = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end,
-                    Spanned dest, int dstart, int dend) {
+                                       Spanned dest, int dstart, int dend) {
                 for (int i = start; i < end; i++) {
                     if (!isHexChar(source.charAt(i))) {
                         return "";
@@ -168,7 +205,7 @@ public class ColorMixer extends RelativeLayout implements TextWatcher {
             }
         };
         colorEt.setFilters(
-                new InputFilter[] { filter, new InputFilter.LengthFilter(8) });
+                new InputFilter[]{filter, new InputFilter.LengthFilter(8)});
 
         red = (SeekBar) findViewById(R.id.red);
         red.setMax(0xFF);
@@ -216,57 +253,14 @@ public class ColorMixer extends RelativeLayout implements TextWatcher {
         setProgressBarColor(state.getInt(COLOR));
     }
 
-    @SuppressLint("HandlerLeak")
-    Handler hander = new Handler() {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            if (msg.what == 0) {
-                int color = getColor();
-
-                // Not set the text if it is from that
-                if (color != valueFromText) {
-                    //Log.d("DEBUG", "update color from progress bar: " + color);
-                    setTextColorValue(color);
-                }
-
-                swatch.setBackgroundColor(color);
-
-                if (listener != null) {
-                    listener.onColorChange(color);
-                }
-            }
-        }
-    };
-
-    // Make changes from progress bar to text
-    private final SeekBar.OnSeekBarChangeListener onMix = new SeekBar.OnSeekBarChangeListener() {
-        public void onProgressChanged(SeekBar seekBar, int progress,
-                boolean fromUser) {
-            hander.removeMessages(0);
-            hander.sendEmptyMessageDelayed(0, 100);
-        }
-
-        public void onStartTrackingTouch(SeekBar seekBar) {
-            // unused
-        }
-
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            // unused
-        }
-    };
-
-    public interface OnColorChangedListener {
-        public void onColorChange(int argb);
-    }
-
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count,
-            int after) {
+                                  int after) {
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before,
-            int count) {
+                              int count) {
     }
 
     // Make changes from text to progress bar
@@ -277,5 +271,9 @@ public class ColorMixer extends RelativeLayout implements TextWatcher {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public interface OnColorChangedListener {
+        public void onColorChange(int argb);
     }
 }

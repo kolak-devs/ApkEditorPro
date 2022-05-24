@@ -43,7 +43,7 @@ public class ViewDialog extends Dialog {
         mCaption.setText(title);
     }
 
-    public void setTitleTextSize(float size){
+    public void setTitleTextSize(float size) {
         mCaption.setTextSize(size);
     }
 

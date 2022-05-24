@@ -5,10 +5,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkComposeActivity;
 import com.mcal.apkeditor.R;
-import com.mcal.common.view.ProcessingDialog;
+import com.mcal.apkeditor.activities.ApkComposeActivity;
 import com.mcal.common.utils.RandomUtils;
+import com.mcal.common.view.ProcessingDialog;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -41,11 +41,11 @@ public class ErrorFixManager {
     public static final int FIXER_INVALID_ATTR = 2;
     public static final int FIXER_INVALID_SYMBOL = 3;
     public static final int FIXER_ERROR_EQUIVALENT = 4;
+    private final String decodeRootPath;
     // Record all the string replaces
     Map<String, String> allReplaces = new HashMap<String, String>();
     // Record replaces for each file
     Map<String, Map<String, String>> fileReplaces = new HashMap<>();
-    private final String decodeRootPath;
     private String errMessage;
     private FixInvalid fixer;
     private int fixerId = -1;

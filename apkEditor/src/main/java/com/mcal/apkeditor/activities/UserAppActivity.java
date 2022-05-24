@@ -39,10 +39,10 @@ import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.se.SimpleEditActivity;
 import com.mcal.apkeditor.utils.FileUtils;
 import com.mcal.appdm.PrefOverallActivity;
-import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utils.IOUtils;
 import com.mcal.common.data.Preferences;
+import com.mcal.common.utils.ActivityUtils;
+import com.mcal.common.utils.IOUtils;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

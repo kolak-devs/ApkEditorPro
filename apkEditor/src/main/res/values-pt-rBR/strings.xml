@@ -52,8 +52,6 @@
     <string name="failed">Falhou</string>
     <string name="appearance">Aparência</string>
     <string name="launcher_icon">Mudar Ícone</string>
-    <string name="full_screen">Tela Cheia</string>
-    <string name="full_screen_desc">Usar app em tela cheia.</string>
     <string name="save_succeed_1">Concluído: salvado para %s</string>
     <string name="failed_1">Falhou: %s</string>
     <string name="user_apps">Apps do usuário</string>
@@ -79,8 +77,6 @@
     <string name="sign">Assinando...</string>
     <string name="sign_error">Erro ao assinar:</string>
     <string name="apk_building">Criador de APK</string>
-    <string name="compression_level">Nível de Compressão</string>
-    <string name="compression_level_summary">Nível mais baixo tem melhor velocidade, mas com taxa baixa de compressão, criando um APK maior.</string>
     <string name="str_app_name">Nome do app</string>
     <string name="common_edit">Edição Comum</string>
     <string name="package_name">Nome do pacote</string>
@@ -119,8 +115,6 @@
     <string name="line_wrap">Envolvimento de Linha</string>
     <string name="cannot_find_ext_sdcard">Não é possível encontrar o Cartão SD externo.</string>
     <string name="rename_in_resources">Renomear o nome do pacote em resources.arsc</string>
-    <string name="sign_apk_with">Assinar o APK com</string>
-    <string name="sign_apk_with_summary">Especifique a chave a ser usada para assinar o APK.</string>
     <string name="str_files_found" formatted="false">%d arquivo(s) encontrado(s) - \"%s\"</string>
     <string name="files">Arquivos</string>
     <string name="smali_editing">Edição Smali</string>

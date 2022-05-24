@@ -5,9 +5,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +13,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.content.ContextCompat;
 
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
@@ -210,9 +205,9 @@ public class ManifestListAdapter extends BaseAdapter implements
         if (lineRec.sectionEnd != lineRec.lineIndex) {
             Bitmap arrow;
             if (!lineRec.collapsed) {
-                arrow = BitmapUtils.getBitmapFromVectorDrawable(activityRef.get(),R.drawable.manifest_chevron_down);
+                arrow = BitmapUtils.getBitmapFromVectorDrawable(activityRef.get(), R.drawable.manifest_chevron_down);
             } else {
-                arrow = BitmapUtils.getBitmapFromVectorDrawable(activityRef.get(),R.drawable.manifest_chevron_right);
+                arrow = BitmapUtils.getBitmapFromVectorDrawable(activityRef.get(), R.drawable.manifest_chevron_right);
             }
 
             // Draw the arrow

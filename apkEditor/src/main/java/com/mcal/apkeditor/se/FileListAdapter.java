@@ -11,9 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mcal.apkeditor.R;
+import com.mcal.common.utils.ImageZoomer;
 import com.mcal.folderlist.FileRecord;
 import com.mcal.folderlist.FilenameComparator;
-import com.mcal.common.utils.ImageZoomer;
 
 import java.io.File;
 import java.io.FilenameFilter;

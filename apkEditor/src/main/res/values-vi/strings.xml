@@ -32,8 +32,6 @@
     <string name="colormixer_set">Thiết đặt</string>
     <string name="common_edit">Chỉnh sửa thông thường</string>
     <string name="compose">Biên soạn</string>
-    <string name="compression_level">Mức độ nén</string>
-    <string name="compression_level_summary">Chọn mức độ cao thấp sẽ ảnh hưởng đến thời gian nén,chất lượng và kích cỡ tập tin Apk đầu ra.</string>
     <string name="confirm_dir_replace">Xác nhận thư mục thay thế</string>
     <string name="copied_to_clipboard">"'%s' sao chép vào bộ nhớ tạm."</string>
     <string name="copy_error_msg">Sao chép thông báo lỗi</string>
@@ -74,7 +72,6 @@
     <string name="folder_replaced">Đã thay thế thư mục</string>
     <string name="font_size">Kích cỡ phông chữ</string>
     <string name="full_edit">Chỉnh sửa chuyên sâu</string>
-    <string name="full_screen_desc">Chọn để bật toàn màn hình</string>
     <string name="general_error">Lỗi: %s</string>
     <string name="help">Trợ giúp</string>
     <string name="hide_smali_tip">Hãy nhấp và giữ vào DEX - Smali để ẩn nó.</string>
@@ -185,8 +182,6 @@
     <string name="settings">Cài đặt</string>
     <string name="show_a_toast">Hiện một Toast</string>
     <string name="sign">Đăng ký</string>
-    <string name="sign_apk_with">Đăng ký APK với</string>
-    <string name="sign_apk_with_summary">Chọn Key tương thích để đăng ký cho tập tin APK</string>
     <string name="sign_error">Đăng ký bị lỗi:</string>
     <string name="sign_the_apk">Đăng ký APK</string>
     <string name="simple_edit">Chỉnh sửa đơn giản</string>
@@ -242,7 +237,6 @@
     <string name="fix_invalid_name_tip">Cố gắng sửa chữa(s) về tên không hợp lệ?</string>
     <string name="fix_invalid_symbol_tip">Cố gắng sửa chữa(s) về biểu tượng không hợp lệ?</string>
     <string name="fix_invalid_token_tip">Cố gắng sửa chữa(s) về mã thông báo không hợp lệ?</string>
-    <string name="full_screen">Toàn màn hình</string>
     <string name="hide_warnings">Ẩn cảnh báo</string>
     <string name="invalid_directory">Thư mục không hợp lệ: %s</string>
     <string name="label_replace_with_same_setting">Thay thế như vậy trong thời gian thiết lập tiếp theo và không hiển thị hộp thoại này nữa.</string>
@@ -338,9 +332,6 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="use_bfe_tip">Như tập tin là quá lớn, lớn tập tin biên tập được sử dụng. Bạn có thể thay đổi khi sử dụng trình soạn thảo tập tin lớn trong cài đặt trình soạn thảo.</string>
     <string name="when_use_bfe">Sử dụng trình chỉnh sửa tập tin lớn</string>
     <string name="xml_file_edit">CHỈNH SỬA XML(BETA)</string>
-    <string name="decode_all_files">Giải mã tất cả các tập tin</string>
-    <string name="decode_mode">Chế độ giải mã</string>
-    <string name="decode_partial_files">Giải mã một phần tập tin</string>
     <string name="error_path_xxx_not_exist">"Lỗi: đường dẫn '%s' không tồn tại."</string>
     <string name="folder_path">Đường dẫn thư mục:</string>
     <string name="import_folder">Nhập thư mục</string>

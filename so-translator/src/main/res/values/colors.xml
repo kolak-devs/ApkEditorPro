@@ -9,10 +9,7 @@
     <color name="yellow">#FF9800</color>
 
     <color name="color_white">#FAFAFA</color>
-    <color name="color_grey">#ffb4cae9</color>
     <color name="color_green">#ff4cb648</color>
 
     <color name="textColorPrimary">#FF000000</color>
-    <color name="compatibility_focus_color">#48000000</color>
-    <color name="compatibility_pressed_color">#1a000000</color>
 </resources>

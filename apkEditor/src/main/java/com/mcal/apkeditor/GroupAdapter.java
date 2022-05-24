@@ -8,8 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mcal.apkeditor.R;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;

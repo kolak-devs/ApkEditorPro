@@ -3,8 +3,6 @@
     <string name="app_translate">Translate</string>
     <string name="search">Search</string>
     <string name="saving">Saving…</string>
-    <string name="pickSo">Please pick .so</string>
-    <string name="noFile">No File Manager Found.</string>
 
     <string name="ok">OK</string>
     <string name="no">No</string>
@@ -21,7 +19,6 @@
     <string name="copy">Copy text</string>
     <string name="b64">Decode base64</string>
     <string name="save">Save</string>
-    <string name="opened">Opened file</string>
     <string name="go_to">Go to line</string>
 
     <string name="cancel_button_label">Cancel</string>

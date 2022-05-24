@@ -32,8 +32,6 @@
     <string name="colormixer_set">Imposta</string>
     <string name="common_edit">Modifica comune</string>
     <string name="compose">Componi</string>
-    <string name="compression_level">Livello compressione</string>
-    <string name="compression_level_summary">"Un livello inferiore ha una migliore velocità, ma un minor rapporto di compressione e quindi rende l'APK più grande."</string>
     <string name="confirm_dir_replace">Conferma la sostituzione della cartella</string>
     <string name="copied_to_clipboard">"'%s' copiato negli Appunti."</string>
     <string name="copy_error_msg">Messaggio di errore di copia</string>
@@ -74,7 +72,6 @@
     <string name="folder_replaced">Cartella sostituita</string>
     <string name="font_size">Dimensione carattere</string>
     <string name="full_edit">Completa (ricostruzione risorse)</string>
-    <string name="full_screen_desc">Seleziona questa opzione per attivare lo schermo intero</string>
     <string name="general_error">Errore: %s</string>
     <string name="help">Aiuto</string>
     <string name="hide_smali_tip">Fai clic a lungo su DEX -> Smali per nasconderlo.</string>
@@ -185,8 +182,6 @@
     <string name="settings">Impostazioni</string>
     <string name="show_a_toast">Visualizza toast</string>
     <string name="sign">Firma</string>
-    <string name="sign_apk_with">Firma APK con</string>
-    <string name="sign_apk_with_summary">"Specifica quale chiave usare per firmare l'APK."</string>
     <string name="sign_error">Errore nella firma:</string>
     <string name="sign_the_apk">Firma APK</string>
     <string name="simple_edit">Semplice (SOSTITUZIONE FILE)</string>
@@ -219,7 +214,6 @@
     <string name="wait_for_decoding">Attendi finché non è completata la decodifica.</string>
     <string name="warning">Avviso</string>
     <string name="yes">SÌ</string>
-    <string name="full_screen">Schermo intero</string>
     <string name="apk_decoding">Decodifica APK</string>
     <string name="build">Build</string>
     <string name="cannot_load_project_info">Impossibile caricare info progetto.</string>

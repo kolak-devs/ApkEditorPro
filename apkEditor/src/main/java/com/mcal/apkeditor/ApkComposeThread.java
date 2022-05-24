@@ -5,25 +5,24 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.pro.DexEncoder;
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
+import com.mcal.apkeditor.pro.DexEncoder;
 import com.mcal.apkeditor.smali.ISmaliAssembleCallback;
 import com.mcal.apkeditor.utils.AssetsInstaller;
 import com.mcal.apkeditor.utils.FileUtils;
 import com.mcal.apksigner.ApkSigner;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.fastzip.FastZip;
 import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.utils.ITaskCallback;
 import com.mcal.common.utils.ITaskCallback.TaskStepInfo;
 import com.mcal.common.utils.LOGGER;
 import com.mcal.common.utils.SDCard;
-import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ScopedStorage;
 
 import java.io.File;
@@ -32,7 +31,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

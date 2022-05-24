@@ -1,29 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="compression_level_key">
-        <item>0 (no compressione)</item>
-        <item>1 (massima velocità)</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5 (Medium)</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9 (miglior compressione)</item>
-    </string-array>
-    <string-array name="compression_level_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
     <string-array name="fileTypeAudio">
         <item>.mp3</item>
         <item>.wav</item>

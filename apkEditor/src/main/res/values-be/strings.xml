@@ -33,8 +33,6 @@
     <string name="colormixer_set">"Прызначыць "</string>
     <string name="common_edit">Агульнае рэдагаванне</string>
     <string name="compose">Кампанаваць</string>
-    <string name="compression_level">Узровень сціскання</string>
-    <string name="compression_level_summary">Чым ніжэй узровень сціскання, тым большая хуткасць, але большы памер APK .</string>
     <string name="confirm_dir_replace">Пацверджанне замены каталога</string>
     <string name="copied_to_clipboard">"'%s' скапіравана ў буфер абмену."</string>
     <string name="copy_error_msg">"Капіраваць паведамленне "</string>
@@ -74,7 +72,6 @@
     <string name="folder_replaced">Каталог заменены</string>
     <string name="font_size">"Памер шрыфту "</string>
     <string name="full_edit">Рэдагаваць увесь apk (RESOURCE RE-BUILD)</string>
-    <string name="full_screen_desc">"Абярыце для ўключэння на ўвесь экран "</string>
     <string name="general_error">Памылка: %s</string>
     <string name="help">"Дапамога "</string>
     <string name="hide_smali_tip">Працяжна націсніце DEX -> Smali каб схаваць.</string>
@@ -185,8 +182,6 @@
     <string name="settings">"Налады "</string>
     <string name="show_a_toast">Паказаць тост</string>
     <string name="sign">"Падпісаць "</string>
-    <string name="sign_apk_with">"Падпісаць APK "</string>
-    <string name="sign_apk_with_summary">Задайце ключ для падпісвання APK.</string>
     <string name="sign_error">Не атрымалася падпісаць:</string>
     <string name="sign_the_apk">Падпісаць APK</string>
     <string name="simple_edit">Простае рэдагаванне (ЗАМЕНА ФАЙЛАЎ)</string>
@@ -219,7 +214,6 @@
     <string name="wait_for_decoding">Крыху пачакайце да завяршэння дэкадавання.</string>
     <string name="warning">"Увага "</string>
     <string name="yes">ТАК</string>
-    <string name="full_screen">"На ўвесь экран "</string>
     <string name="apk_decoding">"Дэкадаванне APK "</string>
     <string name="build">"Зборка "</string>
     <string name="cannot_load_project_info">Немагчыма загрузіць звесткі пра праект.</string>

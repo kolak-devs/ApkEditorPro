@@ -3,9 +3,9 @@ package com.mcal.apkeditor.patch;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.IGeneralCallback;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;

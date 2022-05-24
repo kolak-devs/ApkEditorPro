@@ -2,12 +2,11 @@ package com.mcal.apkeditor.pro;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.smali.ISmaliAssembleCallback;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import com.mcal.apkeditor.smali.ISmaliAssembleCallback;
 
 import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.jf.dexlib2.Opcodes;

@@ -32,8 +32,6 @@
     <string name="colormixer_set">Zestaw</string>
     <string name="common_edit">Zwykła edycja</string>
     <string name="compose">Składanie</string>
-    <string name="compression_level">Poziom kompresji</string>
-    <string name="compression_level_summary">Niższy poziom ma lepszą szybkość, ale gorszą kompresję, co czyni aplikację większą.</string>
     <string name="confirm_dir_replace">Potwierdź zmianę katalogu</string>
     <string name="copied_to_clipboard">"'%s' skopiowane do schowka."</string>
     <string name="copy_error_msg">Skopiuj wiadomość błędu</string>
@@ -74,7 +72,6 @@
     <string name="folder_replaced">Folder zastąpiony</string>
     <string name="font_size">Rozmiar czcionki</string>
     <string name="full_edit">Pełna edycja (PRZEBUDOWA ZASOBÓW)</string>
-    <string name="full_screen_desc">Wybierz aby odblokować pełny ekran</string>
     <string name="general_error">Błąd: %s</string>
     <string name="help">Pomoc</string>
     <string name="hide_smali_tip">Przytrzymaj na DEX -> Smali aby ukryć.</string>
@@ -185,8 +182,6 @@
     <string name="settings">Ustawienia</string>
     <string name="show_a_toast">Pokaż Toast</string>
     <string name="sign">Podpisz</string>
-    <string name="sign_apk_with">Podpisz APK z</string>
-    <string name="sign_apk_with_summary">Ustal który klucz ma być użyty do podpisu APK.</string>
     <string name="sign_error">Błąd podpisu:</string>
     <string name="sign_the_apk">Podpisz APK</string>
     <string name="simple_edit">Prosta edycja (ZAMIANA PLIKU)</string>
@@ -219,7 +214,6 @@
     <string name="wait_for_decoding">Poczekaj chwilę do zakończenia rozkodowania.</string>
     <string name="warning">Ostrzeżenie</string>
     <string name="yes">TAK</string>
-    <string name="full_screen">Pełny ekran</string>
     <string name="case_insensitive">Wielkość liter ma znaczenie</string>
     <string name="donot_save">"Nie zapisuj"</string>
     <string name="dump_a_value">Wysyp wartości</string>

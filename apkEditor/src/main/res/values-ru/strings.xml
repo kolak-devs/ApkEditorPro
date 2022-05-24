@@ -32,8 +32,6 @@
     <string name="colormixer_set">Применить</string>
     <string name="common_edit">Общее редактирование</string>
     <string name="compose">Компоновка</string>
-    <string name="compression_level">Уровень сжатия</string>
-    <string name="compression_level_summary">При низком уровне сжатия создаётся APK большего размера, но увеличивается скорость работы приложения.</string>
     <string name="confirm_dir_replace">Подтверждение замены папки</string>
     <string name="copied_to_clipboard">"'%s' скопировано в буфер обмена."</string>
     <string name="copy_error_msg">Копировать сообщение</string>
@@ -73,7 +71,6 @@
     <string name="folder_replaced">Заменить папку</string>
     <string name="font_size">Размер шрифта</string>
     <string name="full_edit">Полное редактирование</string>
-    <string name="full_screen_desc">Выберите для включения полноэкранного режима.</string>
     <string name="general_error">Ошибка: %s</string>
     <string name="help">Помощь</string>
     <string name="hide_smali_tip">Длительное нажатие на \"DEX -> Smali\" скроет эту надпись.</string>
@@ -184,8 +181,6 @@
     <string name="settings">Настройки</string>
     <string name="show_a_toast">Показать уведомление</string>
     <string name="sign">Подписывание</string>
-    <string name="sign_apk_with">Подписывание APK</string>
-    <string name="sign_apk_with_summary">Укажите, какой ключ должен использоваться для подписания APK.</string>
     <string name="sign_error">Ошибка подписи:</string>
     <string name="sign_the_apk">Подписывание APK</string>
     <string name="simple_edit">Замена файлов</string>
@@ -241,7 +236,6 @@
     <string name="fix_invalid_name_tip">Исправить проблему с некорректным именем?</string>
     <string name="fix_invalid_symbol_tip">Исправить проблему с некорректным символом?</string>
     <string name="fix_invalid_token_tip">Исправить проблему с некорректным токеном?</string>
-    <string name="full_screen">На весь экран</string>
     <string name="hide_warnings">Скрыть предупреждения</string>
     <string name="invalid_directory">Некорректная папка: %s</string>
     <string name="label_replace_with_same_setting">Использовать данные настройки в следующий раз.</string>
@@ -337,9 +331,6 @@
     <string name="use_bfe_tip">Поскольку файл слишком большой, используется редактор больших файлов. В настройках приложения вы можете изменить условие, при котором он используется.</string>
     <string name="when_use_bfe">Редактор больших файлов</string>
     <string name="xml_file_edit">Редактор XML-файлов (BETA)</string>
-    <string name="decode_all_files">Декодировать все файлы</string>
-    <string name="decode_mode">Режим декодирования</string>
-    <string name="decode_partial_files">Декодировать некоторые файлы</string>
     <string name="error_path_xxx_not_exist">Ошибка: путь \"%s\" не существует.</string>
     <string name="folder_path">Путь к папке:</string>
     <string name="import_folder">Импортировать папку</string>

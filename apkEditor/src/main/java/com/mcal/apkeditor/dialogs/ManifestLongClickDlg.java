@@ -9,16 +9,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.apkeditor.editor.TextEditor;
-import com.mcal.apkeditor.adapters.IManifestChangeCallback;
-import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.adapters.IManifestChangeCallback;
+import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
+import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.folderlist.util.OpenFiles;
 
 import org.jetbrains.annotations.Contract;

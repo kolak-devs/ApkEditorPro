@@ -1,6 +1,5 @@
 package com.mcal.apkeditor.se;
 
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 

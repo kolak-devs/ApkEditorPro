@@ -13,12 +13,10 @@ public class PathFilter_Wildcard extends PathFilter {
     private final String wildPathStr;
     private final String regexPath;
     private final String decodedRootPath;
-
-    private boolean initialized = false;
-
     // Each element in folderList is the relative path
     private final List<String> folderList = new LinkedList<>();
     private final List<String> fileList = new ArrayList<>();
+    private boolean initialized = false;
     private int fileCursor = 0; // Index inside fileList
 
     public PathFilter_Wildcard(@NonNull IPatchContext ctx, @NonNull String pathStr) {

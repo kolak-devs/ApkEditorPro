@@ -23,14 +23,12 @@ import java.util.List;
 
 // Directly patch the DEX cache
 public class OdexPatcher {
+    private final String packageName;
     public String errMessage;
     public String targetOdex; // Where is cached odex
-
     private String apkName; // like base.apk
     private int checksumOffset; // crc32 offset;
     private byte[] crc32;   // checksum in the cached odex
-
-    private final String packageName;
 
     public OdexPatcher(String packageName) {
         this.packageName = packageName;

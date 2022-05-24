@@ -51,41 +51,10 @@
         <item>17</item>
     </string-array>
 
-    <string-array name="compression_level_key">
-        <item>0 (No Compression)</item>
-        <item>1 (Best Speed)</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5 (Medium)</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9 (Best Compression)</item>
-    </string-array>
-
-    <string-array name="compression_level_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
-
     <string-array name="signer_key">
         <item>testkey</item>
         <item>key created by APK Editor</item>
         <item>custom key</item>
-    </string-array>
-    <string-array name="signer_value_dont_translate">
-        <item>testkey</item>
-        <item>editorkey</item>
-        <item>customkey</item>
     </string-array>
 
     <string-array name="language_key">
@@ -151,18 +120,6 @@
     <string-array name="file_extract_rename_value">
         <item>0</item>
         <item>1</item>
-    </string-array>
-
-    <string-array name="decode_mode_key">
-        <item>@string/decode_all_files</item>
-        <item>@string/decode_partial_files</item>
-        <item>Decide it at decoding</item>
-    </string-array>
-
-    <string-array name="decode_mode_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
 
     <string-array name="signatureKey">

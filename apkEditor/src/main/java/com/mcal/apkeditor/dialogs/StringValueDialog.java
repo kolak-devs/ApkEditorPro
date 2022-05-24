@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.StringListAdapter;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.StringListAdapter;
 import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.ClipboardUtils;
 

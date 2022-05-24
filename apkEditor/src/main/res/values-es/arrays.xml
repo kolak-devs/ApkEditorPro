@@ -19,18 +19,6 @@
         <item>Icono (16)</item>
         <item>Icono (17)</item>
     </string-array>
-    <string-array name="compression_level_key">
-        <item>0 (Sin Compresión)</item>
-        <item>1 (Mejor Velocidad)</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5 (Valor Medio)</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9 (Mejor Compresión)</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Automático (Con sufijo numérico)</item>
         <item>Sobreescribir</item>
@@ -68,23 +56,6 @@
         <item>Clave de Prueba</item>
         <item>Clave de APK Editor Pro</item>
         <item>Clave Personalizada</item>
-    </string-array>
-    <string-array name="signer_value_dont_translate">
-        <item>testkey</item>
-        <item>editorkey</item>
-        <item>customkey</item>
-    </string-array>
-    <string-array name="compression_level_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
     </string-array>
     <string-array name="fileTypeAudio">
         <item>.mp3</item>

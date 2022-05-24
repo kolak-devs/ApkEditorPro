@@ -13,13 +13,12 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.apkeditor.view.KeyListPreference;
-import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
+import com.mcal.apkeditor.view.KeyListPreference;
 
 import java.io.File;
 import java.lang.ref.WeakReference;

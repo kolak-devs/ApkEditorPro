@@ -32,8 +32,6 @@
     <string name="colormixer_set">Beállítás</string>
     <string name="common_edit">Attribútumok módosítása</string>
     <string name="compose">Összeállítás</string>
-    <string name="compression_level">Tömörítési szint</string>
-    <string name="compression_level_summary">Az alacsonyabb szint gyorsabb, de rosszabb tömörítési arányával megnöveli az APK méretét.</string>
     <string name="confirm_dir_replace">Könyvtár csere megerősítése</string>
     <string name="copied_to_clipboard">"A(z) '%s' a vágólapra lett másolva."</string>
     <string name="copy_error_msg">Hibaüzenet másolása</string>
@@ -74,7 +72,6 @@
     <string name="folder_replaced">Mappa lecserélve</string>
     <string name="font_size">Betűméret</string>
     <string name="full_edit">Teljes (FORRÁS ÚJRAÉPÍTÉSE)</string>
-    <string name="full_screen_desc">Aktiválja a teljes képernyő engedélyezéséhez</string>
     <string name="general_error">Hiba: %s</string>
     <string name="help">Súgó megnyitása</string>
     <string name="hide_smali_tip">Nyomja meg hosszan a DEX -> Smali-t az elrejtéshez.</string>
@@ -185,8 +182,6 @@
     <string name="settings">Beállítások</string>
     <string name="show_a_toast">Értesítés megjelenítése</string>
     <string name="sign">Aláírás</string>
-    <string name="sign_apk_with">APK aláírása…</string>
-    <string name="sign_apk_with_summary">Adja meg az APK aláírására használandó kulcsot.</string>
     <string name="sign_error">Aláírási hiba:</string>
     <string name="sign_the_apk">APK aláírása</string>
     <string name="simple_edit">Egyszerű (FÁJL CSERÉJE)</string>
@@ -242,7 +237,6 @@
     <string name="fix_invalid_name_tip">Megpróbálja elhárítani az érvénytelen név hibá(ka)t?</string>
     <string name="fix_invalid_symbol_tip">Megpróbálja elhárítani az érvénytelen szimbólum problémá(ka)t?</string>
     <string name="fix_invalid_token_tip">Megpróbálja elhárítani az érvénytelen token hibá(ka)t?</string>
-    <string name="full_screen">Teljes képernyő</string>
     <string name="hide_warnings">Figyelmeztetések elrejtése</string>
     <string name="invalid_directory">Érvénytelen könyvtár: %s</string>
     <string name="label_replace_with_same_setting">Cserélje ugyanazokkal a beállításokkal legközelebb, és ne jelenjen meg ez az ablak.</string>

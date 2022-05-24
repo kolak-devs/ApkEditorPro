@@ -15,16 +15,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.utils.FileUtils;
-import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.data.Preferences;
+import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ScopedStorage;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

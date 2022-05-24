@@ -2,8 +2,8 @@ package com.mcal.apkeditor.patch;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,15 +20,13 @@ class PatchRule_MatchAssign extends PatchRule {
     private static final String REGEX = "REGEX:";
     private static final String ASSIGN = "ASSIGN:";
     private static final String DOTALL = "DOTALL:";
-
-    // private String targetFile;
-    private PathFinder pathFinder;
     private final List<String> matches;
     private final List<String> assigns;
+    private final List<String> keywords;
+    // private String targetFile;
+    private PathFinder pathFinder;
     private boolean bRegex = false;
     private boolean bDotall = false;
-
-    private final List<String> keywords;
 
     PatchRule_MatchAssign() {
         matches = new ArrayList<>();

@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.apkeditor.R;
 import com.mcal.androlib.LanguageMapping;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.view.ViewDialog;
 
 import java.lang.ref.WeakReference;

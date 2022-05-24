@@ -30,12 +30,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
-import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.view.DynamicExpandListView;
 import com.mcal.common.utils.SDCard;
+import com.mcal.common.view.DynamicExpandListView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

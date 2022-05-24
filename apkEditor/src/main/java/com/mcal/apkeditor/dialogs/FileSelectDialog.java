@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
@@ -214,7 +213,7 @@ public class FileSelectDialog implements OnItemClickListener,
                         name = name.trim();
                         if ("".equals(name)) {
                             Toast.makeText(ctx,
-                                    R.string.empty_input_tip, Toast.LENGTH_LONG)
+                                            R.string.empty_input_tip, Toast.LENGTH_LONG)
                                     .show();
                         } else {
                             fileListAdapter.addFolder(dirPath, name);

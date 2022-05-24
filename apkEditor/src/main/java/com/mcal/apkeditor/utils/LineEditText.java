@@ -16,10 +16,10 @@ public class LineEditText extends AppCompatAutoCompleteTextView {
     private final Paint mPaint;
 
     private final float scale;
-    private int left;
     private final int right;
     private final int bottom;
     private final int top;
+    private int left;
 
     public LineEditText(Context context, AttributeSet attrs) {
         super(context, attrs);

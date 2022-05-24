@@ -54,8 +54,6 @@
     <string name="app_list_order">应用列表排序方式</string>
     <string name="appearance">外观</string>
     <string name="launcher_icon">启动图标</string>
-    <string name="full_screen">全屏显示</string>
-    <string name="full_screen_desc">勾中开启全屏显示</string>
 
     <!-- added 20150501 -->
     <string name="save_succeed_1">成功: 已保存到 %s</string>
@@ -85,8 +83,6 @@
     <string name="sign">签名</string>
     <string name="sign_error">签名出错: </string>
     <string name="apk_building">APK Building</string>
-    <string name="compression_level">压缩级别</string>
-    <string name="compression_level_summary">低的压缩级别速度更快，但压缩率不高 (意味着更大的APK文件)</string>
 
     <!-- added in version 1.3.2 -->
     <string name="str_app_name">应用名</string>
@@ -144,8 +140,6 @@
     <string name="line_wrap">自动换行</string>
     <string name="cannot_find_ext_sdcard">找不到外置SD卡.</string>
     <string name="rename_in_resources">修改 resources.arsc 中的包名</string>
-    <string name="sign_apk_with">签名密钥</string>
-    <string name="sign_apk_with_summary">指定签名APK时使用的密钥文件.</string>
     <string name="str_files_found" formatted="false">找到 %d 个文件 - \'%s\'</string>
 
     <!-- version 1.4 -->

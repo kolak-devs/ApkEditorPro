@@ -1,37 +1,20 @@
 package com.mcal.apkeditor.activities;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
 
 import com.mcal.apkeditor.GlobalConfig;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.data.Constants;
 import com.mcal.common.activities.CustomizedLangActivity;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Locale;
 
 public class HelpActivity extends CustomizedLangActivity {
 

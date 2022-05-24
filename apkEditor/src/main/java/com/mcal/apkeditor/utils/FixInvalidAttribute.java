@@ -24,12 +24,10 @@ import java.util.regex.Pattern;
 
 public class FixInvalidAttribute extends FixInvalid {
     private final static String err_InvalidAttr = "^(.+):([0-9]+): Tag (.+) attribute (.+) has invalid character '";
-
-    private int modifiedFiles = 0;
     private final List<InvalidAttrRecord> invalidRecords = new ArrayList<InvalidAttrRecord>();
-
     // Record all the file modifications
     private final Map<String, Map<String, String>> fileModifications = new HashMap<>();
+    private int modifiedFiles = 0;
 
     // replaces means replaces already made
     public FixInvalidAttribute(String decodeRootPath, String message,

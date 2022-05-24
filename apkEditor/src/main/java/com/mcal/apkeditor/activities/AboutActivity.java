@@ -79,6 +79,7 @@ public class AboutActivity extends CustomizedLangActivity {
     public void openApkTool(@NonNull View view) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/iBotPeaches/Apktool")));
     }
+
     public void openSmali(@NonNull View view) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/JesusFreke/smali")));
     }

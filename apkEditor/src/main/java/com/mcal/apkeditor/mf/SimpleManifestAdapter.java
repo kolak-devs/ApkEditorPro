@@ -3,7 +3,6 @@ package com.mcal.apkeditor.mf;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.content.ContextCompat;
 
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.BitmapUtils;
@@ -309,9 +307,9 @@ public class SimpleManifestAdapter extends BaseAdapter implements
         if (lineRec.sectionEnd != lineRec.lineIndex) {
             Bitmap arrow;
             if (!lineRec.collapsed) {
-                arrow = BitmapUtils.getBitmapFromVectorDrawable(ctx,R.drawable.manifest_chevron_down);
+                arrow = BitmapUtils.getBitmapFromVectorDrawable(ctx, R.drawable.manifest_chevron_down);
             } else {
-                arrow = BitmapUtils.getBitmapFromVectorDrawable(ctx,R.drawable.manifest_chevron_right);
+                arrow = BitmapUtils.getBitmapFromVectorDrawable(ctx, R.drawable.manifest_chevron_right);
             }
 
             // Draw the arrow

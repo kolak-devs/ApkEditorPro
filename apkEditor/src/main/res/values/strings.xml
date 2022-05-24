@@ -54,8 +54,6 @@
     <string name="app_list_order">App List Ordered By</string>
     <string name="appearance">Appearance</string>
     <string name="launcher_icon">Launcher Icon</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 
     <!-- added 20150501 -->
     <string name="save_succeed_1">Succeed: saved to %s</string>
@@ -85,8 +83,6 @@
     <string name="sign">Sign</string>
     <string name="sign_error">Sign Error: </string>
     <string name="apk_building">APK Building</string>
-    <string name="compression_level">Compression Level</string>
-    <string name="compression_level_summary">Lower level has better speed, but with bad compression ratio, thus make the APK bigger.</string>
 
     <!-- added in version 1.3.2 -->
     <string name="str_app_name">App Name</string>
@@ -144,8 +140,6 @@
     <string name="line_wrap">Line Wrap</string>
     <string name="cannot_find_ext_sdcard">Cannot find the external sd card.</string>
     <string name="rename_in_resources">Rename the package name in resources.arsc</string>
-    <string name="sign_apk_with">Sign APK with</string>
-    <string name="sign_apk_with_summary">Specify which key is to used to sign the APK.</string>
     <string name="str_files_found" formatted="false">%d File(s) Found - \'%s\'</string>
 
     <!-- version 1.4 -->
@@ -427,9 +421,6 @@
     <string name="symbol_input_summary">Enable symbol input or not.</string>
 
     <!-- 1.9.7 -->
-    <string name="decode_mode">Decoding Mode</string>
-    <string name="decode_all_files">Decode All Files</string>
-    <string name="decode_partial_files">Decode Partial Files</string>
     <string name="summary_decode_all_files">Decode All Files. All files include images and unknown files, will be decoded to decoding directory. In this mode, the decode files could be rebuilt with other tools. It has more flexibility, but with slower speed.</string>
     <string name="summary_decode_partial_files">Decode Partial Files. Only important files will be decoded to decoding directory (images will be replaced with dummy files, and unknown files will not be decoded). Faster speed, but less flexibility.</string>
     <string name="summary_decide_at_decoding">To select decode mode on the fly. A dialog will be prompted when \"Full Edit\" is clicked.</string>

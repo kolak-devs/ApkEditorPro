@@ -13,20 +13,18 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.GlobalConfig;
-import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileCopyDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
+import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.apklib.AXMLPrinter;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.IOUtils;
@@ -54,6 +52,21 @@ public class ZipFileListAdapter extends BaseAdapter implements
         OnItemClickListener, OnItemLongClickListener, OnClickListener,
         IFileSelection, ProcessingDialog.ProcessingInterface {
 
+    private final Activity ctx;
+    private final IDirChanged dirChangeIf;
+    private final Map<String, List<FileInfo>> dir2Files;
+    // Record all the replaces (entry name -> file path)
+    private final Map<String, String> fileReplaces = new HashMap<>();
+    // Image cache
+    private final LruCache<String, Bitmap> imageBitmaps = new LruCache<String, Bitmap>(
+            32) {
+        protected void entryRemoved(boolean evicted, String key,
+                                    Bitmap oldValue, Bitmap newValue) {
+            oldValue.recycle();
+        }
+    };
+    // Help to resolve the image
+    private final ZipHelper zipHelper;
     // Use to do the sorting
     Comparator<FileInfo> comparator = new Comparator<FileInfo>() {
         @Override
@@ -73,25 +86,10 @@ public class ZipFileListAdapter extends BaseAdapter implements
             }
         }
     };
-    private final Activity ctx;
-    private final IDirChanged dirChangeIf;
     private String curDir;
     private List<FileInfo> curFileList;
-    private final Map<String, List<FileInfo>> dir2Files;
-    // Record all the replaces (entry name -> file path)
-    private final Map<String, String> fileReplaces = new HashMap<>();
     // For AXML editing
     private boolean xmlEditMode = false;
-    // Image cache
-    private final LruCache<String, Bitmap> imageBitmaps = new LruCache<String, Bitmap>(
-            32) {
-        protected void entryRemoved(boolean evicted, String key,
-                                    Bitmap oldValue, Bitmap newValue) {
-            oldValue.recycle();
-        }
-    };
-    // Help to resolve the image
-    private final ZipHelper zipHelper;
     private ZipFile zfile;
     private ZipImageZoomer zipImageZoomer;
 

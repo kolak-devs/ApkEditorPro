@@ -9,30 +9,6 @@
         <item>Podle času instalace</item>
     </string-array>
 
-    <string-array name="compression_level_key">
-        <item>0 (Bez Komprese)</item>
-        <item>1 (Nejlepší Rychlost)</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5 (Střední)</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9 (Nejlepší Komprese)</item>
-    </string-array>
-    <string-array name="compression_level_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
     <string-array name="signer_key">
         <item>Testovací klíč</item>
         <item>Klíč vytvořit APK Editorem</item>
