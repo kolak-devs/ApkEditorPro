@@ -4,12 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import android.text.Layout;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.mcal.common.App;
 import com.mcal.common.data.Preferences;
@@ -24,6 +24,7 @@ public class CodeText extends ShaderText {
     private final transient Paint paint = new Paint();
     private final transient Paint bgPaint = new Paint();
     private Layout layout;
+    private boolean isShowLineNumber = true;
 
     public CodeText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,7 +35,7 @@ public class CodeText extends ShaderText {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
-        if (Preferences.isMonospaceFontAllowed()){
+        if (Preferences.isMonospaceFontAllowed()) {
             setTypeface(ResourcesCompat.getFont(getContext(), R.font.mono));
         }
         setTextSize(Preferences.getFontSize());
@@ -55,20 +56,20 @@ public class CodeText extends ShaderText {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int padding = (int) getPixels(getDigitCount() * 10 + 10);
-        setPadding(padding, 0, 0, 0);
+        if (isShowLineNumber) {
+            int padding = (int) getPixels(getDigitCount() * 10 + 10);
+            setPadding(padding, 0, 0, 0);
 
-        int scrollY = getScrollY();
-        int firstLine = layout.getLineForVertical(scrollY), lastLine;
+            int scrollY = getScrollY();
+            int firstLine = layout.getLineForVertical(scrollY), lastLine;
 
-        try {
-            lastLine = layout.getLineForVertical(scrollY + (getHeight() - getExtendedPaddingTop() - getExtendedPaddingBottom()));
-        } catch (NullPointerException npe) {
-            lastLine = layout.getLineForVertical(scrollY + (getHeight() - getPaddingTop() - getPaddingBottom()));
-        }
+            try {
+                lastLine = layout.getLineForVertical(scrollY + (getHeight() - getExtendedPaddingTop() - getExtendedPaddingBottom()));
+            } catch (NullPointerException npe) {
+                lastLine = layout.getLineForVertical(scrollY + (getHeight() - getPaddingTop() - getPaddingBottom()));
+            }
 
-        //the y position starts at the baseline of the first line
-        if(isShowLineNumber) {
+            //the y position starts at the baseline of the first line
             int positionY = getBaseline() + (layout.getLineBaseline(firstLine) - layout.getLineBaseline(0));
             drawLineNumber(canvas, layout, positionY, firstLine);
             for (int i = firstLine + 1; i <= lastLine; i++) {
@@ -80,10 +81,8 @@ public class CodeText extends ShaderText {
         super.onDraw(canvas);
     }
 
-    private boolean isShowLineNumber=true;
-
     public void setShowLineNumber(boolean value) {
-        isShowLineNumber=value;
+        isShowLineNumber = value;
     }
 
     private void drawLineNumber(@NonNull Canvas canvas, @NonNull Layout layout, int positionY, int line) {
