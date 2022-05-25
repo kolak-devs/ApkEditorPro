@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.StringListAdapter;
@@ -47,7 +48,7 @@ public class StringValueDialog implements android.view.View.OnClickListener {
 
         this.keyTv = view.findViewById(R.id.key);
         this.valueEt = view.findViewById(R.id.value);
-        View menu = view.findViewById(R.id.menu_clipboard);
+        AppCompatImageButton menu = view.findViewById(R.id.menu_clipboard);
         menu.setOnClickListener(this);
 
         Button okBtn = view.findViewById(R.id.btn_editstring_ok);

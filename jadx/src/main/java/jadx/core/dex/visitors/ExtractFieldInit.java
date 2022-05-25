@@ -1,5 +1,7 @@
 package jadx.core.dex.visitors;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ import jadx.core.utils.exceptions.JadxException;
 public class ExtractFieldInit extends AbstractVisitor {
 
 	@Override
-	public boolean visit(ClassNode cls) throws JadxException {
+	public boolean visit(@NonNull ClassNode cls) throws JadxException {
 		for (ClassNode inner : cls.getInnerClasses()) {
 			visit(inner);
 		}
@@ -72,7 +74,7 @@ public class ExtractFieldInit extends AbstractVisitor {
 		}
 	}
 
-	private static void moveStaticFieldsInit(ClassNode cls) {
+	private static void moveStaticFieldsInit(@NonNull ClassNode cls) {
 		MethodNode classInitMth = cls.getClassInitMth();
 		if (classInitMth == null
 				|| !classInitMth.getAccessFlags().isStatic()
@@ -163,7 +165,8 @@ public class ExtractFieldInit extends AbstractVisitor {
 		fixFieldsOrder(cls, common.fieldInits);
 	}
 
-	private static List<FieldInitInfo> collectFieldsInit(ClassNode cls, MethodNode mth, InsnType putType) {
+	@NonNull
+	private static List<FieldInitInfo> collectFieldsInit(ClassNode cls, @NonNull MethodNode mth, InsnType putType) {
 		List<FieldInitInfo> fieldsInit = new ArrayList<>();
 		Set<BlockNode> singlePathBlocks = new HashSet<>();
 		BlockUtils.visitSinglePath(mth.getEnterBlock(), singlePathBlocks::add);
@@ -186,7 +189,7 @@ public class ExtractFieldInit extends AbstractVisitor {
 		return fieldsInit;
 	}
 
-	private static void filterFieldsInit(List<FieldInitInfo> inits) {
+	private static void filterFieldsInit(@NonNull List<FieldInitInfo> inits) {
 		// exclude fields initialized several times
 		Set<FieldInfo> excludedFields = inits
 				.stream()
@@ -225,7 +228,7 @@ public class ExtractFieldInit extends AbstractVisitor {
 		}
 	}
 
-	private static boolean checkInsn(FieldInitInfo initInfo) {
+	private static boolean checkInsn(@NonNull FieldInitInfo initInfo) {
 		if (!initInfo.singlePath) {
 			return false;
 		}
@@ -251,7 +254,7 @@ public class ExtractFieldInit extends AbstractVisitor {
 		return true;
 	}
 
-	private static boolean insnUseExcludedField(FieldInitInfo initInfo, Set<FieldInfo> excludedFields) {
+	private static boolean insnUseExcludedField(FieldInitInfo initInfo, @NonNull Set<FieldInfo> excludedFields) {
 		if (excludedFields.isEmpty()) {
 			return false;
 		}
@@ -276,6 +279,7 @@ public class ExtractFieldInit extends AbstractVisitor {
 		applyFieldsOrder(cls, orderedFields);
 	}
 
+	@NonNull
 	private static List<FieldNode> processFieldsDependencies(ClassNode cls, List<FieldInitInfo> inits) {
 		List<FieldNode> orderedFields = Utils.collectionMap(inits, v -> v.fieldNode);
 		// collect dependant fields
@@ -333,7 +337,7 @@ public class ExtractFieldInit extends AbstractVisitor {
 		return result;
 	}
 
-	private static void applyFieldsOrder(ClassNode cls, List<FieldNode> orderedFields) {
+	private static void applyFieldsOrder(@NonNull ClassNode cls, List<FieldNode> orderedFields) {
 		List<FieldNode> clsFields = cls.getFields();
 		// check if already ordered
 		boolean ordered = Collections.indexOfSubList(clsFields, orderedFields) != -1;
@@ -343,7 +347,7 @@ public class ExtractFieldInit extends AbstractVisitor {
 		}
 	}
 
-	private static boolean compareFieldInits(List<FieldInitInfo> base, List<FieldInitInfo> other) {
+	private static boolean compareFieldInits(@NonNull List<FieldInitInfo> base, @NonNull List<FieldInitInfo> other) {
 		if (base.size() != other.size()) {
 			return false;
 		}
@@ -358,7 +362,8 @@ public class ExtractFieldInit extends AbstractVisitor {
 		return true;
 	}
 
-	private static List<MethodNode> getConstructorsList(ClassNode cls) {
+	@NonNull
+	private static List<MethodNode> getConstructorsList(@NonNull ClassNode cls) {
 		List<MethodNode> list = new ArrayList<>();
 		for (MethodNode mth : cls.getMethods()) {
 			AccessInfo accFlags = mth.getAccessFlags();
@@ -372,7 +377,7 @@ public class ExtractFieldInit extends AbstractVisitor {
 		return list;
 	}
 
-	private static void addFieldInitAttr(MethodNode mth, FieldNode field, InsnNode insn) {
+	private static void addFieldInitAttr(MethodNode mth, @NonNull FieldNode field, @NonNull InsnNode insn) {
 		InsnNode assignInsn = InsnNode.wrapArg(insn.getArg(0));
 		field.addAttr(new FieldInitInsnAttr(mth, assignInsn));
 	}

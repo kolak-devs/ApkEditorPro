@@ -52,7 +52,7 @@
                                 android:id="@+id/tv_select_apkfile"
                                 style="@style/Base.Widget.AppCompat.Button.Colored"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="56dp"
                                 android:gravity="center"
                                 android:singleLine="true"
                                 android:text="@string/select_apk_file" />
@@ -61,7 +61,7 @@
                                 android:id="@+id/tv_select_appfile"
                                 style="@style/Base.Widget.AppCompat.Button.Colored"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="56dp"
                                 android:gravity="center"
                                 android:singleLine="true"
                                 android:text="@string/select_apk_from_app" />
@@ -70,7 +70,7 @@
                                 android:id="@+id/tv_odex_patcher"
                                 style="@style/Base.Widget.AppCompat.Button.Colored"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="56dp"
                                 android:gravity="center"
                                 android:singleLine="true"
                                 android:text="Odex Patcher" />
@@ -79,7 +79,7 @@
                                 android:id="@+id/tv_help"
                                 style="@style/Base.Widget.AppCompat.Button.Colored"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="56dp"
                                 android:gravity="center"
                                 android:singleLine="true"
                                 android:text="@string/help" />
@@ -88,7 +88,7 @@
                                 android:id="@+id/tv_exit"
                                 style="@style/Base.Widget.AppCompat.Button.Colored"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="56dp"
                                 android:gravity="center"
                                 android:singleLine="true"
                                 android:text="@string/exit" />
