@@ -983,10 +983,10 @@ public class ResListAdapter extends BaseAdapter implements
     // Delete a file or directory in a directory
     // The item to be deleted can in file system or zip file
     public void deleteFile(List<Integer> positions) {
-        List<FileRecord> records = new ArrayList<FileRecord>();
+        List<FileRecord> records = new ArrayList<>();
         String dirPath = getData(records);
 
-        List<Integer> deletedPositions = new ArrayList<Integer>();
+        List<Integer> deletedPositions = new ArrayList<>();
         for (int position : positions) {
             FileRecord fileRec = records.get(position);
             if (fileRec == null) {

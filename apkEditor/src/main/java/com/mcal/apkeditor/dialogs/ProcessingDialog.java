@@ -2,6 +2,7 @@ package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -9,11 +10,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.view.ViewDialog;
 
 import java.lang.ref.WeakReference;
 
-public class ProcessingDialog extends ViewDialog implements
+public class ProcessingDialog extends Dialog implements
         android.view.View.OnClickListener {
 
     private final WeakReference<Activity> activityRef;
@@ -30,7 +30,7 @@ public class ProcessingDialog extends ViewDialog implements
 
         LayoutInflater inflater = LayoutInflater.from(activity);
         View layout = inflater.inflate(R.layout.dlg_processing, null);
-        setView(layout);
+        setContentView(layout);
         setCancelable(false);
 
         // Start processing thread

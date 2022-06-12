@@ -155,10 +155,9 @@ public class ManifestLongClickDlg {
                         public void fileSelectedInDialog(
                                 String filePath, String extraStr, boolean openFile) {
                             String targetFolder = filePath;
-                            FileCopyDialog dlg = new FileCopyDialog(
+                            new FileCopyDialog(
                                     activityRef.get(),
                                     xmlPath, targetFolder, null, null, null, 0);
-                            dlg.show();
                         }
 
                         @Override
@@ -212,7 +211,7 @@ public class ManifestLongClickDlg {
                     p112.dismiss();
                     break;
                 case 3:
-                    Intent intent = TextEditor.getEditorIntent(
+                    Intent intent = TextEditor.getSoraEditor(
                             activityRef.get().getApplicationContext(), xmlPath, null);
                     activityRef.get().startActivityForResult(intent, 2);
                     p112.dismiss();

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
 import android.text.InputFilter;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -22,11 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
-import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.InputUtils;
 import com.mcal.common.utils.PathUtils;
 import com.mcal.common.utils.SDCard;
@@ -65,7 +65,7 @@ public class FileSelectDialog implements OnItemClickListener,
     private final IFileSelection callback;
 
     private final Context ctx;
-    private final ViewDialog dialog;
+    private final AlertDialog dialog;
 
     // extraString should be the replaced file name if used to replace a file
     public FileSelectDialog(Context ctx, IFileSelection callback,
@@ -90,7 +90,6 @@ public class FileSelectDialog implements OnItemClickListener,
                             String fileSuffix, String extraString, String strTitle,
                             boolean selectFolder, boolean showConfirmDlg, boolean showEditOption,
                             String tag, String defaultDir) {
-
         this.ctx = ctx;
         this.callback = callback;
         this.extraStr = extraString;
@@ -167,10 +166,9 @@ public class FileSelectDialog implements OnItemClickListener,
         Button closeBtn = view.findViewById(R.id.close);
         closeBtn.setOnClickListener(this);
 
-        dialog = new ViewDialog(ctx);
-        dialog.setTitle("Select File");
-        dialog.setView(view);
-        dialog.show();
+        MaterialAlertDialogBuilder materialDialog = new MaterialAlertDialogBuilder(ctx);
+        materialDialog.setView(view);
+        dialog = materialDialog.show();
     }
 
     @Override
@@ -320,7 +318,7 @@ public class FileSelectDialog implements OnItemClickListener,
             final String curDir = fileListAdapter.getData(null);
 
             if (showConfirmDlg) {
-                new MaterialAlertDialogBuilder(this.ctx)
+                new MaterialAlertDialogBuilder(ctx)
                         .setTitle(R.string.confirm_dir_replace)
                         .setMessage(callback.getConfirmMessage(curDir, extraStr))
                         .setPositiveButton(R.string.yes,

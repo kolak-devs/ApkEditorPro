@@ -1,6 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,11 @@ import androidx.appcompat.widget.AppCompatImageButton;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.StringListAdapter;
-import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.ClipboardUtils;
 
 import java.lang.ref.WeakReference;
 
-public class StringValueDialog implements android.view.View.OnClickListener {
+public class StringValueDialog extends Dialog implements android.view.View.OnClickListener {
 
     private final WeakReference<Context> ctxRef;
     private final StringListAdapter strListAdapter;
@@ -28,11 +28,11 @@ public class StringValueDialog implements android.view.View.OnClickListener {
     private final View view;
     private final TextView keyTv;
     private final EditText valueEt;
-    private final ViewDialog dialog;
 
     @SuppressLint("InflateParams")
     public StringValueDialog(Context context, StringListAdapter strListAdapter,
                              int position) {
+        super(context);
 
         this.ctxRef = new WeakReference<>(context);
         this.strListAdapter = strListAdapter;
@@ -40,9 +40,8 @@ public class StringValueDialog implements android.view.View.OnClickListener {
 
         this.view = LayoutInflater.from(context).inflate(R.layout.dlg_stringvalue, null);
 
-        dialog = new ViewDialog(context);
-        dialog.setTitle(R.string.edit_string_value);
-        dialog.setView(view);
+        setTitle(R.string.edit_string_value);
+        setContentView(view);
 
         // getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -59,19 +58,15 @@ public class StringValueDialog implements android.view.View.OnClickListener {
         cancelBtn.setOnClickListener(this);
     }
 
-    public void show() {
-        dialog.show();
-    }
-
     @Override
     public void onClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.btn_editstring_ok) {
             String newValue = valueEt.getText().toString();
             strListAdapter.checkTextChange(position, newValue);
-            dialog.dismiss();
+            dismiss();
         } else if (id == R.id.btn_editstring_cancel) {
-            dialog.cancel();
+            cancel();
         } else if (id == R.id.menu_clipboard) {
             Context ctx = ctxRef.get();
             String str = keyTv.getText().toString();

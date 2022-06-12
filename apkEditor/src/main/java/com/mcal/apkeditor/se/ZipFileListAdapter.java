@@ -157,9 +157,8 @@ public class ZipFileListAdapter extends BaseAdapter implements
             // extraStr is the source file/directory
             public void fileSelectedInDialog(
                     String filePath, String extraStr, boolean openFile) {
-                FileCopyDialog dlg = new FileCopyDialog(
-                        ctxRef.get(), zipFilePath, null, null, sources, filePath);
-                dlg.show();
+                FileCopyDialog d = new FileCopyDialog(ctxRef.get(), zipFilePath, null, null, sources, filePath);
+                d.show();
             }
 
             @Override
@@ -215,7 +214,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
     public void afterProcess() {
         if (convertSucceed) {
             String apkPath = (zipHelper != null ? zipHelper.getFilePath() : null);
-            Intent intent = TextEditor.getEditorIntent(ctx, decodedXmlPath, apkPath);
+            Intent intent = TextEditor.getSoraEditor(ctx, decodedXmlPath, apkPath);
             ActivityUtils.attachParam(intent, "displayFileName", clickedEntryPath);
             ActivityUtils.attachParam(intent, "extraString", clickedEntryPath);
             ctx.startActivityForResult(intent, 0);

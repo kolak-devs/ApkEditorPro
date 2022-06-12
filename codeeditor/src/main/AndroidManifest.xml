@@ -1,1 +1,17 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+
+        <profileable android:shell="true"
+            tools:targetApi="q" />
+
+        <activity
+            android:name=".editor2.EditorActivity"
+            android:exported="false"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize"/>
+
+    </application>
+
+</manifest>

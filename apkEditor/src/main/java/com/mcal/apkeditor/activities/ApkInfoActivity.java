@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.App.context;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
@@ -54,6 +56,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 
+import com.developer.filepicker.model.DialogConfigs;
+import com.developer.filepicker.model.DialogProperties;
+import com.developer.filepicker.view.FilePickerDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.androlib.KXmlSerializer;
 import com.mcal.androlib.LanguageMapping;
@@ -102,6 +107,7 @@ import com.mcal.common.utils.PathUtils;
 import com.mcal.common.utils.PreferenceUtils;
 import com.mcal.common.utils.RandomUtils;
 import com.mcal.common.utils.SDCard;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ServiceUtil;
 import com.mcal.common.utils.TextFileReader;
 import com.mcal.common.utils.UriUtils;
@@ -2840,7 +2846,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             return;
         }
 
-        Intent intent = TextEditor.getEditorIntent(this, filePath, this.apkPath);
+        Intent intent = TextEditor.getSoraEditor(this, filePath, this.apkPath);
         ActivityUtils.attachParam(intent, "syntaxFileName", syntaxFileName);
         if (displayFileName != null) {
             ActivityUtils.attachParam(intent, "displayFileName", displayFileName);
@@ -2873,8 +2879,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                                     item -> {
                                         List<Integer> positions = new ArrayList<>(1);
                                         positions.add(position);
-                                        resListAdapter
-                                                .deleteFile(positions);
+                                        resListAdapter.deleteFile(positions);
                                         resListAdapter.dumpChangedFiles();
                                         return true;
                                     });
@@ -2888,6 +2893,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                                         List<Integer> positions = new ArrayList<>(1);
                                         positions.add(position);
                                         extractFileOrDir(positions);
+                                        // todo
                                         return true;
                                     });
                         }
@@ -2965,7 +2971,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
             result.add(src);
         }
-
         return result;
     }
 
@@ -2996,9 +3001,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
             // extraStr is the source file/directory
             public void fileSelectedInDialog(
                     String filePath, String extraStr, boolean openFile) {
-                FileCopyDialog dlg = new FileCopyDialog(ApkInfoActivity.this,
-                        apkPath, decodeRootPath, fileEntry2ZipEntry, sources, filePath);
-                dlg.show();
+                FileCopyDialog d = new FileCopyDialog(ApkInfoActivity.this, apkPath, decodeRootPath, fileEntry2ZipEntry, sources, filePath);
+                d.show();
             }
 
             @Override
@@ -3116,8 +3120,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         IFileSelection callback = new IFileSelection() {
             @Override
-            public void fileSelectedInDialog(
-                    String filePath, String extraStr, boolean openFile) {
+            public void fileSelectedInDialog(String filePath, String extraStr, boolean openFile) {
                 String decodedPath = extraStr;
                 String workingDir = SDCard.getRootDirectory() + "/ApkEditor/tmp";
                 // Selected path contains working dir
@@ -3150,8 +3153,16 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 return String.format(message, replaced, filePath);
             }
         };
-        new FileSelectDialog(this, callback, null,
-                dirPath + "/" + rec.fileName, dlgTitle, true, true, false, null);
+
+        new FileSelectDialog(this, callback, null, dirPath + "/" + rec.fileName, dlgTitle, true, true, false, null);
+    }
+
+    public DialogProperties x509Properties() {
+        DialogProperties properties = new DialogProperties();
+        properties.selection_mode = DialogConfigs.SINGLE_MODE;
+        properties.selection_type = DialogConfigs.FILE_SELECT;
+        properties.root = new File(ScopedStorage.getStorageDirectory().getAbsolutePath());
+        return properties;
     }
 
     // To add a file in current directory

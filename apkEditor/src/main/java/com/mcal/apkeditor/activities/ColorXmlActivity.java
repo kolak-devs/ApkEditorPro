@@ -171,7 +171,7 @@ public class ColorXmlActivity extends CustomizedLangActivity
         String syntaxFileName = "xml.xml";
         String displayFileName = "colors.xml";
 
-        Intent intent = TextEditor.getEditorIntent(this, this.xmlPath, null);
+        Intent intent = TextEditor.getSoraEditor(this, this.xmlPath, null);
         ActivityUtils.attachParam(intent,
                 "syntaxFileName", syntaxFileName);
         if (displayFileName != null) {

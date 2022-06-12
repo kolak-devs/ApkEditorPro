@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.utils;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +10,11 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.ClipboardUtils;
 
 import java.lang.ref.WeakReference;
 
-public class DebugDialog extends ViewDialog implements View.OnClickListener {
+public class DebugDialog extends Dialog implements View.OnClickListener {
     private final EditText logEt;
     private final Button closeBtn;
 
@@ -27,8 +27,8 @@ public class DebugDialog extends ViewDialog implements View.OnClickListener {
         this.contextRef = new WeakReference<>(context);
 
         View layout = LayoutInflater.from(context).inflate(R.layout.dialog_debug, null);
-        this.logEt = (EditText) layout.findViewById(R.id.et_log);
-        this.closeBtn = (Button) layout.findViewById(R.id.btn_close);
+        this.logEt = layout.findViewById(R.id.et_log);
+        this.closeBtn = layout.findViewById(R.id.btn_close);
         closeBtn.setOnClickListener(this);
         layout.findViewById(R.id.btn_copy).setOnClickListener(this);
 

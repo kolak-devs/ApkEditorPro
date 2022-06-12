@@ -2,7 +2,6 @@ package com.mcal.apkeditor.dialogs;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,18 +42,10 @@ public class LinesOpDialogHelper {
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
-        d.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
+        d.setOnShowListener(dialog -> {
 
-                Button b = d.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        positiveBtnClicked();
-                    }
-                });
-            }
+            Button b = d.getButton(AlertDialog.BUTTON_POSITIVE);
+            b.setOnClickListener(view -> positiveBtnClicked());
         });
 
         this.d.show();

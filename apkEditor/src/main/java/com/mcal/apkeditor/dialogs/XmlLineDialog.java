@@ -12,11 +12,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.view.ViewDialog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,7 +33,6 @@ public class XmlLineDialog implements
     private final LinkedHashMap<String, String> keyValues;
     private final Context ctx;
     private final LinearLayout keyValueLayout;
-    private final ViewDialog dialog;
     // Record all the value edit text
     List<EditText> valueEtList;
     private String tag;
@@ -41,8 +41,10 @@ public class XmlLineDialog implements
     // extraContent
     private String extraContent;
     // Dialog to add a key/value
-    private ViewDialog keyValueDlg;
+    private AlertDialog keyValueDlg;
     private View keyValueView;
+
+    private AlertDialog dialog;
 
     public XmlLineDialog(Context ctx, IXmlLineChanged changeListener,
                          int lineIndex, @NonNull String lineContent) {
@@ -116,12 +118,9 @@ public class XmlLineDialog implements
             imageView.setOnClickListener(this);
         }
 
-        dialog = new ViewDialog(ctx);
-        dialog.setTitle(lineContent);
-        dialog.setView(view);
-    }
-
-    public void show() {
+        dialog = new MaterialAlertDialogBuilder(ctx)
+                .setView(view)
+                .create();
         dialog.show();
     }
 
@@ -154,7 +153,7 @@ public class XmlLineDialog implements
         }
         // To add a key/value to this line
         else if (id == R.id.hidden_image) {
-            this.keyValueDlg = new ViewDialog(ctx);
+            this.keyValueDlg = new MaterialAlertDialogBuilder(ctx).create();
 
             View view = LayoutInflater.from(ctx).inflate(R.layout.dlg_addkeyvalue, null);
             Button okBtn = view.findViewById(R.id.btn_addkeyvalue_ok);

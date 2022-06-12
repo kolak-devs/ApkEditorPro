@@ -11,6 +11,7 @@ import com.mcal.apkeditor.activities.SettingEditorActivity;
 import com.mcal.apkeditor.activities.TextEditBigActivity;
 import com.mcal.apkeditor.activities.TextEditNormalActivity;
 import com.mcal.common.utils.ActivityUtils;
+import com.mcal.neweditor.editor2.EditorActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,13 +30,28 @@ public class TextEditor {
     }
 
 
-    @NonNull
+    /*@NonNull
     public static Intent getEditorIntent(Context ctx, String filepath, String apkPath) {
         Intent intent;
         if (isBigFile(ctx, filepath)) {
             intent = new Intent(ctx, TextEditBigActivity.class);
         } else {
             intent = new Intent(ctx, TextEditNormalActivity.class);
+        }
+        ActivityUtils.attachParam(intent, "xmlPath", filepath);
+        if (apkPath != null) {
+            ActivityUtils.attachParam(intent, "apkPath", apkPath);
+        }
+        return intent;
+    }*/
+
+    @NonNull
+    public static Intent getSoraEditor(Context ctx, String filepath, String apkPath) {
+        Intent intent;
+        if (isBigFile(ctx, filepath)) {
+            intent = new Intent(ctx, EditorActivity.class);
+        } else {
+            intent = new Intent(ctx, EditorActivity.class);
         }
         ActivityUtils.attachParam(intent, "xmlPath", filepath);
         if (apkPath != null) {

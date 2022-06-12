@@ -2,6 +2,7 @@ package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.SmaliMethodAdapter;
 import com.mcal.apkeditor.SmaliMethodInfo;
-import com.mcal.apkeditor.view.ViewDialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,12 +26,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // Popup window helper
-public class SmaliMethodsDialogs {
+public class SmaliMethodsDialogs extends Dialog {
     private final WeakReference<ISmaliMethodClicked> callbackRef;
-
+    private Activity mActivity;
     private String methodComputedFrom; // Record the method is from which file
 
-    public SmaliMethodsDialogs(ISmaliMethodClicked callback) {
+    public SmaliMethodsDialogs(Activity activity, ISmaliMethodClicked callback) {
+        super(activity);
+        mActivity = activity;
         callbackRef = new WeakReference<>(callback);
     }
 
@@ -39,8 +41,9 @@ public class SmaliMethodsDialogs {
         return methodComputedFrom;
     }
 
-    private void createPopWindow(@NonNull Activity activity, String smaliFile,
+    private void createPopWindow(String smaliFile,
                                  final List<SmaliMethodInfo> methodList) {
+        final Activity activity = mActivity;
         this.methodComputedFrom = smaliFile;
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
@@ -56,11 +59,10 @@ public class SmaliMethodsDialogs {
                 activity.getApplicationContext(), methodList);
         methodLv.setAdapter(adapter);
 
-        ViewDialog dialog = new ViewDialog(activity);
-        dialog.setTitle("Methods");
-        dialog.setView(ll);
-        dialog.setPositive("Ok", null);
-        dialog.show();
+        setTitle("Methods");
+        setContentView(ll);
+        //setPositive("Ok", null);
+        show();
 
         methodLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -71,9 +73,7 @@ public class SmaliMethodsDialogs {
                     if (callbackRef.get() != null) {
                         callbackRef.get().gotoLine(info.lineIndex + 1);
                     }
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+                    dismiss();
                 }
             }
         });
@@ -164,7 +164,7 @@ public class SmaliMethodsDialogs {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            createPopWindow(activityRef.get(), smaliFile, methodList);
+            createPopWindow(smaliFile, methodList);
         }
     }
 }

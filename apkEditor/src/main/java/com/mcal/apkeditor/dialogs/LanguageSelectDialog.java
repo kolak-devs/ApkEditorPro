@@ -1,6 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,24 +15,23 @@ import androidx.annotation.NonNull;
 import com.mcal.androlib.LanguageMapping;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.apkeditor.view.ViewDialog;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-public class LanguageSelectDialog implements
+public class LanguageSelectDialog extends Dialog implements
         android.view.View.OnClickListener {
 
     private final WeakReference<ApkInfoActivity> activityRef;
     private final View contentView;
     private final EditText codeEt;
     private final boolean isAutoTranslate;
-    private final ViewDialog dialog;
     private String[] codes;
     private String[] languages;
 
     @SuppressLint("InflateParams")
     public LanguageSelectDialog(ApkInfoActivity activity, String[] _lang, String[] _codes, String resId) {
+        super(activity);
 
         this.languages = _lang;
         this.codes = _codes;
@@ -41,10 +41,9 @@ public class LanguageSelectDialog implements
         this.contentView = activity.getLayoutInflater().inflate(
                 R.layout.dlg_selectlanguage, null, false);
 
-        dialog = new ViewDialog(activity);
-        dialog.setTitle(resId);
-        dialog.setView(contentView);
-        dialog.show();
+        setTitle(resId);
+        setContentView(contentView);
+        show();
 
         this.codeEt = contentView.findViewById(R.id.language_code);
         if (isAutoTranslate) { // Do not allow to modify
@@ -126,14 +125,14 @@ public class LanguageSelectDialog implements
             String strCode = codeEt.getText().toString();
             if (this.isAutoTranslate) {
                 translateLanguage(strCode);
-                dialog.dismiss();
+                dismiss();
             } else {
                 if (addLanguage(strCode)) {
-                    dialog.dismiss();
+                    dismiss();
                 }
             }
         } else if (id == R.id.btn_addlang_cancel) {
-            dialog.dismiss();
+            dismiss();
         }
     }
 

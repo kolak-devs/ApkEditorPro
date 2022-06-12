@@ -1,6 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -17,9 +18,7 @@ import com.mcal.apkeditor.activities.TextEditNormalActivity;
 import com.mcal.apkeditor.utils.Smali2Html;
 import com.mcal.apkeditor.utils.ValuesXml2Html;
 import com.mcal.apkeditor.utils.Xml2Html;
-import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.IOUtils;
-import com.mcal.common.utils.TextFileReader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,14 +29,14 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class HtmlViewDialog extends ViewDialog implements
+public class HtmlViewDialog extends Dialog implements
         View.OnClickListener, SmaliMethodsDialogs.ISmaliMethodClicked {
 
     private final WeakReference<Activity> activityRef;
     @NonNull
     private final MyHandler handler = new MyHandler(this);
-    @NonNull
-    private final SmaliMethodsDialogs popupWindowHelper = new SmaliMethodsDialogs(this);
+    //    @NonNull
+//    private final SmaliMethodsDialogs popupWindowHelper = new SmaliMethodsDialogs(this);
     private AppCompatTextView filenameTv;
     private View methodMenu;
     private WebView webView;
@@ -193,12 +192,12 @@ public class HtmlViewDialog extends ViewDialog implements
 
     private void showPopWindow() {
         // The popup window is initialized
-        try {
-            String content = new TextFileReader(filePath).getContents();
-            popupWindowHelper.asyncShowPopup(activityRef.get(), filePath, content);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String content = new TextFileReader(filePath).getContents();
+//            popupWindowHelper.asyncShowPopup(activityRef.get(), filePath, content);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     private static class MyHandler extends Handler {

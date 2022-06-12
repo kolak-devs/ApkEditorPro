@@ -1,6 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.AsyncTask;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -26,7 +27,6 @@ import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.ResSelectionChangeListener;
 import com.mcal.apkeditor.SomethingChangedListener;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.apkeditor.view.ViewDialog;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 // This activity is called from ApkInfoActivity::searchInResourceFiles
-public class SearchFilenameDialog implements
+public class SearchFilenameDialog extends Dialog implements
         android.view.View.OnClickListener, ResSelectionChangeListener,
         OnItemClickListener, OnItemLongClickListener {
 
@@ -58,11 +58,11 @@ public class SearchFilenameDialog implements
     private View doneMenu;
     private View selectMenu;
     // Record matched files
-    private ArrayList<String> matchedFiles = new ArrayList<String>();
-    private ViewDialog dialog;
+    private ArrayList<String> matchedFiles = new ArrayList<>();
 
     public SearchFilenameDialog(ApkInfoActivity activity, String searchFolder,
                                 List<String> filenameList, String keyword, boolean caseSensitive) {
+        super(activity);
         this.activityRef = new WeakReference<>(activity);
         this.searchFolder = searchFolder;
         this.filenameList = filenameList;
@@ -100,10 +100,9 @@ public class SearchFilenameDialog implements
         // Start searching task
         new AsyncFolderSearchTask(searchFolder, filenameList, keyword).execute();
 
-        dialog = new ViewDialog(activity);
-        dialog.setTitle("Search");
-        dialog.setView(view);
-        dialog.show();
+        setTitle("Search");
+        setContentView(view);
+        show();
     }
 
     private void showMatchedFiles() {
@@ -127,7 +126,7 @@ public class SearchFilenameDialog implements
     public void onClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.btn_close) {
-            dialog.dismiss();
+            dismiss();
         } else if (id == R.id.btn_delete) {
             deleteSelectedFiles();
         } else if (id == R.id.menu_done) {

@@ -348,10 +348,9 @@ public class ManifestListAdapter extends BaseAdapter implements
         }
 
         if (lineRec != null) {
-            XmlLineDialog dlg = new XmlLineDialog(
+            new XmlLineDialog(
                     activityRef.get(),
                     ManifestListAdapter.this, lineRec.lineIndex, lineRec.lineData);
-            dlg.show();
         }
     }
 

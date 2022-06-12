@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.dialogs;
 
+import android.app.Dialog;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -24,7 +25,6 @@ import com.mcal.apkeditor.ce.ManifestParser;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.patch.IPatchContext;
 import com.mcal.apkeditor.patch.PatchExecutor;
-import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.IOUtils;
 import com.mcal.common.utils.SDCard;
 import com.mcal.patchview.ui.CodeText;
@@ -45,7 +45,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 // Dialog used for patch applying
-public class PatchDialog
+public class PatchDialog extends Dialog
         implements android.view.View.OnClickListener, IPatchContext {
 
     private final WeakReference<ApkInfoActivity> activityRef;
@@ -64,9 +64,9 @@ public class PatchDialog
     private ManifestInfo manifestInfo;
     // Record executor as the parse is done there
     private PatchExecutor patchExecutor;
-    private ViewDialog dialog;
 
     public PatchDialog(ApkInfoActivity activity) {
+        super(activity);
 
         this.activityRef = new WeakReference<>(activity);
 
@@ -93,20 +93,15 @@ public class PatchDialog
         this.logLayout = view.findViewById(R.id.log_layout);
         this.logTv = view.findViewById(R.id.tv_patchlog);
 
-        dialog = new ViewDialog(activity);
-        dialog.setTitle(R.string.patch_capital);
-        dialog.setView(view);
-    }
-
-    public void show() {
-        dialog.show();
+        setTitle(R.string.patch_capital);
+        setContentView(view);
     }
 
     @Override
     public void onClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.btn_close) {
-            dialog.dismiss();
+            dismiss();
         }
         // Click on current patch
         else if (id == R.id.tv_curpatch) {

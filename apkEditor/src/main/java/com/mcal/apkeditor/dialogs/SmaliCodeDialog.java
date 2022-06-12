@@ -2,6 +2,7 @@ package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -19,7 +20,6 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.IOUtils;
 
 import java.io.Closeable;
@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 
-public class SmaliCodeDialog
+public class SmaliCodeDialog extends Dialog
         implements android.view.View.OnClickListener {
     static int[] smaliNameIds = {R.string.show_a_toast, R.string.log_a_message,
             R.string.dump_a_value, R.string.print_stack_trace};
@@ -54,10 +54,10 @@ public class SmaliCodeDialog
     boolean isPro;
     private Spinner spinner;
     private EditText codeEt;
-    private ViewDialog dialog;
 
     // filePath: The path for current editing file
     public SmaliCodeDialog(Activity activity, String filePath) {
+        super(activity);
 
         this.activityRef = new WeakReference<>(activity);
         this.isPro = BuildConfig.IS_PRO;
@@ -120,13 +120,8 @@ public class SmaliCodeDialog
         Button closeBtn = view.findViewById(R.id.btn_close);
         closeBtn.setOnClickListener(this);
 
-        dialog = new ViewDialog(activity);
-        dialog.setTitle("Smali Code");
-        dialog.setView(view);
-    }
-
-    public void show() {
-        dialog.show();
+        setTitle("Smali Code");
+        setContentView(view);
     }
 
     protected void updateSmaliCode(int position) {
@@ -139,7 +134,7 @@ public class SmaliCodeDialog
     public void onClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.btn_close) {
-            dialog.dismiss();
+            dismiss();
         } else if (id == R.id.btn_copy) {
             // Copy to clipboard
             Activity activity = activityRef.get();

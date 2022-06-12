@@ -348,7 +348,7 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter
                 } else {
                     String filePath = filePathList.get(index);
                     ApkInfoActivity activity = activityRef.get();
-                    intent = TextEditor.getEditorIntent(activity, filePath, activity.getApkPath());
+                    intent = TextEditor.getSoraEditor(activity, filePath, activity.getApkPath());
                 }
 
                 ActivityUtils.attachParam(intent, "searchString", keyword);

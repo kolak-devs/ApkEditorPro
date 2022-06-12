@@ -93,7 +93,7 @@ public class ApkComposeFailAdapter extends BaseAdapter {
                 final int lineIndex = lineNum;
                 holder.viewBtn.setOnClickListener(v -> {
                     ApkComposeActivity activity = activityRef.get();
-                    Intent intent = TextEditor.getEditorIntent(activity, filePath, activity.srcApkPath);
+                    Intent intent = TextEditor.getSoraEditor(activity, filePath, activity.srcApkPath);
                     if (lineIndex > 0) {
                         ActivityUtils.attachParam(intent, "startLine", "" + lineIndex);
                     }

@@ -1,21 +1,16 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
-import android.view.LayoutInflater;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatTextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.SettingActivity;
-import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.FileUtils;
-import com.mcal.common.utils.SDCard;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ZipUtils;
 
 import java.io.File;
@@ -26,8 +21,7 @@ import java.util.Map;
 
 // Used for extract function
 // It can copy from srcPath to dstPath
-public class FileCopyDialog extends ViewDialog implements
-        android.view.View.OnClickListener {
+public class FileCopyDialog {
 
     // Source and target
     private final List<CopySource> copySources;
@@ -40,24 +34,19 @@ public class FileCopyDialog extends ViewDialog implements
     // Get real entry in apk by entry name
     private final Map<String, String> entryMapping;
 
-    private final MyHandler handler = new MyHandler(this);
-
-    private View view;
-
-    private String succeedStr;
-    private String failedStr;
+    private final MyHandler handler;
 
     // File will automatically renamed(0) or overwrite
     private int fileRenameOption;
 
     // The real target path of the copied file/dir
     private String savedFilePath;
+    private MaterialAlertDialogBuilder materialDialog;
 
     // This constructor means may copy from file, and may copy from zip
     public FileCopyDialog(Context context, String filePath,
                           String targetFolder, String apkPath, String decodeRootPath,
                           Map<String, String> entryMapping, int unused) {
-        super(context);
 
         CopySource source = new CopySource();
         source.path = filePath;
@@ -73,8 +62,10 @@ public class FileCopyDialog extends ViewDialog implements
         if (targetFolder != null) {
             this.targetFolder = targetFolder;
         } else {
-            this.targetFolder = SDCard.getRootDirectory() + "/ApkEditor";
+            this.targetFolder = ScopedStorage.getExternalStoragePath() + "/ApkEditor";
         }
+
+        handler = new MyHandler(context, this);
 
         init(context);
     }
@@ -82,7 +73,6 @@ public class FileCopyDialog extends ViewDialog implements
     public FileCopyDialog(Context context, String apkPath,
                           String decodeRootPath, Map<String, String> fileEntry2ZipEntry,
                           List<CopySource> copySources, String targetFolder) {
-        super(context);
 
         this.apkPath = apkPath;
         this.decodeRootPath = decodeRootPath;
@@ -90,7 +80,9 @@ public class FileCopyDialog extends ViewDialog implements
         this.copySources = copySources;
         this.targetFolder = targetFolder;
 
-        init(context.getApplicationContext());
+        handler = new MyHandler(context, this);
+
+        init(context);
     }
 
     @NonNull
@@ -134,63 +126,50 @@ public class FileCopyDialog extends ViewDialog implements
     private void init(Context context) {
         this.fileRenameOption = SettingActivity.getFileRenameOption(context);
 
-        Resources res = context.getResources();
-        this.succeedStr = res.getString(R.string.save_succeed_1);
-        this.failedStr = res.getString(R.string.failed_1);
-
-        this.view = LayoutInflater.from(context).inflate(R.layout.dlg_extractres, null);
-
-        setTitle("Copying");
-        setView(view);
-
-        AppCompatButton closeBtn = view.findViewById(R.id.close_button);
-        closeBtn.setOnClickListener(this);
+        materialDialog = new MaterialAlertDialogBuilder(context);
+        materialDialog.setPositiveButton(android.R.string.ok, null);
     }
 
     // File copy succeed
-    public void succeed() {
-        AppCompatTextView resultTv = view.findViewById(R.id.result_tv);
+    public void succeed(Context context) {
 
         // When just copy one file, show the full path
         if (copySources.size() == 1) {
-            resultTv.setText(String.format(succeedStr, savedFilePath));
+            materialDialog.setMessage(String.format(context.getString(R.string.save_succeed_1), savedFilePath));
         } else {
-            resultTv.setText(String.format(succeedStr, targetFolder));
+            materialDialog.setMessage(String.format(context.getString(R.string.save_succeed_1), targetFolder));
         }
-
-        view.findViewById(R.id.layout_done).setVisibility(View.VISIBLE);
     }
 
     // File copy failed
-    public void failed(String msg) {
-        AppCompatTextView resultTv = view.findViewById(R.id.result_tv);
-        resultTv.setText(String.format(failedStr, msg));
-
-        view.findViewById(R.id.layout_done).setVisibility(View.VISIBLE);
+    public void failed(@NonNull Context context, String msg) {
+        materialDialog.setMessage(String.format(context.getString(R.string.failed_1), msg));
     }
 
     // Start file copy thread and show the dialog
     public void show() {
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    for (CopySource source : copySources) {
-                        // The file/directory already decoded
-                        if (!source.isInApk) {
-                            copyFiles(source);
-                        } else {
-                            extractFiles(source);
-                        }
+        new Thread(() -> {
+            try {
+                for (CopySource source : copySources) {
+                    // The file/directory already decoded
+                    if (!source.isInApk) {
+                        copyFiles(source);
+                    } else {
+                        extractFiles(source);
                     }
-                    handler.sendEmptyMessage(0);
-                } catch (Exception e) {
-                    handler.setErrorMessage(e.getMessage());
-                    handler.sendEmptyMessage(1);
                 }
+                handler.sendEmptyMessage(0);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        materialDialog.show();
+                    }
+                });
+            } catch (Exception e) {
+                handler.setErrorMessage(e.getMessage());
+                handler.sendEmptyMessage(1);
             }
-        }.start();
-        super.show();
+        }).start();
     }
 
     // To extract file/directory from the apk/zip file
@@ -291,14 +270,6 @@ public class FileCopyDialog extends ViewDialog implements
         }
     }
 
-    @Override
-    public void onClick(@NonNull View v) {
-        int id = v.getId();
-        if (id == R.id.close_button) {
-            dismiss();
-        }
-    }
-
     public static class CopySource {
         public String path; // File path or entry path
         public boolean isDir;
@@ -307,9 +278,11 @@ public class FileCopyDialog extends ViewDialog implements
 
     private static class MyHandler extends Handler {
         private final WeakReference<FileCopyDialog> dlgRef;
+        private final Context mContext;
         private String errMsg;
 
-        public MyHandler(FileCopyDialog dlg) {
+        public MyHandler(Context context, FileCopyDialog dlg) {
+            mContext = context;
             this.dlgRef = new WeakReference<>(dlg);
         }
 
@@ -325,10 +298,10 @@ public class FileCopyDialog extends ViewDialog implements
             }
             switch (msg.what) {
                 case 0:
-                    dlg.succeed();
+                    dlg.succeed(mContext);
                     break;
                 case 1:
-                    dlg.failed(errMsg);
+                    dlg.failed(mContext, errMsg);
                     break;
             }
         }

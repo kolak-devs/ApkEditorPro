@@ -144,7 +144,7 @@ public class SearchTextDialog extends Dialog
         if (filePathList.size() > 100) {
             String filePath = filePathList.get(groupPos);
             ApkInfoActivity activity = activityRef.get();
-            intent = TextEditor.getEditorIntent(activity, filePath, activity.getApkPath());
+            intent = TextEditor.getSoraEditor(activity, filePath, activity.getApkPath());
             ActivityUtils.attachParam(intent, "startLine", "" + item.lineIndex);
         } else {
             ApkInfoActivity activity = activityRef.get();

@@ -122,6 +122,7 @@ android {
 //        resources.excludes += 'google/protobuf/*'
 //        resources.excludes += 'junit/*'
         resources.excludes += 'keys/*'
+        resources.excludes += 'license/*'
 //        resources.excludes += 'kotlin/*'
 //        resources.excludes += 'org/conscrypt/*'
 //        resources.excludes += 'properties/*'
@@ -176,6 +177,7 @@ dependencies {
 
     implementation 'com.google.guava:guava:31.1-android'
     implementation 'org.antlr:antlr-runtime:3.5.2'
+    implementation project(path: ':filepicker')
 
     //coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }

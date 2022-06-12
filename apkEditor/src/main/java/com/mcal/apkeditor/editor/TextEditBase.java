@@ -584,7 +584,7 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
                         return;
                     }
 
-                    Intent intent = TextEditor.getEditorIntent(TextEditBase.this, path, null);
+                    Intent intent = TextEditor.getSoraEditor(TextEditBase.this, path, null);
                     startActivity(intent);
                 } else {
                     Toast.makeText(TextEditBase.this, errMessage, Toast.LENGTH_LONG).show();
@@ -666,6 +666,6 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
     // otherwise directly show it
     protected void showPopWindow(View parent) {
         // The popup window exist and is for current file
-        new SmaliMethodsDialogs(this).asyncShowPopup(this, curFilePath, curDocument.getText());
+//        new SmaliMethodsDialogs(this).asyncShowPopup(this, curFilePath, curDocument.getText());
     }
 }

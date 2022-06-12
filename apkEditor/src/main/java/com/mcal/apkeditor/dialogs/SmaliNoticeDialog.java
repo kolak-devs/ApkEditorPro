@@ -1,6 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.PreferenceUtils;
 
 import java.io.BufferedReader;
@@ -17,28 +17,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class SmaliNoticeDialog implements
+public class SmaliNoticeDialog extends Dialog implements
         android.view.View.OnClickListener {
 
     private final View view;
     private final Context context;
-    private final ViewDialog dialog;
 
     @SuppressLint("InflateParams")
     public SmaliNoticeDialog(Context context) {
+        super(context);
         this.context = context;
 
         this.view = LayoutInflater.from(context).inflate(R.layout.dlg_smali_license, null);
 
-        dialog = new ViewDialog(context);
-        dialog.setTitle(R.string.notice_capital);
-        dialog.setView(view);
+        setTitle(R.string.notice_capital);
+        setContentView(view);
 
         initView();
-    }
-
-    public void show() {
-        dialog.show();
     }
 
     private void initView() {
@@ -60,6 +55,7 @@ public class SmaliNoticeDialog implements
                 try {
                     in.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -77,6 +73,6 @@ public class SmaliNoticeDialog implements
         if (cb.isChecked()) {
             PreferenceUtils.setBoolean(context, "smali_license_showed", true);
         }
-        dialog.dismiss();
+        dismiss();
     }
 }

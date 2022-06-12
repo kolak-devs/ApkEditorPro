@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.ui;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
-import com.mcal.apkeditor.view.ViewDialog;
 import com.mcal.common.utils.InputUtils;
 
 import java.io.File;
@@ -20,11 +20,10 @@ import java.lang.ref.WeakReference;
 
 
 // Create a new directory or import a directory
-public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.IFileSelection {
+public class AddFolderDialog extends Dialog implements View.OnClickListener, FileSelectDialog.IFileSelection {
     private final AddFolderCallback callback;
     private final WeakReference<Context> contextRef;
     private final boolean showImportFolder;
-    private final ViewDialog dialog;
     private final View view;
     private View newDivider;
     private View importDivider;
@@ -38,6 +37,7 @@ public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.I
     private boolean addFolder = true;
 
     public AddFolderDialog(final Context context, AddFolderCallback callback, boolean showImportFolder) {
+        super(context);
 
         this.contextRef = new WeakReference<>(context);
         this.callback = callback;
@@ -45,15 +45,10 @@ public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.I
 
         view = LayoutInflater.from(context).inflate(R.layout.dlg_add_folder, null);
 
-        dialog = new ViewDialog(context);
-        dialog.setTitle("New");
-        dialog.setView(view);
+        setTitle("New");
+        setContentView(view);
 
         init();
-    }
-
-    public void show() {
-        dialog.show();
     }
 
     @Override
@@ -106,7 +101,7 @@ public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.I
         } else if (id == R.id.tv_import_folder) {
             showImportFolderView();
         } else if (id == R.id.btn_cancel) {
-            dialog.dismiss();
+            dismiss();
         } else if (id == R.id.btn_confirm) {
             confirm();
         } else if (id == R.id.btn_browse) {
@@ -134,7 +129,7 @@ public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.I
                         R.string.empty_input_tip, Toast.LENGTH_LONG).show();
             } else {
                 callback.addFolder(name);
-                dialog.dismiss();
+                dismiss();
             }
         }
         // To import a folder
@@ -150,7 +145,7 @@ public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.I
                 Toast.makeText(contextRef.get(), message, Toast.LENGTH_LONG).show();
             } else {
                 callback.importFolder(path);
-                dialog.dismiss();
+                dismiss();
             }
         }
     }
