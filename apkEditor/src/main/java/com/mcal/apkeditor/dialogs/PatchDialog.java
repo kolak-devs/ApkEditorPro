@@ -1,6 +1,5 @@
 package com.mcal.apkeditor.dialogs;
 
-import android.app.Dialog;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -11,13 +10,17 @@ import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.ce.ManifestInfo;
@@ -45,18 +48,16 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 // Dialog used for patch applying
-public class PatchDialog extends Dialog
-        implements android.view.View.OnClickListener, IPatchContext {
-
+public class PatchDialog implements android.view.View.OnClickListener, IPatchContext {
     private final WeakReference<ApkInfoActivity> activityRef;
     // Record all the global parameter values
     private final Map<String, String> globalVariableValues = new HashMap<String, String>();
     private String exampleDir = null;
     private String patchPath = null;
-    private AppCompatTextView curPatchTv;
-    private AppCompatTextView patchPathTv;
-    private AppCompatTextView saveExamplesTv;
-    private AppCompatButton selectApplyBtn;
+    private TextView curPatchTv;
+    private TextView patchPathTv;
+    private TextView saveExamplesTv;
+    private Button selectApplyBtn;
     private WebView webView;
     private View logLayout;
     private CodeText logTv;
@@ -66,10 +67,7 @@ public class PatchDialog extends Dialog
     private PatchExecutor patchExecutor;
 
     public PatchDialog(ApkInfoActivity activity) {
-        super(activity);
-
-        this.activityRef = new WeakReference<>(activity);
-
+        activityRef = new WeakReference<>(activity);
         init(activity);
     }
 
@@ -93,15 +91,20 @@ public class PatchDialog extends Dialog
         this.logLayout = view.findViewById(R.id.log_layout);
         this.logTv = view.findViewById(R.id.tv_patchlog);
 
-        setTitle(R.string.patch_capital);
-        setContentView(view);
+        materialDialog = new MaterialAlertDialogBuilder(activity)
+                .setView(view)
+                .create();
+
+        materialDialog.show();
     }
+
+    private AlertDialog materialDialog;
 
     @Override
     public void onClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.btn_close) {
-            dismiss();
+            materialDialog.dismiss();
         }
         // Click on current patch
         else if (id == R.id.tv_curpatch) {
@@ -148,7 +151,7 @@ public class PatchDialog extends Dialog
 
     private void initExampleDir() {
         // Check the directory exist or not
-        if (this.exampleDir == null) {
+        if (exampleDir == null) {
             try {
                 exampleDir = SDCard.makeDir(activityRef.get(), "patches");
             } catch (Exception e1) {

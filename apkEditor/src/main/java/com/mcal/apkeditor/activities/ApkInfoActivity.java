@@ -1446,7 +1446,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // Apply a patch
         else if (id == R.id.menu_apply_patch) {
-            new PatchDialog(this).show();
+            new PatchDialog(this);
         }
 
         // Auto translate
