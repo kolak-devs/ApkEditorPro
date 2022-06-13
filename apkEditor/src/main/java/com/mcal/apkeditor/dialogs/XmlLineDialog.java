@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class XmlLineDialog {
-
     private final IXmlLineChanged lineChangeListener;
     private final LinkedHashMap<String, String> keyValues;
     private final Context ctx;
@@ -34,7 +33,7 @@ public class XmlLineDialog {
     // Record all the value edit text
     List<EditText> valueEtList;
     private String tag;
-    private boolean selfClosed = false;
+    private final boolean selfClosed;
     // One line may contain several tags, content after first tag is put into
     // extraContent
     private String extraContent;
@@ -171,13 +170,13 @@ public class XmlLineDialog {
     @NonNull
     private String getLineData() {
         StringBuilder sb = new StringBuilder();
-        sb.append("<" + tag);
+        sb.append("<").append(tag);
         int index = 0;
         for (Entry<String, String> entry : keyValues.entrySet()) {
             String key = entry.getKey();
             EditText et = valueEtList.get(index);
             String newValue = et.getText().toString();
-            sb.append(" " + key + "=\"" + newValue + "\"");
+            sb.append(" ").append(key).append("=\"").append(newValue).append("\"");
             index++;
         }
         if (selfClosed) {
@@ -185,9 +184,7 @@ public class XmlLineDialog {
         } else {
             sb.append(">");
         }
-
         sb.append(extraContent);
-
         return sb.toString();
     }
 
