@@ -461,8 +461,6 @@ public class UserAppActivity extends CustomizedLangActivity implements OnItemCli
                     }
                 }
             }, -1);
-
-            dlg.show();
         } catch (Exception e) {
             e.printStackTrace();
         }

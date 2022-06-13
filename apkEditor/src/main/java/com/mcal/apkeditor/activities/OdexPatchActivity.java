@@ -61,8 +61,7 @@ public class OdexPatchActivity extends AppCompatActivity implements View.OnClick
             new FileSelectDialog(this, this, ".apk", "", null);
         } else if (id == R.id.btn_apply_patch) {
             this.apkPath = apkPathEt.getText().toString();
-            ProcessingDialog dlg = new ProcessingDialog(this, new PatchProcessor(), -1);
-            dlg.show();
+            new ProcessingDialog(this, new PatchProcessor(), -1);
         }
     }
 

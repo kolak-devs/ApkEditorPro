@@ -189,7 +189,7 @@ public class ImageDownloadActivity extends Activity implements ProcessingDialog.
     }
 
     private void downloadImage() {
-        new ProcessingDialog(this, this, -1).show();
+        new ProcessingDialog(this, this, -1);
     }
 
     @Override

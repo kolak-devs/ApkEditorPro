@@ -84,7 +84,7 @@ public class ProjectListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void removeProject(ProjectListAdapter.ItemInfo item) {
-        new ProcessingDialog(this, new ProjectRemover(this, item), -1).show();
+        new ProcessingDialog(this, new ProjectRemover(this, item), -1);
     }
 
     void updateProjectList() {

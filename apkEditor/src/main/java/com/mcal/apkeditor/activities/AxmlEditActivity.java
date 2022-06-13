@@ -117,7 +117,7 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
             if (resultCode == 1) {
                 String filePath = data.getStringExtra("xmlPath");
                 String entryName = data.getStringExtra("extraString");
-                new ProcessingDialog(this, new XmlCompiler(filePath, entryName), -1).show();
+                new ProcessingDialog(this, new XmlCompiler(filePath, entryName), -1);
             }
         }
     }

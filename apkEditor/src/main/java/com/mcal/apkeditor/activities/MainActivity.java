@@ -197,7 +197,7 @@ public class MainActivity extends CustomizedLangActivity implements
 
         // Exit
         AppCompatButton exitButton = this.findViewById(R.id.tv_exit);
-        exitButton.setOnClickListener(v -> new ProcessingDialog(MainActivity.this, MainActivity.this, -1).show());
+        exitButton.setOnClickListener(v -> new ProcessingDialog(MainActivity.this, MainActivity.this, -1));
 
         // Help
         // For APK Parser, use it as 'project'

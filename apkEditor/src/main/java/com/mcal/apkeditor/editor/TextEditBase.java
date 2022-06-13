@@ -590,7 +590,7 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
                     Toast.makeText(TextEditBase.this, errMessage, Toast.LENGTH_LONG).show();
                 }
             }
-        }, -1).show();
+        }, -1);
     }
 
     // Get dex and class name from the file path

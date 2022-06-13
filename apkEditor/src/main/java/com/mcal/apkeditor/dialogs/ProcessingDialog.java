@@ -2,36 +2,38 @@ package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 
 import java.lang.ref.WeakReference;
 
-public class ProcessingDialog extends Dialog implements
-        android.view.View.OnClickListener {
-
-    private final WeakReference<Activity> activityRef;
-    private final ProcessingInterface processor;
+public class ProcessingDialog {
+    private final Activity mActivity;
+    private final ProcessingInterface mProcessor;
     private final int successTipResId;
+    private final AlertDialog materialDialog;
 
     @SuppressLint("InflateParams")
     public ProcessingDialog(Activity activity, ProcessingInterface processor,
                             int okTipResId) {
-        super(activity);
-        this.activityRef = new WeakReference<>(activity);
-        this.processor = processor;
-        this.successTipResId = okTipResId;
+        mActivity = activity;
+        mProcessor = processor;
+        successTipResId = okTipResId;
 
         LayoutInflater inflater = LayoutInflater.from(activity);
-        View layout = inflater.inflate(R.layout.dlg_processing, null);
-        setContentView(layout);
-        setCancelable(false);
+        View view = inflater.inflate(R.layout.dlg_processing, null);
+
+        materialDialog = new MaterialAlertDialogBuilder(activity)
+                .setView(view)
+                .setCancelable(false)
+                .create();
+        materialDialog.show();
 
         // Start processing thread
         ProcessingThread thread = new ProcessingThread(this);
@@ -40,36 +42,25 @@ public class ProcessingDialog extends Dialog implements
 
     // When errMsg == null, means revert succeed
     protected void processCompleted(final String errMsg) {
-        Activity activity = activityRef.get();
+        final Activity activity = mActivity;
         if (activity != null) {
             activity.runOnUiThread(() -> {
                 // Call back to the task which is mainly for UI change
-                processor.afterProcess();
-
+                mProcessor.afterProcess();
                 if (errMsg != null) {
                     showTip("Failed: " + errMsg);
                 } else {
                     showTip(successTipResId);
                 }
-
-                if (ProcessingDialog.this.isShowing()) {
-                    dismissWithoutThrow();
+                if (materialDialog.isShowing()) {
+                    materialDialog.dismiss();
                 }
             });
         }
     }
 
-    // Don't know why occurred, but it appears on google play
-    private void dismissWithoutThrow() {
-        try {
-            dismiss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     protected void showTip(String msg) {
-        Activity activity = activityRef.get();
+        final Activity activity = mActivity;
         if (activity != null) {
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
         }
@@ -77,18 +68,10 @@ public class ProcessingDialog extends Dialog implements
 
     protected void showTip(int resId) {
         if (resId != -1) {
-            Activity activity = activityRef.get();
+            final Activity activity = mActivity;
             if (activity != null) {
                 Toast.makeText(activity, resId, Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    @Override
-    public void onClick(@NonNull View v) {
-        int id = v.getId();
-        if (id == R.id.close_button) {
-            dismissWithoutThrow();
         }
     }
 
@@ -107,16 +90,13 @@ public class ProcessingDialog extends Dialog implements
 
         @Override
         public void run() {
-            String errMsg = null;
-
             ProcessingDialog dlg = dlgRef.get();
             if (dlg != null) {
                 try {
-                    dlg.processor.process();
+                    dlg.mProcessor.process();
                 } catch (Exception e) {
-                    errMsg = e.getMessage();
+                    dlg.processCompleted(e.getMessage());
                 }
-                dlg.processCompleted(errMsg);
             }
         }
     }

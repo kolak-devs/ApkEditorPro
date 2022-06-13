@@ -466,7 +466,6 @@ public class SettingActivity extends PreferenceActivity
                         }
 
                     }, R.string.temp_file_cleaned);
-            dlg.show();
         }
         return false;
     }

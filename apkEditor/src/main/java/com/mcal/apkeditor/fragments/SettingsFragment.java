@@ -230,7 +230,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                             }
 
                         }, R.string.temp_file_cleaned);
-                dlg.show();
                 dialog.cancel();
             });
             builder.setNegativeButton(android.R.string.cancel, null);
@@ -261,7 +260,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                             }
 
                         }, android.R.string.ok);
-                dlg.show();
                 dialog.cancel();
             });
             builder.setNegativeButton(android.R.string.cancel, null);

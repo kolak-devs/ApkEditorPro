@@ -846,7 +846,7 @@ public class ResListAdapter extends BaseAdapter implements
             }
         };
         new ProcessingDialog((Activity) ctxRef.get(), processing,
-                R.string.folder_replaced).show();
+                R.string.folder_replaced);
     }
 
     // Copy all files from srcFolder to dstFolder

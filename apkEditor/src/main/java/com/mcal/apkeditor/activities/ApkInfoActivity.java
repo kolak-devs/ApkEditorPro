@@ -566,7 +566,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             public void afterProcess() {
                 recoverView();
             }
-        }, -1).show();
+        }, -1);
     }
 
     @NonNull
@@ -963,7 +963,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     ApkInfoActivity.this.finish();
                 }
             }
-        }, -1).show();
+        }, -1);
     }
 
     // Save current decoding as project
@@ -1051,7 +1051,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     }
                 }
             }
-        }, -1).show();
+        }, -1);
     }
 
     @Override
@@ -1417,7 +1417,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         else if (id == R.id.imageview_dex2smali) {
             boolean showed = PreferenceUtils.getBoolean(this, "smali_license_showed", false);
             if (!showed) {
-                new SmaliNoticeDialog(this).show();
+                new SmaliNoticeDialog(this);
             }
             decodeDex(null);
         }
@@ -1748,7 +1748,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     resListAdapter.refresh();
                 }
             }
-        }, -1).show();
+        }, -1);
     }
 
     // First check if the build is still ongoing

@@ -896,7 +896,6 @@ public class TextEditNormalActivity extends TextEditBase
                     }
 
                 }, R.string.file_saved);
-        dlg.show();
     }
 
     // Open the search panel

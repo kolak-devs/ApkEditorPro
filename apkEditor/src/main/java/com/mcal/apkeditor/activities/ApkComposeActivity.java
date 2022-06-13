@@ -599,7 +599,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
                     patchTip.setText(errMessage);
                 }
             }
-        }, -1).show();
+        }, -1);
     }
 
     public void buildAgain() {

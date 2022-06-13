@@ -428,8 +428,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
 
     private void editAXML(String entryPath) {
         this.clickedEntryPath = entryPath;
-        ProcessingDialog dlg = new ProcessingDialog(ctx, this, -1);
-        dlg.show();
+        new ProcessingDialog(ctx, this, -1);
     }
 
     private boolean isRootDirectory() {
