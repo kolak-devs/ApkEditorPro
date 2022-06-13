@@ -2081,8 +2081,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     private void initAddLanguageBtn() {
         AppCompatImageButton iv = this.findViewById(R.id.add_language);
-        iv.setOnClickListener(v -> new LanguageSelectDialog(
-                ApkInfoActivity.this, null, null, getString(R.string.select_target_lang)));
+        iv.setOnClickListener(v -> new LanguageSelectDialog(ApkInfoActivity.this, null, null));
     }
 
     // Set the click listener for translate button
@@ -2125,7 +2124,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     public void startNewTranslation() {
         new LanguageSelectDialog(
                 ApkInfoActivity.this, PossibleLanguages.languages,
-                PossibleLanguages.codes, getString(R.string.select_target_lang));
+                PossibleLanguages.codes);
     }
 
     // Save Translated strings

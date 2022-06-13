@@ -2,74 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/language_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="4dip">
+        android:focusable="false"
+        android:text="@string/language" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/language_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/language_spinner"
-            android:layout_marginStart="4dip"
-            android:layout_marginTop="4dip"
-            android:layout_marginEnd="4dip"
-            android:layout_marginBottom="4dip"
-            android:focusable="false"
-            android:text="@string/language" />
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/language_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/language_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/language_tv" />
-
-        <androidx.appcompat.widget.AppCompatEditText
+        <EditText
             android:id="@+id/language_code"
-            android:layout_margin="5dp"
-            android:background="@drawable/background_search"
-            android:gravity="center|left"
-            android:minHeight="45dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/language_spinner"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/language_tv"
+            android:gravity="center|left"
             android:hint="@string/code"
             android:inputType="text"
-            android:maxLines="10" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_addlang_cancel"
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="0.5"
-            android:text="@android:string/cancel" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_addlang_ok"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="0.5"
-            android:text="@android:string/ok" />
-
-    </LinearLayout>
+            android:maxLines="10"
+            android:minHeight="45dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
 
 </LinearLayout>

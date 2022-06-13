@@ -1,6 +1,5 @@
 package com.mcal.apkeditor.dialogs;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -11,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.adapters.IManifestChangeCallback;
@@ -19,6 +17,7 @@ import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.editor.TextEditor;
 import com.mcal.folderlist.util.OpenFiles;
+import com.mcal.patchview.ui.CodeText;
 
 import org.jetbrains.annotations.Contract;
 
@@ -103,23 +102,16 @@ class ManifestDesc {
 
 public class ManifestLongClickDlg {
     private final WeakReference<Activity> activityRef;
-    private final String xmlPath;
     private final LineRecord lineRec;
-    private final IManifestChangeCallback deleteCallbacker;
 
     public ManifestLongClickDlg(Activity activity, String xmlPath,
-                                LineRecord lineRec, IManifestChangeCallback callback) {
+                                @NonNull LineRecord lineRec, IManifestChangeCallback callback) {
         this.activityRef = new WeakReference<>(activity);
-        this.xmlPath = xmlPath;
         this.lineRec = lineRec;
-        this.deleteCallbacker = callback;
-    }
 
-    @SuppressLint("InflateParams")
-    public void showDialog() {
         View view = activityRef.get().getLayoutInflater().inflate(
                 R.layout.dlg_manifestline, null, false);
-        TextView contentTv = view.findViewById(R.id.content);
+        CodeText contentTv = view.findViewById(R.id.content);
         contentTv.setText(lineRec.lineData);
         TextView descTv = view.findViewById(R.id.description);
         String desc = getDescription();
@@ -135,7 +127,7 @@ public class ManifestLongClickDlg {
                 activityRef.get().getString(R.string.close)}, (p112, p2) -> {
             switch (p2) {
                 case 0:
-                    String errMsg = deleteCallbacker.tryToDeleteSection(lineRec);
+                    String errMsg = callback.tryToDeleteSection(lineRec);
                     if (errMsg == null) {
                         p112.dismiss();
                     } else {
@@ -148,7 +140,7 @@ public class ManifestLongClickDlg {
                 case 1:
                     // Select a target folder to extract
                     String dlgTitle = activityRef.get().getString(R.string.select_folder);
-                    IFileSelection callback = new IFileSelection() {
+                    IFileSelection deleteCallback = new IFileSelection() {
                         @Override
                         // filePath is the target directory
                         // extraStr is the source file/directory
@@ -170,8 +162,7 @@ public class ManifestLongClickDlg {
                         }
                     };
 
-                    new FileSelectDialog(
-                            activityRef.get(), callback, null, null,
+                    new FileSelectDialog(activityRef.get(), deleteCallback, null, null,
                             dlgTitle, true, false, false, null);
 
                     p112.dismiss();
@@ -219,141 +210,6 @@ public class ManifestLongClickDlg {
             }
         });
         dialog.show();
-
-        //Resources res = activityRef.get().getResources();
-
-        // Delete button
-        /*TextView deleteTv = view.findViewById(R.id.delete);
-        deleteTv.setClickable(true);
-        deleteTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String errMsg = deleteCallbacker.tryToDeleteSection(lineRec);
-                if (errMsg == null) {
-                    close();
-                } else {
-                    // Prompt the reason of the fail
-                    if (!errMsg.equals("")) {
-                        Toast.makeText(activityRef.get(), errMsg, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });*/
-
-        // extract button
-        /*TextView extractTv = (TextView) view.findViewById(R.id.extract);
-        extractTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Select a target folder to extract
-                String dlgTitle = activityRef.get().getString(R.string.select_folder);
-                IFileSelection callback = new IFileSelection() {
-                    @Override
-                    // filePath is the target directory
-                    // extraStr is the source file/directory
-                    public void fileSelectedInDialog(
-                            String filePath, String extraStr, boolean openFile) {
-                        String targetFolder = filePath;
-                        FileCopyDialog dlg = new FileCopyDialog(
-                                activityRef.get(),
-                                xmlPath, targetFolder, null, null, null, 0);
-                        dlg.show();
-                    }
-
-                    @Override
-                    public boolean isInterestedFile(String filename, String extraStr) {
-                        return true;
-                    }
-
-                    @Override
-                    public String getConfirmMessage(String filePath, String extraStr) {
-                        return null;
-                    }
-                };
-
-                FileSelectDialog dlg = new FileSelectDialog(
-                        activityRef.get(), callback, null, null,
-                        dlgTitle, true, false, false, null);
-                dlg.show();
-
-                close();
-            }
-        });*/
-
-        // Replace button
-        /*TextView replaceTv = (TextView) view.findViewById(R.id.replace);
-        replaceTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isProVersion()) {
-                    ManifestListAdapter.showPromoteDialog(activityRef.get());
-                } else {
-                    FileSelectDialog dlg = new FileSelectDialog(
-                            activityRef.get(),
-                            new IFileSelection() {
-                                @Override
-                                public void fileSelectedInDialog(
-                                        String filePath, String extraStr, boolean openFile) {
-                                    if (openFile) {
-                                        ((ApkInfoActivity) activityRef.get()).saveParams(
-                                                filePath, extraStr, null);
-                                        OpenFiles.openFile(activityRef.get(), filePath,
-                                                ApkInfoActivity.RC_OPEN_BEFORE_REPLACE);
-                                    } else {
-                                        ((ApkInfoActivity) activityRef.get()).replaceFile(extraStr, filePath);
-                                        ((ApkInfoActivity) activityRef.get()).setManifestModified(true);
-                                    }
-                                }
-
-                                @Override
-                                public boolean isInterestedFile(
-                                        String filename, String extraStr) {
-                                    return filename.endsWith(".xml");
-                                }
-
-                                @Override
-                                public String getConfirmMessage(String filePath, String extraStr) {
-                                    return null;
-                                }
-                            }, ".xml", xmlPath, null, false, false, true, null);
-                    dlg.show();
-                    close();
-                }
-            }
-        });*/
-
-        // Open in new window
-        /*TextView openTv = (TextView) view.findViewById(R.id.open_in_new_window);
-        openTv.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (!isProVersion()) {
-                    ManifestListAdapter.showPromoteDialog(activityRef.get());
-                    return;
-                }
-
-                Intent intent = TextEditor.getEditorIntent(
-                        activityRef.get().getApplicationContext(), xmlPath, null);
-                activityRef.get().startActivityForResult(intent, 2);
-                close();
-            }
-        });*/
-
-        // Close button
-        /*TextView closeTv = (TextView) view.findViewById(R.id.close);
-        closeTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                close();
-            }
-        });
-
-        setContentView(view);*/
-    }
-
-    private boolean isProVersion() {
-        return BuildConfig.IS_PRO;
     }
 
     // Tag like activity, manifest, uses-permission, etc

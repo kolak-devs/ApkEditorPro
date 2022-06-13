@@ -357,15 +357,13 @@ public class ManifestListAdapter extends BaseAdapter implements
     @Override
     public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                    int position, long arg3) {
-        LineRecord lineRec = null;
         try {
-            lineRec = xmlLines.get(position);
-        } catch (Exception ignored) {
+            LineRecord lineRec = xmlLines.get(position);
+            // Create and show the dialog.
+            new ManifestLongClickDlg(activityRef.get(), xmlPath, lineRec, ManifestListAdapter.this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        // Create and show the dialog.
-        new ManifestLongClickDlg(
-                activityRef.get(), xmlPath, lineRec, ManifestListAdapter.this).showDialog();
         return true;
     }
 

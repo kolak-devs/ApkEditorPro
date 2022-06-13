@@ -2,6 +2,7 @@ package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,7 +12,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.androlib.LanguageMapping;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
@@ -19,9 +22,7 @@ import com.mcal.apkeditor.activities.ApkInfoActivity;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-public class LanguageSelectDialog extends Dialog implements
-        android.view.View.OnClickListener {
-
+public class LanguageSelectDialog {
     private final WeakReference<ApkInfoActivity> activityRef;
     private final View contentView;
     private final EditText codeEt;
@@ -29,38 +30,40 @@ public class LanguageSelectDialog extends Dialog implements
     private String[] codes;
     private String[] languages;
 
-    @SuppressLint("InflateParams")
-    public LanguageSelectDialog(ApkInfoActivity activity, String[] _lang, String[] _codes, String resId) {
-        super(activity);
+    private final AlertDialog materialDialog;
 
-        this.languages = _lang;
-        this.codes = _codes;
-        this.isAutoTranslate = (languages != null);
+    @SuppressLint("InflateParams")
+    public LanguageSelectDialog(ApkInfoActivity activity, String[] _lang, String[] _codes) {
+        languages = _lang;
+        codes = _codes;
+        isAutoTranslate = (languages != null);
 
         this.activityRef = new WeakReference<>(activity);
-        this.contentView = activity.getLayoutInflater().inflate(
-                R.layout.dlg_selectlanguage, null, false);
-
-        setTitle(resId);
-        setContentView(contentView);
-        show();
-
-        this.codeEt = contentView.findViewById(R.id.language_code);
+        this.contentView = activity.getLayoutInflater().inflate(R.layout.dlg_selectlanguage, null, false);
+        codeEt = contentView.findViewById(R.id.language_code);
         if (isAutoTranslate) { // Do not allow to modify
             codeEt.setEnabled(false);
         }
+        materialDialog = new MaterialAlertDialogBuilder(activity)
+                .setView(contentView)
+                .create();
+        materialDialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getString(android.R.string.ok), (dialog, which) -> {
+            String strCode = codeEt.getText().toString();
+            if (isAutoTranslate) {
+                translateLanguage(strCode);
+                materialDialog.dismiss();
+            } else {
+                if (addLanguage(strCode)) {
+                    materialDialog.dismiss();
+                }
+            }
+            dialog.dismiss();
+        });
+
+        materialDialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getString(android.R.string.cancel), (dialog, which) -> dialog.dismiss());
+        materialDialog.show();
 
         initSpinner();
-        initButton();
-    }
-
-    private void initButton() {
-        Button okBtn = contentView.findViewById(R.id.btn_addlang_ok);
-        okBtn.setOnClickListener(this);
-
-        Button cancelBtn = contentView
-                .findViewById(R.id.btn_addlang_cancel);
-        cancelBtn.setOnClickListener(this);
     }
 
     private void initSpinner() {
@@ -73,7 +76,7 @@ public class LanguageSelectDialog extends Dialog implements
 
         // Initialize spinner by setting adapter
         Spinner spinner = contentView.findViewById(R.id.language_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 activityRef.get(), android.R.layout.simple_spinner_item,
                 languages);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -116,24 +119,6 @@ public class LanguageSelectDialog extends Dialog implements
 
     protected void updateLanguageCode(int position) {
         codeEt.setText(codes[position]);
-    }
-
-    @Override
-    public void onClick(@NonNull View v) {
-        int id = v.getId();
-        if (id == R.id.btn_addlang_ok) {
-            String strCode = codeEt.getText().toString();
-            if (this.isAutoTranslate) {
-                translateLanguage(strCode);
-                dismiss();
-            } else {
-                if (addLanguage(strCode)) {
-                    dismiss();
-                }
-            }
-        } else if (id == R.id.btn_addlang_cancel) {
-            dismiss();
-        }
     }
 
     // Add a language

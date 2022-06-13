@@ -82,8 +82,8 @@ public class LinesOpDialogHelper {
     }
 
     private void initView(@NonNull View content) {
-        this.fromEt = (EditText) content.findViewById(R.id.et_from);
-        this.toEt = (EditText) content.findViewById(R.id.et_to);
+        this.fromEt = content.findViewById(R.id.et_from);
+        this.toEt = content.findViewById(R.id.et_to);
     }
 
     public interface ILinesOperation {
