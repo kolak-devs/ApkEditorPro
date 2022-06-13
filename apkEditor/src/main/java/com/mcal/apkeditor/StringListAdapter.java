@@ -9,6 +9,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.dialogs.StringValueDialog;
 
 import java.lang.ref.WeakReference;
@@ -22,8 +24,7 @@ import common.types.StringItem;
 public class StringListAdapter extends BaseAdapter implements
         OnItemClickListener {
     private final List<StringItem> valueList = new ArrayList<>();
-    int editingIndex = -1;
-    private WeakReference<Activity> activityRef;
+    private final WeakReference<Activity> activityRef;
     // Record changed value
     private Map<String, Map<String, String>> changedValues = new HashMap<>();
 
@@ -65,46 +66,25 @@ public class StringListAdapter extends BaseAdapter implements
                 convertView = LayoutInflater.from(activityRef.get()).inflate(R.layout.item_stringvaluestatic, null);
 
                 viewHolder = new ViewHolder();
-                viewHolder.name = (TextView) convertView
+                viewHolder.name = convertView
                         .findViewById(R.id.string_name);
-                viewHolder.value = (TextView) convertView
+                viewHolder.value = convertView
                         .findViewById(R.id.string_value);
 
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
-                // viewHolder.value.removeTextChangedListener(viewHolder.watcher);
-                // viewHolder.watcher = null;
             }
 
             viewHolder.name.setText(value.name);
             viewHolder.value.setText(value.value);
-
-            // Add text change listener
-            // viewHolder.watcher = new MyTextWatcher(this, position);
-            // viewHolder.value.addTextChangedListener(viewHolder.watcher);
-
-            // EditText editText = viewHolder.value;
-            // editText.setOnTouchListener(new OnTouchListener() {
-            // public boolean onTouch(View view, MotionEvent event) {
-            // if (event.getAction() == MotionEvent.ACTION_UP) {
-            // editingIndex = position;
-            // }
-            // return false;
-            // }
-            // });
-            //
-            // editText.clearFocus();
-            // if (editingIndex != -1 && editingIndex == position) {
-            // editText.requestFocus();
-            // }
         }
 
         return convertView;
     }
 
     // Update a new display
-    public void updateData(String curConfig, List<StringItem> list) {
+    public void updateData(String curConfig, @NonNull List<StringItem> list) {
         synchronized (valueList) {
             this.curConfig = curConfig;
             valueList.clear();
@@ -112,38 +92,8 @@ public class StringListAdapter extends BaseAdapter implements
                 valueList.add(item);
             }
         }
-
         this.notifyDataSetChanged();
     }
-
-    // private static class MyTextWatcher implements TextWatcher {
-    //
-    // private WeakReference<StringListAdapter> adapterRef;
-    // private int position = -1;
-    //
-    // public MyTextWatcher(StringListAdapter adapter, int position) {
-    // adapterRef = new WeakReference<StringListAdapter>(adapter);
-    // this.position = position;
-    // }
-    //
-    // @Override
-    // public void afterTextChanged(Editable s) {
-    // String value = s.toString();
-    // StringListAdapter adapter = adapterRef.get();
-    // adapter.checkTextChange(position, value);
-    // }
-    //
-    // @Override
-    // public void beforeTextChanged(CharSequence s, int start, int count,
-    // int after) {
-    // }
-    //
-    // @Override
-    // public void onTextChanged(CharSequence s, int start, int before,
-    // int count) {
-    // }
-    //
-    // }
 
     public void checkTextChange(int position, String newValue) {
         boolean valueChanged = false;
@@ -191,7 +141,6 @@ public class StringListAdapter extends BaseAdapter implements
             StringItem item = valueList.get(position);
             dlg.setKeyValue(item.name, item.value);
         }
-        dlg.show();
     }
 
     private static class ViewHolder {

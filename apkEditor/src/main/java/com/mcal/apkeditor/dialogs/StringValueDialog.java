@@ -1,86 +1,60 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.StringListAdapter;
 import com.mcal.common.utils.ClipboardUtils;
 
-import java.lang.ref.WeakReference;
-
-public class StringValueDialog extends Dialog implements android.view.View.OnClickListener {
-
-    private final WeakReference<Context> ctxRef;
-    private final StringListAdapter strListAdapter;
-    private final int position;
-
-    private final View view;
-    private final TextView keyTv;
-    private final EditText valueEt;
+public class StringValueDialog {
+    private final TextView key;
+    private final EditText value;
 
     @SuppressLint("InflateParams")
-    public StringValueDialog(Context context, StringListAdapter strListAdapter,
-                             int position) {
-        super(context);
+    public StringValueDialog(Context context, StringListAdapter strListAdapter, int position) {
+        final Context mContext = context;
 
-        this.ctxRef = new WeakReference<>(context);
-        this.strListAdapter = strListAdapter;
-        this.position = position;
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dlg_stringvalue, null);
+        ImageButton menu = view.findViewById(R.id.menu_clipboard);
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str = key.getText().toString();
+                ClipboardUtils.copyToClipboard(mContext, str);
+                String msg = mContext.getString(R.string.copied_to_clipboard);
+                msg = String.format(msg, str);
+                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+        key = view.findViewById(R.id.key);
+        value = view.findViewById(R.id.value);
 
-        this.view = LayoutInflater.from(context).inflate(R.layout.dlg_stringvalue, null);
-
-        setTitle(R.string.edit_string_value);
-        setContentView(view);
-
-        // getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        this.keyTv = view.findViewById(R.id.key);
-        this.valueEt = view.findViewById(R.id.value);
-        AppCompatImageButton menu = view.findViewById(R.id.menu_clipboard);
-        menu.setOnClickListener(this);
-
-        Button okBtn = view.findViewById(R.id.btn_editstring_ok);
-        okBtn.setOnClickListener(this);
-
-        Button cancelBtn = view
-                .findViewById(R.id.btn_editstring_cancel);
-        cancelBtn.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(@NonNull View v) {
-        int id = v.getId();
-        if (id == R.id.btn_editstring_ok) {
-            String newValue = valueEt.getText().toString();
+        AlertDialog materialDialog = new MaterialAlertDialogBuilder(mContext)
+                .setView(view)
+                .create();
+        materialDialog.setButton(DialogInterface.BUTTON_POSITIVE, mContext.getString(android.R.string.ok), (dialog, which) -> {
+            String newValue = value.getText().toString();
             strListAdapter.checkTextChange(position, newValue);
-            dismiss();
-        } else if (id == R.id.btn_editstring_cancel) {
-            cancel();
-        } else if (id == R.id.menu_clipboard) {
-            Context ctx = ctxRef.get();
-            String str = keyTv.getText().toString();
-            ClipboardUtils.copyToClipboard(ctx, str);
-
-            String msg = ctx.getString(R.string.copied_to_clipboard);
-            msg = String.format(msg, str);
-            Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
-        }
+            dialog.dismiss();
+        });
+        materialDialog.setButton(DialogInterface.BUTTON_NEGATIVE, mContext.getString(android.R.string.cancel), (dialog, which) -> dialog.dismiss());
+        materialDialog.show();
     }
 
     public void setKeyValue(String key, String val) {
-        keyTv.setText(key);
-        valueEt.setText(val);
-        valueEt.setSelection(val != null ? val.length() : 0);
+        this.key.setText(key);
+        value.setText(val);
+        value.setSelection(val != null ? val.length() : 0);
     }
 }

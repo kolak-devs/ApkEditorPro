@@ -1,82 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:id="@+id/content_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="4dip">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/key"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dip"
-                android:layout_marginBottom="4dip"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:text="@string/key"
-                android:textStyle="italic" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/menu_clipboard"
-                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/round_content_copy_24" />
-
-        </LinearLayout>
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            android:maxLines="10"
-            android:layout_margin="5dp"
-            android:background="@drawable/background_search"
-            android:gravity="center|left"
-            android:minHeight="45dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
-
-    </LinearLayout>
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/content_layout"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_editstring_cancel"
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+        <TextView
+            android:id="@+id/key"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="0.5"
-            android:text="@android:string/cancel" />
+            android:layout_weight="1"
+            android:text="@string/key"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_editstring_ok"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="0.5"
-            android:text="@android:string/ok" />
+        <ImageButton
+            android:id="@+id/menu_clipboard"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/round_content_copy_24" />
 
     </LinearLayout>
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="center|left"
+        android:inputType="textMultiLine"
+        android:maxLines="10"
+        android:minHeight="56dp" />
+
+</LinearLayout>
