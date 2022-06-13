@@ -28,21 +28,21 @@ import java.util.Map.Entry;
 public class XmlLineDialog {
     private final IXmlLineChanged lineChangeListener;
     private final LinkedHashMap<String, String> keyValues;
-    private final Context ctx;
+    private final Context mContext;
     private final LinearLayout keyValueLayout;
     // Record all the value edit text
-    List<EditText> valueEtList;
-    private String tag;
+    private final List<EditText> valueEtList;
     private final boolean selfClosed;
+    private String tag;
     // One line may contain several tags, content after first tag is put into
     // extraContent
     private String extraContent;
 
     @SuppressLint("CutPasteId")
-    public XmlLineDialog(Context ctx, IXmlLineChanged changeListener,
+    public XmlLineDialog(Context context, IXmlLineChanged changeListener,
                          int lineIndex, @NonNull String lineContent) {
-        this.ctx = ctx;
-        this.lineChangeListener = changeListener;
+        mContext = context;
+        lineChangeListener = changeListener;
 
         int endPos = lineContent.indexOf('>');
         if (endPos != -1) {
@@ -53,7 +53,7 @@ public class XmlLineDialog {
         }
 
         // Parse into detail information (tag, key/value, selfClosed)
-        this.keyValues = new LinkedHashMap<String, String>();
+        keyValues = new LinkedHashMap<>();
         String[] words = lineContent.split(" ");
         tag = words[0].trim();
         if (tag.startsWith("<")) {
@@ -72,9 +72,9 @@ public class XmlLineDialog {
         }
         selfClosed = lineContent.endsWith("/>");
 
-        View view = LayoutInflater.from(ctx).inflate(R.layout.dlg_xmlline, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dlg_xmlline, null);
 
-        AlertDialog materialDialog = new MaterialAlertDialogBuilder(ctx)
+        AlertDialog materialDialog = new MaterialAlertDialogBuilder(context)
                 .setView(view)
                 .create();
 
@@ -82,16 +82,16 @@ public class XmlLineDialog {
         keyValueLayout = view.findViewById(R.id.view_keyvalue);
         valueEtList = new ArrayList<>();
         if (keyValues.isEmpty()) {
-            View v = new View(ctx);
+            View v = new View(context);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, 100);
             v.setLayoutParams(lp);
             keyValueLayout.addView(v, 0);
-            materialDialog.setButton(DialogInterface.BUTTON_NEGATIVE,  ctx.getString(android.R.string.ok), (dialog, which) -> dialog.dismiss());
+            materialDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(android.R.string.ok), (dialog, which) -> dialog.dismiss());
         } else {
             int index = 0;
             for (Entry<String, String> entry : keyValues.entrySet()) {
-                View child = LayoutInflater.from(ctx).inflate(R.layout.item_stringvalue, null);
+                View child = LayoutInflater.from(context).inflate(R.layout.item_stringvalue, null);
                 AppCompatTextView tv = child.findViewById(R.id.string_name);
                 tv.setText(entry.getKey());
                 AppCompatEditText valueEt = child.findViewById(R.id.string_value);
@@ -100,14 +100,14 @@ public class XmlLineDialog {
                 keyValueLayout.addView(child, index++);
             }
 
-            materialDialog.setButton(DialogInterface.BUTTON_POSITIVE,  "Save", (dialog, which) -> {
+            materialDialog.setButton(DialogInterface.BUTTON_POSITIVE, mContext.getString(R.string.save), (dialog, which) -> {
                 if (lineChangeListener != null) {
                     lineChangeListener.xmlLineChanged(lineIndex, getLineData());
                 }
                 dialog.dismiss();
             });
 
-            materialDialog.setButton(DialogInterface.BUTTON_NEGATIVE,  ctx.getString(android.R.string.cancel), (dialog, which) -> dialog.dismiss());
+            materialDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(android.R.string.cancel), (dialog, which) -> dialog.dismiss());
         }
         materialDialog.show();
 
@@ -115,16 +115,17 @@ public class XmlLineDialog {
     }
 
     private void addNewValue() {
+        final Context context = mContext;
         ImageView imageView = keyValueLayout.findViewById(R.id.hidden_image);
         imageView.setVisibility(View.VISIBLE);
         imageView.setOnClickListener(v -> {
-            AlertDialog addValueDialog = new MaterialAlertDialogBuilder(ctx).create();
+            AlertDialog addValueDialog = new MaterialAlertDialogBuilder(context).create();
 
-            View view1 = LayoutInflater.from(ctx).inflate(R.layout.dlg_addkeyvalue, null);
+            View view1 = LayoutInflater.from(context).inflate(R.layout.dlg_addkeyvalue, null);
 
             addValueDialog.setTitle(R.string.add_key_value);
             addValueDialog.setView(view1);
-            addValueDialog.setButton(DialogInterface.BUTTON_POSITIVE,  ctx.getString(android.R.string.ok), (dialog, which) -> {
+            addValueDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(android.R.string.ok), (dialog, which) -> {
                 EditText keyEt = view1.findViewById(R.id.key);
                 EditText valueEt = view1.findViewById(R.id.value);
                 String strKey = keyEt.getText().toString();
@@ -132,11 +133,11 @@ public class XmlLineDialog {
                 String strValue = valueEt.getText().toString();
                 strValue = strValue.trim();
                 if (strKey.equals("")) {
-                    Toast.makeText(ctx, R.string.empty_key_tip, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.empty_key_tip, Toast.LENGTH_SHORT).show();
                 } else {
                     keyValues.put(strKey, strValue);
 
-                    View child = LayoutInflater.from(ctx).inflate(R.layout.item_stringvalue, null);
+                    View child = LayoutInflater.from(context).inflate(R.layout.item_stringvalue, null);
                     TextView tv = child.findViewById(R.id.string_name);
                     tv.setText(strKey);
                     EditText valueEdit = child.findViewById(R.id.string_value);
@@ -146,7 +147,7 @@ public class XmlLineDialog {
                 }
                 dialog.dismiss();
             });
-            addValueDialog.setButton(DialogInterface.BUTTON_NEGATIVE,  ctx.getString(android.R.string.cancel), (dialog, which) -> {
+            addValueDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(android.R.string.cancel), (dialog, which) -> {
                 dialog.dismiss();
             });
             addValueDialog.show();
