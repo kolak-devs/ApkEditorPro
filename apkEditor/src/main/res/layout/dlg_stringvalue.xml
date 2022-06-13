@@ -23,7 +23,7 @@
 
         <ImageButton
             android:id="@+id/menu_clipboard"
-            style="@style/Widget.Material3.Button"
+            style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/round_content_copy_24" />

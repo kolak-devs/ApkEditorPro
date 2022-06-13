@@ -139,11 +139,9 @@
     <string name="pls_input_filename">Введите имя файла:</string>
     <string name="pls_input_foldername">Пожалуйста, введите имя папки:</string>
     <string name="pls_input_keyword">Введите ключевые слова для поиска</string>
-    <string name="private_key_label">"Личный ключ
-(.pk8)"</string>
+    <string name="private_key_label">"Личный ключ(.pk8)"</string>
     <string name="promote_msg">Редактирование поддерживается только в версии Pro. Нажмите \"Купить Pro-версию\", чтобы её получить.</string>
-    <string name="public_key_label">"Общий ключ
-(.x509.pem)"</string>
+    <string name="public_key_label">"Общий ключ(.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">Отключено. Пересборка и подписывание APK будут выполнены непосредственно при нажатии кнопки сохранения.</string>
     <string name="rebuild_confirm_e_summary">Включено. Будет показан диалог подтверждения при нажатии кнопки сохранения. Вы можете отказаться от подписывания APK в диалоговом окне.</string>
     <string name="rebuild_confirmation">Подтверждение пересборки</string>

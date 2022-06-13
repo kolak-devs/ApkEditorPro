@@ -175,8 +175,8 @@
     <string name="folder_replace_tip" formatted="false">Are you sure to replace %s with %s?</string>
     <string name="folder_replaced">Folder Replaced</string>
     <string name="custom_key_setting">Custom Key Setting</string>
-    <string name="public_key_label">Public Key\n(.x509.pem)</string>
-    <string name="private_key_label">Private Key\n(.pk8)</string>
+    <string name="public_key_label">Public Key(.x509.pem)</string>
+    <string name="private_key_label">Private Key(.pk8)</string>
     <string name="select_key_file">Select a key file</string>
     <string name="error_filepath_empty">File path cannot be empty.</string>
     <string name="error_filepath_notexist">File does not exist.</string>

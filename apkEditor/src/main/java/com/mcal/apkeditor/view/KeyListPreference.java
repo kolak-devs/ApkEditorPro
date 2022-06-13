@@ -2,7 +2,6 @@ package com.mcal.apkeditor.view;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -37,17 +36,13 @@ public class KeyListPreference extends ListPreference implements
     protected void onPrepareDialogBuilder(@NonNull AlertDialog.Builder builder) {
         int checkItem = getValueIndex(getValue());
         builder.setSingleChoiceItems(R.array.signer_key, checkItem,
-                new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (customKeyIndex == which) {
-                            new KeySelectDlgHelper(KeyListPreference.this)
-                                    .showDialog(context);
-                        } else {
-                            setValue(getEntryValues()[which] + "");
-                        }
-                        dialog.dismiss();
+                (dialog, which) -> {
+                    if (customKeyIndex == which) {
+                        new KeySelectDlgHelper(context, KeyListPreference.this);
+                    } else {
+                        setValue(getEntryValues()[which] + "");
                     }
+                    dialog.dismiss();
                 });
         builder.setPositiveButton(null, null);
     }
