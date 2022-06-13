@@ -154,10 +154,7 @@ public class ManifestLongClickDlg {
                         // extraStr is the source file/directory
                         public void fileSelectedInDialog(
                                 String filePath, String extraStr, boolean openFile) {
-                            String targetFolder = filePath;
-                            new FileCopyDialog(
-                                    activityRef.get(),
-                                    xmlPath, targetFolder, null, null, null, 0);
+                            new FileCopyDialog(activityRef.get(), xmlPath, filePath, null, null, null, 0);
                         }
 
                         @Override

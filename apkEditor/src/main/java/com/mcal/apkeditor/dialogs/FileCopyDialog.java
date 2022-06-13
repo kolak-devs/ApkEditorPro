@@ -1,10 +1,12 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
@@ -22,17 +24,16 @@ import java.util.Map;
 // Used for extract function
 // It can copy from srcPath to dstPath
 public class FileCopyDialog {
-
     // Source and target
-    private final List<CopySource> copySources;
-    private final String apkPath;
-    private final String targetFolder; // In general, not end with "/"
+    private final List<CopySource> mCopySources;
+    private final String mApkPath;
+    private final String mTargetFolder; // In general, not end with "/"
 
     // Used to get entry name from file path
-    private final String decodeRootPath;
+    private final String mDecodeRootPath;
 
     // Get real entry in apk by entry name
-    private final Map<String, String> entryMapping;
+    private final Map<String, String> mEntryMapping;
 
     private final MyHandler handler;
 
@@ -41,28 +42,27 @@ public class FileCopyDialog {
 
     // The real target path of the copied file/dir
     private String savedFilePath;
-    private MaterialAlertDialogBuilder materialDialog;
+    private AlertDialog materialDialog;
 
     // This constructor means may copy from file, and may copy from zip
     public FileCopyDialog(Context context, String filePath,
                           String targetFolder, String apkPath, String decodeRootPath,
                           Map<String, String> entryMapping, int unused) {
-
         CopySource source = new CopySource();
         source.path = filePath;
         source.isInApk = false;
         source.isDir = new File(filePath).isDirectory();
 
-        this.copySources = new ArrayList<>();
-        this.copySources.add(source);
-        this.apkPath = apkPath;
-        this.decodeRootPath = decodeRootPath;
-        this.entryMapping = entryMapping;
+        mCopySources = new ArrayList<>();
+        mCopySources.add(source);
+        mApkPath = apkPath;
+        mDecodeRootPath = decodeRootPath;
+        mEntryMapping = entryMapping;
 
         if (targetFolder != null) {
-            this.targetFolder = targetFolder;
+            mTargetFolder = targetFolder;
         } else {
-            this.targetFolder = ScopedStorage.getExternalStoragePath() + "/ApkEditor";
+            mTargetFolder = ScopedStorage.getExternalStoragePath() + "/ApkEditor";
         }
 
         handler = new MyHandler(context, this);
@@ -73,12 +73,11 @@ public class FileCopyDialog {
     public FileCopyDialog(Context context, String apkPath,
                           String decodeRootPath, Map<String, String> fileEntry2ZipEntry,
                           List<CopySource> copySources, String targetFolder) {
-
-        this.apkPath = apkPath;
-        this.decodeRootPath = decodeRootPath;
-        this.entryMapping = fileEntry2ZipEntry;
-        this.copySources = copySources;
-        this.targetFolder = targetFolder;
+        mApkPath = apkPath;
+        mDecodeRootPath = decodeRootPath;
+        mEntryMapping = fileEntry2ZipEntry;
+        mCopySources = copySources;
+        mTargetFolder = targetFolder;
 
         handler = new MyHandler(context, this);
 
@@ -124,20 +123,21 @@ public class FileCopyDialog {
     }
 
     private void init(Context context) {
-        this.fileRenameOption = SettingActivity.getFileRenameOption(context);
+        fileRenameOption = SettingActivity.getFileRenameOption(context);
 
-        materialDialog = new MaterialAlertDialogBuilder(context);
-        materialDialog.setPositiveButton(android.R.string.ok, null);
+        materialDialog = new MaterialAlertDialogBuilder(context).create();
+        materialDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(android.R.string.ok), (dialog, which) -> {
+            dialog.dismiss();
+        });
     }
 
     // File copy succeed
     public void succeed(Context context) {
-
         // When just copy one file, show the full path
-        if (copySources.size() == 1) {
+        if (mCopySources.size() == 1) {
             materialDialog.setMessage(String.format(context.getString(R.string.save_succeed_1), savedFilePath));
         } else {
-            materialDialog.setMessage(String.format(context.getString(R.string.save_succeed_1), targetFolder));
+            materialDialog.setMessage(String.format(context.getString(R.string.save_succeed_1), mTargetFolder));
         }
     }
 
@@ -150,7 +150,7 @@ public class FileCopyDialog {
     public void show() {
         new Thread(() -> {
             try {
-                for (CopySource source : copySources) {
+                for (CopySource source : mCopySources) {
                     // The file/directory already decoded
                     if (!source.isInApk) {
                         copyFiles(source);
@@ -159,12 +159,7 @@ public class FileCopyDialog {
                     }
                 }
                 handler.sendEmptyMessage(0);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        materialDialog.show();
-                    }
-                });
+                handler.post(() -> materialDialog.show());
             } catch (Exception e) {
                 handler.setErrorMessage(e.getMessage());
                 handler.sendEmptyMessage(1);
@@ -174,24 +169,24 @@ public class FileCopyDialog {
 
     // To extract file/directory from the apk/zip file
     protected void extractFiles(@NonNull CopySource source) throws Exception {
-        String targetPath = targetFolder + "/" + getName(source.path);
+        String targetPath = mTargetFolder + "/" + getName(source.path);
         boolean bExist = new File(targetPath).exists();
         if (bExist && fileRenameOption == SettingActivity.EXTRACT_AUTORENAME) {
             targetPath = getTargetNonExistPath(targetPath, source.isDir);
         }
 
         if (source.isDir) {
-            ZipUtils.unzipDirectory(apkPath, source.path, targetPath);
+            ZipUtils.unzipDirectory(mApkPath, source.path, targetPath);
         } else {
-            ZipUtils.unzipFileTo(apkPath, source.path, targetPath);
+            ZipUtils.unzipFileTo(mApkPath, source.path, targetPath);
         }
 
-        this.savedFilePath = targetPath;
+        savedFilePath = targetPath;
     }
 
     // Just copy the file/directory, as it is already decoded
     protected void copyFiles(@NonNull CopySource source) throws Exception {
-        String targetPath = targetFolder + "/" + getName(source.path);
+        String targetPath = mTargetFolder + "/" + getName(source.path);
         File srcFile = new File(source.path);
         // Copy directory
         if (srcFile.isDirectory()) {
@@ -215,7 +210,7 @@ public class FileCopyDialog {
                 }
             }
             doFileCopy(new File(source.path), dst);
-            this.savedFilePath = dst.getPath();
+            savedFilePath = dst.getPath();
         }
     }
 
@@ -255,16 +250,16 @@ public class FileCopyDialog {
     private void doFileCopy(@NonNull File from, File to) throws Exception {
         String filename = from.getName();
         // It is the common image
-        if (this.apkPath != null
+        if (this.mApkPath != null
                 && (filename.endsWith(".jpg") || (filename.endsWith(".png")
                 && !filename.endsWith(".9.png")))) {
             String entryName = from.getPath().substring(
-                    decodeRootPath.length() + 1);
-            String realEntry = entryMapping.get(entryName);
+                    mDecodeRootPath.length() + 1);
+            String realEntry = mEntryMapping.get(entryName);
             if (realEntry != null) {
                 entryName = realEntry;
             }
-            ZipUtils.unzipFileTo(this.apkPath, entryName, to.getPath());
+            ZipUtils.unzipFileTo(this.mApkPath, entryName, to.getPath());
         } else {
             FileUtils.copyFile(from, to);
         }

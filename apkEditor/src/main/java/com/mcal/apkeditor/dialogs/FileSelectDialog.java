@@ -6,14 +6,12 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.text.InputFilter;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -33,12 +31,10 @@ import com.mcal.common.utils.SDCard;
 import com.mcal.folderlist.FileRecord;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileSelectDialog implements OnItemClickListener,
-        View.OnClickListener, AdapterView.OnItemLongClickListener {
+public class FileSelectDialog implements OnItemClickListener, AdapterView.OnItemLongClickListener {
     private static final String LAST_DIR = "lastDirectory";
 
     private final ResListAdapter fileListAdapter;
@@ -48,23 +44,18 @@ public class FileSelectDialog implements OnItemClickListener,
     private final String extraStr;
 
     // To select a folder or not
-    private final boolean selectFolder;
-
-    // Should show confirmation dialog or not
-    private final boolean showConfirmDlg;
+    private final boolean mSelectFolder;
 
     // tag to save last directory
-    private final String tag;
+    private final String mTag;
 
-    // Sub title for current path
-    private final TextView titleTv;
     private final TextView pathTv;
 
     private final CheckBox editCheckBox;
 
-    private final IFileSelection callback;
+    private final IFileSelection mCallback;
 
-    private final Context ctx;
+    private final Context mContext;
     private final AlertDialog dialog;
 
     // extraString should be the replaced file name if used to replace a file
@@ -90,23 +81,14 @@ public class FileSelectDialog implements OnItemClickListener,
                             String fileSuffix, String extraString, String strTitle,
                             boolean selectFolder, boolean showConfirmDlg, boolean showEditOption,
                             String tag, String defaultDir) {
-        this.ctx = ctx;
-        this.callback = callback;
-        this.extraStr = extraString;
-        this.selectFolder = selectFolder;
-        this.showConfirmDlg = showConfirmDlg;
-        this.tag = tag;
+        mContext = ctx;
+        mCallback = callback;
+        extraStr = extraString;
+        mSelectFolder = selectFolder;
+        // Should show confirmation dialog or not
+        mTag = tag;
 
         View view = LayoutInflater.from(ctx).inflate(R.layout.dlg_fileselect, null, false);
-
-        // Not show confirm button when select file
-        Button confirmBtn = view.findViewById(R.id.confirm);
-        if (selectFolder) {
-            confirmBtn.setVisibility(View.VISIBLE);
-            confirmBtn.setOnClickListener(this);
-        } else {
-            confirmBtn.setVisibility(View.INVISIBLE);
-        }
 
         // File List view
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -124,7 +106,8 @@ public class FileSelectDialog implements OnItemClickListener,
         }
 
         // Title & sub title
-        titleTv = view.findViewById(R.id.tv_title);
+        // Sub title for current path
+        TextView titleTv = view.findViewById(R.id.tv_title);
         pathTv = view.findViewById(R.id.tv_subtitle);
         if (strTitle == null) {
             if (fileSuffix != null) {
@@ -139,12 +122,9 @@ public class FileSelectDialog implements OnItemClickListener,
         // File list view
         ListView fileList = view.findViewById(R.id.file_list);
         this.fileListAdapter = new ResListAdapter(ctx, null, lastDir, "/",
-                new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String filename) {
-                        File f = new File(dir, filename);
-                        return (f.isDirectory() || isInterestedFile(filename));
-                    }
+                (dir, filename) -> {
+                    File f = new File(dir, filename);
+                    return (f.isDirectory() || isInterestedFile(filename));
                 });
         fileList.setAdapter(fileListAdapter);
         fileList.setOnItemClickListener(this);
@@ -159,33 +139,51 @@ public class FileSelectDialog implements OnItemClickListener,
             editCheckBox.setChecked(getHistoryEditOption());
             editCheckBox.setVisibility(View.VISIBLE);
         } else {
-            editCheckBox.setVisibility(View.INVISIBLE);
+            editCheckBox.setVisibility(View.GONE);
         }
 
-        // Close button
-        Button closeBtn = view.findViewById(R.id.close);
-        closeBtn.setOnClickListener(this);
-
-        MaterialAlertDialogBuilder materialDialog = new MaterialAlertDialogBuilder(ctx);
-        materialDialog.setView(view);
-        dialog = materialDialog.show();
+        dialog = new MaterialAlertDialogBuilder(ctx).setView(view).create();
+        if (selectFolder) {
+            dialog.setButton(DialogInterface.BUTTON_POSITIVE, ctx.getString(android.R.string.ok), (dialog, which) -> {
+                final String curDir = fileListAdapter.getData(null);
+                if (showConfirmDlg) {
+                    new MaterialAlertDialogBuilder(ctx)
+                            .setTitle(R.string.confirm_dir_replace)
+                            .setMessage(callback.getConfirmMessage(curDir, extraStr))
+                            .setPositiveButton(R.string.yes,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog,
+                                                            int which) {
+                                            callback.fileSelectedInDialog(
+                                                    curDir, extraStr, isEditSelected());
+                                            saveLastDirectory(curDir);
+                                            close();
+                                        }
+                                    })
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
+                } else {
+                    callback.fileSelectedInDialog(curDir, extraStr, isEditSelected());
+                    saveLastDirectory(curDir);
+                    close();
+                }
+                dialog.dismiss();
+            });
+        }
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, ctx.getString(android.R.string.cancel), (dialog, which) -> dialog.dismiss());
+        dialog.show();
     }
 
     @Override
     public boolean onItemLongClick(@NonNull AdapterView<?> parent, View view, int position, long id) {
-        parent.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-            public void onCreateContextMenu(ContextMenu menu, View v,
-                                            ContextMenu.ContextMenuInfo menuInfo) {
-                // New Folder
-                MenuItem item1 = menu.add(0, Menu.FIRST, 0, R.string.new_folder);
-                item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        createFolder();
-                        return true;
-                    }
-                });
-            }
+        parent.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+            // New Folder
+            MenuItem item1 = menu.add(0, Menu.FIRST, 0, R.string.new_folder);
+            item1.setOnMenuItemClickListener(item -> {
+                createFolder();
+                return true;
+            });
         });
         return false;
     }
@@ -193,46 +191,36 @@ public class FileSelectDialog implements OnItemClickListener,
     private void createFolder() {
         final String dirPath = fileListAdapter.getData(null);
 
-        MaterialAlertDialogBuilder inputDlg = new MaterialAlertDialogBuilder(ctx);
+        MaterialAlertDialogBuilder inputDlg = new MaterialAlertDialogBuilder(mContext);
         inputDlg.setTitle(R.string.new_folder);
         inputDlg.setMessage(R.string.pls_input_foldername);
 
         // Set an EditText view to get user input
-        final EditText input = new EditText(ctx);
+        final EditText input = new EditText(mContext);
         InputFilter filter = InputUtils.getFileNameFilter();
         input.setFilters(new InputFilter[]{filter});
         inputDlg.setView(input);
 
         inputDlg.setPositiveButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        String name = input.getText().toString();
-                        name = name.trim();
-                        if ("".equals(name)) {
-                            Toast.makeText(ctx,
-                                            R.string.empty_input_tip, Toast.LENGTH_LONG)
-                                    .show();
-                        } else {
-                            fileListAdapter.addFolder(dirPath, name);
-                        }
+                (dialog, whichButton) -> {
+                    String name = input.getText().toString();
+                    name = name.trim();
+                    if ("".equals(name)) {
+                        Toast.makeText(mContext,
+                                        R.string.empty_input_tip, Toast.LENGTH_LONG)
+                                .show();
+                    } else {
+                        fileListAdapter.addFolder(dirPath, name);
                     }
                 });
 
-        inputDlg.setNegativeButton(android.R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        // Canceled.
-                    }
-                });
-
+        inputDlg.setNegativeButton(android.R.string.cancel, null);
         inputDlg.show();
     }
 
     // To decide whether to show the file in the dialog
     private boolean isInterestedFile(String filename) {
-        return callback.isInterestedFile(filename, extraStr);
+        return mCallback.isInterestedFile(filename, extraStr);
     }
 
     protected void close() {
@@ -261,16 +249,10 @@ public class FileSelectDialog implements OnItemClickListener,
             String curPath = fileListAdapter.getData(null);
             pathTv.setText(curPath);
 
-        } else if (!this.selectFolder && isInterestedFile(rec.fileName)) {
+        } else if (!mSelectFolder && isInterestedFile(rec.fileName)) {
             String selectedPath = oldDir + "/" + rec.fileName;
             boolean editSelected = isEditSelected();
-            callback.fileSelectedInDialog(selectedPath, extraStr, editSelected);
-            // if (!isManifest) {
-            //
-            // } else {
-            // activity.replaceFile(replacedFilePath, selectedPath);
-            // activity.setManifestModified();
-            // }
+            mCallback.fileSelectedInDialog(selectedPath, extraStr, editSelected);
             saveLastDirectory(oldDir);
             saveEditOption(editSelected);
             close();
@@ -279,67 +261,34 @@ public class FileSelectDialog implements OnItemClickListener,
 
     // Save the directory as the default directory next time
     private void saveLastDirectory(String lastDir) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
         Editor editor = sp.edit();
         String key = LAST_DIR;
-        if (tag != null) {
-            key = tag + "_" + LAST_DIR;
+        if (mTag != null) {
+            key = mTag + "_" + LAST_DIR;
         }
         editor.putString(key, lastDir);
         editor.apply();
     }
 
     private boolean getHistoryEditOption() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
         String key = "editBeforeReplace";
-        if (tag != null) {
-            key = tag + "_" + key;
+        if (mTag != null) {
+            key = mTag + "_" + key;
         }
         return sp.getBoolean(key, false);
     }
 
     private void saveEditOption(boolean editChecked) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
         Editor editor = sp.edit();
         String key = "editBeforeReplace";
-        if (tag != null) {
-            key = tag + "_" + key;
+        if (mTag != null) {
+            key = mTag + "_" + key;
         }
         editor.putBoolean(key, editChecked);
         editor.apply();
-    }
-
-    @Override
-    public void onClick(@NonNull View v) {
-        int id = v.getId();
-        if (id == R.id.close) {
-            close();
-        } else if (id == R.id.confirm) {
-            final String curDir = fileListAdapter.getData(null);
-
-            if (showConfirmDlg) {
-                new MaterialAlertDialogBuilder(ctx)
-                        .setTitle(R.string.confirm_dir_replace)
-                        .setMessage(callback.getConfirmMessage(curDir, extraStr))
-                        .setPositiveButton(R.string.yes,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        callback.fileSelectedInDialog(
-                                                curDir, extraStr, isEditSelected());
-                                        saveLastDirectory(curDir);
-                                        close();
-                                    }
-                                })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
-            } else {
-                callback.fileSelectedInDialog(curDir, extraStr, isEditSelected());
-                saveLastDirectory(curDir);
-                close();
-            }
-        }
     }
 
     // If the option "Edit the file before replacing" selected
