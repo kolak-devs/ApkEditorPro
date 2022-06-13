@@ -1,9 +1,10 @@
 package com.mcal.apkeditor.dialogs;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,12 +25,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class XmlLineDialog implements
-        android.view.View.OnClickListener {
+public class XmlLineDialog {
 
-    // private Context ctx;
     private final IXmlLineChanged lineChangeListener;
-    private final int lineIndex;
     private final LinkedHashMap<String, String> keyValues;
     private final Context ctx;
     private final LinearLayout keyValueLayout;
@@ -40,17 +38,12 @@ public class XmlLineDialog implements
     // One line may contain several tags, content after first tag is put into
     // extraContent
     private String extraContent;
-    // Dialog to add a key/value
-    private AlertDialog keyValueDlg;
-    private View keyValueView;
 
-    private AlertDialog dialog;
-
+    @SuppressLint("CutPasteId")
     public XmlLineDialog(Context ctx, IXmlLineChanged changeListener,
                          int lineIndex, @NonNull String lineContent) {
         this.ctx = ctx;
         this.lineChangeListener = changeListener;
-        this.lineIndex = lineIndex;
 
         int endPos = lineContent.indexOf('>');
         if (endPos != -1) {
@@ -81,47 +74,84 @@ public class XmlLineDialog implements
         selfClosed = lineContent.endsWith("/>");
 
         View view = LayoutInflater.from(ctx).inflate(R.layout.dlg_xmlline, null);
-        Button closeBtn = view.findViewById(R.id.btn_dlgclose);
-        closeBtn.setOnClickListener(this);
-        Button saveBtn = view.findViewById(R.id.btn_dlgsave);
-        saveBtn.setOnClickListener(this);
+
+        AlertDialog materialDialog = new MaterialAlertDialogBuilder(ctx)
+                .setView(view)
+                .create();
 
         // Add key/values
-        this.keyValueLayout = view
-                .findViewById(R.id.view_keyvalue);
+        keyValueLayout = view.findViewById(R.id.view_keyvalue);
         valueEtList = new ArrayList<>();
         if (keyValues.isEmpty()) {
             View v = new View(ctx);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.FILL_PARENT, 100);
+                    LinearLayout.LayoutParams.MATCH_PARENT, 100);
             v.setLayoutParams(lp);
             keyValueLayout.addView(v, 0);
-            saveBtn.setVisibility(View.GONE);
+            materialDialog.setButton(DialogInterface.BUTTON_NEGATIVE,  ctx.getString(android.R.string.ok), (dialog, which) -> dialog.dismiss());
         } else {
             int index = 0;
             for (Entry<String, String> entry : keyValues.entrySet()) {
-                View child = LayoutInflater.from(ctx).inflate(R.layout.item_stringvalue,
-                        null);
+                View child = LayoutInflater.from(ctx).inflate(R.layout.item_stringvalue, null);
                 AppCompatTextView tv = child.findViewById(R.id.string_name);
                 tv.setText(entry.getKey());
-                AppCompatEditText valueEt = child
-                        .findViewById(R.id.string_value);
+                AppCompatEditText valueEt = child.findViewById(R.id.string_value);
                 valueEtList.add(valueEt);
                 valueEt.setText(entry.getValue());
                 keyValueLayout.addView(child, index++);
             }
 
-            // Add Image
-            ImageView imageView = keyValueLayout
-                    .findViewById(R.id.hidden_image);
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setOnClickListener(this);
-        }
+            materialDialog.setButton(DialogInterface.BUTTON_POSITIVE,  "Save", (dialog, which) -> {
+                if (lineChangeListener != null) {
+                    lineChangeListener.xmlLineChanged(lineIndex, getLineData());
+                }
+                dialog.dismiss();
+            });
 
-        dialog = new MaterialAlertDialogBuilder(ctx)
-                .setView(view)
-                .create();
-        dialog.show();
+            materialDialog.setButton(DialogInterface.BUTTON_NEGATIVE,  ctx.getString(android.R.string.cancel), (dialog, which) -> dialog.dismiss());
+        }
+        materialDialog.show();
+
+        addNewValue();
+    }
+
+    private void addNewValue() {
+        ImageView imageView = keyValueLayout.findViewById(R.id.hidden_image);
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setOnClickListener(v -> {
+            AlertDialog addValueDialog = new MaterialAlertDialogBuilder(ctx).create();
+
+            View view1 = LayoutInflater.from(ctx).inflate(R.layout.dlg_addkeyvalue, null);
+
+            addValueDialog.setTitle(R.string.add_key_value);
+            addValueDialog.setView(view1);
+            addValueDialog.setButton(DialogInterface.BUTTON_POSITIVE,  ctx.getString(android.R.string.ok), (dialog, which) -> {
+                EditText keyEt = view1.findViewById(R.id.key);
+                EditText valueEt = view1.findViewById(R.id.value);
+                String strKey = keyEt.getText().toString();
+                strKey = strKey.trim();
+                String strValue = valueEt.getText().toString();
+                strValue = strValue.trim();
+                if (strKey.equals("")) {
+                    Toast.makeText(ctx, R.string.empty_key_tip, Toast.LENGTH_SHORT).show();
+                } else {
+                    keyValues.put(strKey, strValue);
+
+                    View child = LayoutInflater.from(ctx).inflate(R.layout.item_stringvalue, null);
+                    TextView tv = child.findViewById(R.id.string_name);
+                    tv.setText(strKey);
+                    EditText valueEdit = child.findViewById(R.id.string_value);
+                    valueEtList.add(valueEdit);
+                    valueEdit.setText(strValue);
+                    keyValueLayout.addView(child, keyValues.size() - 1);
+                }
+                dialog.dismiss();
+            });
+            addValueDialog.setButton(DialogInterface.BUTTON_NEGATIVE,  ctx.getString(android.R.string.cancel), (dialog, which) -> {
+                dialog.dismiss();
+            });
+            addValueDialog.show();
+        });
     }
 
     // Trim the comma, if it ends with >, also trim it
@@ -135,69 +165,6 @@ public class XmlLineDialog implements
             }
         }
         return null;
-    }
-
-    @Override
-    public void onClick(@NonNull View v) {
-        int id = v.getId();
-        // Close
-        if (id == R.id.btn_dlgclose) {
-            dialog.dismiss();
-        }
-        // Save
-        else if (id == R.id.btn_dlgsave) {
-            if (lineChangeListener != null) {
-                lineChangeListener.xmlLineChanged(lineIndex, getLineData());
-            }
-            dialog.dismiss();
-        }
-        // To add a key/value to this line
-        else if (id == R.id.hidden_image) {
-            this.keyValueDlg = new MaterialAlertDialogBuilder(ctx).create();
-
-            View view = LayoutInflater.from(ctx).inflate(R.layout.dlg_addkeyvalue, null);
-            Button okBtn = view.findViewById(R.id.btn_addkeyvalue_ok);
-            okBtn.setOnClickListener(this);
-            Button cancelBtn = view
-                    .findViewById(R.id.btn_addkeyvalue_cancel);
-            cancelBtn.setOnClickListener(this);
-            this.keyValueView = view;
-            keyValueDlg.setTitle(R.string.add_key_value);
-            keyValueDlg.setView(view);
-            keyValueDlg.show();
-        }
-        // OK button clicked in key/value dialog
-        else if (id == R.id.btn_addkeyvalue_ok) {
-            EditText keyEt = keyValueView.findViewById(R.id.key);
-            EditText valueEt = keyValueView.findViewById(R.id.value);
-            String strKey = keyEt.getText().toString();
-            strKey = strKey.trim();
-            String strValue = valueEt.getText().toString();
-            strValue = strValue.trim();
-            if (strKey.equals("")) {
-                Toast.makeText(ctx, R.string.empty_key_tip, Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-                // LOGGER.info("key=" + strKey + ", value=" + strValue);
-                keyValues.put(strKey, strValue);
-
-                View child = LayoutInflater.from(ctx).inflate(R.layout.item_stringvalue,
-                        null);
-                TextView tv = child.findViewById(R.id.string_name);
-                tv.setText(strKey);
-                EditText valueEdit = child
-                        .findViewById(R.id.string_value);
-                valueEtList.add(valueEdit);
-                valueEdit.setText(strValue);
-                keyValueLayout.addView(child, keyValues.size() - 1);
-
-                keyValueDlg.dismiss();
-            }
-        }
-        // Cancel button clicked in key/value dialog
-        else if (id == R.id.btn_addkeyvalue_cancel) {
-            keyValueDlg.dismiss();
-        }
     }
 
     // Get modified line from UI
