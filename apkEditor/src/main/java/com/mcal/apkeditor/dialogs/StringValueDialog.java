@@ -5,21 +5,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.StringListAdapter;
 import com.mcal.common.utils.ClipboardUtils;
 
 public class StringValueDialog {
-    private final TextView key;
-    private final EditText value;
+    private final TextInputLayout key;
+    private final TextInputEditText value;
 
     @SuppressLint("InflateParams")
     public StringValueDialog(Context context, StringListAdapter strListAdapter, int position) {
@@ -30,7 +30,7 @@ public class StringValueDialog {
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str = key.getText().toString();
+                String str = key.getHint().toString();
                 ClipboardUtils.copyToClipboard(mContext, str);
                 String msg = mContext.getString(R.string.copied_to_clipboard);
                 msg = String.format(msg, str);
@@ -53,7 +53,7 @@ public class StringValueDialog {
     }
 
     public void setKeyValue(String key, String val) {
-        this.key.setText(key);
+        this.key.setHint(key);
         value.setText(val);
         value.setSelection(val != null ? val.length() : 0);
     }
