@@ -1,51 +1,46 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.MatchedFilenameAdapter;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.ResSelectionChangeListener;
-import com.mcal.apkeditor.SomethingChangedListener;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 // This activity is called from ApkInfoActivity::searchInResourceFiles
-public class SearchFilenameDialog extends Dialog implements
-        android.view.View.OnClickListener, ResSelectionChangeListener,
+public class SearchFilenameDialog implements ResSelectionChangeListener,
         OnItemClickListener, OnItemLongClickListener {
 
-    private final String searchFolder;
-    private final List<String> filenameList;
-    private final String keyword;
-    private final boolean caseSensitive;
+    private final String mSearchFolder;
+    private final List<String> mFilenameList;
+    private final String mKeyword;
+    private final boolean mCaseSensitive;
     // Record modified files
-    private final Set<String> modifiedFiles = new HashSet<>();
     WeakReference<ApkInfoActivity> activityRef;
     private TextView titleTv;
     private View selectionHeaderView;
@@ -53,22 +48,17 @@ public class SearchFilenameDialog extends Dialog implements
     private ListView listView;
     private MatchedFilenameAdapter listAdapter;
     private LinearLayout searchingLayout;
-    private Button closeBtn;
-    private Button deleteBtn;
-    private View doneMenu;
-    private View selectMenu;
     // Record matched files
     private ArrayList<String> matchedFiles = new ArrayList<>();
 
     public SearchFilenameDialog(ApkInfoActivity activity, String searchFolder,
                                 List<String> filenameList, String keyword, boolean caseSensitive) {
-        super(activity);
-        this.activityRef = new WeakReference<>(activity);
-        this.searchFolder = searchFolder;
-        this.filenameList = filenameList;
-        this.keyword = keyword;
-        this.caseSensitive = caseSensitive;
-        if (!this.searchFolder.endsWith("/")) {
+        activityRef = new WeakReference<>(activity);
+        mSearchFolder = searchFolder;
+        mFilenameList = filenameList;
+        mKeyword = keyword;
+        mCaseSensitive = caseSensitive;
+        if (!mSearchFolder.endsWith("/")) {
             searchFolder += "/";
         }
 
@@ -78,41 +68,56 @@ public class SearchFilenameDialog extends Dialog implements
     private void init(ApkInfoActivity activity) {
         View view = LayoutInflater.from(activity).inflate(R.layout.dlg_filename_searchret, null);
 
-        this.titleTv = view.findViewById(R.id.title);
-        this.selectionHeaderView = view.findViewById(R.id.res_header_selection);
-        this.selectionTipTv = view.findViewById(R.id.selection_tip);
-        this.listView = view.findViewById(R.id.file_list);
-        this.searchingLayout = view
-                .findViewById(R.id.searching_layout);
+        titleTv = view.findViewById(R.id.title);
+        selectionHeaderView = view.findViewById(R.id.res_header_selection);
+        selectionTipTv = view.findViewById(R.id.selection_tip);
+        listView = view.findViewById(R.id.file_list);
+        searchingLayout = view.findViewById(R.id.searching_layout);
 
-        this.doneMenu = view.findViewById(R.id.menu_done);
-        this.selectMenu = view.findViewById(R.id.menu_select);
-        this.doneMenu.setOnClickListener(this);
-        this.selectMenu.setOnClickListener(this);
-
-        this.closeBtn = view.findViewById(R.id.btn_close);
-        this.deleteBtn = view.findViewById(R.id.btn_delete);
-        this.closeBtn.setOnClickListener(this);
-        this.deleteBtn.setOnClickListener(this);
+        ImageButton doneMenu = view.findViewById(R.id.menu_done);
+        ImageButton selectMenu = view.findViewById(R.id.menu_select);
+        doneMenu.setOnClickListener(v -> {
+            listAdapter.selectNone();
+            showNonSelectView();
+        });
+        selectMenu.setOnClickListener(v -> {
+            if (listAdapter.isAllSelected()) {
+                listAdapter.selectNone();
+                showNonSelectView();
+            } else {
+                listAdapter.selectAll();
+            }
+        });
 
         listView.setVisibility(View.INVISIBLE);
 
         // Start searching task
-        new AsyncFolderSearchTask(searchFolder, filenameList, keyword).execute();
+        new AsyncFolderSearchTask(mSearchFolder, mFilenameList, mKeyword).execute();
 
-        setTitle("Search");
-        setContentView(view);
-        show();
+        materialDialog = new MaterialAlertDialogBuilder(activity)
+                .setView(view)
+                .setPositiveButton(activity.getString(R.string.close), null)
+                .setNegativeButton(activity.getString(R.string.delete), null)
+                .create();
+        materialDialog.setOnShowListener(dialogShowListener -> {
+            materialDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(v -> {
+                deleteSelectedFiles();
+                materialDialog.dismiss();
+            });
+            materialDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.GONE);
+        });
+        materialDialog.show();
     }
+
+    private AlertDialog materialDialog;
 
     private void showMatchedFiles() {
         // Set title
         String format = activityRef.get().getString(R.string.str_files_found);
-        String text = String.format(format, matchedFiles.size(), keyword);
+        String text = String.format(format, matchedFiles.size(), mKeyword);
         titleTv.setText(text);
 
-        this.listAdapter = new MatchedFilenameAdapter(activityRef.get(), this,
-                searchFolder, matchedFiles);
+        listAdapter = new MatchedFilenameAdapter(activityRef.get(), this, mSearchFolder, matchedFiles);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
@@ -122,32 +127,12 @@ public class SearchFilenameDialog extends Dialog implements
         searchingLayout.setVisibility(View.INVISIBLE);
     }
 
-    @Override
-    public void onClick(@NonNull View v) {
-        int id = v.getId();
-        if (id == R.id.btn_close) {
-            dismiss();
-        } else if (id == R.id.btn_delete) {
-            deleteSelectedFiles();
-        } else if (id == R.id.menu_done) {
-            listAdapter.selectNone();
-            this.showNonSelectView();
-        } else if (id == R.id.menu_select) {
-            if (listAdapter.isAllSelected()) {
-                listAdapter.selectNone();
-                this.showNonSelectView();
-            } else {
-                listAdapter.selectAll();
-            }
-        }
-    }
-
     private void deleteSelectedFiles() {
         List<Integer> selected = listAdapter.getSeletedItems();
         deleteFilesByIndex(selected);
     }
 
-    private void deleteFilesByIndex(List<Integer> indexes) {
+    private void deleteFilesByIndex(@NonNull List<Integer> indexes) {
         ResListAdapter resManager = activityRef.get().getResListAdapter();
 
         // Use ResListAdapter to delete it
@@ -160,7 +145,7 @@ public class SearchFilenameDialog extends Dialog implements
         }
 
         // Collect file list which not deleted
-        ArrayList<String> fileList = new ArrayList<String>();
+        ArrayList<String> fileList = new ArrayList<>();
         for (int i = 0; i < matchedFiles.size(); ++i) {
             if (!indexes.contains(i)) {
                 fileList.add(matchedFiles.get(i));
@@ -168,8 +153,8 @@ public class SearchFilenameDialog extends Dialog implements
         }
 
         // Update matched files
-        this.matchedFiles = fileList;
-        listAdapter.resetFileList(this.matchedFiles, indexes);
+        matchedFiles = fileList;
+        listAdapter.resetFileList(matchedFiles, indexes);
 
         if (listAdapter.isNonSelected()) {
             showNonSelectView();
@@ -179,34 +164,31 @@ public class SearchFilenameDialog extends Dialog implements
     private void showNonSelectView() {
         titleTv.setVisibility(View.VISIBLE);
         selectionHeaderView.setVisibility(View.INVISIBLE);
-        deleteBtn.setVisibility(View.INVISIBLE);
 
         // As file count may change, need to update the title
         String format = activityRef.get().getString(R.string.str_files_found);
-        String text = String.format(format, matchedFiles.size(), keyword);
+        String text = String.format(format, matchedFiles.size(), mKeyword);
         titleTv.setText(text);
     }
 
     @Override
-    public void selectionChanged(Set<Integer> selected) {
+    public void selectionChanged(@NonNull Set<Integer> selected) {
         // No selection at all
         if (selected.isEmpty()) {
             showNonSelectView();
         } else {
-            String text = String.format(
-                    activityRef.get().getString(R.string.num_items_selected),
-                    selected.size());
+            String text = String.format(activityRef.get().getString(R.string.num_items_selected), selected.size());
             selectionTipTv.setText(text);
             titleTv.setVisibility(View.INVISIBLE);
             selectionHeaderView.setVisibility(View.VISIBLE);
-            deleteBtn.setVisibility(View.VISIBLE);
         }
+        materialDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(selected.isEmpty() ? View.GONE : View.VISIBLE);
+        materialDialog.show();
     }
 
     // Click on list item
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-                            long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position >= matchedFiles.size()) {
             return;
         }
@@ -221,7 +203,7 @@ public class SearchFilenameDialog extends Dialog implements
     }
 
     private void deleteItem(int position) {
-        List<Integer> indexes = new ArrayList<Integer>();
+        List<Integer> indexes = new ArrayList<>();
         indexes.add(position);
         this.deleteFilesByIndex(indexes);
     }
@@ -236,61 +218,40 @@ public class SearchFilenameDialog extends Dialog implements
     private void replaceItem(int position) {
         if (position < matchedFiles.size()) {
             String filepath = matchedFiles.get(position);
-            activityRef.get().replaceFile(filepath,
-                    new SomethingChangedListener() {
-                        @Override
-                        public void somethingChanged() {
-                            listAdapter.notifyDataSetChanged();
-                        }
-                    });
+            activityRef.get().replaceFile(filepath, () -> listAdapter.notifyDataSetChanged());
         }
     }
 
     // Long click on list item
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view,
+    public boolean onItemLongClick(@NonNull AdapterView<?> parent, View view,
                                    final int position, long id) {
         parent.setOnCreateContextMenuListener(
-                new OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                                                    ContextMenuInfo menuInfo) {
-
-                        // Delete
-                        MenuItem item1 = menu.add(0, Menu.FIRST, 0,
-                                R.string.delete);
-                        item1.setOnMenuItemClickListener(
-                                new OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(
-                                            MenuItem item) {
-                                        deleteItem(position);
-                                        return true;
-                                    }
-                                });
-                        // Extract
-                        MenuItem item2 = menu.add(0, Menu.FIRST + 1, 0,
-                                R.string.extract);
-                        item2.setOnMenuItemClickListener(
-                                new OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(
-                                            MenuItem item) {
-                                        extractItem(position);
-                                        return true;
-                                    }
-                                });
-                        // Replace the file
-                        MenuItem item3 = menu.add(0, Menu.FIRST + 2, 0,
-                                R.string.replace);
-                        OnMenuItemClickListener listener = new OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                replaceItem(position);
+                (menu, v, menuInfo) -> {
+                    // Delete
+                    MenuItem item1 = menu.add(0, Menu.FIRST, 0,
+                            R.string.delete);
+                    item1.setOnMenuItemClickListener(
+                            item -> {
+                                deleteItem(position);
                                 return true;
-                            }
-                        };
-                        item3.setOnMenuItemClickListener(listener);
-                    }
+                            });
+                    // Extract
+                    MenuItem item2 = menu.add(0, Menu.FIRST + 1, 0,
+                            R.string.extract);
+                    item2.setOnMenuItemClickListener(
+                            item -> {
+                                extractItem(position);
+                                return true;
+                            });
+                    // Replace the file
+                    MenuItem item3 = menu.add(0, Menu.FIRST + 2, 0,
+                            R.string.replace);
+                    OnMenuItemClickListener listener = item -> {
+                        replaceItem(position);
+                        return true;
+                    };
+                    item3.setOnMenuItemClickListener(listener);
                 });
 
         return false;
@@ -301,25 +262,25 @@ public class SearchFilenameDialog extends Dialog implements
     private class AsyncFolderSearchTask
             extends AsyncTask<Object, Void, List<String>> {
 
-        private final String baseFolder;
-        private final List<String> filenameList;
-        private final String keyword;
+        private final String mBaseFolder;
+        private final List<String> mFilenameList;
+        private final String mKeyword;
         private final String lowerCaseKeyword;
 
         @SuppressLint("DefaultLocale")
         public AsyncFolderSearchTask(String folderPath,
                                      List<String> filenameList, @NonNull String keyword) {
-            this.baseFolder = folderPath;
-            this.filenameList = filenameList;
-            this.keyword = keyword;
-            this.lowerCaseKeyword = keyword.toLowerCase();
+            mBaseFolder = folderPath;
+            mFilenameList = filenameList;
+            mKeyword = keyword;
+            lowerCaseKeyword = keyword.toLowerCase();
         }
 
         // Check the file whether contains the keyword
         private boolean fileMatches(String filename) {
-            boolean bContain = false;
-            if (caseSensitive) {
-                bContain = filename.contains(keyword);
+            boolean bContain;
+            if (mCaseSensitive) {
+                bContain = filename.contains(mKeyword);
             } else {
                 bContain = filename.toLowerCase()
                         .contains(lowerCaseKeyword);
@@ -345,8 +306,8 @@ public class SearchFilenameDialog extends Dialog implements
 
         @Override
         protected List<String> doInBackground(Object... params) {
-            File root = new File(baseFolder);
-            for (String filename : filenameList) {
+            File root = new File(mBaseFolder);
+            for (String filename : mFilenameList) {
                 File f = new File(root, filename);
                 if (!f.exists()) { // Not exist
                     continue;
