@@ -18,8 +18,8 @@ import com.mcal.apkeditor.StringListAdapter;
 import com.mcal.common.utils.ClipboardUtils;
 
 public class StringValueDialog {
-    private final TextInputLayout key;
-    private final TextInputEditText value;
+    private final TextInputLayout mKey;
+    private final TextInputEditText mValue;
 
     @SuppressLint("InflateParams")
     public StringValueDialog(Context context, StringListAdapter strListAdapter, int position) {
@@ -30,21 +30,21 @@ public class StringValueDialog {
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str = key.getHint().toString();
+                String str = mKey.getHint().toString();
                 ClipboardUtils.copyToClipboard(mContext, str);
                 String msg = mContext.getString(R.string.copied_to_clipboard);
                 msg = String.format(msg, str);
                 Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
             }
         });
-        key = view.findViewById(R.id.key);
-        value = view.findViewById(R.id.value);
+        mKey = view.findViewById(R.id.key);
+        mValue = view.findViewById(R.id.value);
 
         AlertDialog materialDialog = new MaterialAlertDialogBuilder(mContext)
                 .setView(view)
                 .create();
         materialDialog.setButton(DialogInterface.BUTTON_POSITIVE, mContext.getString(android.R.string.ok), (dialog, which) -> {
-            String newValue = value.getText().toString();
+            String newValue = mValue.getText().toString();
             strListAdapter.checkTextChange(position, newValue);
             dialog.dismiss();
         });
@@ -53,8 +53,8 @@ public class StringValueDialog {
     }
 
     public void setKeyValue(String key, String val) {
-        this.key.setHint(key);
-        value.setText(val);
-        value.setSelection(val != null ? val.length() : 0);
+        mKey.setHint(key);
+        mValue.setText(val);
+        mValue.setSelection(val != null ? val.length() : 0);
     }
 }
