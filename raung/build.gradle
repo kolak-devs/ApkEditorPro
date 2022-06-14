@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.beust:jcommander:1.82'
     implementation('com.jakewharton.android.repackaged:dalvik-dx:11.0.0_r3')
     implementation('com.android.tools:r8:3.3.28')
-    implementation 'org.ow2.asm:asm:9.2'
+    //implementation 'org.ow2.asm:asm:9.2'
 
     // Raung asm
     implementation 'info.picocli:picocli:4.6.3'

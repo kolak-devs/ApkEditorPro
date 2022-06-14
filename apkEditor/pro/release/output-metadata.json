@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1126,
-      "versionName": "1.12.6-minApi26",
-      "outputFile": "proRelease-1.12.6-minApi26.apk"
+      "versionCode": 1127,
+      "versionName": "1.12.7-alpha-minApi26",
+      "outputFile": "proRelease-1.12.7-alpha-minApi26.apk"
     }
   ],
   "elementType": "File"
