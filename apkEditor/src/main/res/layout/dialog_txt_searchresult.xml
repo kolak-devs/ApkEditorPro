@@ -1,33 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center|left"
-        android:padding="4dip"
+        android:gravity="center"
         android:minHeight="?attr/actionBarSize"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:padding="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:text="15 файлов найдено - png"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ExpandableListView
+                android:id="@+id/lv_matchedfiles"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </ExpandableListView>
+
+            <LinearLayout
+                android:id="@+id/searching_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16.0dip"
+                    android:text="@string/searching"
+                    android:textColor="@color/colorAccent" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:paddingBottom="2dip"
-        android:paddingLeft="2dip"
-        android:paddingRight="2dip"
+        android:layout_height="56dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <LinearLayout
             android:layout_width="0px"
@@ -38,62 +79,19 @@
         <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
             android:id="@+id/et_replaceall"
             android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:background="@drawable/background_search"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10" />
+            android:ems="10"
+            tools:text="Text"/>
 
         <Button
             android:id="@+id/btn_replaceall"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
+            style="@style/Widget.Material3.Button"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="4dip"
-            android:paddingRight="4dip"
-            android:layout_marginRight="2dip"
-            android:layout_marginBottom="2dip"
-            android:text="@string/replace_all" />
+            android:layout_height="wrap_content"
+            android:text="@string/replace_all"
+            android:textColor="@color/colorGray" />
+
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_layout"
-        android:layout_below="@id/title"
-        android:layout_weight="1">
-
-        <ExpandableListView
-            android:id="@+id/lv_matchedfiles"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </ExpandableListView>
-
-        <LinearLayout
-            android:id="@+id/searching_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-
-            <TextView
-                android:id="@+id/tv_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16.0dip"
-                android:text="@string/searching"
-                android:textColor="@color/colorAccent"/>
-
-        </LinearLayout>
-
-    </FrameLayout>
-
-</RelativeLayout>
+</LinearLayout>

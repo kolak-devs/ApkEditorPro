@@ -1,7 +1,5 @@
 package com.mcal.apkeditor.activities;
 
-import static com.mcal.common.App.context;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
@@ -58,7 +56,6 @@ import androidx.core.widget.ContentLoadingProgressBar;
 
 import com.developer.filepicker.model.DialogConfigs;
 import com.developer.filepicker.model.DialogProperties;
-import com.developer.filepicker.view.FilePickerDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.androlib.KXmlSerializer;
 import com.mcal.androlib.LanguageMapping;
@@ -1460,8 +1457,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     protected void searchInResourceFiles(String keyword, String directory,
                                          ArrayList<String> filenameList, boolean bSearchFilename,
                                          boolean caseSensitive) {
-
-        if (this.resKeywordAdapter != null) {
+        if (resKeywordAdapter != null) {
             resKeywordAdapter.addInputHistory(keyword);
         }
 
@@ -1469,8 +1465,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             new SearchFilenameDialog(this, directory,
                     filenameList, keyword, caseSensitive);
         } else {
-            new SearchTextDialog(
-                    this, directory, filenameList, keyword, caseSensitive).show();
+            new SearchTextDialog(this, directory, filenameList, keyword, caseSensitive);
         }
     }
 

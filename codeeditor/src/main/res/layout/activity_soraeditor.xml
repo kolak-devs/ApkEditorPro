@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -16,6 +17,14 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+        android:id="@+id/position_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="13sp"
+        tools:text="1:0" />
+
     <io.github.rosemoe.sora.widget.CodeEditor
         android:id="@+id/editor"
         android:layout_width="match_parent"
@@ -27,7 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <EditText
             android:id="@+id/search_editor"
@@ -48,32 +58,48 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="5dp">
 
                 <Button
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:onClick="gotoLast"
-                    android:text="@string/layout_tv_last" />
+                    android:text="@string/layout_tv_last"
+                    android:textColor="@color/colorGray" />
 
                 <Button
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:onClick="gotoNext"
-                    android:text="@string/layout_tv_next" />
+                    android:text="@string/layout_tv_next"
+                    android:textColor="@color/colorGray" />
 
                 <Button
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:onClick="replace"
-                    android:text="@string/layout_tv_replace" />
+                    android:text="@string/layout_tv_replace"
+                    android:textColor="@color/colorGray" />
 
                 <Button
+                    style="@style/Widget.Material3.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:onClick="replaceAll"
-                    android:text="@string/layout_tv_replaceAll" />
-
+                    android:text="@string/layout_tv_replaceAll"
+                    android:textColor="@color/colorGray" />
 
             </LinearLayout>
 
@@ -96,14 +122,6 @@
                 android:layout_height="36dp" />
 
         </HorizontalScrollView>
-
-        <TextView
-            android:id="@+id/position_display"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:gravity="center"
-            android:textColor="#000000" />
 
     </LinearLayout>
 

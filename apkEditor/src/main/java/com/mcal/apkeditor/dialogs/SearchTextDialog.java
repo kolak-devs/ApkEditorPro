@@ -2,18 +2,13 @@ package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -22,11 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mcal.apkeditor.GlobalConfig;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.MatchedTextListAdapter;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
-import com.mcal.apkeditor.SomethingChangedListener;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
@@ -41,10 +38,8 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-// /////////////////////////////////////////////////////////////////////
 
-public class SearchTextDialog extends Dialog
-        implements OnGroupClickListener, OnChildClickListener, OnClickListener, AdapterView.OnItemLongClickListener {
+public class SearchTextDialog implements OnGroupClickListener, OnChildClickListener, AdapterView.OnItemLongClickListener {
 
     private TextView titleTv;
     private AutoCompleteTextView etReplaceAll;
@@ -52,14 +47,14 @@ public class SearchTextDialog extends Dialog
     private MatchedTextListAdapter listAdapter;
     private LinearLayout searchingLayout;
 
-    private WeakReference<ApkInfoActivity> activityRef;
-    private String searchFolder;
-    private List<String> filenameList;
-    private String keyword;
-    private boolean caseSensitive;
+    private final WeakReference<ApkInfoActivity> mActivityRef;
+    private final String mSearchFolder;
+    private final List<String> mFilenameList;
+    private final String mKeyword;
+    private final boolean mCaseSensitive;
 
     // Record matched files
-    private ArrayList<String> matchedFiles = new ArrayList<>();
+    private final ArrayList<String> matchedFiles = new ArrayList<>();
 
     // Replace string
     private AutoCompleteAdapter adapter;
@@ -67,52 +62,45 @@ public class SearchTextDialog extends Dialog
     public SearchTextDialog(ApkInfoActivity activity, String searchFolder,
                             List<String> filenameList,
                             String keyword, boolean caseSensitive) {
-        super(activity);
-        // Full screen
-        if (GlobalConfig.instance(activity).isFullScreen()) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-
-        this.activityRef = new WeakReference<>(activity);
-        this.searchFolder = searchFolder;
-        this.filenameList = filenameList;
-        this.keyword = keyword;
-        this.caseSensitive = caseSensitive;
-        if (!this.searchFolder.endsWith("/")) {
+        mActivityRef = new WeakReference<>(activity);
+        mSearchFolder = searchFolder;
+        mFilenameList = filenameList;
+        mKeyword = keyword;
+        mCaseSensitive = caseSensitive;
+        if (!mSearchFolder.endsWith("/")) {
             searchFolder += "/";
         }
-        // this.searchFolder = "/storage/sdcard1/";
-        // this.keyword = "android";
-
         init(activity);
     }
 
     private void init(Activity activity) {
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_txt_searchresult, null);
 
-        this.titleTv = (TextView) view.findViewById(R.id.title);
-        this.etReplaceAll = (AutoCompleteTextView) view.findViewById(R.id.et_replaceall);
-        this.listView = (ExpandableListView) view.findViewById(R.id.lv_matchedfiles);
-        this.searchingLayout = (LinearLayout) view.findViewById(R.id.searching_layout);
+        titleTv = (TextView) view.findViewById(R.id.title);
+        etReplaceAll = (AutoCompleteTextView) view.findViewById(R.id.et_replaceall);
+        listView = (ExpandableListView) view.findViewById(R.id.lv_matchedfiles);
+        searchingLayout = (LinearLayout) view.findViewById(R.id.searching_layout);
         listView.setVisibility(View.INVISIBLE);
 
         // Start searching task
-        new AsyncFolderSearchTask(searchFolder, filenameList, keyword,
-                caseSensitive).execute();
+        new AsyncFolderSearchTask(mSearchFolder, mFilenameList, mKeyword,
+                mCaseSensitive).execute();
 
         // Replace all
-        view.findViewById(R.id.btn_replaceall).setOnClickListener(this);
-        this.adapter = new AutoCompleteAdapter(
+        view.findViewById(R.id.btn_replaceall).setOnClickListener(v -> showConfirmDialog());
+        adapter = new AutoCompleteAdapter(
                 activity.getApplicationContext(), "search_replace_with");
         AutoCompleteTextView etReplaceAll = (AutoCompleteTextView) view.findViewById(R.id.et_replaceall);
         etReplaceAll.setAdapter(adapter);
 
-        this.setContentView(view);
+        AlertDialog materialDialog = new MaterialAlertDialogBuilder(activity)
+                .setView(view)
+                .create();
+        materialDialog.show();
     }
 
     @Override
-    public boolean onGroupClick(ExpandableListView parent, View v,
+    public boolean onGroupClick(@NonNull ExpandableListView parent, View v,
                                 int groupPosition, long id) {
         boolean expanded = parent.isGroupExpanded(groupPosition);
         if (!expanded) {
@@ -143,11 +131,11 @@ public class SearchTextDialog extends Dialog
         // If too many files, only edit current file
         if (filePathList.size() > 100) {
             String filePath = filePathList.get(groupPos);
-            ApkInfoActivity activity = activityRef.get();
+            ApkInfoActivity activity = mActivityRef.get();
             intent = TextEditor.getSoraEditor(activity, filePath, activity.getApkPath());
             ActivityUtils.attachParam(intent, "startLine", "" + item.lineIndex);
         } else {
-            ApkInfoActivity activity = activityRef.get();
+            ApkInfoActivity activity = mActivityRef.get();
             intent = TextEditor.getEditorIntent(activity, filePathList, groupPos, activity.getApkPath());
             ActivityUtils.attachParam(intent, "fileList", filePathList);
             ActivityUtils.attachParam(intent, "curFileIndex", groupPos);
@@ -163,21 +151,21 @@ public class SearchTextDialog extends Dialog
             ActivityUtils.attachParam2(intent, "startLineList", startLineList);
         }
 
-        ActivityUtils.attachParam(intent, "searchString", keyword);
+        ActivityUtils.attachParam(intent, "searchString", mKeyword);
 
-        activityRef.get().startActivityForResult(intent, 0);
+        mActivityRef.get().startActivityForResult(intent, 0);
 
         return false;
     }
 
     private void showMatchedFiles() {
         // Set title
-        String format = activityRef.get().getString(R.string.str_files_found);
-        String text = String.format(format, matchedFiles.size(), keyword);
+        String format = mActivityRef.get().getString(R.string.str_files_found);
+        String text = String.format(format, matchedFiles.size(), mKeyword);
         titleTv.setText(text);
 
-        this.listAdapter = new MatchedTextListAdapter(activityRef,
-                listView, searchFolder, matchedFiles, keyword);
+        this.listAdapter = new MatchedTextListAdapter(mActivityRef,
+                listView, mSearchFolder, matchedFiles, mKeyword);
         listView.setAdapter(listAdapter);
         listView.setOnGroupClickListener(this);
         listView.setOnChildClickListener(this);
@@ -188,60 +176,40 @@ public class SearchTextDialog extends Dialog
         searchingLayout.setVisibility(View.INVISIBLE);
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.btn_replaceall) {
-            showConfirmDialog();
-        }
-    }
-
     private void showConfirmDialog() {
 
         final String strReplace = etReplaceAll.getText().toString();
 
-        AlertDialog.Builder comfirmDlg = new AlertDialog.Builder(activityRef.get());
-        String msg = String.format(
-                activityRef.get().getString(R.string.sure_to_replace_all),
-                this.keyword, strReplace);
-        comfirmDlg.setMessage(msg);
-
-        comfirmDlg.setPositiveButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        if (!"".equals(strReplace.trim())) {
-                            adapter.addInputHistory(strReplace);
-                        }
-                        doReplaceAll(strReplace);
-                    }
-                });
-
-        comfirmDlg.setNegativeButton(android.R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        // Canceled.
-                    }
-                });
-
-        comfirmDlg.show();
+        AlertDialog confirmDlg = new MaterialAlertDialogBuilder(mActivityRef.get()).create();
+        String msg = String.format(mActivityRef.get().getString(R.string.sure_to_replace_all), mKeyword, strReplace);
+        confirmDlg.setMessage(msg);
+        confirmDlg.setButton(DialogInterface.BUTTON_POSITIVE, mActivityRef.get().getString(android.R.string.ok), (dialog, which) -> {
+            if (!"".equals(strReplace.trim())) {
+                adapter.addInputHistory(strReplace);
+            }
+            doReplaceAll(strReplace);
+            dialog.dismiss();
+        });
+        confirmDlg.setButton(DialogInterface.BUTTON_POSITIVE, mActivityRef.get().getString(android.R.string.cancel), (dialog, which) -> {
+            dialog.dismiss();
+        });
+        confirmDlg.show();
     }
 
     protected void doReplaceAll(final String strReplace) {
-        new ProcessingDialog(activityRef.get(), new ProcessingDialog.ProcessingInterface() {
+        new ProcessingDialog(mActivityRef.get(), new ProcessingDialog.ProcessingInterface() {
             int failedNum = 0;
             String failMessage = "";
 
             @Override
-            public void process() throws Exception {
+            public void process() {
                 for (String f : matchedFiles) {
                     try {
                         listAdapter.replaceWith(f, strReplace);
                         addModification(f);
                     } catch (Exception e) {
                         failMessage += "\n" + String.format(
-                                activityRef.get().getString(R.string.failed_to_modify), f);
+                                mActivityRef.get().getString(R.string.failed_to_modify), f);
                         failedNum += 1;
                     }
                 }
@@ -254,23 +222,22 @@ public class SearchTextDialog extends Dialog
                     listAdapter.removeSearchResult(i);
                 }
 
-                String msg = activityRef.get().getString(R.string.str_num_modified_file);
+                String msg = mActivityRef.get().getString(R.string.str_num_modified_file);
                 msg = String.format(msg, matchedFiles.size() - failedNum);
 
                 if (failedNum > 0) {
                     msg += failMessage;
-                    Toast.makeText(activityRef.get(), msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(mActivityRef.get(), msg, Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(activityRef.get(), msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivityRef.get(), msg, Toast.LENGTH_SHORT).show();
                 }
             }
-
         }, -1);
     }
 
     // Mark the file as modified
     public void addModification(String filePath) {
-        activityRef.get().dealWithModifiedFile(filePath, null);
+        mActivityRef.get().dealWithModifiedFile(filePath, null);
     }
 
     // Long click on list item
@@ -284,53 +251,37 @@ public class SearchTextDialog extends Dialog
 
         final int groupIdx = ExpandableListView.getPackedPositionGroup(id);
         parent.setOnCreateContextMenuListener(
-                new View.OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                                                    ContextMenu.ContextMenuInfo menuInfo) {
-
-                        // Delete
-                        MenuItem item1 = menu.add(0, Menu.FIRST, 0,
-                                R.string.delete);
-                        item1.setOnMenuItemClickListener(
-                                new MenuItem.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(
-                                            MenuItem item) {
-                                        deleteItem(groupIdx);
-                                        return true;
-                                    }
-                                });
-                        // Extract
-                        MenuItem item2 = menu.add(0, Menu.FIRST + 1, 0,
-                                R.string.extract);
-                        item2.setOnMenuItemClickListener(
-                                new MenuItem.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(
-                                            MenuItem item) {
-                                        extractItem(groupIdx);
-                                        return true;
-                                    }
-                                });
-                        // Replace the file
-                        MenuItem item3 = menu.add(0, Menu.FIRST + 2, 0,
-                                R.string.replace);
-                        MenuItem.OnMenuItemClickListener listener = new MenuItem.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                replaceItem(groupIdx);
+                (menu, v, menuInfo) -> {
+                    // Delete
+                    MenuItem item1 = menu.add(0, Menu.FIRST, 0,
+                            R.string.delete);
+                    item1.setOnMenuItemClickListener(
+                            item -> {
+                                deleteItem(groupIdx);
                                 return true;
-                            }
-                        };
-                        item3.setOnMenuItemClickListener(listener);
-                    }
+                            });
+                    // Extract
+                    MenuItem item2 = menu.add(0, Menu.FIRST + 1, 0,
+                            R.string.extract);
+                    item2.setOnMenuItemClickListener(
+                            item -> {
+                                extractItem(groupIdx);
+                                return true;
+                            });
+                    // Replace the file
+                    MenuItem item3 = menu.add(0, Menu.FIRST + 2, 0,
+                            R.string.replace);
+                    MenuItem.OnMenuItemClickListener listener = item -> {
+                        replaceItem(groupIdx);
+                        return true;
+                    };
+                    item3.setOnMenuItemClickListener(listener);
                 });
-
         return false;
     }
 
     private void deleteItem(int position) {
-        ResListAdapter resManager = activityRef.get().getResListAdapter();
+        ResListAdapter resManager = mActivityRef.get().getResListAdapter();
 
         // Use ResListAdapter to delete it
         String filepath = this.matchedFiles.get(position);
@@ -346,43 +297,41 @@ public class SearchTextDialog extends Dialog
     private void extractItem(int position) {
         if (position < matchedFiles.size()) {
             String filepath = matchedFiles.get(position);
-            activityRef.get().extractFileOrDir(filepath);
+            mActivityRef.get().extractFileOrDir(filepath);
         }
     }
 
     private void replaceItem(final int position) {
         if (position < matchedFiles.size()) {
             String filepath = matchedFiles.get(position);
-            activityRef.get().replaceFile(filepath,
-                    new SomethingChangedListener() {
-                        @Override
-                        public void somethingChanged() {
-                            listView.collapseGroup(position);
-                            listAdapter.removeSearchResult(position);
-                        }
+            mActivityRef.get().replaceFile(filepath,
+                    () -> {
+                        listView.collapseGroup(position);
+                        listAdapter.removeSearchResult(position);
                     });
         }
     }
 
     // Search all the files inside the folder
+    @SuppressLint("StaticFieldLeak")
     private class AsyncFolderSearchTask
             extends AsyncTask<Object, Void, List<String>> {
 
-        private String baseFolder;
-        private List<String> filenameList;
-        private String keyword;
-        private String lcKeyword; // lower case
-        private boolean caseSensitive;
+        private final String baseFolder;
+        private final List<String> mFilenameList;
+        private final String mKeyword;
+        private final String lcKeyword; // lower case
+        private final boolean mCaseSensitive;
 
         @SuppressLint("DefaultLocale")
         public AsyncFolderSearchTask(String folderPath,
-                                     List<String> filenameList, String keyword,
+                                     List<String> filenameList, @NonNull String keyword,
                                      boolean caseSensitive) {
-            this.baseFolder = folderPath;
-            this.filenameList = filenameList;
-            this.keyword = keyword;
-            this.lcKeyword = keyword.toLowerCase();
-            this.caseSensitive = caseSensitive;
+            baseFolder = folderPath;
+            mFilenameList = filenameList;
+            mKeyword = keyword;
+            lcKeyword = keyword.toLowerCase();
+            mCaseSensitive = caseSensitive;
         }
 
         // Check the file whether contains the keyword
@@ -392,14 +341,13 @@ public class SearchTextDialog extends Dialog
 
             BufferedReader br = null;
             try {
-                br = new BufferedReader(
-                        new InputStreamReader(new FileInputStream(file)));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 
                 // Search the keyword line by line
                 String line = br.readLine();
-                if (caseSensitive) {
+                if (mCaseSensitive) {
                     while (line != null) {
-                        if (line.contains(keyword)) {
+                        if (line.contains(mKeyword)) {
                             ret = true;
                             break;
                         }
@@ -416,19 +364,20 @@ public class SearchTextDialog extends Dialog
                 }
 
             } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 if (br != null) {
                     try {
                         br.close();
                     } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
-
             return ret;
         }
 
-        private void searchFolder(File folderFile) {
+        private void searchFolder(@NonNull File folderFile) {
             File[] files = folderFile.listFiles();
             if (files != null)
                 for (File f : files) {
@@ -440,19 +389,22 @@ public class SearchTextDialog extends Dialog
                         }
                     }
                 }
-
         }
 
-        private boolean isTxtFile(File f) {
+        private boolean isTxtFile(@NonNull File f) {
             String name = f.getName();
-            return name.endsWith(".xml") || name.endsWith(".smali")
-                    || name.endsWith(".txt");
+            return name.endsWith(".xml") ||
+                    name.endsWith(".smali") ||
+                    name.endsWith(".java") ||
+                    name.endsWith(".json") ||
+                    name.endsWith(".kt") ||
+                    name.endsWith(".txt");
         }
 
         @Override
         protected List<String> doInBackground(Object... params) {
             File root = new File(baseFolder);
-            for (String filename : filenameList) {
+            for (String filename : mFilenameList) {
                 File f = new File(root, filename);
                 if (!f.exists()) { // Not exist
                     continue;
@@ -465,7 +417,6 @@ public class SearchTextDialog extends Dialog
                     }
                 }
             }
-
             return matchedFiles;
         }
 
@@ -476,41 +427,43 @@ public class SearchTextDialog extends Dialog
     }
 
     // Search the keyword asynchronously in one file
+    @SuppressLint("StaticFieldLeak")
     private class AsyncFileSearchTask
             extends AsyncTask<Object, Void, TxtSearchResult> {
 
-        private String filePath;
-        private String keyword;
-        private int groupPosition;
+        private final String mFilePath;
+        private final String mKeyword;
+        private final int mGroupPosition;
 
         public AsyncFileSearchTask(String filePath, String keyword,
                                    int groupPosition) {
-            this.filePath = filePath;
-            this.keyword = keyword;
-            this.groupPosition = groupPosition;
+            mFilePath = filePath;
+            mKeyword = keyword;
+            mGroupPosition = groupPosition;
         }
 
+        @NonNull
         @SuppressLint("DefaultLocale")
         @Override
         protected TxtSearchResult doInBackground(Object... params) {
             TxtSearchResult result = new TxtSearchResult();
-            result.filePath = filePath;
-            result.keyword = keyword;
-            String lcKeyword = keyword.toLowerCase();
+            result.filePath = mFilePath;
+            result.keyword = mKeyword;
+            String lcKeyword = mKeyword.toLowerCase();
 
             BufferedReader br = null;
             try {
                 List<MatchedLineItem> matchedItems = new ArrayList<MatchedLineItem>();
                 br = new BufferedReader(
-                        new InputStreamReader(new FileInputStream(filePath)));
+                        new InputStreamReader(new FileInputStream(mFilePath)));
 
                 // Search the keyword line by line
                 int lineIndex = 1;
                 String line = br.readLine();
                 while (line != null) {
                     int position = -1;
-                    if (caseSensitive) {
-                        position = line.indexOf(keyword);
+                    if (mCaseSensitive) {
+                        position = line.indexOf(mKeyword);
                     } else {
                         position = line.toLowerCase().indexOf(lcKeyword);
                     }
@@ -524,6 +477,7 @@ public class SearchTextDialog extends Dialog
 
                 result.matchList = matchedItems;
             } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 if (br != null) {
                     try {
@@ -533,17 +487,16 @@ public class SearchTextDialog extends Dialog
                     }
                 }
             }
-
             return result;
         }
 
         @Override
-        protected void onPostExecute(TxtSearchResult result) {
+        protected void onPostExecute(@NonNull TxtSearchResult result) {
             // unfold the list
             if (result.matchList != null) {
                 listAdapter.addSearchResult(result.filePath, result.matchList);
             }
-            listView.expandGroup(groupPosition);
+            listView.expandGroup(mGroupPosition);
         }
     }
 }
