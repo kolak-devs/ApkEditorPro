@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,18 +14,16 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dip"
-            android:layout_marginTop="4dip"
-            android:layout_marginRight="4dip"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/tv_new_folder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:gravity="center"
                 android:padding="4dip"
+                android:singleLine="true"
                 android:text="@string/new_folder"
                 android:textSize="16sp" />
 
@@ -39,18 +38,16 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dip"
-            android:layout_marginTop="4dip"
-            android:layout_marginRight="4dip"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/tv_import_folder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:gravity="center"
                 android:padding="4dip"
+                android:singleLine="true"
                 android:text="@string/import_folder"
                 android:textSize="16sp" />
 
@@ -70,7 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
-        android:padding="4dip">
+        android:padding="16dp">
 
         <LinearLayout
             android:id="@+id/layout_new"
@@ -79,21 +76,24 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/pls_input_foldername" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/et_folder_name"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/background_search"
-                android:gravity="center|left"
-                android:minHeight="45dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp" />
+                android:hint="@string/pls_input_foldername"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_folder_name"
+                    style="@style/ThemeOverlay.Material3.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="5dp"
+                    android:inputType="textNoSuggestions"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -105,59 +105,26 @@
             android:orientation="vertical"
             android:visibility="invisible">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/folder_path" />
+                android:hint="@string/folder_path"
+                app:errorEnabled="false">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/et_folder_path"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/background_search"
-                android:gravity="center|left"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:minHeight="45dp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_folder_path"
+                    style="@style/ThemeOverlay.Material3.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="5dp"
+                    android:inputType="textNoSuggestions"
+                    android:singleLine="true" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_browse"
-                style="@style/Base.Widget.AppCompat.Button.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="..." />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/content"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_cancel"
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dip"
-            android:layout_marginTop="4dip"
-            android:layout_marginBottom="4dip"
-            android:layout_weight="1"
-            android:text="@android:string/cancel" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_confirm"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dip"
-            android:layout_weight="1"
-            android:text="@android:string/ok" />
-
-    </LinearLayout>
 
 </RelativeLayout>

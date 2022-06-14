@@ -41,21 +41,18 @@ import java.util.List;
 
 public class SearchTextDialog implements OnGroupClickListener, OnChildClickListener, AdapterView.OnItemLongClickListener {
 
-    private TextView titleTv;
-    private AutoCompleteTextView etReplaceAll;
-    private ExpandableListView listView;
-    private MatchedTextListAdapter listAdapter;
-    private LinearLayout searchingLayout;
-
     private final WeakReference<ApkInfoActivity> mActivityRef;
     private final String mSearchFolder;
     private final List<String> mFilenameList;
     private final String mKeyword;
     private final boolean mCaseSensitive;
-
     // Record matched files
     private final ArrayList<String> matchedFiles = new ArrayList<>();
-
+    private TextView titleTv;
+    private AutoCompleteTextView etReplaceAll;
+    private ExpandableListView listView;
+    private MatchedTextListAdapter listAdapter;
+    private LinearLayout searchingLayout;
     // Replace string
     private AutoCompleteAdapter adapter;
 

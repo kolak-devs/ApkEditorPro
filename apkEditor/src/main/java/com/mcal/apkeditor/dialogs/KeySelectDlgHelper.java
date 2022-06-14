@@ -46,12 +46,12 @@ public class KeySelectDlgHelper implements IFileSelection {
         btn2.setOnClickListener(v -> new FileSelectDialog(mContext, this, ".x509.pem", ".pem",
                 mContext.getString(R.string.select_key_file)));
 
-        MaterialAlertDialogBuilder db = new MaterialAlertDialogBuilder(context);
-        db.setView(view);
-        db.setTitle(R.string.custom_key_setting);
-        db.setPositiveButton(android.R.string.ok, (dialog, which) -> setCustomKey());
-        db.setNegativeButton(android.R.string.cancel, null);
-        db.show();
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
+        dialog.setView(view);
+        dialog.setTitle(R.string.custom_key_setting);
+        dialog.setPositiveButton(android.R.string.ok, (v, which) -> setCustomKey());
+        dialog.setNegativeButton(android.R.string.cancel, null);
+        dialog.show();
     }
 
     protected void setCustomKey() {

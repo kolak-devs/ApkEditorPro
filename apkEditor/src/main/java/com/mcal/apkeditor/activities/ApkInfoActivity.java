@@ -3187,8 +3187,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // To create a folder in current directory
     protected void createFolder(int position) {
-        boolean showImportFolder = this.isFullDecoding;
-        new AddFolderDialog(this, this, showImportFolder).show();
+        boolean showImportFolder = isFullDecoding;
+        new AddFolderDialog(this, this, showImportFolder);
     }
 
     @Override

@@ -50,6 +50,7 @@ public class SearchFilenameDialog implements ResSelectionChangeListener,
     private LinearLayout searchingLayout;
     // Record matched files
     private ArrayList<String> matchedFiles = new ArrayList<>();
+    private AlertDialog materialDialog;
 
     public SearchFilenameDialog(ApkInfoActivity activity, String searchFolder,
                                 List<String> filenameList, String keyword, boolean caseSensitive) {
@@ -108,8 +109,6 @@ public class SearchFilenameDialog implements ResSelectionChangeListener,
         });
         materialDialog.show();
     }
-
-    private AlertDialog materialDialog;
 
     private void showMatchedFiles() {
         // Set title

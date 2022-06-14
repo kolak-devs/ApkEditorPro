@@ -1,16 +1,18 @@
 package com.mcal.apkeditor.ui;
 
-import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.common.utils.InputUtils;
@@ -18,37 +20,64 @@ import com.mcal.common.utils.InputUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
-
 // Create a new directory or import a directory
-public class AddFolderDialog extends Dialog implements View.OnClickListener, FileSelectDialog.IFileSelection {
-    private final AddFolderCallback callback;
+public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.IFileSelection {
+    private final AddFolderCallback mCallback;
     private final WeakReference<Context> contextRef;
-    private final boolean showImportFolder;
-    private final View view;
-    private View newDivider;
-    private View importDivider;
-    private View newFolderLayout;
-    private View importFolderLayout;
-    private EditText folderNameEt;
+    private final View newDivider;
+    private final View importDivider;
+    private final View newFolderLayout;
+    private final View importFolderLayout;
+    private final TextInputEditText folderNameEt;
 
-    ////////////////////////////////////////////////////////////////////////////////
     // Callback functions for folder selection
-    private EditText folderPathEt;
+    private final TextInputEditText folderPathEt;
     private boolean addFolder = true;
+    private final AlertDialog materialDialog;
 
     public AddFolderDialog(final Context context, AddFolderCallback callback, boolean showImportFolder) {
-        super(context);
+        contextRef = new WeakReference<>(context);
+        mCallback = callback;
 
-        this.contextRef = new WeakReference<>(context);
-        this.callback = callback;
-        this.showImportFolder = showImportFolder;
+        View view = LayoutInflater.from(context).inflate(R.layout.dlg_add_folder, null);
+        TextView newTv = (TextView) view.findViewById(R.id.tv_new_folder);
+        TextView importTv = (TextView) view.findViewById(R.id.tv_import_folder);
+        if (!showImportFolder) {
+            importTv.setVisibility(View.GONE);
+        }
 
-        view = LayoutInflater.from(context).inflate(R.layout.dlg_add_folder, null);
+        newDivider = view.findViewById(R.id.divider1);
+        importDivider = view.findViewById(R.id.divider2);
+        newFolderLayout = view.findViewById(R.id.layout_new);
+        importFolderLayout = view.findViewById(R.id.layout_import);
 
-        setTitle("New");
-        setContentView(view);
+        folderNameEt = (TextInputEditText) view.findViewById(R.id.et_folder_name);
+        folderPathEt = (TextInputEditText) view.findViewById(R.id.et_folder_path);
 
-        init();
+        InputFilter filter = InputUtils.getFileNameFilter();
+        folderNameEt.setFilters(new InputFilter[]{filter});
+
+        newTv.setOnClickListener(this);
+        importTv.setOnClickListener(this);
+
+        materialDialog = new MaterialAlertDialogBuilder(context)
+                .setView(view)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    confirm();
+                    dialog.dismiss();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .setNeutralButton("Select", null)
+                .create();
+
+        materialDialog.setOnShowListener(dialogShowListener -> {
+            materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(v -> {
+                browse();
+                materialDialog.dismiss();
+            });
+            materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
+        });
+        materialDialog.show();
     }
 
     @Override
@@ -61,36 +90,9 @@ public class AddFolderDialog extends Dialog implements View.OnClickListener, Fil
         return false;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-
     @Override
     public String getConfirmMessage(String filePath, String extraStr) {
         return null;
-    }
-
-    private void init() {
-        TextView newTv = (TextView) view.findViewById(R.id.tv_new_folder);
-        TextView importTv = (TextView) view.findViewById(R.id.tv_import_folder);
-        if (!showImportFolder) {
-            importTv.setVisibility(View.GONE);
-        }
-
-        this.newDivider = view.findViewById(R.id.divider1);
-        this.importDivider = view.findViewById(R.id.divider2);
-        this.newFolderLayout = view.findViewById(R.id.layout_new);
-        this.importFolderLayout = view.findViewById(R.id.layout_import);
-
-        folderNameEt = (EditText) view.findViewById(R.id.et_folder_name);
-        folderPathEt = (EditText) view.findViewById(R.id.et_folder_path);
-
-        InputFilter filter = InputUtils.getFileNameFilter();
-        folderNameEt.setFilters(new InputFilter[]{filter});
-
-        newTv.setOnClickListener(this);
-        importTv.setOnClickListener(this);
-        view.findViewById(R.id.btn_browse).setOnClickListener(this);
-        view.findViewById(R.id.btn_cancel).setOnClickListener(this);
-        view.findViewById(R.id.btn_confirm).setOnClickListener(this);
     }
 
     @Override
@@ -100,12 +102,6 @@ public class AddFolderDialog extends Dialog implements View.OnClickListener, Fil
             showNewFolderView();
         } else if (id == R.id.tv_import_folder) {
             showImportFolderView();
-        } else if (id == R.id.btn_cancel) {
-            dismiss();
-        } else if (id == R.id.btn_confirm) {
-            confirm();
-        } else if (id == R.id.btn_browse) {
-            browse();
         }
     }
 
@@ -125,11 +121,10 @@ public class AddFolderDialog extends Dialog implements View.OnClickListener, Fil
             String name = folderNameEt.getText().toString();
             name = name.trim();
             if ("".equals(name)) {
-                Toast.makeText(contextRef.get(),
-                        R.string.empty_input_tip, Toast.LENGTH_LONG).show();
+                Toast.makeText(contextRef.get(), R.string.empty_input_tip, Toast.LENGTH_LONG).show();
             } else {
-                callback.addFolder(name);
-                dismiss();
+                mCallback.addFolder(name);
+                materialDialog.dismiss();
             }
         }
         // To import a folder
@@ -137,15 +132,14 @@ public class AddFolderDialog extends Dialog implements View.OnClickListener, Fil
             String path = folderPathEt.getText().toString();
             path = path.trim();
             if ("".equals(path)) {
-                Toast.makeText(contextRef.get(),
-                        R.string.empty_input_tip, Toast.LENGTH_LONG).show();
+                Toast.makeText(contextRef.get(), R.string.empty_input_tip, Toast.LENGTH_LONG).show();
             } else if (!new File(path).exists()) {
                 String fmt = contextRef.get().getString(R.string.error_path_xxx_not_exist);
                 String message = String.format(fmt, path);
                 Toast.makeText(contextRef.get(), message, Toast.LENGTH_LONG).show();
             } else {
-                callback.importFolder(path);
-                dismiss();
+                mCallback.importFolder(path);
+                materialDialog.dismiss();
             }
         }
     }
@@ -156,6 +150,8 @@ public class AddFolderDialog extends Dialog implements View.OnClickListener, Fil
         importDivider.setVisibility(View.INVISIBLE);
         newFolderLayout.setVisibility(View.VISIBLE);
         importFolderLayout.setVisibility(View.INVISIBLE);
+        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.INVISIBLE);
+        materialDialog.show();
     }
 
     private void showImportFolderView() {
@@ -164,6 +160,8 @@ public class AddFolderDialog extends Dialog implements View.OnClickListener, Fil
         importDivider.setVisibility(View.VISIBLE);
         newFolderLayout.setVisibility(View.INVISIBLE);
         importFolderLayout.setVisibility(View.VISIBLE);
+        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.VISIBLE);
+        materialDialog.show();
     }
 
     public interface AddFolderCallback {

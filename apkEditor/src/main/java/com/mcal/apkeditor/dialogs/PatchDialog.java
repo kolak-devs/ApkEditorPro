@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
@@ -65,6 +64,7 @@ public class PatchDialog implements android.view.View.OnClickListener, IPatchCon
     private ManifestInfo manifestInfo;
     // Record executor as the parse is done there
     private PatchExecutor patchExecutor;
+    private AlertDialog materialDialog;
 
     public PatchDialog(ApkInfoActivity activity) {
         activityRef = new WeakReference<>(activity);
@@ -97,8 +97,6 @@ public class PatchDialog implements android.view.View.OnClickListener, IPatchCon
 
         materialDialog.show();
     }
-
-    private AlertDialog materialDialog;
 
     @Override
     public void onClick(@NonNull View v) {

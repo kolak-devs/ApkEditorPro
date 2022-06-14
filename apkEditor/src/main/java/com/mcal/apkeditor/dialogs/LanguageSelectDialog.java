@@ -1,17 +1,14 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -27,10 +24,9 @@ public class LanguageSelectDialog {
     private final View contentView;
     private final EditText codeEt;
     private final boolean isAutoTranslate;
+    private final AlertDialog materialDialog;
     private String[] codes;
     private String[] languages;
-
-    private final AlertDialog materialDialog;
 
     @SuppressLint("InflateParams")
     public LanguageSelectDialog(ApkInfoActivity activity, String[] _lang, String[] _codes) {
