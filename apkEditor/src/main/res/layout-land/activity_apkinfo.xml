@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
@@ -131,16 +132,18 @@
                 android:src="@drawable/round_patch_24"
                 android:visibility="invisible" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/btn_build_apk"
-                style="@style/Base.Widget.AppCompat.Button.Colored"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="4dip"
                 android:layout_marginRight="4dip"
                 android:text="@string/build"
-                android:visibility="invisible" />
+                android:textColor="@color/colorGray"
+                android:visibility="invisible"
+                tools:visibility="visible" />
 
         </LinearLayout>
 

@@ -36,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -224,7 +225,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private AppCompatImageButton webserverMenu;
     private AppCompatImageButton rotateMenu;
     private AppCompatImageButton patchMenu;
-    private AppCompatButton saveBtn;
+    private Button saveBtn;
     // APK parser
     private ApkParseThread parseThread;
     // Modified String/Manifest or not

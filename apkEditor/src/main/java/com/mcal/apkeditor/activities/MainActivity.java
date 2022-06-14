@@ -12,12 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -166,14 +166,14 @@ public class MainActivity extends CustomizedLangActivity implements
         setupSlidingMenu();
 
         // Select apk from folder
-        AppCompatButton openApkBtn = this.findViewById(R.id.tv_select_apkfile);
+        Button openApkBtn = this.findViewById(R.id.tv_select_apkfile);
         openApkBtn.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, FileListActivity.class);
             startActivity(intent);
         });
 
         // Select apk from app
-        AppCompatButton openAppBtn = this.findViewById(R.id.tv_select_appfile);
+        Button openAppBtn = this.findViewById(R.id.tv_select_appfile);
         if (BuildConfig.DISPLAY_APP) {
             openAppBtn.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, UserAppActivity.class);
@@ -188,7 +188,7 @@ public class MainActivity extends CustomizedLangActivity implements
         }
 
         // Odex Patcher
-        AppCompatButton odexPatcherBtn = this.findViewById(R.id.tv_odex_patcher);
+        Button odexPatcherBtn = this.findViewById(R.id.tv_odex_patcher);
         odexPatcherBtn.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, OdexPatchActivity.class);
             startActivity(intent);
@@ -196,12 +196,12 @@ public class MainActivity extends CustomizedLangActivity implements
 
 
         // Exit
-        AppCompatButton exitButton = this.findViewById(R.id.tv_exit);
+        Button exitButton = this.findViewById(R.id.tv_exit);
         exitButton.setOnClickListener(v -> new ProcessingDialog(MainActivity.this, MainActivity.this, -1));
 
         // Help
         // For APK Parser, use it as 'project'
-        AppCompatButton helpButton = this.findViewById(R.id.tv_help);
+        Button helpButton = this.findViewById(R.id.tv_help);
         if (BuildConfig.PARSER_ONLY) {
             helpButton.setText(R.string.projects);
             helpButton.setOnClickListener(v -> {
