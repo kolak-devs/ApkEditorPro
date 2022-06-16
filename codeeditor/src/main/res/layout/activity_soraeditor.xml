@@ -62,44 +62,40 @@
                 android:paddingBottom="5dp">
 
                 <Button
-                    style="@style/Widget.Material3.Button"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:onClick="gotoLast"
-                    android:text="@string/layout_tv_last"
-                    android:textColor="@color/colorGray" />
+                    android:text="@string/layout_tv_last" />
 
                 <Button
-                    style="@style/Widget.Material3.Button"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:onClick="gotoNext"
-                    android:text="@string/layout_tv_next"
-                    android:textColor="@color/colorGray" />
+                    android:text="@string/layout_tv_next" />
 
                 <Button
-                    style="@style/Widget.Material3.Button"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:onClick="replace"
-                    android:text="@string/layout_tv_replace"
-                    android:textColor="@color/colorGray" />
+                    android:text="@string/layout_tv_replace" />
 
                 <Button
-                    style="@style/Widget.Material3.Button"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:onClick="replaceAll"
-                    android:text="@string/layout_tv_replaceAll"
-                    android:textColor="@color/colorGray" />
+                    android:text="@string/layout_tv_replaceAll" />
 
             </LinearLayout>
 

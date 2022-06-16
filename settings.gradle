@@ -39,3 +39,6 @@ include ':color-picker'
 include ':filepicker'
 
 include ':libraries'
+
+include ':emulatorview', ':libtermexec'
+include ':term'

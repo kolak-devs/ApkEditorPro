@@ -17,11 +17,6 @@ android {
         multiDexEnabled true
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     externalNativeBuild {
         cmake {
             version '3.18.1'
@@ -163,6 +158,8 @@ dependencies {
     implementation project(':patchview')
     implementation project(':so-translator')
     implementation project(':color-picker')
+    implementation project(':emulatorview')
+    implementation project(':term')
 
     implementation project(':libraries')
 

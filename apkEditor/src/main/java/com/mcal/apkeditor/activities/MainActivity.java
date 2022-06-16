@@ -13,12 +13,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -42,6 +42,8 @@ import com.mcal.common.utils.FileUtils;
 import com.mcal.httpserver.HttpServiceManager;
 
 import java.io.File;
+
+import jackpal.androidterm.Term;
 
 /**
  * For apktool, look into:
@@ -158,7 +160,7 @@ public class MainActivity extends CustomizedLangActivity implements
 
     private void initUI() {
         if (BuildConfig.PARSER_ONLY) {
-            AppCompatImageView imageView = findViewById(R.id.logo);
+            ImageView imageView = findViewById(R.id.logo);
             imageView.setImageResource(R.drawable.parser_logo);
         }
 
@@ -194,6 +196,12 @@ public class MainActivity extends CustomizedLangActivity implements
             startActivity(intent);
         });
 
+        // Terminal
+        Button terminalBtn = this.findViewById(R.id.tv_terminal);
+        terminalBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, Term.class);
+            startActivity(intent);
+        });
 
         // Exit
         Button exitButton = this.findViewById(R.id.tv_exit);
@@ -220,7 +228,7 @@ public class MainActivity extends CustomizedLangActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
         return true;
     }

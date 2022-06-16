@@ -80,7 +80,7 @@
 
         <Button
             android:id="@+id/btn_build_apk"
-            style="@style/Widget.Material3.Button"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:textColor="@color/colorGray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

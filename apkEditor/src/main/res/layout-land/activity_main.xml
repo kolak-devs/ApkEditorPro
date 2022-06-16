@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <ImageView
                     android:id="@+id/logo"
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
@@ -50,8 +50,7 @@
 
                             <Button
                                 android:id="@+id/tv_select_apkfile"
-                                style="@style/Widget.Material3.Button"
-                                android:textColor="@color/colorGray"
+                                style="@style/Widget.Material3.Button.TonalButton"
                                 android:layout_width="match_parent"
                                 android:layout_height="56dp"
                                 android:gravity="center"
@@ -60,8 +59,7 @@
 
                             <Button
                                 android:id="@+id/tv_select_appfile"
-                                style="@style/Widget.Material3.Button"
-                                android:textColor="@color/colorGray"
+                                style="@style/Widget.Material3.Button.TonalButton"
                                 android:layout_width="match_parent"
                                 android:layout_height="56dp"
                                 android:gravity="center"
@@ -70,8 +68,7 @@
 
                             <Button
                                 android:id="@+id/tv_odex_patcher"
-                                style="@style/Widget.Material3.Button"
-                                android:textColor="@color/colorGray"
+                                style="@style/Widget.Material3.Button.TonalButton"
                                 android:layout_width="match_parent"
                                 android:layout_height="56dp"
                                 android:gravity="center"
@@ -79,9 +76,17 @@
                                 android:text="Odex Patcher" />
 
                             <Button
+                                android:id="@+id/tv_terminal"
+                                style="@style/Widget.Material3.Button.TonalButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="56dp"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:text="Terminal" />
+
+                            <Button
                                 android:id="@+id/tv_help"
-                                style="@style/Widget.Material3.Button"
-                                android:textColor="@color/colorGray"
+                                style="@style/Widget.Material3.Button.TonalButton"
                                 android:layout_width="match_parent"
                                 android:layout_height="56dp"
                                 android:gravity="center"
@@ -90,8 +95,7 @@
 
                             <Button
                                 android:id="@+id/tv_exit"
-                                style="@style/Widget.Material3.Button"
-                                android:textColor="@color/colorGray"
+                                style="@style/Widget.Material3.Button.TonalButton"
                                 android:layout_width="match_parent"
                                 android:layout_height="56dp"
                                 android:gravity="center"

@@ -1,5 +1,6 @@
 package com.mcal.neweditor.editor2
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Typeface
@@ -29,6 +30,9 @@ import io.github.rosemoe.sora.widget.component.Magnifier
 import io.github.rosemoe.sora.widget.schemes.*
 import io.github.rosemoe.sora.widget.style.builtin.ScaleCursorAnimator
 import io.github.rosemoe.sorakt.subscribeEvent
+import jadx.api.JadxArgs
+import jadx.api.JadxDecompiler
+import jadx.api.JavaClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,6 +45,7 @@ class EditorActivity : AppCompatActivity() {
     private var save: MenuItem? = null
     private var undo: MenuItem? = null
     private var redo: MenuItem? = null
+    private var smaliToJava: MenuItem? = null
     private var filePath: File? = null
 
 
@@ -154,6 +159,7 @@ class EditorActivity : AppCompatActivity() {
         updateBtnState()
     }
 
+    @SuppressLint("FileEndsWithExt")
     private fun updateBtnState() {
         if (undo == null) {
             return
@@ -161,6 +167,7 @@ class EditorActivity : AppCompatActivity() {
         save!!.isEnabled = canSave()
         undo!!.isEnabled = binding.editor.canUndo()
         redo!!.isEnabled = binding.editor.canRedo()
+        smaliToJava!!.isVisible = filePath!!.endsWith(".smali")
     }
 
     private fun canSave() : Boolean {
@@ -221,6 +228,7 @@ class EditorActivity : AppCompatActivity() {
         save = menu.findItem(R.id.text_save)
         undo = menu.findItem(R.id.text_undo)
         redo = menu.findItem(R.id.text_redo)
+        smaliToJava = menu.findItem(R.id.smali_to_java)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -264,10 +272,30 @@ class EditorActivity : AppCompatActivity() {
         }
     }
 
+    private fun smaliToJava() {
+        translate(filePath)
+    }
+
+    fun translate(smali: File?): String? {
+        val args = JadxArgs()
+        args.isSkipResources = true
+        args.isShowInconsistentCode = true
+        args.setInputFile(smali)
+
+        val decompiler = JadxDecompiler(args)
+        decompiler.load()
+
+        val javaClass: JavaClass = decompiler.classes.iterator().next()
+        javaClass.decompile()
+        return javaClass.code
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         val editor = binding.editor
-        if (id == R.id.text_save) {
+        if (id == R.id.smali_to_java) {
+            smaliToJava()
+        } else if (id == R.id.text_save) {
             save()
         } else if (id == R.id.text_undo) {
             editor.undo()
