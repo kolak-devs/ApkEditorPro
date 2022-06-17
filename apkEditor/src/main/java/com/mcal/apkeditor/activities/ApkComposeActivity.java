@@ -12,6 +12,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -24,6 +25,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -50,6 +53,7 @@ import com.mcal.apkeditor.utils.AxmlStringModifier;
 import com.mcal.apkeditor.utils.ErrorFixManager;
 import com.mcal.apkeditor.utils.OdexPatcher;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.ITaskCallback;
@@ -170,9 +174,18 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        if (GlobalConfig.instance(this).isFullScreen()) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Preferences.getFullScreen()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                final WindowInsetsController insetsController = getWindow().getInsetsController();
+                if (insetsController != null) {
+                    insetsController.hide(WindowInsets.Type.statusBars());
+                }
+            } else {
+                getWindow().setFlags(
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN
+                );
+            }
         }
         setContentView(R.layout.activity_apkcompose);
 

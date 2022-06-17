@@ -1,27 +1,11 @@
-/*
- * Copyright (C) 2007 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package jackpal.androidterm;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -56,8 +40,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
 import java.text.Collator;
@@ -65,9 +54,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import jackpal.androidterm.compat.ActionBarCompat;
-import jackpal.androidterm.compat.ActivityCompat;
-import jackpal.androidterm.compat.AndroidCompat;
 import jackpal.androidterm.emulatorview.EmulatorView;
 import jackpal.androidterm.emulatorview.TermSession;
 import jackpal.androidterm.emulatorview.UpdateCallback;
@@ -82,50 +68,41 @@ import jackpal.androidterm.util.TermSettings;
  */
 
 public class Term extends AppCompatActivity implements UpdateCallback, SharedPreferences.OnSharedPreferenceChangeListener {
-    /**
-     * The ViewFlipper which holds the collection of EmulatorView widgets.
-     */
-    private TermViewFlipper mViewFlipper;
-
+    public static final int REQUEST_CHOOSE_WINDOW = 1;
+    public static final String EXTRA_WINDOW_ID = "jackpal.androidterm.window_id";
     /**
      * The name of the ViewFlipper in the resources.
      */
     private static final int VIEW_FLIPPER = R.id.view_flipper;
-
-    private SessionList mTermSessions;
-
-    private TermSettings mSettings;
-
     private final static int SELECT_TEXT_ID = 0;
     private final static int COPY_ALL_ID = 1;
     private final static int PASTE_ID = 2;
     private final static int SEND_CONTROL_KEY_ID = 3;
     private final static int SEND_FN_KEY_ID = 4;
-
-    private boolean mAlreadyStarted = false;
-    private boolean mStopServiceOnFinish = false;
-
-    private Intent TSIntent;
-
-    public static final int REQUEST_CHOOSE_WINDOW = 1;
-    public static final String EXTRA_WINDOW_ID = "jackpal.androidterm.window_id";
-    private int onResumeSelectWindow = -1;
-    private ComponentName mPrivateAlias;
-
-    private PowerManager.WakeLock mWakeLock;
-    private WifiManager.WifiLock mWifiLock;
     // Available on API 12 and later
     private static final int WIFI_MODE_FULL_HIGH_PERF = 3;
-
-    private boolean mBackKeyPressed;
-
     private static final String ACTION_PATH_BROADCAST = "jackpal.androidterm.broadcast.APPEND_TO_PATH";
     private static final String ACTION_PATH_PREPEND_BROADCAST = "jackpal.androidterm.broadcast.PREPEND_TO_PATH";
     private static final String PERMISSION_PATH_BROADCAST = "jackpal.androidterm.permission.APPEND_TO_PATH";
     private static final String PERMISSION_PATH_PREPEND_BROADCAST = "jackpal.androidterm.permission.PREPEND_TO_PATH";
+    private final Handler mHandler = new Handler();
+    /**
+     * The ViewFlipper which holds the collection of EmulatorView widgets.
+     */
+    private TermViewFlipper mViewFlipper;
+    private SessionList mTermSessions;
+    private TermSettings mSettings;
+    private boolean mAlreadyStarted = false;
+    private boolean mStopServiceOnFinish = false;
+    private Intent TSIntent;
+    private int onResumeSelectWindow = -1;
+    private ComponentName mPrivateAlias;
+    private PowerManager.WakeLock mWakeLock;
+    private WifiManager.WifiLock mWifiLock;
+    private boolean mBackKeyPressed;
     private int mPendingPathBroadcasts = 0;
-    private BroadcastReceiver mPathReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
+    private TermService mTermService;    private final BroadcastReceiver mPathReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, @NonNull Intent intent) {
             String path = makePathFromBundle(getResultExtras(false));
             if (intent.getAction().equals(ACTION_PATH_PREPEND_BROADCAST)) {
                 mSettings.setPrependPath(path);
@@ -140,11 +117,9 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
             }
         }
     };
-    // Available on API 12 and later
-    private static final int FLAG_INCLUDE_STOPPED_PACKAGES = 0x20;
-
-    private TermService mTermService;
-    private ServiceConnection mTSConnection = new ServiceConnection() {
+    private ActionBar mActionBar;
+    private int mActionBarMode = TermSettings.ACTION_BAR_MODE_NONE;
+    private WindowListAdapter mWinListAdapter;    private ServiceConnection mTSConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             Log.i(TermDebug.LOG_TAG, "Bound to TermService");
             TermService.TSBinder binder = (TermService.TSBinder) service;
@@ -159,172 +134,27 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
             mTermService = null;
         }
     };
+    private boolean mHaveFullHwKeyboard = false;
+    /**
+     * Should we use keyboard shortcuts?
+     */
+    private boolean mUseKeyboardShortcuts;
 
-    private ActionBarCompat mActionBar;
-    private int mActionBarMode = TermSettings.ACTION_BAR_MODE_NONE;
+    @NonNull
+    protected static TermSession createTermSession(@NonNull Context context, TermSettings settings, String initialCommand) throws IOException {
+        GenericTermSession session = new ShellTermSession(settings, initialCommand);
+        // XXX We should really be able to fetch this from within TermSession
+        session.setProcessExitMessage(context.getString(R.string.process_exit_message));
 
-    private WindowListAdapter mWinListAdapter;
+        return session;
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         mSettings.readPrefs(sharedPreferences);
     }
 
-    private class WindowListActionBarAdapter extends WindowListAdapter implements UpdateCallback {
-        // From android.R.style in API 13
-        private static final int TextAppearance_Holo_Widget_ActionBar_Title = 0x01030112;
-
-        public WindowListActionBarAdapter(SessionList sessions) {
-            super(sessions);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView label = new TextView(Term.this);
-            String title = getSessionTitle(position, getString(R.string.window_title, position + 1));
-            label.setText(title);
-            if (AndroidCompat.SDK >= 13) {
-                label.setTextAppearance(Term.this, TextAppearance_Holo_Widget_ActionBar_Title);
-            } else {
-                label.setTextAppearance(Term.this, android.R.style.TextAppearance_Medium);
-            }
-            return label;
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            return super.getView(position, convertView, parent);
-        }
-
-        public void onUpdate() {
-            notifyDataSetChanged();
-            mActionBar.setSelectedNavigationItem(mViewFlipper.getDisplayedChild());
-        }
-    }
-
-    private ActionBarCompat.OnNavigationListener mWinListItemSelected = new ActionBarCompat.OnNavigationListener() {
-        public boolean onNavigationItemSelected(int position, long id) {
-            int oldPosition = mViewFlipper.getDisplayedChild();
-            if (position != oldPosition) {
-                if (position >= mViewFlipper.getChildCount()) {
-                    mViewFlipper.addView(createEmulatorView(mTermSessions.get(position)));
-                }
-                mViewFlipper.setDisplayedChild(position);
-                if (mActionBarMode == TermSettings.ACTION_BAR_MODE_HIDES) {
-                    mActionBar.hide();
-                }
-            }
-            return true;
-        }
-    };
-
-    private boolean mHaveFullHwKeyboard = false;
-
-    private class EmulatorViewGestureListener extends SimpleOnGestureListener {
-        private EmulatorView view;
-
-        public EmulatorViewGestureListener(EmulatorView view) {
-            this.view = view;
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            // Let the EmulatorView handle taps if mouse tracking is active
-            if (view.isMouseTrackingActive()) return false;
-
-            //Check for link at tap location
-            String link = view.getURLat(e.getX(), e.getY());
-            if (link != null)
-                execURL(link);
-            else
-                doUIToggle((int) e.getX(), (int) e.getY(), view.getVisibleWidth(), view.getVisibleHeight());
-            return true;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            float absVelocityX = Math.abs(velocityX);
-            float absVelocityY = Math.abs(velocityY);
-            if (absVelocityX > Math.max(1000.0f, 2.0 * absVelocityY)) {
-                // Assume user wanted side to side movement
-                if (velocityX > 0) {
-                    // Left to right swipe -- previous window
-                    mViewFlipper.showPrevious();
-                } else {
-                    // Right to left swipe -- next window
-                    mViewFlipper.showNext();
-                }
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    /**
-     * Should we use keyboard shortcuts?
-     */
-    private boolean mUseKeyboardShortcuts;
-
-    /**
-     * Intercepts keys before the view/terminal gets it.
-     */
-    private View.OnKeyListener mKeyListener = new View.OnKeyListener() {
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
-            return backkeyInterceptor(keyCode, event) || keyboardShortcuts(keyCode, event);
-        }
-
-        /**
-         * Keyboard shortcuts (tab management, paste)
-         */
-        private boolean keyboardShortcuts(int keyCode, KeyEvent event) {
-            if (event.getAction() != KeyEvent.ACTION_DOWN) {
-                return false;
-            }
-            if (!mUseKeyboardShortcuts) {
-                return false;
-            }
-            boolean isCtrlPressed = (event.getMetaState() & KeycodeConstants.META_CTRL_ON) != 0;
-            boolean isShiftPressed = (event.getMetaState() & KeycodeConstants.META_SHIFT_ON) != 0;
-
-            if (keyCode == KeycodeConstants.KEYCODE_TAB && isCtrlPressed) {
-                if (isShiftPressed) {
-                    mViewFlipper.showPrevious();
-                } else {
-                    mViewFlipper.showNext();
-                }
-
-                return true;
-            } else if (keyCode == KeycodeConstants.KEYCODE_N && isCtrlPressed && isShiftPressed) {
-                doCreateNewWindow();
-
-                return true;
-            } else if (keyCode == KeycodeConstants.KEYCODE_V && isCtrlPressed && isShiftPressed) {
-                doPaste();
-
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        /**
-         * Make sure the back button always leaves the application.
-         */
-        private boolean backkeyInterceptor(int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_BACK && mActionBarMode == TermSettings.ACTION_BAR_MODE_HIDES && mActionBar != null && mActionBar.isShowing()) {
-                /* We need to intercept the key event before the view sees it,
-                   otherwise the view will handle it before we get it */
-                onKeyUp(keyCode, event);
-                return true;
-            } else {
-                return false;
-            }
-        }
-    };
-
-    private Handler mHandler = new Handler();
-
+    @SuppressLint("InvalidWakeLockTag")
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -341,9 +171,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         mPrefs.registerOnSharedPreferenceChangeListener(this);
 
         Intent broadcast = new Intent(ACTION_PATH_BROADCAST);
-        if (AndroidCompat.SDK >= 12) {
-            broadcast.addFlags(FLAG_INCLUDE_STOPPED_PACKAGES);
-        }
+        broadcast.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         mPendingPathBroadcasts++;
         sendOrderedBroadcast(broadcast, PERMISSION_PATH_BROADCAST, mPathReceiver, null, RESULT_OK, null, null);
 
@@ -355,47 +183,29 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         TSIntent = new Intent(this, TermService.class);
         startService(TSIntent);
 
-        if (AndroidCompat.SDK >= 11) {
-            int actionBarMode = mSettings.actionBarMode();
-            mActionBarMode = actionBarMode;
-            if (AndroidCompat.V11ToV20) {
-                switch (actionBarMode) {
-                    case TermSettings.ACTION_BAR_MODE_ALWAYS_VISIBLE:
-                        setTheme(R.style.Theme_Holo);
-                        break;
-                    case TermSettings.ACTION_BAR_MODE_HIDES:
-                        setTheme(R.style.Theme_Holo_ActionBarOverlay);
-                        break;
-                }
-            }
-        } else {
-            mActionBarMode = TermSettings.ACTION_BAR_MODE_ALWAYS_VISIBLE;
+        int actionBarMode = mSettings.actionBarMode();
+        mActionBarMode = actionBarMode;
+        switch (actionBarMode) {
+            case TermSettings.ACTION_BAR_MODE_ALWAYS_VISIBLE:
+                setTheme(R.style.Theme_Holo);
+                break;
+            case TermSettings.ACTION_BAR_MODE_HIDES:
+                setTheme(R.style.Theme_Holo_ActionBarOverlay);
+                break;
         }
 
         setContentView(R.layout.term_activity);
 
         setupToolbar("Terminal");
 
-        mViewFlipper = (TermViewFlipper) findViewById(VIEW_FLIPPER);
+        mViewFlipper = findViewById(VIEW_FLIPPER);
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TermDebug.LOG_TAG);
-        WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         int wifiLockMode = WifiManager.WIFI_MODE_FULL;
-        if (AndroidCompat.SDK >= 12) {
-            wifiLockMode = WIFI_MODE_FULL_HIGH_PERF;
-        }
+        wifiLockMode = WIFI_MODE_FULL_HIGH_PERF;
         mWifiLock = wm.createWifiLock(wifiLockMode, TermDebug.LOG_TAG);
-
-        ActionBarCompat actionBar = ActivityCompat.getActionBar(this);
-        if (actionBar != null) {
-            mActionBar = actionBar;
-            actionBar.setNavigationMode(ActionBarCompat.NAVIGATION_MODE_LIST);
-            actionBar.setDisplayOptions(0, ActionBarCompat.DISPLAY_SHOW_TITLE);
-            if (mActionBarMode == TermSettings.ACTION_BAR_MODE_HIDES) {
-                actionBar.hide();
-            }
-        }
 
         mHaveFullHwKeyboard = checkHaveFullHwKeyboard(getResources().getConfiguration());
 
@@ -407,8 +217,19 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            mActionBar = actionBar;
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+            if (mActionBarMode == TermSettings.ACTION_BAR_MODE_HIDES) {
+                actionBar.hide();
+            }
+        }
     }
 
+    @NonNull
     private String makePathFromBundle(Bundle extras) {
         if (extras == null || extras.size() == 0) {
             return "";
@@ -429,7 +250,21 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         }
 
         return path.substring(0, path.length() - 1);
-    }
+    }    private final ActionBar.OnNavigationListener mWinListItemSelected = new ActionBar.OnNavigationListener() {
+        public boolean onNavigationItemSelected(int position, long id) {
+            int oldPosition = mViewFlipper.getDisplayedChild();
+            if (position != oldPosition) {
+                if (position >= mViewFlipper.getChildCount()) {
+                    mViewFlipper.addView(createEmulatorView(mTermSessions.get(position)));
+                }
+                mViewFlipper.setDisplayedChild(position);
+                if (mActionBarMode == TermSettings.ACTION_BAR_MODE_HIDES) {
+                    mActionBar.hide();
+                }
+            }
+            return true;
+        }
+    };
 
     @Override
     protected void onStart() {
@@ -514,16 +349,64 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
     private void restart() {
         startActivity(getIntent());
         finish();
-    }
+    }    /**
+     * Intercepts keys before the view/terminal gets it.
+     */
+    private final View.OnKeyListener mKeyListener = new View.OnKeyListener() {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            return backkeyInterceptor(keyCode, event) || keyboardShortcuts(keyCode, event);
+        }
 
-    protected static TermSession createTermSession(Context context, TermSettings settings, String initialCommand) throws IOException {
-        GenericTermSession session = new ShellTermSession(settings, initialCommand);
-        // XXX We should really be able to fetch this from within TermSession
-        session.setProcessExitMessage(context.getString(R.string.process_exit_message));
+        /**
+         * Keyboard shortcuts (tab management, paste)
+         */
+        private boolean keyboardShortcuts(int keyCode, @NonNull KeyEvent event) {
+            if (event.getAction() != KeyEvent.ACTION_DOWN) {
+                return false;
+            }
+            if (!mUseKeyboardShortcuts) {
+                return false;
+            }
+            boolean isCtrlPressed = (event.getMetaState() & KeycodeConstants.META_CTRL_ON) != 0;
+            boolean isShiftPressed = (event.getMetaState() & KeycodeConstants.META_SHIFT_ON) != 0;
 
-        return session;
-    }
+            if (keyCode == KeycodeConstants.KEYCODE_TAB && isCtrlPressed) {
+                if (isShiftPressed) {
+                    mViewFlipper.showPrevious();
+                } else {
+                    mViewFlipper.showNext();
+                }
 
+                return true;
+            } else if (keyCode == KeycodeConstants.KEYCODE_N && isCtrlPressed && isShiftPressed) {
+                doCreateNewWindow();
+
+                return true;
+            } else if (keyCode == KeycodeConstants.KEYCODE_V && isCtrlPressed && isShiftPressed) {
+                doPaste();
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Make sure the back button always leaves the application.
+         */
+        private boolean backkeyInterceptor(int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && mActionBarMode == TermSettings.ACTION_BAR_MODE_HIDES && mActionBar != null && mActionBar.isShowing()) {
+                /* We need to intercept the key event before the view sees it,
+                   otherwise the view will handle it before we get it */
+                onKeyUp(keyCode, event);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    @NonNull
     private TermSession createTermSession() throws IOException {
         TermSettings settings = mSettings;
         TermSession session = createTermSession(this, settings, settings.getInitialCommand());
@@ -531,6 +414,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         return session;
     }
 
+    @NonNull
     private TermView createEmulatorView(TermSession session) {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -543,6 +427,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         return emulatorView;
     }
 
+    @Nullable
     private TermSession getCurrentTermSession() {
         SessionList sessions = mTermSessions;
         if (sessions == null) {
@@ -580,7 +465,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
             WindowManager.LayoutParams params = win.getAttributes();
             final int FULLSCREEN = WindowManager.LayoutParams.FLAG_FULLSCREEN;
             int desiredFlag = mSettings.showStatusBar() ? 0 : FULLSCREEN;
-            if (desiredFlag != (params.flags & FULLSCREEN) || (AndroidCompat.SDK >= 11 && mActionBarMode != mSettings.actionBarMode())) {
+            if (desiredFlag != (params.flags & FULLSCREEN) || mActionBarMode != mSettings.actionBarMode()) {
                 if (mAlreadyStarted) {
                     // Can't switch to/from fullscreen after
                     // starting the activity.
@@ -613,13 +498,6 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
     @Override
     public void onPause() {
         super.onPause();
-
-        if (AndroidCompat.SDK < 5) {
-            /* If we lose focus between a back key down and a back key up,
-               we shouldn't respond to the next back key up event unless
-               we get another key down first */
-            mBackKeyPressed = false;
-        }
 
         /* Explicitly close the input method
            Otherwise, the soft keyboard could cover up whatever activity takes
@@ -654,13 +532,14 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         super.onStop();
     }
 
-    private boolean checkHaveFullHwKeyboard(Configuration c) {
+    @Contract(pure = true)
+    private boolean checkHaveFullHwKeyboard(@NonNull Configuration c) {
         return (c.keyboard == Configuration.KEYBOARD_QWERTY) &&
                 (c.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO);
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         mHaveFullHwKeyboard = checkHaveFullHwKeyboard(newConfig);
@@ -685,7 +564,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_preferences) {
             doPreferences();
@@ -747,16 +626,10 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         final AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setIcon(android.R.drawable.ic_dialog_alert);
         b.setMessage(R.string.confirm_window_close_message);
-        final Runnable closeWindow = new Runnable() {
-            public void run() {
-                doCloseWindow();
-            }
-        };
-        b.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                mHandler.post(closeWindow);
-            }
+        final Runnable closeWindow = this::doCloseWindow;
+        b.setPositiveButton(android.R.string.yes, (dialog, id) -> {
+            dialog.dismiss();
+            mHandler.post(closeWindow);
         });
         b.setNegativeButton(android.R.string.no, null);
         b.show();
@@ -833,8 +706,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // TODO
+    public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem wakeLockItem = menu.findItem(R.id.menu_toggle_wakelock);
         MenuItem wifiLockItem = menu.findItem(R.id.menu_toggle_wifilock);
         if (mWakeLock.isHeld()) {
@@ -866,7 +738,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case SELECT_TEXT_ID:
                 getCurrentEmulatorView().toggleSelectingText();
@@ -890,33 +762,13 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        /* The pre-Eclair default implementation of onKeyDown() would prevent
-           our handling of the Back key in onKeyUp() from taking effect, so
-           ignore it here */
-        if (AndroidCompat.SDK < 5 && keyCode == KeyEvent.KEYCODE_BACK) {
-            /* Android pre-Eclair has no key event tracking, and a back key
-               down event delivered to an activity above us in the back stack
-               could be succeeded by a back key up event to us, so we need to
-               keep track of our own back key presses */
-            mBackKeyPressed = true;
-            return true;
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (AndroidCompat.SDK < 5) {
-                    if (!mBackKeyPressed) {
-                    /* This key up event might correspond to a key down
-                       delivered to another activity -- ignore */
-                        return false;
-                    }
-                    mBackKeyPressed = false;
-                }
                 if (mActionBarMode == TermSettings.ACTION_BAR_MODE_HIDES && mActionBar != null && mActionBar.isShowing()) {
                     mActionBar.hide();
                     return true;
@@ -970,14 +822,11 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
     private boolean canPaste() {
         ClipboardManagerCompat clip = ClipboardManagerCompatFactory
                 .getManager(getApplicationContext());
-        if (clip.hasText()) {
-            return true;
-        }
-        return false;
+        return clip.hasText();
     }
 
     private void doPreferences() {
-        startActivity(new Intent(this, TermPreferences.class));
+        startActivity(new Intent(this, TerminalPreferences.class));
     }
 
     private void doResetTerminal() {
@@ -1068,8 +917,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         String[] keyNames = r.getStringArray(arrayId);
         String keyName = keyNames[keyId];
         String template = r.getString(enabledId);
-        String result = template.replaceAll(regex, keyName);
-        return result;
+        return template.replaceAll(regex, keyName);
     }
 
     private void doToggleSoftKeyboard() {
@@ -1083,9 +931,9 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         if (mWakeLock.isHeld()) {
             mWakeLock.release();
         } else {
-            mWakeLock.acquire();
+            mWakeLock.acquire(10 * 60 * 1000L /*10 minutes*/);
         }
-        ActivityCompat.invalidateOptionsMenu(this);
+        invalidateOptionsMenu();
     }
 
     private void doToggleWifiLock() {
@@ -1094,11 +942,11 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         } else {
             mWifiLock.acquire();
         }
-        ActivityCompat.invalidateOptionsMenu(this);
+        invalidateOptionsMenu();
     }
 
     private void doToggleActionBar() {
-        ActionBarCompat bar = mActionBar;
+        ActionBar bar = mActionBar;
         if (bar == null) {
             return;
         }
@@ -1112,7 +960,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
     private void doUIToggle(int x, int y, int width, int height) {
         switch (mActionBarMode) {
             case TermSettings.ACTION_BAR_MODE_NONE:
-                if (AndroidCompat.SDK >= 11 && (mHaveFullHwKeyboard || y < height / 2)) {
+                if (mHaveFullHwKeyboard || y < height / 2) {
                     openOptionsMenu();
                     return;
                 } else {
@@ -1141,6 +989,7 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
      *
      * @param link The URL to be opened.
      */
+    @SuppressLint("QueryPermissionsNeeded")
     private void execURL(String link) {
         Uri webLink = Uri.parse(link);
         Intent openLink = new Intent(Intent.ACTION_VIEW, webLink);
@@ -1149,4 +998,82 @@ public class Term extends AppCompatActivity implements UpdateCallback, SharedPre
         if (handlers.size() > 0)
             startActivity(openLink);
     }
+
+    private class WindowListActionBarAdapter extends WindowListAdapter implements UpdateCallback {
+        // From android.R.style in API 13
+        private static final int TextAppearance_Holo_Widget_ActionBar_Title = 0x01030112;
+
+        public WindowListActionBarAdapter(SessionList sessions) {
+            super(sessions);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView label = new TextView(Term.this);
+            String title = getSessionTitle(position, getString(R.string.window_title, position + 1));
+            label.setText(title);
+            label.setTextAppearance(Term.this, TextAppearance_Holo_Widget_ActionBar_Title);
+            return label;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return super.getView(position, convertView, parent);
+        }
+
+        public void onUpdate() {
+            notifyDataSetChanged();
+            mActionBar.setSelectedNavigationItem(mViewFlipper.getDisplayedChild());
+        }
+    }
+
+    private class EmulatorViewGestureListener extends SimpleOnGestureListener {
+        private final EmulatorView view;
+
+        public EmulatorViewGestureListener(EmulatorView view) {
+            this.view = view;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            // Let the EmulatorView handle taps if mouse tracking is active
+            if (view.isMouseTrackingActive()) return false;
+
+            //Check for link at tap location
+            String link = view.getURLat(e.getX(), e.getY());
+            if (link != null)
+                execURL(link);
+            else
+                doUIToggle((int) e.getX(), (int) e.getY(), view.getVisibleWidth(), view.getVisibleHeight());
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            float absVelocityX = Math.abs(velocityX);
+            float absVelocityY = Math.abs(velocityY);
+            if (absVelocityX > Math.max(1000.0f, 2.0 * absVelocityY)) {
+                // Assume user wanted side to side movement
+                if (velocityX > 0) {
+                    // Left to right swipe -- previous window
+                    mViewFlipper.showPrevious();
+                } else {
+                    // Right to left swipe -- next window
+                    mViewFlipper.showNext();
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+
+
+
+
+
+
+
 }

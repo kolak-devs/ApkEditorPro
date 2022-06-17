@@ -1,0 +1,17 @@
+[
+{
+  "directory": "H:/AppProjects/ApkEditor-Release/term/.cxx/Debug/5k67394g/x86",
+  "command": "F:\\Android\\Sdk\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=i686-none-linux-android21 --gcc-toolchain=F:/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=F:/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Djackpal_androidterm5_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC   -DHAVE_CONFIG_H -I./apkeditor/libzip -fvisibility=hidden -o CMakeFiles\\jackpal-androidterm5.dir\\common.cpp.o -c H:\\AppProjects\\ApkEditor-Release\\term\\src\\main\\cpp\\common.cpp",
+  "file": "H:\\AppProjects\\ApkEditor-Release\\term\\src\\main\\cpp\\common.cpp"
+},
+{
+  "directory": "H:/AppProjects/ApkEditor-Release/term/.cxx/Debug/5k67394g/x86",
+  "command": "F:\\Android\\Sdk\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=i686-none-linux-android21 --gcc-toolchain=F:/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=F:/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Djackpal_androidterm5_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC   -DHAVE_CONFIG_H -I./apkeditor/libzip -fvisibility=hidden -o CMakeFiles\\jackpal-androidterm5.dir\\fileCompat.cpp.o -c H:\\AppProjects\\ApkEditor-Release\\term\\src\\main\\cpp\\fileCompat.cpp",
+  "file": "H:\\AppProjects\\ApkEditor-Release\\term\\src\\main\\cpp\\fileCompat.cpp"
+},
+{
+  "directory": "H:/AppProjects/ApkEditor-Release/term/.cxx/Debug/5k67394g/x86",
+  "command": "F:\\Android\\Sdk\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=i686-none-linux-android21 --gcc-toolchain=F:/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=F:/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Djackpal_androidterm5_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC   -DHAVE_CONFIG_H -I./apkeditor/libzip -fvisibility=hidden -o CMakeFiles\\jackpal-androidterm5.dir\\termExec.cpp.o -c H:\\AppProjects\\ApkEditor-Release\\term\\src\\main\\cpp\\termExec.cpp",
+  "file": "H:\\AppProjects\\ApkEditor-Release\\term\\src\\main\\cpp\\termExec.cpp"
+}
+]

@@ -1,0 +1,7 @@
+Executable : F:\Android\Sdk\cmake\3.18.1\bin\ninja.exe
+arguments : 
+-C
+H:\AppProjects\ApkEditor-Release\term\.cxx\Debug\5k67394g\arm64-v8a
+jackpal-androidterm5
+jvmArgs : 
+

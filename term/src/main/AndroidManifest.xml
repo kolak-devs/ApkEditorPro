@@ -105,7 +105,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="TermPreferences"
+            android:name="TerminalPreferences"
             android:label="@string/preferences" />
         <activity
             android:name="WindowList"

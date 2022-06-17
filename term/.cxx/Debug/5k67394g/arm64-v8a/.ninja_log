@@ -1,0 +1,5 @@
+# ninja log v5
+3	4191	677172954	CMakeFiles/jackpal-androidterm5.dir/fileCompat.cpp.o	262f5b160f0bc0f1
+0	5111	677172955	CMakeFiles/jackpal-androidterm5.dir/common.cpp.o	3c545236d458dde6
+4	6119	677172956	CMakeFiles/jackpal-androidterm5.dir/termExec.cpp.o	cd18268e4388130e
+6120	6201	677172957	H:/AppProjects/ApkEditor-Release/term/build/intermediates/cxx/Debug/5k67394g/obj/arm64-v8a/libjackpal-androidterm5.so	a129470484868baa

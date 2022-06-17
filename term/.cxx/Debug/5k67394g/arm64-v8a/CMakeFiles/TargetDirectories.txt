@@ -1,0 +1,3 @@
+H:/AppProjects/ApkEditor-Release/term/.cxx/Debug/5k67394g/arm64-v8a/CMakeFiles/jackpal-androidterm5.dir
+H:/AppProjects/ApkEditor-Release/term/.cxx/Debug/5k67394g/arm64-v8a/CMakeFiles/edit_cache.dir
+H:/AppProjects/ApkEditor-Release/term/.cxx/Debug/5k67394g/arm64-v8a/CMakeFiles/rebuild_cache.dir

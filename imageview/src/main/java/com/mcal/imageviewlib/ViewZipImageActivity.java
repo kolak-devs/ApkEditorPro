@@ -9,13 +9,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.polites.android.GestureImageView;
@@ -40,10 +44,18 @@ public class ViewZipImageActivity extends CustomizedLangActivity {
             return;
         }
 
-        boolean fullScreen = intent.getBooleanExtra("fullScreen", false);
-        if (fullScreen) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Preferences.getFullScreen()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                final WindowInsetsController insetsController = getWindow().getInsetsController();
+                if (insetsController != null) {
+                    insetsController.hide(WindowInsets.Type.statusBars());
+                }
+            } else {
+                getWindow().setFlags(
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN
+                );
+            }
         }
 
         setContentView(R.layout.imageviewlib_activity_empty);

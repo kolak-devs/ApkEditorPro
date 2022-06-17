@@ -1,7 +1,9 @@
 package com.mcal.apkeditor.activities
 
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -12,13 +14,17 @@ import com.mcal.common.data.Preferences
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Full screen
+        @Suppress("DEPRECATION")
         if (Preferences.getFullScreen()) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val insetsController = window.insetsController
+                insetsController?.hide(WindowInsets.Type.statusBars())
+            } else {
+                window.setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+                )
+            }
         }
         setContentView(R.layout.activity_settings)
         setupToolbar(getString(R.string.settings))

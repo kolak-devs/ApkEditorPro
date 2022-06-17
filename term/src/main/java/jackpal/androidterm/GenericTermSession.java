@@ -1,36 +1,18 @@
-/*
- * Copyright (C) 2007 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package jackpal.androidterm;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-
-import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 
 import jackpal.androidterm.emulatorview.ColorScheme;
 import jackpal.androidterm.emulatorview.TermSession;
 import jackpal.androidterm.emulatorview.UpdateCallback;
-
-import jackpal.androidterm.compat.FileCompat;
 import jackpal.androidterm.util.TermSettings;
 
 /**
@@ -42,26 +24,13 @@ class GenericTermSession extends TermSession {
     private static final boolean VTTEST_MODE = false;
 
     private static Field descriptorField;
-
+    final ParcelFileDescriptor mTermFd;
     private final long createdAt;
-
+    private final UpdateCallback mUTF8ModeNotify = () -> setPtyUTF8Mode(getUTF8Mode());
+    TermSettings mSettings;
     // A cookie which uniquely identifies this session.
     private String mHandle;
-
-    final ParcelFileDescriptor mTermFd;
-
-    TermSettings mSettings;
-
-    public static final int PROCESS_EXIT_FINISHES_SESSION = 0;
-    public static final int PROCESS_EXIT_DISPLAYS_MESSAGE = 1;
-
     private String mProcessExitMessage;
-
-    private UpdateCallback mUTF8ModeNotify = new UpdateCallback() {
-        public void onUpdate() {
-            setPtyUTF8Mode(getUTF8Mode());
-        }
-    };
 
     GenericTermSession(ParcelFileDescriptor mTermFd, TermSettings settings, boolean exitOnEOF) {
         super(exitOnEOF);
@@ -73,7 +42,19 @@ class GenericTermSession extends TermSession {
         updatePrefs(settings);
     }
 
-    public void updatePrefs(TermSettings settings) {
+    private static void cacheDescField() throws NoSuchFieldException {
+        if (descriptorField != null)
+            return;
+
+        descriptorField = FileDescriptor.class.getDeclaredField("descriptor");
+        descriptorField.setAccessible(true);
+    }
+
+    private static int getIntFd(ParcelFileDescriptor parcelFd) throws IOException {
+        return FdHelperHoneycomb.getFd(parcelFd);
+    }
+
+    public void updatePrefs(@NonNull TermSettings settings) {
         mSettings = settings;
         setColorScheme(new ColorScheme(settings.getColorScheme()));
         setDefaultUTF8Mode(settings.defaultToUTF8Mode());
@@ -113,13 +94,9 @@ class GenericTermSession extends TermSession {
         if (mSettings.closeWindowOnProcessExit()) {
             finish();
         } else if (mProcessExitMessage != null) {
-            try {
-                byte[] msg = ("\r\n[" + mProcessExitMessage + "]").getBytes("UTF-8");
-                appendToEmulator(msg, 0, msg.length);
-                notifyUpdate();
-            } catch (UnsupportedEncodingException e) {
-                // Never happens
-            }
+            byte[] msg = ("\r\n[" + mProcessExitMessage + "]").getBytes(StandardCharsets.UTF_8);
+            appendToEmulator(msg, 0, msg.length);
+            notifyUpdate();
         }
     }
 
@@ -140,7 +117,7 @@ class GenericTermSession extends TermSession {
      * be returned instead.
      *
      * @param defaultTitle The default title to use if this session's title is
-     *     unset or an empty string.
+     *                     unset or an empty string.
      */
     public String getTitle(String defaultTitle) {
         String title = getTitle();
@@ -151,15 +128,15 @@ class GenericTermSession extends TermSession {
         }
     }
 
+    public String getHandle() {
+        return mHandle;
+    }
+
     public void setHandle(String handle) {
         if (mHandle != null) {
             throw new IllegalStateException("Cannot change handle once set");
         }
         mHandle = handle;
-    }
-
-    public String getHandle() {
-        return mHandle;
     }
 
     @Override
@@ -210,27 +187,5 @@ class GenericTermSession extends TermSession {
      */
     boolean isFailFast() {
         return false;
-    }
-
-    private static void cacheDescField() throws NoSuchFieldException {
-        if (descriptorField != null)
-            return;
-
-        descriptorField = FileDescriptor.class.getDeclaredField("descriptor");
-        descriptorField.setAccessible(true);
-    }
-
-    private static int getIntFd(ParcelFileDescriptor parcelFd) throws IOException {
-        if (Build.VERSION.SDK_INT >= 12)
-            return FdHelperHoneycomb.getFd(parcelFd);
-        else {
-            try {
-                cacheDescField();
-
-                return descriptorField.getInt(parcelFd.getFileDescriptor());
-            } catch (Exception e) {
-                throw new IOException("Unable to obtain file descriptor on this OS version: " + e.getMessage());
-            }
-        }
     }
 }

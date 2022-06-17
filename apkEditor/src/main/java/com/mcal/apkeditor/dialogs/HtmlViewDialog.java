@@ -2,10 +2,13 @@ package com.mcal.apkeditor.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
@@ -18,6 +21,7 @@ import com.mcal.apkeditor.activities.TextEditNormalActivity;
 import com.mcal.apkeditor.utils.Smali2Html;
 import com.mcal.apkeditor.utils.ValuesXml2Html;
 import com.mcal.apkeditor.utils.Xml2Html;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.IOUtils;
 
 import java.io.BufferedReader;
@@ -46,12 +50,17 @@ public class HtmlViewDialog extends Dialog implements
     public HtmlViewDialog(Activity activity) {
         super(activity);
         this.activityRef = new WeakReference<>(activity);
-        // Full screen
-        if (GlobalConfig.instance(activity).isFullScreen()) {
-            Window win = getWindow();
-            if (win != null) {
-                win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Preferences.getFullScreen()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                final WindowInsetsController insetsController = getWindow().getInsetsController();
+                if (insetsController != null) {
+                    insetsController.hide(WindowInsets.Type.statusBars());
+                }
+            } else {
+                getWindow().setFlags(
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN
+                );
             }
         }
         setContentView(R.layout.dlg_htmlview);

@@ -4,11 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize" />
+    <include layout="@layout/terminal_toolbar" />
 
     <jackpal.androidterm.TermViewFlipper
         android:id="@+id/view_flipper"

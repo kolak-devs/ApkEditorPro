@@ -16,9 +16,6 @@
 
 package jackpal.androidterm;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -29,56 +26,41 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import androidx.annotation.NonNull;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import jackpal.androidterm.emulatorview.EmulatorView;
 import jackpal.androidterm.emulatorview.TermSession;
 import jackpal.androidterm.emulatorview.UpdateCallback;
-
-import jackpal.androidterm.compat.AndroidCompat;
 import jackpal.androidterm.util.TermSettings;
 
 public class TermViewFlipper extends ViewFlipper implements Iterable<View> {
-    private Context context;
-    private Toast mToast;
-    private LinkedList<UpdateCallback> callbacks;
-    private boolean mStatusBarVisible = false;
-
-    private int mCurWidth;
-    private int mCurHeight;
-    private Rect mVisibleRect = new Rect();
-    private Rect mWindowRect = new Rect();
-    private LayoutParams mChildParams = null;
-    private boolean mRedoLayout = false;
-
+    private static final int SCREEN_CHECK_PERIOD = 1000;
     /**
      * True if we must poll to discover if the view has changed size.
      * This is the only known way to detect the view changing size due to
      * the IME being shown or hidden in API level <= 7.
      */
-    private final boolean mbPollForWindowSizeChange = (AndroidCompat.SDK < 8);
-    private static final int SCREEN_CHECK_PERIOD = 1000;
+    private final boolean mbPollForWindowSizeChange = false;
     private final Handler mHandler = new Handler();
-    private Runnable mCheckSize = new Runnable() {
-            public void run() {
-                adjustChildSize();
-                mHandler.postDelayed(this, SCREEN_CHECK_PERIOD);
-            }
-        };
-
-    class ViewFlipperIterator implements Iterator<View> {
-        int pos = 0;
-
-        public boolean hasNext() {
-            return (pos < getChildCount());
+    private final Rect mVisibleRect = new Rect();
+    private final Rect mWindowRect = new Rect();
+    private Context context;
+    private Toast mToast;
+    private LinkedList<UpdateCallback> callbacks;
+    private boolean mStatusBarVisible = false;
+    private int mCurWidth;
+    private int mCurHeight;
+    private LayoutParams mChildParams = null;
+    private boolean mRedoLayout = false;
+    private final Runnable mCheckSize = new Runnable() {
+        public void run() {
+            adjustChildSize();
+            mHandler.postDelayed(this, SCREEN_CHECK_PERIOD);
         }
-
-        public View next() {
-            return getChildAt(pos++);
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-    }
+    };
 
     public TermViewFlipper(Context context) {
         super(context);
@@ -92,21 +74,22 @@ public class TermViewFlipper extends ViewFlipper implements Iterable<View> {
 
     private void commonConstructor(Context context) {
         this.context = context;
-        callbacks = new LinkedList<UpdateCallback>();
+        callbacks = new LinkedList<>();
 
         updateVisibleRect();
         Rect visible = mVisibleRect;
         mChildParams = new LayoutParams(visible.width(), visible.height(),
-            Gravity.TOP|Gravity.LEFT);
+                Gravity.TOP | Gravity.LEFT);
     }
 
-    public void updatePrefs(TermSettings settings) {
+    public void updatePrefs(@NonNull TermSettings settings) {
         boolean statusBarVisible = settings.showStatusBar();
         int[] colorScheme = settings.getColorScheme();
         setBackgroundColor(colorScheme[1]);
         mStatusBarVisible = statusBarVisible;
     }
 
+    @NonNull
     public Iterator<View> iterator() {
         return new ViewFlipperIterator();
     }
@@ -170,7 +153,7 @@ public class TermViewFlipper extends ViewFlipper implements Iterable<View> {
             return;
         }
 
-        String title = context.getString(R.string.window_title,getDisplayedChild()+1);
+        String title = context.getString(R.string.window_title, getDisplayedChild() + 1);
         if (session instanceof GenericTermSession) {
             title = ((GenericTermSession) session).getTitle(title);
         }
@@ -300,5 +283,21 @@ public class TermViewFlipper extends ViewFlipper implements Iterable<View> {
             mRedoLayout = false;
         }
         super.onDraw(canvas);
+    }
+
+    class ViewFlipperIterator implements Iterator<View> {
+        int pos = 0;
+
+        public boolean hasNext() {
+            return (pos < getChildCount());
+        }
+
+        public View next() {
+            return getChildAt(pos++);
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 }

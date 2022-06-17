@@ -1,11 +1,14 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
-    compileSdkVersion 32
+    compileSdk 32
 
     defaultConfig {
-        minSdkVersion 4
-        targetSdkVersion 32
+        minSdk 21
+        targetSdk 32
 
         ndk {
             moduleName "libjackpal-androidterm5"
@@ -37,6 +40,7 @@ android {
 dependencies {
     implementation project(':emulatorview')
     implementation project(':libtermexec')
+    implementation project(':common')
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'

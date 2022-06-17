@@ -1,24 +1,10 @@
-/*
- * Copyright (C) 2011 Steven Luo
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package jackpal.androidterm.util;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import jackpal.androidterm.emulatorview.TermSession;
 import jackpal.androidterm.emulatorview.UpdateCallback;
@@ -28,8 +14,7 @@ import jackpal.androidterm.emulatorview.UpdateCallback;
  * order to be notified when the list is changed.
  */
 @SuppressWarnings("serial")
-public class SessionList extends ArrayList<TermSession>
-{
+public class SessionList extends ArrayList<TermSession> {
     LinkedList<UpdateCallback> callbacks = new LinkedList<UpdateCallback>();
     LinkedList<UpdateCallback> titleChangedListeners = new LinkedList<UpdateCallback>();
     UpdateCallback mTitleChangedListener = new UpdateCallback() {
@@ -92,7 +77,7 @@ public class SessionList extends ArrayList<TermSession>
     }
 
     @Override
-    public boolean addAll(Collection <? extends TermSession> collection) {
+    public boolean addAll(@NonNull Collection<? extends TermSession> collection) {
         boolean result = super.addAll(collection);
         for (TermSession session : collection) {
             session.setTitleChangedListener(mTitleChangedListener);
@@ -102,7 +87,7 @@ public class SessionList extends ArrayList<TermSession>
     }
 
     @Override
-    public boolean addAll(int index, Collection <? extends TermSession> collection) {
+    public boolean addAll(int index, @NonNull Collection<? extends TermSession> collection) {
         boolean result = super.addAll(index, collection);
         for (TermSession session : collection) {
             session.setTitleChangedListener(mTitleChangedListener);

@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
@@ -23,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -50,6 +53,7 @@ import com.mcal.apkeditor.pro.JavaExtractor;
 import com.mcal.apkeditor.pro.activities.SettingsEditorActivity;
 import com.mcal.apkeditor.utils.AndroidBug5497Workaround;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ActivityUtils;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.Display;
@@ -142,11 +146,18 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-        // Seems there are some problems in full screen?
-        boolean isFullScreen = GlobalConfig.instance(this).isFullScreen();
-        if (isFullScreen) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Preferences.getFullScreen()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                final WindowInsetsController insetsController = getWindow().getInsetsController();
+                if (insetsController != null) {
+                    insetsController.hide(WindowInsets.Type.statusBars());
+                }
+            } else {
+                getWindow().setFlags(
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN
+                );
+            }
         }
 
         // Need double check this line?
@@ -162,13 +173,6 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
             } else {
                 this.setContentView(
                         R.layout.activity_editor);
-            }
-        }
-
-        // Bug fix: http://blog.csdn.net/huangxiaoguo1/article/details/53081229?locationNum=3&fps=1
-        if (fixBug) {
-            if (isFullScreen) {
-                AndroidBug5497Workaround.assistActivity(this);
             }
         }
 

@@ -1,26 +1,5 @@
-/*
- * Copyright (C) 2012 Steven Luo
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package jackpal.androidterm;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -31,10 +10,14 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import jackpal.androidterm.emulatorview.TermSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
+import jackpal.androidterm.emulatorview.TermSession;
 import jackpal.androidterm.util.SessionList;
 import jackpal.androidterm.util.TermSettings;
 
@@ -50,17 +33,26 @@ public class RemoteInterface extends AppCompatActivity {
 
     private TermService mTermService;
     private Intent mTSIntent;
-    private ServiceConnection mTSConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            TermService.TSBinder binder = (TermService.TSBinder) service;
-            mTermService = binder.getService();
-            handleIntent();
-        }
 
-        public void onServiceDisconnected(ComponentName className) {
-            mTermService = null;
+    /**
+     * Quote a string so it can be used as a parameter in bash and similar shells.
+     */
+    @NonNull
+    public static String quoteForBash(@NonNull String s) {
+        StringBuilder builder = new StringBuilder();
+        String specialChars = "\"\\$`!";
+        builder.append('"');
+        int length = s.length();
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (specialChars.indexOf(c) >= 0) {
+                builder.append('\\');
+            }
+            builder.append(c);
         }
-    };
+        builder.append('"');
+        return builder.toString();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +68,17 @@ public class RemoteInterface extends AppCompatActivity {
             Log.e(TermDebug.LOG_TAG, "bind to service failed!");
             finish();
         }
-    }
+    }    private ServiceConnection mTSConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            TermService.TSBinder binder = (TermService.TSBinder) service;
+            mTermService = binder.getService();
+            handleIntent();
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            mTermService = null;
+        }
+    };
 
     @Override
     public void finish() {
@@ -114,7 +116,7 @@ public class RemoteInterface extends AppCompatActivity {
         String action = myIntent.getAction();
         if (action.equals(Intent.ACTION_SEND)
                 && myIntent.hasExtra(Intent.EXTRA_STREAM)) {
-          /* "permission.RUN_SCRIPT" not required as this is merely opening a new window. */
+            /* "permission.RUN_SCRIPT" not required as this is merely opening a new window. */
             Object extraStream = myIntent.getExtras().get(Intent.EXTRA_STREAM);
             if (extraStream instanceof Uri) {
                 String path = ((Uri) extraStream).getPath();
@@ -128,25 +130,6 @@ public class RemoteInterface extends AppCompatActivity {
         }
 
         finish();
-    }
-
-    /**
-     *  Quote a string so it can be used as a parameter in bash and similar shells.
-     */
-    public static String quoteForBash(String s) {
-        StringBuilder builder = new StringBuilder();
-        String specialChars = "\"\\$`!";
-        builder.append('"');
-        int length = s.length();
-        for (int i = 0; i < length; i++) {
-            char c = s.charAt(i);
-            if (specialChars.indexOf(c) >= 0) {
-                builder.append('\\');
-            }
-            builder.append(c);
-        }
-        builder.append('"');
-        return builder.toString();
     }
 
     protected String openNewWindow(String iInitialCommand) {

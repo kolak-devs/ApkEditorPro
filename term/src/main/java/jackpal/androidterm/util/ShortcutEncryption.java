@@ -1,26 +1,13 @@
-/*
- * Copyright (C) 2015 Steven Luo
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package jackpal.androidterm.util;
-
-import jackpal.androidterm.compat.Base64;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import org.jetbrains.annotations.Contract;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -31,6 +18,7 @@ import java.nio.charset.CodingErrorAction;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.regex.Pattern;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
@@ -38,47 +26,49 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import jackpal.androidterm.compat.Base64;
+
 /**
  * Implementation of a simple authenticated encryption scheme suitable for
  * TEA shortcuts.
- *
+ * <p>
  * The goals of the encryption are as follows:
- *
- *   (1) An unauthorized actor must not be able to create a valid text with
- *       contents of his choice;
- *   (2) An unauthorized actor must not be able to modify an existing text to
- *       change its contents in any way;
- *   (3) An unauthorized actor must not be able to discover the contents of
- *       an existing text.
- *
+ * <p>
+ * (1) An unauthorized actor must not be able to create a valid text with
+ * contents of his choice;
+ * (2) An unauthorized actor must not be able to modify an existing text to
+ * change its contents in any way;
+ * (3) An unauthorized actor must not be able to discover the contents of
+ * an existing text.
+ * <p>
  * Conditions (1) and (2) ensure that an attacker cannot send commands of his
  * choosing to TEA via the shortcut mechanism, while condition (3) ensures that
  * an attacker cannot learn what commands are being sent via shortcuts even if
  * he can read saved shortcuts or sniff Android intents.
- *
+ * <p>
  * We ensure these conditions using two cryptographic building blocks:
- *
- *   * a symmetric cipher (currently AES in CBC mode using PKCS#5 padding),
- *     which prevents someone without the encryption key from reading the
- *     contents of the shortcut; and
- *   * a message authentication code (currently HMAC-SHA256), which proves that
- *     the shortcut was created by someone with the MAC key.
- *
+ * <p>
+ * * a symmetric cipher (currently AES in CBC mode using PKCS#5 padding),
+ * which prevents someone without the encryption key from reading the
+ * contents of the shortcut; and
+ * * a message authentication code (currently HMAC-SHA256), which proves that
+ * the shortcut was created by someone with the MAC key.
+ * <p>
  * The security of these depends on the security of the keys, which must be
  * kept secret.  In this application, the keys are randomly generated and stored
  * in the application's private shared preferences.
- *
+ * <p>
  * The encrypted string output by this scheme is of the form:
- *
- *     mac + ":" + iv + ":" cipherText
- *
+ * <p>
+ * mac + ":" + iv + ":" cipherText
+ * <p>
  * where:
- *
- *   * cipherText is the Base64-encoded result of encrypting the data
- *     using the encryption key;
- *   * iv is a Base64-encoded, non-secret random number used as an
- *     initialization vector for the encryption algorithm;
- *   * mac is the Base64 encoding of MAC(MAC-key, iv + ":" + cipherText).
+ * <p>
+ * * cipherText is the Base64-encoded result of encrypting the data
+ * using the encryption key;
+ * * iv is a Base64-encoded, non-secret random number used as an
+ * initialization vector for the encryption algorithm;
+ * * mac is the Base64 encoding of MAC(MAC-key, iv + ":" + cipherText).
  */
 public final class ShortcutEncryption {
     public static final String ENC_ALGORITHM = "AES";
@@ -93,54 +83,15 @@ public final class ShortcutEncryption {
 
     private static final Pattern COLON = Pattern.compile(":");
 
-    public static final class Keys {
-        private final SecretKey encKey;
-        private final SecretKey macKey;
-
-        public Keys(SecretKey encKey, SecretKey macKey) {
-            this.encKey = encKey;
-            this.macKey = macKey;
-        }
-
-        public SecretKey getEncKey() {
-            return encKey;
-        }
-
-        public SecretKey getMacKey() {
-            return macKey;
-        }
-
-        /**
-         * Outputs the keys as a string of the form
-         *
-         *     encKey + ":" + macKey
-         *
-         * where encKey and macKey are the Base64-encoded encryption and MAC
-         * keys.
-         */
-        public String encode() {
-            return encodeToBase64(encKey.getEncoded()) + ":" + encodeToBase64(macKey.getEncoded());
-        }
-
-        /**
-         * Creates a new Keys object by decoding a string of the form output
-         * from encode().
-         */
-        public static Keys decode(String encodedKeys) {
-            String[] keys = COLON.split(encodedKeys);
-            if (keys.length != 2) {
-                throw new IllegalArgumentException("Invalid encoded keys!");
-            }
-
-            SecretKey encKey = new SecretKeySpec(decodeBase64(keys[0]), ENC_ALGORITHM);
-            SecretKey macKey = new SecretKeySpec(decodeBase64(keys[1]), MAC_ALGORITHM);
-            return new Keys(encKey, macKey);
-        }
+    // Prevent instantiation
+    private ShortcutEncryption() {
+        throw new UnsupportedOperationException();
     }
 
     /**
      * Retrieves the shortcut encryption keys from preferences.
      */
+    @Nullable
     public static Keys getKeys(Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         String keyEnc = prefs.getString(SHORTCUT_KEYS_PREF, null);
@@ -158,12 +109,12 @@ public final class ShortcutEncryption {
     /**
      * Saves shortcut encryption keys to preferences.
      */
-    public static void saveKeys(Context ctx, Keys keys) {
+    public static void saveKeys(Context ctx, @NonNull Keys keys) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString(SHORTCUT_KEYS_PREF, keys.encode());
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -172,6 +123,8 @@ public final class ShortcutEncryption {
      *
      * @throws GeneralSecurityException if an error occurs during key generation.
      */
+    @NonNull
+    @Contract(" -> new")
     public static Keys generateKeys() throws GeneralSecurityException {
         KeyGenerator gen = KeyGenerator.getInstance(ENC_ALGORITHM);
         gen.init(KEYLEN);
@@ -191,11 +144,11 @@ public final class ShortcutEncryption {
      * contents have not been tampered with.
      *
      * @param encrypted The string to decrypt, in the format described above.
-     * @param keys The keys to verify and decrypt with.
+     * @param keys      The keys to verify and decrypt with.
      * @return The decrypted data.
-     *
      * @throws GeneralSecurityException if the data is invalid, verification fails, or an error occurs during decryption.
      */
+    @NonNull
     public static String decrypt(String encrypted, Keys keys) throws GeneralSecurityException {
         Cipher cipher = Cipher.getInstance(ENC_SYSTEM);
         String[] data = COLON.split(encrypted);
@@ -248,10 +201,10 @@ public final class ShortcutEncryption {
      * @param data The string containing the data to encrypt.
      * @param keys The keys to encrypt and authenticate with.
      * @return The encrypted data.
-     *
      * @throws GeneralSecurityException if an error occurs during encryption.
      */
-    public static String encrypt(String data, Keys keys) throws GeneralSecurityException {
+    @NonNull
+    public static String encrypt(@NonNull String data, @NonNull Keys keys) throws GeneralSecurityException {
         Cipher cipher = Cipher.getInstance(ENC_SYSTEM);
 
         // Generate a random IV
@@ -278,7 +231,8 @@ public final class ShortcutEncryption {
      *
      * @throws GeneralSecurityException if an error occurs during MAC computation.
      */
-    private static String computeMac(String data, SecretKey key) throws GeneralSecurityException {
+    @NonNull
+    private static String computeMac(@NonNull String data, SecretKey key) throws GeneralSecurityException {
         Mac mac = Mac.getInstance(MAC_ALGORITHM);
         mac.init(key);
         byte[] macBytes = mac.doFinal(data.getBytes());
@@ -291,6 +245,8 @@ public final class ShortcutEncryption {
      *
      * @return A String with the Base64-encoded data.
      */
+    @NonNull
+    @Contract("_ -> new")
     private static String encodeToBase64(byte[] data) {
         return Base64.encodeToString(data, BASE64_EFLAGS);
     }
@@ -306,8 +262,51 @@ public final class ShortcutEncryption {
         return Base64.decode(data, BASE64_DFLAGS);
     }
 
-    // Prevent instantiation
-    private ShortcutEncryption() {
-        throw new UnsupportedOperationException();
+    public static final class Keys {
+        private final SecretKey encKey;
+        private final SecretKey macKey;
+
+        public Keys(SecretKey encKey, SecretKey macKey) {
+            this.encKey = encKey;
+            this.macKey = macKey;
+        }
+
+        /**
+         * Creates a new Keys object by decoding a string of the form output
+         * from encode().
+         */
+        @NonNull
+        @Contract("_ -> new")
+        public static Keys decode(String encodedKeys) {
+            String[] keys = COLON.split(encodedKeys);
+            if (keys.length != 2) {
+                throw new IllegalArgumentException("Invalid encoded keys!");
+            }
+
+            SecretKey encKey = new SecretKeySpec(decodeBase64(keys[0]), ENC_ALGORITHM);
+            SecretKey macKey = new SecretKeySpec(decodeBase64(keys[1]), MAC_ALGORITHM);
+            return new Keys(encKey, macKey);
+        }
+
+        public SecretKey getEncKey() {
+            return encKey;
+        }
+
+        public SecretKey getMacKey() {
+            return macKey;
+        }
+
+        /**
+         * Outputs the keys as a string of the form
+         * <p>
+         * encKey + ":" + macKey
+         * <p>
+         * where encKey and macKey are the Base64-encoded encryption and MAC
+         * keys.
+         */
+        @NonNull
+        public String encode() {
+            return encodeToBase64(encKey.getEncoded()) + ":" + encodeToBase64(macKey.getEncoded());
+        }
     }
 }

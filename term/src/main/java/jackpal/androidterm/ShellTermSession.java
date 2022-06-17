@@ -1,30 +1,19 @@
-/*
- * Copyright (C) 2007 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package jackpal.androidterm;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
-import jackpal.androidterm.compat.FileCompat;
-import jackpal.androidterm.util.TermSettings;
 
-import java.io.*;
+import androidx.annotation.NonNull;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import jackpal.androidterm.util.TermSettings;
 
 /**
  * A terminal session, controlling the process attached to the session (usually
@@ -32,13 +21,11 @@ import java.util.ArrayList;
  * upon stopping.
  */
 public class ShellTermSession extends GenericTermSession {
-    private int mProcId;
-    private Thread mWatcherThread;
-
-    private String mInitialCommand;
-
     private static final int PROCESS_EXITED = 1;
-    private Handler mMsgHandler = new Handler() {
+    private final Thread mWatcherThread;
+    private final String mInitialCommand;
+    @SuppressLint("HandlerLeak")
+    private final Handler mMsgHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (!isRunning()) {
@@ -49,6 +36,7 @@ public class ShellTermSession extends GenericTermSession {
             }
         }
     };
+    private int mProcId;
 
     public ShellTermSession(TermSettings settings, String initialCommand) throws IOException {
         super(ParcelFileDescriptor.open(new File("/dev/ptmx"), ParcelFileDescriptor.MODE_READ_WRITE),
@@ -101,17 +89,18 @@ public class ShellTermSession extends GenericTermSession {
         mProcId = createSubprocess(settings.getShell(), env);
     }
 
-    private String checkPath(String path) {
+    @NonNull
+    private String checkPath(@NonNull String path) {
         String[] dirs = path.split(":");
         StringBuilder checkedPath = new StringBuilder(path.length());
         for (String dirname : dirs) {
             File dir = new File(dirname);
-            if (dir.isDirectory() && FileCompat.canExecute(dir)) {
+            if (dir.isDirectory() && dir.canExecute()) {
                 checkedPath.append(dirname);
                 checkedPath.append(":");
             }
         }
-        return checkedPath.substring(0, checkedPath.length()-1);
+        return checkedPath.substring(0, checkedPath.length() - 1);
     }
 
     @Override
@@ -122,7 +111,7 @@ public class ShellTermSession extends GenericTermSession {
         sendInitialCommand(mInitialCommand);
     }
 
-    private void sendInitialCommand(String initialCommand) {
+    private void sendInitialCommand(@NonNull String initialCommand) {
         if (initialCommand.length() > 0) {
             write(initialCommand + '\r');
         }
@@ -139,7 +128,7 @@ public class ShellTermSession extends GenericTermSession {
             if (!file.exists()) {
                 Log.e(TermDebug.LOG_TAG, "Shell " + arg0 + " not found!");
                 throw new FileNotFoundException(arg0);
-            } else if (!FileCompat.canExecute(file)) {
+            } else if (!file.canExecute()) {
                 Log.e(TermDebug.LOG_TAG, "Shell " + arg0 + " not executable!");
                 throw new FileNotFoundException(arg0);
             }
@@ -153,12 +142,13 @@ public class ShellTermSession extends GenericTermSession {
         return TermExec.createSubprocess(mTermFd, arg0, args, env);
     }
 
-    private ArrayList<String> parse(String cmd) {
+    @NonNull
+    private ArrayList<String> parse(@NonNull String cmd) {
         final int PLAIN = 0;
         final int WHITESPACE = 1;
         final int INQUOTE = 2;
         int state = WHITESPACE;
-        ArrayList<String> result =  new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<String>();
         int cmdLen = cmd.length();
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < cmdLen; i++) {
@@ -166,7 +156,7 @@ public class ShellTermSession extends GenericTermSession {
             if (state == PLAIN) {
                 if (Character.isWhitespace(c)) {
                     result.add(builder.toString());
-                    builder.delete(0,builder.length());
+                    builder.delete(0, builder.length());
                     state = WHITESPACE;
                 } else if (c == '"') {
                     state = INQUOTE;
