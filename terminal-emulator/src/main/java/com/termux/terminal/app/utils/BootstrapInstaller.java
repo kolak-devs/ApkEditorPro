@@ -129,7 +129,7 @@ public class BootstrapInstaller {
                         }
 
                         if (symlinks.isEmpty()) {
-                           // LOG.error("No SYMLINKS.txt file encountered...");
+                            // LOG.error("No SYMLINKS.txt file encountered...");
                             throw new CompletionException(
                                     new InstallationException("No SYMLINKS.txt encountered"));
                         }

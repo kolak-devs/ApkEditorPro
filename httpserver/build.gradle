@@ -9,9 +9,6 @@ android {
     defaultConfig {
         minSdk 14
         targetSdk 32
-
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-
     }
 
     buildTypes {

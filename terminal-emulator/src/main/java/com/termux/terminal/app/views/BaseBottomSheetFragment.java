@@ -114,7 +114,8 @@ public abstract class BaseBottomSheetFragment extends BottomSheetDialogFragment 
         this.titleEnabled = enabled;
     }
 
-    protected void onShow() {}
+    protected void onShow() {
+    }
 
     protected abstract void bind(LinearLayout container);
 

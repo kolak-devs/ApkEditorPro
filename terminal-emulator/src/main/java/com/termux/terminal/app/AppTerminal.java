@@ -18,15 +18,6 @@ public class AppTerminal extends AppCommon {
     @SuppressLint("StaticFieldLeak")
     private static AppTerminal instance;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        instance = this;
-        Environment.init();
-        ToolsManager.init(null);
-    }
-
     public static AppTerminal getBaseInstance() {
         return instance;
     }
@@ -49,6 +40,22 @@ public class AppTerminal extends AppCommon {
         return null;
     }
 
+    public static File mkdirIfNotExits(File in) {
+        if (in != null && !in.exists()) {
+            FileUtils.createOrExistsDir(in);
+        }
+        return in;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
+        Environment.init();
+        ToolsManager.init(null);
+    }
+
     public File getRootDir() {
         return new File(getRootFilesDir(), "home");
     }
@@ -56,12 +63,5 @@ public class AppTerminal extends AppCommon {
     @SuppressLint("SdCardPath")
     public File getRootFilesDir() {
         return mkdirIfNotExits(getFilesDir());
-    }
-
-    public static File mkdirIfNotExits(File in) {
-        if (in != null && !in.exists()) {
-            FileUtils.createOrExistsDir(in);
-        }
-        return in;
     }
 }

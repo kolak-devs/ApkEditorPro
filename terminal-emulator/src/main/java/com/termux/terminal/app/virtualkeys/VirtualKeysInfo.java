@@ -116,6 +116,40 @@ public class VirtualKeysInfo {
         mButtons = initVirtualKeysInfo(propertiesInfo, extraKeyDisplayMap, extraKeyAliasMap);
     }
 
+    /**
+     * Convert "value" -> {"key": "value"}. Required by {@link
+     * VirtualKeyButton#VirtualKeyButton(JSONObject, VirtualKeyButton,
+     * VirtualKeysConstants.VirtualKeyDisplayMap, VirtualKeysConstants.VirtualKeyDisplayMap)}.
+     */
+    private static JSONObject normalizeKeyConfig(Object key) throws JSONException {
+        JSONObject jobject;
+        if (key instanceof String) {
+            jobject = new JSONObject();
+            jobject.put(VirtualKeyButton.KEY_KEY_NAME, key);
+        } else if (key instanceof JSONObject) {
+            jobject = (JSONObject) key;
+        } else {
+            throw new JSONException("An key in the extra-key matrix must be a string or an object");
+        }
+        return jobject;
+    }
+
+    @NonNull
+    public static VirtualKeysConstants.VirtualKeyDisplayMap getCharDisplayMapForStyle(String style) {
+        switch (style) {
+            case "arrows-only":
+                return VirtualKeysConstants.EXTRA_KEY_DISPLAY_MAPS.ARROWS_ONLY_CHAR_DISPLAY;
+            case "arrows-all":
+                return VirtualKeysConstants.EXTRA_KEY_DISPLAY_MAPS.LOTS_OF_ARROWS_CHAR_DISPLAY;
+            case "all":
+                return VirtualKeysConstants.EXTRA_KEY_DISPLAY_MAPS.FULL_ISO_CHAR_DISPLAY;
+            case "none":
+                return new VirtualKeysConstants.VirtualKeyDisplayMap();
+            default:
+                return VirtualKeysConstants.EXTRA_KEY_DISPLAY_MAPS.DEFAULT_CHAR_DISPLAY;
+        }
+    }
+
     private VirtualKeyButton[][] initVirtualKeysInfo(
             @NonNull String propertiesInfo,
             @NonNull VirtualKeysConstants.VirtualKeyDisplayMap extraKeyDisplayMap,
@@ -161,41 +195,7 @@ public class VirtualKeysInfo {
         return buttons;
     }
 
-    /**
-     * Convert "value" -> {"key": "value"}. Required by {@link
-     * VirtualKeyButton#VirtualKeyButton(JSONObject, VirtualKeyButton,
-     * VirtualKeysConstants.VirtualKeyDisplayMap, VirtualKeysConstants.VirtualKeyDisplayMap)}.
-     */
-    private static JSONObject normalizeKeyConfig(Object key) throws JSONException {
-        JSONObject jobject;
-        if (key instanceof String) {
-            jobject = new JSONObject();
-            jobject.put(VirtualKeyButton.KEY_KEY_NAME, key);
-        } else if (key instanceof JSONObject) {
-            jobject = (JSONObject) key;
-        } else {
-            throw new JSONException("An key in the extra-key matrix must be a string or an object");
-        }
-        return jobject;
-    }
-
     public VirtualKeyButton[][] getMatrix() {
         return mButtons;
-    }
-
-    @NonNull
-    public static VirtualKeysConstants.VirtualKeyDisplayMap getCharDisplayMapForStyle(String style) {
-        switch (style) {
-            case "arrows-only":
-                return VirtualKeysConstants.EXTRA_KEY_DISPLAY_MAPS.ARROWS_ONLY_CHAR_DISPLAY;
-            case "arrows-all":
-                return VirtualKeysConstants.EXTRA_KEY_DISPLAY_MAPS.LOTS_OF_ARROWS_CHAR_DISPLAY;
-            case "all":
-                return VirtualKeysConstants.EXTRA_KEY_DISPLAY_MAPS.FULL_ISO_CHAR_DISPLAY;
-            case "none":
-                return new VirtualKeysConstants.VirtualKeyDisplayMap();
-            default:
-                return VirtualKeysConstants.EXTRA_KEY_DISPLAY_MAPS.DEFAULT_CHAR_DISPLAY;
-        }
     }
 }

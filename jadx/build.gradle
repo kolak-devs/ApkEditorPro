@@ -16,8 +16,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
-        lintOptions {
-        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

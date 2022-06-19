@@ -29,9 +29,9 @@ public final class Environment {
     public static final String PROJECTS_FOLDER = "ApkEditor";
     public static final String DEFAULT_ROOT = "/data/data/com.mcal.apkeditor.pro/files";
     public static final String DEFAULT_HOME = DEFAULT_ROOT + "/home";
+    private static final String DEFAULT_ANDROID_HOME = DEFAULT_HOME + "/android-sdk";
     public static final String DEFAULT_PREFIX = DEFAULT_ROOT + "/usr";
     private static final String DEFAULT_JAVA_HOME = DEFAULT_PREFIX + "/opt/openjdk";
-    private static final String DEFAULT_ANDROID_HOME = DEFAULT_HOME + "/android-sdk";
     private static final List<String> blacklist = new ArrayList<>();
     public static File ROOT;
     public static File PREFIX;
