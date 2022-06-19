@@ -11,7 +11,7 @@
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network"
         android:allowBackup="true"
-        android:name="com.mcal.common.App"
+        android:name=".App"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"

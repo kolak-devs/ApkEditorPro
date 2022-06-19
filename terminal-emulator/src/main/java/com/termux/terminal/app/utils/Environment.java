@@ -9,9 +9,9 @@ import androidx.annotation.RequiresApi;
 
 import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.FileUtils;
-import com.mcal.common.App;
 import com.mcal.common.utils.PreferenceUtils;
 import com.mcal.common.utils.ScopedStorage;
+import com.termux.terminal.app.AppTerminal;
 
 import java.io.File;
 import java.io.StringReader;
@@ -66,7 +66,7 @@ public final class Environment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void init() {
-        final App app = App.getBaseInstance();
+        final AppTerminal app = AppTerminal.getBaseInstance();
         ROOT = app.getRootFilesDir();
         PREFIX = mkdirIfNotExits(new File(app.getRootFilesDir(), "usr"));
         HOME = mkdirIfNotExits(app.getRootDir());
@@ -219,7 +219,7 @@ public final class Environment {
         ENV_VARS.put("LD_LIBRARY_PATH", ld);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-                && App.isAarch64()
+                && AppTerminal.isAarch64()
                 && LIB_HOOK.exists()
                 && PreferenceUtils.shouldUseLdPreload()) {
             // Required for JDK 11

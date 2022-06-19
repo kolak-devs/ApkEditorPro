@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.mcal.common.App;
+import com.mcal.common.AppCommon;
 import com.mcal.neweditor.R;
 import com.mcal.neweditor.Token;
 
@@ -42,47 +42,47 @@ public class ColorTheme {
     }
 
     public int getColorBackground(Context context) {
-        return App.getPreferences().getInt("editorBackground", ContextCompat.getColor(context, R.color.editorBackground));
+        return AppCommon.getPreferences().getInt("editorBackground", ContextCompat.getColor(context, R.color.editorBackground));
     }
 
     public int getColorNormal(Context context) {
-        return App.getPreferences().getInt("editorNormal", ContextCompat.getColor(context, R.color.editorNormal));
+        return AppCommon.getPreferences().getInt("editorNormal", ContextCompat.getColor(context, R.color.editorNormal));
     }
 
     public int getColorReserved(Context context) {
-        return App.getPreferences().getInt("editorReserved", ContextCompat.getColor(context, R.color.editorReserved));
+        return AppCommon.getPreferences().getInt("editorReserved", ContextCompat.getColor(context, R.color.editorReserved));
     }
 
     public int getColorType(Context context) {
-        return App.getPreferences().getInt("editorType", ContextCompat.getColor(context, R.color.editorType));
+        return AppCommon.getPreferences().getInt("editorType", ContextCompat.getColor(context, R.color.editorType));
     }
 
     public int getColorLiteral(Context context) {
-        return App.getPreferences().getInt("editorLiteral", ContextCompat.getColor(context, R.color.editorLiteral));
+        return AppCommon.getPreferences().getInt("editorLiteral", ContextCompat.getColor(context, R.color.editorLiteral));
     }
 
     public int getColorIdentifier(Context context) {
-        return App.getPreferences().getInt("editorIdentifier", ContextCompat.getColor(context, R.color.editorIdentifier));
+        return AppCommon.getPreferences().getInt("editorIdentifier", ContextCompat.getColor(context, R.color.editorIdentifier));
     }
 
     public int getColorPreprocessor(Context context) {
-        return App.getPreferences().getInt("editorPreprocessor", ContextCompat.getColor(context, R.color.editorPreprocessor));
+        return AppCommon.getPreferences().getInt("editorPreprocessor", ContextCompat.getColor(context, R.color.editorPreprocessor));
     }
 
     public int getColorComment(Context context) {
-        return App.getPreferences().getInt("editorComment", ContextCompat.getColor(context, R.color.editorComment));
+        return AppCommon.getPreferences().getInt("editorComment", ContextCompat.getColor(context, R.color.editorComment));
     }
 
     public int getColorError(Context context) {
-        return App.getPreferences().getInt("editorError", ContextCompat.getColor(context, R.color.editorError));
+        return AppCommon.getPreferences().getInt("editorError", ContextCompat.getColor(context, R.color.editorError));
     }
 
     public int getColorFunction(Context context) {
-        return App.getPreferences().getInt("editorFunction", ContextCompat.getColor(context, R.color.editorFunction));
+        return AppCommon.getPreferences().getInt("editorFunction", ContextCompat.getColor(context, R.color.editorFunction));
     }
 
     public int getColorOperator(Context context) {
-        return App.getPreferences().getInt("editorOperator", ContextCompat.getColor(context, R.color.editorOperator));
+        return AppCommon.getPreferences().getInt("editorOperator", ContextCompat.getColor(context, R.color.editorOperator));
     }
 
     public int getBackgroundColor() {

@@ -9,8 +9,8 @@ import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.ZipUtils;
-import com.mcal.common.App;
 import com.mcal.common.data.Preferences;
+import com.termux.terminal.app.AppTerminal;
 import com.termux.terminal.app.utils.Environment;
 
 import org.jetbrains.annotations.Contract;
@@ -22,13 +22,13 @@ import java.util.concurrent.CompletableFuture;
 public class ToolsManager {
 
     public static final int LOG_SENDER_VERSION = 2;
-    public static String ARCH_SPECIFIC_ASSET_DATA_DIR = "data/" + App.getArch();
+    public static String ARCH_SPECIFIC_ASSET_DATA_DIR = "data/" + AppTerminal.getArch();
     public static String COMMON_ASSET_DATA_DIR = "data/common";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void init(@NonNull App app, Runnable onFinish) {
+    public static void init(Runnable onFinish) {
 
-        if (App.getArch() == null) {
+        if (AppTerminal.getArch() == null) {
             //LOG.error("Device not supported");
             return;
         }

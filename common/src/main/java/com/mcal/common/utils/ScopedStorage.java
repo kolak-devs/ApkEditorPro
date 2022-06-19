@@ -4,7 +4,7 @@ import android.os.Environment;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.common.App;
+import com.mcal.common.AppCommon;
 
 import org.jetbrains.annotations.Contract;
 
@@ -19,12 +19,12 @@ public class ScopedStorage {
     }
 
     public static File getFilesDir() {
-        return App.getContext().getFilesDir();
+        return AppCommon.getContext().getFilesDir();
     }
 
     public static String getExternalStoragePath() {
         String internalPath = ScopedStorage.getStorageDirectory().getPath();
-        File[] files = App.getContext().getExternalFilesDirs(null);
+        File[] files = AppCommon.getContext().getExternalFilesDirs(null);
         if (files != null) {
             // Find the pattern
             int appendedLen = 0;

@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-import com.mcal.common.App;
+import com.mcal.common.AppCommon;
 import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.utils.ScopedStorage;
 
@@ -13,7 +13,7 @@ public class Preferences {
     // Some aapt must pass "--no-version-vectors" option to get the correct result
     public static boolean getNoVersionVectorOption(String aaptPath) {
         String configKey = "aapt-no-version-vectors";
-        SharedPreferences sp = android.preference.PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        SharedPreferences sp = android.preference.PreferenceManager.getDefaultSharedPreferences(AppCommon.getContext());
         int intVal = sp.getInt(configKey, -1);
         if (intVal == 1) {
             return true;
@@ -37,19 +37,19 @@ public class Preferences {
 
     // Assets Installer
     public static boolean getInitialized() {
-        return App.getPreferences().getBoolean("initialized", false);
+        return AppCommon.getPreferences().getBoolean("initialized", false);
     }
 
     public static void setInitialized(boolean key) {
-        App.getPreferences().edit().putBoolean("initialized", key).apply();
+        AppCommon.getPreferences().edit().putBoolean("initialized", key).apply();
     }
 
     public static String getVersionString() {
-        return App.getPreferences().getString("version", "");
+        return AppCommon.getPreferences().getString("version", "");
     }
 
     public static void setVersionString(String key) {
-        App.getPreferences().edit().putString("version", key).apply();
+        AppCommon.getPreferences().edit().putString("version", key).apply();
     }
 
     public static boolean isAapt2(Context ctx) {
@@ -63,55 +63,55 @@ public class Preferences {
      * @return null
      */
     public static String isSignatureKeyType() {
-        return App.getPreferences().getString("signatureKey", "0");
+        return AppCommon.getPreferences().getString("signatureKey", "0");
     }
 
     public static String getSignatureAlias() {
-        return App.getPreferences().getString("signatureAlias", "");
+        return AppCommon.getPreferences().getString("signatureAlias", "");
     }
 
     public static String getCertPassword() {
-        return App.getPreferences().getString("certPass", "");
+        return AppCommon.getPreferences().getString("certPass", "");
     }
 
     public static String getSignaturePassword() {
-        return App.getPreferences().getString("signaturePass", "");
+        return AppCommon.getPreferences().getString("signaturePass", "");
     }
 
     public static void setSignatureAlias(String key) {
-        App.getPreferences().edit().putString("signatureAlias", key).apply();
+        AppCommon.getPreferences().edit().putString("signatureAlias", key).apply();
     }
 
     public static void setCertPassword(String key) {
-        App.getPreferences().edit().putString("certPass", key).apply();
+        AppCommon.getPreferences().edit().putString("certPass", key).apply();
     }
 
     public static void setSignaturePassword(String key) {
-        App.getPreferences().edit().putString("signaturePass", key).apply();
+        AppCommon.getPreferences().edit().putString("signaturePass", key).apply();
     }
 
     public static String getPk8() {
-        return App.getPreferences().getString("pk8Path", "");
+        return AppCommon.getPreferences().getString("pk8Path", "");
     }
 
     public static void setPk8(String key) {
-        App.getPreferences().edit().putString("pk8Path", key).apply();
+        AppCommon.getPreferences().edit().putString("pk8Path", key).apply();
     }
 
     public static String getX509() {
-        return App.getPreferences().getString("x509Path", "");
+        return AppCommon.getPreferences().getString("x509Path", "");
     }
 
     public static void setX509(String key) {
-        App.getPreferences().edit().putString("x509Path", key).apply();
+        AppCommon.getPreferences().edit().putString("x509Path", key).apply();
     }
 
     public static String getSignaturePath() {
-        return App.getPreferences().getString("signaturePath", "");
+        return AppCommon.getPreferences().getString("signaturePath", "");
     }
 
     public static void setSignaturePath(String key) {
-        App.getPreferences().edit().putString("signaturePath", key).apply();
+        AppCommon.getPreferences().edit().putString("signaturePath", key).apply();
     }
 
 
@@ -121,27 +121,27 @@ public class Preferences {
      */
     public static String getLastDirectory() {
         String rootDir = ScopedStorage.getStorageDirectory().getPath();
-        return App.getPreferences().getString("apkDirectory", rootDir);
+        return AppCommon.getPreferences().getString("apkDirectory", rootDir);
     }
 
     public static void setLastDirectory(String directory) {
-        App.getPreferences().edit().putString("apkDirectory", directory).apply();
+        AppCommon.getPreferences().edit().putString("apkDirectory", directory).apply();
     }
 
     public static boolean getFullScreen() {
-        return App.getPreferences().getBoolean("FullScreen", false);
+        return AppCommon.getPreferences().getBoolean("FullScreen", false);
     }
 
     public static String getListOrder() {
-        return App.getPreferences().getString("AppListOrder", "0");
+        return AppCommon.getPreferences().getString("AppListOrder", "0");
     }
 
     public static boolean isFixMultiRes() {
-        return App.getPreferences().getBoolean("fixMultiRes", true);
+        return AppCommon.getPreferences().getBoolean("fixMultiRes", true);
     }
 
     public static boolean isApkToolCompiler() {
-        return App.getPreferences().getBoolean("apkToolCompiler", true);
+        return AppCommon.getPreferences().getBoolean("apkToolCompiler", true);
     }
 
     // PATCH CODE VIEW
@@ -158,26 +158,26 @@ public class Preferences {
     }
 
     public static boolean isNightModeEnabled() {
-        return App.getPreferences().getBoolean("night_mode", false);
+        return AppCommon.getPreferences().getBoolean("night_mode", false);
     }
 
     public static void setNightModeEnabled(boolean flag) {
-        App.getPreferences().edit().putBoolean("night_mode", flag).apply();
+        AppCommon.getPreferences().edit().putBoolean("night_mode", flag).apply();
     }
 
     /**
      * SEARCH HISTORY
      */
     public static void setResKeywordHistory(String directory) {
-        App.getPreferences().edit().putString("res_keywords", directory).apply();
+        AppCommon.getPreferences().edit().putString("res_keywords", directory).apply();
     }
 
     public static void setMfKeywordHistory(String directory) {
-        App.getPreferences().edit().putString("mf_keywords", directory).apply();
+        AppCommon.getPreferences().edit().putString("mf_keywords", directory).apply();
     }
 
     public static void setStringKeywordHistory(String directory) {
-        App.getPreferences().edit().putString("string_keywords", directory).apply();
+        AppCommon.getPreferences().edit().putString("string_keywords", directory).apply();
     }
 
     public static boolean isSystemShell() {
@@ -187,19 +187,19 @@ public class Preferences {
 
     public static int getLogSenderVersion() {
         //KEY_LOG_SENDER_VERSION
-        return App.getPreferences().getInt("tools_logsenderVersion", 0);
+        return AppCommon.getPreferences().getInt("tools_logsenderVersion", 0);
     }
 
     public static void setLogSenderVersion(int mode) {
-        App.getPreferences().edit().putInt("mf_keywords", mode).apply();
+        AppCommon.getPreferences().edit().putInt("mf_keywords", mode).apply();
     }
 
     public static int getFontSizeTerminal() {
         //KEY_LOG_SENDER_VERSION
-        return App.getPreferences().getInt("terminal_fontSize", 14);
+        return AppCommon.getPreferences().getInt("terminal_fontSize", 14);
     }
 
     public static void setFontSizeTerminal(int mode) {
-        App.getPreferences().edit().putInt("terminal_fontSize", mode).apply();
+        AppCommon.getPreferences().edit().putInt("terminal_fontSize", mode).apply();
     }
 }

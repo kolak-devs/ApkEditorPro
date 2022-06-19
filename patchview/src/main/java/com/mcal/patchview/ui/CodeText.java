@@ -11,7 +11,7 @@ import android.util.TypedValue;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.mcal.common.App;
+import com.mcal.common.AppCommon;
 import com.mcal.common.data.Preferences;
 import com.mcal.patchview.R;
 
@@ -31,7 +31,7 @@ public class CodeText extends ShaderText {
 
         this.context = context;
         bgPaint.setStyle(Paint.Style.FILL);
-        bgPaint.setColor(App.getColorFromAttr(getContext(), android.R.attr.windowBackground));
+        bgPaint.setColor(AppCommon.getColorFromAttr(getContext(), android.R.attr.windowBackground));
 
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);

@@ -47,6 +47,7 @@ import com.termux.terminal.app.TerminalActivity;
 import com.termux.terminal.app.utils.Environment;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * For apktool, look into:
@@ -210,8 +211,8 @@ public class MainActivity extends CustomizedLangActivity implements
         // Terminal
         Button terminalBtn = this.findViewById(R.id.tv_terminal);
         terminalBtn.setOnClickListener(v -> {
-            Environment.init();
             Intent intent = new Intent(MainActivity.this, TerminalActivity.class);
+            //intent.putExtra(TerminalActivity.KEY_WORKING_DIRECTORY, Objects.requireNonNull(getProjectDirPath()));
             startActivity(intent);
         });
 
