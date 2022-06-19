@@ -179,4 +179,27 @@ public class Preferences {
     public static void setStringKeywordHistory(String directory) {
         App.getPreferences().edit().putString("string_keywords", directory).apply();
     }
+
+    public static boolean isSystemShell() {
+        // KEY_TERMINAL_USE_SYSTEM_SHELL
+        return true;
+    }
+
+    public static int getLogSenderVersion() {
+        //KEY_LOG_SENDER_VERSION
+        return App.getPreferences().getInt("tools_logsenderVersion", 0);
+    }
+
+    public static void setLogSenderVersion(int mode) {
+        App.getPreferences().edit().putInt("mf_keywords", mode).apply();
+    }
+
+    public static int getFontSizeTerminal() {
+        //KEY_LOG_SENDER_VERSION
+        return App.getPreferences().getInt("terminal_fontSize", 14);
+    }
+
+    public static void setFontSizeTerminal(int mode) {
+        App.getPreferences().edit().putInt("terminal_fontSize", mode).apply();
+    }
 }

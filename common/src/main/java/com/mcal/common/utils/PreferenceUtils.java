@@ -17,4 +17,8 @@ public class PreferenceUtils {
         editor.putBoolean(key, value);
         editor.apply();
     }
+
+    public static boolean shouldUseLdPreload() {
+        return true;
+    }
 }

@@ -43,10 +43,10 @@ import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.FileUtils;
 import com.mcal.httpserver.HttpServiceManager;
+import com.termux.terminal.app.TerminalActivity;
+import com.termux.terminal.app.utils.Environment;
 
 import java.io.File;
-
-import jackpal.androidterm.Term;
 
 /**
  * For apktool, look into:
@@ -210,7 +210,8 @@ public class MainActivity extends CustomizedLangActivity implements
         // Terminal
         Button terminalBtn = this.findViewById(R.id.tv_terminal);
         terminalBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, Term.class);
+            Environment.init();
+            Intent intent = new Intent(MainActivity.this, TerminalActivity.class);
             startActivity(intent);
         });
 

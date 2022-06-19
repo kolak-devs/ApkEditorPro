@@ -1,3 +1,0 @@
-H:/AppProjects/ApkEditor-Release/libtermexec/.cxx/Debug/4r06r437/x86_64/CMakeFiles/jackpal-termexec2.dir
-H:/AppProjects/ApkEditor-Release/libtermexec/.cxx/Debug/4r06r437/x86_64/CMakeFiles/edit_cache.dir
-H:/AppProjects/ApkEditor-Release/libtermexec/.cxx/Debug/4r06r437/x86_64/CMakeFiles/rebuild_cache.dir

@@ -1,7 +1,0 @@
-[
-{
-  "directory": "H:/AppProjects/ApkEditor-Release/libtermexec/.cxx/Debug/4r06r437/x86_64",
-  "command": "F:\\Android\\Sdk\\ndk\\21.4.7075529\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=x86_64-none-linux-android21 --gcc-toolchain=F:/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=F:/Android/Sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Djackpal_termexec2_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC -o CMakeFiles\\jackpal-termexec2.dir\\process.cpp.o -c H:\\AppProjects\\ApkEditor-Release\\libtermexec\\src\\main\\cpp\\process.cpp",
-  "file": "H:\\AppProjects\\ApkEditor-Release\\libtermexec\\src\\main\\cpp\\process.cpp"
-}
-]

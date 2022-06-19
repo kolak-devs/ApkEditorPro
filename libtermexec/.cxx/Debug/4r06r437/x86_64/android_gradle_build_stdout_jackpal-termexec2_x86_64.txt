@@ -1,2 +1,0 @@
-ninja: Entering directory `H:\AppProjects\ApkEditor-Release\libtermexec\.cxx\Debug\4r06r437\x86_64'
-ninja: no work to do.

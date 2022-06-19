@@ -1,2 +1,0 @@
-ninja: Entering directory `H:\AppProjects\ApkEditor-Release\term\.cxx\Debug\if1m533n\arm64-v8a'
-ninja: no work to do.

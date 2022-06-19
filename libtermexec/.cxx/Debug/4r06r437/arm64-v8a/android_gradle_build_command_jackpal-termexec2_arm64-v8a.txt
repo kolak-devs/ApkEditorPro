@@ -1,7 +1,0 @@
-Executable : F:\Android\Sdk\cmake\3.18.1\bin\ninja.exe
-arguments : 
--C
-H:\AppProjects\ApkEditor-Release\libtermexec\.cxx\Debug\4r06r437\arm64-v8a
-jackpal-termexec2
-jvmArgs : 
-
