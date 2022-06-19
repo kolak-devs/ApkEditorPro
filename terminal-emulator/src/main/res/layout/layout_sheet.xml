@@ -19,7 +19,7 @@
         android:elevation="0dp"
         app:icon="@drawable/ic_expand_more"
         app:iconPadding="8dp"
-        style="@style/Widget.MaterialComponents.Button.Icon"/>
+        style="@style/Widget.Material3.Button.Icon"/>
 
     <LinearLayout
         android:orientation="horizontal"

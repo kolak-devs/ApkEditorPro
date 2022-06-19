@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blankj.utilcode.util.ClipboardUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.mcal.common.data.Preferences;
+import com.termux.terminal.R;
 import com.termux.terminal.TerminalEmulator;
 import com.termux.terminal.TerminalSession;
 import com.termux.terminal.TerminalSessionClient;
@@ -46,7 +48,7 @@ import java.io.FileOutputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-public class TerminalActivity extends StudioActivity
+public class TerminalActivity extends AppCompatActivity
         implements TerminalViewClient, TerminalSessionClient {
 
     public static final String KEY_WORKING_DIRECTORY = "terminal_workingDirectory";
@@ -63,8 +65,7 @@ public class TerminalActivity extends StudioActivity
     private int MAX_FONT_SIZE;
     private int DEFAULT_FONT_SIZE;
 
-    @Override
-    protected View bindLayout() {
+    public View bindLayout() {
         binding = ActivityTerminalBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }
@@ -73,15 +74,11 @@ public class TerminalActivity extends StudioActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(bindLayout());
 
         final File bash = new File(BIN_DIR, "bash");
 
-
-
-
-
-        final boolean useSystemShell =
-                Preferences.isSystemShell();
+        final boolean useSystemShell = Preferences.isSystemShell();
         if ((PREFIX.exists()
                 && PREFIX.isDirectory()
                 && bash.exists()
@@ -121,7 +118,7 @@ public class TerminalActivity extends StudioActivity
                                         showInstallationError(throwable);
                                         return;
                                     }
-
+                                    Preferences.setSystemShell(true);
                                     setupTerminalView();
                                 });
                     });
@@ -146,6 +143,7 @@ public class TerminalActivity extends StudioActivity
         params.weight = 1f;
 
         binding.getRoot().addView(terminal, 0, params);
+
         try {
             binding.virtualKeyTable.setVirtualKeysViewClient(getKeyListener());
             binding.virtualKeyTable.reload(
@@ -243,8 +241,7 @@ public class TerminalActivity extends StudioActivity
 
     @NonNull
     private String getShellPath() {
-        final boolean useSystemShell =
-                Preferences.isSystemShell();
+        final boolean useSystemShell = Preferences.isSystemShell();
         if (!useSystemShell && LOGIN_SHELL.exists() && LOGIN_SHELL.isFile()) {
             return LOGIN_SHELL.getAbsolutePath();
         }

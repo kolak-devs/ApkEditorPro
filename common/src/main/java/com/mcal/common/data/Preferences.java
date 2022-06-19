@@ -181,12 +181,14 @@ public class Preferences {
     }
 
     public static boolean isSystemShell() {
-        // KEY_TERMINAL_USE_SYSTEM_SHELL
-        return true;
+        return AppCommon.getPreferences().getBoolean("idepref_general_terminalShell", false);
+    }
+
+    public static void setSystemShell(boolean flag) {
+        AppCommon.getPreferences().edit().putBoolean("idepref_general_terminalShell", flag).apply();
     }
 
     public static int getLogSenderVersion() {
-        //KEY_LOG_SENDER_VERSION
         return AppCommon.getPreferences().getInt("tools_logsenderVersion", 0);
     }
 
@@ -195,7 +197,6 @@ public class Preferences {
     }
 
     public static int getFontSizeTerminal() {
-        //KEY_LOG_SENDER_VERSION
         return AppCommon.getPreferences().getInt("terminal_fontSize", 14);
     }
 
