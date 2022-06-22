@@ -150,20 +150,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_commonedit);
-
-        if (Preferences.getFullScreen()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                final WindowInsetsController insetsController = getWindow().getInsetsController();
-                if (insetsController != null) {
-                    insetsController.hide(WindowInsets.Type.statusBars());
-                }
-            } else {
-                getWindow().setFlags(
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN
-                );
-            }
-        }
+        initFullScreen();
 
         this.apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
 

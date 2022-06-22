@@ -146,35 +146,20 @@ public abstract class TextEditBase extends CustomizedLangActivity implements Col
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-        if (Preferences.getFullScreen()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                final WindowInsetsController insetsController = getWindow().getInsetsController();
-                if (insetsController != null) {
-                    insetsController.hide(WindowInsets.Type.statusBars());
-                }
-            } else {
-                getWindow().setFlags(
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN
-                );
-            }
-        }
-
         // Need double check this line?
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         if (isForBigFile) {
-            this.setContentView(R.layout.activity_editor_bigfile);
+            setContentView(R.layout.activity_editor_bigfile);
         } else {
             this.textWrap = SettingEditorActivity.isLineWrap(this);
             if (this.textWrap) {
-                this.setContentView(
-                        R.layout.activity_editor_wrap);
+                setContentView(R.layout.activity_editor_wrap);
             } else {
-                this.setContentView(
-                        R.layout.activity_editor);
+                setContentView(R.layout.activity_editor);
             }
         }
+        initFullScreen();
 
         // Get data from intent
         Intent intent = getIntent();

@@ -51,20 +51,8 @@ public class ColorXmlActivity extends CustomizedLangActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        if (Preferences.getFullScreen()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                final WindowInsetsController insetsController = getWindow().getInsetsController();
-                if (insetsController != null) {
-                    insetsController.hide(WindowInsets.Type.statusBars());
-                }
-            } else {
-                getWindow().setFlags(
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN
-                );
-            }
-        }
         setContentView(R.layout.activity_colors_xml);
+        initFullScreen();
 
         this.xmlPath = ActivityUtils
                 .getParam(getIntent(), "xmlPath");

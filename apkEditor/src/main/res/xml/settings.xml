@@ -14,10 +14,10 @@
             android:layout="@layout/item_iconlistpref"
             android:title="@string/launcher_icon" / -->
 
-        <!-- SwitchPreference
+        <SwitchPreference
             android:key="FullScreen"
             android:summary="@string/full_screen_desc"
-            android:title="@string/full_screen" / -->
+            android:title="@string/full_screen" />
 
         <ListPreference
             android:defaultValue=""

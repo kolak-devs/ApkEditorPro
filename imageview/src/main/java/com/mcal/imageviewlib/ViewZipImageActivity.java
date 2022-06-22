@@ -44,21 +44,8 @@ public class ViewZipImageActivity extends CustomizedLangActivity {
             return;
         }
 
-        if (Preferences.getFullScreen()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                final WindowInsetsController insetsController = getWindow().getInsetsController();
-                if (insetsController != null) {
-                    insetsController.hide(WindowInsets.Type.statusBars());
-                }
-            } else {
-                getWindow().setFlags(
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN
-                );
-            }
-        }
-
         setContentView(R.layout.imageviewlib_activity_empty);
+        initFullScreen();
 
         this.zipFilePath = ActivityUtils.getParam(intent, "zipFilePath");
         this.entryName = ActivityUtils.getParam(intent, "entryName");

@@ -190,9 +190,8 @@ public class SettingActivity extends PreferenceActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
-
         super.onCreate(savedInstanceState);
-
+        addPreferencesFromResource(R.xml.settings);
         if (Preferences.getFullScreen()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 final WindowInsetsController insetsController = getWindow().getInsetsController();
@@ -206,8 +205,6 @@ public class SettingActivity extends PreferenceActivity
                 );
             }
         }
-        this.addPreferencesFromResource(R.xml.settings);
-
         initData();
     }
 

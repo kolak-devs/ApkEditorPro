@@ -460,6 +460,8 @@
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
+    <string name="full_screen">Full Screen</string>
+    <string name="full_screen_desc">Select to enable full screen</string>
     <!--
     <string name="sure_to_exit_tip">Are you sure to exit?\nSorry, edit is not supported any more as some of the policy reason. You could save it as project which will be located at %s.</string>
     -->

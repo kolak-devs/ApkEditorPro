@@ -23,6 +23,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.dialogs.ProcessingDialog;
 import com.mcal.apkeditor.utils.FileUtils;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ScopedStorage;
@@ -40,7 +41,7 @@ import java.util.Map;
 
 import common.types.ProjectInfo;
 
-public class ProjectListActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProjectListActivity extends CustomizedLangActivity implements View.OnClickListener {
     private final MyHandler handler = new MyHandler(this);
     private ProjectListAdapter adapter;
     private String projectFolder; // like "/sdcard/ApkEditor/.projects/"
@@ -51,23 +52,8 @@ public class ProjectListActivity extends AppCompatActivity implements View.OnCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
-        if (Preferences.getFullScreen()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                final WindowInsetsController insetsController = getWindow().getInsetsController();
-                if (insetsController != null) {
-                    insetsController.hide(WindowInsets.Type.statusBars());
-                }
-            } else {
-                getWindow().setFlags(
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN
-                );
-            }
-        }
-
         setContentView(R.layout.activity_projectlist);
-
+        initFullScreen();
         setupToolbar(R.string.projects);
         initUI();
     }
