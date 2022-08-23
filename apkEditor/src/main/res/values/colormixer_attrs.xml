@@ -1,5 +1,0 @@
-<resources>
-    <declare-styleable name="ColorMixer">
-        <attr name="colormixer_color" format="color" />
-    </declare-styleable>
-</resources>

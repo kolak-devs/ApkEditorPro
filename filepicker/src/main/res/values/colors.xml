@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorAccent">#2962FF</color>
-    <color name="colorPrimary">#FFF</color>
-    <color name="colorPrimaryDark">#FFF</color>
-    <color name="colorCheckBox">#FFFFFF</color>
-
-    <color name="textColorPrimary">#000</color>
-</resources>
