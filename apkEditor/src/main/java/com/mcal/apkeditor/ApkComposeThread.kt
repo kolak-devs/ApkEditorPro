@@ -617,6 +617,7 @@ class ApkComposeThread(
     override fun stopRunning() {
         stopFlag = true
         coroutineContext.cancel()
+        cancel() // TODO CANCEL JOB
     }
 
     override fun setExtraMaker(extraMaker: IApkMaking?) {

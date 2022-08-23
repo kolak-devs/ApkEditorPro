@@ -72,18 +72,20 @@ class ApkComposeService : Service(), ITaskCallback {
         srcApkPath = ActivityUtils.getParam(intent, "srcApkPath")
         targetApkPath = ActivityUtils.getParam(intent, "targetApkPath")
         var str = ActivityUtils.getParam(intent, "stringModified")
-        stringModified = java.lang.Boolean.valueOf(str)
+        stringModified = str.toBoolean()
         str = ActivityUtils.getParam(intent, "manifestModified")
-        manifestModified = java.lang.Boolean.valueOf(str)
+        manifestModified = str.toBoolean()
         str = ActivityUtils.getParam(intent, "resFileModified")
-        resFileModified = java.lang.Boolean.valueOf(str)
+        resFileModified = str.toBoolean()
         modifiedSmaliFolders = ActivityUtils.getStringArray(intent, "modifiedSmaliFolders")
         signAPK = ActivityUtils.getBoolParam(intent, "signAPK")
         addedFiles = ActivityUtils.getMapParam(intent, "addedFiles")
         replacedFiles = ActivityUtils.getMapParam(intent, "replacedFiles")
         deletedFiles = HashSet()
         val delEntries: List<String>? = ActivityUtils.getStringArray(intent, "deletedFiles")
-        deletedFiles?.addAll(delEntries!!)
+        delEntries?.let { entries ->
+            deletedFiles?.addAll(entries)
+        }
         val passedFile = ActivityUtils.getParam(intent, "fileEntry2ZipEntry")
         if (passedFile != null) {
             fileEntry2ZipEntry = getMapFromFile(passedFile)
@@ -363,6 +365,11 @@ class ApkComposeService : Service(), ITaskCallback {
                 if (foregroundStarted) {
                     stopForeground(true)
                     foregroundStarted = false
+                }
+                composeThread?.let { thread ->
+                    if (thread.isActive) {
+                        thread.stopRunning()
+                    }
                 }
                 mNotificationManager = null
                 Log.e("DEBUG", "notification hidden.")
