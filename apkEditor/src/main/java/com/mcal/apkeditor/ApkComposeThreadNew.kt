@@ -604,6 +604,7 @@ class ApkComposeThreadNew(
     override fun stopRunning() {
         stopFlag = true
         coroutineContext.cancel()
+        cancel() // todo
     }
 
     override val coroutineContext: CoroutineContext
