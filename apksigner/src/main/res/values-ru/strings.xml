@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="save">Сохранить</string>
+    <string name="choose">Выбрать</string>
+    <string name="select">Выбрать</string>
+    <string name="select_keystore">Выбрать ключ</string>
+    <string name="public_key_label">Публичный ключ (.x509.pem)</string>
+    <string name="private_key_label">Приватный ключ (.pk8)</string>
+    <string name="custom_keystore">Пользовательский ключ</string>
+</resources>

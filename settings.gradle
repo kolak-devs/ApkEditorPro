@@ -1,0 +1,42 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+include ':apklib'
+include ':httpserver'
+include ':pngeditor'
+include ':common'
+include ':imageview'
+include ':apkEditor'
+include ':applistutil'
+include ':sqliteutil'
+include ':codeeditor'
+include ':dataeditor'
+include ':crashreporter'
+include ':apksigner'
+include ':patchview'
+include ':xpp3'
+include ':androlib'
+include ':smali'
+include ':jadx'
+include ':raung'
+include ':so-translator'
+include ':color-picker'
+include ':filepicker'
+include ':manifestparser'
+include ':net-manager'
+
+//include ':terminal-emulator'
+
+include ':libraries'

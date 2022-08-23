@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 26
+        targetSdk 32
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+    packagingOptions {
+        resources.excludes += 'license/*'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    namespace 'com.mcal.neweditor'
+}
+
+dependencies {
+    implementation project(':common')
+    implementation project(':jadx')
+    api project(':smali')
+    implementation 'com.google.guava:guava:31.1-android'
+
+    implementation project(':libraries')
+
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+
+    implementation 'com.google.android.material:material:1.6.1'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+
+    //implementation 'io.github.Rosemoe.sora-editor:editor-kt:0.15.0-dev-1'
+    implementation 'io.github.Rosemoe.sora-editor:editor:0.16.1'
+    implementation 'io.github.Rosemoe.sora-editor:language-java:0.16.1'
+    implementation 'io.github.Rosemoe.sora-editor:language-textmate:0.16.1'
+    implementation 'io.github.Rosemoe.sora-editor:editor-lsp:0.16.1'
+}

@@ -1,0 +1,126 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 32
+    ndkVersion '24.0.8215888'
+    
+    defaultConfig {
+        applicationId "com.mcal.apkeditor.pro"
+        minSdk 26
+        //noinspection ExpiredTargetSdkVersion
+        targetSdk 26
+        versionCode 1128
+        versionName "1.12.8-alpha"
+        multiDexEnabled true
+    }
+
+    externalNativeBuild {
+        cmake {
+            version '3.18.1'
+            path 'src/main/cpp/CMakeLists.txt'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "boolean", "IS_PRO", "true"
+            buildConfigField "boolean", "WITH_SIGN", "true"
+            buildConfigField "boolean", "DISPLAY_APP", "true"
+            buildConfigField "boolean", "ODEX_PATCH", "true"
+            buildConfigField "boolean", "SHOW_AGREEMENT", "true"
+            buildConfigField "boolean", "LIMIT_NEW_VERSION", "false"
+            buildConfigField "boolean", "PARSER_ONLY", "false"
+            buildConfigField "String", "JADX_VERSION", "\"1.3.5+\""
+            buildConfigField "String", "APKTOOL_VERSION", "\"2.6.1+\""
+            buildConfigField "String", "SMALI_VERSION", "\"2.5.2\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            buildConfigField "boolean", "IS_PRO", "true"
+            buildConfigField "boolean", "WITH_SIGN", "true"
+            buildConfigField "boolean", "DISPLAY_APP", "true"
+            buildConfigField "boolean", "ODEX_PATCH", "true"
+            buildConfigField "boolean", "SHOW_AGREEMENT", "true"
+            buildConfigField "boolean", "LIMIT_NEW_VERSION", "false"
+            buildConfigField "boolean", "PARSER_ONLY", "false"
+            buildConfigField "String", "JADX_VERSION", "\"1.4.2+\""
+            buildConfigField "String", "APKTOOL_VERSION", "\"2.6.1+\""
+            buildConfigField "String", "SMALI_VERSION", "\"2.5.2\""
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${variant.name}-${variant.versionName}.apk"
+        }
+    }
+
+
+    compileOptions {
+        // Flag to enable support for the new language APIs
+        //coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    packagingOptions {
+        resources.excludes += 'keys/*'
+        resources.excludes += 'license/*'
+        resources.excludes += '**/tmp/*'
+    }
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+    namespace 'com.mcal.apkeditor'
+}
+
+dependencies {
+    implementation project(':androlib')
+    implementation project(':jadx')
+    implementation project(':smali')
+    implementation project(':apklib')
+    implementation project(':common')
+    implementation project(':codeeditor')
+    implementation project(':httpserver')
+    implementation project(':pngeditor')
+    implementation project(':imageview')
+    implementation project(':apksigner')
+    implementation project(':dataeditor')
+    implementation project(':crashreporter')
+    implementation project(':patchview')
+    implementation project(':so-translator')
+    implementation project(':color-picker')
+    //implementation project(':terminal-emulator')
+    implementation project(':filepicker')
+    implementation project(':manifestparser')
+    implementation project(':net-manager')
+
+    implementation project(':libraries')
+
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+
+    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+
+    implementation 'com.google.guava:guava:31.1-android'
+    implementation 'org.antlr:antlr-runtime:3.5.2'
+
+    // LeakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
+
+    //coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+}

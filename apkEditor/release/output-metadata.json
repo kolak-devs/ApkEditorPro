@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.mcal.apkeditor.pro",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 1128,
+      "versionName": "1.12.8-alpha",
+      "outputFile": "release-1.12.8-alpha.apk"
+    }
+  ],
+  "elementType": "File"
+}

@@ -1,0 +1,108 @@
+package com.mcal.patchview.ui;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.text.Layout;
+import android.util.AttributeSet;
+import android.util.TypedValue;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
+
+import com.mcal.common.App;
+import com.mcal.common.data.Preferences;
+import com.mcal.patchview.R;
+
+/**
+ * Created by Snow Volf on 03.11.2017, 16:23
+ */
+
+public class CodeText extends ShaderText {
+    private final Context context;
+    private final transient Paint paint = new Paint();
+    private final transient Paint bgPaint = new Paint();
+    private Layout layout;
+    private boolean isShowLineNumber = true;
+
+    public CodeText(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        this.context = context;
+        bgPaint.setStyle(Paint.Style.FILL);
+        bgPaint.setColor(getColorFromAttr(context, android.R.attr.windowBackground));
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
+        if (Preferences.isMonospaceFontAllowed()) {
+            setTypeface(ResourcesCompat.getFont(getContext(), R.font.mono));
+        }
+        setTextSize(Preferences.getFontSize());
+        paint.setColor(Color.parseColor(!Preferences.isNightModeEnabled() ? "#000000" : "#fafafa"));
+        paint.setTextSize(getPixels(14));
+        getViewTreeObserver().addOnGlobalLayoutListener(() -> layout = getLayout());
+    }
+
+    @ColorInt
+    public static int getColorFromAttr(@NonNull Context context, @AttrRes int attr) {
+        TypedValue typedValue = new TypedValue();
+        if (context.getTheme().resolveAttribute(attr, typedValue, true)) {
+            return typedValue.data;
+        } else {
+            return Color.WHITE;
+        }
+    }
+
+    private int getDigitCount() {
+        int count = 0;
+        int len = getLineCount();
+        while (len > 0) {
+            count++;
+            len /= 10;
+        }
+        return count;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        if (isShowLineNumber) {
+            int padding = (int) getPixels(getDigitCount() * 10 + 10);
+            setPadding(padding, 0, 0, 0);
+
+            int scrollY = getScrollY();
+            int firstLine = layout.getLineForVertical(scrollY), lastLine;
+
+            try {
+                lastLine = layout.getLineForVertical(scrollY + (getHeight() - getExtendedPaddingTop() - getExtendedPaddingBottom()));
+            } catch (NullPointerException npe) {
+                lastLine = layout.getLineForVertical(scrollY + (getHeight() - getPaddingTop() - getPaddingBottom()));
+            }
+
+            //the y position starts at the baseline of the first line
+            int positionY = getBaseline() + (layout.getLineBaseline(firstLine) - layout.getLineBaseline(0));
+            drawLineNumber(canvas, layout, positionY, firstLine);
+            for (int i = firstLine + 1; i <= lastLine; i++) {
+                //get the next y position using the difference between the current and last baseline
+                positionY += layout.getLineBaseline(i) - layout.getLineBaseline(i - 1);
+                drawLineNumber(canvas, layout, positionY, i);
+            }
+        }
+        super.onDraw(canvas);
+    }
+
+    public void setShowLineNumber(boolean value) {
+        isShowLineNumber = value;
+    }
+
+    private void drawLineNumber(@NonNull Canvas canvas, @NonNull Layout layout, int positionY, int line) {
+        int positionX = (int) layout.getLineLeft(line);
+        canvas.drawText(String.valueOf(line + 1), positionX + getPixels(2), positionY, paint);
+    }
+
+    private float getPixels(int dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
+}

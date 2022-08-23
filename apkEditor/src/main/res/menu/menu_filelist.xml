@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/internal_storage"
+        android:title="@string/sd_card" />
+    <item
+        android:id="@+id/external_storage"
+        android:title="@string/ext_sd_card" />
+    <item
+        android:id="@+id/app_files"
+        android:title="@string/app_files" />
+</menu>

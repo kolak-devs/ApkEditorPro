@@ -1,0 +1,45 @@
+package com.mcal.apkeditor;
+
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+
+import androidx.annotation.NonNull;
+
+import java.io.File;
+import java.util.Date;
+
+public class AppInfo {
+    public ApplicationInfo applicationInfo;
+
+    public String packagePath;
+    public String appName;
+    public long size;
+    public Drawable icon;
+    public String apkPath;
+    public long lastUpdateTime;
+
+    @NonNull
+    public static AppInfo create(PackageManager pm,
+                                 @NonNull ApplicationInfo applicationInfo) {
+        AppInfo appInfo = new AppInfo();
+        appInfo.applicationInfo = applicationInfo;
+        appInfo.appName = (String) applicationInfo.loadLabel(pm);
+        appInfo.packagePath = applicationInfo.packageName;
+
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(
+                    applicationInfo.packageName, 0);
+            appInfo.lastUpdateTime = packageInfo.lastUpdateTime;
+
+            // Get apk size
+            File f = new File(applicationInfo.sourceDir);
+            appInfo.size = f.length();
+        } catch (Throwable e) {
+            appInfo.lastUpdateTime = 0;
+        }
+
+        return appInfo;
+    }
+}

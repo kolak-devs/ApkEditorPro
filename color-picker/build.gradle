@@ -1,0 +1,23 @@
+plugins {
+  id 'com.android.library'
+}
+
+android {
+  compileSdk 32
+
+  defaultConfig {
+    minSdk 21
+    targetSdk 32
+  }
+    lint {
+        abortOnError false
+    }
+    namespace 'com.jaredrummler.android.colorpicker'
+}
+
+dependencies {
+  implementation 'androidx.appcompat:appcompat:1.5.0'
+  implementation 'androidx.preference:preference-ktx:1.2.0'
+
+  implementation 'com.google.android.material:material:1.6.1'
+}

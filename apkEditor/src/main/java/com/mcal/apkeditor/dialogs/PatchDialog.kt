@@ -1,0 +1,456 @@
+package com.mcal.apkeditor.dialogs
+
+import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.view.LayoutInflater
+import android.view.View
+import android.webkit.WebView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mcal.apkeditor.R
+import com.mcal.apkeditor.activities.ApkInfoActivity
+import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection
+import com.mcal.apkeditor.patch.IPatchContext
+import com.mcal.apkeditor.patch.PatchExecutor
+import com.mcal.common.utilsOld.IOUtils
+import com.mcal.common.utilsOld.SDCard
+import com.mcal.patchview.ui.CodeText
+import org.xml.sax.SAXException
+import ru.mcal.manifestparser.xml.AndroidManifestParser
+import java.io.*
+import java.lang.ref.WeakReference
+import java.util.zip.ZipFile
+import javax.xml.parsers.ParserConfigurationException
+
+// Dialog used for patch applying
+class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchContext {
+    private val activityRef: WeakReference<ApkInfoActivity>
+
+    // Record all the global parameter values
+    private val globalVariableValues: MutableMap<String, String> = HashMap()
+    private var exampleDir: String? = null
+    private var patchPath: String? = null
+    private var patchPathTv: TextView? = null
+    private var webView: WebView? = null
+    private var logLayout: View? = null
+    private var logTv: CodeText? = null
+
+    // Record executor as the parse is done there
+    private var patchExecutor: PatchExecutor? = null
+    private var materialDialog: AlertDialog? = null
+    private val manifestPath: File
+
+    private fun init(activity: ApkInfoActivity) {
+        val view = LayoutInflater.from(activity).inflate(R.layout.dialog_patch, null)
+        val curPatchTv = view.findViewById<TextView>(R.id.tv_curpatch)
+        curPatchTv.setOnClickListener(this)
+        patchPathTv = view.findViewById(R.id.tv_patch_path)
+        val saveExamplesTv = view.findViewById<TextView>(R.id.tv_save_patches)
+        saveExamplesTv.setOnClickListener(this)
+        webView = view.findViewById(R.id.web_instructions)
+        webView?.loadUrl("file:///android_res/raw/about_patch.html")
+        logLayout = view.findViewById(R.id.log_layout)
+        logTv = view.findViewById(R.id.tv_patchlog)
+        materialDialog = MaterialAlertDialogBuilder(activity)
+            .setView(view)
+            .setPositiveButton(activity.getString(R.string.select_patch), null)
+            .setNegativeButton(activity.getString(R.string.close), null)
+            .create()
+        materialDialog?.setOnShowListener {
+            materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.setOnClickListener {
+                if (patchPath == null) {
+                    selectPatch()
+                } else {
+                    applyPatch()
+                }
+            }
+        }
+        materialDialog?.show()
+    }
+
+    override fun onClick(v: View) {
+        val id = v.id
+        if (id == R.id.btn_close) {
+            materialDialog?.dismiss()
+        } else if (id == R.id.tv_curpatch) {
+            selectPatch()
+        } else if (id == R.id.tv_save_patches) {
+            // ApkEditor Patches
+            var ret = extractExamples("patch_AE_app_rename.zip")
+            ret = ret or extractExamples("patch_AE_bypass_sign_check.zip")
+            ret = ret or extractExamples("patch_AE_data_editor.zip")
+            ret = ret or extractExamples("patch_AE_launcher_toast.zip")
+            ret = ret or extractExamples("patch_AE_mem_editor.zip")
+            ret = ret or extractExamples("patch_AE_my_font.zip")
+            ret = ret or extractExamples("patch_AE_new_entrance.zip")
+            ret = ret or extractExamples("patch_AE_script_example.zip")
+
+            // Kubarev Patches
+            ret = ret or extractExamples("patch_Bin_SignHook.zip")
+            ret = ret or extractExamples("patch_CNFIX_3.0_SignHook.zip")
+            ret = ret or extractExamples("patch_Heavenly_SignHook.zip")
+            ret = ret or extractExamples("patch_LP_DexSignHook.zip")
+            ret = ret or extractExamples("patch_LP_SignHook.zip")
+            ret = ret or extractExamples("patch_R3Tools_SignHook.zip")
+            ret = ret or extractExamples("patch_Ultima_SignHook.zip")
+            ret = ret or extractExamples("patch_Ultima_VipSignHook.zip")
+            if (ret) {
+                val message = activityRef.get()?.let { activity ->
+                    String.format(activity.getString(R.string.patch_examples_copied), exampleDir)
+                }
+                Toast.makeText(activityRef.get(), message, Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    private fun initExampleDir() {
+        // Check the directory exist or not
+        if (exampleDir == null) {
+            try {
+                exampleDir = SDCard.makeDir(activityRef.get(), "patches")
+            } catch (e1: Exception) {
+                e1.printStackTrace()
+            }
+        }
+    }
+
+    private fun extractExamples(filename: String): Boolean {
+        initExampleDir()
+        activityRef.get()?.let { activity ->
+            val path = exampleDir + filename
+            val am = activity.assets
+            var input: InputStream? = null
+            var output: FileOutputStream? = null
+            try {
+                input = am.open("patches" + File.separator + filename)
+                output = FileOutputStream(path)
+                IOUtils.copy(input, output)
+                return true
+            } catch (e: IOException) {
+                Toast.makeText(
+                    activityRef.get(), e.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            } finally {
+                closeQuietly(input)
+                closeQuietly(output)
+            }
+        }
+        return false
+    }
+
+    private fun closeQuietly(close: Closeable?) {
+        close?.let {
+            try {
+                close.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun closeQuietly(zfile: ZipFile?) {
+        zfile?.let {
+            try {
+                zfile.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun applyPatch() {
+        // Switch the view
+        logTv?.text = ""
+
+        materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.isEnabled = false
+        materialDialog?.show()
+
+        // Patch it
+        patchExecutor = PatchExecutor(activityRef.get(), patchPath, this)
+        patchExecutor?.applyPatch()
+    }
+
+    private fun selectPatch() {
+        var defaultDir: String? = null
+        initExampleDir()
+        exampleDir?.let { dir ->
+            if (File(dir).exists()) {
+                defaultDir = exampleDir
+            }
+        }
+        activityRef.get()?.let { activity ->
+            FileSelectDialog(
+                activity,
+                object : IFileSelection {
+                    override fun fileSelectedInDialog(
+                        filePath: String?, extraStr: String?, openFile: Boolean
+                    ) {
+                        filePath?.let {
+                            patchSelected(filePath)
+                        }
+                    }
+
+                    override fun isInterestedFile(filename: String?, extraStr: String?): Boolean {
+                        filename?.let {
+                            return filename.endsWith(".zip")
+                        }
+                        return false
+                    }
+
+                    override fun getConfirmMessage(filePath: String?, extraStr: String?): String? {
+                        return null
+                    }
+
+                },
+                ".zip",
+                null,
+                activity.getString(R.string.select_patch),
+                false,
+                false,
+                false,
+                "patch",
+                defaultDir
+            )
+        }
+    }
+
+    private fun patchSelected(filePath: String) {
+        logLayout?.visibility = View.VISIBLE
+        webView?.visibility = View.GONE
+        val patchConfig = getPatchConfig(filePath)
+        patchConfig?.let { config ->
+            logTv?.text = config
+        }
+        patchPath = filePath
+        patchPathTv?.text = patchPath
+        materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.setText(R.string.apply_the_patch)
+        materialDialog?.show()
+    }
+
+    private fun getPatchConfig(filePath: String): String? {
+        var zfile: ZipFile? = null
+        var input: InputStream? = null
+        try {
+            zfile = ZipFile(filePath)
+            val entry = zfile.getEntry("patch.txt")
+            if (entry == null) {
+                this.error(R.string.patch_error_no_entry, "patch.txt")
+            }
+            input = zfile.getInputStream(entry)
+            return IOUtils.readString(input)
+        } catch (e: Exception) {
+            e.message?.let { message ->
+                error(R.string.general_error, message)
+            }
+        } finally {
+            closeQuietly(input)
+            closeQuietly(zfile)
+        }
+        return null
+    }
+
+    @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY")
+    override fun info(resourceId: Int, bold: Boolean, vararg args: Any) {
+        activityRef.get()?.let { activity ->
+            var txt = activity.getString(resourceId)
+            @Suppress("UNNECESSARY_SAFE_CALL")
+            args?.let {
+                txt = String.format(txt, *args)
+            }
+            val message = if (bold) "\n" + txt + "\n" else txt + "\n"
+            appendText(message, bold, false)
+        }
+    }
+
+    @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY")
+    override fun info(format: String, bold: Boolean, vararg args: Any) {
+        var txt = format
+        @Suppress("UNNECESSARY_SAFE_CALL")
+        args?.let {
+            txt = String.format(txt, *args)
+        }
+        val message = if (bold) "\n" + txt + "\n" else txt + "\n"
+        appendText(message, bold, false)
+    }
+
+    @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY")
+    override fun error(resourceId: Int, vararg args: Any) {
+        activityRef.get()?.let { activity ->
+            var txt = activity.getString(resourceId)
+            @Suppress("UNNECESSARY_SAFE_CALL")
+            args?.let {
+                txt = String.format(txt, *args)
+            }
+            appendText(txt + "\n", bold = false, red = true)
+        }
+    }
+
+    private fun appendText(
+        txt: String, bold: Boolean,
+        red: Boolean
+    ) {
+        activityRef.get()?.runOnUiThread {
+            if (red) {
+                val spanString = SpannableString(txt)
+                val span = ForegroundColorSpan(Color.RED)
+                spanString.setSpan(span, 0, txt.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                logTv?.append(spanString)
+            } else if (bold) {
+                val spanString = SpannableString(txt)
+                val span = StyleSpan(Typeface.BOLD)
+                spanString.setSpan(
+                    span, 0, txt.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                logTv?.append(spanString)
+            } else {
+                logTv?.append(txt)
+            }
+        }
+    }
+
+    override fun getString(stringId: Int): String? {
+        activityRef.get()?.let { activity ->
+            return activity.getString(stringId)
+        }
+        return null
+    }
+
+    override fun setVariableValue(key: String, value: String) {
+        globalVariableValues[key] = value
+    }
+
+    override fun getVariableValue(key: String): String? {
+        globalVariableValues[key]?.let {
+            return it
+        }
+        return null
+    }
+
+    override fun patchFinished() {
+        activityRef.get()?.runOnUiThread {
+            materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.setText(R.string.patch_applied)
+            materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.setBackgroundColor(-0x9f9fa0)
+            materialDialog?.show()
+        }
+    }
+
+    override fun getDecodeRootPath(): String? {
+        activityRef.get()?.let { activity ->
+            return activity.decodeRootPath
+        }
+        return null
+    }
+
+    override fun getSmaliFolders(): List<String> {
+        val folders: MutableList<String> = ArrayList()
+        folders.add("smali")
+
+        // Look into zip file to get all dex, thus get related smali folder
+        activityRef.get()?.let { activity ->
+            val apkPath = activity.apkPath
+            var zfile: ZipFile? = null
+            try {
+                zfile = ZipFile(apkPath)
+                val entries = zfile.entries()
+                while (entries.hasMoreElements()) {
+                    val entry = entries.nextElement()
+                    val name = entry.name
+                    if (name.endsWith(".dex") && !name.contains("/")) {
+                        if (name != "classes.dex") {
+                            folders.add(
+                                "smali_" + name.substring(0, name.length - 4)
+                            )
+                        }
+                    }
+                }
+            } catch (e1: IOException) {
+                e1.printStackTrace()
+            } finally {
+                closeQuietly(zfile)
+            }
+        }
+        return folders
+    }
+
+    override fun getApplicationName(): String? {
+        try {
+            val parser = AndroidManifestParser.parse(FileInputStream(manifestPath))
+            val name = parser.applicationName
+            name?.let {
+                return name
+            }
+        } catch (e: ParserConfigurationException) {
+            e.printStackTrace()
+        } catch (e: SAXException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY")
+    override fun getActivities(): List<String>? {
+        val activityName: MutableList<String> = ArrayList()
+        try {
+            val parser = AndroidManifestParser.parse(FileInputStream(manifestPath))
+            for (activity in parser.activities) {
+                activityName.add(activity.name)
+            }
+            @Suppress("UNNECESSARY_SAFE_CALL")
+            activityName?.let {
+                return activityName
+            }
+        } catch (e: ParserConfigurationException) {
+            e.printStackTrace()
+        } catch (e: SAXException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY")
+    override fun getLauncherActivities(): List<String>? {
+        val activityName: MutableList<String> = ArrayList()
+        try {
+            val parser = AndroidManifestParser.parse(FileInputStream(manifestPath))
+            activityName.add(parser.launcherActivity.name)
+            @Suppress("UNNECESSARY_SAFE_CALL")
+            activityName?.let {
+                return activityName
+            }
+        } catch (e: ParserConfigurationException) {
+            e.printStackTrace()
+        } catch (e: SAXException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    override fun getPatchNames(): List<String>? {
+        patchExecutor?.let { executor ->
+            return executor.ruleNames
+        }
+        return null
+    }
+
+    init {
+        activityRef = WeakReference(activity)
+        manifestPath = File(activity.decodeRootPath + "/AndroidManifest.xml")
+        init(activity)
+    }
+}
