@@ -107,8 +107,10 @@ class ApkComposeThread(
         this.bSignApk = bSignApk
     }
 
+    private var runningJob = Job()
+
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
+        get() = Dispatchers.Main + runningJob
 
     override fun execute() = launch {
         doInBackground()
@@ -616,8 +618,7 @@ class ApkComposeThread(
 
     override fun stopRunning() {
         stopFlag = true
-        coroutineContext.cancel()
-        cancel() // TODO CANCEL JOB
+        runningJob.cancel()
     }
 
     override fun setExtraMaker(extraMaker: IApkMaking?) {

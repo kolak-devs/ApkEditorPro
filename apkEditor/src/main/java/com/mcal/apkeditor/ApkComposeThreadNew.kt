@@ -16,7 +16,7 @@ import com.mcal.common.fastzip.FastZip
 import com.mcal.common.utilsOld.*
 import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -69,6 +69,11 @@ class ApkComposeThreadNew(
     private var stopFlag = false
     private var bSignApk = false
     private var extraMaker: IApkMaking? = null
+
+    private var runningJob = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + runningJob
 
     // resReplaces contains non-xml replaces
     // resFileModified means res added/deleted, or xml changed
@@ -603,12 +608,8 @@ class ApkComposeThreadNew(
 
     override fun stopRunning() {
         stopFlag = true
-        coroutineContext.cancel()
-        cancel() // todo
+        runningJob.cancel()
     }
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
 
     override fun setExtraMaker(extraMaker: IApkMaking?) {
         this.extraMaker = extraMaker
