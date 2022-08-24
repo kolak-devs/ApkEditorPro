@@ -83,6 +83,10 @@ android {
     namespace 'com.mcal.apkeditor'
 }
 
+configurations {
+    debugImplementation.exclude group: "junit", module: "junit"
+}
+
 dependencies {
     implementation project(':androlib')
     implementation project(':jadx')
