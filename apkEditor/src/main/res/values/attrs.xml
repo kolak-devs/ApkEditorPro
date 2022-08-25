@@ -3,8 +3,14 @@
     <declare-styleable name="IconListPreference">
         <!-- If a preference does not have individual icons for each entry, it can has a single icon to represent it. -->
         <attr name="singleIcon" format="reference" />
-        <attr name="icons" />
         <attr name="largeIcons" format="reference" />
         <attr name="images" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="RobotStyle">
+        <attr name="colorRobotTone" format="color" />
+        <attr name="colorOnRobotTone" format="color" />
+        <attr name="colorRobotToneContainer" format="color" />
+        <attr name="colorOnRobotToneContainer" format="color" />
+        <attr name="harmonizeRobotTone" format="boolean" />
     </declare-styleable>
 </resources>

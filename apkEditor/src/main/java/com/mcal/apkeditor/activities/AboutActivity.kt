@@ -23,10 +23,11 @@ class AboutActivity : CustomizedLangActivity() {
     private fun setupToolbar(@StringRes title: Int) {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.let { bar ->
-            bar.setTitle(title)
-            bar.setDisplayHomeAsUpEnabled(true)
-            bar.setDisplayShowHomeEnabled(true)
+
+        supportActionBar?.apply {
+            setTitle(title)
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
         }
     }
 

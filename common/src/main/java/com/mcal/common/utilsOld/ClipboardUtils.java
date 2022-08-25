@@ -15,6 +15,7 @@ public class ClipboardUtils {
                 .getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("", str);
         clipboard.setPrimaryClip(clip);
+
     }
 
     @Nullable

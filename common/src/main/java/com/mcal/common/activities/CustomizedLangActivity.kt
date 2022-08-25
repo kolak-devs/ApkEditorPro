@@ -25,11 +25,7 @@ open class CustomizedLangActivity : AppCompatActivity() {
             val locale = Locale(languageToLoad)
             Locale.setDefault(locale)
             val config = Configuration()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                config.setLocale(locale)
-            } else {
-                config.locale = locale
-            }
+            config.setLocale(locale)
             baseContext.resources.updateConfiguration(
                 config,
                 baseContext.resources.displayMetrics
