@@ -15,9 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/string_name"
             android:padding="5dp"
             android:text="@string/app_name" />
+
+        <View
+            android:layout_width="3dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_height="match_parent"/>
 
         <TextView
             android:id="@+id/string_value"
