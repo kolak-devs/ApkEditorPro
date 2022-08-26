@@ -246,7 +246,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-        <activity android:name="com.mcal.apkeditor.activities.LoginActivity" />
         <activity android:name="com.mcal.apkeditor.activities.AboutActivity" />
         <activity
             android:name="com.mcal.apkeditor.activities.ApkInfoActivity"

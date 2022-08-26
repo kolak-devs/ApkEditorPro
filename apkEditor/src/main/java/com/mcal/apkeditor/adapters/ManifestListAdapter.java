@@ -71,7 +71,6 @@ public class ManifestListAdapter extends BaseAdapter implements
 
         // Scan to initialize the line record
         initXmlLines();
-
     }
 
     private void initXmlLines() {

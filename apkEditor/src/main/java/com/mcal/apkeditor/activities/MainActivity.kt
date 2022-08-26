@@ -4,36 +4,25 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
 import android.os.Process
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
-import android.widget.AdapterView.OnItemClickListener
-import androidx.appcompat.app.ActionBarDrawerToggle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.downloader.DownloaderActivity
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
-import com.balsikandar.crashreporter.ui.LogMessageActivity
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
-import com.mcal.apkeditor.MenuListAdapter
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.MainMenuItem
-import com.mcal.apkeditor.data.Dialogs
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
 import com.mcal.apkeditor.prj.ProjectListActivity
-import com.mcal.apkeditor.prj.ProjectListActivity2
 import com.mcal.apkeditor.utils.Native
 import com.mcal.apkeditor.utils.OnlineMessage
 import com.mcal.common.activities.CustomizedLangActivity
@@ -66,16 +55,14 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     // Used to show a dialog
     private var prompter: OnlineMessage? = null
 
-    private val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
-    private lateinit var thread: Thread
-    private lateinit var indicator: TextView
-    private lateinit var mRecycler: RecyclerView
+    private var indicator: TextView? = null
+    private var mRecycler: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initFullScreen()
-        setupToolbar(getString(R.string.app_name))
+        setupToolbar(R.id.toolbar, getString(R.string.app_name), false)
         initUI()
 
         // As pro has no network access, cannot get online message
@@ -94,12 +81,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         }
     }
 
-    private fun setupToolbar(title: String) {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = title
-    }
-
     public override fun onPause() {
         super.onPause()
     }
@@ -109,50 +90,10 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             prompter?.showMessageDialog()
         }
         super.onResume()
-        /*if (preferences.getString("token", "").isNullOrBlank()) {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        } else {
-            thread = Thread {
-                do {
-                    val url =
-                        URL(
-                            "https://timscriptov.ru/apkeditor/user.php?token=" + preferences.getString(
-                                "token",
-                                ""
-                            )
-                        )
-                    val con = url.openConnection() as HttpURLConnection
-                    val json = JSONObject(con.inputStream.bufferedReader().readText())
-                    val user = User(
-                        json.optInt("id"),
-                        json.optString("email"),
-                        json.optString("token"),
-                        json.optInt("is_vip") > 0
-                    )
-                    if (user.vip.not()) {
-                        runOnUiThread {
-                            indicator.text = "Not VIP"
-                            indicator.setBackgroundColor(Color.RED)
-                        }
-                    } else {
-                        runOnUiThread {
-                            indicator.text = "VIP"
-                            indicator.setBackgroundColor(Color.GREEN)
-                        }
-                    }
-                    Thread.sleep(30000)
-                } while (thread.isInterrupted.not())
-            }
-            thread.start()
-        }*/
     }
 
     public override fun onDestroy() {
         super.onDestroy()
-        if (::thread.isInitialized) {
-            thread.interrupt()
-        }
     }
 
     private fun initUI() {
@@ -162,7 +103,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         mRecycler = findViewById(R.id.menu_recycler)
         indicator = findViewById(R.id.indicator)
 
-        mRecycler.adapter = fastAdapter
+        mRecycler?.adapter = fastAdapter
         // id может быть любым числом, главное, чтобы оно было уникальным. Сделано для того, чтобы не ломалась логика
         // onClick при добавлении новых айтемов
         itemAdapter.add(
@@ -175,30 +116,30 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(6, R.drawable.ic_help, R.string.help),
             MainMenuItem(7, R.drawable.ic_exit_to_app, R.string.exit)
         )
-        fastAdapter.onClickListener = { view: View?, iAdapter: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
-            when(mainMenuItem.id){
+        fastAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
+            when (mainMenuItem.id) {
                 0 -> {
-                    val intent = Intent(this@MainActivity, FileListActivity::class.java)
+                    val intent = Intent(this, FileListActivity::class.java)
                     startActivity(intent)
                     true
                 }
                 1 -> {
-                    val intent = Intent(this@MainActivity, UserAppActivity::class.java)
+                    val intent = Intent(this, UserAppActivity::class.java)
                     startActivity(intent)
                     true
                 }
                 2 -> {
-                    val intent = Intent(this@MainActivity, ProjectListActivity::class.java)
+                    val intent = Intent(this, ProjectListActivity::class.java)
                     startActivity(intent)
                     true
                 }
                 3 -> {
-                    val intent = Intent(this@MainActivity, OdexPatchActivity::class.java)
+                    val intent = Intent(this, OdexPatchActivity::class.java)
                     startActivity(intent)
                     true
                 }
                 4 -> {
-                    val intent = Intent(this@MainActivity, DownloaderActivity::class.java)
+                    val intent = Intent(this, DownloaderActivity::class.java)
                     startActivity(intent)
                     true
                 }
@@ -208,7 +149,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     true
                 }
                 6 -> {
-                    val intent = Intent(this@MainActivity, HelpActivity::class.java)
+                    val intent = Intent(this, HelpActivity::class.java)
                     startActivity(intent)
                     true
                 }
@@ -220,11 +161,11 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             }
         }
 
+        val msg = findViewById<TextView>(R.id.pirated_version_detected)
         if (BuildConfig.DEBUG || Native.getSignature(this).startsWith("kQpOVghQhe8XLbkzKM4PynXi8R0=")) {
-
-        } else {
-            val msg = findViewById<TextView>(R.id.pirated_version_detected)
             msg.visibility = View.VISIBLE
+        } else {
+            msg.visibility = View.INVISIBLE
         }
     }
 
