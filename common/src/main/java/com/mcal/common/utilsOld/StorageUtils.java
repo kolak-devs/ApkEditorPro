@@ -40,12 +40,10 @@ public class StorageUtils {
                 if (line.contains("vfat") || line.contains("/mnt")
                         || line.contains("/storage")) {
                     StringTokenizer tokens = new StringTokenizer(line, " ");
-                    String unused = tokens.nextToken(); // device
                     String mount_point = tokens.nextToken(); // mount point
                     if (paths.contains(mount_point)) {
                         continue;
                     }
-                    unused = tokens.nextToken(); // file system
                     List<String> flags = Arrays.asList(tokens.nextToken()
                             .split(",")); // flags
                     boolean readonly = flags.contains("ro");
@@ -92,6 +90,7 @@ public class StorageUtils {
                 try {
                     buf_reader.close();
                 } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
         }

@@ -9,10 +9,11 @@ import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.pro.DexEncoder
 import com.mcal.apkeditor.smali.ISmaliAssembleCallback
 import com.mcal.apkeditor.utils.AssetsInstaller
-import com.mcal.apkeditor.utils.FileUtils.createNewFile
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.data.Preferences
 import com.mcal.common.fastzip.FastZip
+import com.mcal.common.utils.createNewFile
+import com.mcal.common.utils.recursiveModifiedTime
 import com.mcal.common.utilsOld.*
 import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo
 import kotlinx.coroutines.Dispatchers
@@ -297,7 +298,7 @@ class ApkComposeThreadNew(
                     val dexTime1 = getLastModifyTime(File("$decodedFilePath/$dexName"))
                     val dexTime2 = getLastModifyTime(File("$decodedFilePath/build/$dexName"))
                     val dexTime = max(dexTime2, dexTime1)
-                    val smaliTime = FileUtils.recursiveModifiedTime(f)
+                    val smaliTime = recursiveModifiedTime(f)
                     // Means smali code is modified
                     if (smaliTime > dexTime) {
                         modifiedSmaliFolders.add(dirName)
@@ -459,7 +460,7 @@ class ApkComposeThreadNew(
         // To check if need to build the resource
         val apkFile = File(resourceApkPath)
         if (apkFile.isFile && apkFile.exists()) {
-            val resModifyTime = FileUtils.recursiveModifiedTime(
+            val resModifyTime = recursiveModifiedTime(
                 arrayOf(
                     File("$decodedFilePath/res"),
                     File("$decodedFilePath/AndroidManifest.xml")

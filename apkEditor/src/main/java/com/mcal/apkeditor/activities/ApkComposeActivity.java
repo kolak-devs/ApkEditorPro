@@ -49,10 +49,10 @@ import com.mcal.apkeditor.utils.AxmlStringModifier;
 import com.mcal.apkeditor.utils.ErrorFixManager;
 import com.mcal.apkeditor.utils.OdexPatcher;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utilsOld.ApkInfoParser;
-import com.mcal.common.utilsOld.ClipboardUtils;
+import com.mcal.common.utils.ApkInfoParser;
+import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utilsOld.ITaskCallback;
-import com.mcal.common.utilsOld.PackageUtils;
+import com.mcal.common.utils.PackageHelper;
 import com.mcal.common.utilsOld.PreferenceUtils;
 import com.mcal.common.view.ProgressDialog;
 
@@ -446,7 +446,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
         try {
             ApkInfoParser.AppInfo info = new ApkInfoParser().parse(this, targetApkPath);
             if (info != null) {
-                return info.packageName;
+                return info.pkgName;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -464,7 +464,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
             // this.finish();
         } else if (id == R.id.btn_remove) {
             if (this.packageName != null) {
-                PackageUtils.uninstallPackage(this, packageName);
+                PackageHelper.uninstallPackage(this, packageName);
             }
         } else if (id == R.id.btn_copy_errmsg) {
             ClipboardUtils.copyToClipboard(this,

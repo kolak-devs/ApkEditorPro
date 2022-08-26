@@ -1,5 +1,11 @@
 package com.mcal.apkeditor;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
+import static com.mcal.common.utils.PathHelperKt.getSubFolder;
+import static com.mcal.common.utils.PathHelperKt.isParentFolderOf;
+import static com.mcal.common.utils.StringHelperKt.getRandomString;
+import static com.mcal.common.utils.StringHelperKt.join;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -21,13 +27,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.se.ZipImageZoomer;
-import com.mcal.common.utilsOld.FileUtils;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.ImageZoomer;
-import com.mcal.common.utilsOld.PathUtils;
-import com.mcal.common.utilsOld.RandomUtils;
 import com.mcal.common.utilsOld.SDCard;
-import com.mcal.common.utilsOld.StringUtils;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.folderlist.FileRecord;
 import com.mcal.folderlist.FilenameComparator;
@@ -268,12 +270,12 @@ public class ResListAdapter extends BaseAdapter implements
         }
         // Special case: in the parent path of SD card (like /storage/emulated/0)
         // As on some phones, we cannot access the directory like /storage/emulated
-        else if (PathUtils.isParentFolderOf(path, SDCard.getRootDirectory())) {
+        else if (isParentFolderOf(path, SDCard.getRootDirectory())) {
             fileList.clear();
 
             SDCard.getRootDirectory();
             FileRecord fr = new FileRecord();
-            fr.fileName = PathUtils.getSubFolder(path, SDCard.getRootDirectory());
+            fr.fileName = getSubFolder(path, SDCard.getRootDirectory());
             fr.isDir = true;
             fileList.add(fr);
 
@@ -617,8 +619,7 @@ public class ResListAdapter extends BaseAdapter implements
                 throwExistException(entryName);
             } else {
                 // Copy to the working path
-                targetPath = SDCard.makeWorkingDir(ctxRef.get())
-                        + RandomUtils.getRandomString(8);
+                targetPath = SDCard.makeWorkingDir(ctxRef.get()) + getRandomString(8);
                 FileOutputStream out = new FileOutputStream(targetPath);
                 IOUtils.copy(input, out);
                 out.close();
@@ -763,9 +764,8 @@ public class ResListAdapter extends BaseAdapter implements
         else {
             try {
                 // Copy file to working directory
-                String targetPath = SDCard.makeWorkingDir(ctxRef.get())
-                        + RandomUtils.getRandomString(8);
-                FileUtils.copyFile(newPath, targetPath);
+                String targetPath = SDCard.makeWorkingDir(ctxRef.get()) + getRandomString(8);
+                copyFile(newPath, targetPath);
 
                 // Record replacement and show toast
                 recordFileReplace(entryPath, targetPath);
@@ -813,8 +813,7 @@ public class ResListAdapter extends BaseAdapter implements
                         }
                     }
                     // Copy to the working directory (not decoded path)
-                    String targetFolder = SDCard.makeWorkingDir(ctxRef.get())
-                            + RandomUtils.getRandomString(6);
+                    String targetFolder = SDCard.makeWorkingDir(ctxRef.get()) + getRandomString(6);
                     Map<String, String> added = copyAllFiles(new File(newPath),
                             new File(targetFolder), entry);
                     // Record and update the zip nodes
@@ -841,7 +840,7 @@ public class ResListAdapter extends BaseAdapter implements
             dstFolder.mkdirs();
         }
 
-        Map<String, String> addedEntries = new HashMap<String, String>();
+        Map<String, String> addedEntries = new HashMap<>();
 
         File[] files = srcFolder.listFiles();
         if (files != null)
@@ -849,7 +848,7 @@ public class ResListAdapter extends BaseAdapter implements
                 String name = f.getName();
                 if (f.isFile()) { // Copy a single file
                     File dstFile = new File(dstFolder, f.getName());
-                    FileUtils.copyFile(f, dstFile);
+                    copyFile(f, dstFile);
                     String filepath = dstFile.getPath();
                     addedEntries.put(entryName + "/" + name, filepath);
                 } else { // Copy the sub folder
@@ -1294,24 +1293,20 @@ public class ResListAdapter extends BaseAdapter implements
                 parentNode = this;
             }
             if (parentNode != null) {
-                ZipNode target = parentNode
-                        .findChildByName(paths[paths.length - 1]);
+                ZipNode target = parentNode.findChildByName(paths[paths.length - 1]);
                 if (target != null) {
                     if (target.isFile) {
                         parentNode.deleteChild(target);
                         List<String> deletedEntries = new ArrayList<>();
-                        String delPath = StringUtils
-                                .join("/", paths);
+                        String delPath = join("/", paths);
                         deletedEntries.add(delPath);
                         return deletedEntries;
                     } else {
                         List<String> deletedEntries = target.enumFiles();
                         if (deletedEntries != null) {
-                            String delRootPath = StringUtils
-                                    .join("/", paths);
+                            String delRootPath = join("/", paths);
                             for (int i = 0; i < deletedEntries.size(); i++) {
-                                deletedEntries.set(i, delRootPath + "/"
-                                        + deletedEntries.get(i));
+                                deletedEntries.set(i, delRootPath + "/" + deletedEntries.get(i));
                             }
                             parentNode.deleteChild(target);
                             return deletedEntries;

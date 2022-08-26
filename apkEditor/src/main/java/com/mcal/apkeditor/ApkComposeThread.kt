@@ -7,11 +7,11 @@ import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.pro.DexEncoder
 import com.mcal.apkeditor.smali.ISmaliAssembleCallback
 import com.mcal.apkeditor.utils.AssetsInstaller
-import com.mcal.apkeditor.utils.FileUtils.createNewFile
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.data.Preferences
 import com.mcal.common.fastzip.FastZip
 import com.mcal.common.utils.ScopedStorage.apkEditorDirectory
+import com.mcal.common.utils.createNewFile
 import com.mcal.common.utilsOld.CommandRunner
 import com.mcal.common.utilsOld.ITaskCallback
 import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo

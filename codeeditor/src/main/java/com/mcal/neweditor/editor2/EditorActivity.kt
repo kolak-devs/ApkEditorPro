@@ -386,9 +386,9 @@ class EditorActivity : CustomizedLangActivity(),
         filePath?.let { path ->
             Thread {
                 try {
-                    val text = FileUtils.readFileDirectlyAsText(path.path)
+                    val text = FileUtils.readFileAsTextUsingInputStream(path.path)
                     runOnUiThread {
-                        supportActionBar?.let { actionBar -> actionBar.title = path.name }
+                        supportActionBar?.apply { title = path.name }
                         binding.editor.apply {
                             setText(text, null)
                             startLineList?.let { line ->

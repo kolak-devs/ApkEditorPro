@@ -1,5 +1,7 @@
 package com.mcal.common.utilsOld;
 
+import static com.mcal.common.utils.FileHelperKt.writeToFile;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -88,7 +90,7 @@ public class ImageTool {
         byte[] photoData = bitmap2Bytes(resizeBitmap);
 
         // save file
-        FileUtils.writeToFile(dstFile, photoData);
+        writeToFile(dstFile, photoData);
     }
 
     @NonNull

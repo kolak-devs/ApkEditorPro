@@ -12,7 +12,7 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection
 import com.mcal.apkeditor.utils.OdexPatcher
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.utilsOld.ApkInfoParser
+import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 
@@ -89,7 +89,7 @@ class OdexPatchActivity : CustomizedLangActivity(), IFileSelection {
         override fun process() {
             val parser = ApkInfoParser()
             val info = parser.parse(this@OdexPatchActivity, apkPath) ?: return
-            val packageName = info.packageName
+            val packageName = info.pkgName
             val patcher = OdexPatcher(packageName)
             patcher.applyPatch(this@OdexPatchActivity, apkPath)
             odexPath = patcher.targetOdex

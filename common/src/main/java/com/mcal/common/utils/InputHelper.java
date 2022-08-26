@@ -1,4 +1,4 @@
-package com.mcal.common.utilsOld;
+package com.mcal.common.utils;
 
 import android.text.InputFilter;
 
@@ -6,11 +6,7 @@ import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.Contract;
 
-/**
- * Created by phe3 on 3/30/2017.
- */
-
-public class InputUtils {
+public class InputHelper {
     @NonNull
     @Contract(" -> new")
     public static InputFilter getFileNameFilter() {

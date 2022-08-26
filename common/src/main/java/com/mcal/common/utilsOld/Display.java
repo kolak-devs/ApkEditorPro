@@ -2,9 +2,13 @@ package com.mcal.common.utilsOld;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.hardware.display.DisplayManagerCompat;
 
 public class Display {
 

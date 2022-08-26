@@ -11,7 +11,7 @@ import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.content.DialogInterface
 import com.mcal.apkeditor.StringListAdapter
-import com.mcal.common.utilsOld.ClipboardUtils
+import com.mcal.common.utils.ClipboardUtils
 
 class StringValueDialog @SuppressLint("InflateParams") constructor(
     context: Context,

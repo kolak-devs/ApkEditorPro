@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.utils.StringHelperKt.getRandomString;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
@@ -23,9 +25,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
-import com.mcal.common.utilsOld.ClipboardUtils;
+import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.RandomUtils;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ZipUtils;
@@ -500,8 +501,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                     input = zipFile.getInputStream(entry);
                 }
 
-                tmpFilePath = SDCard.makeWorkingDir(ApkInfoExActivity.this)
-                        + RandomUtils.getRandomString(6);
+                tmpFilePath = SDCard.makeWorkingDir(ApkInfoExActivity.this) + getRandomString(6);
                 out = new FileOutputStream(tmpFilePath);
                 IOUtils.copy(input, out);
             } catch (Exception e) {

@@ -1,12 +1,13 @@
 package com.mcal.apkeditor.utils;
 
+import static com.mcal.common.utils.StringHelperKt.getRandomString;
+
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.R;
-import com.mcal.common.utilsOld.RandomUtils;
 import com.mcal.common.utilsOld.TextFileReader;
 
 import java.io.BufferedReader;
@@ -273,7 +274,7 @@ class FixInvalidSymbol extends FixInvalid {
             // Create a new valid name
             @NonNull
             private String createNewName() {
-                return name + "_" + RandomUtils.getRandomString(4);
+                return name + "_" + getRandomString(4);
             }
         }
     }

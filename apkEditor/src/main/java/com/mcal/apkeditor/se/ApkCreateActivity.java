@@ -38,8 +38,8 @@ import com.mcal.apkeditor.utils.SignHelper;
 import com.mcal.apklib.sign.ImageTools;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.ApkInfoParser;
-import com.mcal.common.utilsOld.ApkInfoParser.AppInfo;
+import com.mcal.common.utils.ApkInfoParser;
+import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utilsOld.CheckUtils;
 import com.mcal.common.utilsOld.SDCard;
 
@@ -218,7 +218,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
 
             if (info != null) {
                 PackageManager pm = this.getPackageManager();
-                pm.getPackageInfo(info.packageName, 0);
+                pm.getPackageInfo(info.pkgName, 0);
 
                 // If the package name is found, return true
                 return true;
@@ -368,7 +368,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
     }
 
     private boolean isSameSignature() {
-        String signature = CheckUtils.getSign(this, apkInfo.packageName);
+        String signature = CheckUtils.getSign(this, apkInfo.pkgName);
         return CheckUtils.isRevisedSignature(signature);
     }
 
@@ -379,7 +379,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
         // Remove the package
         if (id == R.id.button_uninstall) {
             if (apkInfo != null) {
-                Uri packageURI = Uri.parse("package:" + apkInfo.packageName);
+                Uri packageURI = Uri.parse("package:" + apkInfo.pkgName);
                 Intent intent = new Intent(Intent.ACTION_DELETE, packageURI);
                 startActivity(intent);
             }
@@ -539,7 +539,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 if (activity.newAppNameInArsc != null || activity.newPackageNameInArsc != null) {
                     resEditor.modifyString(activity.oldAppNameInArsc,
                             activity.newAppNameInArsc,
-                            activity.apkInfo.packageName,
+                            activity.apkInfo.pkgName,
                             activity.newPackageNameInArsc);
                 }
 

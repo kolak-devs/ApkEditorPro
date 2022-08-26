@@ -1,5 +1,7 @@
 package com.mcal.apkeditor;
 
+import static com.mcal.common.utils.FileHelperKt.deleteAll;
+
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
@@ -10,7 +12,6 @@ import com.mcal.androlib.util.Logger;
 import com.mcal.apkeditor.utils.AssetsInstaller;
 import com.mcal.apkeditor.utils.TimeDumper;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
-import com.mcal.common.utilsOld.FileUtils;
 import com.mcal.common.utilsOld.LOGGER;
 
 import org.jetbrains.annotations.Contract;
@@ -145,7 +146,7 @@ public class ApkDecoderMine implements IReferenceDecode, Logger {
         timer.lastTime("Manifest Decode Time");
 
         try {
-            FileUtils.deleteAll(new File(outDir.getPath() + "/res"));
+           deleteAll(new File(outDir.getPath() + "/res"));
         } catch (Exception e) {
             e.printStackTrace();
         }

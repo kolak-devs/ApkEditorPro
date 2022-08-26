@@ -30,8 +30,8 @@ import com.mcal.apkeditor.R;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.ApkInfoParser;
-import com.mcal.common.utilsOld.ApkInfoParser.AppInfo;
+import com.mcal.common.utils.ApkInfoParser;
+import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.DynamicExpandListView;
 
@@ -150,6 +150,7 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         // Log.d("DEBUG", "onActivityResult, request=" + requestCode +
         // ", result="
         // + resultCode);
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0) {
             // APK successfully modified and installed
             if (resultCode == 1000) {
@@ -158,7 +159,7 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         // Save APK path
         {
             outState.putString("apkPath", this.apkPath);
@@ -348,7 +349,7 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
         ActivityUtils.attachParam(intent, "apkPath", this.apkPath);
-        ActivityUtils.attachParam(intent, "packageName", apkInfo.packageName);
+        ActivityUtils.attachParam(intent, "packageName", apkInfo.pkgName);
         ActivityUtils.attachParam(intent, "imageReplaces", imgReplaces);
         if (!fileReplaces.isEmpty() || !audioReplaces.isEmpty()) {
             fileReplaces.putAll(audioReplaces);

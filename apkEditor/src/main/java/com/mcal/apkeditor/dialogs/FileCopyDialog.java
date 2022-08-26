@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
@@ -11,7 +13,6 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.SettingActivity;
-import com.mcal.common.utilsOld.FileUtils;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ZipUtils;
 
@@ -261,7 +262,7 @@ public class FileCopyDialog {
             }
             ZipUtils.unzipFileTo(this.mApkPath, entryName, to.getPath());
         } else {
-            FileUtils.copyFile(from, to);
+            copyFile(from, to);
         }
     }
 

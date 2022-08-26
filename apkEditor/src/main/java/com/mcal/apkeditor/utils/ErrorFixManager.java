@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.utils;
 
+import static com.mcal.common.utils.StringHelperKt.getRandomString;
+
 import android.app.Activity;
 import android.widget.Toast;
 
@@ -7,7 +9,6 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkComposeActivity;
-import com.mcal.common.utilsOld.RandomUtils;
 import com.mcal.common.view.ProgressDialog;
 
 import java.io.BufferedWriter;
@@ -43,7 +44,7 @@ public class ErrorFixManager {
     public static final int FIXER_ERROR_EQUIVALENT = 4;
     private final String decodeRootPath;
     // Record all the string replaces
-    Map<String, String> allReplaces = new HashMap<String, String>();
+    Map<String, String> allReplaces = new HashMap<>();
     // Record replaces for each file
     Map<String, Map<String, String>> fileReplaces = new HashMap<>();
     private String errMessage;
@@ -64,7 +65,7 @@ public class ErrorFixManager {
                     || (c >= 'A' && c <= 'Z') || c == '_' || c == '.') {
                 sb.append(c);
             } else {
-                String str = RandomUtils.getRandomString(4);
+                String str = getRandomString(4);
                 sb.append(str);
             }
         }

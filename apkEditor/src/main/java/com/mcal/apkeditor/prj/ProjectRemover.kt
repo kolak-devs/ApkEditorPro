@@ -3,7 +3,7 @@ package com.mcal.apkeditor.prj
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import android.widget.Toast
 import com.mcal.apkeditor.R
-import com.mcal.common.utilsOld.FileUtils
+import com.mcal.common.utils.deleteAll
 import com.mcal.common.utilsOld.SDCard
 import java.io.File
 import java.io.IOException
@@ -30,7 +30,7 @@ internal class ProjectRemover(
 
         // Remove the decoded directory
         try {
-            FileUtils.deleteAll(File(mItemInfo.decodeDirectory))
+            deleteAll(File(mItemInfo.decodeDirectory))
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -38,7 +38,7 @@ internal class ProjectRemover(
         // Remove the project index files
         try {
             val projectFolder = SDCard.makeDir(weakReference.get(), ".projects")
-            FileUtils.deleteAll(File(projectFolder + mItemInfo.name))
+            deleteAll(File(projectFolder + mItemInfo.name))
             result = true
         } catch (e: Exception) {
             errMessage = e.message

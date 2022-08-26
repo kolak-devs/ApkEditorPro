@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.utils.StringHelperKt.getRandomString;
+
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -27,9 +29,8 @@ import com.mcal.apkeditor.se.ZipFileListAdapter;
 import com.mcal.apkeditor.se.ZipHelper;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.ApkInfoParser;
+import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utilsOld.CommandRunner;
-import com.mcal.common.utilsOld.RandomUtils;
 import com.mcal.common.view.ProgressDialog;
 
 import java.io.File;
@@ -215,7 +216,7 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
         ActivityUtils.attachParam(intent, "apkPath", this.apkPath);
-        ActivityUtils.attachParam(intent, "packageName", apkInfo.packageName);
+        ActivityUtils.attachParam(intent, "packageName", apkInfo.pkgName);
         if (!fileReplaces.isEmpty()) {
             ActivityUtils.attachParam(intent, "otherReplaces", fileReplaces);
         }
@@ -294,7 +295,7 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
             this.xmlPath = filePath;
             this.axmlPath = filePath + ".bin";
             this.entryName = entryName;
-            this.tempPath = filePath + RandomUtils.getRandomString(6);
+            this.tempPath = filePath + getRandomString(6);
         }
 
         @Override

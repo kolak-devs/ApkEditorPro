@@ -17,8 +17,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
+import com.mcal.common.utils.getTargetNonExistFile
 import com.mcal.common.utilsOld.IOUtils
-import com.mcal.common.utilsOld.PathUtils
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import kotlinx.coroutines.CoroutineScope
@@ -196,7 +196,7 @@ class ImageDownloadActivity : CustomizedLangActivity(), ProcessingInterface {
             val path = targetDir + "/" + name + if (isPng) ".png" else ".jpg"
             var targetFile = File(path)
             if (targetFile.exists()) {
-                targetFile = PathUtils.getTargetNonExistFile(path, false)
+                targetFile = getTargetNonExistFile(path, false)
             }
             downloadPath = targetFile.path
             val ret = File(tmpPath).renameTo(targetFile)

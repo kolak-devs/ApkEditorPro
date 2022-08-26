@@ -32,7 +32,7 @@ import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.ApkInfoParser;
+import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.folderlist.FileRecord;
 import com.mcal.folderlist.FolderListWrapper;
 import com.mcal.folderlist.IListEventListener;

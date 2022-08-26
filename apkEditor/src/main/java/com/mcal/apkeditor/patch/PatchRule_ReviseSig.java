@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.common.utilsOld.HexUtils;
+import com.mcal.common.utils.HexHelper;
 import com.mcal.common.utilsOld.IOUtils;
 
 import java.io.BufferedInputStream;
@@ -53,7 +53,7 @@ class PatchRule_ReviseSig extends PatchRule {
     public String executeRule(@NonNull ApkInfoActivity activity, ZipFile patchZip, @NonNull IPatchContext logger) {
         String apkPath = activity.getApkPath();
         String hexRSA = getHexRSA(apkPath);
-        String packageName = activity.getApkInfo().packageName;
+        String packageName = activity.getApkInfo().pkgName;
         String rootPath = logger.getDecodeRootPath();
         String targetFile = rootPath + "/" + targetList.get(0);
 
@@ -107,7 +107,7 @@ class PatchRule_ReviseSig extends PatchRule {
         }
 
         if (output != null) {
-            return HexUtils.bytesToHexString(output.toByteArray());
+            return HexHelper.bytesToHexString(output.toByteArray());
         } else {
             return null;
         }

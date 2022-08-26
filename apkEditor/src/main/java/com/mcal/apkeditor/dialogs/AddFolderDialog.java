@@ -14,7 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mcal.apkeditor.R;
-import com.mcal.common.utilsOld.InputUtils;
+import com.mcal.common.utils.InputHelper;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -53,7 +53,7 @@ public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.I
         folderNameEt = (TextInputEditText) view.findViewById(R.id.et_folder_name);
         folderPathEt = (TextInputEditText) view.findViewById(R.id.et_folder_path);
 
-        InputFilter filter = InputUtils.getFileNameFilter();
+        InputFilter filter = InputHelper.getFileNameFilter();
         folderNameEt.setFilters(new InputFilter[]{filter});
 
         newTv.setOnClickListener(this);

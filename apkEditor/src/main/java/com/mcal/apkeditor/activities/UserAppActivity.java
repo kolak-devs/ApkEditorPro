@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.utils.FileHelperKt.makeBackupDir;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -35,7 +37,6 @@ import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
-import com.mcal.apkeditor.utils.FileUtils;
 import com.mcal.appdm.PrefOverallActivity;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
@@ -412,7 +413,7 @@ public class UserAppActivity extends CustomizedLangActivity implements OnItemCli
 
                 @Override
                 public void process() throws Exception {
-                    outPath = FileUtils.makeBackupDir(UserAppActivity.this) + appName + ".apk";
+                    outPath = makeBackupDir(UserAppActivity.this) + appName + ".apk";
 
                     FileInputStream in = null;
                     FileOutputStream out = null;

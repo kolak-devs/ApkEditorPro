@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.prj;
 
+import static com.mcal.common.utils.FileHelperKt.makeDir;
+
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,9 +18,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.apkeditor.utils.FileUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utilsOld.ApkInfoParser;
+import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.view.ProgressDialog;
 
@@ -100,7 +101,7 @@ public class ProjectListActivity extends CustomizedLangActivity implements View.
             if (BuildConfig.PARSER_ONLY) {
                 this.projectFolder = ScopedStorage.getStorageDirectory() + "/ApkParser";
             } else {
-                this.projectFolder = FileUtils.makeDir(this, ".projects");
+                this.projectFolder = makeDir(this, ".projects");
             }
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();

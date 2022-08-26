@@ -1,8 +1,6 @@
 package com.mcal.apkeditor.utils;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,10 +10,6 @@ import java.util.Date;
 public class Utils {
 
     private static final String TAG = "APKEDITOR";
-
-    public static void showToast(Context ctx, String msg) {
-        Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
-    }
 
     public static void log(String msg) {
         Log.d(TAG, msg);
@@ -37,35 +31,6 @@ public class Utils {
             return str.substring(0, str.length() - 1) + c;
         }
         return str;
-    }
-
-    @NonNull
-    public static String generateImei(int offset) {
-        long base = 35806501910400L;
-        long imei = base + offset;
-        int checksum = imei_checksum(imei);
-        return String.valueOf(imei * 10 + checksum);
-    }
-
-    private static int imei_checksum(long imei) {
-        int[] sum = new int[15];
-        long mod = 10;
-        for (int i = 1; i <= 14; i++) {
-            sum[i] = (int) (imei % mod);
-            if (i % 2 != 0) {
-                sum[i] *= 2;
-            }
-            if (sum[i] >= 10) {
-                sum[i] = sum[i] % 10 + (sum[i] / 10);
-            }
-            imei /= mod;
-        }
-
-        int check = 0;
-        for (int i = 0; i < sum.length; i++) {
-            check += sum[i];
-        }
-        return (check * 9) % 10;
     }
 
     @NonNull

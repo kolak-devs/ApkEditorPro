@@ -38,7 +38,7 @@ import com.mcal.apkeditor.utils.Native
 import com.mcal.apkeditor.utils.OnlineMessage
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
-import com.mcal.common.utilsOld.FileUtils
+import com.mcal.common.utils.deleteAll
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import com.mcal.httpserver.HttpServiceManager
 import com.mikepenz.fastadapter.FastAdapter
@@ -307,7 +307,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             val fileDir = filesDir
             val rootDirectory = fileDir.absolutePath
             val decodeRootPath = "$rootDirectory/decoded"
-            FileUtils.deleteAll(File(decodeRootPath))
+            deleteAll(File(decodeRootPath))
         } catch (e: Throwable) {
             e.printStackTrace()
         }

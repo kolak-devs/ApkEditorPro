@@ -1,5 +1,7 @@
 package com.mcal.apkeditor;
 
+import static com.mcal.common.utils.FileHelperKt.deleteAll;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -8,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.common.data.Preferences;
-import com.mcal.common.utilsOld.FileUtils;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.LOGGER;
 
@@ -107,7 +108,7 @@ public class ApkParseThread extends Thread {
 
             this.decoder = new ApkDecoderMine(resTable, dummyPng, dummyJpg);
 
-            FileUtils.deleteAll(new File(decodeRootPath));
+            deleteAll(new File(decodeRootPath));
 
             File outDir = new File(decodeRootPath);
             if (!outDir.exists()) {

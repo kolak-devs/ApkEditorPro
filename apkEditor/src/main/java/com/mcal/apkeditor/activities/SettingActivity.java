@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.utils.StringHelperKt.getRandomString;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -28,7 +30,6 @@ import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utilsOld.CommandRunner;
-import com.mcal.common.utilsOld.RandomUtils;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.ProgressDialog;
 
@@ -137,7 +138,7 @@ public class SettingActivity extends PreferenceActivity
     private static boolean dirCanWrite(String dir) {
         File f = new File(dir);
         if (f.exists() && f.isDirectory()) {
-            String rand = RandomUtils.getRandomString(8);
+            String rand = getRandomString(8);
             File tryF = new File(f, rand);
             boolean ret = tryF.mkdir();
             if (ret) {

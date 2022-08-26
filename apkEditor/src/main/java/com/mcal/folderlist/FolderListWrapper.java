@@ -1,5 +1,7 @@
 package com.mcal.folderlist;
 
+import static com.mcal.common.utils.FileHelperKt.deleteAll;
+
 import android.content.Context;
 import android.text.InputFilter;
 import android.view.Menu;
@@ -14,8 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
-import com.mcal.common.utilsOld.FileUtils;
-import com.mcal.common.utilsOld.InputUtils;
+import com.mcal.common.utils.InputHelper;
 import com.mcal.folderlist.util.OpenFiles;
 
 import java.io.File;
@@ -201,7 +202,7 @@ public class FolderListWrapper implements OnItemClickListener, OnItemLongClickLi
 
         // Set an EditText view to get user input
         final EditText input = new EditText(mContext);
-        final InputFilter filter = InputUtils.getFileNameFilter();
+        final InputFilter filter = InputHelper.getFileNameFilter();
         input.setFilters(new InputFilter[]{filter});
         inputDlg.setView(input);
 
@@ -272,7 +273,7 @@ public class FolderListWrapper implements OnItemClickListener, OnItemLongClickLi
                 ret = file.delete();
             } else {
                 try {
-                    FileUtils.deleteAll(file);
+                    deleteAll(file);
                     ret = true;
                 } catch (IOException e) {
                     e.printStackTrace();

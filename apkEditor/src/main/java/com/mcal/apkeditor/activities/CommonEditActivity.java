@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.utils.StringHelperKt.getRandomString;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -50,11 +52,10 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.se.ApkCreateActivity;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.ApkInfoParser;
-import com.mcal.common.utilsOld.ApkInfoParser.AppInfo;
+import com.mcal.common.utils.ApkInfoParser;
+import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utilsOld.FileEncrypter;
 import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.RandomUtils;
 import com.mcal.common.utilsOld.SDCard;
 
 import java.io.File;
@@ -322,7 +323,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         }
 
         // authorityName
-        String authString = RandomUtils.getRandomString(4);
+        String authString = getRandomString(4);
 
         try {
             this.newManifestFile = SDCard.makeWorkingDir(this) + ".xml";

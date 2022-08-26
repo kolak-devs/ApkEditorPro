@@ -1,8 +1,8 @@
-package com.mcal.common.utilsOld;
+package com.mcal.common.utils;
 
 import androidx.annotation.Nullable;
 
-public class HexUtils {
+public class HexHelper {
     @Nullable
     public static String bytesToHexString(byte[] src) {
         StringBuilder stringBuilder = new StringBuilder("");

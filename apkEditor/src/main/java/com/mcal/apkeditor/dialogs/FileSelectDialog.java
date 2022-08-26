@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
+import static com.mcal.common.utils.PathHelperKt.getNameFromPath;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,8 +28,7 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
-import com.mcal.common.utilsOld.InputUtils;
-import com.mcal.common.utilsOld.PathUtils;
+import com.mcal.common.utils.InputHelper;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.folderlist.FileRecord;
 
@@ -135,8 +136,7 @@ public class FileSelectDialog implements OnItemClickListener, AdapterView.OnItem
         this.editCheckBox = view.findViewById(R.id.cb_edit_before_replace);
         if (showEditOption) {
             editCheckBox.setText(
-                    String.format(ctx.getString(R.string.edit_before_replace),
-                            PathUtils.getNameFromPath(extraString)));
+                    String.format(ctx.getString(R.string.edit_before_replace), getNameFromPath(extraString)));
             editCheckBox.setChecked(getHistoryEditOption());
             editCheckBox.setVisibility(View.VISIBLE);
         } else {
@@ -198,7 +198,7 @@ public class FileSelectDialog implements OnItemClickListener, AdapterView.OnItem
 
         // Set an EditText view to get user input
         final EditText input = new EditText(mContext);
-        InputFilter filter = InputUtils.getFileNameFilter();
+        InputFilter filter = InputHelper.getFileNameFilter();
         input.setFilters(new InputFilter[]{filter});
         inputDlg.setView(input);
 

@@ -1,11 +1,12 @@
 package com.mcal.apkeditor.patch;
 
+import static com.mcal.common.utils.StringHelperKt.getRandomString;
+
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.RandomUtils;
 import com.mcal.common.utilsOld.SDCard;
 
 import java.io.FileOutputStream;
@@ -85,7 +86,7 @@ class PatchRule_AddFiles extends PatchRule {
             // Source is a zip file
             else {
                 String tmpDir = SDCard.makeDir(activity, "tmp");
-                String path = tmpDir + RandomUtils.getRandomString(6);
+                String path = tmpDir + getRandomString(6);
                 fos = new FileOutputStream(path);
                 IOUtils.copy(input, fos);
                 fos.close();

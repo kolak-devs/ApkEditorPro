@@ -1,5 +1,11 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.utils.FileHelperKt.recursiveModifiedTime;
+import static com.mcal.common.utils.FileHelperKt.reviseFileName;
+import static com.mcal.common.utils.FileHelperKt.writeToFile;
+import static com.mcal.common.utils.PathHelperKt.replaceNameWith;
+import static com.mcal.common.utils.StringHelperKt.getRandomString;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
@@ -86,13 +92,10 @@ import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.ApkInfoParser;
-import com.mcal.common.utilsOld.FileUtils;
+import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.LOGGER;
-import com.mcal.common.utilsOld.PathUtils;
 import com.mcal.common.utilsOld.PreferenceUtils;
-import com.mcal.common.utilsOld.RandomUtils;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.utilsOld.ServiceUtil;
 import com.mcal.common.utilsOld.TextFileReader;
@@ -908,7 +911,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                         }
 
                         // Rename decoded folder (as currently always in a fixed directory)
-                        String targetFolder = PathUtils.replaceNameWith(decodeRootPath, projectName);
+                        String targetFolder = replaceNameWith(decodeRootPath, projectName);
                         targetDir = new File(targetFolder);
                         if (targetDir.exists()) {
                             targetDir = FileCopyDialog.getTargetNonExistFile(targetFolder, true);
@@ -1066,7 +1069,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // Rename it to other names, as it will be overwritten
         if (pathRemovedType != null && pathRemovedType.endsWith("/" + TMP_EDITOR_FILE)) {
             File oldFile = new File(filePath);
-            String newPath = pathRemovedType.substring(0, pathRemovedType.length() - TMP_EDITOR_FILE.length()) + RandomUtils.getRandomString(8);
+            String newPath = pathRemovedType.substring(0, pathRemovedType.length() - TMP_EDITOR_FILE.length()) + getRandomString(8);
             File newFile = new File(newPath);
             if (oldFile.renameTo(newFile)) {
                 filePath = newPath;
@@ -1150,7 +1153,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         if (apkInfo != null) {
             apkIcon.setImageDrawable(apkInfo.icon);
             apkLabel.setText(apkInfo.label);
-            apkPkgPath.setText(apkInfo.packageName);
+            apkPkgPath.setText(apkInfo.pkgName);
         } else {
             if (projectName != null) {
                 apkIcon.setImageResource(R.drawable.round_android_24);
@@ -1457,9 +1460,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
         this.resFileModified = false;
         Set<String> modifiedDex = new HashSet<>();
 
-        long resModifyTime = FileUtils.recursiveModifiedTime(new File(decodeRootPath + "/res"));
+        long resModifyTime = recursiveModifiedTime(new File(decodeRootPath + "/res"));
         Log.d("DEBUG", "resModifyTime=" + resModifyTime);
-        long manifestModifyTime = FileUtils.recursiveModifiedTime(new File(decodeRootPath + "/AndroidManifest.xml"));
+        long manifestModifyTime = recursiveModifiedTime(new File(decodeRootPath + "/AndroidManifest.xml"));
         Log.d("DEBUG", "manifestTime=" + manifestModifyTime);
 
         // Collect modified files
@@ -1650,8 +1653,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
         String filename;
         switch (outputApkRule) {
             case 0:
-                filename = (bSign && BuildConfig.WITH_SIGN) ? apkInfo.packageName + "_signed" :
-                        apkInfo.packageName + "_unsigned";
+                filename = (bSign && BuildConfig.WITH_SIGN) ? apkInfo.pkgName + "_signed" :
+                        apkInfo.pkgName + "_unsigned";
                 break;
             case 2:
                 filename = (bSign && BuildConfig.WITH_SIGN) ? apkInfo.label + "_signed" :
@@ -1661,7 +1664,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 filename = (bSign && BuildConfig.WITH_SIGN) ? "gen_signed" : "gen_unsigned";
                 break;
         }
-        filename = FileUtils.reviseFileName(filename);
+        filename = reviseFileName(filename);
 
         String targetApkPath = createOutputPath(apkPath, outputDir, filename);
 
@@ -1703,8 +1706,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     @Nullable
     private String serialize2File(Map<String, String> fileEntry2ZipEntry2) {
         try {
-            String filepath = SDCard.makeWorkingDir(this)
-                    + RandomUtils.getRandomString(8);
+            String filepath = SDCard.makeWorkingDir(this) + getRandomString(8);
             BufferedOutputStream bos = new BufferedOutputStream(
                     new FileOutputStream(filepath));
             for (Entry<String, String> entry : fileEntry2ZipEntry2
@@ -2339,7 +2341,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }
 
         // Write back to file
-        FileUtils.writeToFile(filePath, newLines);
+        writeToFile(filePath, newLines);
     }
 
     @SuppressLint("DefaultLocale")

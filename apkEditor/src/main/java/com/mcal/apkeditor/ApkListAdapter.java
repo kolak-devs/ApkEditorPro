@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mcal.common.utilsOld.ApkInfoParser;
+import com.mcal.common.utils.ApkInfoParser;
 
 import java.util.ArrayList;
 import java.util.List;
