@@ -87,7 +87,10 @@ configurations {
     debugImplementation.exclude group: "junit", module: "junit"
 }
 
+
 dependencies {
+    def latestFastAdapterRelease = "5.6.0"
+
     implementation project(':androlib')
     implementation project(':jadx')
     implementation project(':smali')
@@ -122,6 +125,9 @@ dependencies {
 
     implementation 'com.google.guava:guava:31.1-android'
     implementation 'org.antlr:antlr-runtime:3.5.2'
+
+    implementation "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     // LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'

@@ -55,9 +55,9 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:minHeight="?attr/actionBarSize"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize">
 
                 <TextView
                     android:id="@+id/files_label"

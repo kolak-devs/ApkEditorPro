@@ -23,8 +23,8 @@
                 android:layout_margin="16dp"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="2dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?colorPrimaryContainer">
+                app:strokeColor="?colorPrimaryContainer"
+                app:strokeWidth="1dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -116,8 +116,8 @@
                 android:layout_marginEnd="16dp"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="2dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?colorPrimaryContainer">
+                app:strokeColor="?colorPrimaryContainer"
+                app:strokeWidth="1dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -221,8 +221,8 @@
                 android:layout_margin="16dp"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="2dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?colorPrimaryContainer">
+                app:strokeColor="?colorPrimaryContainer"
+                app:strokeWidth="1dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -405,8 +405,8 @@
                 android:layout_marginEnd="16dp"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="2dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?colorPrimaryContainer">
+                app:strokeColor="?colorPrimaryContainer"
+                app:strokeWidth="1dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -549,8 +549,8 @@
                 android:layout_margin="16dp"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="2dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?colorPrimaryContainer">
+                app:strokeColor="?colorPrimaryContainer"
+                app:strokeWidth="1dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"

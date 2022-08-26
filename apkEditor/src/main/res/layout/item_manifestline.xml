@@ -10,10 +10,10 @@
         android:id="@+id/collapse_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/app_name"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginStart="5dp"
+        android:contentDescription="@string/app_name"
         android:scaleType="fitCenter"
         app:tint="@color/colorAccent" />
 
@@ -22,9 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
         android:singleLine="false" />
 
 </LinearLayout>

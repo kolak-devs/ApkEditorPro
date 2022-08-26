@@ -20,12 +20,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.downloader.DownloaderActivity
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
+import com.balsikandar.crashreporter.ui.LogMessageActivity
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.MenuListAdapter
 import com.mcal.apkeditor.R
+import com.mcal.apkeditor.adapters.MainMenuItem
 import com.mcal.apkeditor.data.Dialogs
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
@@ -38,9 +41,12 @@ import com.mcal.common.data.Preferences
 import com.mcal.common.utilsOld.FileUtils
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import com.mcal.httpserver.HttpServiceManager
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.IAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
 import java.io.File
 
-class MainActivity : CustomizedLangActivity(), OnItemClickListener, ProcessingInterface {
+class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     companion object {
         init {
             System.loadLibrary("apkeditorpro")
@@ -60,13 +66,10 @@ class MainActivity : CustomizedLangActivity(), OnItemClickListener, ProcessingIn
     // Used to show a dialog
     private var prompter: OnlineMessage? = null
 
-    private var mDrawerLayout: DrawerLayout? = null
-    private var mDrawerList: ListView? = null
-    private var mDrawerToggle: ActionBarDrawerToggle? = null
-
     private val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
     private lateinit var thread: Thread
     private lateinit var indicator: TextView
+    private lateinit var mRecycler: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,104 +155,76 @@ class MainActivity : CustomizedLangActivity(), OnItemClickListener, ProcessingIn
         }
     }
 
-    private fun setupSlidingMenu() {
-        supportActionBar?.let { actionBar ->
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeButtonEnabled(true)
-            actionBar.setDisplayShowHomeEnabled(false)
-        }
-        mDrawerLayout = findViewById(R.id.drawer_layout)
-        mDrawerList = findViewById(R.id.slider_list)
-        mDrawerList?.let { list ->
-            val adapter = MenuListAdapter(this)
-            list.adapter = adapter
-            list.onItemClickListener = this
-        }
-        mDrawerToggle = ActionBarDrawerToggle(
-            this, mDrawerLayout,
-            R.string.app_name,
-            R.string.app_name
-        )
-        mDrawerToggle?.let { toggle ->
-            mDrawerLayout?.addDrawerListener(toggle)
-        }
-    }
-
     private fun initUI() {
-        if (BuildConfig.PARSER_ONLY) {
-            val imageView = findViewById<ImageView>(R.id.logo)
-            imageView.setImageResource(R.drawable.parser_logo)
-        }
+        val itemAdapter = ItemAdapter<MainMenuItem>()
+        val fastAdapter = FastAdapter.with(itemAdapter)
 
+        mRecycler = findViewById(R.id.menu_recycler)
         indicator = findViewById(R.id.indicator)
 
-        // Left sliding menu
-        setupSlidingMenu()
-        if (BuildConfig.DEBUG || Native.getSignature(this).startsWith("kQpOVghQhe8XLbkzKM4PynXi8R0=")) {
-            // Select apk from folder
-            val openApkBtn = findViewById<Button>(R.id.tv_select_apkfile)
-            openApkBtn.setOnClickListener {
-                val intent = Intent(this@MainActivity, FileListActivity::class.java)
-                startActivity(intent)
-            }
-
-            // Select apk from app
-            val openAppBtn = findViewById<Button>(R.id.tv_select_appfile)
-            if (BuildConfig.DISPLAY_APP) {
-                openAppBtn.setOnClickListener {
+        mRecycler.adapter = fastAdapter
+        // id может быть любым числом, главное, чтобы оно было уникальным. Сделано для того, чтобы не ломалась логика
+        // onClick при добавлении новых айтемов
+        itemAdapter.add(
+            MainMenuItem(0, R.drawable.ic_android, R.string.select_apk_file),
+            MainMenuItem(1, R.drawable.ic_android, R.string.select_apk_from_app),
+            MainMenuItem(2, R.drawable.round_inventory_2_24, R.string.projects),
+            MainMenuItem(3, R.drawable.puzzle, R.string.odex_patcher),
+            MainMenuItem(4, R.drawable.application_braces, R.string.tools_manager),
+            MainMenuItem(5, R.drawable.round_logo_dev_24, R.string.view_logs),
+            MainMenuItem(6, R.drawable.ic_help, R.string.help),
+            MainMenuItem(7, R.drawable.ic_exit_to_app, R.string.exit)
+        )
+        fastAdapter.onClickListener = { view: View?, iAdapter: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
+            when(mainMenuItem.id){
+                0 -> {
+                    val intent = Intent(this@MainActivity, FileListActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                1 -> {
                     val intent = Intent(this@MainActivity, UserAppActivity::class.java)
                     startActivity(intent)
+                    true
                 }
-            } else {
-                openAppBtn.setText(R.string.settings)
-                openAppBtn.setOnClickListener {
-                    val intent = Intent(this@MainActivity, SettingsActivity::class.java)
+                2 -> {
+                    val intent = Intent(this@MainActivity, ProjectListActivity::class.java)
                     startActivity(intent)
+                    true
                 }
+                3 -> {
+                    val intent = Intent(this@MainActivity, OdexPatchActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                4 -> {
+                    val intent = Intent(this@MainActivity, DownloaderActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                5 -> {
+                    val intent = Intent(this, CrashReporterActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                6 -> {
+                    val intent = Intent(this@MainActivity, HelpActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                7 -> {
+                    finishAndRemoveTask()
+                    true
+                }
+                else -> false
             }
+        }
 
-            // Odex Patcher
-            val odexPatcherBtn = findViewById<Button>(R.id.tv_odex_patcher)
-            odexPatcherBtn.setOnClickListener {
-                val intent = Intent(this@MainActivity, OdexPatchActivity::class.java)
-                startActivity(intent)
-            }
+        if (BuildConfig.DEBUG || Native.getSignature(this).startsWith("kQpOVghQhe8XLbkzKM4PynXi8R0=")) {
 
-            // Odex Patcher
-            val downloadManager = findViewById<Button>(R.id.download_manager)
-            downloadManager.setOnClickListener {
-                val intent = Intent(this@MainActivity, DownloaderActivity::class.java)
-                startActivity(intent)
-            }
         } else {
             val msg = findViewById<TextView>(R.id.pirated_version_detected)
             msg.visibility = View.VISIBLE
-        }
-
-        // Exit
-        val exitButton = findViewById<Button>(R.id.tv_exit)
-        exitButton.setOnClickListener { finish() }
-
-        // Help
-        // For APK Parser, use it as 'project'
-        val helpButton = findViewById<Button>(R.id.tv_help)
-        if (BuildConfig.PARSER_ONLY) {
-            helpButton.setText(R.string.projects)
-            helpButton.setOnClickListener {
-                val cls: Class<*> =
-                    if (BuildConfig.PARSER_ONLY) {
-                        ProjectListActivity2::class.java
-                    } else {
-                        ProjectListActivity::class.java
-                    }
-                val helpIntent = Intent(this@MainActivity, cls)
-                startActivity(helpIntent)
-            }
-        } else {
-            helpButton.setOnClickListener {
-                val helpIntent = Intent(this@MainActivity, HelpActivity::class.java)
-                startActivity(helpIntent)
-            }
         }
     }
 
@@ -259,11 +234,6 @@ class MainActivity : CustomizedLangActivity(), OnItemClickListener, ProcessingIn
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        mDrawerToggle?.let { toggle ->
-            if (toggle.onOptionsItemSelected(item)) {
-                return true
-            }
-        }
         when (item.itemId) {
             R.id.action_settings -> {
                 val i = Intent(this, SettingsActivity::class.java)
@@ -288,26 +258,6 @@ class MainActivity : CustomizedLangActivity(), OnItemClickListener, ProcessingIn
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        mDrawerList?.let { list ->
-            mDrawerLayout?.isDrawerOpen(list)?.let { drawerOpen ->
-                menu.findItem(R.id.action_settings).isVisible = !drawerOpen
-                menu.findItem(R.id.action_about).isVisible = !drawerOpen
-            }
-        }
-        return super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        mDrawerToggle?.syncState()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        mDrawerToggle?.onConfigurationChanged(newConfig)
     }
 
     override fun onBackPressed() {
@@ -345,46 +295,6 @@ class MainActivity : CustomizedLangActivity(), OnItemClickListener, ProcessingIn
 
         if (BuildConfig.LIMIT_NEW_VERSION) {
             return
-        }
-    }
-
-    override fun onItemClick(adapterView: AdapterView<*>?, view: View, position: Int, id: Long) {
-        when (id.toInt()) {
-            MenuListAdapter.ITEM_PROJECT -> {
-                val cls: Class<*> =
-                    if (BuildConfig.PARSER_ONLY) ProjectListActivity2::class.java else ProjectListActivity::class.java
-                val intent = Intent(this, cls)
-                startActivity(intent)
-            }
-            MenuListAdapter.ITEM_SETTING -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-            }
-            MenuListAdapter.ITEM_IMG_DOWNLOADER -> {
-                val intent = Intent(this, ImageDownloadActivity::class.java)
-                startActivity(intent)
-            }
-            MenuListAdapter.ITEM_ABOUT -> {
-                Dialogs.about(this)
-            }
-            MenuListAdapter.ITEM_LOGS -> {
-                val intent = Intent(this, CrashReporterActivity::class.java)
-                startActivity(intent)
-            }
-            MenuListAdapter.ITEM_FORUM -> {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://forum.timscriptov.ru/index.php?apkeditor-pro.9/")
-                    )
-                )
-            }
-            MenuListAdapter.ITEM_TELEGRAM -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/apkeditor2021")))
-            }
-        }
-        mDrawerList?.let { list ->
-            mDrawerLayout?.closeDrawer(list)
         }
     }
 

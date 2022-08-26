@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -81,15 +81,15 @@
         <Button
             android:id="@+id/btn_build_apk"
             style="@style/Widget.Material3.Button.TonalButton"
-            android:textColor="@color/colorGray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="4dip"
             android:layout_marginRight="4dip"
             android:text="@string/build"
+            android:textColor="@color/colorGray"
             android:visibility="invisible"
-            tools:visibility="visible"/>
+            tools:visibility="visible" />
 
     </LinearLayout>
 

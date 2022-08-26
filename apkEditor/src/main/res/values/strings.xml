@@ -465,4 +465,6 @@
     <!--
     <string name="sure_to_exit_tip">Are you sure to exit?\nSorry, edit is not supported any more as some of the policy reason. You could save it as project which will be located at %s.</string>
     -->
+    <string name="odex_patcher">Odex patcher</string>
+    <string name="tools_manager">Инструментарий</string>
 </resources>
