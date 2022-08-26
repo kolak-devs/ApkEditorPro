@@ -113,10 +113,8 @@ public class Preferences {
         App.getPreferences().edit().putString("signaturePath", key).apply();
     }
 
-
     /**
-     *
-     * @return
+     * OTHERS
      */
     public static String getLastDirectory() {
         String rootDir = ScopedStorage.getStorageDirectory().getPath();
@@ -141,10 +139,6 @@ public class Preferences {
 
     public static boolean isFixMultiRes() {
         return App.getPreferences().getBoolean("fixMultiRes", true);
-    }
-
-    public static boolean isApkToolCompiler() {
-        return App.getPreferences().getBoolean("apkToolCompiler", true);
     }
 
     // PATCH CODE VIEW
@@ -181,32 +175,5 @@ public class Preferences {
 
     public static void setStringKeywordHistory(String directory) {
         App.getPreferences().edit().putString("string_keywords", directory).apply();
-    }
-
-    /**
-     * Terminal
-     */
-    public static boolean isSystemShell() {
-        return App.getPreferences().getBoolean("ide_pref_general_terminalShell", false);
-    }
-
-    public static void setSystemShell(boolean flag) {
-        App.getPreferences().edit().putBoolean("ide_pref_general_terminalShell", flag).apply();
-    }
-
-    public static int getLogSenderVersion() {
-        return App.getPreferences().getInt("tools_logSenderVersion", 0);
-    }
-
-    public static void setLogSenderVersion(int mode) {
-        App.getPreferences().edit().putInt("tools_logSenderVersion", mode).apply();
-    }
-
-    public static int getFontSizeTerminal() {
-        return App.getPreferences().getInt("terminal_fontSize", 14);
-    }
-
-    public static void setFontSizeTerminal(int mode) {
-        App.getPreferences().edit().putInt("terminal_fontSize", mode).apply();
     }
 }

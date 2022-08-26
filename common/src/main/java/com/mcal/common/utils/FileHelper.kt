@@ -3,6 +3,8 @@ package com.mcal.common.utils
 import android.content.Context
 import android.content.res.AssetManager
 import android.os.Environment
+import com.mcal.common.utilsOld.CommandRunner
+import com.mcal.common.utilsOld.SDCard
 import java.io.*
 import java.nio.file.Files
 import java.nio.file.Path
@@ -204,4 +206,13 @@ fun makeDir(ctx: Context, dirName: String): String {
         f.mkdirs()
     }
     return targetDir
+}
+
+fun File.cleanup() {
+    val cr = CommandRunner()
+    try {
+        cr.runCommand("rm -rf $this", null, 10000)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }

@@ -73,12 +73,6 @@
 
         <SwitchPreference
             android:defaultValue="true"
-            android:key="apkToolCompiler"
-            android:summary="@string/pref_summary_apktool_compiler"
-            android:title="@string/pref_title_apktool_compiler" />
-
-        <SwitchPreference
-            android:defaultValue="true"
             android:key="aapt2"
             android:summary="@string/pref_summary_aapt2"
             android:title="@string/pref_title_aapt2" />
