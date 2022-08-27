@@ -1,13 +1,12 @@
 package com.mcal.apkeditor.prj
 
-import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import android.widget.Toast
 import com.mcal.apkeditor.R
 import com.mcal.common.utils.deleteAll
 import com.mcal.common.utilsOld.SDCard
+import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
 import java.lang.ref.WeakReference
 
 internal class ProjectRemover(
@@ -46,13 +45,13 @@ internal class ProjectRemover(
     }
 
     override fun afterProcess() {
-        weakReference.get()?.let { activity->
+        weakReference.get()?.let { activity ->
             if (result) {
                 Toast.makeText(activity, String.format(activity.getString(R.string.project_removed), mItemInfo.name), Toast.LENGTH_LONG).show()
-                weakReference.get()!!.updateProjectList()
             } else if (errMessage != null) {
-                Toast.makeText(activity, String.format(weakReference.get()!!.getString(R.string.general_error), errMessage), Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, String.format(activity.getString(R.string.general_error), errMessage), Toast.LENGTH_LONG).show()
             }
+            weakReference.get()?.updateProjectList()
         }
     }
 }

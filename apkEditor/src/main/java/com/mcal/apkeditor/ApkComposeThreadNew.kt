@@ -105,6 +105,7 @@ class ApkComposeThreadNew(
                     errMessage = e.message
                 }
                 setNextStep("Compiling...")
+                androlib.buildOptions.noCrunch = true
                 androlib.build(File(decodedFilePath), tmp)
                 setNextStep("Signing...")
                 if (!signApk(tmp.path)) {
