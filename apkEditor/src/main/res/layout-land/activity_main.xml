@@ -17,4 +17,14 @@
         app:spanCount="2"
         tools:listitem="@layout/main_list_item" />
 
+    <TextView
+        android:id="@+id/pirated_version_detected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Pirated Version Detected!"
+        android:textColor="#F44336"
+        android:visibility="gone" />
+
 </LinearLayout>

@@ -55,7 +55,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     // Used to show a dialog
     private var prompter: OnlineMessage? = null
 
-    private var indicator: TextView? = null
     private var mRecycler: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,7 +100,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         val fastAdapter = FastAdapter.with(itemAdapter)
 
         mRecycler = findViewById(R.id.menu_recycler)
-        indicator = findViewById(R.id.indicator)
 
         mRecycler?.adapter = fastAdapter
         // id может быть любым числом, главное, чтобы оно было уникальным. Сделано для того, чтобы не ломалась логика
