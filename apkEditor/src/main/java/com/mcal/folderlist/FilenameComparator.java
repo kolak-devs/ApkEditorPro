@@ -1,11 +1,12 @@
 package com.mcal.folderlist;
 
+import androidx.annotation.NonNull;
+
 import java.util.Comparator;
 
 @SuppressWarnings("rawtypes")
 public class FilenameComparator implements Comparator {
-
-    private static int myCompare(String str1, String str2) {
+    private static int myCompare(@NonNull String str1, String str2) {
         if (str1.isEmpty()) {
             if (str2.isEmpty()) {
                 return 0;

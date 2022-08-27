@@ -232,10 +232,6 @@ public class FolderListAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
-    public void fileAdded(String fileName) {
-
-    }
-
     private static class ViewHolder {
         ImageView icon;
         TextView filename;
