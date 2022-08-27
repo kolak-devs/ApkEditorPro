@@ -85,7 +85,8 @@ public class ApkComposeFailAdapter extends BaseAdapter {
                 if (nextCommaPos != -1) {
                     try {
                         lineNum = Integer.parseInt(strLine.substring(commaPos + 1, nextCommaPos));
-                    } catch (Exception ignored) {
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
                 int lineIndex = Math.max(lineNum, 0);

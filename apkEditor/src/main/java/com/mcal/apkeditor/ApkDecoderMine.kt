@@ -53,14 +53,6 @@ class ApkDecoderMine(val resTable: ResTable) : IReferenceDecode, Logger {
         }
     }
 
-    private val resPackage: ResPackage?
-        get() {
-            val packages = resTable.listMainPackages()
-            return if (packages != null && packages.isNotEmpty()) {
-                packages.iterator().next()
-            } else null
-        }
-
     override fun getResReference(id: Int): String {
         try {
             val spec = resTable.getResSpec(id)
@@ -91,15 +83,5 @@ class ApkDecoderMine(val resTable: ResTable) : IReferenceDecode, Logger {
                 "android:"
             } else ""
         }
-    }
-
-    init {
-        val xmlDecoder = XmlDecoder(resPackage)
-        val mDecoders = ResStreamDecoderContainer()
-        mDecoders.setDecoder("xml", xmlDecoder)
-        val res9pathDecoder = Res9patchStreamDecoder()
-        mDecoders.setDecoder("9path", res9pathDecoder)
-        val rawDecoder = ResRawStreamDecoder()
-        mDecoders.setDecoder("raw", rawDecoder)
     }
 }
