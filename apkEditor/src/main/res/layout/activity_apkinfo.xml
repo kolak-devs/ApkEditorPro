@@ -118,33 +118,9 @@
 
         <!-- Loading -->
 
-        <LinearLayout
-            android:id="@+id/layout_loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            android:focusable="false"
-            android:gravity="center"
-            android:orientation="vertical"
-            tools:visibility="gone">
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:id="@+id/tv_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16.0dip"
-                android:text="@string/loading"
-                android:textColor="@color/colorAccent" />
-
-        </LinearLayout>
+        <include
+            layout="@layout/activity_apkinfo_loading"
+            tools:visibility="gone" />
 
     </FrameLayout>
 
