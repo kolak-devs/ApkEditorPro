@@ -22,7 +22,7 @@ class ApkDecoderMine(val resTable: ResTable) : IReferenceDecode, Logger {
     // Record all the file entry to zip entry
     // like res/drawable-hdpi-v4/a.png -> res/drawable-hdpi/a.png
     val fileEntry2ZipEntry: Map<String, String> = HashMap()
-    fun decode(activity: Activity, apkPath: String?, decodeRootPath: String?) {
+    fun decode(activity: Activity, apkPath: File, decodeRootPath: File) {
         val binFolder = File(activity.filesDir.toString() + "/bin")
 
         // Preparing
@@ -35,8 +35,8 @@ class ApkDecoderMine(val resTable: ResTable) : IReferenceDecode, Logger {
             val options = BuildOptions()
             options.frameworkFolderLocation = binFolder.path
             val lib = Androlib(options, this)
-            val decoder = ApkDecoder(File(apkPath), lib)
-            decoder.setApkFile(File(apkPath))
+            val decoder = ApkDecoder(apkPath, lib)
+            decoder.setApkFile(apkPath)
             decoder.setBaksmaliDebugMode(false)
             decoder.setFrameworkDir(binFolder.path) //android-framework.jar
             //decoder.setDecodeAssets(ApkDecoder.DECODE_ASSETS_FULL);
@@ -44,7 +44,7 @@ class ApkDecoderMine(val resTable: ResTable) : IReferenceDecode, Logger {
             //decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_NONE);
             //decoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_SMALI);
             decoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_NONE)
-            decoder.setOutDir(File(decodeRootPath))
+            decoder.setOutDir(decodeRootPath)
             decoder.setApiLevel(14)
             decoder.setForceDelete(true)
             decoder.decode()
@@ -78,11 +78,11 @@ class ApkDecoderMine(val resTable: ResTable) : IReferenceDecode, Logger {
         // TODO IMPLEMENT ME
     }
 
-    override fun error(log: String) {}
-    override fun log(warring: Level, format: String, ex: Throwable) {}
-    override fun fine(log: String) {}
-    override fun warning(log: String) {}
-    override fun info(log: String) {}
+    override fun error(log: String) = Unit
+    override fun log(warring: Level, format: String, ex: Throwable) = Unit
+    override fun fine(log: String) = Unit
+    override fun warning(log: String) = Unit
+    override fun info(log: String) = Unit
 
     companion object {
         @Contract(pure = true)
@@ -97,8 +97,8 @@ class ApkDecoderMine(val resTable: ResTable) : IReferenceDecode, Logger {
         val xmlDecoder = XmlDecoder(resPackage)
         val mDecoders = ResStreamDecoderContainer()
         mDecoders.setDecoder("xml", xmlDecoder)
-        val _9pathDecoder = Res9patchStreamDecoder()
-        mDecoders.setDecoder("9path", _9pathDecoder)
+        val res9pathDecoder = Res9patchStreamDecoder()
+        mDecoders.setDecoder("9path", res9pathDecoder)
         val rawDecoder = ResRawStreamDecoder()
         mDecoders.setDecoder("raw", rawDecoder)
     }

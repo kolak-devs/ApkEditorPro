@@ -69,7 +69,7 @@ class ApkParseThread(
 
             // File outDir = new File("/storage/emulated/0/decoded/");
             decoder?.let { apkDecoder ->
-                apkDecoder.decode(activity, apkFile.path, outDir.path)
+                apkDecoder.decode(activity, apkFile, outDir)
                 consumerRef.get()?.resourceDecoded(apkDecoder.fileEntry2ZipEntry)
             }
             return true
