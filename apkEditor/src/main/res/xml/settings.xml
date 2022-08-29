@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="ROOT">
-
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/about">
+        <Preference
+            android:title="@string/app_name"
+            android:icon="@drawable/info">
+            <intent
+                android:action="com.mcal.action.SHOW_ABOUT"/>
+        </Preference>
+    </PreferenceCategory>
     <PreferenceCategory
         android:key="Appearance"
         android:layout="@layout/preferences_category"

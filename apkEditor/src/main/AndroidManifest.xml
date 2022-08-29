@@ -246,7 +246,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-        <activity android:name="com.mcal.apkeditor.activities.AboutActivity" />
+        <activity android:name="com.mcal.apkeditor.activities.AboutActivity">
+           <intent-filter>
+               <action android:name="com.mcal.action.SHOW_ABOUT" />
+               <category android:name="android.intent.category.DEFAULT"/>
+           </intent-filter>
+        </activity>
         <activity
             android:name="com.mcal.apkeditor.activities.ApkInfoActivity"
             android:screenOrientation="portrait" />

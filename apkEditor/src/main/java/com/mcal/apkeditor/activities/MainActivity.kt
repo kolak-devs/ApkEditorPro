@@ -179,11 +179,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 startActivity(i)
                 return true
             }
-            R.id.action_about -> {
-                val intent = Intent(this, AboutActivity::class.java)
-                startActivity(intent)
-                return true
-            }
             R.id.action_night_mode -> {
                 if (Preferences.isNightModeEnabled()) {
                     Preferences.setNightModeEnabled(false)

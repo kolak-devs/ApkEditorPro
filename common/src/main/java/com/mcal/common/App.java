@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import com.balsikandar.crashreporter.CrashReporter;
+import com.google.android.material.color.DynamicColors;
 import com.mcal.common.data.Preferences;
 
 public class App extends Application {
@@ -40,5 +41,7 @@ public class App extends Application {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+        // Support android 12 Monet Engine
+        DynamicColors.applyToActivitiesIfAvailable(this);
     }
 }
