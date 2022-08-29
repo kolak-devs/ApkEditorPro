@@ -10,14 +10,4 @@
         android:checkable="true"
         android:checked="false"
         android:title="@string/system_apps" />
-    <item
-        android:id="@+id/sort_by_app"
-        android:checkable="true"
-        android:checked="true"
-        android:title="@string/by_app_name" />
-    <item
-        android:id="@+id/sort_by_install_time"
-        android:checkable="true"
-        android:checked="false"
-        android:title="@string/by_install_time" />
 </menu>

@@ -1,10 +1,8 @@
 package com.mcal.common.utils
 
 import android.content.Context
-import android.content.res.AssetManager
 import android.os.Environment
 import com.mcal.common.utilsOld.CommandRunner
-import com.mcal.common.utilsOld.SDCard
 import java.io.*
 import java.nio.file.Files
 import java.nio.file.Path
@@ -73,16 +71,6 @@ fun deleteAll(f: File) {
         }
     }
     f.delete()
-}
-
-@Throws(IOException::class)
-fun copyFile(srcFile: File, dstFile: File) {
-    srcFile.copyTo(dstFile)
-}
-
-@Throws(IOException::class)
-fun copyFile(srcFilePath: String, dstFilePath: String) {
-    copyFile(File(srcFilePath), File(dstFilePath))
 }
 
 fun writeToFile(fileName: String, lines: List<String>) {
@@ -156,12 +144,32 @@ fun reviseFileName(filename: String?): String {
     }
 }
 
-fun Context.copyFile(filename: String, output: File) {
-    this.assets.open(filename).use { stream ->
-        output.outputStream().use {
-            stream.copyTo(it)
-        }
+@Throws(IOException::class)
+fun Context.copyAssetsFile(filename: String, output: File) {
+    copyFileStream(this.assets.open(filename), FileOutputStream(output))
+}
+
+@Throws(IOException::class)
+fun copyFile(srcFilePath: String, dstFilePath: String) {
+    copyFile(File(srcFilePath), File(dstFilePath))
+}
+
+@Throws(IOException::class)
+fun copyFile(filename: File, output: File) {
+    copyFileStream(FileInputStream(filename), FileOutputStream(output))
+}
+
+@Throws(IOException::class)
+fun copyFileStream(input: InputStream, output: OutputStream) {
+    val buffer = ByteArray(1024)
+    var length: Int = input.read(buffer)
+    while ((length) > 0) {
+        output.write(buffer, 0, length)
+        length = input.read(buffer)
     }
+    input.close()
+    output.flush()
+    output.close()
 }
 
 @Throws(IOException::class)

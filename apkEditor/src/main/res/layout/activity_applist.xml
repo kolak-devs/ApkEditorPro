@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
@@ -11,7 +12,7 @@
         android:layout_height="0dip"
         android:layout_weight="1">
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/application_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -32,33 +33,29 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        android:background="@drawable/background_search"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_keyword"
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            android:layout_weight="1.0"
-            android:background="@null"
-            android:enabled="false"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="@string/keyword_hint"
-            android:inputType="textNoSuggestions"
-            android:singleLine="true" />
+            app:errorEnabled="false">
 
-        <ImageButton
-            android:id="@+id/btn_search"
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/round_search_24" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_keyword"
+                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="5dp"
+                android:inputType="textNoSuggestions"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
