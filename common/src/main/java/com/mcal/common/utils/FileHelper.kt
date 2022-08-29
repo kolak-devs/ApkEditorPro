@@ -73,16 +73,6 @@ fun deleteAll(f: File) {
     f.delete()
 }
 
-@Throws(IOException::class)
-fun copyFile(srcFile: File, dstFile: File) {
-    srcFile.copyTo(dstFile)
-}
-
-@Throws(IOException::class)
-fun copyFile(srcFilePath: String, dstFilePath: String) {
-    copyFile(File(srcFilePath), File(dstFilePath))
-}
-
 fun writeToFile(fileName: String, lines: List<String>) {
     var bw: BufferedWriter? = null
     try {
@@ -155,19 +145,31 @@ fun reviseFileName(filename: String?): String {
 }
 
 @Throws(IOException::class)
-fun Context.copyFile(filename: String, output: File) {
-    val myOutput = FileOutputStream(output)
-    val myInput = this.assets.open(filename)
+fun Context.copyAssetsFile(filename: String, output: File) {
+    copyFileStream(this.assets.open(filename), FileOutputStream(output))
+}
 
+@Throws(IOException::class)
+fun copyFile(srcFilePath: String, dstFilePath: String) {
+    copyFile(File(srcFilePath), File(dstFilePath))
+}
+
+@Throws(IOException::class)
+fun copyFile(filename: File, output: File) {
+    copyFileStream(FileInputStream(filename), FileOutputStream(output))
+}
+
+@Throws(IOException::class)
+fun copyFileStream(input: InputStream, output: OutputStream) {
     val buffer = ByteArray(1024)
-    var length: Int = myInput.read(buffer)
+    var length: Int = input.read(buffer)
     while ((length) > 0) {
-        myOutput.write(buffer, 0, length)
-        length = myInput.read(buffer)
+        output.write(buffer, 0, length)
+        length = input.read(buffer)
     }
-    myInput.close()
-    myOutput.flush()
-    myOutput.close()
+    input.close()
+    output.flush()
+    output.close()
 }
 
 @Throws(IOException::class)

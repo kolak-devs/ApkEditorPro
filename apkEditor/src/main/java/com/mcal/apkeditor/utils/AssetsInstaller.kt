@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import com.mcal.common.data.Preferences
-import com.mcal.common.utils.copyFile
+import com.mcal.common.utils.copyAssetsFile
 import java.io.File
 import java.io.IOException
 
@@ -34,17 +34,17 @@ class AssetsInstaller(private val context: Context) {
         val inited = Preferences.getInitialized()
         val lastVersion = Preferences.getVersionString()
         if (!inited || lastVersion != curVersion) {
-            context.copyFile("key/testkey.pk8", File(path, "testkey.pk8"))
-            context.copyFile("key/testkey.x509.pem", File(path, "testkey.x509.pem"))
-            context.copyFile(Build.CPU_ABI + "/aapt", File(path, "aapt"))
-            context.copyFile(Build.CPU_ABI + "/aapt2", File(path, "aapt2"))
-            context.copyFile(Build.CPU_ABI + "/zipalign", File(path, "zipalign"))
-            context.copyFile("aaptz", File(path, "aaptz"))
-            context.copyFile("android-framework.jar", File(path, "android-framework.jar"))
-            context.copyFile("android-framework.jar", File(path, "1.apk"))
+            context.copyAssetsFile("key/testkey.pk8", File(path, "testkey.pk8"))
+            context.copyAssetsFile("key/testkey.x509.pem", File(path, "testkey.x509.pem"))
+            context.copyAssetsFile(Build.CPU_ABI + "/aapt", File(path, "aapt"))
+            context.copyAssetsFile(Build.CPU_ABI + "/aapt2", File(path, "aapt2"))
+            context.copyAssetsFile(Build.CPU_ABI + "/zipalign", File(path, "zipalign"))
+            context.copyAssetsFile("aaptz", File(path, "aaptz"))
+            context.copyAssetsFile("android-framework.jar", File(path, "android-framework.jar"))
+            context.copyAssetsFile("android-framework.jar", File(path, "1.apk"))
             val bin = File(context.filesDir, "mycp")
             if (!bin.exists()) {
-                context.copyFile(Build.CPU_ABI + "/mycp", bin)
+                context.copyAssetsFile(Build.CPU_ABI + "/mycp", bin)
                 bin.setExecutable(true)
             }
             createWorkFiles()
