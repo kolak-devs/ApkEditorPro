@@ -86,6 +86,7 @@ class ApkComposeThreadNew(
             }
         }
         do {
+            val tmp = File(ctx.cacheDir, "app.apk")
             val binFolder = File(ctx.filesDir.toString() + "/bin")
             val options = BuildOptions()
             options.useAapt2 = Preferences.isAapt2(ctx)
@@ -93,7 +94,6 @@ class ApkComposeThreadNew(
             options.frameworkFolderLocation = binFolder.path
             val androlib = Androlib(options, this@ApkComposeThreadNew)
             try {
-                val tmp = File(ctx.cacheDir, "app.apk")
                 launch(Dispatchers.IO) {
                     tmp.createNewFile()
                 }
@@ -101,7 +101,6 @@ class ApkComposeThreadNew(
                 setNextStep("Preparing...")
                 AssetsInstaller(ctx).install()
                 setNextStep("Compiling...")
-                //androlib.buildOptions.noCrunch = true
                 androlib.build(File(decodedFilePath), tmp)
                 setNextStep("Signing...")
                 if (!signApk(tmp.path)) {
@@ -119,6 +118,8 @@ class ApkComposeThreadNew(
             }
             setNextStep(ctx.getString(R.string.cleanup))
             File(ScopedStorage.storageDirectory.path + "/ApkEditor/tmp").cleanup()
+            File(ScopedStorage.filesDir.path + "/decoded").cleanup()
+            tmp.delete()
             succeed = true
         } while (false)
         if (!stopFlag) {
