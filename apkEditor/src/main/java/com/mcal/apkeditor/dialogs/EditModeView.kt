@@ -106,7 +106,7 @@ class EditModeView(
     }
 
     interface IEditModeSelected {
-        fun editModeSelected(mode: Int, extraStr: String?)
+        fun editModeSelected(mode: Int, filePath: String?)
         fun updateFileList(path: String)
     }
 
