@@ -38,10 +38,9 @@ class AssetsInstaller(private val context: Context) {
             context.copyFile("key/testkey.x509.pem", File(path, "testkey.x509.pem"))
             context.copyFile(Build.CPU_ABI + "/aapt", File(path, "aapt"))
             context.copyFile(Build.CPU_ABI + "/aapt2", File(path, "aapt2"))
-            context.copyFile(Build.CPU_ABI + "/aaptz", File(path, "aaptz"))
             context.copyFile(Build.CPU_ABI + "/zipalign", File(path, "zipalign"))
+            context.copyFile("aaptz", File(path, "aaptz"))
             context.copyFile("android-framework.jar", File(path, "android-framework.jar"))
-            context.copyFile("android-framework.jar", File(path, "1.apk"))
             context.copyFile("android-framework.jar", File(path, "1.apk"))
             val bin = File(context.filesDir, "mycp")
             if (!bin.exists()) {

@@ -1,10 +1,8 @@
 package com.mcal.common.utils
 
 import android.content.Context
-import android.content.res.AssetManager
 import android.os.Environment
 import com.mcal.common.utilsOld.CommandRunner
-import com.mcal.common.utilsOld.SDCard
 import java.io.*
 import java.nio.file.Files
 import java.nio.file.Path
@@ -156,12 +154,20 @@ fun reviseFileName(filename: String?): String {
     }
 }
 
+@Throws(IOException::class)
 fun Context.copyFile(filename: String, output: File) {
-    this.assets.open(filename).use { stream ->
-        output.outputStream().use {
-            stream.copyTo(it)
-        }
+    val myOutput = FileOutputStream(output)
+    val myInput = this.assets.open(filename)
+
+    val buffer = ByteArray(1024)
+    var length: Int = myInput.read(buffer)
+    while ((length) > 0) {
+        myOutput.write(buffer, 0, length)
+        length = myInput.read(buffer)
     }
+    myInput.close()
+    myOutput.flush()
+    myOutput.close()
 }
 
 @Throws(IOException::class)

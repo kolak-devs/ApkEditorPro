@@ -98,14 +98,10 @@ class ApkComposeThreadNew(
                     tmp.createNewFile()
                 }
                 stepInfo.stepTotal = 4
-                try {
-                    setNextStep("Preparing...")
-                    AssetsInstaller(ctx).install()
-                } catch (e: Exception) {
-                    errMessage = e.message
-                }
+                setNextStep("Preparing...")
+                AssetsInstaller(ctx).install()
                 setNextStep("Compiling...")
-                androlib.buildOptions.noCrunch = true
+                //androlib.buildOptions.noCrunch = true
                 androlib.build(File(decodedFilePath), tmp)
                 setNextStep("Signing...")
                 if (!signApk(tmp.path)) {
