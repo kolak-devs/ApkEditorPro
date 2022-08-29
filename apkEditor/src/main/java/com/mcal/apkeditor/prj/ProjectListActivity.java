@@ -34,8 +34,9 @@ import java.util.List;
 import java.util.Map;
 
 import common.types.ProjectInfo;
+import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
-public class ProjectListActivity extends CustomizedLangActivity implements View.OnClickListener {
+public class ProjectListActivity extends SwipeBackActivity implements View.OnClickListener {
     private final MyHandler handler = new MyHandler(this);
     private ProjectListAdapter adapter;
     private String projectFolder; // like "/sdcard/ApkEditor/.projects/"

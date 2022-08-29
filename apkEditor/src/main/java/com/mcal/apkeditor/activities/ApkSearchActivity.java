@@ -23,7 +23,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApkSearchActivity extends CustomizedLangActivity implements OnItemClickListener,
+import ru.svolf.melissa.swipeback.SwipeBackActivity;
+
+public class ApkSearchActivity extends SwipeBackActivity implements OnItemClickListener,
         EditModeView.IEditModeSelected {
 
     private final List<String> apkFileList = new ArrayList<>();

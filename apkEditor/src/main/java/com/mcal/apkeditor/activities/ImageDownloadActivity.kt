@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -32,7 +33,7 @@ import java.io.UnsupportedEncodingException
 import java.net.URL
 import java.net.URLDecoder
 
-class ImageDownloadActivity : CustomizedLangActivity(), ProcessingInterface {
+class ImageDownloadActivity : SwipeBackActivity(), ProcessingInterface {
     private var webView: WebView? = null
     private var imageUrl: String? = null
 

@@ -37,7 +37,9 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 
-public class AxmlEditActivity extends CustomizedLangActivity implements IDirChanged, View.OnClickListener {
+import ru.svolf.melissa.swipeback.SwipeBackActivity;
+
+public class AxmlEditActivity extends SwipeBackActivity implements IDirChanged, View.OnClickListener {
     private String apkPath;
     private ApkInfoParser.AppInfo apkInfo;
 

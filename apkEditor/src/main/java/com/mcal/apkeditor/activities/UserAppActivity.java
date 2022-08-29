@@ -50,7 +50,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserAppActivity extends CustomizedLangActivity implements OnItemClickListener,
+import ru.svolf.melissa.swipeback.SwipeBackActivity;
+
+public class UserAppActivity extends SwipeBackActivity implements OnItemClickListener,
         OnClickListener, EditModeView.IEditModeSelected {
 
     private final MyHandler handler = new MyHandler(this);

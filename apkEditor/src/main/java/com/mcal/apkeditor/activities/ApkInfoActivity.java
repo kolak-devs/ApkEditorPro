@@ -144,8 +144,9 @@ import brut.util.Duo;
 import common.types.ActivityState;
 import common.types.ProjectInfo;
 import common.types.StringItem;
+import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
-public class ApkInfoActivity extends CustomizedLangActivity
+public class ApkInfoActivity extends SwipeBackActivity
         implements OnItemClickListener, OnItemLongClickListener,
         IManifestChangeCallback, OnClickListener, IDecodeTaskCallback,
         OnLongClickListener, ApkParseConsumer, ResSelectionChangeListener, AddFolderDialog.AddFolderCallback {

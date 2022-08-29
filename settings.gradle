@@ -40,3 +40,4 @@ include ':net-manager'
 //include ':terminal-emulator'
 
 include ':libraries'
+include ':melissa'

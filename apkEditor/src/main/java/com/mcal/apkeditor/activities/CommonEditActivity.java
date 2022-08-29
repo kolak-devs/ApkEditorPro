@@ -70,7 +70,9 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class CommonEditActivity extends CustomizedLangActivity implements OnClickListener,
+import ru.svolf.melissa.swipeback.SwipeBackActivity;
+
+public class CommonEditActivity extends SwipeBackActivity implements OnClickListener,
         IFileSelection, TextWatcher, OnItemSelectedListener {
 
     private final MyHandler handler = new MyHandler(this);

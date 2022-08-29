@@ -62,7 +62,9 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 
-public class ApkComposeActivity extends CustomizedLangActivity
+import ru.svolf.melissa.swipeback.SwipeBackActivity;
+
+public class ApkComposeActivity extends SwipeBackActivity
         implements ITaskCallback, OnClickListener {
 
     public static final int SUCCEED = 10005;

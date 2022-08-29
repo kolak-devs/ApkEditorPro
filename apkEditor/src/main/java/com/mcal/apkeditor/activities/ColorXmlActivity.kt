@@ -19,10 +19,11 @@ import com.mcal.apkeditor.R
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.neweditor.TextEditor.getSoraEditor
+import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.*
 
 
-class ColorXmlActivity : CustomizedLangActivity(), View.OnClickListener, OnItemClickListener {
+class ColorXmlActivity : SwipeBackActivity(), View.OnClickListener, OnItemClickListener {
     private var xmlPath: String? = null
     private var colorValues: ArrayList<ColorValue>? = null
     private var colorAdapter: ColorValueAdapter? = null

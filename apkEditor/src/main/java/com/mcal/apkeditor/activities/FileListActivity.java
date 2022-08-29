@@ -43,7 +43,9 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FileListActivity extends CustomizedLangActivity implements IListEventListener,
+import ru.svolf.melissa.swipeback.SwipeBackActivity;
+
+public class FileListActivity extends SwipeBackActivity implements IListEventListener,
         IListItemProducer, EditModeView.IEditModeSelected, OnClickListener {
 
     // Image cache

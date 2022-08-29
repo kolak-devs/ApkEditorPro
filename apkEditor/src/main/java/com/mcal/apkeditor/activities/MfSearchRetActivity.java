@@ -22,7 +22,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MfSearchRetActivity extends CustomizedLangActivity implements OnClickListener {
+import ru.svolf.melissa.swipeback.SwipeBackActivity;
+
+public class MfSearchRetActivity extends SwipeBackActivity implements OnClickListener {
 
     private String xmlPath;
     private ArrayList<Integer> lineIndexs;

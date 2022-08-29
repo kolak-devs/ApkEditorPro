@@ -106,7 +106,7 @@ dependencies {
     implementation project(':patchview')
     implementation project(':so-translator')
     implementation project(':color-picker')
-    //implementation project(':terminal-emulator')
+    implementation project(':melissa')
     implementation project(':filepicker')
     implementation project(':manifestparser')
     implementation project(':net-manager')
