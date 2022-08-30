@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import androidx.annotation.IntDef;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
 import androidx.fragment.app.Fragment;
@@ -214,7 +213,7 @@ public class SwipeBackLayout extends FrameLayout {
      * Set a drawable used for edge shadow.
      */
     public void setShadow(int resId, int edgeFlag) {
-        setShadow(AppCompatResources.getDrawable(getContext(), resId), edgeFlag);
+        setShadow(getResources().getDrawable(resId), edgeFlag);
     }
 
     /**
