@@ -40,10 +40,11 @@ import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.File
 
 
-class UserAppActivity : CustomizedLangActivity(), IEditModeSelected, AppListAdapter.AppItemClick {
+class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.AppItemClick {
     var adapter: AppListAdapter? = null
     var appList = mutableListOf<AppInfo>()
     private var recyclerView: RecyclerView? = null
