@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
@@ -99,6 +100,7 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
         SYSTEMS, USERS
     }
 
+    var lastValue: String? = null
     private fun reScanAppList(listMode: AppType) {
         ProgressDialog(
             this, "Loading", "Please wait...", false,
@@ -134,7 +136,19 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
                         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
                         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
                         override fun afterTextChanged(s: Editable) {
-                            adapter?.filter(s.toString())
+                            adapter?.let { adapter ->
+                                if (adapter.canStartFilterProcess) {
+                                    if (!TextUtils.equals(s, lastValue)) {
+                                        val constraint = s.toString()
+                                        lastValue = constraint
+                                        adapter.canStartFilterProcess = false
+                                        adapter.filter(constraint)
+                                        return
+                                    }
+                                    return
+                                }
+                                adapter.newValue = s.toString()
+                            }
                         }
                     })
                 }

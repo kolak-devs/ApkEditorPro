@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.view.LayoutInflater
@@ -10,6 +11,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.AppInfo
 import com.mcal.apkeditor.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class AppListAdapter(
@@ -18,6 +22,8 @@ class AppListAdapter(
     private val listener: AppItemClick
 ) :
     RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
+    var newValue: String? = null
+    var canStartFilterProcess = true
     private val pm: PackageManager = context.packageManager
     private var appFilterList = appList
 
@@ -59,10 +65,10 @@ class AppListAdapter(
         val appName: TextView = itemView.findViewById(R.id.app_name)
     }
 
-    fun filter(constraint: CharSequence?) {
+    fun filter(constraint: CharSequence?) = CoroutineScope(Dispatchers.IO).launch {
         val charSearch = constraint.toString()
-        if (charSearch.isEmpty()) {
-            appFilterList = appList
+        appFilterList = if (charSearch.isEmpty()) {
+            appList
         } else {
             val resultList = mutableListOf<AppInfo>()
             for (row in appList) {
@@ -71,13 +77,28 @@ class AppListAdapter(
                     resultList.add(row)
                 }
             }
-            appFilterList = resultList
+            resultList
         }
-        publishResults(appFilterList)
+        CoroutineScope(Dispatchers.Main).launch {
+            publishResults(appFilterList)
+        }
     }
 
-    private fun publishResults(results: MutableList<AppInfo>) {
-        appFilterList = results
-        notifyDataSetChanged()
+    @SuppressLint("NotifyDataSetChanged")
+    private fun publishResults(results: MutableList<AppInfo>?) {
+        if (results != null) {
+            val length = results.size
+            if (length > 0) {
+                appFilterList = results
+                notifyDataSetChanged()
+            }
+        }
+        val text = newValue
+        if (text.isNullOrEmpty()) {
+            canStartFilterProcess = true
+            return
+        }
+        newValue = null
+        filter(text)
     }
 }
