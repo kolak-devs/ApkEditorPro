@@ -26,7 +26,6 @@ public class SwipeBackActivity extends CustomizedLangActivity {
         super.onCreate(savedInstanceState);
 
         onActivityCreate();
-        setEdgeLevel(SwipeBackLayout.EdgeLevel.MED);
     }
 
     @Override
@@ -45,7 +44,8 @@ public class SwipeBackActivity extends CustomizedLangActivity {
     }
 
     void onActivityCreate() {
-        getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         //getWindow().getDecorView().setBackground(null);
         mSwipeBackLayout = new SwipeBackLayout(this);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
