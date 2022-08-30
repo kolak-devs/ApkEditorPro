@@ -45,6 +45,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader
 import org.eclipse.tm4e.core.theme.IRawTheme
+import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
@@ -52,7 +53,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.regex.PatternSyntaxException
 
-class EditorActivity : CustomizedLangActivity(),
+class EditorActivity : SwipeBackActivity(),
     SmaliMethodsDialogs.ISmaliMethodClicked {
     private lateinit var binding: ActivitySoraeditorBinding
 
