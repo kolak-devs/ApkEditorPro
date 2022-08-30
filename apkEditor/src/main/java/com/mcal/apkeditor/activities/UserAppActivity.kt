@@ -31,18 +31,13 @@ import com.mcal.apkeditor.dialogs.EditModeView
 import com.mcal.apkeditor.dialogs.EditModeView.IEditModeSelected
 import com.mcal.apkeditor.se.SimpleEditActivity
 import com.mcal.appdm.PrefOverallActivity
-import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.copyFile
 import com.mcal.common.utils.makeBackupDir
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.File
-
 
 class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.AppItemClick {
     var adapter: AppListAdapter? = null
@@ -106,26 +101,24 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
 
     private fun reScanAppList(listMode: AppType) {
         ProgressDialog(
-            this, "Saving", "Please wait...", false,
+            this, "Loading", "Please wait...", false,
             object : ProcessingInterface {
                 @Throws(java.lang.Exception::class)
                 override fun process() {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val pm = packageManager
-                        val appInfoList = pm.getInstalledApplications(0)
+                    val pm = packageManager
+                    val appInfoList = pm.getInstalledApplications(0)
 
-                        appList.clear()
-                        if (listMode == AppType.USERS) {
-                            for (ai in appInfoList) {
-                                if (ai.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
-                                    appList.add(AppInfo.create(pm, ai))
-                                }
+                    appList.clear()
+                    if (listMode == AppType.USERS) {
+                        for (ai in appInfoList) {
+                            if (ai.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
+                                appList.add(AppInfo.create(pm, ai))
                             }
-                        } else if (listMode == AppType.SYSTEMS) {
-                            for (ai in appInfoList) {
-                                if (ai.flags and ApplicationInfo.FLAG_SYSTEM != 0) {
-                                    appList.add(AppInfo.create(pm, ai))
-                                }
+                        }
+                    } else if (listMode == AppType.SYSTEMS) {
+                        for (ai in appInfoList) {
+                            if (ai.flags and ApplicationInfo.FLAG_SYSTEM != 0) {
+                                appList.add(AppInfo.create(pm, ai))
                             }
                         }
                     }
@@ -138,12 +131,8 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
                     recyclerView?.layoutManager = LinearLayoutManager(this@UserAppActivity)
                     recyclerView?.adapter = adapter
                     searchTextWatcher?.addTextChangedListener(object : TextWatcher {
-                        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                        }
-
-                        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                        }
-
+                        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
+                        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
                         override fun afterTextChanged(s: Editable) {
                             adapter?.filter(s.toString())
                         }
@@ -153,25 +142,95 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
         ).show()
     }
 
+    override fun onClick(item: AppInfo) {
+        val pm = packageManager
+        val moreInfo: ApplicationInfo
+        try {
+            moreInfo = pm.getApplicationInfo(item.packagePath, 0)
+            val apkPath = moreInfo.sourceDir
+            if (BuildConfig.PARSER_ONLY) {
+                startFullEditActivity(this, apkPath)
+            } else if (BuildConfig.LIMIT_NEW_VERSION && upgradedFromOldVersion(this)) {
+                startFullEditActivity(this, apkPath)
+            } else {
+                EditModeView(this, this, apkPath, moreInfo.packageName).showAppEditDialog()
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun editModeSelected(mode: Int, filePath: String?) {
+        var intent: Intent? = null
+        val dialog = MaterialAlertDialogBuilder(this)
+        dialog.setItems(
+            arrayOf(
+                getString(R.string.full_edit),
+                getString(R.string.simple_edit),
+                getString(R.string.common_edit),
+                getString(R.string.xml_file_edit),
+                getString(R.string.edit_data_root)
+            )
+        ) { p112: DialogInterface, p2: Int ->
+            when (p2) {
+                SIMPLE_EDIT -> {
+                    intent = Intent(this, SimpleEditActivity::class.java)
+                    p112.dismiss()
+                }
+                FULL_EDIT -> {
+                    if (startFullEditActivity(this, filePath)) {
+                        finish()
+                    }
+                    p112.dismiss()
+                }
+                COMMON_EDIT -> {
+                    intent = Intent(this, CommonEditActivity::class.java)
+                    p112.dismiss()
+                }
+                XML_FILE_EDIT -> {
+                    intent = Intent(this, AxmlEditActivity::class.java)
+                }
+                DATA_EDIT -> {
+                    val prefIntent = Intent(this, PrefOverallActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putString("packagePath", filePath)
+                    bundle.putBoolean("backup", false)
+                    prefIntent.putExtras(bundle)
+                    startActivity(prefIntent)
+                }
+            }
+        }
+        dialog.create().show()
+        intent?.let { i ->
+            ActivityUtils.attachParam(i, "apkPath", filePath)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    override fun updateFileList(path: String) {
+        // nothing
+    }
+
     override fun onLongClick(position: Int) {
         val dialog = MaterialAlertDialogBuilder(this)
         dialog.setItems(
             arrayOf(
-                this.getString(R.string.app_info),
-                this.getString(R.string.backup),
-                this.getString(R.string.launch),
+                getString(R.string.app_info),
+                getString(R.string.backup),
+                getString(R.string.launch),
             )
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
-                0 -> {
+                DETAILS -> {
                     showAppInfo(position)
                     p112.dismiss()
                 }
-                1 -> {
+                BACKUP -> {
                     backupApp(position)
                     p112.dismiss()
                 }
-                2 -> {
+                LAUNCH -> {
                     launchApp(position)
                     p112.dismiss()
                 }
@@ -180,13 +239,11 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
         dialog.create().show()
     }
 
-    // App Detail/information
     private fun showAppInfo(position: Int) {
         try {
             val info = appList[position]
             val packageName = info.packagePath
             try {
-                // Open the specific App Info page:
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 intent.data = Uri.parse("package:$packageName")
                 startActivity(intent)
@@ -197,6 +254,7 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
             e.printStackTrace()
         }
     }
+
 
     private fun backupApp(position: Int) {
         try {
@@ -244,45 +302,32 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
         }
     }
 
-    override fun editModeSelected(mode: Int, filePath: String?) {
-        var intent: Intent? = null
-        when (mode) {
-            EditModeView.SIMPLE_EDIT -> {
-                intent = Intent(this, SimpleEditActivity::class.java)
+    private fun openApp(context: Context, packageName: String?): Boolean {
+        val manager = context.packageManager
+        return try {
+            packageName?.let { pkg ->
+                val intent = manager.getLaunchIntentForPackage(pkg) ?: return false
+                intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                context.startActivity(intent)
             }
-            EditModeView.FULL_EDIT -> {
-                if (startFullEditActivity(this, filePath)) {
-                    finish()
-                }
-                return
-            }
-            EditModeView.COMMON_EDIT -> {
-                intent = Intent(this, CommonEditActivity::class.java)
-            }
-            EditModeView.XML_FILE_EDIT -> {
-                intent = Intent(this, AxmlEditActivity::class.java)
-            }
-            EditModeView.DATA_EDIT -> {
-                val prefIntent = Intent(this, PrefOverallActivity::class.java)
-                val bundle = Bundle()
-                bundle.putString("packagePath", filePath)
-                bundle.putBoolean("backup", false)
-                prefIntent.putExtras(bundle)
-                startActivity(prefIntent)
-            }
+            true
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
+            false
         }
-        if (intent != null) {
-            ActivityUtils.attachParam(intent, "apkPath", filePath)
-            startActivity(intent)
-            finish()
-        }
-    }
-
-    override fun updateFileList(path: String) {
-        // nothing
     }
 
     companion object {
+        const val FULL_EDIT = 0
+        const val SIMPLE_EDIT = 1
+        const val COMMON_EDIT = 2
+        const val DATA_EDIT = 3
+        const val XML_FILE_EDIT = 4
+
+        const val DETAILS = 0
+        const val BACKUP = 1
+        const val LAUNCH = 2
+
         @JvmStatic
         fun startFullEditActivity(activity: Activity, filePath: String?): Boolean {
             val intent = Intent(activity, ApkInfoExActivity::class.java)
@@ -291,39 +336,6 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
             ActivityUtils.attachBoolParam(intent, "isFullDecoding", fullDecoding)
             activity.startActivity(intent)
             return true
-        }
-
-        fun openApp(context: Context, packageName: String?): Boolean {
-            val manager = context.packageManager
-            return try {
-                packageName?.let { pkg ->
-                    val intent = manager.getLaunchIntentForPackage(pkg) ?: return false
-                    intent.addCategory(Intent.CATEGORY_LAUNCHER)
-                    context.startActivity(intent)
-                }
-                true
-            } catch (e: ActivityNotFoundException) {
-                e.printStackTrace()
-                false
-            }
-        }
-    }
-
-    override fun onClick(item: AppInfo) {
-        val pm = packageManager
-        val moreInfo: ApplicationInfo
-        try {
-            moreInfo = pm.getApplicationInfo(item.packagePath, 0)
-            val apkPath = moreInfo.sourceDir
-            if (BuildConfig.PARSER_ONLY) {
-                startFullEditActivity(this, apkPath)
-            } else if (BuildConfig.LIMIT_NEW_VERSION && upgradedFromOldVersion(this)) {
-                startFullEditActivity(this, apkPath)
-            } else {
-                EditModeView(this, this, apkPath, moreInfo.packageName).showAppEditDialog()
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
         }
     }
 }
