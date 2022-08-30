@@ -10,6 +10,7 @@
     app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Body2"
     app:titleCentered="true"
     app:subtitleCentered="true"
+    tools:navigationIcon="@drawable/ic_pan"
     tools:title="Toolbar title centered"
     tools:subtitle="test"
     tools:menu="@menu/menu_main"/>

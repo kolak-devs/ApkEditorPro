@@ -26,6 +26,7 @@ public class SwipeBackActivity extends CustomizedLangActivity {
         super.onCreate(savedInstanceState);
 
         onActivityCreate();
+        setEdgeLevel(SwipeBackLayout.EdgeLevel.MED);
     }
 
     @Override
