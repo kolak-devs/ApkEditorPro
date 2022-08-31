@@ -79,32 +79,6 @@ class EditModeView(
         ).show()
     }
 
-    fun showAppEditDialog() {
-        val context = mActivity
-        val dialog = MaterialAlertDialogBuilder(context)
-        dialog.setItems(
-            arrayOf(
-                context.getString(R.string.full_edit),
-                context.getString(R.string.simple_edit),
-                context.getString(R.string.common_edit),
-                context.getString(R.string.xml_file_edit),
-                context.getString(R.string.edit_data_root)
-            )
-        ) { _: DialogInterface?, p2: Int ->
-            val apkPath = mApkPath
-            when (p2) {
-                0 -> mCallback.editModeSelected(FULL_EDIT, apkPath)
-                1 -> mCallback.editModeSelected(SIMPLE_EDIT, apkPath)
-                2 -> mCallback.editModeSelected(COMMON_EDIT, apkPath)
-                3 -> if (BuildConfig.IS_PRO) {
-                    mCallback.editModeSelected(XML_FILE_EDIT, apkPath)
-                }
-                4 -> mCallback.editModeSelected(DATA_EDIT, mPackageName)
-            }
-        }
-        dialog.create().show()
-    }
-
     interface IEditModeSelected {
         fun editModeSelected(mode: Int, filePath: String?)
         fun updateFileList(path: String)
@@ -114,7 +88,6 @@ class EditModeView(
         const val FULL_EDIT = 0
         const val SIMPLE_EDIT = 1
         const val COMMON_EDIT = 2
-        const val DATA_EDIT = 3
         const val XML_FILE_EDIT = 4
     }
 }
