@@ -181,13 +181,13 @@ class DownloaderActivity : CustomizedLangActivity() {
         val tb = kb / 1024
         if (size < 1024) {
             s = "$size Bytes"
-        } else if (size >= 1024 && size < 1024 * 1024) {
+        } else if (size in 1024..1_048_575) {//1024*1024
             s = String.format("%.2f", kb) + " KB"
-        } else if (size >= 1024 * 1024 && size < 1024 * 1024 * 1024) {
+        } else if (size in 1_048_576..1_073_741_823) {//1024 * 1024 * 1024
             s = String.format("%.2f", mb) + " MB"
-        } else if (size >= 1024 * 1024 * 1024 && size < 1024 * 1024 * 1024 * 1024) {
+        } else if (size in 1_073_741_824..1_099_511_627_775) {//1024 * 1024 * 1024 * 1024
             s = String.format("%.2f", gb) + " GB"
-        } else if (size >= 1024 * 1024 * 1024 * 1024) {
+        } else if (size >= 1_099_511_627_776) {//1024 * 1024 * 1024 * 1024
             s = String.format("%.2f", tb) + " TB"
         }
         return s

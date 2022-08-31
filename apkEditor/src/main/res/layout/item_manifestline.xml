@@ -15,7 +15,7 @@
         android:layout_marginBottom="5dp"
         android:contentDescription="@string/app_name"
         android:scaleType="fitCenter"
-        app:tint="@color/colorAccent" />
+        app:tint="?colorSecondaryContainer" />
 
     <com.mcal.patchview.ui.CodeText
         android:id="@+id/line_data"
