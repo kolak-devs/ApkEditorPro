@@ -16,7 +16,6 @@ import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
-import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utilsOld.ActivityUtils;
 
 import java.io.File;
@@ -109,7 +108,7 @@ public class ApkSearchActivity extends SwipeBackActivity implements OnItemClickL
             } else if (BuildConfig.LIMIT_NEW_VERSION && MainActivity.Companion.upgradedFromOldVersion(this)) {
                 startFullEditActivity(filePath);
             } else {
-                new EditModeView(this, this, filePath, null).showFileEditDialog();
+                new EditModeView(this, this, filePath).showFileEditDialog();
             }
         }
     }

@@ -2,23 +2,15 @@ package com.mcal.apkeditor.dialogs
 
 import android.app.Activity
 import android.content.DialogInterface
-import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
-import com.mcal.apksigner.ApkSigner
-import com.mcal.common.view.ProgressDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.Exception
 
+// TODO REMOVE ME
 class EditModeView(
     private val mActivity: Activity,
     private val mCallback: IEditModeSelected,
-    private val mApkPath: String,
-    private val mPackageName: String?
+    private val mApkPath: String
 ) {
     fun showFileEditDialog() {
         val context = mActivity
@@ -51,32 +43,10 @@ class EditModeView(
                     }
                     p112.dismiss()
                 }
-                4 -> {
-                    sign(mApkPath, mApkPath.replace(".apk", "_sign.apk"))
-                    p112.dismiss()
-                }
+
             }
         }
         dialog.create().show()
-    }
-
-    fun sign(unsignedPath: String, signedPath: String) {
-        ProgressDialog(
-            mActivity, "Signing", "Please wait...", false,
-            object : ProgressDialog.ProcessingInterface {
-                @Throws(Exception::class)
-                override fun process() {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        ApkSigner().signApk(unsignedPath, signedPath)
-                    }
-                }
-
-                override fun afterProcess() {
-                    mCallback.updateFileList(signedPath)
-                    Toast.makeText(mActivity, "Apk signed success", Toast.LENGTH_SHORT).show()
-                }
-            }, -1
-        ).show()
     }
 
     interface IEditModeSelected {

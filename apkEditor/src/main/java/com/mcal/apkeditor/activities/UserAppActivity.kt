@@ -37,14 +37,14 @@ import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.File
 
 class UserAppActivity : SwipeBackActivity(), AppListAdapter.AppItemClick {
-    var adapter: AppListAdapter? = null
+    var mAdapter: AppListAdapter? = null
     var appList = mutableListOf<AppInfo>()
-    private var recyclerView: RecyclerView? = null
+    private var mRecyclerView: RecyclerView? = null
     private var searchTextWatcher: TextInputEditText? = null
     private var progressBar: ProgressBar? = null
     private var userApps: MenuItem? = null
     private var systemApps: MenuItem? = null
-    private var startIntent: Intent? = null
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_NO_TITLE)
@@ -53,7 +53,7 @@ class UserAppActivity : SwipeBackActivity(), AppListAdapter.AppItemClick {
         setupToolbar(R.id.toolbar, getString(R.string.select_apk_from_app), true)
 
         progressBar = findViewById(R.id.progress_bar)
-        recyclerView = findViewById(R.id.application_list)
+        mRecyclerView = findViewById(R.id.application_list)
         searchTextWatcher = findViewById(R.id.et_keyword)
         reScanAppList(AppType.USERS)
     }
@@ -81,18 +81,6 @@ class UserAppActivity : SwipeBackActivity(), AppListAdapter.AppItemClick {
         return super.onOptionsItemSelected(item)
     }
 
-    public override fun onPause() {
-        super.onPause()
-    }
-
-    public override fun onResume() {
-        super.onResume()
-    }
-
-    public override fun onDestroy() {
-        super.onDestroy()
-    }
-
     enum class AppType {
         SYSTEMS, USERS
     }
@@ -106,7 +94,6 @@ class UserAppActivity : SwipeBackActivity(), AppListAdapter.AppItemClick {
                 override fun process() {
                     val pm = packageManager
                     val appInfoList = pm.getInstalledApplications(0)
-
                     appList.clear()
                     if (listMode == AppType.USERS) {
                         for (ai in appInfoList) {
@@ -124,16 +111,18 @@ class UserAppActivity : SwipeBackActivity(), AppListAdapter.AppItemClick {
                 }
 
                 override fun afterProcess() {
-                    adapter = AppListAdapter(this@UserAppActivity, appList, this@UserAppActivity)
+                    val context = this@UserAppActivity
+                    val adapter = AppListAdapter(context, appList, context)
+                    mAdapter = adapter
                     progressBar?.visibility = View.GONE
-                    recyclerView?.visibility = View.VISIBLE
-                    recyclerView?.layoutManager = LinearLayoutManager(this@UserAppActivity)
-                    recyclerView?.adapter = adapter
-                    searchTextWatcher?.addTextChangedListener(object : TextWatcher {
-                        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
-                        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
-                        override fun afterTextChanged(s: Editable) {
-                            adapter?.let { adapter ->
+                    mRecyclerView?.let { recyclerView ->
+                        recyclerView.visibility = View.VISIBLE
+                        recyclerView.layoutManager = LinearLayoutManager(context)
+                        recyclerView.adapter = adapter
+                        searchTextWatcher?.addTextChangedListener(object : TextWatcher {
+                            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
+                            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
+                            override fun afterTextChanged(s: Editable) {
                                 if (adapter.canStartFilterProcess) {
                                     if (!TextUtils.equals(s, lastValue)) {
                                         val constraint = s.toString()
@@ -146,18 +135,16 @@ class UserAppActivity : SwipeBackActivity(), AppListAdapter.AppItemClick {
                                 }
                                 adapter.newValue = s.toString()
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }, -1
         ).show()
     }
 
     override fun onClick(item: AppInfo) {
-        val pm = packageManager
-        val moreInfo: ApplicationInfo
         try {
-            moreInfo = pm.getApplicationInfo(item.packagePath, 0)
+            val moreInfo = packageManager.getApplicationInfo(item.packagePath, 0)
             val apkPath = moreInfo.sourceDir
             editModeDialog(apkPath)
         } catch (e: PackageManager.NameNotFoundException) {
@@ -167,7 +154,7 @@ class UserAppActivity : SwipeBackActivity(), AppListAdapter.AppItemClick {
 
     private fun editModeDialog(filePath: String?) {
         val dialog = MaterialAlertDialogBuilder(this)
-        var intent = startIntent
+        var intent: Intent?
         dialog.setItems(
             arrayOf(
                 getString(R.string.full_edit),
