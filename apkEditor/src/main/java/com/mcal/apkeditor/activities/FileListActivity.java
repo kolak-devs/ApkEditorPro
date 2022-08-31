@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.Message;
 import android.util.LruCache;
 import android.view.ContextMenu;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -28,7 +30,6 @@ import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
-import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
@@ -46,7 +47,7 @@ import java.util.List;
 import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
 public class FileListActivity extends SwipeBackActivity implements IListEventListener,
-        IListItemProducer, EditModeView.IEditModeSelected, OnClickListener {
+        IListItemProducer, EditModeView.IEditModeSelected, SearchView.OnQueryTextListener {
 
     // Image cache
     private final LruCache<String, ApkInfoParser.AppInfo> apkIconCache = new LruCache<>(64);
@@ -55,7 +56,7 @@ public class FileListActivity extends SwipeBackActivity implements IListEventLis
     private FolderListWrapper foderWrapper;
 
     @SuppressLint("HandlerLeak")
-    private final android.os.Handler handler = new android.os.Handler() {
+    private final android.os.Handler handler = new android.os.Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             if (msg.what == 0) {
@@ -126,13 +127,12 @@ public class FileListActivity extends SwipeBackActivity implements IListEventLis
         final ListView listView = findViewById(R.id.file_list);
         foderWrapper = new FolderListWrapper(this, listView, curDir, rootPath, this, this);
 
-        // Search apk files
-        final AppCompatImageButton searchBtn = this.findViewById(R.id.search_button);
-        searchBtn.setOnClickListener(this);
+        final SearchView searchApkView = findViewById(R.id.search_find);
+        searchApkView.setOnQueryTextListener(this);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_filelist, menu);
         externalStorage = menu.findItem(R.id.external_storage);
@@ -322,22 +322,6 @@ public class FileListActivity extends SwipeBackActivity implements IListEventLis
         return null;
     }
 
-    @Override
-    public void onClick(@NonNull View v) {
-        int id = v.getId();
-        if (id == R.id.search_button) {
-            if (foderWrapper != null) {
-                final AppCompatEditText et = this.findViewById(R.id.keyword_edit);
-                final String keyword = et.getText().toString();
-                final String currentFolder = this.foderWrapper.getAdapter().getData(null);
-                final Intent intent = new Intent(this, ApkSearchActivity.class);
-                ActivityUtils.attachParam(intent, "Keyword", keyword);
-                ActivityUtils.attachParam(intent, "Path", currentFolder);
-                this.startActivity(intent);
-            }
-        }
-    }
-
     // Simple edit or full edit clicked
     @Override
     public void editModeSelected(int mode, String extraStr) {
@@ -367,6 +351,43 @@ public class FileListActivity extends SwipeBackActivity implements IListEventLis
     @Override
     public void updateFileList(String path) {
         foderWrapper.getAdapter().openDirectory(foderWrapper.getAdapter().getData(null));
+    }
+
+    /**
+     * Called when the user submits the query. This could be due to a key press on the
+     * keyboard or due to pressing a submit button.
+     * The listener can override the standard behavior by returning true
+     * to indicate that it has handled the submit request. Otherwise return false to
+     * let the SearchView handle the submission by launching any associated intent.
+     *
+     * @param query the query text that is to be submitted
+     * @return true if the query has been handled by the listener, false to let the
+     * SearchView perform the default action.
+     */
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if (foderWrapper == null) {
+            return false;
+        } else {
+            final String currentFolder = this.foderWrapper.getAdapter().getData(null);
+            final Intent intent = new Intent(this, ApkSearchActivity.class);
+            ActivityUtils.attachParam(intent, "Keyword", query);
+            ActivityUtils.attachParam(intent, "Path", currentFolder);
+            this.startActivity(intent);
+            return true;
+        }
+    }
+
+    /**
+     * Called when the query text is changed by the user.
+     *
+     * @param newText the new content of the query text field.
+     * @return false if the SearchView should perform the default action of showing any
+     * suggestions if available, true if the action was handled by the listener.
+     */
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
     class ApkParseThread extends Thread {

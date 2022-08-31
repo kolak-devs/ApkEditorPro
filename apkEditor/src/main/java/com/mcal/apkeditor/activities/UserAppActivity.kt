@@ -13,6 +13,7 @@ import android.provider.Settings
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -48,6 +49,7 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
     private var progressBar: ProgressBar? = null
     private var userApps: MenuItem? = null
     private var systemApps: MenuItem? = null
+    private var startIntent: Intent? = null
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_NO_TITLE)
@@ -175,52 +177,42 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
     }
 
     override fun editModeSelected(mode: Int, filePath: String?) {
-        var intent: Intent? = null
-        val dialog = MaterialAlertDialogBuilder(this)
-        dialog.setItems(
-            arrayOf(
-                getString(R.string.full_edit),
-                getString(R.string.simple_edit),
-                getString(R.string.common_edit),
-                getString(R.string.xml_file_edit),
-                getString(R.string.edit_data_root)
-            )
-        ) { p112: DialogInterface, p2: Int ->
-            when (p2) {
-                SIMPLE_EDIT -> {
-                    intent = Intent(this, SimpleEditActivity::class.java)
-                    p112.dismiss()
-                }
-                FULL_EDIT -> {
-                    if (startFullEditActivity(this, filePath)) {
-                        finish()
-                    }
-                    p112.dismiss()
-                }
-                COMMON_EDIT -> {
-                    intent = Intent(this, CommonEditActivity::class.java)
-                    p112.dismiss()
-                }
-                XML_FILE_EDIT -> {
-                    intent = Intent(this, AxmlEditActivity::class.java)
-                }
-                DATA_EDIT -> {
-                    val prefIntent = Intent(this, PrefOverallActivity::class.java)
-                    val bundle = Bundle()
-                    bundle.putString("packagePath", filePath)
-                    bundle.putBoolean("backup", false)
-                    prefIntent.putExtras(bundle)
-                    startActivity(prefIntent)
+        when (mode) {
+            EditModeView.SIMPLE_EDIT -> {
+                startIntent = Intent(this, SimpleEditActivity::class.java)
+                ActivityUtils.attachParam(startIntent!!, "apkPath", filePath)
+                startActivity(startIntent)
+                finish()
+            }
+            EditModeView.FULL_EDIT -> {
+                if (startFullEditActivity(this, filePath)) {
+                    finish()
                 }
             }
-        }
-        dialog.create().show()
-        intent?.let { i ->
-            ActivityUtils.attachParam(i, "apkPath", filePath)
-            startActivity(intent)
-            finish()
+            EditModeView.COMMON_EDIT -> {
+                startIntent = Intent(this, CommonEditActivity::class.java)
+                ActivityUtils.attachParam(startIntent!!, "apkPath", filePath)
+                startActivity(startIntent)
+                finish()
+            }
+            EditModeView.XML_FILE_EDIT -> {
+                startIntent = Intent(this, AxmlEditActivity::class.java)
+                ActivityUtils.attachParam(startIntent!!, "apkPath", filePath)
+                startActivity(startIntent)
+                finish()
+            }
+            EditModeView.DATA_EDIT -> {
+                val prefIntent = Intent(this, PrefOverallActivity::class.java)
+                val bundle = Bundle()
+                bundle.putString("packagePath", filePath)
+                bundle.putBoolean("backup", false)
+                prefIntent.putExtras(bundle)
+                startActivity(prefIntent)
+            }
         }
     }
+
+
 
     override fun updateFileList(path: String) {
         // nothing
@@ -332,6 +324,8 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
     }
 
     companion object {
+        private const val TAG = "UserAppActivity"
+
         const val FULL_EDIT = 0
         const val SIMPLE_EDIT = 1
         const val COMMON_EDIT = 2
@@ -351,5 +345,7 @@ class UserAppActivity : SwipeBackActivity(), IEditModeSelected, AppListAdapter.A
             activity.startActivity(intent)
             return true
         }
+
+
     }
 }

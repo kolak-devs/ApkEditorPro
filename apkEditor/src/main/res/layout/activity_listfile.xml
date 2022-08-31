@@ -2,44 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
     <include layout="@layout/toolbar" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_find"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:queryHint="@string/keyword_hint"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@null"
+        android:background="@drawable/edit_search_background" />
 
     <ListView
         android:id="@+id/file_list"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:divider="@null" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/keyword_edit"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            android:layout_weight="1.0"
-            android:hint="@string/keyword_hint"
-            android:inputType="textNoSuggestions"
-            android:singleLine="true" />
-
-        <ImageButton
-            android:id="@+id/search_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="5dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:src="@drawable/round_search_24" />
-
-    </LinearLayout>
 
 </LinearLayout>
