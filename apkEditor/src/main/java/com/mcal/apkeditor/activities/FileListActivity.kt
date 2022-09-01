@@ -30,7 +30,6 @@ import com.mcal.common.utils.ScopedStorage.externalStoragePath
 import com.mcal.common.utils.ScopedStorage.storageDirectory
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.common.view.ProgressDialog
-import com.mcal.elfeditor.MainActivity
 import com.mcal.folderlist.FileRecord
 import com.mcal.folderlist.FolderListWrapper
 import com.mcal.folderlist.IListEventListener
@@ -40,7 +39,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
