@@ -412,7 +412,6 @@ public class ZipFileListAdapter extends BaseAdapter implements
     private void viewImageFile(String entryPath) {
         String replaceFile = fileReplaces.get(entryPath);
         Intent intent = new Intent(ctx, ViewZipImageActivity.class);
-        ActivityUtils.attachParam(intent, "fullScreen", Preferences.isFullScreen());
         if (replaceFile == null) {
             ActivityUtils.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
             ActivityUtils.attachParam(intent, "entryName", entryPath);

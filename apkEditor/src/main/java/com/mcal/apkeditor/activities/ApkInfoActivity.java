@@ -2055,7 +2055,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
             }
 
             Bundle bundle = new Bundle();
-            bundle.putBoolean("isFullScreen", Preferences.isFullScreen());
             {
                 String translatedFile = SDCard.makeWorkingDir(this)
                         + "translated";

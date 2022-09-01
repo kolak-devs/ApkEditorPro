@@ -191,19 +191,6 @@ public class SettingActivity extends PreferenceActivity
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
-        if (Preferences.isFullScreen()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                final WindowInsetsController insetsController = getWindow().getInsetsController();
-                if (insetsController != null) {
-                    insetsController.hide(WindowInsets.Type.statusBars());
-                }
-            } else {
-                getWindow().setFlags(
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN
-                );
-            }
-        }
         initData();
     }
 
@@ -281,18 +268,6 @@ public class SettingActivity extends PreferenceActivity
             String strNameIdx = sp.getString(apkNameKey, "1");
             signPref.setValue(strNameIdx);
             signPref.setOnPreferenceChangeListener(this);
-        }
-
-        // Full screen
-        {
-            SwitchPreference checkBox = (SwitchPreference) findPreference("FullScreen");
-            boolean b = Preferences.isFullScreen();
-            checkBox.setChecked(b);
-            checkBox.setOnPreferenceChangeListener(
-                    (arg0, newValue) -> {
-                        Preferences.setFullScreen((Boolean) newValue);
-                        return true;
-                    });
         }
 
         // Language

@@ -4,12 +4,12 @@
     <PreferenceCategory
         android:layout="@layout/preferences_category"
         android:title="@string/about">
-        <Preference
+        <Preference.
             android:title="@string/app_name"
             android:icon="@drawable/info">
             <intent
                 android:action="com.mcal.action.SHOW_ABOUT"/>
-        </Preference>
+        </Preference.>
     </PreferenceCategory>
     <PreferenceCategory
         android:key="Appearance"
@@ -22,11 +22,6 @@
             android:key="MyIcon"
             android:layout="@layout/item_iconlistpref"
             android:title="@string/launcher_icon" / -->
-
-        <SwitchPreference
-            android:key="FullScreen"
-            android:summary="@string/full_screen_desc"
-            android:title="@string/full_screen" />
 
         <ListPreference
             android:defaultValue=""

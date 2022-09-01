@@ -207,7 +207,6 @@ public class ImageListAdapter extends BaseAdapter implements
         String filename = drawableFileList.get(position);
         DrawableEntry entry = drawableEntries.get(filename);
         Intent intent = new Intent(ctx, ViewZipImageActivity.class);
-        ActivityUtils.attachParam(intent, "fullScreen", Preferences.isFullScreen());
         if (entry != null) {
             if (entry.replaceFile == null) {
                 ActivityUtils.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
