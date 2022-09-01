@@ -4,12 +4,12 @@
     <PreferenceCategory
         android:layout="@layout/preferences_category"
         android:title="@string/about">
-        <Preference.
+        <Preference
             android:title="@string/app_name"
             android:icon="@drawable/info">
             <intent
                 android:action="com.mcal.action.SHOW_ABOUT"/>
-        </Preference.>
+        </Preference>
     </PreferenceCategory>
     <PreferenceCategory
         android:key="Appearance"
