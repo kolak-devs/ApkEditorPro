@@ -64,7 +64,7 @@ import java.util.Map;
 
 import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
-public class ApkComposeActivity extends SwipeBackActivity
+public class ApkComposeActivity extends CustomizedLangActivity
         implements ITaskCallback, OnClickListener {
 
     public static final int SUCCEED = 10005;
@@ -170,7 +170,6 @@ public class ApkComposeActivity extends SwipeBackActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_apkcompose);
-        initFullScreen();
         initView();
 
         bind2Service();

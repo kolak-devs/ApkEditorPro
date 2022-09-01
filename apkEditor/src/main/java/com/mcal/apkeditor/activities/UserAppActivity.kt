@@ -28,6 +28,7 @@ import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.AppListAdapter
 import com.mcal.apkeditor.se.SimpleEditActivity
 import com.mcal.appdm.PrefOverallActivity
+import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.copyFile
 import com.mcal.common.utils.makeBackupDir
 import com.mcal.common.utilsOld.ActivityUtils
@@ -36,7 +37,7 @@ import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.File
 
-class UserAppActivity : SwipeBackActivity(), AppListAdapter.AppItemClick {
+class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
     var mAdapter: AppListAdapter? = null
     var appList = mutableListOf<AppInfo>()
     private var mRecyclerView: RecyclerView? = null
@@ -49,7 +50,6 @@ class UserAppActivity : SwipeBackActivity(), AppListAdapter.AppItemClick {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_applist)
-        initFullScreen()
         setupToolbar(R.id.toolbar, getString(R.string.select_apk_from_app), true)
 
         progressBar = findViewById(R.id.progress_bar)

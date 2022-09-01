@@ -9,11 +9,10 @@ import com.mcal.apkeditor.fragments.SettingsFragment
 import com.mcal.common.activities.CustomizedLangActivity
 import ru.svolf.melissa.swipeback.SwipeBackActivity
 
-class SettingsActivity : SwipeBackActivity() {
+class SettingsActivity : CustomizedLangActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        initFullScreen()
         setupToolbar(getString(R.string.settings))
         if(supportFragmentManager.fragments.isEmpty()) {
             supportFragmentManager

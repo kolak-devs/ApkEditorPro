@@ -72,7 +72,7 @@ import java.util.zip.ZipFile;
 
 import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
-public class CommonEditActivity extends SwipeBackActivity implements OnClickListener,
+public class CommonEditActivity extends CustomizedLangActivity implements OnClickListener,
         IFileSelection, TextWatcher, OnItemSelectedListener {
 
     private final MyHandler handler = new MyHandler(this);
@@ -141,7 +141,6 @@ public class CommonEditActivity extends SwipeBackActivity implements OnClickList
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_commonedit);
-        initFullScreen();
         setupToolbar(R.id.toolbar, "Common Editor", true);
 
         apkPath = ActivityUtils.getParam(getIntent(), "apkPath");

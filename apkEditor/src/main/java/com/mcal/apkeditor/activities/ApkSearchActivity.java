@@ -16,6 +16,7 @@ import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.EditModeView;
 import com.mcal.apkeditor.se.SimpleEditActivity;
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utilsOld.ActivityUtils;
 
 import java.io.File;
@@ -24,7 +25,7 @@ import java.util.List;
 
 import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
-public class ApkSearchActivity extends SwipeBackActivity implements OnItemClickListener,
+public class ApkSearchActivity extends CustomizedLangActivity implements OnItemClickListener,
         EditModeView.IEditModeSelected {
 
     private final List<String> apkFileList = new ArrayList<>();
@@ -39,7 +40,6 @@ public class ApkSearchActivity extends SwipeBackActivity implements OnItemClickL
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_apksearch);
-        initFullScreen();
 
         Intent intent = getIntent();
         this.keyword = ActivityUtils.getParam(intent, "Keyword");

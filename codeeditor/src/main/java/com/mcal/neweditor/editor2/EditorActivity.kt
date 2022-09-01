@@ -53,7 +53,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.regex.PatternSyntaxException
 
-class EditorActivity : SwipeBackActivity(),
+class EditorActivity : CustomizedLangActivity(),
     SmaliMethodsDialogs.ISmaliMethodClicked {
     private lateinit var binding: ActivitySoraeditorBinding
 
@@ -83,7 +83,6 @@ class EditorActivity : SwipeBackActivity(),
         binding = ActivitySoraeditorBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "Editor", false)
-        initFullScreen()
         initIntent()
         getFileName()
         initSymbolsList()

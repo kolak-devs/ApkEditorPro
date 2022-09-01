@@ -14,7 +14,7 @@ import com.mcal.apkeditor.R
 import com.mcal.common.activities.CustomizedLangActivity
 import ru.svolf.melissa.swipeback.SwipeBackActivity
 
-class AboutActivity : SwipeBackActivity() {
+class AboutActivity : CustomizedLangActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)

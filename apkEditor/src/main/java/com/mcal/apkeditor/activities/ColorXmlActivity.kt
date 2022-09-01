@@ -23,7 +23,7 @@ import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.*
 
 
-class ColorXmlActivity : SwipeBackActivity(), View.OnClickListener, OnItemClickListener {
+class ColorXmlActivity : CustomizedLangActivity(), View.OnClickListener, OnItemClickListener {
     private var xmlPath: String? = null
     private var colorValues: ArrayList<ColorValue>? = null
     private var colorAdapter: ColorValueAdapter? = null
@@ -33,7 +33,6 @@ class ColorXmlActivity : SwipeBackActivity(), View.OnClickListener, OnItemClickL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_colors_xml)
-        initFullScreen()
         xmlPath = ActivityUtils.getParam(intent, "filePath")
         initData()
         initView()

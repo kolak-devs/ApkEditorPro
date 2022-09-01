@@ -20,13 +20,12 @@ import ru.svolf.melissa.swipeback.SwipeBackActivity
 /**
  * Created by phe3 on 1/30/2018.
  */
-class OdexPatchActivity : SwipeBackActivity(), IFileSelection {
+class OdexPatchActivity : CustomizedLangActivity(), IFileSelection {
     private var apkPathEt: EditText? = null
     private var apkPath: String? = null
     public override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         setContentView(R.layout.activity_odex_patch)
-        initFullScreen()
         setupToolbar("Odex Patcher")
         initView()
     }

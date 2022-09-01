@@ -48,7 +48,6 @@ public class ProjectListActivity extends SwipeBackActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_projectlist);
-        initFullScreen();
         setupToolbar(R.string.projects);
         initUI();
     }

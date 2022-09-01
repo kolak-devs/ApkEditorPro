@@ -97,7 +97,6 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_simpleedit);
-        initFullScreen();
 
         this.apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
 

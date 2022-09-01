@@ -1,21 +1,19 @@
 package com.mcal.common.activities
 
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.WindowInsets
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.google.android.material.appbar.MaterialToolbar
-import com.mcal.common.data.Preferences
+import ru.svolf.melissa.swipeback.SwipeBackActivity
+import ru.svolf.melissa.swipeback.SwipeBackLayout
 import java.util.*
 
-open class CustomizedLangActivity : AppCompatActivity() {
+open class CustomizedLangActivity : SwipeBackActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initLanguage()
+        setEdgeLevel(SwipeBackLayout.EdgeLevel.MIN)
     }
 
     private fun initLanguage() {
@@ -30,20 +28,6 @@ open class CustomizedLangActivity : AppCompatActivity() {
                 config,
                 baseContext.resources.displayMetrics
             )
-        }
-    }
-
-    fun initFullScreen() {
-        if (Preferences.isFullScreen()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val insetsController = window.insetsController
-                insetsController?.hide(WindowInsets.Type.statusBars())
-            } else {
-                window.setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN
-                )
-            }
         }
     }
 

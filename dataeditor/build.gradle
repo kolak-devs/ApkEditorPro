@@ -24,6 +24,7 @@ dependencies {
     api project(':sqliteutil')
     api project(':codeeditor')
     api project(':applistutil')
+    implementation project(":melissa")
 
     implementation 'androidx.appcompat:appcompat:1.5.0'
 

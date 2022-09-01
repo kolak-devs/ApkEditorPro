@@ -22,7 +22,6 @@ class DownloaderActivity : CustomizedLangActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_net_manager)
-        initFullScreen()
         start_download_btn.setOnClickListener {
             execute()
         }

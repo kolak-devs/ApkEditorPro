@@ -39,7 +39,7 @@ import java.util.Map;
 
 import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
-public class AxmlEditActivity extends SwipeBackActivity implements IDirChanged, View.OnClickListener {
+public class AxmlEditActivity extends CustomizedLangActivity implements IDirChanged, View.OnClickListener {
     private String apkPath;
     private ApkInfoParser.AppInfo apkInfo;
 
@@ -61,7 +61,6 @@ public class AxmlEditActivity extends SwipeBackActivity implements IDirChanged, 
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_axmledit);
-        initFullScreen();
 
         this.apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
 

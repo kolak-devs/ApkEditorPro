@@ -33,7 +33,7 @@ import java.io.UnsupportedEncodingException
 import java.net.URL
 import java.net.URLDecoder
 
-class ImageDownloadActivity : SwipeBackActivity(), ProcessingInterface {
+class ImageDownloadActivity : CustomizedLangActivity(), ProcessingInterface {
     private var webView: WebView? = null
     private var imageUrl: String? = null
 

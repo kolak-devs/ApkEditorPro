@@ -9,15 +9,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
-
-import com.mcal.common.activities.CustomizedLangActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 /**
  * SwipeBackActivity
  * Created by YoKeyword on 16/4/19.
  */
-public class SwipeBackActivity extends CustomizedLangActivity {
+public class SwipeBackActivity extends AppCompatActivity {
     private SwipeBackLayout mSwipeBackLayout;
     private int mDefaultFragmentBackground = 0;
 
@@ -26,7 +25,6 @@ public class SwipeBackActivity extends CustomizedLangActivity {
         super.onCreate(savedInstanceState);
 
         onActivityCreate();
-        setEdgeLevel(SwipeBackLayout.EdgeLevel.MED);
     }
 
     @Override

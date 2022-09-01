@@ -146,7 +146,7 @@ import common.types.ProjectInfo;
 import common.types.StringItem;
 import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
-public class ApkInfoActivity extends SwipeBackActivity
+public class ApkInfoActivity extends CustomizedLangActivity
         implements OnItemClickListener, OnItemLongClickListener,
         IManifestChangeCallback, OnClickListener, IDecodeTaskCallback,
         OnLongClickListener, ApkParseConsumer, ResSelectionChangeListener, AddFolderDialog.AddFolderCallback {
@@ -415,7 +415,6 @@ public class ApkInfoActivity extends SwipeBackActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apkinfo);
-        initFullScreen();
 
         // If projectName is not null, means recover from a project
         projectName = ActivityUtils.getParam(getIntent(), "projectName");

@@ -61,7 +61,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initFullScreen()
         setupToolbar(R.id.toolbar, getString(R.string.app_name), false)
         initUI()
 

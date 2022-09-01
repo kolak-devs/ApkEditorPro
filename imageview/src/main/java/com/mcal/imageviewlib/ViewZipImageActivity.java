@@ -40,7 +40,6 @@ public class ViewZipImageActivity extends CustomizedLangActivity {
         }
 
         setContentView(R.layout.imageviewlib_activity_empty);
-        initFullScreen();
 
         this.zipFilePath = ActivityUtils.getParam(intent, "zipFilePath");
         this.entryName = ActivityUtils.getParam(intent, "entryName");

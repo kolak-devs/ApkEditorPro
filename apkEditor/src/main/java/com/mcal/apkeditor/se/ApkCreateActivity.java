@@ -108,7 +108,6 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_simpleedit_making);
-        initFullScreen();
 
         // Activity re-creation
         if (savedInstanceState != null) {

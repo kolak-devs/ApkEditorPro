@@ -23,6 +23,7 @@ import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.UserAppActivity.Companion.startFullEditActivity
 import com.mcal.apkeditor.se.SimpleEditActivity
 import com.mcal.apksigner.ApkSigner
+import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.utils.ScopedStorage.externalStoragePath
@@ -43,7 +44,7 @@ import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
-class FileListActivity : SwipeBackActivity(), IListEventListener, IListItemProducer, SearchView.OnQueryTextListener {
+class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItemProducer, SearchView.OnQueryTextListener {
     // Image cache
     private val apkIconCache = LruCache<String, ApkInfoParser.AppInfo>(64)
     private var externalStorage: MenuItem? = null
@@ -54,7 +55,6 @@ class FileListActivity : SwipeBackActivity(), IListEventListener, IListItemProdu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listfile)
-        initFullScreen()
 
         if (parseThread == null) {
             parseThread = ApkParseThread()

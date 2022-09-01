@@ -24,7 +24,7 @@ import java.util.List;
 
 import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
-public class MfSearchRetActivity extends SwipeBackActivity implements OnClickListener {
+public class MfSearchRetActivity extends CustomizedLangActivity implements OnClickListener {
 
     private String xmlPath;
     private ArrayList<Integer> lineIndexs;
@@ -37,7 +37,6 @@ public class MfSearchRetActivity extends SwipeBackActivity implements OnClickLis
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_mf_searchret);
-        initFullScreen();
 
         Bundle bundle = getIntent().getExtras();
         this.xmlPath = bundle.getString("filePath");

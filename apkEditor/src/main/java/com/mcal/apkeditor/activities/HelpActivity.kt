@@ -11,7 +11,7 @@ import com.mcal.apkeditor.R
 import com.mcal.common.activities.CustomizedLangActivity
 import ru.svolf.melissa.swipeback.SwipeBackActivity
 
-class HelpActivity : SwipeBackActivity() {
+class HelpActivity : CustomizedLangActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,6 @@ class HelpActivity : SwipeBackActivity() {
         }
         ll.addView(webView)
         setContentView(ll)
-        initFullScreen()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
