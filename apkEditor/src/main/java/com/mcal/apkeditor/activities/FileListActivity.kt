@@ -279,7 +279,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
 
                 override fun afterProcess() {
                     folderWrapper?.let { wrapper ->
-                        wrapper.adapter?.openDirectory(wrapper.adapter?.getData(null))
+                        wrapper.mAdapter?.openDirectory(wrapper.mAdapter?.getData(null))
                     }
                     Toast.makeText(this@FileListActivity, "Apk signed success", Toast.LENGTH_SHORT).show()
                 }
@@ -296,14 +296,17 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
             return null
         }
         // APK file
-        if (!record.isDir && record.fileName.endsWith(".apk")) {
-            val path = dirPath + "/" + record.fileName
-            val info = apkIconCache[path]
-            if (info != null) {
-                return info.icon
+        val name = record.fileName
+        if (name != null) {
+            if (!record.isDir && name.endsWith(".apk")) {
+                val path = "$dirPath/$name"
+                val info = apkIconCache[path]
+                if (info != null) {
+                    return info.icon
+                }
+                parseThread?.addApk(path)
+                return ContextCompat.getDrawable(this, R.drawable.round_android_24)
             }
-            parseThread?.addApk(path)
-            return ContextCompat.getDrawable(this, R.drawable.round_android_24)
         }
         return null
     }
@@ -312,13 +315,16 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         dirPath: String,
         record: FileRecord
     ): String? {
-        if (!record.isDir && record.fileName.endsWith(".apk")) {
-            val path = dirPath + "/" + record.fileName
-            val info = apkIconCache[path]
-            return if (info != null) {
-                info.label
-            } else {
-                ""
+        val name = record.fileName
+        if (name != null) {
+            if (!record.isDir && name.endsWith(".apk")) {
+                val path = "$dirPath/$name"
+                val info = apkIconCache[path]
+                return if (info != null) {
+                    info.label
+                } else {
+                    ""
+                }
             }
         }
         return null
@@ -329,11 +335,12 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         return if (wrapper == null) {
             false
         } else {
-            val currentFolder = wrapper.adapter.getData(null)
-            val intent = Intent(this, ApkSearchActivity::class.java)
-            ActivityUtils.attachParam(intent, "Keyword", query)
-            ActivityUtils.attachParam(intent, "Path", currentFolder)
-            this.startActivity(intent)
+            wrapper.mAdapter?.getData(null)?.let { currentFolder ->
+                val intent = Intent(this, ApkSearchActivity::class.java)
+                ActivityUtils.attachParam(intent, "Keyword", query)
+                ActivityUtils.attachParam(intent, "Path", currentFolder)
+                this.startActivity(intent)
+            }
             true
         }
     }
@@ -379,7 +386,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                     // Обновление списка в адаптере
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(300)
-                        folderWrapper?.adapter?.notifyDataSetChanged()
+                        folderWrapper?.mAdapter?.notifyDataSetChanged()
                     }
                 }
             }

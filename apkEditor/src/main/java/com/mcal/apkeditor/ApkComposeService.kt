@@ -106,7 +106,7 @@ class ApkComposeService : Service(), ITaskCallback {
         composeIntent.action = Constants.ACTION.MAIN_ACTION
         composeIntent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
         val pendingIntent = PendingIntent.getActivity(this, 0, composeIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val iconId = SetIcon.getIconId()
+        val iconId = SetIcon.iconId
         val icon = BitmapFactory.decodeResource(resources, iconId)
         val appName = getString(R.string.app_name)
         mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
