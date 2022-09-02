@@ -2,26 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
     <include layout="@layout/toolbar" />
 
-    <androidx.appcompat.widget.SearchView
+    <EditText
         android:id="@+id/search_find"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:queryHint="@string/keyword_hint"
-        app:iconifiedByDefault="false"
-        app:queryBackground="@null"
-        android:background="@drawable/edit_search_background" />
+        android:background="@drawable/edit_search_background"
+        android:hint="@string/keyword_hint"
+        android:inputType="textNoSuggestions"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:singleLine="true"
+        android:textColor="?attr/colorOnSurfaceVariant" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/file_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
         android:divider="@null" />
 
 </LinearLayout>

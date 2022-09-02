@@ -17,12 +17,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
 import com.mcal.apkeditor.AppInfo
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.AppListAdapter
@@ -34,14 +34,13 @@ import com.mcal.common.utils.makeBackupDir
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
-import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.File
 
 class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
     var mAdapter: AppListAdapter? = null
     var appList = mutableListOf<AppInfo>()
     private var mRecyclerView: RecyclerView? = null
-    private var searchTextWatcher: TextInputEditText? = null
+    private var searchTextWatcher: EditText? = null
     private var progressBar: ProgressBar? = null
     private var userApps: MenuItem? = null
     private var systemApps: MenuItem? = null

@@ -1,9 +1,5 @@
 package com.mcal.folderlist;
 
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View;
-
 public interface IListEventListener {
 
     public void dirChanged(String newDir);
@@ -14,9 +10,8 @@ public interface IListEventListener {
 
     public void fileAdded(String fileName);
 
-    public void itemLongClicked(ContextMenu menu, View v,
-                                ContextMenuInfo menuInfo);
+    public void itemLongClicked();
 
     // Return true if the listener can deal with the click event
-    public boolean fileClicked(View view, String filePath);
+    public boolean fileClicked(String filePath);
 }

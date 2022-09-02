@@ -7,17 +7,16 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.LruCache
-import android.view.ContextMenu
-import android.view.ContextMenu.ContextMenuInfo
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.ListView
+import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.UserAppActivity.Companion.startFullEditActivity
@@ -42,7 +41,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
-class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItemProducer, SearchView.OnQueryTextListener {
+class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItemProducer {
     // Image cache
     private val apkIconCache = LruCache<String, ApkInfoParser.AppInfo>(64)
     private var externalStorage: MenuItem? = null
@@ -87,10 +86,27 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         val curDir = Preferences.getLastDirectory()
         pathTV = curDir
         setupToolbar(R.id.toolbar, pathTV, true)
-        val listView = findViewById<ListView>(R.id.file_list)
+        val listView = findViewById<RecyclerView>(R.id.file_list)
         folderWrapper = FolderListWrapper(this, listView, curDir, rootPath, this, this)
-        val searchApkView = findViewById<SearchView>(R.id.search_find)
-        searchApkView.setOnQueryTextListener(this)
+        val searchApkView = findViewById<EditText>(R.id.search_find)
+        searchApkView.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
+            override fun afterTextChanged(s: Editable) {
+                val constraint = s.toString()
+                if (constraint.isNotEmpty()) {
+                    val wrapper = folderWrapper
+                    if (wrapper != null) {
+                        wrapper.mAdapter?.getData(null)?.let { currentFolder ->
+                            val intent = Intent(this@FileListActivity, ApkSearchActivity::class.java)
+                            ActivityUtils.attachParam(intent, "Keyword", constraint)
+                            ActivityUtils.attachParam(intent, "Path", currentFolder)
+                            this@FileListActivity.startActivity(intent)
+                        }
+                    }
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -176,12 +192,9 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
     override fun fileRenamed(dirPath: String, oldName: String, newName: String) = Unit
     override fun fileDeleted(dirPath: String, fileName: String) = Unit
     override fun fileAdded(fileName: String) = Unit
-    override fun itemLongClicked(
-        menu: ContextMenu, v: View,
-        menuInfo: ContextMenuInfo
-    ) = Unit
+    override fun itemLongClicked() = Unit
 
-    override fun fileClicked(view: View, filePath: String): Boolean {
+    override fun fileClicked(filePath: String): Boolean {
         // Save the directory
         val directory = filePath.substring(0, filePath.lastIndexOf('/'))
         Preferences.setLastDirectory(directory)
@@ -256,6 +269,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                         startActivity(i)
                         finish()
                     }
+                    p112.dismiss()
                 }
                 SIGN_APK -> {
                     sign(filePath, filePath.replace(".apk", "_sign.apk"))
@@ -328,25 +342,6 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
             }
         }
         return null
-    }
-
-    override fun onQueryTextSubmit(query: String): Boolean {
-        val wrapper = folderWrapper
-        return if (wrapper == null) {
-            false
-        } else {
-            wrapper.mAdapter?.getData(null)?.let { currentFolder ->
-                val intent = Intent(this, ApkSearchActivity::class.java)
-                ActivityUtils.attachParam(intent, "Keyword", query)
-                ActivityUtils.attachParam(intent, "Path", currentFolder)
-                this.startActivity(intent)
-            }
-            true
-        }
-    }
-
-    override fun onQueryTextChange(newText: String): Boolean {
-        return false
     }
 
     internal inner class ApkParseThread : CoroutineScope {

@@ -15,7 +15,6 @@ import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
-import ru.svolf.melissa.swipeback.SwipeBackActivity
 
 /**
  * Created by phe3 on 1/30/2018.
@@ -23,19 +22,21 @@ import ru.svolf.melissa.swipeback.SwipeBackActivity
 class OdexPatchActivity : CustomizedLangActivity(), IFileSelection {
     private var apkPathEt: EditText? = null
     private var apkPath: String? = null
-    public override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_odex_patch)
         setupToolbar("Odex Patcher")
         initView()
     }
 
-    private fun setupToolbar(title: String) {
+    private fun setupToolbar(text: String) {
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = title
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.apply {
+            title = text
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
     }
 
     private fun initView() {

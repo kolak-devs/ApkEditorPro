@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:foreground="?selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingLeft="6.0dip"
@@ -19,7 +20,7 @@
         android:layout_marginRight="11.0dip"
         android:contentDescription="@string/app_name"
         android:scaleType="fitCenter"
-        app:tint="?colorPrimary"/>
+        app:tint="?colorPrimary" />
 
     <LinearLayout
         android:layout_width="match_parent"

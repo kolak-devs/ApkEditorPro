@@ -1,13 +1,11 @@
 package com.mcal.folderlist
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
 import com.mcal.common.utils.getSubFolder
 import com.mcal.common.utils.isParentFolderOf
@@ -16,11 +14,11 @@ import org.jetbrains.annotations.Contract
 import java.io.File
 
 class FolderListAdapter(
-    private val ctx: Context,
+    private val listener: FileItemClick,
     private val rootPath: String, // Directly call this function may cause data not synchronized
     private var currentDirectory: String,
     private val producer: IListItemProducer
-) : BaseAdapter() {
+) : RecyclerView.Adapter<FolderListAdapter.FileListViewHolder>() {
     private val mFileList: MutableList<FileRecord> = ArrayList()
 
     fun getItemData(position: Int): FileRecord {
@@ -39,11 +37,16 @@ class FolderListAdapter(
     }
 
     // Return directory and sub file records
-    fun getData(records: MutableList<FileRecord>?): String? {
+    fun getData(records: MutableList<FileRecord>?): String {
         synchronized(mFileList) {
             records?.addAll(mFileList)
             return currentDirectory
         }
+    }
+
+    interface FileItemClick {
+        fun onClick(position: Int)
+        fun onLongClick(position: Int): Boolean
     }
 
     private fun initListData(filePath: String) {
@@ -102,11 +105,7 @@ class FolderListAdapter(
         }
     }
 
-    override fun getCount(): Int {
-        return mFileList.size
-    }
-
-    override fun getItem(position: Int): Any {
+    fun getItem(position: Int): Any {
         return mFileList[position]
     }
 
@@ -114,37 +113,45 @@ class FolderListAdapter(
         return position.toLong()
     }
 
-    @SuppressLint("InflateParams", "ViewHolder")
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileListViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_file, parent, false)
+        return FolderListAdapter.FileListViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: FileListViewHolder, position: Int) {
         val rec = mFileList[position]
-        val view = LayoutInflater.from(ctx).inflate(R.layout.item_file, null)
-        val viewHolder = ViewHolder()
-        viewHolder.icon = view.findViewById(R.id.file_icon)
-        viewHolder.filename = view.findViewById(R.id.filename)
-        viewHolder.desc1 = view.findViewById(R.id.detail1)
-        view.tag = viewHolder
-        viewHolder.filename?.text = rec.fileName
+        holder.filename.text = rec.fileName
         if (rec.fileName == "..") {
-            viewHolder.icon?.setImageResource(R.drawable.round_reply_blue_24)
+            holder.icon.setImageResource(R.drawable.round_reply_blue_24)
         } else if (rec.isDir) {
-            viewHolder.icon?.setImageResource(R.drawable.round_folder_blue_24)
+            holder.icon.setImageResource(R.drawable.round_folder_blue_24)
         } else {
             val icon = producer.getFileIcon(currentDirectory, rec)
             if (icon == null) {
                 // Use the default icon
-                viewHolder.icon?.setImageResource(R.drawable.round_insert_drive_file_24)
+                holder.icon.setImageResource(R.drawable.round_insert_drive_file_24)
             } else {
-                viewHolder.icon?.setImageDrawable(icon)
+                holder.icon.setImageDrawable(icon)
             }
         }
         val detailInfo = producer.getDetail1(currentDirectory, rec)
         if (detailInfo != null) {
-            viewHolder.desc1?.text = detailInfo
-            viewHolder.desc1?.visibility = View.VISIBLE
+            holder.desc1.text = detailInfo
+            holder.desc1.visibility = View.VISIBLE
         } else {
-            viewHolder.desc1?.visibility = View.GONE
+            holder.desc1.visibility = View.GONE
         }
-        return view
+        holder.itemView.setOnClickListener {
+            listener.onClick(position)
+        }
+        holder.itemView.setOnLongClickListener {
+            listener.onLongClick(position)
+            return@setOnLongClickListener true
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return mFileList.size
     }
 
     fun openDirectory(targetPath: String?) {
@@ -185,10 +192,10 @@ class FolderListAdapter(
         notifyDataSetChanged()
     }
 
-    private class ViewHolder {
-        var icon: ImageView? = null
-        var filename: TextView? = null
-        var desc1: TextView? = null
+    class FileListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var icon: ImageView = view.findViewById(R.id.file_icon)
+        var filename: TextView = view.findViewById(R.id.filename)
+        var desc1: TextView = view.findViewById(R.id.detail1)
     }
 
     init {

@@ -1,16 +1,11 @@
 package com.mcal.folderlist
 
 import android.content.Context
-import android.view.ContextMenu
-import android.view.ContextMenu.ContextMenuInfo
-import android.view.Menu
-import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.AdapterView.OnItemLongClickListener
+import android.content.DialogInterface
 import android.widget.EditText
-import android.widget.ListView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
 import com.mcal.common.utils.InputHelper
@@ -21,26 +16,23 @@ import java.io.IOException
 
 open class FolderListWrapper(
     private val mContext: Context,
-    private val mListView: ListView,
+    private val mListView: RecyclerView,
     private val mCurPath: String,
     private val mRootPath: String,
     private val mListener: IListEventListener?,
     producer: IListItemProducer
-) : OnItemClickListener, OnItemLongClickListener {
+) : FolderListAdapter.FileItemClick {
     var mAdapter: FolderListAdapter? = null
         private set
 
     private fun init(producer: IListItemProducer) {
-        mAdapter = FolderListAdapter(mContext, mRootPath, mCurPath, producer)
+        mAdapter = FolderListAdapter(this, mRootPath, mCurPath, producer)
         mListView.adapter = mAdapter
-        mListView.onItemClickListener = this
-        mListView.onItemLongClickListener = this
+        mListView.layoutManager = LinearLayoutManager(mContext)
+        mListView.adapter = mAdapter
     }
 
-    override fun onItemClick(
-        arg0: AdapterView<*>?, arg1: View, position: Int,
-        arg3: Long
-    ) {
+    override fun onClick(position: Int) {
         val fileList: MutableList<FileRecord> = ArrayList()
         val adapter = mAdapter
         val listener = mListener
@@ -58,7 +50,7 @@ open class FolderListWrapper(
             } else {
                 val filePath = oldDir + "/" + rec.fileName
                 // When listener not deal with the opening, we will do it
-                if (!listener.fileClicked(arg1, filePath)) {
+                if (!listener.fileClicked(filePath)) {
                     OpenFiles.openFile(mContext, filePath)
                 }
             }
@@ -69,47 +61,47 @@ open class FolderListWrapper(
         }
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>, view: View, position: Int, id: Long): Boolean {
+    override fun onLongClick(position: Int): Boolean {
         // The first item is always the parent folder
         if (position == 0) {
             return true
         }
-        parent.setOnCreateContextMenuListener { menu: ContextMenu, v: View?, menuInfo: ContextMenuInfo? ->
-            // Open As
-            val openAs = menu.add(0, Menu.FIRST, 0, "Open as...")
-            openAs.setOnMenuItemClickListener {
-                val fileList: MutableList<FileRecord> = ArrayList()
-                val oldDir = mAdapter?.getData(fileList)
-                val rec = fileList[position]
-                if (rec != null) {
-                    val filePath = oldDir + "/" + rec.fileName
-                    OpenFiles.openFile(mContext, filePath)
+        val dialog = MaterialAlertDialogBuilder(mContext)
+        dialog.setItems(
+            arrayOf(
+                "Open as...",
+                mContext.getString(R.string.delete),
+                mContext.getString(R.string.rename),
+                mContext.getString(R.string.new_file)
+            )
+        ) { p112: DialogInterface, p2: Int ->
+            when (p2) {
+                0 -> {
+                    val fileList: MutableList<FileRecord> = ArrayList()
+                    val oldDir = mAdapter?.getData(fileList)
+                    val rec = fileList[position]
+                    if (rec != null) {
+                        val filePath = oldDir + "/" + rec.fileName
+                        OpenFiles.openFile(mContext, filePath)
+                    }
+                    p112.dismiss()
                 }
-                true
+                1 -> {
+                    deleteFile(position)
+                    p112.dismiss()
+                }
+                2 -> {
+                    showRenameDlg(position)
+                    p112.dismiss()
+                }
+                3 -> {
+                    createFile()
+                    p112.dismiss()
+                }
             }
-
-            // Delete
-            val item1 = menu.add(0, Menu.FIRST, 1, R.string.delete)
-            item1.setOnMenuItemClickListener {
-                deleteFile(position)
-                true
-            }
-
-            // Rename
-            val item2 = menu.add(0, Menu.FIRST + 2, 0, R.string.rename)
-            item2.setOnMenuItemClickListener {
-                showRenameDlg(position)
-                true
-            }
-
-            // New File
-            val item3 = menu.add(0, Menu.FIRST + 3, 0, R.string.new_file)
-            item3.setOnMenuItemClickListener {
-                createFile()
-                true
-            }
-            mListener?.itemLongClicked(menu, v, menuInfo)
         }
+        dialog.create().show()
+        mListener?.itemLongClicked()
         return false
     }
 
