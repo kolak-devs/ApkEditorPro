@@ -34,7 +34,6 @@ import com.mcal.appdm.utils.FilenameComparator;
 import com.mcal.appdm.utils.SDCard;
 import com.mcal.appdm.utils.SignatureInfoReader;
 import com.mcal.appdm.utils.StringPair;
-import com.mcal.applistutil.AppInfo;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.CommandInterface;
@@ -728,7 +727,6 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         int id = v.getId();
         // As backup is hidden, not implemented yet!
         if (id == R.id.button_backup) {
-            AppInfo appInfo = AppInfo.create(pm, applicationInfo);
         }
     }
 
