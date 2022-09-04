@@ -51,16 +51,15 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.se.ApkCreateActivity;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
+import com.mcal.common.utils.FileHelperKt;
+import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.FileEncrypter;
-import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.SDCard;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -69,8 +68,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
 public class CommonEditActivity extends CustomizedLangActivity implements OnClickListener,
         IFileSelection, TextWatcher, OnItemSelectedListener {
@@ -107,9 +104,6 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
 
     // png file path for apk launcher icon
     private String launcherIconPath;
-
-    // Extra string replaces is for provider authority change
-    private Map<String, String> extraStrReplaces;
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap;
@@ -300,14 +294,6 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         }
     }
 
-    private void extractAssets(String assetName, String filePath) throws IOException {
-        InputStream input = getAssets().open(assetName);
-        FileOutputStream output = new FileOutputStream(filePath);
-        IOUtils.copy(input, output);
-        input.close();
-        output.close();
-    }
-
     // Use DroidPlugin
     private void enhancedPackageRename() {
         File fileDir = getFilesDir();
@@ -389,7 +375,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         startActivity(intent);
     }
 
-    private void extractWrapperIfNeeded(String tmplApkPath) throws IOException {
+    private void extractWrapperIfNeeded(String tmplApkPath) {
         String curVersion = null;
         try {
             PackageInfo pInfo = getPackageManager()
@@ -405,7 +391,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         if (!new File(tmplApkPath).exists()
                 || !lastVersion.equals(curVersion)) {
             try {
-                extractAssets("_wrapper", tmplApkPath);
+                FileHelperKt.copyAssetsFile(this, "_wrapper", new File(tmplApkPath));
                 FileEncrypter.encrypt(tmplApkPath);
 
                 Editor editor = sp.edit();
@@ -527,7 +513,6 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
             editor.modify(manifestInfo, newInfo);
             editor.save();
             this.refactored = editor.getRefactoredNames();
-            this.extraStrReplaces = new HashMap<>();
 
             is.close();
             zipFile.close();
@@ -662,7 +647,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
     }
 
     @Override
-    public boolean isInterestedFile(@NonNull String filename, String extraStr) {
+    public boolean isInterestedFile(String filename, String extraStr) {
         return filename.endsWith(".png");
     }
 

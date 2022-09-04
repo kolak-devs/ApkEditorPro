@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        app:titleTextAppearance="@style/AppTheme.ToolbarStyle"
+        tools:title="Toolbar title" />
 
     <io.github.rosemoe.sora.widget.CodeEditor
         android:id="@+id/editor"
@@ -97,7 +105,7 @@
             <com.mcal.neweditor.editor2.view.SymbolInputView
                 android:id="@+id/symbol_input"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"/>
+                android:layout_height="36dp" />
 
         </HorizontalScrollView>
 
@@ -108,8 +116,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="13sp"
         android:padding="3dp"
+        android:textSize="13sp"
         tools:text="1:0" />
 
 </LinearLayout>

@@ -31,7 +31,7 @@
                 android:id="@+id/divider1"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/colorAccent" />
+                android:background="?colorPrimary" />
 
         </LinearLayout>
 
@@ -55,7 +55,7 @@
                 android:id="@+id/divider2"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/colorAccent"
+                android:background="?colorPrimary"
                 android:visibility="invisible" />
 
         </LinearLayout>

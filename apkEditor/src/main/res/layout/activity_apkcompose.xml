@@ -37,7 +37,7 @@
                     android:layout_margin="20.0dip"
                     android:text="@string/in_progress"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="?colorPrimary" />
 
             </LinearLayout>
 
@@ -106,7 +106,7 @@
                             android:layout_marginLeft="12.0dip"
                             android:layout_marginRight="12.0dip"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="?colorPrimary" />
                     </LinearLayout>
 
                 </ScrollView>

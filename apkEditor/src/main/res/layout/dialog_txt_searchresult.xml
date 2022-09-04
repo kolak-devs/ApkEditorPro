@@ -55,7 +55,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="16.0dip"
                     android:text="@string/searching"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="?colorPrimary" />
 
             </LinearLayout>
 
