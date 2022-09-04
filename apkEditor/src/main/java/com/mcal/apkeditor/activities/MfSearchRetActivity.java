@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.apkeditor.R;
 import com.mcal.common.activities.CustomizedLangActivity;
 
@@ -71,7 +73,7 @@ public class MfSearchRetActivity extends CustomizedLangActivity implements OnCli
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.btn_close) {
             this.finish();
@@ -156,10 +158,11 @@ public class MfSearchRetActivity extends CustomizedLangActivity implements OnCli
     }
 
     // Get the head blanks
-    private String getHeadPadding(String str) {
-        StringBuffer sb = new StringBuffer();
+    @NonNull
+    private String getHeadPadding(@NonNull String str) {
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
+            final char c = str.charAt(i);
             if (c == ' ' || c == '\t') {
                 sb.append(c);
             } else {

@@ -12,7 +12,9 @@ import android.text.TextWatcher
 import android.util.LruCache
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -89,10 +91,15 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         val listView = findViewById<RecyclerView>(R.id.file_list)
         folderWrapper = FolderListWrapper(this, listView, curDir, rootPath, this, this)
         val searchApkView = findViewById<EditText>(R.id.search_find)
+        val clearSearchText = findViewById<ImageButton>(R.id.clear_text)
+        clearSearchText?.setOnClickListener {
+            searchApkView?.setText("")
+        }
         searchApkView.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
             override fun afterTextChanged(s: Editable) {
+                clearSearchText?.visibility = if (s.isEmpty()) View.GONE else View.VISIBLE
                 val constraint = s.toString()
                 if (constraint.isNotEmpty()) {
                     val wrapper = folderWrapper

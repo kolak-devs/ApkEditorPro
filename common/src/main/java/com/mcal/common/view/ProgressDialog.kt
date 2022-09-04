@@ -9,7 +9,6 @@ import com.mcal.common.databinding.DialogProgressSimpleBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ProgressDialog(
     private val mActivity: Activity,
@@ -64,7 +63,7 @@ class ProgressDialog(
     private fun runProcess() {
         CoroutineScope(Dispatchers.IO).launch {
             mProcessor.process()
-            withContext(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 mActivity.runOnUiThread {
                     mProcessor.afterProcess()
                     showTip(successTipResId)

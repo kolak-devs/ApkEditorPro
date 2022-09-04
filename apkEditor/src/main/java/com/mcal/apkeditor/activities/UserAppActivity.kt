@@ -18,6 +18,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,6 +42,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
     var appList = mutableListOf<AppInfo>()
     private var mRecyclerView: RecyclerView? = null
     private var searchTextWatcher: EditText? = null
+    private var clearSearchText: ImageButton? = null
     private var progressBar: ProgressBar? = null
     private var userApps: MenuItem? = null
     private var systemApps: MenuItem? = null
@@ -54,6 +56,10 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
         progressBar = findViewById(R.id.progress_bar)
         mRecyclerView = findViewById(R.id.application_list)
         searchTextWatcher = findViewById(R.id.et_keyword)
+        clearSearchText = findViewById(R.id.clear_text)
+        clearSearchText?.setOnClickListener {
+            searchTextWatcher?.setText("")
+        }
         reScanAppList(AppType.USERS)
     }
 
@@ -122,6 +128,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
                             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
                             override fun afterTextChanged(s: Editable) {
+                                clearSearchText?.visibility = if(s.isEmpty()) View.GONE else View.VISIBLE
                                 if (adapter.canStartFilterProcess) {
                                     if (!TextUtils.equals(s, lastValue)) {
                                         val constraint = s.toString()
