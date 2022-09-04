@@ -11,9 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mcal.apkeditor.R;
+import com.mcal.common.utils.FileRecord;
+import com.mcal.common.utils.FilenameComparator;
 import com.mcal.common.utilsOld.ImageZoomer;
-import com.mcal.folderlist.FileRecord;
-import com.mcal.folderlist.FilenameComparator;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -115,7 +115,7 @@ public class FileListAdapter extends BaseAdapter {
                     }
                 }
 
-                Collections.sort(fileList, new FilenameComparator());
+                fileList.sort(new FilenameComparator());
 
                 // In root directory, will not show parent folder
                 if (!isRootDir) {

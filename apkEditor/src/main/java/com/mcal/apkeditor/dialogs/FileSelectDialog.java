@@ -28,9 +28,9 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
+import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.InputHelper;
 import com.mcal.common.utilsOld.SDCard;
-import com.mcal.folderlist.FileRecord;
 
 import java.io.File;
 import java.util.ArrayList;

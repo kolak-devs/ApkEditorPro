@@ -18,8 +18,6 @@ import androidx.preference.PreferenceScreen;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
-import com.mcal.apksigner.view.CustomSignDialog;
-import com.mcal.apksigner.view.CustomSignDialog2;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.utils.ScopedStorage;
@@ -110,28 +108,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             Preference pref = manager.findPreference("ApkBuilding");
             root.removePreference(pref);
         }
-        apkSigner();
 
         cleanData();
 
         cleanHistory();
-    }
-
-    public void apkSigner() {
-        ListPreference apkSigner = manager.findPreference("signatureKey");
-        apkSigner.setOnPreferenceChangeListener((preference, newValue) -> {
-            switch ((String) newValue) {
-                case "0":
-                    break;
-                case "1":
-                    new CustomSignDialog(getContext(), null).show();
-                    break;
-                case "2":
-                    new CustomSignDialog2(getContext(), null).show();
-                    break;
-            }
-            return true;
-        });
     }
 
     // Clean the ApkEditor folder except backups

@@ -1,4 +1,4 @@
-package com.mcal.folderlist
+package com.mcal.common.utils
 
 class FilenameComparator : Comparator<Any> {
     override fun compare(obj1: Any, obj2: Any): Int {

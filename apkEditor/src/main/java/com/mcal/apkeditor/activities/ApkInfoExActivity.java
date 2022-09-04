@@ -26,11 +26,11 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 import com.mcal.common.utils.ClipboardUtils;
+import com.mcal.common.utils.FileRecord;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.SDCard;
-import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ZipUtils;
-import com.mcal.folderlist.FileRecord;
 
 import java.io.Closeable;
 import java.io.File;
@@ -304,10 +304,10 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 return;
             }
 
-            List<FileRecord> records = new ArrayList<FileRecord>();
+            List<FileRecord> records = new ArrayList<>();
             String baseFolder = resListAdapter.getData(records);
-            ArrayList<String> filenameList = new ArrayList<String>();
-            ArrayList<Integer> positions = new ArrayList<Integer>(
+            ArrayList<String> filenameList = new ArrayList<>();
+            ArrayList<Integer> positions = new ArrayList<>(
                     selected.size());
             positions.addAll(selected);
             for (int index : positions) {

@@ -111,7 +111,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
 
                 override fun afterProcess() {
                     val context = this@UserAppActivity
-                    val adapter = AppListAdapter(context, appList, context)
+                    val adapter = AppListAdapter(context.packageManager, appList, context)
                     mAdapter = adapter
                     progressBar?.visibility = View.GONE
                     mRecyclerView?.let { recyclerView ->

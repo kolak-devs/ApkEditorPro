@@ -51,8 +51,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:singleLine="true"
-                android:text="@string/appdm_label_shared_preference"
-                android:textColor="@color/lightblack" />
+                android:text="@string/appdm_label_shared_preference" />
 
             <TextView
                 android:id="@+id/tv_prefname"

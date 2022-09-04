@@ -9,9 +9,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TableLayout;
 
+import com.mcal.common.utils.HexHelper;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.sqliteutil.util.HexUtil;
 import com.mcal.sqliteutil.util.PaddingTable;
 
 import java.util.ArrayList;
@@ -107,6 +107,7 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// Table record modified in the SqliteRowViewActivity
+		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 0 && resultCode == 1) {
 //			Log.d("DEBUG", "table should be updated!");
 			queryTableData();
@@ -246,9 +247,9 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
 				byte[] data = c.getBlob(i);
 				if (data.length > 64) {
 					return "(Too big, first 64 byte): \n"
-							+ HexUtil.bytesToHexString(data, 0, 64);
+							+ HexHelper.bytesToHexString(data, 0, 64);
 				} else {
-					return HexUtil.bytesToHexString(data, 0, data.length);
+					return HexHelper.bytesToHexString(data, 0, data.length);
 				}
 			}
 

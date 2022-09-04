@@ -1,5 +1,8 @@
 package com.mcal.appdm.utils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +15,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class SignatureInfoReader {
+    @Nullable
     public static String getSignature(String zipFilePath) {
         try {
             ZipFile zipFile = new ZipFile(zipFilePath);
@@ -32,7 +36,7 @@ public class SignatureInfoReader {
                         X509Certificate cert = readSignatureBlock(input);
                         return getCertInfo(cert);
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     } finally {
                         input.close();
                     }
@@ -41,27 +45,22 @@ public class SignatureInfoReader {
             zipFile.close();
         } catch (Exception e) {
             e.printStackTrace();
-            // Log.d("DEBUG", "Error: " + e.getMessage());
         }
 
         return null;
     }
 
     public static X509Certificate readSignatureBlock(InputStream in)
-            throws IOException, GeneralSecurityException {
+            throws GeneralSecurityException {
         CertificateFactory factory = CertificateFactory.getInstance("X.509");
-        X509Certificate cert = (X509Certificate) factory
-                .generateCertificate(in);
 
-        return cert;
+        return (X509Certificate) factory
+                .generateCertificate(in);
     }
 
-    public static String getCertInfo(X509Certificate cert)
-            throws FileNotFoundException, IOException, GeneralSecurityException {
-        // Log.d("DEBUG", "issuer: " + cert.getIssuerDN());
+    @NonNull
+    public static String getCertInfo(@NonNull X509Certificate cert) {
         Principal p = cert.getSubjectDN();
-
-        // Log.d("DEBUG", "subject: " + p);
         return SignatureInfo.makeReadable(p.toString());
     }
 
@@ -84,11 +83,11 @@ public class SignatureInfoReader {
         // pseudonym (pseudonym) and
         // generation qualifier (generationQualifier).
 
-        public SignatureInfo(String info) {
-            String segments[] = info.split(",");
+        public SignatureInfo(@NonNull String info) {
+            String[] segments = info.split(",");
             for (String seg : segments) {
                 seg = seg.trim();
-                String words[] = seg.split("=");
+                String[] words = seg.split("=");
                 if (words.length == 2) {
                     String key = words[0];
                     String value = words[1];
@@ -97,6 +96,7 @@ public class SignatureInfoReader {
             }
         }
 
+        @NonNull
         public static String makeReadable(String str) {
             return str.replace("C=", "Country=")
                     .replaceAll("O=", "Organization=")

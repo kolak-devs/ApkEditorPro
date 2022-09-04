@@ -27,7 +27,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libraries')
     implementation project(':common')
-    implementation project(':filepicker')
 
     implementation 'androidx.appcompat:appcompat:1.5.0'
 

@@ -27,12 +27,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.se.ZipImageZoomer;
+import com.mcal.common.utils.FileRecord;
+import com.mcal.common.utils.FilenameComparator;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.ImageZoomer;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.ProgressDialog;
-import com.mcal.folderlist.FileRecord;
-import com.mcal.folderlist.FilenameComparator;
 
 import org.jetbrains.annotations.Contract;
 
@@ -58,7 +58,7 @@ import java.util.zip.ZipFile;
 public class ResListAdapter extends BaseAdapter implements
         OnCheckedChangeListener {
 
-    final List<FileRecord> fileList = new ArrayList<FileRecord>();
+    final List<FileRecord> fileList = new ArrayList<>();
     private final WeakReference<Context> ctxRef;
     private WeakReference<ResSelectionChangeListener> listenerRef;
     private final int resourceId;
@@ -72,8 +72,8 @@ public class ResListAdapter extends BaseAdapter implements
 
     // Record all the checked items
     // When it is not empty, it means in selection mode
-    private final Set<Integer> checkedItems = new HashSet<Integer>();
-    private final LruCache<String, BitmapInfo> bitmapCache = new LruCache<String, BitmapInfo>(
+    private final Set<Integer> checkedItems = new HashSet<>();
+    private final LruCache<String, BitmapInfo> bitmapCache = new LruCache<>(
             64) {
         protected void entryRemoved(boolean evicted, String key,
                                     BitmapInfo oldValue, BitmapInfo newValue) {
@@ -86,9 +86,9 @@ public class ResListAdapter extends BaseAdapter implements
     private final ZipNode rootNode = new ZipNode();
     private ZipImageZoomer zipImageZoomer;
     private Map<String, String> allFileReplaced = new HashMap<>();
-    private Map<String, String> allFileAdded = new HashMap<String, String>();
+    private Map<String, String> allFileAdded = new HashMap<>();
     // All the deleted entries
-    private Set<String> allFileDeleted = new HashSet<String>();
+    private Set<String> allFileDeleted = new HashSet<>();
 
     public ResListAdapter(Context ctx, String apkPath, String curPath,
                           String rootPath, FilenameFilter filter) {

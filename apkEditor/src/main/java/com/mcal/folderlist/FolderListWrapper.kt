@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
+import com.mcal.common.utils.FileRecord
 import com.mcal.common.utils.InputHelper
 import com.mcal.common.utils.deleteAll
 import com.mcal.folderlist.util.OpenFiles

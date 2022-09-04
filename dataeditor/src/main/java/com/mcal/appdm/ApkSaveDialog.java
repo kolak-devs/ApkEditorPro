@@ -9,8 +9,8 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.mcal.appdm.base.R;
-import com.mcal.appdm.utils.SDCard;
 import com.mcal.common.utilsOld.IOUtils;
+import com.mcal.common.utilsOld.SDCard;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
