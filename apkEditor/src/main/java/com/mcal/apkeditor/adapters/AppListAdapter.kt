@@ -41,17 +41,23 @@ class AppListAdapter(
         val appInfo = appFilterList[position]
         holder.appName.text = appInfo.appName
         holder.desc1.text = appInfo.packagePath
-        var icon = appInfo.icon
-        if (icon == null) {
-            icon = appInfo.applicationInfo.loadIcon(pm)
-        }
-        holder.icon.setImageDrawable(icon)
+        holder.icon.loadImage(appInfo)
         holder.itemView.setOnClickListener {
             listener.onClick(appInfo)
         }
         holder.itemView.setOnLongClickListener {
             listener.onLongClick(position)
             return@setOnLongClickListener true
+        }
+    }
+
+    private fun ImageView.loadImage(appInfo: AppInfo) = CoroutineScope(Dispatchers.IO).launch {
+        var icon = appInfo.icon
+        if (icon == null) {
+            icon = appInfo.applicationInfo.loadIcon(pm)
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            this@loadImage.setImageDrawable(icon)
         }
     }
 
