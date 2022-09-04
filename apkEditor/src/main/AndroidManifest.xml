@@ -246,7 +246,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-        <activity android:name="com.mcal.apkeditor.activities.AboutActivity">
+        <activity android:name="com.mcal.apkeditor.activities.AboutActivity"
+            android:exported="false">
            <intent-filter>
                <action android:name="com.mcal.action.SHOW_ABOUT" />
                <category android:name="android.intent.category.DEFAULT"/>
@@ -308,9 +309,6 @@
         <activity android:name="com.mcal.sqliteutil.SqliteTableViewActivity" />
         <activity android:name="com.mcal.sqliteutil.SqliteRowViewActivity" />
 
-        <activity
-            android:name="com.mcal.elfeditor.MainActivity"
-            android:label="Translator" />
 
         <meta-data
             android:name="android.webkit.WebView.EnableSafeBrowsing"
