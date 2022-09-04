@@ -1,7 +1,6 @@
 package com.mcal.apkeditor.adapters
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
@@ -16,15 +15,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
+
 class AppListAdapter(
-    context: Context,
+    private val pm: PackageManager,
     private val appList: MutableList<AppInfo>,
     private val listener: AppItemClick
 ) :
     RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
     var newValue: String? = null
     var canStartFilterProcess = true
-    private val pm: PackageManager = context.packageManager
     private var appFilterList = appList
 
     interface AppItemClick {
@@ -73,17 +72,16 @@ class AppListAdapter(
 
     fun filter(constraint: CharSequence?) = CoroutineScope(Dispatchers.IO).launch {
         val charSearch = constraint.toString()
-        appFilterList = if (charSearch.isEmpty()) {
-            appList
+        if (charSearch.isEmpty()) {
+            appFilterList = appList
         } else {
             val resultList = mutableListOf<AppInfo>()
             for (row in appList) {
-                if (row.appName.lowercase(Locale.ROOT).contains(charSearch.lowercase(Locale.ROOT))
-                ) {
+                if (row.appName.lowercase(Locale.ROOT).contains(charSearch.lowercase(Locale.ROOT))) {
                     resultList.add(row)
                 }
             }
-            resultList
+            appFilterList = resultList
         }
         CoroutineScope(Dispatchers.Main).launch {
             publishResults(appFilterList)
