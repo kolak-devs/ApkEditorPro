@@ -19,15 +19,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.mcal.appdm.base.R;
-import com.mcal.appdm.utils.SDCard;
 import com.mcal.appdm.utils.XmlUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.CommandInterface;
 import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.utilsOld.FileCopyUtils;
+import com.mcal.common.utilsOld.RootCommand;
+import com.mcal.common.utilsOld.SDCard;
 import com.mcal.neweditor.TextEditor;
-import com.mcal.sqliteutil.RootCommand;
 import com.mcal.sqliteutil.util.PaddingTable;
 import com.mcal.sqliteutil.util.PaddingTable.ITableRowClicked;
 
@@ -302,9 +302,9 @@ public class PrefDetailActivity extends CustomizedLangActivity implements ITable
             doSearch();
         } else if (id == R.id.btn_raw_file) {
             // Open the editor
-            Intent intent = TextEditor.getSoraEditor(this, tmpFilePath,filePath,isRootMode,new int[]{
-                            R.string.appdm_file_too_big, R.string.appdm_file_saved,
-                            R.string.appdm_not_found});
+            Intent intent = TextEditor.getSoraEditor(this, tmpFilePath, filePath, isRootMode, new int[]{
+                    R.string.appdm_file_too_big, R.string.appdm_file_saved,
+                    R.string.appdm_not_found});
             startActivityForResult(intent, 1000);
         }
     }
@@ -447,9 +447,9 @@ public class PrefDetailActivity extends CustomizedLangActivity implements ITable
                             strCmd = bin.getPath();
                         }
                         boolean copyRet = rc.runCommand(String.format(
-                                //strCmd + " \"%s\" %s && chmod 666 %s",
-                                strCmd + " \"%s\" %s",
-                                activity.filePath, tmpFilePath, tmpFilePath),
+                                        //strCmd + " \"%s\" %s && chmod 666 %s",
+                                        strCmd + " \"%s\" %s",
+                                        activity.filePath, tmpFilePath, tmpFilePath),
                                 null, 2000);
                         extraInfo = rc.getStdError();
                         // Copy file failed, try the original file

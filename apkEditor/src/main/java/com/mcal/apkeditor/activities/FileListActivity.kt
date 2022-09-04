@@ -25,11 +25,11 @@ import com.mcal.apksigner.ApkSigner
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ApkInfoParser
+import com.mcal.common.utils.FileRecord
 import com.mcal.common.utils.ScopedStorage.externalStoragePath
 import com.mcal.common.utils.ScopedStorage.storageDirectory
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.common.view.ProgressDialog
-import com.mcal.folderlist.FileRecord
 import com.mcal.folderlist.FolderListWrapper
 import com.mcal.folderlist.IListEventListener
 import com.mcal.folderlist.IListItemProducer

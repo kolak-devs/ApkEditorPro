@@ -29,18 +29,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.appdm.base.R;
-import com.mcal.appdm.utils.FileRecord;
-import com.mcal.appdm.utils.FilenameComparator;
-import com.mcal.appdm.utils.SDCard;
 import com.mcal.appdm.utils.SignatureInfoReader;
 import com.mcal.appdm.utils.StringPair;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.FileRecord;
+import com.mcal.common.utils.FilenameComparator;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.CommandInterface;
 import com.mcal.common.utilsOld.CommandRunner;
+import com.mcal.common.utilsOld.RootCommand;
+import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.neweditor.TextEditor;
-import com.mcal.sqliteutil.RootCommand;
 
 import java.io.File;
 import java.io.FilenameFilter;

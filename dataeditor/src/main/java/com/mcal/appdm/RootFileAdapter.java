@@ -12,8 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.mcal.appdm.base.R;
-import com.mcal.appdm.utils.FileRecord;
-import com.mcal.appdm.utils.FilenameComparator;
+import com.mcal.common.utils.FileRecord;
+import com.mcal.common.utils.FilenameComparator;
 import com.mcal.common.utilsOld.CommandInterface;
 
 import java.io.BufferedReader;

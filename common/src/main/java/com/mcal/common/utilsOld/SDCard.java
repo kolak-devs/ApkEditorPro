@@ -1,9 +1,14 @@
 package com.mcal.common.utilsOld;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+
+import androidx.annotation.NonNull;
 
 import com.mcal.common.utilsOld.StorageUtils.StorageInfo;
 
@@ -16,20 +21,16 @@ import java.util.List;
 public class SDCard {
 
     public static boolean exist() {
-        if (Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else {
-            return false;
-        }
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
     // Return like "/sdcard"
+    @NonNull
     public static String getRootDirectory() {
         return Environment.getExternalStorageDirectory().getPath();
     }
 
-    public static void copyStream(InputStream is, OutputStream os)
+    public static void copyStream(@NonNull InputStream is, OutputStream os)
             throws IOException {
         byte[] buffer = new byte[4 * 1024];
         int count = 0;
@@ -39,18 +40,22 @@ public class SDCard {
     }
 
     // The working directory is /sdcard/.ApkPermRemover/tmp/
+    @NonNull
     public static String makeWorkingDir(Context ctx) throws Exception {
         return makeDir(ctx, "tmp");
     }
 
+    @NonNull
     public static String makeBackupDir(Context ctx) throws Exception {
         return makeDir(ctx, "backup");
     }
 
+    @NonNull
     public static String makeImageDir(Context ctx) throws Exception {
         return makeDir(ctx, "image");
     }
 
+    @NonNull
     public static String makeDir(Context ctx, String dirName) throws Exception {
         if (!SDCard.exist()) {
             throw new Exception("Can not find sd card.");
@@ -115,26 +120,64 @@ public class SDCard {
             }
         }
         return path;
-        // String externalSd = System.getenv("SECONDARY_STORAGE");
-        //
-        // if (externalSd == null || externalSd.equals("")) {
-        // String extsdcardName = null;
-        // File storageDir = new File("/mnt/");
-        // if (storageDir.isDirectory()) {
-        // String[] nameList = storageDir.list();
-        // for (String name : nameList) {
-        // if (name.equalsIgnoreCase("extsdcard")
-        // || (name.startsWith("external") && name
-        // .contains("sd"))) {
-        // extsdcardName = name;
-        // break;
-        // }
-        // }
-        // }
-        // if (extsdcardName != null) {
-        // externalSd = "/mnt/" + extsdcardName;
-        // }
-        // }
-        // return externalSd;
+    }
+
+    private static String appDir = null;
+
+    private static void initFolderName(Context ctx) {
+        if (appDir != null) {
+            return;
+        }
+        try {
+            ApplicationInfo appInfo = ctx.getPackageManager()
+                    .getApplicationInfo(ctx.getPackageName(),
+                            PackageManager.GET_META_DATA);
+            appDir = appInfo.metaData.getString("heagoo.sdcard_folder");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Backup directory is in SD card
+    @NonNull
+    public static String getBackupDir(Context ctx) {
+        initFolderName(ctx);
+
+        File f = Environment.getExternalStorageDirectory();
+        String path = f.getPath() + "/" + appDir + "/backups";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return path;
+    }
+
+    // Temp dir is in the internal storage
+    @NonNull
+    public static String getTempDir(Context ctx) {
+        initFolderName(ctx);
+
+        File f = Environment.getExternalStorageDirectory();
+        String path = f.getPath() + "/" + appDir + "/temp";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        return path;
+    }
+
+    @NonNull
+    @SuppressLint("DefaultLocale")
+    public static String getSizeDescription(long fileSize) {
+        if (fileSize >= 1024 * 1024) {
+            float mb = 1.0f * fileSize / 1024 / 1024;
+            return String.format("%.2f M", mb);
+        } else if (fileSize >= 1024) {
+            float kb = 1.0f * fileSize / 1024;
+            return String.format("%.2f K", kb);
+        }
+
+        return "" + fileSize + " B";
     }
 }
