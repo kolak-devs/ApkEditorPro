@@ -33,7 +33,6 @@ include ':jadx'
 include ':raung'
 include ':so-translator'
 include ':color-picker'
-include ':filepicker'
 include ':manifestparser'
 include ':net-manager'
 

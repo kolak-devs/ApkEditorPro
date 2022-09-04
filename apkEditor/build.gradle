@@ -106,7 +106,6 @@ dependencies {
     implementation project(':patchview')
     implementation project(':color-picker')
     implementation project(':melissa')
-    implementation project(':filepicker')
     implementation project(':manifestparser')
     implementation project(':net-manager')
 
