@@ -1,9 +1,15 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
+
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.PathFinder;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -15,7 +21,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.zip.ZipFile;
 
-class PatchRule_MatchReplace extends PatchRule {
+public class PatchRuleMatchReplace extends PatchRule {
 
     private static final String strEnd = "[/MATCH_REPLACE]";
     private static final String TARGET = "TARGET:";
@@ -34,7 +40,7 @@ class PatchRule_MatchReplace extends PatchRule {
     // The target file name is specified by wildchar or not
     private boolean isWildMatch;
 
-    PatchRule_MatchReplace() {
+    public PatchRuleMatchReplace() {
         matches = new ArrayList<>();
         replaces = new ArrayList<>();
         keywords = new ArrayList<>();
@@ -90,7 +96,7 @@ class PatchRule_MatchReplace extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip,
+    public String executeRule(Activity activity, ApkInfoListener listener, ZipFile patchZip,
                               IPatchContext logger) {
         preProcessing(logger, matches);
         preProcessing(logger, replaces);
@@ -111,16 +117,16 @@ class PatchRule_MatchReplace extends PatchRule {
 
         String nextPath = pathFinder.getNextPath();
         while (nextPath != null) {
-            executeOnEntry(activity, patchZip, logger, nextPath, pattern);
+            executeOnEntry(activity, listener, patchZip, logger, nextPath, pattern);
             nextPath = pathFinder.getNextPath();
         }
         return null;
     }
 
-    private void executeOnEntry(@NonNull ApkInfoActivity activity, ZipFile patchZip,
+    private void executeOnEntry(Activity activity, @NonNull ApkInfoListener listener, ZipFile patchZip,
                                 IPatchContext patchCtx, String targetFile, Pattern pattern) {
         boolean modified = false;
-        String filepath = activity.getDecodeRootPath() + "/" + targetFile;
+        String filepath = listener.getDecodeRootPath() + "/" + targetFile;
 
         if (pattern != null) {
             // Load all the content
@@ -206,9 +212,9 @@ class PatchRule_MatchReplace extends PatchRule {
         // The file is indeed modified
         if (modified) {
             if ("AndroidManifest.xml".equals(targetFile)) {
-                activity.setManifestModified(false);
+                listener.setManifestModified(false);
             } else {
-                activity.getResListAdapter().fileModified(targetFile, filepath);
+                listener.getResListAdapter().fileModified(targetFile, filepath);
             }
         }
     }

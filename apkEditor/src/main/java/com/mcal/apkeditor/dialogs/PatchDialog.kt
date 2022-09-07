@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.dialogs
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.Typeface
@@ -15,9 +16,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
-import com.mcal.apkeditor.activities.ApkInfoActivity
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection
-import com.mcal.apkeditor.patch.IPatchContext
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener
+import com.mcal.apkeditor.patch.interfaces.IPatchContext
 import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.common.utilsOld.IOUtils
 import com.mcal.common.utilsOld.SDCard
@@ -25,13 +26,13 @@ import com.mcal.patchview.ui.CodeText
 import org.xml.sax.SAXException
 import ru.mcal.manifestparser.xml.AndroidManifestParser
 import java.io.*
-import java.lang.ref.WeakReference
 import java.util.zip.ZipFile
 import javax.xml.parsers.ParserConfigurationException
 
 // Dialog used for patch applying
-class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchContext {
-    private val activityRef: WeakReference<ApkInfoActivity>
+class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : View.OnClickListener,
+    IPatchContext {
+    private val mActivity = activity
 
     // Record all the global parameter values
     private val globalVariableValues: MutableMap<String, String> = HashMap()
@@ -45,9 +46,9 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
     // Record executor as the parse is done there
     private var patchExecutor: PatchExecutor? = null
     private var materialDialog: AlertDialog? = null
-    private val manifestPath: File
+    private val manifestPath: File = File(listener.decodeRootPath + "/AndroidManifest.xml")
 
-    private fun init(activity: ApkInfoActivity) {
+    private fun init(activity: Activity) {
         val view = LayoutInflater.from(activity).inflate(R.layout.dialog_patch, null)
         val curPatchTv = view.findViewById<TextView>(R.id.tv_curpatch)
         curPatchTv.setOnClickListener(this)
@@ -102,10 +103,8 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
             ret = ret or extractExamples("patch_Ultima_SignHook.zip")
             ret = ret or extractExamples("patch_Ultima_VipSignHook.zip")
             if (ret) {
-                val message = activityRef.get()?.let { activity ->
-                    String.format(activity.getString(R.string.patch_examples_copied), exampleDir)
-                }
-                Toast.makeText(activityRef.get(), message, Toast.LENGTH_SHORT)
+                val message = String.format(mActivity.getString(R.string.patch_examples_copied), exampleDir)
+                Toast.makeText(mActivity, message, Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -115,7 +114,7 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
         // Check the directory exist or not
         if (exampleDir == null) {
             try {
-                exampleDir = SDCard.makeDir(activityRef.get(), "patches")
+                exampleDir = SDCard.makeDir(mActivity, "patches")
             } catch (e1: Exception) {
                 e1.printStackTrace()
             }
@@ -124,25 +123,23 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
 
     private fun extractExamples(filename: String): Boolean {
         initExampleDir()
-        activityRef.get()?.let { activity ->
-            val path = exampleDir + filename
-            val am = activity.assets
-            var input: InputStream? = null
-            var output: FileOutputStream? = null
-            try {
-                input = am.open("patches" + File.separator + filename)
-                output = FileOutputStream(path)
-                IOUtils.copy(input, output)
-                return true
-            } catch (e: IOException) {
-                Toast.makeText(
-                    activityRef.get(), e.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            } finally {
-                closeQuietly(input)
-                closeQuietly(output)
-            }
+        val path = exampleDir + filename
+        val am = mActivity.assets
+        var input: InputStream? = null
+        var output: FileOutputStream? = null
+        try {
+            input = am.open("patches" + File.separator + filename)
+            output = FileOutputStream(path)
+            IOUtils.copy(input, output)
+            return true
+        } catch (e: IOException) {
+            Toast.makeText(
+                this.mActivity, e.message,
+                Toast.LENGTH_SHORT
+            ).show()
+        } finally {
+            closeQuietly(input)
+            closeQuietly(output)
         }
         return false
     }
@@ -175,7 +172,7 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
         materialDialog?.show()
 
         // Patch it
-        patchExecutor = PatchExecutor(activityRef.get(), patchPath, this)
+        patchExecutor = PatchExecutor(mActivity, listener, patchPath, this)
         patchExecutor?.applyPatch()
     }
 
@@ -187,40 +184,38 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
                 defaultDir = exampleDir
             }
         }
-        activityRef.get()?.let { activity ->
-            FileSelectDialog(
-                activity,
-                object : IFileSelection {
-                    override fun fileSelectedInDialog(
-                        filePath: String?, extraStr: String?, openFile: Boolean
-                    ) {
-                        filePath?.let {
-                            patchSelected(filePath)
-                        }
+        FileSelectDialog(
+            mActivity,
+            object : IFileSelection {
+                override fun fileSelectedInDialog(
+                    filePath: String?, extraStr: String?, openFile: Boolean
+                ) {
+                    filePath?.let {
+                        patchSelected(filePath)
                     }
+                }
 
-                    override fun isInterestedFile(filename: String?, extraStr: String?): Boolean {
-                        filename?.let {
-                            return filename.endsWith(".zip")
-                        }
-                        return false
+                override fun isInterestedFile(filename: String?, extraStr: String?): Boolean {
+                    filename?.let {
+                        return filename.endsWith(".zip")
                     }
+                    return false
+                }
 
-                    override fun getConfirmMessage(filePath: String?, extraStr: String?): String? {
-                        return null
-                    }
+                override fun getConfirmMessage(filePath: String?, extraStr: String?): String? {
+                    return null
+                }
 
-                },
-                ".zip",
-                null,
-                activity.getString(R.string.select_patch),
-                false,
-                false,
-                false,
-                "patch",
-                defaultDir
-            )
-        }
+            },
+            ".zip",
+            null,
+            mActivity.getString(R.string.select_patch),
+            false,
+            false,
+            false,
+            "patch",
+            defaultDir
+        )
     }
 
     private fun patchSelected(filePath: String) {
@@ -260,15 +255,13 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
 
     @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY")
     override fun info(resourceId: Int, bold: Boolean, vararg args: Any) {
-        activityRef.get()?.let { activity ->
-            var txt = activity.getString(resourceId)
-            @Suppress("UNNECESSARY_SAFE_CALL")
-            args?.let {
-                txt = String.format(txt, *args)
-            }
-            val message = if (bold) "\n" + txt + "\n" else txt + "\n"
-            appendText(message, bold, false)
+        var txt = mActivity.getString(resourceId)
+        @Suppress("UNNECESSARY_SAFE_CALL")
+        args?.let {
+            txt = String.format(txt, *args)
         }
+        val message = if (bold) "\n" + txt + "\n" else txt + "\n"
+        appendText(message, bold, false)
     }
 
     @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY")
@@ -284,21 +277,19 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
 
     @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY")
     override fun error(resourceId: Int, vararg args: Any) {
-        activityRef.get()?.let { activity ->
-            var txt = activity.getString(resourceId)
-            @Suppress("UNNECESSARY_SAFE_CALL")
-            args?.let {
-                txt = String.format(txt, *args)
-            }
-            appendText(txt + "\n", bold = false, red = true)
+        var txt = mActivity.getString(resourceId)
+        @Suppress("UNNECESSARY_SAFE_CALL")
+        args?.let {
+            txt = String.format(txt, *args)
         }
+        appendText(txt + "\n", bold = false, red = true)
     }
 
     private fun appendText(
         txt: String, bold: Boolean,
         red: Boolean
     ) {
-        activityRef.get()?.runOnUiThread {
+        mActivity.runOnUiThread {
             if (red) {
                 val spanString = SpannableString(txt)
                 val span = ForegroundColorSpan(Color.RED)
@@ -318,11 +309,8 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
         }
     }
 
-    override fun getString(stringId: Int): String? {
-        activityRef.get()?.let { activity ->
-            return activity.getString(stringId)
-        }
-        return null
+    override fun getString(stringId: Int): String {
+        return mActivity.getString(stringId)
     }
 
     override fun setVariableValue(key: String, value: String) {
@@ -337,18 +325,15 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
     }
 
     override fun patchFinished() {
-        activityRef.get()?.runOnUiThread {
+        mActivity.runOnUiThread {
             materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.setText(R.string.patch_applied)
             materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.setBackgroundColor(-0x9f9fa0)
             materialDialog?.show()
         }
     }
 
-    override fun getDecodeRootPath(): String? {
-        activityRef.get()?.let { activity ->
-            return activity.decodeRootPath
-        }
-        return null
+    override fun getDecodeRootPath(): String {
+        return listener.decodeRootPath
     }
 
     override fun getSmaliFolders(): List<String> {
@@ -356,28 +341,26 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
         folders.add("smali")
 
         // Look into zip file to get all dex, thus get related smali folder
-        activityRef.get()?.let { activity ->
-            val apkPath = activity.apkPath
-            var zfile: ZipFile? = null
-            try {
-                zfile = ZipFile(apkPath)
-                val entries = zfile.entries()
-                while (entries.hasMoreElements()) {
-                    val entry = entries.nextElement()
-                    val name = entry.name
-                    if (name.endsWith(".dex") && !name.contains("/")) {
-                        if (name != "classes.dex") {
-                            folders.add(
-                                "smali_" + name.substring(0, name.length - 4)
-                            )
-                        }
+        val apkPath = listener.apkPath
+        var zfile: ZipFile? = null
+        try {
+            zfile = ZipFile(apkPath)
+            val entries = zfile.entries()
+            while (entries.hasMoreElements()) {
+                val entry = entries.nextElement()
+                val name = entry.name
+                if (name.endsWith(".dex") && !name.contains("/")) {
+                    if (name != "classes.dex") {
+                        folders.add(
+                            "smali_" + name.substring(0, name.length - 4)
+                        )
                     }
                 }
-            } catch (e1: IOException) {
-                e1.printStackTrace()
-            } finally {
-                closeQuietly(zfile)
             }
+        } catch (e1: IOException) {
+            e1.printStackTrace()
+        } finally {
+            closeQuietly(zfile)
         }
         return folders
     }
@@ -449,8 +432,6 @@ class PatchDialog(activity: ApkInfoActivity) : View.OnClickListener, IPatchConte
     }
 
     init {
-        activityRef = WeakReference(activity)
-        manifestPath = File(activity.decodeRootPath + "/AndroidManifest.xml")
         init(activity)
     }
 }

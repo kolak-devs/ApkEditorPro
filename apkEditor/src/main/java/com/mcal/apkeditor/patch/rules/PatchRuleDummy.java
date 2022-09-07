@@ -1,15 +1,20 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
+
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.IOException;
 import java.util.zip.ZipFile;
 
 
-class PatchRule_Dummy extends PatchRule {
+public class PatchRuleDummy extends PatchRule {
 
     private static final String strEnd = "[/DUMMY]";
 
@@ -35,7 +40,7 @@ class PatchRule_Dummy extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip, IPatchContext logger) {
+    public String executeRule(Activity activity, ApkInfoListener listener, ZipFile patchZip, IPatchContext logger) {
         return null;
     }
 

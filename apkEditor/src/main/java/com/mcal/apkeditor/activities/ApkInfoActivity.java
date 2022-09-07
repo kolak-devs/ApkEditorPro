@@ -84,16 +84,16 @@ import com.mcal.apkeditor.dialogs.RebuildConfirmDialog;
 import com.mcal.apkeditor.dialogs.SearchFilenameDialog;
 import com.mcal.apkeditor.dialogs.SearchTextDialog;
 import com.mcal.apkeditor.dialogs.SmaliNoticeDialog;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.smali.AsyncDecodeTask;
 import com.mcal.apkeditor.smali.AsyncDecodeTask.IDecodeTaskCallback;
 import com.mcal.apkeditor.translate.PossibleLanguages;
 import com.mcal.apkeditor.translate.TranslateItem;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.data.Preferences;
+import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.LOGGER;
 import com.mcal.common.utilsOld.PreferenceUtils;
@@ -144,12 +144,11 @@ import brut.util.Duo;
 import common.types.ActivityState;
 import common.types.ProjectInfo;
 import common.types.StringItem;
-import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
 public class ApkInfoActivity extends CustomizedLangActivity
         implements OnItemClickListener, OnItemLongClickListener,
         IManifestChangeCallback, OnClickListener, IDecodeTaskCallback,
-        OnLongClickListener, ApkParseConsumer, ResSelectionChangeListener, AddFolderDialog.AddFolderCallback {
+        OnLongClickListener, ApkParseConsumer, ResSelectionChangeListener, AddFolderDialog.AddFolderCallback, ApkInfoListener {
     // To edit/view a file before replacing
     public static final int RC_OPEN_BEFORE_REPLACE = 1001;
     // To edit/view a file in external app
@@ -1324,7 +1323,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // Apply a patch
         else if (id == R.id.menu_apply_patch) {
-            new PatchDialog(this);
+            new PatchDialog(this, this);
         }
 
         // Auto translate
@@ -1810,6 +1809,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     // Called when finished resource table decoding
+    @Override
     public void resTableDecoded(boolean ret) {
         if (ret) {
             this.bStringPrepared = prepareStringList();
@@ -1824,6 +1824,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }
     }
 
+    @Override
     public void resourceDecoded(final Map<String, String> fileEntry2ZipEntry) {
         this.fileEntry2ZipEntry = fileEntry2ZipEntry;
 
@@ -1867,12 +1868,14 @@ public class ApkInfoActivity extends CustomizedLangActivity
         });
     }
 
+    @Override
     public void decodeDex(IGeneralCallback dexDecodedCallback) {
         this.dexDecodedCallback = dexDecodedCallback;
         new AsyncDecodeTask(this, apkPath, decodeRootPath, this).execute();
         this.dexDecoded = true;
     }
 
+    @Override
     public void decodeFailed(final String errMessage) {
         this.runOnUiThread(() -> Toast.makeText(ApkInfoActivity.this, errMessage,
                 Toast.LENGTH_LONG).show());
@@ -3139,22 +3142,27 @@ public class ApkInfoActivity extends CustomizedLangActivity
         return false;
     }
 
+    @Override
     public String getDecodeRootPath() {
         return decodeRootPath;
     }
 
+    @Override
     public ResListAdapter getResListAdapter() {
         return resListAdapter;
     }
 
+    @Override
     public boolean isDexDecoded() {
         return dexDecoded;
     }
 
+    @Override
     public String getApkPath() {
         return apkPath;
     }
 
+    @Override
     public ApkInfoParser.AppInfo getApkInfo() {
         return apkInfo;
     }

@@ -1,10 +1,15 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
+
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 import com.mcal.common.utils.HexHelper;
 import com.mcal.common.utilsOld.IOUtils;
 
@@ -17,7 +22,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-class PatchRule_ReviseSig extends PatchRule {
+public class PatchRuleReviseSig extends PatchRule {
 
     private static final String strEnd = "[/SIGNATURE_REVISE]";
     private static final String TARGET = "TARGET:";
@@ -50,10 +55,10 @@ class PatchRule_ReviseSig extends PatchRule {
     }
 
     @Override
-    public String executeRule(@NonNull ApkInfoActivity activity, ZipFile patchZip, @NonNull IPatchContext logger) {
-        String apkPath = activity.getApkPath();
+    public String executeRule(Activity activity, @NonNull ApkInfoListener listener, ZipFile patchZip, @NonNull IPatchContext logger) {
+        String apkPath = listener.getApkPath();
         String hexRSA = getHexRSA(apkPath);
-        String packageName = activity.getApkInfo().pkgName;
+        String packageName = listener.getApkInfo().pkgName;
         String rootPath = logger.getDecodeRootPath();
         String targetFile = rootPath + "/" + targetList.get(0);
 

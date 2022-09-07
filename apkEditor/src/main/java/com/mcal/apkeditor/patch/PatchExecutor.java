@@ -1,14 +1,16 @@
 package com.mcal.apkeditor.patch;
 
+import android.app.Activity;
+
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.IGeneralCallback;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -17,7 +19,8 @@ import java.util.zip.ZipFile;
 @Keep
 public class PatchExecutor implements IGeneralCallback {
 
-    private final WeakReference<ApkInfoActivity> activityRef;
+    private final Activity activity;
+    private final ApkInfoListener listener;
     private final String patchPath;
     private final IPatchContext patchContext;
 
@@ -25,9 +28,10 @@ public class PatchExecutor implements IGeneralCallback {
     private Patch patch;
     private ZipFile sourceZip;
 
-    public PatchExecutor(ApkInfoActivity activity, String patchPath,
+    public PatchExecutor(Activity activity, ApkInfoListener listener, String patchPath,
                          IPatchContext logger) {
-        this.activityRef = new WeakReference<>(activity);
+        this.activity = activity;
+        this.listener = listener;
         this.patchPath = patchPath;
         this.patchContext = logger;
     }
@@ -55,7 +59,7 @@ public class PatchExecutor implements IGeneralCallback {
         boolean needToDecode = false;
 
         // Check if need to decode DEX file
-        if (!activityRef.get().isDexDecoded()) {
+        if (!listener.isDexDecoded()) {
             for (PatchRule rule : patch.rules) {
                 needToDecode = rule.isSmaliNeeded();
                 if (needToDecode) {
@@ -65,7 +69,7 @@ public class PatchExecutor implements IGeneralCallback {
 
             if (needToDecode) {
                 patchContext.info(R.string.decode_dex_file, true);
-                activityRef.get().decodeDex(this);
+                listener.decodeDex(this);
             }
         }
 
@@ -87,7 +91,7 @@ public class PatchExecutor implements IGeneralCallback {
 
                     String nextRule = null;
                     if (rule.isValid(patchContext)) {
-                        nextRule = rule.executeRule(activityRef.get(), sourceZip, patchContext);
+                        nextRule = rule.executeRule(activity, listener, sourceZip, patchContext);
                     }
                     // Goto the target rule
                     if (nextRule != null) {

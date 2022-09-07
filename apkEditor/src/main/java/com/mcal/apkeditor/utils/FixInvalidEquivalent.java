@@ -6,7 +6,7 @@ import static com.mcal.common.utils.StringHelperKt.getRandomString;
 import android.content.Context;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.patch.ResourceItem;
+import com.mcal.apkeditor.patch.resource.ResourceItem;
 import com.mcal.common.utilsOld.TextFileReader;
 
 import java.io.BufferedOutputStream;

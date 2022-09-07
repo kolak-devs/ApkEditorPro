@@ -1,16 +1,21 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
+
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.zip.ZipFile;
 
 
-class PatchRule_Goto extends PatchRule {
+public class PatchRuleGoto extends PatchRule {
 
     private static final String strEnd = "[/GOTO]";
     private static final String GOTO = "GOTO:";
@@ -42,7 +47,7 @@ class PatchRule_Goto extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip, IPatchContext logger) {
+    public String executeRule(Activity activity, ApkInfoListener listener, ZipFile patchZip, IPatchContext logger) {
         return targetRule;
     }
 

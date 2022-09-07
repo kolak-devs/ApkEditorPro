@@ -3,6 +3,18 @@ package com.mcal.apkeditor.patch;
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
+import com.mcal.apkeditor.patch.rules.PatchRuleAddFiles;
+import com.mcal.apkeditor.patch.rules.PatchRuleDummy;
+import com.mcal.apkeditor.patch.rules.PatchRuleExecDex;
+import com.mcal.apkeditor.patch.rules.PatchRuleFuncReplace;
+import com.mcal.apkeditor.patch.rules.PatchRuleGoto;
+import com.mcal.apkeditor.patch.rules.PatchRuleMatchAssign;
+import com.mcal.apkeditor.patch.rules.PatchRuleMatchGoto;
+import com.mcal.apkeditor.patch.rules.PatchRuleMatchReplace;
+import com.mcal.apkeditor.patch.rules.PatchRuleMerge;
+import com.mcal.apkeditor.patch.rules.PatchRuleRemoveFiles;
+import com.mcal.apkeditor.patch.rules.PatchRuleReviseSig;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,27 +83,27 @@ public class PatchParser {
                                        IPatchContext logger) throws IOException {
         PatchRule rule = null;
         if (ADD_FILES.equals(startLine)) {
-            rule = new PatchRule_AddFiles();
+            rule = new PatchRuleAddFiles();
         } else if (REMOVE_FILES.equals(startLine)) {
-            rule = new PatchRule_RemoveFiles();
+            rule = new PatchRuleRemoveFiles();
         } else if (MERGE.equals(startLine)) {
-            rule = new PatchRule_Merge();
+            rule = new PatchRuleMerge();
         } else if (MATCH_REPLACE.equals(startLine)) {
-            rule = new PatchRule_MatchReplace();
+            rule = new PatchRuleMatchReplace();
         } else if (MATCH_GOTO.equals(startLine)) {
-            rule = new PatchRule_MatchGoto();
+            rule = new PatchRuleMatchGoto();
         } else if (MATCH_ASSIGN.equals(startLine)) {
-            rule = new PatchRule_MatchAssign();
+            rule = new PatchRuleMatchAssign();
         } else if (FUNCTION_REPLACE.equals(startLine)) {
-            rule = new PatchRule_FuncReplace();
+            rule = new PatchRuleFuncReplace();
         } else if (SIGNATURE_REVISE.equals(startLine)) {
-            rule = new PatchRule_ReviseSig();
+            rule = new PatchRuleReviseSig();
         } else if (GOTO.equals(startLine)) {
-            rule = new PatchRule_Goto();
+            rule = new PatchRuleGoto();
         } else if (DUMMY.equals(startLine)) {
-            rule = new PatchRule_Dummy();
+            rule = new PatchRuleDummy();
         } else if (EXECUTE_DEX.equals(startLine)) {
-            rule = new PatchRule_ExecDex();
+            rule = new PatchRuleExecDex();
         } else {
             logger.error(R.string.patch_error_unknown_rule,
                     br.getCurrentLine(), startLine);

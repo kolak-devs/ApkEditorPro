@@ -1,11 +1,15 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.SDCard;
 
@@ -28,7 +32,7 @@ import java.util.zip.ZipFile;
 import dalvik.system.DexClassLoader;
 
 
-class PatchRule_ExecDex extends PatchRule {
+public class PatchRuleExecDex extends PatchRule {
 
     private static final String strEnd = "[/EXECUTE_DEX]";
     private static final String SCRIPT = "SCRIPT:";
@@ -45,7 +49,7 @@ class PatchRule_ExecDex extends PatchRule {
     private boolean smaliNeeded = false;
     private int ifVersion = 1;
 
-    PatchRule_ExecDex() {
+    public PatchRuleExecDex() {
         keywords = new ArrayList<>();
         keywords.add(strEnd);
         keywords.add(SCRIPT);
@@ -104,7 +108,7 @@ class PatchRule_ExecDex extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip, IPatchContext logger) {
+    public String executeRule(Activity activity, ApkInfoListener listener, ZipFile patchZip, IPatchContext logger) {
         if (ifVersion != 1) {
             logger.error(R.string.general_error, "Unsupported interface version: " + ifVersion);
             return null;
@@ -155,9 +159,9 @@ class PatchRule_ExecDex extends PatchRule {
                     String.class, String.class, String.class, String.class);
 
             // apkPath, patchPath, decodePath, param
-            String apkPath = activity.getApkPath();
+            String apkPath = listener.getApkPath();
             String patchPath = patchZip.getName();
-            String decodedRootPath = activity.getDecodeRootPath();
+            String decodedRootPath = listener.getDecodeRootPath();
             method.invoke(obj, apkPath, patchPath, decodedRootPath, this.param);
 
         } catch (Throwable e) {

@@ -1,10 +1,14 @@
 package com.mcal.apkeditor.patch;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IBeforeAddFile;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -22,8 +26,8 @@ import java.util.zip.ZipFile;
 public abstract class PatchRule {
 
     private static final String NAME = "NAME:";
+    public int startLine;
     protected String ruleName;
-    protected int startLine;
 
     // Assign values inside rawStr, values are got from patch context
     // For example: name="${STR_NAME}" --> name="app_name"
@@ -73,8 +77,7 @@ public abstract class PatchRule {
             throws IOException;
 
     // Return the next rule name (match_gotogoto), null for common rules
-    public abstract String executeRule(ApkInfoActivity activity,
-                                       ZipFile patchZip, IPatchContext logger);
+    public abstract String executeRule(Activity activity, ApkInfoListener listener, ZipFile patchZip, IPatchContext logger);
 
     // Is the rule valid or not
     public abstract boolean isValid(IPatchContext logger);
@@ -87,7 +90,7 @@ public abstract class PatchRule {
     }
 
     // Parse the common keyword like "NAME:"
-    boolean parseAsKeyword(String line, LinedReader br) throws IOException {
+    public boolean parseAsKeyword(String line, LinedReader br) throws IOException {
         if (NAME.equals(line)) {
             ruleName = br.readLine();
             if (ruleName != null) {
@@ -99,7 +102,7 @@ public abstract class PatchRule {
     }
 
     // Read as text file
-    String readFileContent(String filepath) throws IOException {
+    public String readFileContent(String filepath) throws IOException {
         File f = new File(filepath);
         long size = f.length();
         StringBuilder sb = new StringBuilder((int) size + 32);
@@ -120,7 +123,7 @@ public abstract class PatchRule {
         }
     }
 
-    List<String> readFileLines(String filepath) throws IOException {
+    public List<String> readFileLines(String filepath) throws IOException {
 
         List<String> lines = new ArrayList<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -140,8 +143,8 @@ public abstract class PatchRule {
     }
 
     // To read multiple lines until encounter one keyword
-    String readMultiLines(@NonNull BufferedReader br, List<String> lines,
-                          boolean bTrim, List<String> endKeywords) throws IOException {
+    public String readMultiLines(@NonNull BufferedReader br, List<String> lines,
+                                 boolean bTrim, List<String> endKeywords) throws IOException {
         String line = br.readLine();
         while (line != null) {
             if (bTrim) {
@@ -187,15 +190,13 @@ public abstract class PatchRule {
     }
 
     // targetDir is the absolute directory path
-    private boolean addFileEntry(@NonNull ApkInfoActivity activity, ZipFile zfile,
-                                 @NonNull ZipEntry entry, String targetDir, IPatchContext logger) {
-
+    private boolean addFileEntry(Activity activity, @NonNull ApkInfoListener listener, ZipFile zfile, @NonNull ZipEntry entry, String targetDir, IPatchContext logger) {
         String name = entry.getName();
         String path = targetDir + "/" + name;
 
         // Create the folder if not exist
         String parent = getParentFolder(path);
-        while (!activity.getResListAdapter().isFolderExist(parent)) {
+        while (!listener.getResListAdapter().isFolderExist(parent)) {
             //Log.d("DEBUG", "folder " + parent + " not exist");
             parent = getParentFolder(parent);
         }
@@ -203,7 +204,7 @@ public abstract class PatchRule {
         if (paths.length > 1) {
             for (int i = 0; i < paths.length - 1; ++i) {
                 try {
-                    activity.getResListAdapter().addFolderReportError(parent,
+                    listener.getResListAdapter().addFolderReportError(parent,
                             paths[i], false);
                 } catch (Exception e) {
                     logger.error(R.string.failed_create_dir, e.getMessage());
@@ -216,7 +217,7 @@ public abstract class PatchRule {
         InputStream input = null;
         try {
             input = zfile.getInputStream(entry);
-            return activity.getResListAdapter().addFile(path, input) != null;
+            return listener.getResListAdapter().addFile(path, input) != null;
         } catch (Exception e) {
             logger.error(R.string.general_error, e.getMessage());
         } finally {
@@ -226,10 +227,10 @@ public abstract class PatchRule {
         return false;
     }
 
-    void addFilesInZip(@NonNull ApkInfoActivity activity, String zipFile,
-                       IBeforeAddFile hook, IPatchContext logger) throws Exception {
+    public void addFilesInZip(Activity activity, @NonNull ApkInfoListener listener, String zipFile,
+                              IBeforeAddFile hook, IPatchContext logger) throws Exception {
         ZipFile zfile = null;
-        String targetDir = activity.getDecodeRootPath();
+        String targetDir = listener.getDecodeRootPath();
 
         try {
             zfile = new ZipFile(zipFile);
@@ -245,10 +246,10 @@ public abstract class PatchRule {
 
                 boolean consumed = false;
                 if (hook != null) {
-                    consumed = hook.consumeAddedFile(activity, zfile, ze);
+                    consumed = hook.consumeAddedFile(activity, listener, zfile, ze);
                 }
                 if (!consumed) {
-                    addFileEntry(activity, zfile, ze, targetDir, logger);
+                    addFileEntry(activity, listener, zfile, ze, targetDir, logger);
                 }
             }
             zfile.close();
@@ -265,7 +266,7 @@ public abstract class PatchRule {
     }
 
     // Check the file/directory is in smali folder or not
-    boolean isInSmaliFolder(String targetFile) {
+    public boolean isInSmaliFolder(String targetFile) {
         if (targetFile != null) {
             int pos = targetFile.lastIndexOf('/');
             if (pos != -1) {

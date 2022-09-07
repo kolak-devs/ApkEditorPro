@@ -1,10 +1,15 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
+
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
 
-class PatchRule_RemoveFiles extends PatchRule {
+public class PatchRuleRemoveFiles extends PatchRule {
 
     private static final String strEnd = "[/REMOVE_FILES]";
     private static final String TARGET = "TARGET:";
@@ -54,11 +59,11 @@ class PatchRule_RemoveFiles extends PatchRule {
     }
 
     @Override
-    public String executeRule(@NonNull ApkInfoActivity activity, ZipFile patchZip,
+    public String executeRule(Activity activity, @NonNull ApkInfoListener listener, ZipFile patchZip,
                               IPatchContext logger) {
-        String rootPath = activity.getDecodeRootPath();
+        String rootPath = listener.getDecodeRootPath();
 
-        ResListAdapter resAdapter = activity.getResListAdapter();
+        ResListAdapter resAdapter = listener.getResListAdapter();
         for (int i = 0; i < targetList.size(); ++i) {
             String targetPath = targetList.get(i);
             String filePath = rootPath + "/" + targetPath;

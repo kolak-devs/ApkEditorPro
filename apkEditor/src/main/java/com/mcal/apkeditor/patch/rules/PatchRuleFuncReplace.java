@@ -1,16 +1,21 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
+
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
 
-class PatchRule_FuncReplace extends PatchRule {
+public class PatchRuleFuncReplace extends PatchRule {
 
     private static final String strEnd = "[/FUNCTION_REPLACE]";
     private static final String TARGET = "TARGET:";
@@ -23,7 +28,7 @@ class PatchRule_FuncReplace extends PatchRule {
     // If the source is a zip, extract or not
     private String strFunction;
 
-    PatchRule_FuncReplace() {
+    public PatchRuleFuncReplace() {
         replaceContents = new ArrayList<>();
         keywords = new ArrayList<>();
         keywords.add(strEnd);
@@ -63,7 +68,7 @@ class PatchRule_FuncReplace extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip,
+    public String executeRule(Activity activity, ApkInfoListener listener, ZipFile patchZip,
                               @NonNull IPatchContext logger) {
         logger.error(R.string.general_error, "Not supported yet.");
         return null;

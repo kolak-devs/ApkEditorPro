@@ -1,9 +1,15 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
+
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.PathFinder;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
-class PatchRule_MatchAssign extends PatchRule {
+public class PatchRuleMatchAssign extends PatchRule {
 
     private static final String strEnd = "[/MATCH_ASSIGN]";
     private static final String TARGET = "TARGET:";
@@ -28,7 +34,7 @@ class PatchRule_MatchAssign extends PatchRule {
     private boolean bRegex = false;
     private boolean bDotall = false;
 
-    PatchRule_MatchAssign() {
+    public PatchRuleMatchAssign() {
         matches = new ArrayList<>();
         assigns = new ArrayList<>();
         keywords = new ArrayList<>();
@@ -79,12 +85,12 @@ class PatchRule_MatchAssign extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip, IPatchContext logger) {
+    public String executeRule(Activity activity, ApkInfoListener listener, ZipFile patchZip, IPatchContext logger) {
         preProcessing(logger, matches);
 
         String nextPath = pathFinder.getNextPath();
         while (nextPath != null) {
-            if (executeOnEntry(activity, patchZip, logger, nextPath)) {
+            if (executeOnEntry(activity, listener, patchZip, logger, nextPath)) {
                 break;
             }
             nextPath = pathFinder.getNextPath();
@@ -92,9 +98,9 @@ class PatchRule_MatchAssign extends PatchRule {
         return null;
     }
 
-    private boolean executeOnEntry(@NonNull ApkInfoActivity activity, ZipFile patchZip,
+    private boolean executeOnEntry(Activity activity, @NonNull ApkInfoListener listener, ZipFile patchZip,
                                    IPatchContext patchCtx, String targetFile) {
-        String filepath = activity.getDecodeRootPath() + "/" + targetFile;
+        String filepath = listener.getDecodeRootPath() + "/" + targetFile;
 
         // Load all the content
         String content;

@@ -1,12 +1,15 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.filter;
 
-public class PathFilter_ExactEntry extends PathFilter {
+import com.mcal.apkeditor.patch.PathFilter;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
+
+public class PathFilterExactEntry extends PathFilter {
 
     private final String entryName;
 
     private int cursor = 0;
 
-    public PathFilter_ExactEntry(IPatchContext ctx, String pathStr) {
+    public PathFilterExactEntry(IPatchContext ctx, String pathStr) {
         this.entryName = pathStr;
     }
 

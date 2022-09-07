@@ -1,13 +1,16 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.filter;
 
 import androidx.annotation.NonNull;
+
+import com.mcal.apkeditor.patch.PathFilter;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PathFilter_Wildcard extends PathFilter {
+public class PathFilterWildcard extends PathFilter {
 
     private final IPatchContext ctx;
     private final String wildPathStr;
@@ -19,7 +22,7 @@ public class PathFilter_Wildcard extends PathFilter {
     private boolean initialized = false;
     private int fileCursor = 0; // Index inside fileList
 
-    public PathFilter_Wildcard(@NonNull IPatchContext ctx, @NonNull String pathStr) {
+    public PathFilterWildcard(@NonNull IPatchContext ctx, @NonNull String pathStr) {
         this.ctx = ctx;
         this.wildPathStr = pathStr;
         this.regexPath = "^" + pathStr.replace("*", ".*") + "$";

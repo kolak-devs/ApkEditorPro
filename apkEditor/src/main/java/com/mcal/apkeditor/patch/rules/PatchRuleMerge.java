@@ -1,14 +1,20 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
 
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
 
+import android.app.Activity;
 import android.util.Log;
 import android.util.SparseIntArray;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IBeforeAddFile;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
+import com.mcal.apkeditor.patch.resource.ResourceItem;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.SDCard;
 
@@ -29,7 +35,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-class PatchRule_Merge extends PatchRule {
+public class PatchRuleMerge extends PatchRule {
 
     private static final String strEnd = "[/MERGE]";
     private static final String SOURCE = "SOURCE:";
@@ -65,7 +71,7 @@ class PatchRule_Merge extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, @NonNull ZipFile patchZip,
+    public String executeRule(Activity activity, ApkInfoListener listener, @NonNull ZipFile patchZip,
                               IPatchContext logger) {
 
         ZipEntry entry = patchZip.getEntry(sourceFile);
@@ -88,12 +94,12 @@ class PatchRule_Merge extends PatchRule {
             fos = null;
 
             // Refactor the new added Ids (public.xml)
-            mergeIds(activity.getDecodeRootPath() + "/res/values/public.xml",
+            mergeIds(listener.getDecodeRootPath() + "/res/values/public.xml",
                     path, logger);
 
             // Extract files in zip to target folder
-            addFilesInZip(activity, path,
-                    new ResourceMerger(activity.getDecodeRootPath()), logger);
+            addFilesInZip(activity, listener, path,
+                    new ResourceMerger(listener.getDecodeRootPath()), logger);
 
         } catch (Exception e) {
             logger.error(R.string.general_error, e.getMessage());
@@ -307,7 +313,7 @@ class PatchRule_Merge extends PatchRule {
         }
 
         @Override
-        public boolean consumeAddedFile(ApkInfoActivity activity,
+        public boolean consumeAddedFile(Activity activity, ApkInfoListener listener,
                                         ZipFile zfile, @NonNull ZipEntry entry) throws Exception {
             String name = entry.getName();
             String targetPath = this.rootPath + "/" + name;
@@ -323,7 +329,7 @@ class PatchRule_Merge extends PatchRule {
                     refactorAndSaveSmaliFiles(targetPath, zfile, entry);
                     // Make a trick to notify smali folder modified
                     String fakeSmali = name.substring(0, pos + 1) + "a.smali";
-                    activity.getResListAdapter().fileModified(fakeSmali,
+                    listener.getResListAdapter().fileModified(fakeSmali,
                             targetPath);
                     return true;
                 }

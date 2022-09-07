@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.resource;
 
 
 import androidx.annotation.Keep;

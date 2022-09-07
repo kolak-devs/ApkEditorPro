@@ -4,16 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.patch.filter.PathFilterComponent;
+import com.mcal.apkeditor.patch.filter.PathFilterExactEntry;
+import com.mcal.apkeditor.patch.filter.PathFilterWildcard;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class PathFinder {
+public class PathFinder {
 
     private List<PathFilter> filters = new ArrayList<>();
 
     // pathStr should look like: [APPLICATION] [ACTIVITIES]
-    PathFinder(IPatchContext ctx, String pathStr, int line) {
+    public PathFinder(IPatchContext ctx, String pathStr, int line) {
         // Pre-process the target path
         String expanded = PatchRule.assignValues(ctx, pathStr);
         if (expanded != null) {
@@ -33,9 +37,9 @@ class PathFinder {
                 }
             }
         } else if (pathStr.contains("*")) {
-            filters.add(new PathFilter_Wildcard(ctx, pathStr));
+            filters.add(new PathFilterWildcard(ctx, pathStr));
         } else {
-            filters.add(new PathFilter_ExactEntry(ctx, pathStr));
+            filters.add(new PathFilterExactEntry(ctx, pathStr));
         }
     }
 
@@ -43,14 +47,14 @@ class PathFinder {
     private PathFilter createFilter(IPatchContext ctx, String word,
                                     int lineIdx) {
         if ("APPLICATION".equals(word)) {
-            return new PathFilter_Component(ctx,
-                    PathFilter_Component.ComponentType.APPLICATION);
+            return new PathFilterComponent(ctx,
+                    PathFilterComponent.ComponentType.APPLICATION);
         } else if ("ACTIVITIES".equals(word)) {
-            return new PathFilter_Component(ctx,
-                    PathFilter_Component.ComponentType.ACTIVITY);
+            return new PathFilterComponent(ctx,
+                    PathFilterComponent.ComponentType.ACTIVITY);
         } else if ("LAUNCHER_ACTIVITIES".equals(word)) {
-            return new PathFilter_Component(ctx,
-                    PathFilter_Component.ComponentType.LAUNCHER_ACTIVITY);
+            return new PathFilterComponent(ctx,
+                    PathFilterComponent.ComponentType.LAUNCHER_ACTIVITY);
         } else {
             ctx.error(R.string.patch_error_invalid_target, lineIdx);
             return null;
@@ -75,7 +79,7 @@ class PathFinder {
         return result;
     }
 
-    boolean isSmaliNeeded() {
+    public boolean isSmaliNeeded() {
         if (filters != null) {
             for (int i = 0; i < filters.size(); ++i) {
                 if (filters.get(i).isSmaliNeeded()) {
@@ -86,7 +90,7 @@ class PathFinder {
         return false;
     }
 
-    String getNextPath() {
+    public String getNextPath() {
         if (filters == null) {
             return null;
         }
@@ -129,7 +133,7 @@ class PathFinder {
         return filters != null;
     }
 
-    boolean isWildMatch() {
+    public boolean isWildMatch() {
         if (filters != null) {
             for (PathFilter filter : filters) {
                 if (!filter.isWildMatch()) {

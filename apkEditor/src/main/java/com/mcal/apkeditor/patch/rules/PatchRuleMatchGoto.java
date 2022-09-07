@@ -1,9 +1,15 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
+
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.PathFinder;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
-class PatchRule_MatchGoto extends PatchRule {
+public class PatchRuleMatchGoto extends PatchRule {
 
     private static final String strEnd = "[/MATCH_GOTO]";
     private static final String TARGET = "TARGET:";
@@ -28,7 +34,7 @@ class PatchRule_MatchGoto extends PatchRule {
     private boolean bRegex = false;
     private boolean bDotall = false;
 
-    PatchRule_MatchGoto() {
+    public PatchRuleMatchGoto() {
         matches = new ArrayList<>();
         keywords = new ArrayList<>();
         keywords.add(strEnd);
@@ -77,13 +83,13 @@ class PatchRule_MatchGoto extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, ZipFile patchZip, IPatchContext logger) {
+    public String executeRule(Activity activity, ApkInfoListener listener, ZipFile patchZip, IPatchContext logger) {
         preProcessing(logger, matches);
 
         String nextPath = pathFinder.getNextPath();
         while (nextPath != null) {
             // If matches, then goto target rule
-            if (entryMatches(activity, logger, nextPath)) {
+            if (entryMatches(activity, listener, logger, nextPath)) {
                 return gotoRule;
             }
             nextPath = pathFinder.getNextPath();
@@ -91,9 +97,9 @@ class PatchRule_MatchGoto extends PatchRule {
         return null;
     }
 
-    private boolean entryMatches(@NonNull ApkInfoActivity activity,
+    private boolean entryMatches(Activity activity, @NonNull ApkInfoListener listener,
                                  IPatchContext patchCtx, String targetFile) {
-        String filepath = activity.getDecodeRootPath() + "/" + targetFile;
+        String filepath = listener.getDecodeRootPath() + "/" + targetFile;
 
         if (this.bRegex) {
             // Load all the content

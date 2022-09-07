@@ -1,11 +1,16 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.rules;
 
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
+
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.LinedReader;
+import com.mcal.apkeditor.patch.PatchRule;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.SDCard;
 
@@ -15,7 +20,7 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-class PatchRule_AddFiles extends PatchRule {
+public class PatchRuleAddFiles extends PatchRule {
 
     private static final String strEnd = "[/ADD_FILES]";
     private static final String SOURCE = "SOURCE:";
@@ -63,7 +68,7 @@ class PatchRule_AddFiles extends PatchRule {
     }
 
     @Override
-    public String executeRule(ApkInfoActivity activity, @NonNull ZipFile patchZip,
+    public String executeRule(Activity activity, ApkInfoListener listener, @NonNull ZipFile patchZip,
                               IPatchContext logger) {
 
         ZipEntry entry = patchZip.getEntry(sourceFile);
@@ -79,9 +84,9 @@ class PatchRule_AddFiles extends PatchRule {
 
             // Directly copy the content
             if (!this.bExtract) {
-                String targetPath = activity.getDecodeRootPath() + "/"
+                String targetPath = listener.getDecodeRootPath() + "/"
                         + targetFile;
-                activity.getResListAdapter().addFile(targetPath, input);
+                listener.getResListAdapter().addFile(targetPath, input);
             }
             // Source is a zip file
             else {
@@ -93,7 +98,7 @@ class PatchRule_AddFiles extends PatchRule {
                 fos = null;
 
                 // Extract files in zip to target folder
-                addFilesInZip(activity, path, null, logger);
+                addFilesInZip(activity, listener, path, null, logger);
             }
         } catch (Exception e) {
             logger.error(R.string.general_error, e.getMessage());

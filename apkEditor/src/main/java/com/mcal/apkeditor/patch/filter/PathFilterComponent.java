@@ -1,13 +1,16 @@
-package com.mcal.apkeditor.patch;
+package com.mcal.apkeditor.patch.filter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.mcal.apkeditor.patch.PathFilter;
+import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
 import java.io.File;
 import java.util.List;
 
 // Support "[APPLICATION]" "[ACTIVITIES]" "LAUNCHER_ACTIVITIES"
-public class PathFilter_Component extends PathFilter {
+public class PathFilterComponent extends PathFilter {
 
     private final ComponentType compType;
     private final String decodeRootPath;
@@ -15,7 +18,7 @@ public class PathFilter_Component extends PathFilter {
     private List<String> componentList;
     private int cursor = 0;
 
-    public PathFilter_Component(@NonNull IPatchContext ctx, @NonNull ComponentType compType) {
+    public PathFilterComponent(@NonNull IPatchContext ctx, @NonNull ComponentType compType) {
         this.compType = compType;
         this.decodeRootPath = ctx.getDecodeRootPath();
         switch (compType) {
@@ -108,7 +111,7 @@ public class PathFilter_Component extends PathFilter {
         return false;
     }
 
-    enum ComponentType {
+    public enum ComponentType {
         APPLICATION,
         ACTIVITY,
         LAUNCHER_ACTIVITY
