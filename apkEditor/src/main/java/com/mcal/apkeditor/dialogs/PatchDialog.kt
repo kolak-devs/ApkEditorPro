@@ -17,9 +17,9 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection
+import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener
 import com.mcal.apkeditor.patch.interfaces.IPatchContext
-import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.common.utilsOld.IOUtils
 import com.mcal.common.utilsOld.SDCard
 import com.mcal.patchview.ui.CodeText
@@ -172,6 +172,7 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
         materialDialog?.show()
 
         // Patch it
+        // TODO: Multiple select patches
         patchExecutor = PatchExecutor(mActivity, listener, patchPath, this)
         patchExecutor?.applyPatch()
     }
