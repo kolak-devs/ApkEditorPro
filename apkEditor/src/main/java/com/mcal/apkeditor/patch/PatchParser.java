@@ -48,24 +48,34 @@ public class PatchParser {
         String line = br.readLine();
         while (line != null) {
             line = line.trim();
+
             // Start a tag
             if (line.startsWith("[")) {
                 if (MIN_ENGINE_VER.equals(line)) {
-                    result.setRequiredEngine(Integer.parseInt(br.readLine()));
+                    String next = br.readLine();
+                    result.requiredEngine = Integer.parseInt(next);
                 } else if (AUTHOR.equals(line)) {
-                    result.setAuthor(br.readLine());
+                    String next = br.readLine();
+                    result.author = next;
                 } else if (PACKAGE.equals(line)) {
-                    result.setPackageName(br.readLine());
+                    String next = br.readLine();
+                    result.packagename = next;
                 } else {
                     PatchRule rule = parseRule(br, line, logger);
                     if (rule != null) {
-                        result.setRule(rule);
+                        result.rules.add(rule);
                     }
                 }
             } else if (line.startsWith("#") || "".equals(line)) {
-                logger.error(R.string.patch_error_unknown_rule, br.getCurrentLine(), line);
+                // comment or blank line
+            } else {
+                logger.error(R.string.patch_error_unknown_rule,
+                        br.getCurrentLine(), line);
             }
+
+            line = br.readLine();
         }
+
         return result;
     }
 
