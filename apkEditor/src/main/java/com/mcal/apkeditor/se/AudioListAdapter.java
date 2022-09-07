@@ -39,15 +39,15 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
         OnCompletionListener, OnItemClickListener, OnItemLongClickListener,
         IFileSelection {
 
-    private Activity ctx;
-    private ZipHelper zipHelper;
-    private List<String> audioPathList;
+    private final Activity ctx;
+    private final ZipHelper zipHelper;
+    private final List<String> audioPathList;
 
     // Record all the extracted audios
-    private Set<String> extractedAudios = new HashSet<String>();
+    private final Set<String> extractedAudios = new HashSet<>();
 
     // Record all the replaces
-    private Map<String, String> replaces = new HashMap<String, String>();
+    private final Map<String, String> replaces = new HashMap<>();
 
     // Support music playing
     private String workingDir;
@@ -55,7 +55,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
     private int playingPosition = -1;
     private String playingEntry;
 
-    public AudioListAdapter(Activity ctx, ZipHelper zipHelper) {
+    public AudioListAdapter(Activity ctx, @NonNull ZipHelper zipHelper) {
         this.ctx = ctx;
         this.zipHelper = zipHelper;
         this.audioPathList = zipHelper.audioPathList;

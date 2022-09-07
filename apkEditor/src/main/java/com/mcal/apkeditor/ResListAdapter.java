@@ -26,9 +26,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mcal.apkeditor.se.ZipImageZoomer;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
+import com.mcal.common.utils.ZipImageZoomer;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.ImageZoomer;
 import com.mcal.common.utilsOld.SDCard;
@@ -76,7 +76,7 @@ public class ResListAdapter extends BaseAdapter implements
     private final LruCache<String, BitmapInfo> bitmapCache = new LruCache<>(
             64) {
         protected void entryRemoved(boolean evicted, String key,
-                                    BitmapInfo oldValue, BitmapInfo newValue) {
+                                    @NonNull BitmapInfo oldValue, BitmapInfo newValue) {
             if (oldValue.bitmap != null) {
                 oldValue.bitmap.recycle();
             }

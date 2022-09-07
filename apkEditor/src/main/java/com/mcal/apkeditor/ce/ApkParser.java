@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.apkeditor.se.ZipImageZoomer;
+import com.mcal.common.utils.ZipImageZoomer;
 
 import java.io.IOException;
 import java.io.InputStream;

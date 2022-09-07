@@ -37,6 +37,7 @@ import com.mcal.apkeditor.dex.DexStringEditor;
 import com.mcal.apkeditor.utils.SignHelper;
 import com.mcal.apklib.sign.ImageTools;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.ApkInstaller;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;

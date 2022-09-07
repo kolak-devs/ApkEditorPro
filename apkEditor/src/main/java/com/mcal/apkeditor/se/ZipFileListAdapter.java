@@ -23,7 +23,7 @@ import com.mcal.apkeditor.dialogs.FileCopyDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apklib.AXMLPrinter;
-import com.mcal.common.data.Preferences;
+import com.mcal.common.utils.ZipImageZoomer;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.ImageZoomer;

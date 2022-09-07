@@ -21,7 +21,7 @@ import androidx.annotation.NonNull;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
-import com.mcal.common.data.Preferences;
+import com.mcal.common.utils.ZipImageZoomer;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.ImageZoomer;
 import com.mcal.common.view.DynamicExpandListView;

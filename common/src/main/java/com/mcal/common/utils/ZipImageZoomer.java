@@ -1,8 +1,10 @@
-package com.mcal.apkeditor.se;
+package com.mcal.common.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+
+import androidx.annotation.NonNull;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class ZipImageZoomer {
-    private ZipFile zfile;
+    private final ZipFile zfile;
     private int originWidth;
     private int originHeight;
 
@@ -59,10 +61,11 @@ public class ZipImageZoomer {
         return null;
     }
 
-    private void forceClose(Closeable c) {
+    private void forceClose(@NonNull Closeable c) {
         try {
             c.close();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

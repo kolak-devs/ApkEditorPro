@@ -61,7 +61,7 @@ public class ZipHelper {
 
                 // Record file information to the map structure
                 {
-                    String names[] = path.split("/");
+                    String[] names = path.split("/");
                     String dir = "/";
                     for (int i = 0; i < names.length - 1; i++) {
                         String name = names[i];
