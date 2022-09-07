@@ -48,37 +48,28 @@ public class PatchParser {
         String line = br.readLine();
         while (line != null) {
             line = line.trim();
-
             // Start a tag
             if (line.startsWith("[")) {
                 if (MIN_ENGINE_VER.equals(line)) {
-                    String next = br.readLine();
-                    result.requiredEngine = Integer.valueOf(next);
+                    result.setRequiredEngine(Integer.parseInt(br.readLine()));
                 } else if (AUTHOR.equals(line)) {
-                    String next = br.readLine();
-                    result.author = next;
+                    result.setAuthor(br.readLine());
                 } else if (PACKAGE.equals(line)) {
-                    String next = br.readLine();
-                    result.packagename = next;
+                    result.setPackageName(br.readLine());
                 } else {
                     PatchRule rule = parseRule(br, line, logger);
                     if (rule != null) {
-                        result.rules.add(rule);
+                        result.setRule(rule);
                     }
                 }
             } else if (line.startsWith("#") || "".equals(line)) {
-                // comment or blank line
-            } else {
-                logger.error(R.string.patch_error_unknown_rule,
-                        br.getCurrentLine(), line);
+                logger.error(R.string.patch_error_unknown_rule, br.getCurrentLine(), line);
             }
-
-            line = br.readLine();
         }
-
         return result;
     }
 
+    // Запускаем парсинг правил внутри patch.txt
     private static PatchRule parseRule(LinedReader br, String startLine,
                                        IPatchContext logger) throws IOException {
         PatchRule rule = null;

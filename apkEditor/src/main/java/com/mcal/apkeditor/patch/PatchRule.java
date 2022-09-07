@@ -33,7 +33,7 @@ public abstract class PatchRule {
     // For example: name="${STR_NAME}" --> name="app_name"
     @Nullable
     public static String assignValues(IPatchContext ctx, @NonNull String rawStr) {
-        List<REPLACE_REC> replaces = new ArrayList<>();
+        List<ReplaceRec> replaces = new ArrayList<>();
 
         int position = rawStr.indexOf("${", 0);
         while (position != -1) {
@@ -43,7 +43,7 @@ public abstract class PatchRule {
                 String varName = rawStr.substring(startPos, endPos);
                 String realVal = ctx.getVariableValue(varName);
                 if (realVal != null) {
-                    replaces.add(new REPLACE_REC(startPos - 2, endPos + 1, realVal));
+                    replaces.add(new ReplaceRec(startPos - 2, endPos + 1, realVal));
                 }
             } else {
                 break;
@@ -55,13 +55,13 @@ public abstract class PatchRule {
         if (!replaces.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             int startPos = 0;
-            for (REPLACE_REC rec : replaces) {
-                int curPos = rec.startPos;
+            for (ReplaceRec rec : replaces) {
+                int curPos = rec.getStartPos();
                 if (curPos > startPos) {
                     sb.append(rawStr.substring(startPos, curPos));
                 }
-                sb.append(rec.replacing);
-                startPos = rec.endPos;
+                sb.append(rec.getReplacing());
+                startPos = rec.getEndPos();
             }
             // remaining
             if (startPos < rawStr.length()) {
@@ -286,18 +286,6 @@ public abstract class PatchRule {
             if (assignedVal != null) {
                 values.set(i, assignedVal);
             }
-        }
-    }
-
-    private static class REPLACE_REC {
-        int startPos;
-        int endPos;
-        String replacing;
-
-        public REPLACE_REC(int _s, int _e, String _r) {
-            this.startPos = _s;
-            this.endPos = _e;
-            this.replacing = _r;
         }
     }
 }

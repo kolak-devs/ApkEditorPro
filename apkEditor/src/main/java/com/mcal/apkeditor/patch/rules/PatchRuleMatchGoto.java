@@ -8,6 +8,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.patch.LinedReader;
 import com.mcal.apkeditor.patch.PatchRule;
 import com.mcal.apkeditor.patch.PathFinder;
+import com.mcal.apkeditor.patch.Section;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 
@@ -204,17 +205,5 @@ public class PatchRuleMatchGoto extends PatchRule {
     @Override
     public boolean isSmaliNeeded() {
         return pathFinder.isSmaliNeeded();
-    }
-
-    private static class Section {
-        public int start;
-        public int end;
-        List<String> groupStrs;
-
-        public Section(int _start, int _end, List<String> _groupStrs) {
-            this.start = _start;
-            this.end = _end;
-            this.groupStrs = _groupStrs;
-        }
     }
 }
