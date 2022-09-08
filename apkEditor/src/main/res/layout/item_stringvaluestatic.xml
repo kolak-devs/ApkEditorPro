@@ -15,14 +15,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="#268C8C8C"
             android:padding="5dp"
-            android:text="@string/app_name"
-            android:background="#268C8C8C"/>
-
-        <View
-            android:layout_width="1dp"
-            android:background="@color/colorPrimaryDark"
-            android:layout_height="match_parent"/>
+            android:text="@string/app_name" />
 
         <TextView
             android:id="@+id/string_value"
