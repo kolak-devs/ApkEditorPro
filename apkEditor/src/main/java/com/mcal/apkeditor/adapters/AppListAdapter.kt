@@ -75,13 +75,13 @@ class AppListAdapter(
     }
 
     fun filter(constraint: CharSequence?) = CoroutineScope(Dispatchers.IO).launch {
+        val startResultList = mutableListOf<AppInfo>()
+        val resultList = mutableListOf<AppInfo>()
+        val endResultList = mutableListOf<AppInfo>()
         val charSearch = constraint.toString().lowercase(Locale.ROOT)
         if (charSearch.isEmpty()) {
             appFilterList = appList
         } else {
-            val startResultList = mutableListOf<AppInfo>()
-            val resultList = mutableListOf<AppInfo>()
-            val endResultList = mutableListOf<AppInfo>()
             loop@ for (row in appList) {
                 val name = formatAppName(row.appName)
                 var index = name.indexOf(charSearch)
@@ -147,7 +147,7 @@ class AppListAdapter(
     private fun publishResults(results: List<AppInfo>?) {
         if (results != null) {
             val length = results.size
-            if (length > 0) {
+            if (length >= 0) {
                 appFilterList = results
                 notifyDataSetChanged()
             }
