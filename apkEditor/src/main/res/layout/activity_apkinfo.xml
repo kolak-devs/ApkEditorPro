@@ -138,7 +138,8 @@
             style="@style/main_tab_bottom"
             android:checked="true"
             android:drawableTop="@drawable/round_g_translate_accent_24"
-            android:text="@string/string" />
+            android:text="@string/string"
+            android:background="@drawable/edit_search_background"/>
 
         <RadioButton
             android:id="@+id/tab_resource"

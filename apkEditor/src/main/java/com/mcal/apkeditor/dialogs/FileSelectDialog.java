@@ -76,6 +76,8 @@ public class FileSelectDialog implements OnItemClickListener, AdapterView.OnItem
                 tag, null);
     }
 
+
+
     // When selectFolder = true, means to select a folder
     // tag is used to differentiate remembered directory
     @SuppressLint("InflateParams")
@@ -131,6 +133,7 @@ public class FileSelectDialog implements OnItemClickListener, AdapterView.OnItem
         fileList.setAdapter(fileListAdapter);
         fileList.setOnItemClickListener(this);
         fileList.setOnItemLongClickListener(this);
+        fileList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         // Checkbox (Edit it before replace)
         this.editCheckBox = view.findViewById(R.id.cb_edit_before_replace);

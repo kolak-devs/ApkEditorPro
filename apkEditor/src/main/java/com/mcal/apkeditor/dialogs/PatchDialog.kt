@@ -107,6 +107,11 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
                 Toast.makeText(mActivity, message, Toast.LENGTH_SHORT)
                     .show()
             }
+
+//            mActivity.assets.list("a")?.forEach { patch ->
+//                extractExamples(patch)
+//            }
+
         }
     }
 
