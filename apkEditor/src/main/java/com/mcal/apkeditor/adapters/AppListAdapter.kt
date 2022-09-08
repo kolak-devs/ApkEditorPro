@@ -18,7 +18,7 @@ import java.util.*
 
 class AppListAdapter(
     private val pm: PackageManager,
-    private val appList: MutableList<AppInfo>,
+    private val appList: List<AppInfo>,
     private val listener: AppItemClick
 ) :
     RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
@@ -71,17 +71,45 @@ class AppListAdapter(
     }
 
     fun filter(constraint: CharSequence?) = CoroutineScope(Dispatchers.IO).launch {
-        val charSearch = constraint.toString()
+        val charSearch = constraint.toString().lowercase(Locale.ROOT)
         if (charSearch.isEmpty()) {
             appFilterList = appList
         } else {
+            val startResultList = mutableListOf<AppInfo>()
             val resultList = mutableListOf<AppInfo>()
-            for (row in appList) {
-                if (row.appName.lowercase(Locale.ROOT).contains(charSearch.lowercase(Locale.ROOT))) {
-                    resultList.add(row)
+            val endResultList = mutableListOf<AppInfo>()
+            loop@ for (row in appList) {
+                val name = row.appName.lowercase(Locale.ROOT)
+                var index = name.indexOf(charSearch)
+                if (index == 0) {
+                    startResultList.add(row)
+                } else if (index > 0) {
+                    do {
+                        if (name[index - 1] == ' ') {
+                            resultList.add(row)
+                            continue@loop
+                        }
+                        index = name.indexOf(charSearch, index + 1)
+                    } while (index > 0)
+                    endResultList.add(row)
+                } else {
+                    endResultList.add(row)
                 }
             }
-            appFilterList = resultList
+            val offset1 = startResultList.size
+            val offset2 = resultList.size
+            val length = offset1 + offset2 + endResultList.size
+            val list: MutableList<AppInfo> = ArrayList(length)
+            for (app in startResultList) {
+                list.add(0, app)
+            }
+            for (app in resultList) {
+                list.add(offset1, app)
+            }
+            for (app in endResultList) {
+                list.add(offset1 + offset2, app)
+            }
+            appFilterList = list
         }
         CoroutineScope(Dispatchers.Main).launch {
             publishResults(appFilterList)
@@ -89,7 +117,7 @@ class AppListAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun publishResults(results: MutableList<AppInfo>?) {
+    private fun publishResults(results: List<AppInfo>?) {
         if (results != null) {
             val length = results.size
             if (length > 0) {
