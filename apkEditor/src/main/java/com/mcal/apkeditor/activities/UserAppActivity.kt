@@ -17,10 +17,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -44,6 +41,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
     private var searchTextWatcher: EditText? = null
     private var clearSearchText: ImageButton? = null
     private var progressBar: ProgressBar? = null
+    private var textNotFound: TextView? = null
     private var userApps: MenuItem? = null
     private var systemApps: MenuItem? = null
 
@@ -56,6 +54,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
         progressBar = findViewById(R.id.progress_bar)
         mRecyclerView = findViewById(R.id.application_list)
         searchTextWatcher = findViewById(R.id.et_keyword)
+        textNotFound = findViewById(R.id.app_not_found)
         clearSearchText = findViewById(R.id.clear_text)
         clearSearchText?.setOnClickListener {
             searchTextWatcher?.setText("")
@@ -243,6 +242,10 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
             }
         }
         dialog.create().show()
+    }
+
+    override fun onFoundApp(mode: Boolean) {
+        textNotFound?.visibility = if (mode) View.GONE else View.VISIBLE
     }
 
     private fun showAppInfo(position: Int) {

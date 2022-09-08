@@ -33,6 +33,7 @@ class AppListAdapter(
     interface AppItemClick {
         fun onClick(item: AppInfo)
         fun onLongClick(position: Int)
+        fun onFoundApp(mode: Boolean)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppListViewHolder {
@@ -147,6 +148,7 @@ class AppListAdapter(
     private fun publishResults(results: List<AppInfo>?) {
         if (results != null) {
             val length = results.size
+            listener.onFoundApp(length > 0)
             if (length >= 0) {
                 appFilterList = results
                 notifyDataSetChanged()

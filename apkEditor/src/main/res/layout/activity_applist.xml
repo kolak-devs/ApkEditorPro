@@ -30,7 +30,7 @@
             android:paddingRight="8dp"
             android:singleLine="true"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <ImageButton
             android:id="@+id/clear_text"
@@ -66,6 +66,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/app_not_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="App not found"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </FrameLayout>
 
