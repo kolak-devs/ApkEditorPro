@@ -14,6 +14,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 class AppListAdapter(
@@ -25,6 +27,8 @@ class AppListAdapter(
     var newValue: String? = null
     var canStartFilterProcess = true
     private var appFilterList = appList
+    private var mMatcher: Matcher? = null
+    private var mStringBuffer: StringBuffer? = null
 
     interface AppItemClick {
         fun onClick(item: AppInfo)
@@ -79,7 +83,7 @@ class AppListAdapter(
             val resultList = mutableListOf<AppInfo>()
             val endResultList = mutableListOf<AppInfo>()
             loop@ for (row in appList) {
-                val name = row.appName.lowercase(Locale.ROOT)
+                val name = formatAppName(row.appName)
                 var index = name.indexOf(charSearch)
                 if (index == 0) {
                     startResultList.add(row)
@@ -92,7 +96,7 @@ class AppListAdapter(
                         index = name.indexOf(charSearch, index + 1)
                     } while (index > 0)
                     endResultList.add(row)
-                } else {
+                } else if (name.contains(charSearch)) {
                     endResultList.add(row)
                 }
             }
@@ -114,6 +118,29 @@ class AppListAdapter(
         CoroutineScope(Dispatchers.Main).launch {
             publishResults(appFilterList)
         }
+    }
+
+    private fun formatAppName(name: String): String {
+        val formatName = name.lowercase(Locale.ROOT)
+        var matcher = mMatcher
+        if (matcher == null) {
+            matcher = Pattern.compile("([^\\p{L}\\d]+)").matcher(formatName)
+            mMatcher = matcher
+        } else {
+            matcher.reset(formatName)
+        }
+        var stringBuffer = mStringBuffer
+        if (stringBuffer == null) {
+            stringBuffer = StringBuffer()
+            mStringBuffer = stringBuffer
+        } else {
+            stringBuffer.setLength(0)
+        }
+        while (matcher!!.find()) {
+            matcher.appendReplacement(stringBuffer, " ")
+        }
+        matcher.appendTail(stringBuffer)
+        return stringBuffer.toString().trim()
     }
 
     @SuppressLint("NotifyDataSetChanged")
