@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="seed">#448aff</color>
     <color name="md_theme_light_primary">#005AC2</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_primaryContainer">#D8E2FF</color>
@@ -27,9 +26,6 @@
     <color name="md_theme_light_inverseOnSurface">#D0F8FF</color>
     <color name="md_theme_light_inverseSurface">#00363D</color>
     <color name="md_theme_light_inversePrimary">#ADC6FF</color>
-    <color name="md_theme_light_shadow">#000000</color>
-    <color name="md_theme_light_surfaceTint">#005AC2</color>
-    <color name="md_theme_light_surfaceTintColor">#005AC2</color>
     <color name="md_theme_dark_primary">#ADC6FF</color>
     <color name="md_theme_dark_onPrimary">#002E6A</color>
     <color name="md_theme_dark_primaryContainer">#004495</color>
@@ -56,17 +52,11 @@
     <color name="md_theme_dark_inverseOnSurface">#001F24</color>
     <color name="md_theme_dark_inverseSurface">#97F0FF</color>
     <color name="md_theme_dark_inversePrimary">#005AC2</color>
-    <color name="md_theme_dark_shadow">#000000</color>
-    <color name="md_theme_dark_surfaceTint">#ADC6FF</color>
-    <color name="md_theme_dark_surfaceTintColor">#ADC6FF</color>
-    <color name="RobotTone">#00B473</color>
     <color name="colorGray">#1F1F1F</color>
-    <color name="string_name">#DFDFDF</color>
     <color name="yellow">#FF9800</color>
 
     <color name="color_white">#FAFAFA</color>
     <color name="color_green">#ff4cb648</color>
     <color name="colorStrokeSearch">#4C4F52</color>
 
-    <color name="colorSurface">#FFFFFF</color>
 </resources>

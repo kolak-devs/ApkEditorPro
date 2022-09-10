@@ -1,7 +1,5 @@
 <resources>
 
-    <color name="white">#ffffffff</color>
-
     <string name="appdm_backup">Backup</string>
     <string name="appdm_preference">Preference</string>
     <string name="appdm_database">Database</string>

@@ -29,11 +29,9 @@
     <string name="select_file_replace">&#1740;&#1705; &#1601;&#1575;&#1740;&#1604; &#1585;&#1575; &#1576;&#1585;&#1575;&#1740; &#1580;&#1575;&#1740;&#1711;&#1586;&#1740;&#1606; &#1705;&#1585;&#1583;&#1606; &#1570;&#1606; &#1575;&#1606;&#1578;&#1582;&#1575;&#1576; &#1705;&#1606;&#1740;&#1583;</string>
     <string name="pls_input_keyword">&#1705;&#1604;&#1740;&#1583;&#1608;&#1575;&#1688;&#1607; &#1585;&#1575; &#1576;&#1585;&#1575;&#1740; &#1580;&#1587;&#1578;&#1580;&#1608; &#1608;&#1575;&#1585;&#1583; &#1705;&#1606;&#1740;&#1583;</string>
     <string name="manifest_edit_not_support">&#1575;&#1605;&#1705;&#1575;&#1606; &#1608;&#1740;&#1585;&#1575;&#1740;&#1588; &#1583;&#1585; &#1606;&#1587;&#1582;&#1607;&#8204;&#1740; &#1585;&#1575;&#1740;&#1711;&#1575;&#1606; &#1583;&#1585; &#1583;&#1587;&#1578;&#1585;&#1587; &#1606;&#1740;&#1587;&#1578;!</string>
-    <string name="promote_msg">&#1602;&#1575;&#1576;&#1604;&#1740;&#1578; &#1608;&#1740;&#1585;&#1575;&#1740;&#1588; &#1578;&#1606;&#1607;&#1575; &#1583;&#1585; &#1606;&#1587;&#1582;&#1607;&#8204;&#1740; &#1581;&#1585;&#1601;&#1607;&#8204;&#1575;&#1740; &#1662;&#1588;&#1578;&#1740;&#1576;&#1575;&#1606;&#1740; &#1588;&#1583;&#1607; &#1575;&#1587;&#1578;. &#1576;&#1585;&#1575;&#1740; &#1578;&#1607;&#1740;&#1607;&#8204;&#1740; &#1606;&#1587;&#1582;&#1607;&#8204;&#1740; &#1581;&#1585;&#1601;&#1607;&#8204;&#1575;&#1740;&#1548; &#1711;&#1586;&#1740;&#1606;&#1607;&#8204;&#1740; &#8242;&#1605;&#1588;&#1575;&#1607;&#1583;&#1607;&#8204;&#1740; &#1606;&#1587;&#1582;&#1607;&#8204;&#1740; &#1581;&#1585;&#1601;&#1607;&#8204;&#1575;&#1740;&#8242; &#1585;&#1575; &#1604;&#1605;&#1587; &#1705;&#1606;&#1740;&#1583;.</string>
     <string name="not_available">&#1583;&#1585; &#1583;&#1587;&#1578;&#1585;&#1587; &#1606;&#1740;&#1587;&#1578;</string>
     <string name="add_key_value">&#1575;&#1590;&#1575;&#1601;&#1607;&#8204;&#1705;&#1585;&#1583;&#1606; &#1740;&#1705; &#1705;&#1604;&#1740;&#1583;/ &#1605;&#1602;&#1583;&#1575;&#1585;:</string>
     <string name="open_in_new_window">&#1576;&#1575;&#1586; &#1588;&#1583;&#1606; &#1583;&#1585; &#1662;&#1606;&#1580;&#1585;&#1607;&#8204;&#1575;&#1740; &#1580;&#1583;&#1740;&#1583;</string>
-    <string name="edit_string_value">&#1605;&#1602;&#1583;&#1575;&#1585; &#1605;&#1608;&#1585;&#1583;&#1606;&#1592;&#1585; &#1585;&#1575; &#1608;&#1740;&#1585;&#1575;&#1740;&#1588; &#1705;&#1606;&#1740;&#1583;</string>
     <string name="language">&#1586;&#1576;&#1575;&#1606;:</string>
     <string name="code">&#1588;&#1606;&#1575;&#1587;&#1607;</string>
     <string name="replace">&#1580;&#1575;&#1740;&#1711;&#1586;&#1740;&#1606;&#1740;</string>
@@ -96,18 +94,13 @@
     <string name="file_added">فایل اضافه شده: %s</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -115,14 +108,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

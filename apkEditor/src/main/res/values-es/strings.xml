@@ -26,7 +26,6 @@
     <string name="color">Color</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
-    <string name="colormixer_cancel">Cancelar</string>
     <string name="colormixer_green">G</string>
     <string name="colormixer_red">R</string>
     <string name="colormixer_set">Establecer</string>
@@ -46,13 +45,11 @@
     <string name="donot_show_again">No mostrar más</string>
     <string name="dummy" />
     <string name="edit_data_root">EDITAR DATOS [ROOT]</string>
-    <string name="edit_string_value">Editar el Valor</string>
     <string name="empty_input_tip">¡El campo de búsqueda no puede estar vacío!</string>
     <string name="empty_key_tip">¡El campo \"Clave\" NO puede estar vacío!</string>
     <string name="encode_dex_file">Codificando Archivo DEX…</string>
     <string name="entry_in_apk">Entrada en APK</string>
     <string name="errmsg_copied">El Mensaje de Error se ha copiado al Portapapeles</string>
-    <string name="error_file_too_big">¡El tamaño del archivo es demasiado grande para poder abrirlo!</string>
     <string name="error_filepath_empty">¡El campo \"Ruta del Archivo\" no puede estar vacío!</string>
     <string name="error_filepath_notexist">¡El Archivo No Existe!</string>
     <string name="exit">Salir</string>
@@ -63,14 +60,10 @@
     <string name="file_added">Archivo Añadido: %s</string>
     <string name="file_already_exist">"¡\"%s\" ya existe!"</string>
     <string name="file_replaced">Archivo Reemplazado</string>
-    <string name="file_saved">Archivo Guardado</string>
     <string name="files">Recursos</string>
     <string name="files_capital">ARCHIVOS</string>
-    <string name="find">Buscar</string>
-    <string name="find_replace">Buscar/Reemplazar</string>
     <string name="folder_replace_tip" formatted="false">¿Está seguro que desea reemplazar \"%s\" por \"%s\"?</string>
     <string name="folder_replaced">Carpeta Reemplazada</string>
-    <string name="font_size">Tamaño de la Fuente</string>
     <string name="full_edit">EDICIÓN COMPLETA</string>
     <string name="general_error">¡ERROR!: %s</string>
     <string name="help">Ayuda</string>
@@ -89,8 +82,6 @@
     <string name="language">Idioma</string>
     <string name="launcher_icon">Icono del Launcher</string>
     <string name="line_data">DATOS EN LA LÍNEA:&#160;</string>
-    <string name="line_number">Línea №</string>
-    <string name="line_wrap">Ajuste de Línea</string>
     <string name="loading">Cargando…</string>
     <string name="location_0">Por Defecto (No Especificado)</string>
     <string name="location_1">Automático (El Sistema Decide)</string>
@@ -107,17 +98,13 @@
     <string name="no_change_detected">¡No Se Han Detectado Cambios!</string>
     <string name="no_patch_selected">¡No se ha seleccionado ningún Parche!</string>
     <string name="not_available">No Disponible</string>
-    <string name="not_found">No Encontrado</string>
     <string name="notfound_in_manifest">¡No se ha encontrado este elemento en ninguna entrada de ninguna cadena del Manifiesto!</string>
-    <string name="notice_capital">¡ATENCIÓN!</string>
     <string name="num_items_selected">%d Elemento(s) Seleccionado(s)</string>
-    <string name="open_in_editor">Editar</string>
     <string name="open_in_new_window">Abrir en una Nueva Ventana</string>
     <string name="others">Otros</string>
     <string name="package_name">Nombre del Paquete</string>
     <string name="package_rename_method">Método de Renombrado del Paquete</string>
     <string name="patch_applied">Parche Aplicado</string>
-    <string name="patch_capital">PARCHES</string>
     <string name="patch_error_cannot_parse" formatted="false">¡No es posible analizar la línea: %d: %s!</string>
     <string name="patch_error_invalid_target" formatted="false">¡Objetivo inválido (o no soportado) en la línea %d: %s!</string>
     <string name="patch_error_no_entry">"No se ha encontrado \"%s\" en el contenido del Parche!"</string>
@@ -142,7 +129,6 @@
     <string name="pls_input_keyword">Ingresar Palabra Clave</string>
     <string name="private_key_label">"Clave Privada
 (.pk8)"</string>
-    <string name="promote_msg">"La Edición de Recursos SÓLO es posible en la Versión PRO. Si desea obtenerla, haga clic en el botón \"Versión PRO\".</string>
     <string name="public_key_label">"Clave Pública
 (.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">DESHABILITADO: Inmediatamente después de pulsar el botón \"Compilar\", se iniciará el proceso de recompilado y firma del APK.</string>
@@ -151,13 +137,11 @@
     <string name="rebuild_dex_file">Recompilar Archivo(s) DEX</string>
     <string name="rebuild_res_file">Recompilar Archivo(s) de Recursos</string>
     <string name="rebuild_the_apk">Recompilar el APK</string>
-    <string name="regexp">Expresión Regular</string>
     <string name="remove">Desinstalar</string>
     <string name="remove_tip">Esta Aplicación ya está instalada. Es posible que deba desinstalarla antes de instalar este nuevo APK modificado.</string>
     <string name="rename">Renombrar</string>
     <string name="rename_in_resources">Renombrar el Paquete en \"resources.arsc\"</string>
     <string name="replace">Reemplazar</string>
-    <string name="replace_all_ret">%d Recurrencia(s) Reemplazada(s)</string>
     <string name="resolution">Resolución</string>
     <string name="resource">Recursos</string>
     <string name="sample_code">Código de Muestra</string>
@@ -178,7 +162,6 @@
     <string name="select_folder_replace">Seleccionar la Carpeta a Reemplazar</string>
     <string name="select_key_file">Seleccionar un Archivo de Claves</string>
     <string name="select_patch">Seleccionar Parche</string>
-    <string name="select_target_lang">Seleccionar Idioma para Traducir:&#160;</string>
     <string name="settings">Ajustes</string>
     <string name="show_a_toast">Mostrar un Mensaje Emergente</string>
     <string name="sign">Firmando…</string>
@@ -223,7 +206,6 @@
     <string name="decode_dir">Directorio de Descompilado</string>
     <string name="decode_dir_summary_may_change">No Especificado. Se utilizará el Directorio predeterminado de APK Editor en el Almacenamiento Interno.</string>
     <string name="dex_decode_succeed">Archivo(s) DEX descodificado(s) satisfactoriamente.</string>
-    <string name="donot_save">"No Guardar"</string>
     <string name="dump_a_value">Volcar un Valor</string>
     <string name="edit_before_replace">Ver/Editar el archivo antes de reemplazar \"%s\"</string>
     <string name="extension_changed_tip">La extensión del archivo ha cambiado. ¿Está seguro que desea proseguir con el cambio?</string>
@@ -261,11 +243,8 @@
     <string name="project_removed">El Proyecto \"%s\" ha sido eliminado satisfactoriamente.</string>
     <string name="projects">Proyectos</string>
     <string name="rename_in_dex">Renombrar Paquete en Archivo(s) DEX [Todavía en estado Beta. Para aumentar las posibilidades de éxito, por favor, mantenga intacta la longitud del nombre y haga los menos cambios posibles, como por ejemplo, cambiar \"com.android\" por \"com.androie\"]</string>
-    <string name="replace_all">Rplzr. Todo</string>
     <string name="save_as_project">PROYECTO</string>
-    <string name="save_changes_tip">¿Desea guardar los cambios?</string>
     <string name="select_language_desc">Por favor; seleccione el Idioma que prefiera utilizar con independencia del predeterminado del Sistema.</string>
-    <string name="show_line_numbers">Mostrar Números de Línea</string>
     <string name="str_fix_failed">¡Disculpe, pero se ha producido un error desconocido al intentar corregir el/los problema(s)!</string>
     <string name="str_num_renamed_file">%d Archivo(s) Renombrado(s)</string>
     <string name="str_rename_failed">¡Disculpe, pero se ha producido un error desconocido al intentar renombrar el archivo!</string>
@@ -277,28 +256,11 @@
     <string name="build_in_progress_tip">El Recompilado anterior aún no ha finalizado. No es posible iniciar otro nuevo.</string>
     <string name="build_ongoing">Recompilando...</string>
     <string name="build_still_running_tip">Por favor, tenga en cuenta que el Recompilado puede estar procesándose incluso saliendo de esta ventana. Podrá comprobar el progreso de la operación en la Barra de Estado y/o en el Panel de Notificaciones.</string>
-    <string name="clipboard_no_text">¡No hay ningún texto guardado en el Portapapeles!</string>
-    <string name="code_snippet">Fragmento de Código</string>
-    <string name="colorpad">Paleta de Colores</string>
-    <string name="comment_lines">Comentar Líneas</string>
-    <string name="delete_lines">Eliminar Líneas</string>
     <string name="entry_modified">"\"%s\" modificada."</string>
-    <string name="err_from_greater_than_to">Error: El valor de \"Desde la Línea №\" es mayor que el valor de \"Hasta la Línea №\"</string>
     <string name="error">Error</string>
     <string name="failed_to_parse_xml">No se ha podido corregir la entrada del XML: %s.</string>
-    <string name="from_line_no">Desde la Línea №</string>
-    <string name="html">HTML</string>
-    <string name="n_lines_commented">%d línea(s) comentada(s).</string>
-    <string name="n_lines_deleted">%d línea(s) eliminada(s).</string>
-    <string name="n_lines_uncommented">%d línea(s) sin comentar.</string>
     <string name="please_note">Tenga en Cuenta Que...</string>
-    <string name="selected_str_copied">Cadena Seleccionada Copiada.</string>
     <string name="tip">Consejo</string>
-    <string name="to_line_no">Hasta la Línea №</string>
-    <string name="use_bfe_message">"El \"Editor de Archivos Grandes\" está diseñado para que los archivos de gran tamaño puedan cargarse con mayor rapidez. Sin embargo, de momento sólo permite la edición de líneas \"una por una\".
-Desde este panel se puede definir el tamaño de archivo a partir del cuál se usará el Editor de Archivos Grandes (en Kbytes):"</string>
-    <string name="use_bfe_tip">Debido a que el archivo es de gran tamaño se está utilizando el Editor de Archivos Grandes. Puede Ud. cambiar cuándo usarlo en los Ajustes del Editor.</string>
-    <string name="when_use_bfe">Cuando Usar el Editor de Archivos Grandes</string>
     <string name="xml_file_edit">Editar Archivos XML (BETA)</string>
     <string name="cannot_open_xxx">No se pudo abrir %s</string>
     <string name="patch_error_no_entrance_func">Función de Entrada No Especificada.</string>
@@ -308,18 +270,13 @@ Desde este panel se puede definir el tamaño de archivo a partir del cuál se us
     <string name="sure_to_stop_build">El Recompilado aún no ha finalizado; ¿Está seguro que desea detenerlo? (Tal vez deba esperar un poco para ponerlo en 2º plano)</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -327,14 +284,9 @@ Desde este panel se puede definir el tamaño de archivo a partir del cuál se us
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

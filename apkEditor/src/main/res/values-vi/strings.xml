@@ -26,7 +26,6 @@
     <string name="color">Màu sắc</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
-    <string name="colormixer_cancel">Hủy bỏ</string>
     <string name="colormixer_green">G</string>
     <string name="colormixer_red">R</string>
     <string name="colormixer_set">Thiết đặt</string>
@@ -46,13 +45,11 @@
     <string name="donot_show_again">Không hiển thị lại</string>
     <string name="dummy" />
     <string name="edit_data_root">Chỉnh sửa Data [ROOT]</string>
-    <string name="edit_string_value">Chỉnh sửa Value</string>
     <string name="empty_input_tip">Đầu vào không thể để trống.</string>
     <string name="empty_key_tip">Key không được để trống!</string>
     <string name="encode_dex_file">Mã hóa tập tin DEX …</string>
     <string name="entry_in_apk">Mục nhập APK</string>
     <string name="errmsg_copied">Đã sao chép thông báo lỗi vào bộ nhớ tạm.</string>
-    <string name="error_file_too_big">Tập tin quá lớn để mở.</string>
     <string name="error_filepath_empty">Đường dẫn tập tin không thể để trống.</string>
     <string name="error_filepath_notexist">Tập tin không tồn tại.</string>
     <string name="exit">Thoát ra</string>
@@ -63,14 +60,10 @@
     <string name="file_added">Tập tin thêm: %s</string>
     <string name="file_already_exist">"'%s' đã tồn tại!"</string>
     <string name="file_replaced">Đã thay thế tập tin.</string>
-    <string name="file_saved">Đã lưu tập tin.</string>
     <string name="files">Tập tin</string>
     <string name="files_capital">TẬP TIN</string>
-    <string name="find">Tìm kiếm</string>
-    <string name="find_replace">Tìm /Thay thế</string>
     <string name="folder_replace_tip" formatted="false">Bạn có chắc chắn để thay thế %s với %s?</string>
     <string name="folder_replaced">Đã thay thế thư mục</string>
-    <string name="font_size">Kích cỡ phông chữ</string>
     <string name="full_edit">Chỉnh sửa chuyên sâu</string>
     <string name="general_error">Lỗi: %s</string>
     <string name="help">Trợ giúp</string>
@@ -89,8 +82,6 @@
     <string name="language">Ngôn ngữ:</string>
     <string name="launcher_icon">Biểu tượng (Icon)</string>
     <string name="line_data">DỮ LIỆU TRỰC TUYẾN:</string>
-    <string name="line_number">Số dòng</string>
-    <string name="line_wrap">Ngắt dòng</string>
     <string name="loading">Đang tải</string>
     <string name="location_0">Mặc định (Không rõ)</string>
     <string name="location_1">Tự động (Hệ điều hành OS Quyết định)</string>
@@ -107,17 +98,13 @@
     <string name="no_change_detected">Không phát hiện thay đổi .</string>
     <string name="no_patch_selected">Không có patch nào được chọn</string>
     <string name="not_available">Không thể</string>
-    <string name="not_found">Không tìm thấy</string>
     <string name="notfound_in_manifest">Không thể tìm thấy string trong AndroidManifest.xml</string>
-    <string name="notice_capital">THÔNG BÁO</string>
     <string name="num_items_selected">%d mục(s) được chọn</string>
-    <string name="open_in_editor">Mở chỉnh sửa</string>
     <string name="open_in_new_window">Mở trong một cửa sổ mới</string>
     <string name="others">Xóa lịch sử</string>
     <string name="package_name">Tên gói</string>
     <string name="package_rename_method">Phương thức đổi tên gói</string>
     <string name="patch_applied">Áp dụng Patch</string>
-    <string name="patch_capital">PATCH</string>
     <string name="patch_error_cannot_parse" formatted="false">Không thể phân tích cú pháp %d: %s</string>
     <string name="patch_error_invalid_target" formatted="false">Mục tiêu không hợp lệ hoặc không được hỗ trợ tại dòng %d: %s</string>
     <string name="patch_error_no_entry">"Không thể tìm '%s' bên trong patch."</string>
@@ -142,7 +129,6 @@
     <string name="pls_input_keyword">Đầu vào từ khóa tìm kiếm</string>
     <string name="private_key_label">"Key Riêng tư
 (.pk8)"</string>
-    <string name="promote_msg">" Chỉnh sửa chỉ được hỗ trợ trong phiên bản chuyên nghiệp. Kích vào 'Xem phiên bản Pro' để có được phiên bản chuyên nghiệp?"</string>
     <string name="public_key_label">"Key Công cộng
 (.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">Vô hiệu hoá. Sẽ trực tiếp xây dựng lại và ký APK khi nhấp nút lưu lại.</string>
@@ -151,13 +137,11 @@
     <string name="rebuild_dex_file">Xây dựng lại tập tin DEX</string>
     <string name="rebuild_res_file">Xây dựng lại tập tin resource</string>
     <string name="rebuild_the_apk">Xây dựng lại APK</string>
-    <string name="regexp">Biểu thức bình thường</string>
     <string name="remove">Gỡ cài đặt</string>
     <string name="remove_tip">Ứng dụng này đã được cài đặt - Nếu bị lỗi xung đột, bạn phải gỡ cài đặt cũ trước khi cài đặt tập tin Apk sửa đổi .</string>
     <string name="rename">Đổi tên</string>
     <string name="rename_in_resources">Đổi tên tên gói trong resources.arsc</string>
     <string name="replace">Thay thế</string>
-    <string name="replace_all_ret">%d Sự kiện (s) được thay thế</string>
     <string name="resolution">Phân tích</string>
     <string name="resource">Resource</string>
     <string name="sample_code">Mã mẫu</string>
@@ -178,7 +162,6 @@
     <string name="select_folder_replace">Chọn một thư mục để thay thế nó</string>
     <string name="select_key_file">Chọn một tập tin key</string>
     <string name="select_patch">Chọn một Patch</string>
-    <string name="select_target_lang">Chọn một ngôn ngữ để dịch</string>
     <string name="settings">Cài đặt</string>
     <string name="show_a_toast">Hiện một Toast</string>
     <string name="sign">Đăng ký</string>
@@ -223,7 +206,6 @@
     <string name="decode_dir">Thư mục giải mã</string>
     <string name="decode_dir_summary_may_change">Không được thiết lập. Sẽ sử dụng mặc định lưu trữ nội bộ.</string>
     <string name="dex_decode_succeed">Đã giải mã thành công tập tin DEX(s).</string>
-    <string name="donot_save">Không lưu</string>
     <string name="dump_a_value">Kết xuất một Value</string>
     <string name="edit_before_replace">Xem/Chỉnh sửa tập tin trước khi thay thế %s</string>
     <string name="extension_changed_tip">Đã mở rộng tên tập tin. Bạn có chắc chắn muốn thay đổi nó?</string>
@@ -261,11 +243,8 @@
     <string name="project_removed">Loại bỏ \"%s\" dự án.</string>
     <string name="projects">Dự án</string>
     <string name="rename_in_dex">Đổi tên gói trong tập tin dex (s) [Trong phiên bản beta. Để cải thiện tỷ lệ thành công, xin vui lòng giữ độ dài không thay đổi, và hãy tạo sự thay đổi nhỏ nhất có thể, như thay đổi com.android thành com.androie]</string>
-    <string name="replace_all">Thay thế tất cả</string>
     <string name="save_as_project">Lưu như dự án</string>
-    <string name="save_changes_tip">Bạn có muốn lưu các thay đổi?</string>
     <string name="select_language_desc">Vui lòng chọn ngôn ngữ ưa thích của bạn.</string>
-    <string name="show_line_numbers">Hiển thị số dòng</string>
     <string name="str_fix_failed">Rất tiếc, không thể khắc phục sự cố.</string>
     <string name="str_num_renamed_file">%d tập tin(s) đã đổi tên</string>
     <string name="str_rename_failed">Xin lỗi, không thể đổi tên tập tin.</string>
@@ -282,36 +261,21 @@
 Nếu bạn mua apk Editor Pro trước đây, và đây không phải là những gì bạn muốn, xin vui lòng gửi email đến heagoo@gmail.com đối với các giải pháp. (Xin vui lòng với một tiêu đề \"CÁC VẤN ĐỀ PHIÊN BẢN 1.9\")"</string>
     <string name="build_ongoing">Xây dựng đang tiến hành</string>
     <string name="build_still_running_tip">Xin lưu ý: việc xây dựng có thể vẫn chạy sau khi thoát khỏi trang này, bạn có thể kiểm tra công việc xây dựng trên thanh trạng thái.</string>
-    <string name="cannot_find_java_file">Không thể tìm thấy các tập tin Java giải mã.</string>
     <string name="cannot_launch">Không thể khởi động %s</string>
     <string name="cannot_open_xxx">Không thể mở %s</string>
-    <string name="clipboard_no_text">Không có văn bản trong bộ nhớ tạm.</string>
-    <string name="code_snippet">Đoạn mã</string>
-    <string name="colorpad">Màu đệm</string>
-    <string name="comment_lines">Dòng bình luận</string>
-    <string name="delete_lines">Xóa dòng</string>
     <string name="download">Tải về</string>
     <string name="download_image_tip1">Để tải về hình ảnh, xin vui lòng nhập một số từ khóa như Mục tiêu PNG \" để tìm kiếm. Xin lưu ý: tìm kiếm hình ảnh được cung cấp bởi Google, và những hình ảnh có thể phải chịu bản quyền.</string>
     <string name="download_image_tip2">Vui lòng nhấn và giữ hình ảnh và nhấp vào Lưu hình ảnh \" để tải xuống.</string>
     <string name="entry_modified">"'%s' đã sửa đổi."</string>
-    <string name="err_from_greater_than_to">Lỗi: \"Từ dòng SỐ.\" là lớn hơn \"Đến dòng SỐ.\"</string>
     <string name="error">Lỗi</string>
     <string name="ext_sd_card">Mở thẻ SD</string>
     <string name="failed_create_file">Không thể tạo tập tin.</string>
     <string name="failed_to_parse_xml">Không thể phân tích cú pháp mục nhập xml: %s.</string>
-    <string name="from_line_no">Từ dòng SỐ.</string>
-    <string name="go">Đi</string>
-    <string name="html">HTML</string>
     <string name="image_downloader">Tải xuống hình ảnh</string>
     <string name="image_saved_to">Đã lưu hình ảnh vào %s</string>
     <string name="input_agree_tip">Xin vui lòng nhập \"Chấp nhận \"để chấp nhận các điều khoản trên.</string>
     <string name="input_agree_toast">Xin vui lòng nhập \"Chấp nhận \" để tiếp tục.</string>
-    <string name="java_code">Mã Java</string>
-    <string name="java_code_edit_tip">Mã Java giúp chúng ta hiểu được logic mã, nhưng để chỉnh sửa nó có nghĩa là không có gì, vì nó không thể được xây dựng vào apk.</string>
     <string name="more">Nhiều hơn</string>
-    <string name="n_lines_commented">%d dòng(s) đã nhận xét.</string>
-    <string name="n_lines_deleted">%d dòng(s) đã xóa.</string>
-    <string name="n_lines_uncommented">%d dòng(s) không nhận xét.</string>
     <string name="new_file">Tập tin mới</string>
     <string name="not_signed_tip">Xin lưu ý: apk không được ký và không thể cài đặt.</string>
     <string name="patch_error_no_entrance_func">Chức năng truy cập không được chỉ định.</string>
@@ -321,16 +285,8 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="put_to_background">Chạy ẩn trong nền</string>
     <string name="save_image">Lưu hình ảnh</string>
     <string name="sd_card">Thẻ nhớ SD</string>
-    <string name="selected_str_copied">Đã sao chép chuỗi đã chọn.</string>
     <string name="sure_to_stop_build">Xây dựng đang chạy, bạn có chắc chắn dừng nó không? (Có thể bạn có thể chờ một thời gian hoặc cho nó chạy nền)</string>
-    <string name="symbol_input">Nhập biểu tượng</string>
-    <string name="symbol_input_summary">Bật đầu vào biểu tượng hoặc không.</string>
     <string name="tip">Mẹo</string>
-    <string name="to_line_no">Đến dòng SỐ.</string>
-    <string name="use_bfe_message">"Trình chỉnh sửa tập tin lớn được thiết kế để tải các tập tin lớn nhanh hơn nhiều. Tuy nhiên, nó chỉ có thể hỗ trợ chỉnh sửa từng dòng.
-Ở đây bạn có thể xác định giá trị ngưỡng để sử dụng trình soạn thảo tập tin lớn (trong đơn vị Kbytes):"</string>
-    <string name="use_bfe_tip">Như tập tin là quá lớn, lớn tập tin biên tập được sử dụng. Bạn có thể thay đổi khi sử dụng trình soạn thảo tập tin lớn trong cài đặt trình soạn thảo.</string>
-    <string name="when_use_bfe">Sử dụng trình chỉnh sửa tập tin lớn</string>
     <string name="xml_file_edit">CHỈNH SỬA XML(BETA)</string>
     <string name="error_path_xxx_not_exist">"Lỗi: đường dẫn '%s' không tồn tại."</string>
     <string name="folder_path">Đường dẫn thư mục:</string>
@@ -341,18 +297,13 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="summary_decode_partial_files">Giải mã một phần tập tin. Chỉ các tập tin quan trọng mới được giải mã thành thư mục giải mã (hình ảnh sẽ được thay thế bằng tập tin giả và các tập tin không xác định sẽ không được giải mã). Tốc độ nhanh hơn, nhưng ít linh hoạt hơn.</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -360,14 +311,9 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

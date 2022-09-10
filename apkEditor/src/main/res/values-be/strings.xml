@@ -27,7 +27,6 @@
     <string name="color">Колер</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">Б</string>
-    <string name="colormixer_cancel">"Скасаваць "</string>
     <string name="colormixer_green">G</string>
     <string name="colormixer_red">R</string>
     <string name="colormixer_set">"Прызначыць "</string>
@@ -46,13 +45,11 @@
     <string name="detail">Падрабязнасці</string>
     <string name="donot_show_again">"Больш не паказваць "</string>
     <string name="edit_data_root">Рэдагаваць даныя [ROOT]</string>
-    <string name="edit_string_value">"Рэдагаваць значэнне "</string>
     <string name="empty_input_tip">Не павінна быць пустым.</string>
     <string name="empty_key_tip">Ключ не павінен быць пустым!</string>
     <string name="encode_dex_file">Кадаванне файла DEX…</string>
     <string name="entry_in_apk">Размяшчэнне ў APK</string>
     <string name="errmsg_copied">Паведамленне памылкі скапіравана ў буфер абмену.</string>
-    <string name="error_file_too_big">Файл занадта вялікі.</string>
     <string name="error_filepath_empty">Шлях да файла не можа быць пустым.</string>
     <string name="error_filepath_notexist">"Файл не існуе. "</string>
     <string name="exit">"Выхад "</string>
@@ -63,14 +60,10 @@
     <string name="file_added">Файл дададзены: %s</string>
     <string name="file_already_exist">"'%s' ужо існуе!"</string>
     <string name="file_replaced">Файл заменены .</string>
-    <string name="file_saved">Файл захаваны.</string>
     <string name="files">Файлы</string>
     <string name="files_capital">ФАЙЛЫ</string>
-    <string name="find">"Знайсці "</string>
-    <string name="find_replace">Шукаць/замяніць</string>
     <string name="folder_replace_tip" formatted="false">Сапраўды хочаце замяніць %s на %s?</string>
     <string name="folder_replaced">Каталог заменены</string>
-    <string name="font_size">"Памер шрыфту "</string>
     <string name="full_edit">Рэдагаваць увесь apk (RESOURCE RE-BUILD)</string>
     <string name="general_error">Памылка: %s</string>
     <string name="help">"Дапамога "</string>
@@ -89,8 +82,6 @@
     <string name="language">Мова:</string>
     <string name="launcher_icon">Значок запускальніка</string>
     <string name="line_data">ДАНЫЯ РАДКА:</string>
-    <string name="line_number">Нумар радка</string>
-    <string name="line_wrap">Перанос радкоў</string>
     <string name="loading">Загрузка …</string>
     <string name="location_0">Прадвызначана (Не зададзена)</string>
     <string name="location_1">Аўтаматычна (як у сістэме)</string>
@@ -107,17 +98,13 @@
     <string name="no_change_detected">Зменаў не выяўлена.</string>
     <string name="no_patch_selected">Патч не абраны</string>
     <string name="not_available">"Не даступна "</string>
-    <string name="not_found">"Не знойдзена "</string>
     <string name="notfound_in_manifest">Не атрымалася знайсці гэты радок у AndroidManifest.xml</string>
-    <string name="notice_capital">АПАВЯШЧЭННЕ</string>
     <string name="num_items_selected">%d элемент(аў) вылучана</string>
-    <string name="open_in_editor">Адкрыць у рэдактары</string>
     <string name="open_in_new_window">Адкрыць у новым акне</string>
     <string name="others">"Іншае "</string>
     <string name="package_name">"Назва пакунка "</string>
     <string name="package_rename_method">"Метад змены назвы "</string>
     <string name="patch_applied">"Патч ужыты "</string>
-    <string name="patch_capital">ПАТЧ</string>
     <string name="patch_error_cannot_parse" formatted="false">Немагчыма разабраць радок %d: %s</string>
     <string name="patch_error_invalid_target" formatted="false">Хібная альбо непадтрымліваемая мэта ў радку %d: %s</string>
     <string name="patch_error_no_entry">"Не атрымалася знайсці  '%s' у патчы."</string>
@@ -142,7 +129,6 @@
     <string name="pls_input_keyword">"Увядзіце ключавыя словы для пошуку "</string>
     <string name="private_key_label">"Асабісты ключ
 (.pk8)"</string>
-    <string name="promote_msg">Рэдагаваць можна толькі ў Pro-версіі. Націсніце \"Праглядзець Pro-версію\" каб набыць яе.</string>
     <string name="public_key_label">"Публічны ключ
 (.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">Выключана. APK будзе перасабраны і падпісаны пасля націску на кнопку захавання.</string>
@@ -151,13 +137,11 @@
     <string name="rebuild_dex_file">"Перасабраць файл DEX "</string>
     <string name="rebuild_res_file">"Перасабраць файл рэсурсаў "</string>
     <string name="rebuild_the_apk">Перасабраць APK</string>
-    <string name="regexp">Сталы выраз</string>
     <string name="remove">"Выдаліць "</string>
     <string name="remove_tip">Дадатак ужо ўсталяваны. Магчыма, яго спатрэбіцца выдаліць перад тым, як усталяваць мадыфікаваны apk.</string>
     <string name="rename">Змяніць назву</string>
     <string name="rename_in_resources">Змяніць назву ў resources.arsc</string>
     <string name="replace">"Замяніць "</string>
-    <string name="replace_all_ret">%d уваходжанняў заменена</string>
     <string name="resolution">"Раздзяляльная здольнасць "</string>
     <string name="resource">Рэсурсы</string>
     <string name="sample_code">Узор коду</string>
@@ -178,7 +162,6 @@
     <string name="select_folder_replace">"Абярыце каталог для замены "</string>
     <string name="select_key_file">"Абярыце ключ "</string>
     <string name="select_patch">Абярыце патч</string>
-    <string name="select_target_lang">"Абярыце мову для перакладу "</string>
     <string name="settings">"Налады "</string>
     <string name="show_a_toast">Паказаць тост</string>
     <string name="sign">"Падпісаць "</string>
@@ -223,7 +206,6 @@
     <string name="decode_dir">Каталог дэкадавання</string>
     <string name="decode_dir_summary_may_change">Не зададзена. Будзе выкарыстана прадвызначанае ўнутранае сховішча.</string>
     <string name="dex_decode_succeed">Паспяхова дэкадаваныя файлы DEX .</string>
-    <string name="donot_save">Не захавана</string>
     <string name="dump_a_value">Выняць велічыню</string>
     <string name="edit_before_replace">"Праглядзець/рэдагаваць файл перад тым як замяніць  %s"</string>
     <string name="extension_changed_tip">Пашырэнне назвы зменена. Сапраўды хочаце змяніць?</string>
@@ -259,11 +241,8 @@
     <string name="project_removed">Праект \"%s\" выдалены.</string>
     <string name="projects">Праекты</string>
     <string name="rename_in_dex">"Змена назвы пакунка ў файлах DEX [у бэта-версіі пакуль няма. Для таго, каб павысіць верагоднасць поспеху, калі ласка, захавайце  даўжыню нязменнай, што дасць магчымасць  зрабіць як нязначныя змены, так і значныя кшталту змены com.android на com.androie]"</string>
-    <string name="replace_all">"Замяніць усё "</string>
     <string name="save_as_project">"Захаваць як праект "</string>
-    <string name="save_changes_tip">Хочаце захаваць змены?</string>
     <string name="select_language_desc">Калі ласка, абярыце вашую асноўную мову.</string>
-    <string name="show_line_numbers">"Паказваць нумары радкоў "</string>
     <string name="str_fix_failed">На жаль, не атрымалася выправіць.</string>
     <string name="str_num_renamed_file">У %d файл(аў) зменена назва</string>
     <string name="str_rename_failed">Выбачайце, не атрымалася змяніць назву.</string>
@@ -275,18 +254,13 @@
     <string name="hide_warnings">Хаваць папярэджанні</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -294,14 +268,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

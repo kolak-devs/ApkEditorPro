@@ -29,11 +29,9 @@
     <string name="select_file_replace">Selecteer een bestand om te vervangen</string>
     <string name="pls_input_keyword">Voer woord in om te zoeken</string>
     <string name="manifest_edit_not_support">Bewerken is niet toegestaan in deze DEMO versie</string>
-    <string name="promote_msg">"Bewerken alleen toegestaan in de PRO versie. klik op 'laat PRO versie zien' om de PRO versie te krijgen!"</string>
     <string name="not_available">Aanvraag afgewezen</string>
     <string name="add_key_value">Voeg data/hoeveelheid toe:</string>
     <string name="open_in_new_window">Open in nieuw venster</string>
-    <string name="edit_string_value">Bewerk hoeveelheid</string>
     <string name="language">Taal:</string>
     <string name="code">Code</string>
     <string name="sure_to_exit_editing">Weet je zeker dat je de bewerk-modus wilt afsluiten?</string>
@@ -100,18 +98,13 @@
     <string name="temp_file_cleaned">Cache (tijdelijke bestanden) verwijderd.</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -119,14 +112,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

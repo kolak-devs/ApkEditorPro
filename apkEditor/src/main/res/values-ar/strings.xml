@@ -4,7 +4,6 @@
     <string name="searching">البحث</string>
     <string name="loading">جاري تحميل...</string>
     <string name="close">إغلاق</string>
-    <string name="find">Find</string>
     <string name="keyword_hint">الرجاء إدخال كلمة للبحث</string>
     <string name="app_list_order">قائمة التطبيقات التي أمر بها</string>
     <string name="app_display">عرض التطبيق</string>
@@ -38,11 +37,9 @@
     <string name="select_file_replace">حدد ملف ليحل محله</string>
     <string name="pls_input_keyword">إدخال الكلمة الأساسية للبحث</string>
     <string name="manifest_edit_not_support">لا يتم دعم التحرير في نسخة مجانية!</string>
-    <string name="promote_msg">"تحرير معتمد فقط في الإصدار المحترف. انقر فوق '"عرض الإصدار برو"'ل الحصول على نسخة برو؟"</string>
     <string name="not_available">غير متوفر</string>
     <string name="add_key_value">إضافة مفتاح/قيمة:</string>
     <string name="open_in_new_window">فتح في نافذة جديدة</string>
-    <string name="edit_string_value">قم بتحرير قيمة</string>
     <string name="language">اللغة:</string>
     <string name="code">كود</string>
     <string name="sure_to_exit_editing">هل أنت متأكد من الخروج من التحرير؟</string>
@@ -107,17 +104,9 @@
     <string name="clean_garbage">تنظيف القمامة</string>
     <string name="clean_garbage_summary">انقر هنا لتنظيف الملفات المؤقتة.</string>
     <string name="temp_file_cleaned">تنظيف الملفات المؤقتة.</string>
-    <string name="select_target_lang">حدد لغة لترجمة من و إلى</string>
     <string name="general_error">خطأ: %s</string>
     <string name="save_succeed_tip">%d سلاسل المحفوظة.</string>
-    <string name="error_file_too_big">ملف كبير جداً لفتح.</string>
     <string name="settings">إعدادات</string>
-    <string name="find_replace">بحث/استبدال</string>
-    <string name="regexp">التعبير العادي</string>
-    <string name="not_found">لم يتم العثور على</string>
-    <string name="file_saved">حفظ الملف.</string>
-    <string name="font_size">حجم الخط</string>
-    <string name="line_wrap">التفاف الأسطر</string>
     <string name="cannot_find_ext_sdcard">لا يمكن العثور على بطاقة sd الخارجية.</string>
     <string name="rename_in_resources">إعادة تسمية اسم الحزمة في resources.arsc</string>
     <string name="str_files_found" formatted="false">"%d الملف(s) العثور على - '%s'"</string>
@@ -128,7 +117,6 @@
     <string name="warning">تحذير</string>
     <string name="succeed_with_warning">نجح مع التحذيرات.</string>
     <string name="unknown_error">خطأ غير معروف.</string>
-    <string name="notice_capital">إشعار</string>
     <string name="assemble_dex_file">تجميع ملف التنفيذ المباشر</string>
     <string name="assemble_dex_detail" formatted="false">%d/%d ملفات مجمعة</string>
     <string name="donot_show_again">عدم إظهار ذلك مرة أخرى</string>
@@ -137,7 +125,6 @@
     <string name="colormixer_blue">B</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_set">تعيين</string>
-    <string name="colormixer_cancel">إلغاء </string>
     <string name="new_folder">مجلد جديد</string>
     <string name="pls_input_foldername">الرجاء إدخال اسم المجلد:</string>
     <string name="confirm_dir_replace">تأكيد استبدال الدليل</string>
@@ -184,7 +171,6 @@
     <string name="copy_error_msg">نسخ رسالة الإعلام بالخطأ</string>
     <string name="errmsg_copied">رسالة خطأ في نسخ إلى الحافظة.</string>
     <string name="search_file_names">البحث في اسم الملف</string>
-    <string name="patch_capital">التصحيح</string>
     <string name="select_patch">
 	حدد لتصحيح</string>
     <string name="apply_the_patch">
@@ -215,10 +201,7 @@
     <string name="patch_error_invalid_target" formatted="false">الهدف غير صالح أو غير معتمد في سطر %d: %s</string>
     <string name="patch_info_num_replaced">%d مباراة(es) استبدال.</string>
     <string name="translate_plugin">ترجمة البرنامج المساعد</string>
-    <string name="open_in_editor">فتح في محرر</string>
     <string name="about">حول</string>
-    <string name="line_number">رقم السطر</string>
-    <string name="replace_all_ret">%d التواجد(s) يتم استبدال</string>
     <string name="rebuild_confirmation">إعادة تأكيد</string>
     <string name="rebuild_confirm_e_summary">تمكين. وسوف تظهر النقر فوق إعادة إنشاء مربع حوار للتأكيد عند الزر حفظ. يمكننا أن نجعل خيار عدم التوقيع على أية بي كيه في مربع الحوار.</string>
     <string name="rebuild_confirm_d_summary">معطل. سيتم إعادة مباشرة، والنقر فوق علامة على أية بي كيه عند الزر حفظ.</string>
@@ -235,18 +218,13 @@
     <string name="copied_to_clipboard">"'%s' نسخ إلى الحافظة."</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -254,14 +232,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

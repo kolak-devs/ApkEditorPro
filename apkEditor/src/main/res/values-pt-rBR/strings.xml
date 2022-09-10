@@ -4,7 +4,6 @@
     <string name="searching">Pesquisando...</string>
     <string name="loading">Carregando...</string>
     <string name="close">Fechar</string>
-    <string name="find">Procurar</string>
     <string name="keyword_hint">Procurar...</string>
     <string name="app_list_order">Lista de app ordenada por</string>
     <string name="app_display">Exibir App</string>
@@ -36,11 +35,9 @@
     <string name="select_file_replace">Selecione um arquivo para substituí-lo</string>
     <string name="pls_input_keyword">Digite aqui para pesquisar...</string>
     <string name="manifest_edit_not_support">A edição não é suportada na versão gratuita!</string>
-    <string name="promote_msg">A edição só é suportada na versão Profissional. Clique em Visualizar versão Pro para obter a versão Profissional.</string>
     <string name="not_available">Não disponível</string>
     <string name="add_key_value">Adicionar uma chave/valor:</string>
     <string name="open_in_new_window">Abrir em uma nova janela</string>
-    <string name="edit_string_value">Editar valor</string>
     <string name="language">Idioma:</string>
     <string name="code">Código</string>
     <string name="sure_to_exit_editing">Tem certeza de que deseja sair da edição?</string>
@@ -102,17 +99,9 @@
     <string name="clean_garbage">Limpeza de Lixo</string>
     <string name="clean_garbage_summary">Clique aqui para limpar os arquivos temporários.</string>
     <string name="temp_file_cleaned">Limpeza concluída!</string>
-    <string name="select_target_lang">Selecione um idioma para traduzir</string>
     <string name="general_error">Erro: %s</string>
     <string name="save_succeed_tip">%d textos salvos.</string>
-    <string name="error_file_too_big">O arquivo é muito grande para ser aberto.</string>
     <string name="settings">Configurações</string>
-    <string name="find_replace">Procurar/Substituir</string>
-    <string name="regexp">Expressão regular</string>
-    <string name="not_found">Não encontrado</string>
-    <string name="file_saved">Arquivo salvo.</string>
-    <string name="font_size">Tamanho da Fonte</string>
-    <string name="line_wrap">Envolvimento de Linha</string>
     <string name="cannot_find_ext_sdcard">Não é possível encontrar o Cartão SD externo.</string>
     <string name="rename_in_resources">Renomear o nome do pacote em resources.arsc</string>
     <string name="str_files_found" formatted="false">%d arquivo(s) encontrado(s) - \"%s\"</string>
@@ -123,12 +112,10 @@
     <string name="warning">Atenção</string>
     <string name="succeed_with_warning">Concluído com avisos.</string>
     <string name="unknown_error">Erro desconhecido.</string>
-    <string name="notice_capital">AVISO</string>
     <string name="assemble_dex_file">Montando arquivo DEX</string>
     <string name="assemble_dex_detail" formatted="false">%d/%d arquivos montados</string>
     <string name="donot_show_again">Não mostrar novamente</string>
     <string name="colormixer_set">Definir</string>
-    <string name="colormixer_cancel">Cancelar</string>
     <string name="new_folder">Nova pasta</string>
     <string name="pls_input_foldername">Por favor, insira o nome da pasta:</string>
     <string name="confirm_dir_replace">Confirmar substituição do diretório</string>
@@ -167,7 +154,6 @@
     <string name="copy_error_msg">Copiar mensagem de erro</string>
     <string name="errmsg_copied">Mensagem de erro copiada para a área de transferência.</string>
     <string name="search_file_names">Pesquisar no nome do arquivo</string>
-    <string name="patch_capital">PATCH</string>
     <string name="select_patch">Selecionar Patch</string>
     <string name="apply_the_patch">Aplicar Patch</string>
     <string name="patch_applied">Patch aplicado</string>
@@ -191,10 +177,7 @@
     <string name="patch_error_invalid_target" formatted="false">Alvo inválido ou não suportado na linha %d: %s</string>
     <string name="patch_info_num_replaced">%d correspondência(s) substituída(s).</string>
     <string name="translate_plugin">Plug-in de Tradução</string>
-    <string name="open_in_editor">Abrir no editor</string>
     <string name="about">Sobre</string>
-    <string name="line_number">Número da Linha</string>
-    <string name="replace_all_ret">%d ocorrência(s) são substituída(s)</string>
     <string name="rebuild_confirmation">Confirmação para Reconstruir</string>
     <string name="rebuild_confirm_e_summary">Ativado. Será exibida a caixa de diálogo de confirmação de reconstrução quando o botão Salvar for clicado. Podemos optar por não assinar o APK na caixa de diálogo.</string>
     <string name="rebuild_confirm_d_summary">Desativado. Reconstruirá e assinará diretamente o APK quando o botão Salvar for clicado.</string>
@@ -209,10 +192,7 @@
     <string name="str_num_modified_file">%d arquivo(s) modificado(s)</string>
     <string name="copied_to_clipboard">\"%s\" copiado para a área de transferência.</string>
     <string name="case_insensitive">Insensível ao caso</string>
-    <string name="donot_save">Não salvar</string>
-    <string name="save_changes_tip">Você deseja salvar as alterações?</string>
     <string name="str_replace_with">Substituir \"%s\" por</string>
-    <string name="replace_all">Substituir Todos</string>
     <string name="str_replaced">\"%s\" substituído</string>
     <string name="failed_to_modify">Falha ao modificar %s</string>
     <string name="sure_to_replace_all" formatted="false">Tem certeza de que deseja substituir tudo \"%s\" por \"%s\"?</string>
@@ -230,18 +210,13 @@
     <string name="str_fix_failed">Desculpe, não foi possível corrigir este problema.</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -249,15 +224,10 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 
 </resources>

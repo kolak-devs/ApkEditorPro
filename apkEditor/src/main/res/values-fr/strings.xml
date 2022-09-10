@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="in_progress">Travaille &#8230;</string>
-    <string name="find">Rechercher</string>
     <string name="replace">Remplacer</string>
     <string name="loading">Chargement &#8230;</string>
     <string name="close">Fermer</string>
@@ -34,11 +33,9 @@
     <string name="select_file_replace">S&#233;lectionner un fichier a remplacer</string>
     <string name="pls_input_keyword">Entrez le mot cl&#233; &#224; rechercher</string>
     <string name="manifest_edit_not_support">&#201;dition non support&#233;e dans la version gratuite!</string>
-    <string name="promote_msg">"&#201;dition seulement support&#233;e dans la version pro. Cliquez 'Voir Version Pro' pour l'obtenir. "</string>
     <string name="not_available">Non disponible</string>
     <string name="add_key_value">Ajouter une cl&#233;/valeur:</string>
     <string name="open_in_new_window">Ouvrir dans une nouvelle fen&#234;tre</string>
-    <string name="edit_string_value">&#201;diter la valeur</string>
     <string name="language">Langue:</string>
     <string name="code">Code</string>
     <string name="sure_to_exit_editing">&#202;tes-vous sur de vouloir quitter le mode &#233;dition?</string>
@@ -101,32 +98,22 @@
     <string name="clean_garbage">Nettoyer fichiers inutiles</string>
     <string name="clean_garbage_summary">Cliquez ici pour nettoyer les fichiers temporaires.</string>
     <string name="temp_file_cleaned">Fichiers temporaires nettoy&#233;s</string>
-    <string name="select_target_lang">S&#233;lectionnez un langue a traduire vers</string>
     <string name="general_error">Erreur: %s</string>
     <string name="save_succeed_tip">%d chaine (s) enregistr&#233;e (s).</string>
-    <string name="file_saved">Fichier enregistr&#233;.</string>
-    <string name="font_size">Taille de police</string>
-    <string name="line_wrap">"Retour &#224; la ligne "</string>
     <string name="files">Fichiers</string>
     <string name="smali_editing">Edition Smali</string>
     <string name="smali_edit_summary">Activ&#233;. Vous pouvez afficher image DEX vers smali dans &#233;dition complete.</string>
     <string name="colormixer_set">Regler</string>
-    <string name="colormixer_cancel">Annuler</string>
     <string name="new_folder">"Nouveau dossier "</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -134,14 +121,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

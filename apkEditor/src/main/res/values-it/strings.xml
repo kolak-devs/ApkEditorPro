@@ -26,7 +26,6 @@
     <string name="color">Colore</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
-    <string name="colormixer_cancel">Annulla</string>
     <string name="colormixer_green">G</string>
     <string name="colormixer_red">R</string>
     <string name="colormixer_set">Imposta</string>
@@ -46,13 +45,11 @@
     <string name="donot_show_again">Non mostrare più</string>
     <string name="dummy" />
     <string name="edit_data_root">Modifica i dati [ROOT]</string>
-    <string name="edit_string_value">Modifica i valori</string>
     <string name="empty_input_tip">Il valore non può essere vuoto.</string>
     <string name="empty_key_tip">La chiave non può essere vuota!</string>
     <string name="encode_dex_file">Codifica file DEX …</string>
     <string name="entry_in_apk">Elemento APK</string>
     <string name="errmsg_copied">Messaggio di errore copiato negli Appunti.</string>
-    <string name="error_file_too_big">Il file è troppo grande per essere aperto.</string>
     <string name="error_filepath_empty">Il percorso del file non può essere vuoto.</string>
     <string name="error_filepath_notexist">Il file non esiste.</string>
     <string name="exit">Esci</string>
@@ -63,14 +60,10 @@
     <string name="file_added">File aggiunto: %s</string>
     <string name="file_already_exist">"'%s' esiste già!"</string>
     <string name="file_replaced">File sostituito.</string>
-    <string name="file_saved">File salvato.</string>
     <string name="files">File</string>
     <string name="files_capital">FILE</string>
-    <string name="find">Trova</string>
-    <string name="find_replace">Trova/sostituisci</string>
     <string name="folder_replace_tip" formatted="false">Sei sicuro di voler sostituire %s con %s?</string>
     <string name="folder_replaced">Cartella sostituita</string>
-    <string name="font_size">Dimensione carattere</string>
     <string name="full_edit">Completa (ricostruzione risorse)</string>
     <string name="general_error">Errore: %s</string>
     <string name="help">Aiuto</string>
@@ -89,8 +82,6 @@
     <string name="language">Lingua:</string>
     <string name="launcher_icon">Icona di avvio</string>
     <string name="line_data">LINEA DATI:</string>
-    <string name="line_number">Numero riga</string>
-    <string name="line_wrap">Ritorno a capo</string>
     <string name="loading">Caricamento…</string>
     <string name="location_0">Impostazione predefinita (non specificato)</string>
     <string name="location_1">Auto (decisione del SO)</string>
@@ -107,17 +98,13 @@
     <string name="no_change_detected">Nessuna modifica rilevata.</string>
     <string name="no_patch_selected">Nessuna patch selezionata</string>
     <string name="not_available">Non disponibile</string>
-    <string name="not_found">Non trovato</string>
     <string name="notfound_in_manifest">Stringa destinazione non disponibile in AndroidManifest.xml</string>
-    <string name="notice_capital">AVVISO</string>
     <string name="num_items_selected">%d elemento/i selezionato/i</string>
-    <string name="open_in_editor">"Apri nell'editor"</string>
     <string name="open_in_new_window">Apri in una nuova finestra</string>
     <string name="others">Altri</string>
     <string name="package_name">Nome del pacchetto</string>
     <string name="package_rename_method">Metodo rinomina pacchetto</string>
     <string name="patch_applied">Patch applicata</string>
-    <string name="patch_capital">PATCH</string>
     <string name="patch_error_cannot_parse" formatted="false">Non è possibile analizzare la riga %d: %s</string>
     <string name="patch_error_invalid_target" formatted="false">Destinazione non valida o non supportata nella linea %d: %s</string>
     <string name="patch_error_no_entry">"Impossibile trovare '%s' all'interno della patch."</string>
@@ -142,7 +129,6 @@
     <string name="pls_input_keyword">Parola chiave di ricerca</string>
     <string name="private_key_label">Chiave privata
 	(.pk8)</string>
-    <string name="promote_msg">"La modifica è supportata solo nella versione Pro. Fai clic su 'Visualizza versione Pro' per ottenere la versione Pro?"</string>
     <string name="public_key_label">"Chaive pubblica
 (.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">"Disabilitato. Quando si seleziona Salva verrà ricostruita e firmata l'apk."</string>
@@ -151,13 +137,11 @@
     <string name="rebuild_dex_file">Ricostruisci DEX file</string>
     <string name="rebuild_res_file">Ricostruisci il file di risorse</string>
     <string name="rebuild_the_apk">"Ricostruisci l'APK"</string>
-    <string name="regexp">Espressione regolare</string>
     <string name="remove">Rimuovi</string>
     <string name="remove_tip">"L'app è già installata. Potrebbe essere necessario rimuoverla prima di installare l'apk modificata."</string>
     <string name="rename">Rinomina</string>
     <string name="rename_in_resources">Rinomina il nome del pacchetto in resources.arsc</string>
     <string name="replace">Sostituisci</string>
-    <string name="replace_all_ret">%d elementi sono sostituiti</string>
     <string name="resolution">Risoluzione</string>
     <string name="resource">Risorsa</string>
     <string name="sample_code">Codice esempio</string>
@@ -178,7 +162,6 @@
     <string name="select_folder_replace">Seleziona la cartella da sostituire</string>
     <string name="select_key_file">Seleziona un file di chiave</string>
     <string name="select_patch">Seleziona una patch</string>
-    <string name="select_target_lang">Seleziona una lingua da tradurre</string>
     <string name="settings">Impostazioni</string>
     <string name="show_a_toast">Visualizza toast</string>
     <string name="sign">Firma</string>
@@ -222,7 +205,6 @@
     <string name="case_insensitive">Non rileva la distinzione tra maiuscole e minuscole</string>
     <string name="decode_dir">Decodifica acrtella</string>
     <string name="decode_dir_summary_may_change">No impsotato. Verrà usato lo storage interno predefinito.</string>
-    <string name="donot_save">Non salvare</string>
     <string name="dump_a_value">Copia un valore</string>
     <string name="edit_before_replace">Visualizza/modifica il file prima di sostituirlo %s</string>
     <string name="extension_changed_tip">"L'estensione del nome del file è cambiata. Sei sicuro di volerla cambiare?"</string>
@@ -253,11 +235,8 @@
     <string name="print_stack_trace">Stampa traccia dello stack</string>
     <string name="project_removed">Progetto \"%s\" eliminato.</string>
     <string name="projects">Progetti</string>
-    <string name="replace_all">Sostituisci tutto</string>
     <string name="save_as_project">Salva come progetto</string>
-    <string name="save_changes_tip">Vuoi salvare le modifiche?</string>
     <string name="select_language_desc">Seleziona la lingua preferita.</string>
-    <string name="show_line_numbers">Visualizza numeri linea</string>
     <string name="str_fix_failed">Mi spiace. Non è stato risolto il problema.</string>
     <string name="str_num_renamed_file">%d file rinominato/i</string>
     <string name="str_rename_failed">Mi dispiace, non è stato rinominato file.</string>
@@ -267,18 +246,13 @@
     <string name="target_sdk_version">Versione SDK destinazione</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -286,14 +260,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

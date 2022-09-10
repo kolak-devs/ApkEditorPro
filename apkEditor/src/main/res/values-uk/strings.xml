@@ -4,7 +4,6 @@
     <string name="searching">Пошук...</string>
     <string name="loading">Завантаження...</string>
     <string name="close">Закрити</string>
-    <string name="find">Пошук</string>
     <string name="keyword_hint">Введіть пошуковий запит</string>
     <string name="app_list_order">Сортування додатків</string>
     <string name="app_display">Відображення додатків</string>
@@ -36,11 +35,9 @@
     <string name="select_file_replace">Виберіть файл для заміни</string>
     <string name="pls_input_keyword">Введіть ключові слова для пошуку</string>
     <string name="manifest_edit_not_support">Редагування не підтримується у безкоштовній версії!</string>
-    <string name="promote_msg">Редагування підтримується тільки у версії Pro. Натисніть «Купити версію Pro», щоб її отримати.</string>
     <string name="not_available">Недоступно</string>
     <string name="add_key_value">Додати ключ/значення:</string>
     <string name="open_in_new_window">Відкрити у новому вікні</string>
-    <string name="edit_string_value">Змінити значення</string>
     <string name="language">Мова:</string>
     <string name="code">Код</string>
     <string name="sure_to_exit_editing">Вийти з редагування?</string>
@@ -103,17 +100,9 @@
     <string name="clean_garbage">Видалення тимчасових файлів</string>
     <string name="clean_garbage_summary">Натисніть тут, щоб очистити тимчасові файли.</string>
     <string name="temp_file_cleaned">Тимчасові файли видалені.</string>
-    <string name="select_target_lang">Виберіть мову для перекладу</string>
     <string name="general_error">Помилка: %s</string>
     <string name="save_succeed_tip">%d рядків збережено.</string>
-    <string name="error_file_too_big">Файл занадто великий для відкриття.</string>
     <string name="settings">Налаштування</string>
-    <string name="find_replace">Пошук/Заміна</string>
-    <string name="regexp">Регулярний вираз</string>
-    <string name="not_found">Не знайдено</string>
-    <string name="file_saved">Файл збережено</string>
-    <string name="font_size">Розмір шрифту</string>
-    <string name="line_wrap">Перенесення рядків</string>
     <string name="cannot_find_ext_sdcard">Зовнішню SD-карту не знайдено.</string>
     <string name="rename_in_resources">Змінити назву пакету в resources.arsc</string>
     <string name="str_files_found" formatted="false">"%d файл(-ів) знайдено - '%s'"</string>
@@ -124,7 +113,6 @@
     <string name="warning">Застереження</string>
     <string name="succeed_with_warning">Успішно із застереженнями.</string>
     <string name="unknown_error">Невідома помилка.</string>
-    <string name="notice_capital">ПОВІДОМЛЕННЯ</string>
     <string name="assemble_dex_file">Компіляція DEX</string>
     <string name="assemble_dex_detail" formatted="false">%d/%d файлів скомпільовано</string>
     <string name="donot_show_again">Більше не показувати</string>
@@ -133,7 +121,6 @@
     <string name="colormixer_blue">B</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_set">Застосувати</string>
-    <string name="colormixer_cancel">Скасувати</string>
     <string name="new_folder">Нова тека</string>
     <string name="pls_input_foldername">Будь ласка, вкажіть назву теки:</string>
     <string name="confirm_dir_replace">Підтвердження заміни теки</string>
@@ -172,7 +159,6 @@
     <string name="copy_error_msg">Копіювати текст помилки</string>
     <string name="errmsg_copied">Текст помилки скопійовано до буферу обміну.</string>
     <string name="search_file_names">Пошук файлу(-ів)</string>
-    <string name="patch_capital">ПАТЧ</string>
     <string name="select_patch">Вибрати патч</string>
     <string name="apply_the_patch">Застосувати патч</string>
     <string name="patch_applied">Патч застосований</string>
@@ -196,10 +182,7 @@
     <string name="patch_error_invalid_target" formatted="false">Невірний формат у рядку %d: %s</string>
     <string name="patch_info_num_replaced">%d збіг(-ів) замінено.</string>
     <string name="translate_plugin">Плагін перекладу</string>
-    <string name="open_in_editor">Відкрити в редакторі</string>
     <string name="about">Про</string>
-    <string name="line_number">N рядка</string>
-    <string name="replace_all_ret">%d випадків заміни</string>
     <string name="rebuild_confirmation">Підтвердження рекомпіляції</string>
     <string name="rebuild_confirm_e_summary">Увімкнено. Відображатиметься діалог підтвердження рекомпіляції після натискання кнопки «Зберегти». Матимете можливість зняти відмітку з пункту «Підписати АРК».</string>
     <string name="rebuild_confirm_d_summary">Вимкнено. Після натискання кнопки «Зберегти» АПК буде перезібрано та підписано.</string>
@@ -215,10 +198,7 @@
     <string name="copy_file_path">Скопіювати назву файлу</string>
     <string name="copied_to_clipboard">"'%s' скопійовано до буферу обміну."</string>
     <string name="case_insensitive">Не враховувати регістр</string>
-    <string name="donot_save">Не збережено</string>
-    <string name="save_changes_tip">Зберегти зміни?</string>
     <string name="str_replace_with">"Замінити '%s' на "</string>
-    <string name="replace_all">Замінити все</string>
     <string name="str_replaced">"'%s' замінено"</string>
     <string name="failed_to_modify">Не вдалося змінити %s</string>
     <string name="sure_to_replace_all" formatted="false">"Бажаєте замінити всі '%s' на '%s'?"</string>
@@ -226,18 +206,13 @@
     <string name="dump_a_value">Скинути значення</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -245,14 +220,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

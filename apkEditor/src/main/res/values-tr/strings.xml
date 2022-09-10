@@ -26,7 +26,6 @@
     <string name="color">Renk</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
-    <string name="colormixer_cancel">İptal</string>
     <string name="colormixer_green">G</string>
     <string name="colormixer_red">R</string>
     <string name="colormixer_set">Ayarla</string>
@@ -46,13 +45,11 @@
     <string name="donot_show_again">Tekrar gösterme</string>
     <string name="dummy" />
     <string name="edit_data_root">Veri düzenle [ROOT]</string>
-    <string name="edit_string_value">Düzenle</string>
     <string name="empty_input_tip">Giriş boş olamaz!</string>
     <string name="empty_key_tip">Bu bölüm boş olamaz!</string>
     <string name="encode_dex_file">Dex dosyası kodlanıyor...</string>
     <string name="entry_in_apk">Apk girin</string>
     <string name="errmsg_copied">Hata mesajı panoya kopyalandı</string>
-    <string name="error_file_too_big">Dosya açmak için çok büyük.</string>
     <string name="error_filepath_empty">Dosya yolu boş olamaz.</string>
     <string name="error_filepath_notexist">Dosya bulunamıyor.</string>
     <string name="exit">Çıkış</string>
@@ -63,14 +60,10 @@
     <string name="file_added">Dosya eklendi: %s</string>
     <string name="file_already_exist">"'%s' Zaten var!"</string>
     <string name="file_replaced">Dosya değiştirildi.</string>
-    <string name="file_saved">Dosya kaydedildi.</string>
     <string name="files">Dosyalar</string>
     <string name="files_capital">Dosyalar</string>
-    <string name="find">Ara</string>
-    <string name="find_replace">Bul / Değiştir</string>
     <string name="folder_replace_tip" formatted="false">Dosya değiştirilecek emin misiniz %s ile %s?</string>
     <string name="folder_replaced">Klasör değiştirildi</string>
-    <string name="font_size">Font boyutu</string>
     <string name="full_edit">Tam düzenleme (kaynak değiştirme)</string>
     <string name="general_error">Hata: %s</string>
     <string name="help">Yardım</string>
@@ -90,8 +83,6 @@
 "</string>
     <string name="launcher_icon">Menü simgesi</string>
     <string name="line_data">Veri satırı:</string>
-    <string name="line_number">Satır numarası</string>
-    <string name="line_wrap">Satır görünümü</string>
     <string name="loading">Yükleniyor...</string>
     <string name="location_0">Standart (Belirtilmemiş)</string>
     <string name="location_1">Otomatik</string>
@@ -108,17 +99,13 @@
     <string name="no_change_detected">Değişiklik algılanmadı.</string>
     <string name="no_patch_selected">Yama seçilmedi</string>
     <string name="not_available">Müsait değil</string>
-    <string name="not_found">Bulunamadı</string>
     <string name="notfound_in_manifest">AndroidManifest.xml hedef dizeyi bulamıyor</string>
-    <string name="notice_capital">Sonuç</string>
     <string name="num_items_selected">%d Öğe(ler) seçildi</string>
-    <string name="open_in_editor">Düzenleme modunda aç</string>
     <string name="open_in_new_window">Yeni bir pencerede aç</string>
     <string name="others">Diğer</string>
     <string name="package_name">Paket adı</string>
     <string name="package_rename_method">Paket adlandırma yöntemi</string>
     <string name="patch_applied">Yama uygulandı</string>
-    <string name="patch_capital">Yama</string>
     <string name="patch_error_cannot_parse" formatted="false">Ayrıştırılamıyor %d: %s</string>
     <string name="patch_error_invalid_target" formatted="false">Satır veya hedef geçersiz %d: %s</string>
     <string name="patch_error_no_entry">"Yama içinde '%s' bulunamıyor"</string>
@@ -144,8 +131,6 @@ Başarısız sonuç alınabilir bilginize."</string>
     <string name="pls_input_keyword">Aranacak kelime</string>
     <string name="private_key_label">"Özel imza
 (.pk8)"</string>
-    <string name="promote_msg">"Düzenleme sadece tam sürümünde desteklenir.
-Pro sürümünü satın alabilirsiniz."</string>
     <string name="public_key_label">"Açık imza
 (.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">"Kapalı. 'Kaydet' düğmesine tıkladığınızda apk dosyası seçmiş olduğunuz imzalama türüne göre hemen kaydedilecektir."</string>
@@ -154,14 +139,12 @@ Pro sürümünü satın alabilirsiniz."</string>
     <string name="rebuild_dex_file">DEX Dosyasını yeniden oluştur</string>
     <string name="rebuild_res_file">Kaynak dosyasını yeniden oluştur</string>
     <string name="rebuild_the_apk">"APK'yi yeniden oluştur"</string>
-    <string name="regexp">Düzenli ifade</string>
     <string name="remove">Kaldır</string>
     <string name="remove_tip">"Bu uygulama zaten yüklü.
 Eskisini kaldırıp daha sonra yenisini yükle"</string>
     <string name="rename">Yeni isim ver</string>
     <string name="rename_in_resources">Resources.arsc dosyasını yeniden adlandır</string>
     <string name="replace">Değiştir</string>
-    <string name="replace_all_ret">%d Dosya(lar) değiştirildi</string>
     <string name="resolution">Çözünürlük</string>
     <string name="resource">Kaynaklar</string>
     <string name="sample_code">Örnek kod</string>
@@ -182,7 +165,6 @@ Eskisini kaldırıp daha sonra yenisini yükle"</string>
     <string name="select_folder_replace">Değiştirmek için bir klasör seçin</string>
     <string name="select_key_file">Bir imzalama dosyası seçin</string>
     <string name="select_patch">Yama seç</string>
-    <string name="select_target_lang">Çevirmek için bir dil seçin</string>
     <string name="settings">Ayarlar</string>
     <string name="show_a_toast">Tekrar göster</string>
     <string name="sign">İmzalanıyor</string>
@@ -226,7 +208,6 @@ Eskisini kaldırıp daha sonra yenisini yükle"</string>
     <string name="case_insensitive">Büyük/Küçük harf duyarsız</string>
     <string name="decode_dir">Apk ayrıştırma dizini</string>
     <string name="decode_dir_summary_may_change">Varsayılan hafıza</string>
-    <string name="donot_save">Kaydetme</string>
     <string name="dump_a_value">Bir değer girin</string>
     <string name="edit_before_replace">Dosyayı değiştirmeden önce düzenle/değiştir %s</string>
     <string name="extension_changed_tip">Dosya adı uzantısı değiştirildi. Değiştirmek istediğinizden emin misiniz?</string>
@@ -259,11 +240,8 @@ Tekrar dene?"</string>
     <string name="print_stack_trace">Yığın baskı izi</string>
     <string name="project_removed">Proje \"%s\" kaldırıldı</string>
     <string name="projects">Projeler</string>
-    <string name="replace_all">Tümünü değiştir</string>
     <string name="save_as_project">Projeyi kaydet</string>
-    <string name="save_changes_tip">Değişiklikleri kaydetmek istiyor musunuz?</string>
     <string name="select_language_desc">Uygulamada kullanılacak dili seçin</string>
-    <string name="show_line_numbers">Satır numaraları göster</string>
     <string name="str_fix_failed">Üzgünüz, sorun çözme başarısız oldu.</string>
     <string name="str_num_renamed_file">%d Dosya(lar) yeniden adlandırıldı</string>
     <string name="str_rename_failed">Üzgünüz, dosyayı yeniden adlandıramadı.</string>
@@ -278,18 +256,13 @@ Tekrar dene?"</string>
 Başarı oranını yükseltmek için lütfen mümkün olduğunca küçük değişiklikler yapın, (örneğin com.android'i com.androie'ye değiştirin)"</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -297,14 +270,9 @@ Başarı oranını yükseltmek için lütfen mümkün olduğunca küçük deği�
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

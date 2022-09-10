@@ -3,7 +3,6 @@
     <string name="searching">Pesquisando</string>
     <string name="loading">Carregando &#8230;</string>
     <string name="close">Fechar</string>
-    <string name="find">Procurar</string>
     <string name="keyword_hint">Insira uma palavra-chave</string>
     <string name="app_list_order">Lista de app ordenado por</string>
     <string name="app_display">Exibir App</string>
@@ -35,11 +34,9 @@
     <string name="select_file_replace">Selecione um arquivo para substituí-lo</string>
     <string name="pls_input_keyword">Insira uma Palavra-chave para Pesquisar</string>
     <string name="manifest_edit_not_support">Editing is not supported in free version!</string>
-    <string name="promote_msg">"Editing is only supported in pro version. Click 'View Pro Version' to get the pro version?"</string>
     <string name="not_available">Não disponível</string>
     <string name="add_key_value">Adicionar uma chave/valor:</string>
     <string name="open_in_new_window">Abrir em uma nova janela</string>
-    <string name="edit_string_value">Editar o Valor</string>
     <string name="language">Linguagem:</string>
     <string name="code">Código</string>
     <string name="replace">Substituir</string>
@@ -105,18 +102,13 @@
     <string name="temp_file_cleaned">Arquivos temporários limpados.</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -124,14 +116,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

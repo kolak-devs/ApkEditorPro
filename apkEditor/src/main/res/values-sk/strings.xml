@@ -26,7 +26,6 @@
     <string name="color">Farba</string>
     <string name="colormixer_alpha">A</string>
     <string name="colormixer_blue">B</string>
-    <string name="colormixer_cancel">Zrušiť</string>
     <string name="colormixer_green">G</string>
     <string name="colormixer_red">R</string>
     <string name="colormixer_set">Nastaviť</string>
@@ -44,13 +43,11 @@
     <string name="detail">Podrobnosti</string>
     <string name="donot_show_again">Už viac nezobrazovať</string>
     <string name="edit_data_root">Upraviť údaje [ROOT]</string>
-    <string name="edit_string_value">Upraviť hodnotu</string>
     <string name="empty_input_tip">Vstup nemôže byť prázdny.</string>
     <string name="empty_key_tip">Kľúč nemôže byť prázdny!</string>
     <string name="encode_dex_file">Zakódovať súbor DEX...</string>
     <string name="entry_in_apk">Vstupný bod APK</string>
     <string name="errmsg_copied">Chybová správa skopírovaná do schránky.</string>
-    <string name="error_file_too_big">Súbor je príliš veľký na otvorenie.</string>
     <string name="error_filepath_empty">Cesta nemôže byť prázdna.</string>
     <string name="error_filepath_notexist">Súbor neexistuje.</string>
     <string name="exit">Ukončiť</string>
@@ -61,14 +58,10 @@
     <string name="file_added">Pridaný súbor: %s</string>
     <string name="file_already_exist">"'%s' už existuje!"</string>
     <string name="file_replaced">Súbor bol nahradený.</string>
-    <string name="file_saved">Súbor uložený.</string>
     <string name="files">Súbory</string>
     <string name="files_capital">SÚBORY</string>
-    <string name="find">Hľadať</string>
-    <string name="find_replace">Hľadať alebo nahradiť</string>
     <string name="folder_replace_tip" formatted="false">Ste si istý, že chcete priečinok %s nahradiť týmto %s?</string>
     <string name="folder_replaced">Priečinok bol nahradený</string>
-    <string name="font_size">Veľkosť písma</string>
     <string name="full_edit">Plná úprava (zdroj bude znovuzostavený)</string>
     <string name="general_error">Chyba: %s</string>
     <string name="help">Nápoveda</string>
@@ -87,7 +80,6 @@
     <string name="language">Jazyk:</string>
     <string name="launcher_icon">Ikona spúšťača</string>
     <string name="line_data">RIADOK ÚDAJOV:</string>
-    <string name="line_wrap">Zalomenie riadka</string>
     <string name="loading">Načítava sa …</string>
     <string name="location_0">Predvolené (nešpecifikované)</string>
     <string name="location_1">Auto (vyberie OS)</string>
@@ -104,17 +96,13 @@
     <string name="no_change_detected">Nebola detegovaná zmena.</string>
     <string name="no_patch_selected">Žiadna záplata nebola vybraná</string>
     <string name="not_available">Nie je k dispozícii</string>
-    <string name="not_found">Nebol nájdený</string>
     <string name="notfound_in_manifest">Nemôžem nájsť cieľový reťazec v AndroidManifest.xml</string>
-    <string name="notice_capital">UPOZORNENIE</string>
     <string name="num_items_selected">označených položiek %d</string>
-    <string name="open_in_editor">Otvoriť v Editore</string>
     <string name="open_in_new_window">Otvoriť v novom okne</string>
     <string name="others">Ostatné</string>
     <string name="package_name">Názov balíka</string>
     <string name="package_rename_method">Metóda premenovania balíčka</string>
     <string name="patch_applied">Záplata bola aplikovaná</string>
-    <string name="patch_capital">ZÁPLATA</string>
     <string name="patch_error_cannot_parse" formatted="false">Riadok %d: %s sa nepodarilo parsovať</string>
     <string name="patch_error_invalid_target" formatted="false">Neplatný alebo nepodporovaný cieľ na riadku %d: %s</string>
     <string name="patch_error_no_entry">"Nepodarilo sa nájsť '%s' v záplate."</string>
@@ -138,7 +126,6 @@
     <string name="pls_input_foldername">Zadajte názov priečinka, prosím:</string>
     <string name="pls_input_keyword">Zadajte kľúčové slovo pre vyhľadávanie</string>
     <string name="private_key_label">\"Súkromný kľúč\n(.pk8)\"</string>
-    <string name="promote_msg">"Úprava je podporovaná vo verzii PRO. Kliknite na tlačidlo \"Zobraziť verziu PRO\" pre získanie verzie PRO."</string>
     <string name="public_key_label">\"Verejný kľúč\n(.x509.pem)\"</string>
     <string name="rebuild_confirm_d_summary">Zakázané. APK bude priamo znova zostavené a podpísané klepnutím na tlačidlo uložiť.</string>
     <string name="rebuild_confirm_e_summary">Povolené. Klepnutím na tlačidlo uložiť sa zobrazí potvrdzovaní dialóg. V dialógovom okne bude na výber nepodpísanie APK.</string>
@@ -146,7 +133,6 @@
     <string name="rebuild_dex_file">Znovu zostaviť DEX súbor</string>
     <string name="rebuild_res_file">Znovu zostaviť zdrojový súbor</string>
     <string name="rebuild_the_apk">Znovu zostaviť APK</string>
-    <string name="regexp">Regulárny výraz</string>
     <string name="remove">Odstrániť</string>
     <string name="remove_tip">Aplikácia je už nainštalovaná, budete ju musieť odstrániť pred inštaláciou modifikovaného APK.</string>
     <string name="rename">Premenovať</string>
@@ -172,7 +158,6 @@
     <string name="select_folder_replace">Vyberte priečinok, ktorý chcete nahradiť</string>
     <string name="select_key_file">Vyberte súbor kľúča</string>
     <string name="select_patch">Výber záplaty</string>
-    <string name="select_target_lang">Vyberte jazyk, ktorý chcete preložiť</string>
     <string name="settings">Nastavenia</string>
     <string name="show_a_toast">Zobraziť toast</string>
     <string name="sign">Podpísať</string>
@@ -212,11 +197,8 @@
     <string name="print_stack_trace">Zobraziť trasovanie zásobníka</string>
     <string name="project_removed">Projekt \"%s\" bol odstránený.</string>
     <string name="projects">Projekty</string>
-    <string name="replace_all">Nahradiť všetko</string>
     <string name="save_as_project">Uložiť ako projekt</string>
-    <string name="save_changes_tip">Chcete uložiť zmeny?</string>
     <string name="select_language_desc">Vyberte svoj preferovaný jazyk.</string>
-    <string name="show_line_numbers">Zobraziť číslo riadka</string>
     <string name="str_fix_failed">Ľutujeme, problém sa nepodarilo odstrániť.</string>
     <string name="str_num_renamed_file">premenované súbory %d</string>
     <string name="str_rename_failed">Premenovanie súboru zlyhalo.</string>
@@ -226,18 +208,13 @@
     <string name="target_sdk_version">Verzia cieľového SDK</string>
     <string name="link_forum">Forum</string>
     <string name="link_telegram">Telegram</string>
-    <string name="by_app_name">By App Name</string>
-    <string name="by_install_time">By Install Time</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
-    <string name="pref_title_apktool_compiler">ApkTool Compiler</string>
-    <string name="pref_summary_apktool_compiler">Use ApkTool for Build Apk</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
-    <string name="pref_title_color_theme">Color Theme</string>
     <string name="about_community">Community</string>
     <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
@@ -245,14 +222,9 @@
     <string name="app_translator">Translator</string>
     <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="pref_summary_signature_key">Select your Signature Key</string>
-    <string name="pref_title_signature_key">Signature Key</string>
-    <string name="pref_category_title_apksigner">Apk Signer</string>
     <string name="title_clear_data">Clear Data</string>
     <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
 </resources>

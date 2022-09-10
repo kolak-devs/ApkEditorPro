@@ -16,13 +16,6 @@
         android:layout="@layout/preferences_category"
         android:title="@string/appearance">
 
-        <!-- com.mcal.apkeditor.view.IconPickerPreference
-            android:entries="@array/appicon_key"
-            android:entryValues="@array/appicon_value"
-            android:key="MyIcon"
-            android:layout="@layout/item_iconlistpref"
-            android:title="@string/launcher_icon" / -->
-
         <ListPreference
             android:defaultValue=""
             android:entries="@array/language_key"
@@ -80,21 +73,6 @@
             android:key="aapt2"
             android:summary="@string/pref_summary_aapt2"
             android:title="@string/pref_title_aapt2" />
-
-        <!-- ListPreference
-            android:defaultValue="0"
-            android:entries="@array/compression_level_key"
-            android:entryValues="@array/compression_level_value"
-            android:key="CompressionLevel"
-            android:summary="@string/compression_level_summary"
-            android:title="@string/compression_level" / -->
-
-        <!-- com.mcal.apkeditor.view.KeyListPreference
-            android:entries="@array/signer_key"
-            android:entryValues="@array/signer_value_dont_translate"
-            android:key="SignApkWith"
-            android:summary="@string/sign_apk_with_summary"
-            android:title="@string/sign_apk_with" / -->
 
         <ListPreference
             android:entries="@array/output_apkname_key"
