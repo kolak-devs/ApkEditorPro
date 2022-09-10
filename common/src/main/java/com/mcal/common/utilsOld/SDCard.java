@@ -20,6 +20,8 @@ import java.util.List;
 
 public class SDCard {
 
+    private static String appDir = null;
+
     public static boolean exist() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
@@ -121,8 +123,6 @@ public class SDCard {
         }
         return path;
     }
-
-    private static String appDir = null;
 
     private static void initFolderName(Context ctx) {
         if (appDir != null) {

@@ -1,8 +1,6 @@
 package com.mcal.pngeditor.editor;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 
 import com.mcal.pngeditor.ImageEditor;
 
@@ -11,26 +9,6 @@ public class RemoveBackground implements ImageEditor {
     private int tolerance = 0;
 
     private boolean bModified = false;
-
-    @Override
-    public void setParam(String name, Object value) {
-        if ("color".equals(name)) {
-            this.color = (Integer) value;
-        } else if ("tolerance".equals(name)) {
-            this.tolerance = (Integer) value;
-        }
-    }
-
-    @Override
-    public Bitmap edit(Bitmap bitmap) {
-        bModified = true;
-        return removeBackground(bitmap, color, tolerance);
-    }
-
-    @Override
-    public boolean isModified() {
-        return bModified;
-    }
 
     private static int getColorDistance(int c1, int c2) {
         int diff1 = (c1 & 0xff) - (c2 & 0xff);
@@ -71,5 +49,25 @@ public class RemoveBackground implements ImageEditor {
         }
 
         return retBitmap;
+    }
+
+    @Override
+    public void setParam(String name, Object value) {
+        if ("color".equals(name)) {
+            this.color = (Integer) value;
+        } else if ("tolerance".equals(name)) {
+            this.tolerance = (Integer) value;
+        }
+    }
+
+    @Override
+    public Bitmap edit(Bitmap bitmap) {
+        bModified = true;
+        return removeBackground(bitmap, color, tolerance);
+    }
+
+    @Override
+    public boolean isModified() {
+        return bModified;
     }
 }

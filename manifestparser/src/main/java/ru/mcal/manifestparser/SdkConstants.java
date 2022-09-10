@@ -845,22 +845,6 @@ public final class SdkConstants {
     public static final String OS_PLATFORM_RESOURCES_FOLDER =
             OS_PLATFORM_DATA_FOLDER + FD_RES + File.separator;
     /**
-     * Path of the attrs.xml file relative to a platform folder.
-     */
-    public static final String OS_PLATFORM_ATTRS_XML =
-            OS_PLATFORM_RESOURCES_FOLDER
-                    + SdkConstants.FD_RES_VALUES
-                    + File.separator
-                    + FN_ATTRS_XML;
-    /**
-     * Path of the attrs_manifest.xml file relative to a platform folder.
-     */
-    public static final String OS_PLATFORM_ATTRS_MANIFEST_XML =
-            OS_PLATFORM_RESOURCES_FOLDER
-                    + SdkConstants.FD_RES_VALUES
-                    + File.separator
-                    + FN_ATTRS_MANIFEST_XML;
-    /**
      * Path of the fonts directory relative to a platform folder. This is an OS path, ending with a
      * separator.
      */
@@ -906,8 +890,6 @@ public final class SdkConstants {
      */
     public static final String OS_FRAMEWORK_RS_CLANG =
             FN_FRAMEWORK_RENDERSCRIPT + File.separator + FN_FRAMEWORK_INCLUDE_CLANG;
-
-    /* Folder paths relative to a addon folder */
     /**
      * Path of the images directory relative to a folder folder. This is an OS path, ending with a
      * separator.
@@ -917,6 +899,8 @@ public final class SdkConstants {
      * Skin default
      */
     public static final String SKIN_DEFAULT = "default"; //$NON-NLS-1$
+
+    /* Folder paths relative to a addon folder */
     /**
      * SDK property: ant templates revision
      */
@@ -1054,6 +1038,22 @@ public final class SdkConstants {
      * Default values resource folder name, i.e. "values"
      */
     public static final String FD_RES_VALUES = "values"; //$NON-NLS-1$
+    /**
+     * Path of the attrs.xml file relative to a platform folder.
+     */
+    public static final String OS_PLATFORM_ATTRS_XML =
+            OS_PLATFORM_RESOURCES_FOLDER
+                    + SdkConstants.FD_RES_VALUES
+                    + File.separator
+                    + FN_ATTRS_XML;
+    /**
+     * Path of the attrs_manifest.xml file relative to a platform folder.
+     */
+    public static final String OS_PLATFORM_ATTRS_MANIFEST_XML =
+            OS_PLATFORM_RESOURCES_FOLDER
+                    + SdkConstants.FD_RES_VALUES
+                    + File.separator
+                    + FN_ATTRS_MANIFEST_XML;
     /**
      * Default xml resource folder name, i.e. "xml"
      */

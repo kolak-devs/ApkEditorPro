@@ -28,7 +28,7 @@ import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 import com.mcal.common.view.ProgressDialog;
-import com.mcal.neweditor.TextEditor;
+import com.mcal.editor.TextEditor;
 
 import java.io.BufferedReader;
 import java.io.File;

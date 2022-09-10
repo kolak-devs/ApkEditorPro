@@ -25,7 +25,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream

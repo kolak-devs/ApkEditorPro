@@ -1,9 +1,9 @@
 package jadx.api.plugins.input.insns.custom;
 
 public interface IArrayPayload extends ICustomPayload {
-	int getSize();
+    int getSize();
 
-	int getElementSize();
+    int getElementSize();
 
-	Object getData();
+    Object getData();
 }

@@ -1,21 +1,21 @@
 package jadx.api.plugins.input.data;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import jadx.api.plugins.input.data.attributes.IJadxAttribute;
 
 public interface IMethodData {
 
-	IMethodRef getMethodRef();
+    IMethodRef getMethodRef();
 
-	int getAccessFlags();
+    int getAccessFlags();
 
-	@Nullable
-	ICodeReader getCodeReader();
+    @Nullable
+    ICodeReader getCodeReader();
 
-	String disassembleMethod();
+    String disassembleMethod();
 
-	List<IJadxAttribute> getAttributes();
+    List<IJadxAttribute> getAttributes();
 }

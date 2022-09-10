@@ -192,7 +192,7 @@ public class FastZip {
     }
 
     public static void repack(@NotNull String inZip, @NotNull String outZip, @Nullable Map<String, String> replacedFiles,
-                              @Nullable  Map<String, String> addedFiles, @Nullable Set<String> deletedFiles) throws Exception {
+                              @Nullable Map<String, String> addedFiles, @Nullable Set<String> deletedFiles) throws Exception {
         repack(new File(inZip), new File(outZip), replacedFiles, addedFiles, deletedFiles);
     }
 }

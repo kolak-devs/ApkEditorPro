@@ -29,11 +29,13 @@ import android.sun.security.util.DerValue;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Represent the Policy Mappings Extension.
- *
+ * <p>
  * This extension, if present, identifies the certificate policies considered
  * identical between the issuing and the subject CA.
  * <p>Extensions are addiitonal attributes which can be inserted in a X509
@@ -51,7 +53,7 @@ import java.util.*;
  * @see android.sun.security.x509.CertAttrSet
  */
 public class PolicyMappingsExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
@@ -65,23 +67,6 @@ implements CertAttrSet<String> {
 
     // Private data members
     private List<android.sun.security.x509.CertificatePolicyMap> maps;
-
-    // Encode this extension value
-    private void encodeThis() throws IOException {
-        if (maps == null || maps.isEmpty()) {
-            this.extensionValue = null;
-            return;
-        }
-        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
-        android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
-
-        for (android.sun.security.x509.CertificatePolicyMap map : maps) {
-            map.encode(tmp);
-        }
-
-        os.write(android.sun.security.util.DerValue.tag_Sequence, tmp);
-        this.extensionValue = os.toByteArray();
-    }
 
     /**
      * Create a PolicyMappings with the List of CertificatePolicyMap.
@@ -108,13 +93,13 @@ implements CertAttrSet<String> {
     /**
      * Create the extension from the passed DER encoded value.
      *
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
      * @params critical true if the extension is to be treated as critical.
      * @params value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
      */
     public PolicyMappingsExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.PolicyMappings_Id;
         this.critical = critical.booleanValue();
 
@@ -122,7 +107,7 @@ implements CertAttrSet<String> {
         android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(this.extensionValue);
         if (val.tag != android.sun.security.util.DerValue.tag_Sequence) {
             throw new IOException("Invalid encoding for " +
-                                  "PolicyMappingsExtension.");
+                    "PolicyMappingsExtension.");
         }
         maps = new ArrayList<android.sun.security.x509.CertificatePolicyMap>();
         while (val.data.available() != 0) {
@@ -132,13 +117,30 @@ implements CertAttrSet<String> {
         }
     }
 
+    // Encode this extension value
+    private void encodeThis() throws IOException {
+        if (maps == null || maps.isEmpty()) {
+            this.extensionValue = null;
+            return;
+        }
+        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
+        android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
+
+        for (android.sun.security.x509.CertificatePolicyMap map : maps) {
+            map.encode(tmp);
+        }
+
+        os.write(android.sun.security.util.DerValue.tag_Sequence, tmp);
+        this.extensionValue = os.toByteArray();
+    }
+
     /**
      * Returns a printable representation of the policy map.
      */
     public String toString() {
         if (maps == null) return "";
         String s = super.toString() + "PolicyMappings [\n"
-                 + maps.toString() + "]\n";
+                + maps.toString() + "]\n";
 
         return (s);
     }
@@ -147,7 +149,7 @@ implements CertAttrSet<String> {
      * Write the extension to the OutputStream.
      *
      * @param out the OutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
@@ -166,13 +168,13 @@ implements CertAttrSet<String> {
     public void set(String name, Object obj) throws IOException {
         if (name.equalsIgnoreCase(MAP)) {
             if (!(obj instanceof List)) {
-              throw new IOException("Attribute value should be of" +
-                                    " type List.");
+                throw new IOException("Attribute value should be of" +
+                        " type List.");
             }
-            maps = (List<CertificatePolicyMap>)obj;
+            maps = (List<CertificatePolicyMap>) obj;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:PolicyMappingsExtension.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:PolicyMappingsExtension.");
         }
         encodeThis();
     }
@@ -184,8 +186,8 @@ implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(MAP)) {
             return (maps);
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:PolicyMappingsExtension.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:PolicyMappingsExtension.");
         }
     }
 
@@ -196,8 +198,8 @@ implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(MAP)) {
             maps = null;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:PolicyMappingsExtension.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:PolicyMappingsExtension.");
         }
         encodeThis();
     }
@@ -206,7 +208,7 @@ implements CertAttrSet<String> {
      * Return an enumeration of names of attributes existing within this
      * attribute.
      */
-    public Enumeration<String> getElements () {
+    public Enumeration<String> getElements() {
         android.sun.security.x509.AttributeNameEnumeration elements = new AttributeNameEnumeration();
         elements.addElement(MAP);
 
@@ -216,7 +218,7 @@ implements CertAttrSet<String> {
     /**
      * Return the name of this attribute.
      */
-    public String getName () {
+    public String getName() {
         return (NAME);
     }
 }

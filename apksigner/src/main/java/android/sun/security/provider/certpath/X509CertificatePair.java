@@ -24,6 +24,12 @@
  */
 package android.sun.security.provider.certpath;
 
+import android.sun.security.provider.X509Factory;
+import android.sun.security.util.Cache;
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.x509.X509CertImpl;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.PublicKey;
@@ -33,12 +39,6 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.DSAPublicKey;
 
 import javax.security.auth.x500.X500Principal;
-
-import android.sun.security.util.DerOutputStream;
-import android.sun.security.util.DerValue;
-import android.sun.security.util.Cache;
-import android.sun.security.x509.X509CertImpl;
-import android.sun.security.provider.X509Factory;
 
 /**
  * This class represents an X.509 Certificate Pair object, which is primarily
@@ -53,7 +53,7 @@ import android.sun.security.provider.X509Factory;
  * digital signature on the other certificate and vice versa.  If a subject
  * public key in one certificate does not contain required key algorithm
  * parameters, then the signature check involving that key is not done.<p>
- *
+ * <p>
  * The ASN.1 syntax for this object is:
  * <pre>
  * CertificatePair      ::=     SEQUENCE {
@@ -61,12 +61,12 @@ import android.sun.security.provider.X509Factory;
  *      reverse [1]     Certificate OPTIONAL
  *                      -- at least one of the pair shall be present -- }
  * </pre><p>
- *
+ * <p>
  * This structure uses EXPLICIT tagging. References: Annex A of
  * X.509(2000), X.509(1997).
  *
- * @author      Sean Mullan
- * @since       1.4
+ * @author Sean Mullan
+ * @since 1.4
  */
 
 public class X509CertificatePair {
@@ -74,33 +74,32 @@ public class X509CertificatePair {
     /* ASN.1 explicit tags */
     private static final byte TAG_FORWARD = 0;
     private static final byte TAG_REVERSE = 1;
-
+    private static final Cache cache = Cache.newSoftMemoryCache(750);
     private X509Certificate forward;
     private X509Certificate reverse;
     private byte[] encoded;
 
-    private static final Cache cache = Cache.newSoftMemoryCache(750);
-
     /**
      * Creates an empty instance of X509CertificatePair.
      */
-    public X509CertificatePair() {}
+    public X509CertificatePair() {
+    }
 
     /**
      * Creates an instance of X509CertificatePair. At least one of
      * the pair must be non-null.
      *
      * @param forward The forward component of the certificate pair
-     *          which represents a certificate issued to this CA by other CAs.
+     *                which represents a certificate issued to this CA by other CAs.
      * @param reverse The reverse component of the certificate pair
-     *          which represents a certificate issued by this CA to other CAs.
+     *                which represents a certificate issued by this CA to other CAs.
      * @throws CertificateException If an exception occurs.
      */
     public X509CertificatePair(X509Certificate forward, X509Certificate reverse)
-                throws CertificateException {
+            throws CertificateException {
         if (forward == null && reverse == null) {
             throw new CertificateException("at least one of certificate pair "
-                + "must be non-null");
+                    + "must be non-null");
         }
 
         this.forward = forward;
@@ -111,10 +110,10 @@ public class X509CertificatePair {
 
     /**
      * Create a new X509CertificatePair from its encoding.
-     *
+     * <p>
      * For internal use only, external code should use generateCertificatePair.
      */
-    private X509CertificatePair(byte[] encoded)throws CertificateException {
+    private X509CertificatePair(byte[] encoded) throws CertificateException {
         try {
             parse(new DerValue(encoded));
             this.encoded = encoded;
@@ -136,9 +135,9 @@ public class X509CertificatePair {
      * if possible.
      */
     public static synchronized X509CertificatePair generateCertificatePair
-            (byte[] encoded) throws CertificateException {
+    (byte[] encoded) throws CertificateException {
         Object key = new Cache.EqualByteArray(encoded);
-        X509CertificatePair pair = (X509CertificatePair)cache.get(key);
+        X509CertificatePair pair = (X509CertificatePair) cache.get(key);
         if (pair != null) {
             return pair;
         }
@@ -146,22 +145,6 @@ public class X509CertificatePair {
         key = new Cache.EqualByteArray(pair.encoded);
         cache.put(key, pair);
         return pair;
-    }
-
-    /**
-     * Sets the forward component of the certificate pair.
-     */
-    public void setForward(X509Certificate cert) throws CertificateException {
-        checkPair();
-        forward = cert;
-    }
-
-    /**
-     * Sets the reverse component of the certificate pair.
-     */
-    public void setReverse(X509Certificate cert) throws CertificateException {
-        checkPair();
-        reverse = cert;
     }
 
     /**
@@ -174,12 +157,28 @@ public class X509CertificatePair {
     }
 
     /**
+     * Sets the forward component of the certificate pair.
+     */
+    public void setForward(X509Certificate cert) throws CertificateException {
+        checkPair();
+        forward = cert;
+    }
+
+    /**
      * Returns the reverse component of the certificate pair.
      *
      * @return The reverse certificate, or null if not set.
      */
     public X509Certificate getReverse() {
         return reverse;
+    }
+
+    /**
+     * Sets the reverse component of the certificate pair.
+     */
+    public void setReverse(X509Certificate cert) throws CertificateException {
+        checkPair();
+        reverse = cert;
     }
 
     /**
@@ -219,11 +218,10 @@ public class X509CertificatePair {
 
     /* Parse the encoded bytes */
     private void parse(DerValue val)
-        throws IOException, CertificateException
-    {
+            throws IOException, CertificateException {
         if (val.tag != DerValue.tag_Sequence) {
             throw new IOException
-                ("Sequence tag missing for X509CertificatePair");
+                    ("Sequence tag missing for X509CertificatePair");
         }
 
         while (val.data != null && val.data.available() != 0) {
@@ -234,53 +232,52 @@ public class X509CertificatePair {
                     if (opt.isContextSpecific() && opt.isConstructed()) {
                         if (forward != null) {
                             throw new IOException("Duplicate forward "
-                                + "certificate in X509CertificatePair");
+                                    + "certificate in X509CertificatePair");
                         }
                         opt = opt.data.getDerValue();
                         forward = X509Factory.intern
-                                        (new X509CertImpl(opt.toByteArray()));
+                                (new X509CertImpl(opt.toByteArray()));
                     }
                     break;
                 case TAG_REVERSE:
                     if (opt.isContextSpecific() && opt.isConstructed()) {
                         if (reverse != null) {
                             throw new IOException("Duplicate reverse "
-                                + "certificate in X509CertificatePair");
+                                    + "certificate in X509CertificatePair");
                         }
                         opt = opt.data.getDerValue();
                         reverse = X509Factory.intern
-                                        (new X509CertImpl(opt.toByteArray()));
+                                (new X509CertImpl(opt.toByteArray()));
                     }
                     break;
                 default:
                     throw new IOException("Invalid encoding of "
-                        + "X509CertificatePair");
+                            + "X509CertificatePair");
             }
         }
         if (forward == null && reverse == null) {
             throw new CertificateException("at least one of certificate pair "
-                + "must be non-null");
+                    + "must be non-null");
         }
     }
 
     /* Translate to encoded bytes */
     private void emit(DerOutputStream out)
-        throws IOException, CertificateEncodingException
-    {
+            throws IOException, CertificateEncodingException {
         DerOutputStream tagged = new DerOutputStream();
 
         if (forward != null) {
             DerOutputStream tmp = new DerOutputStream();
             tmp.putDerValue(new DerValue(forward.getEncoded()));
             tagged.write(DerValue.createTag(DerValue.TAG_CONTEXT,
-                         true, TAG_FORWARD), tmp);
+                    true, TAG_FORWARD), tmp);
         }
 
         if (reverse != null) {
             DerOutputStream tmp = new DerOutputStream();
             tmp.putDerValue(new DerValue(reverse.getEncoded()));
             tagged.write(DerValue.createTag(DerValue.TAG_CONTEXT,
-                         true, TAG_REVERSE), tmp);
+                    true, TAG_REVERSE), tmp);
         }
 
         out.write(DerValue.tag_Sequence, tagged);
@@ -305,24 +302,24 @@ public class X509CertificatePair {
         X500Principal rvIssuer = reverse.getIssuerX500Principal();
         if (!fwIssuer.equals(rvSubject) || !rvIssuer.equals(fwSubject)) {
             throw new CertificateException("subject and issuer names in "
-                + "forward and reverse certificates do not match");
+                    + "forward and reverse certificates do not match");
         }
 
         /* check signatures unless key parameters are missing */
         try {
             PublicKey pk = reverse.getPublicKey();
             if (!(pk instanceof DSAPublicKey) ||
-                        ((DSAPublicKey)pk).getParams() != null) {
+                    ((DSAPublicKey) pk).getParams() != null) {
                 forward.verify(pk);
             }
             pk = forward.getPublicKey();
             if (!(pk instanceof DSAPublicKey) ||
-                        ((DSAPublicKey)pk).getParams() != null) {
+                    ((DSAPublicKey) pk).getParams() != null) {
                 reverse.verify(pk);
             }
         } catch (GeneralSecurityException e) {
             throw new CertificateException("invalid signature: "
-                + e.getMessage());
+                    + e.getMessage());
         }
     }
 }

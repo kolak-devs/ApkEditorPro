@@ -25,15 +25,17 @@
 
 package android.sun.security.pkcs;
 
+import android.sun.security.util.DerEncoder;
+import android.sun.security.util.DerInputStream;
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.security.cert.CertificateException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
-
-import android.sun.security.util.*;
 
 /**
  * This class defines the PKCS10 attributes for the request.
@@ -50,12 +52,13 @@ import android.sun.security.util.*;
 public class PKCS10Attributes implements DerEncoder {
 
     private Hashtable<String, PKCS10Attribute> map =
-                        new Hashtable<String, PKCS10Attribute>(3);
+            new Hashtable<String, PKCS10Attribute>(3);
 
     /**
      * Default constructor for the PKCS10 attribute.
      */
-    public PKCS10Attributes() { }
+    public PKCS10Attributes() {
+    }
 
     /**
      * Create the object from the array of PKCS10Attribute objects.
@@ -73,7 +76,7 @@ public class PKCS10Attributes implements DerEncoder {
      * The DER stream contains the SET OF Attribute.
      *
      * @param in the DerInputStream to read the attributes from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public PKCS10Attributes(DerInputStream in) throws IOException {
         DerValue[] attrs = in.getSet(3, true);
@@ -90,7 +93,7 @@ public class PKCS10Attributes implements DerEncoder {
      * Encode the attributes in DER form to the stream.
      *
      * @param out the OutputStream to marshal the contents to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         derEncode(out);
@@ -101,7 +104,7 @@ public class PKCS10Attributes implements DerEncoder {
      * Implements the <code>DerEncoder</code> interface.
      *
      * @param out the OutputStream to marshal the contents to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void derEncode(OutputStream out) throws IOException {
         // first copy the elements into an array
@@ -111,8 +114,8 @@ public class PKCS10Attributes implements DerEncoder {
 
         DerOutputStream attrOut = new DerOutputStream();
         attrOut.putOrderedSetOf(DerValue.createTag(DerValue.TAG_CONTEXT,
-                                                   true, (byte)0),
-                                attribs);
+                        true, (byte) 0),
+                attribs);
         out.write(attrOut.toByteArray());
     }
 
@@ -121,7 +124,7 @@ public class PKCS10Attributes implements DerEncoder {
      */
     public void setAttribute(String name, Object obj) {
         if (obj instanceof PKCS10Attribute) {
-            map.put(name, (PKCS10Attribute)obj);
+            map.put(name, (PKCS10Attribute) obj);
         }
     }
 
@@ -172,15 +175,15 @@ public class PKCS10Attributes implements DerEncoder {
             return false;
 
         Collection<PKCS10Attribute> othersAttribs =
-                ((PKCS10Attributes)other).getAttributes();
+                ((PKCS10Attributes) other).getAttributes();
         PKCS10Attribute[] attrs =
-            othersAttribs.toArray(new PKCS10Attribute[othersAttribs.size()]);
+                othersAttribs.toArray(new PKCS10Attribute[othersAttribs.size()]);
         int len = attrs.length;
         if (len != map.size())
             return false;
         PKCS10Attribute thisAttr, otherAttr;
         String key = null;
-        for (int i=0; i < len; i++) {
+        for (int i = 0; i < len; i++) {
             otherAttr = attrs[i];
             key = otherAttr.getAttributeId().toString();
 
@@ -189,7 +192,7 @@ public class PKCS10Attributes implements DerEncoder {
             thisAttr = map.get(key);
             if (thisAttr == null)
                 return false;
-            if (! thisAttr.equals(otherAttr))
+            if (!thisAttr.equals(otherAttr))
                 return false;
         }
         return true;
@@ -210,7 +213,7 @@ public class PKCS10Attributes implements DerEncoder {
      * by the ASCII characters "<tt>,&nbsp;</tt>" (comma and space).
      * <p>Overrides the <tt>toString</tt> method of <tt>Object</tt>.
      *
-     * @return  a string representation of this PKCS10Attributes.
+     * @return a string representation of this PKCS10Attributes.
      */
     public String toString() {
         String s = map.size() + "\n" + map.toString();

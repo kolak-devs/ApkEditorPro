@@ -3,17 +3,17 @@
 
 package org.xmlpull.v1.xsd.impl;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.URI;
-import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 import org.xmlpull.v1.wrapper.XmlPullWrapperFactory;
 import org.xmlpull.v1.wrapper.classic.StaticXmlSerializerWrapper;
 import org.xmlpull.v1.xsd.XsdException;
 import org.xmlpull.v1.xsd.XsdSerializer;
 import org.xmlpull.v1.xsd.impl.base64.Base64;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URI;
 
 //TODO: add QName
 
@@ -48,7 +48,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdAnyUriElement(String namespace, String name, URI value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("anyURI");
+        if (addXsiType) serializeXsiType("anyURI");
         writeXsdAnyUri(value);
         xs.endTag(namespace, name);
     }
@@ -73,7 +73,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdBase64Element(String namespace, String name, byte[] value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("base64Binary");
+        if (addXsiType) serializeXsiType("base64Binary");
         writeXsdBase64(value);
         xs.endTag(namespace, name);
     }
@@ -98,7 +98,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdBooleanElement(String namespace, String name, boolean value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("boolean");
+        if (addXsiType) serializeXsiType("boolean");
         writeXsdBoolean(value);
         xs.endTag(namespace, name);
     }
@@ -123,7 +123,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdByteElement(String namespace, String name, byte value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("byte");
+        if (addXsiType) serializeXsiType("byte");
         writeXsdByte(value);
         xs.endTag(namespace, name);
     }
@@ -149,7 +149,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdDecimalElement(String namespace, String name, BigDecimal value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("BigDecimal");
+        if (addXsiType) serializeXsiType("BigDecimal");
         writeXsdDecimal(value);
         xs.endTag(namespace, name);
     }
@@ -174,7 +174,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdDoubleElement(String namespace, String name, double d, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("double");
+        if (addXsiType) serializeXsiType("double");
         writeXsdDouble(d);
         xs.endTag(namespace, name);
     }
@@ -200,7 +200,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdFloatElement(String namespace, String name, float value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("float");
+        if (addXsiType) serializeXsiType("float");
         writeXsdFloat(value);
         xs.endTag(namespace, name);
     }
@@ -225,7 +225,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdIntElement(String namespace, String name, int value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("int");
+        if (addXsiType) serializeXsiType("int");
         writeXsdInt(value);
         xs.endTag(namespace, name);
     }
@@ -250,7 +250,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdBigIntegeregerElement(String namespace, String name, BigInteger value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("integer");
+        if (addXsiType) serializeXsiType("integer");
         writeXsdBigIntegereger(value);
         xs.endTag(namespace, name);
     }
@@ -275,7 +275,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdLongElement(String namespace, String name, int value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("long");
+        if (addXsiType) serializeXsiType("long");
         writeXsdLong(value);
         xs.endTag(namespace, name);
     }
@@ -300,7 +300,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     public void writeXsdShortElement(String namespace, String name, short value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("short");
+        if (addXsiType) serializeXsiType("short");
         writeXsdShort(value);
         xs.endTag(namespace, name);
     }
@@ -308,7 +308,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
     // ----- xsd:string
 
     public void writeXsdString(String value) throws XsdException, IOException {
-        if(value == null) {
+        if (value == null) {
             xs.attribute(XSI_NS, "nil", "1");
         } else {
             xs.text(value);
@@ -327,30 +327,28 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
         writeXsdStringElement(namespace, name, value, false);
     }
 
-    public void writeXsdStringElement(String namespace, String name, String value, boolean addXsiType) throws XsdException, IOException
-    {
+    public void writeXsdStringElement(String namespace, String name, String value, boolean addXsiType) throws XsdException, IOException {
         xs.startTag(namespace, name);
-        if(addXsiType) serializeXsiType("string");
+        if (addXsiType) serializeXsiType("string");
         writeXsdString(value);
         xs.endTag(namespace, name);
     }
 
     // --------------- utility methods
 
-    String serializeXsdAnyUri(URI value){
+    String serializeXsdAnyUri(URI value) {
         return value.toASCIIString();
     }
 
     String serializeXsdBase64(byte[] value)
-        throws XsdException
-    {
+            throws XsdException {
         try {
             //byteArr = Base64.decode(value.toCharArray());
-            char[] carr= Base64.encode(value);
+            char[] carr = Base64.encode(value);
             return new String(carr);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             throw new XsdException(
-                "can't serialize BAS64 value '"+value+"'", ex);
+                    "can't serialize BAS64 value '" + value + "'", ex);
         }
     }
 
@@ -383,7 +381,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
         return s.toString();
     }
 
-    String serializeXsdLong(long  s) {
+    String serializeXsdLong(long s) {
         return Long.toString(s);
     }
 
@@ -399,7 +397,7 @@ public class XsdTypeSerializerImpl extends StaticXmlSerializerWrapper implements
 
     void serializeXsiType(String xsdTypeName) throws IOException {
         String prefix = xs.getPrefix(XSD_NS, true);
-        xs.attribute(XSI_NS, "type", prefix+":"+xsdTypeName);
+        xs.attribute(XSI_NS, "type", prefix + ":" + xsdTypeName);
     }
 
 }

@@ -25,14 +25,13 @@
 
 package android.sun.security.x509;
 
+import android.sun.misc.HexDumpEncoder;
 import android.sun.security.util.DerValue;
 
 import java.io.IOException;
-import java.security.PublicKey;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import android.sun.misc.HexDumpEncoder;
+import java.security.PublicKey;
 
 /**
  * Represent the Key Identifier ASN.1 object.
@@ -81,12 +80,11 @@ public class KeyIdentifier {
      * @throws IOException on parsing errors
      */
     public KeyIdentifier(PublicKey pubKey)
-        throws IOException
-    {
+            throws IOException {
         android.sun.security.util.DerValue algAndKey = new DerValue(pubKey.getEncoded());
         if (algAndKey.tag != android.sun.security.util.DerValue.tag_Sequence)
             throw new IOException("PublicKey value is not a valid "
-                                  + "X.509 public key");
+                    + "X.509 public key");
 
         android.sun.security.x509.AlgorithmId algid = AlgorithmId.parse(algAndKey.data.getDerValue());
         byte[] key = algAndKey.data.getUnalignedBitString().toByteArray();
@@ -124,7 +122,7 @@ public class KeyIdentifier {
      * Write the KeyIdentifier to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the object to.
-     * @exception IOException
+     * @throws IOException
      */
     void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         out.putOctetString(octetString);
@@ -134,7 +132,7 @@ public class KeyIdentifier {
      * Returns a hash code value for this object.
      * Objects that are equal will also have the same hashcode.
      */
-    public int hashCode () {
+    public int hashCode() {
         int retval = 0;
         for (int i = 0; i < octetString.length; i++)
             retval += octetString[i] * i;
@@ -150,6 +148,6 @@ public class KeyIdentifier {
         if (!(other instanceof KeyIdentifier))
             return false;
         return java.util.Arrays.equals(octetString,
-                                       ((KeyIdentifier)other).getIdentifier());
+                ((KeyIdentifier) other).getIdentifier());
     }
 }

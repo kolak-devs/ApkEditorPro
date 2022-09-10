@@ -22,8 +22,8 @@
 package android.sun.security.provider;
 
 import android.sun.security.pkcs12.PKCS12KeyStore;
-import android.sun.security.provider.JavaKeyStore.JKS;
 import android.sun.security.provider.JavaKeyStore.CaseExactJKS;
+import android.sun.security.provider.JavaKeyStore.JKS;
 
 import java.security.Provider;
 import java.security.Security;

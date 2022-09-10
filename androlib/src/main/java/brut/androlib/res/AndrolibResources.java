@@ -23,33 +23,89 @@ import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.PackageInfo;
 import com.mcal.androlib.meta.VersionInfo;
 
-import brut.androlib.AndrolibException;
-import brut.androlib.options.BuildOptions;
-import brut.androlib.err.CantFindFrameworkResException;
-import brut.androlib.res.data.*;
-import brut.androlib.res.decoder.*;
-import brut.androlib.res.decoder.ARSCDecoder.ARSCData;
-import brut.androlib.res.decoder.ARSCDecoder.FlagsOffset;
-import brut.androlib.res.util.ExtMXSerializer;
-import brut.androlib.res.util.ExtXmlSerializer;
-import brut.androlib.res.xml.ResValuesXmlSerializable;
-import brut.androlib.res.xml.ResXmlPatcher;
-import brut.common.BrutException;
-import brut.directory.*;
-import brut.util.*;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlSerializer;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Logger;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import brut.androlib.AndrolibException;
+import brut.androlib.err.CantFindFrameworkResException;
+import brut.androlib.options.BuildOptions;
+import brut.androlib.res.data.ResConfigFlags;
+import brut.androlib.res.data.ResPackage;
+import brut.androlib.res.data.ResResSpec;
+import brut.androlib.res.data.ResResource;
+import brut.androlib.res.data.ResTable;
+import brut.androlib.res.data.ResValuesFile;
+import brut.androlib.res.decoder.ARSCDecoder;
+import brut.androlib.res.decoder.ARSCDecoder.ARSCData;
+import brut.androlib.res.decoder.ARSCDecoder.FlagsOffset;
+import brut.androlib.res.decoder.AXmlResourceParser;
+import brut.androlib.res.decoder.AndroidManifestResourceParser;
+import brut.androlib.res.decoder.Res9patchStreamDecoder;
+import brut.androlib.res.decoder.ResAttrDecoder;
+import brut.androlib.res.decoder.ResFileDecoder;
+import brut.androlib.res.decoder.ResRawStreamDecoder;
+import brut.androlib.res.decoder.ResStreamDecoderContainer;
+import brut.androlib.res.decoder.XmlPullStreamDecoder;
+import brut.androlib.res.util.ExtMXSerializer;
+import brut.androlib.res.util.ExtXmlSerializer;
+import brut.androlib.res.xml.ResValuesXmlSerializable;
+import brut.androlib.res.xml.ResXmlPatcher;
+import brut.common.BrutException;
+import brut.directory.Directory;
+import brut.directory.DirectoryException;
+import brut.directory.ExtFile;
+import brut.directory.FileDirectory;
+import brut.directory.ZipUtils;
+import brut.util.AaptManager;
+import brut.util.Duo;
+import brut.util.Jar;
+import brut.util.OS;
+
 final public class AndrolibResources {
+    private final static Logger LOGGER = Logger.getLogger(AndrolibResources.class.getName());
+    private final static String[] IGNORED_PACKAGES = new String[]{
+            "android", "com.htc", "com.lge", "com.lge.internal", "yi", "flyme", "air.com.adobe.appentry",
+            "FFFFFFFFFFFFFFFFFFFFFF"};
+    // TODO: dirty static hack. I have to refactor decoding mechanisms.
+    public static boolean sKeepBroken = false;
+    public BuildOptions buildOptions;
+    private File mFrameworkDirectory = null;
+    private ExtFile mFramework = null;
+    private String mMinSdkVersion = null;
+    private String mMaxSdkVersion = null;
+    private String mTargetSdkVersion = null;
+    private String mVersionCode = null;
+    private String mVersionName = null;
+    private String mPackageRenamed = null;
+    private String mPackageId = null;
+    private boolean mSharedLibrary = false;
+    private boolean mSparseResources = false;
+
     @NonNull
     public ResTable getResTable(ExtFile apkFile) throws AndrolibException {
         return getResTable(apkFile, true);
@@ -100,7 +156,7 @@ final public class AndrolibResources {
 
         for (int i = 0; i < pkgs.length; i++) {
             ResPackage resPackage = pkgs[i];
-            if (resPackage.getResSpecCount() > value && ! resPackage.getName().equalsIgnoreCase("android")) {
+            if (resPackage.getResSpecCount() > value && !resPackage.getName().equalsIgnoreCase("android")) {
                 value = resPackage.getResSpecCount();
                 id = resPackage.getId();
                 index = i;
@@ -397,7 +453,7 @@ final public class AndrolibResources {
         cmd.add("-o");
         cmd.add(apkFile.getAbsolutePath());
 
-        if (mPackageId != null && ! mSharedLibrary) {
+        if (mPackageId != null && !mSharedLibrary) {
             cmd.add("--package-id");
             cmd.add(mPackageId);
         }
@@ -525,7 +581,7 @@ final public class AndrolibResources {
         }
         // force package id so that some frameworks build with correct id
         // disable if user adds own aapt (can't know if they have this feature)
-        if (mPackageId != null && ! customAapt && ! mSharedLibrary) {
+        if (mPackageId != null && !customAapt && !mSharedLibrary) {
             cmd.add("--forced-package-id");
             cmd.add(mPackageId);
         }
@@ -690,7 +746,7 @@ final public class AndrolibResources {
     public boolean detectWhetherAppIsFramework(File appDir)
             throws AndrolibException {
         File publicXml = new File(appDir, "res/values/public.xml");
-        if (! publicXml.exists()) {
+        if (!publicXml.exists()) {
             return false;
         }
 
@@ -730,7 +786,7 @@ final public class AndrolibResources {
         if (withResources) {
             axmlParser.setAttrDecoder(new ResAttrDecoder());
         }
-        decoders.setDecoder("xml", new XmlPullStreamDecoder(axmlParser,getResXmlSerializer()));
+        decoders.setDecoder("xml", new XmlPullStreamDecoder(axmlParser, getResXmlSerializer()));
 
         return new Duo<>(new ResFileDecoder(decoders), axmlParser);
     }
@@ -843,11 +899,11 @@ final public class AndrolibResources {
 
         apk = new File(dir, "1.apk");
 
-        if (! apk.exists()) {
+        if (!apk.exists()) {
             LOGGER.warning("Can't empty framework directory, no file found at: " + apk.getAbsolutePath());
         } else {
             try {
-                if (apk.exists() && dir.listFiles().length > 1 && ! buildOptions.forceDeleteFramework) {
+                if (apk.exists() && dir.listFiles().length > 1 && !buildOptions.forceDeleteFramework) {
                     LOGGER.warning("More than default framework detected. Please run command with `--force` parameter to wipe framework directory.");
                 } else {
                     for (File file : dir.listFiles()) {
@@ -900,7 +956,7 @@ final public class AndrolibResources {
             publicizeResources(data, arsc.getFlagsOffsets());
 
             File outFile = new File(getFrameworkDir(), arsc
-                .getOnePackage().getId()
+                    .getOnePackage().getId()
                     + (tag == null ? "" : '-' + tag)
                     + ".apk");
 
@@ -944,12 +1000,12 @@ final public class AndrolibResources {
     public void publicizeResources(@NonNull File arscFile) throws AndrolibException {
         byte[] data = new byte[(int) arscFile.length()];
 
-        try(InputStream in = new FileInputStream(arscFile);
-            OutputStream out = new FileOutputStream(arscFile)) {
+        try (InputStream in = new FileInputStream(arscFile);
+             OutputStream out = new FileOutputStream(arscFile)) {
             in.read(data);
             publicizeResources(data);
             out.write(data);
-        } catch (IOException ex){
+        } catch (IOException ex) {
             throw new AndrolibException(ex);
         }
     }
@@ -1000,30 +1056,4 @@ final public class AndrolibResources {
             mFramework.close();
         }
     }
-
-    public BuildOptions buildOptions;
-
-    // TODO: dirty static hack. I have to refactor decoding mechanisms.
-    public static boolean sKeepBroken = false;
-
-    private final static Logger LOGGER = Logger.getLogger(AndrolibResources.class.getName());
-
-    private File mFrameworkDirectory = null;
-
-    private ExtFile mFramework = null;
-
-    private String mMinSdkVersion = null;
-    private String mMaxSdkVersion = null;
-    private String mTargetSdkVersion = null;
-    private String mVersionCode = null;
-    private String mVersionName = null;
-    private String mPackageRenamed = null;
-    private String mPackageId = null;
-
-    private boolean mSharedLibrary = false;
-    private boolean mSparseResources = false;
-
-    private final static String[] IGNORED_PACKAGES = new String[] {
-            "android", "com.htc", "com.lge", "com.lge.internal", "yi", "flyme", "air.com.adobe.appentry",
-            "FFFFFFFFFFFFFFFFFFFFFF" };
 }

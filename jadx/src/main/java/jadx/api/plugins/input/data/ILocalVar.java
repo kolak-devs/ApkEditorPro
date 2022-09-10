@@ -3,16 +3,16 @@ package jadx.api.plugins.input.data;
 import org.jetbrains.annotations.Nullable;
 
 public interface ILocalVar {
-	String getName();
+    String getName();
 
-	int getRegNum();
+    int getRegNum();
 
-	String getType();
+    String getType();
 
-	@Nullable
-	String getSignature();
+    @Nullable
+    String getSignature();
 
-	int getStartOffset();
+    int getStartOffset();
 
-	int getEndOffset();
+    int getEndOffset();
 }

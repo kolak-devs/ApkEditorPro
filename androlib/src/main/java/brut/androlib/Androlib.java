@@ -70,9 +70,27 @@ import brut.util.BrutIO;
 import brut.util.OS;
 
 public class Androlib {
-    private final AndrolibResources mAndRes = new AndrolibResources();
-    protected final ResUnknownFiles mResUnknownFiles = new ResUnknownFiles();
+    private final static String SMALI_DIRNAME = "smali";
+    private final static String APK_DIRNAME = "build/apk";
+    private final static String UNK_DIRNAME = "unknown";
+    private final static String[] APK_RESOURCES_FILENAMES = new String[]{
+            "resources.arsc", "AndroidManifest.xml", "res"};
+    private final static String[] APK_RESOURCES_WITHOUT_RES_FILENAMES = new String[]{
+            "resources.arsc", "AndroidManifest.xml"};
+    private final static String[] APP_RESOURCES_FILENAMES = new String[]{
+            "AndroidManifest.xml", "res"};
+    private final static String[] APK_MANIFEST_FILENAMES = new String[]{
+            "AndroidManifest.xml"};
+    private final static String[] APK_STANDARD_ALL_FILENAMES = new String[]{
+            "classes.dex", "AndroidManifest.xml", "resources.arsc", "res", "r", "R",
+            "lib", "libs", "assets", "META-INF", "kotlin"};
+    private final static Pattern NO_COMPRESS_PATTERN = Pattern.compile("(" +
+            "jpg|jpeg|png|gif|wav|mp2|mp3|ogg|aac|mpg|mpeg|mid|midi|smf|jet|rtttl|imy|xmf|mp4|" +
+            "m4a|m4v|3gp|3gpp|3g2|3gpp2|amr|awb|wma|wmv|webm|webp|mkv)$");
+    private /*final*/ static Logger LOGGER;// = Logger.getLogger(Androlib.class.getName());
     public final BuildOptions buildOptions;
+    protected final ResUnknownFiles mResUnknownFiles = new ResUnknownFiles();
+    private final AndrolibResources mAndRes = new AndrolibResources();
     private int mMinSdkVersion = 0;
 
     public Androlib(Logger LOGGER) {
@@ -83,6 +101,10 @@ public class Androlib {
         this.LOGGER = LOGGER;
         this.buildOptions = buildOptions;
         mAndRes.buildOptions = buildOptions;
+    }
+
+    public static String getVersion() {
+        return ApktoolProperties.get("application.version");
     }
 
     public ResTable getResTable(ExtFile apkFile)
@@ -743,7 +765,7 @@ public class Androlib {
 
             ZipEntry newEntry = new ZipEntry(unknownFileInfo.getKey());
             int method = Integer.parseInt(unknownFileInfo.getValue());
-            LOGGER.fine( String.format("Copying unknown file %s with method %d", unknownFileInfo.getKey(), method));
+            LOGGER.fine(String.format("Copying unknown file %s with method %d", unknownFileInfo.getKey(), method));
             if (method == ZipEntry.STORED) {
                 newEntry.setMethod(ZipEntry.STORED);
                 newEntry.setSize(inputFile.length());
@@ -805,10 +827,6 @@ public class Androlib {
         return false;
     }
 
-    public static String getVersion() {
-        return ApktoolProperties.get("application.version");
-    }
-
     private File[] parseUsesFramework(UsesFramework usesFramework)
             throws AndrolibException {
         if (usesFramework == null) {
@@ -857,24 +875,4 @@ public class Androlib {
     public void close() throws IOException {
         mAndRes.close();
     }
-
-    private /*final*/ static Logger LOGGER;// = Logger.getLogger(Androlib.class.getName());
-
-    private final static String SMALI_DIRNAME = "smali";
-    private final static String APK_DIRNAME = "build/apk";
-    private final static String UNK_DIRNAME = "unknown";
-    private final static String[] APK_RESOURCES_FILENAMES = new String[]{
-            "resources.arsc", "AndroidManifest.xml", "res"};
-    private final static String[] APK_RESOURCES_WITHOUT_RES_FILENAMES = new String[]{
-            "resources.arsc", "AndroidManifest.xml"};
-    private final static String[] APP_RESOURCES_FILENAMES = new String[]{
-            "AndroidManifest.xml", "res"};
-    private final static String[] APK_MANIFEST_FILENAMES = new String[]{
-            "AndroidManifest.xml"};
-    private final static String[] APK_STANDARD_ALL_FILENAMES = new String[]{
-            "classes.dex", "AndroidManifest.xml", "resources.arsc", "res", "r", "R",
-            "lib", "libs", "assets", "META-INF", "kotlin"};
-    private final static Pattern NO_COMPRESS_PATTERN = Pattern.compile("(" +
-            "jpg|jpeg|png|gif|wav|mp2|mp3|ogg|aac|mpg|mpeg|mid|midi|smf|jet|rtttl|imy|xmf|mp4|" +
-            "m4a|m4v|3gp|3gpp|3g2|3gpp2|amr|awb|wma|wmv|webm|webp|mkv)$");
 }

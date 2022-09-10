@@ -25,10 +25,16 @@
 
 package android.sun.security.x509;
 
+import android.sun.security.action.GetBooleanAction;
+import android.sun.security.pkcs.PKCS9Attribute;
 import android.sun.security.util.Debug;
 import android.sun.security.util.DerEncoder;
 import android.sun.security.util.DerInputStream;
 import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.util.ObjectIdentifier;
+
+import androidx.annotation.NonNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,14 +43,12 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.security.AccessController;
 import java.text.Normalizer;
-import java.util.*;
-
-import android.sun.security.action.GetBooleanAction;
-import android.sun.security.pkcs.PKCS9Attribute;
-import android.sun.security.util.DerValue;
-import android.sun.security.util.ObjectIdentifier;
-
-import androidx.annotation.NonNull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * X.500 Attribute-Value-Assertion (AVA):  an attribute, as identified by
@@ -65,13 +69,6 @@ import androidx.annotation.NonNull;
  * @see RDN
  */
 public class AVA implements DerEncoder {
-    private static final Debug debug = Debug.getInstance("x509", "\t[AVA]");
-    // See CR 6391482: if enabled this flag preserves the old but incorrect
-    // PrintableString encoding for DomainComponent. It may need to be set to
-    // avoid breaking preexisting certificates generated with sun.security APIs.
-    private static final boolean PRESERVE_OLD_DC_ENCODING = AccessController.doPrivileged(
-            new GetBooleanAction("com.sun.security.preserveOldDCEncoding"));
-
     /**
      * DEFAULT format allows both RFC1779 and RFC2253 syntax and
      * additional keywords.
@@ -85,11 +82,12 @@ public class AVA implements DerEncoder {
      * RFC2253 specifies format according to RFC2253.
      */
     final static int RFC2253 = 3;
-
-    // currently not private, accessed directly from RDN
-    final ObjectIdentifier oid;
-    final DerValue value;
-
+    private static final Debug debug = Debug.getInstance("x509", "\t[AVA]");
+    // See CR 6391482: if enabled this flag preserves the old but incorrect
+    // PrintableString encoding for DomainComponent. It may need to be set to
+    // avoid breaking preexisting certificates generated with sun.security APIs.
+    private static final boolean PRESERVE_OLD_DC_ENCODING = AccessController.doPrivileged(
+            new GetBooleanAction("com.sun.security.preserveOldDCEncoding"));
     /*
      * If the value has any of these characters in it, it must be quoted.
      * Backslash and quote characters must also be individually escaped.
@@ -97,23 +95,23 @@ public class AVA implements DerEncoder {
      * call for quoting the whole string.
      */
     private static final String specialChars = ",+=\n<>#;";
-
     /*
      * In RFC2253, if the value has any of these characters in it, it
      * must be quoted by a preceding \.
      */
     private static final String specialChars2253 = ",+\"\\<>;";
-
     /*
      * includes special chars from RFC1779 and RFC2253, as well as ' '
      */
     private static final String specialCharsAll = ",=\n+<>#;\\\" ";
-
     /*
      * Values that aren't printable strings are emitted as BER-encoded
      * hex data.
      */
     private static final String hexDigits = "0123456789ABCDEF";
+    // currently not private, accessed directly from RDN
+    final ObjectIdentifier oid;
+    final DerValue value;
 
     public AVA(ObjectIdentifier type, DerValue val) {
         if ((type == null) || (val == null)) {
@@ -229,37 +227,23 @@ public class AVA implements DerEncoder {
         }
     }
 
-    /**
-     * Get the ObjectIdentifier of this AVA.
-     */
-    public ObjectIdentifier getObjectIdentifier() {
-        return oid;
-    }
-
-    /**
-     * Get the value of this AVA as a DerValue.
-     */
-    public DerValue getDerValue() {
-        return value;
-    }
-
-    /**
-     * Get the value of this AVA as a String.
-     *
-     * @throws RuntimeException if we could not obtain the string form
-     *                          (should not occur)
-     */
-    public String getValueString() {
-        try {
-            String s = value.getAsString();
-            if (s == null) {
-                throw new RuntimeException("AVA string is null");
-            }
-            return s;
-        } catch (IOException e) {
-            // should not occur
-            throw new RuntimeException("AVA error: " + e, e);
+    AVA(DerValue derval) throws IOException {
+        // Individual attribute value assertions are SEQUENCE of two values.
+        // That'd be a "struct" outside of ASN.1.
+        if (derval.tag != DerValue.tag_Sequence) {
+            throw new IOException("AVA not a sequence");
         }
+        oid = X500Name.intern(derval.data.getOID());
+        value = derval.data.getDerValue();
+
+        if (derval.data.available() != 0) {
+            throw new IOException("AVA, extra bytes = "
+                    + derval.data.available());
+        }
+    }
+
+    AVA(DerInputStream in) throws IOException {
+        this(in.getDerValue());
     }
 
     private static DerValue parseHexString(Reader in, int format) throws IOException {
@@ -301,6 +285,146 @@ public class AVA implements DerEncoder {
         }
 
         return new DerValue(baos.toByteArray());
+    }
+
+    private static Byte getEmbeddedHexPair(int c1, Reader in) throws IOException {
+        if (hexDigits.indexOf(Character.toUpperCase((char) c1)) >= 0) {
+            int c2 = readChar(in, "unexpected EOF - escaped hex value must include two valid digits");
+
+            if (hexDigits.indexOf(Character.toUpperCase((char) c2)) >= 0) {
+                int hi = Character.digit((char) c1, 16);
+                int lo = Character.digit((char) c2, 16);
+                return (byte) ((hi << 4) + lo);
+            } else {
+                throw new IOException("escaped hex value must include two valid digits");
+            }
+        }
+        return null;
+    }
+
+    private static String getEmbeddedHexString(List<Byte> hexList) {
+        int n = hexList.size();
+        byte[] hexBytes = new byte[n];
+        for (int i = 0; i < n; i++) {
+            hexBytes[i] = hexList.get(i);
+        }
+        return new String(hexBytes, StandardCharsets.UTF_8);
+    }
+
+    private static boolean isTerminator(int ch, int format) {
+        switch (ch) {
+            case -1:
+            case '+':
+            case ',':
+                return true;
+            case ';':
+            case '>':
+                return format != RFC2253;
+            default:
+                return false;
+        }
+    }
+
+    private static int readChar(Reader in, String errMsg) throws IOException {
+        int c = in.read();
+        if (c == -1) {
+            throw new IOException(errMsg);
+        }
+        return c;
+    }
+
+    private static boolean trailingSpace(Reader in) throws IOException {
+        boolean trailing;
+        if (!in.markSupported()) {
+            // oh well
+            return true;
+        } else {
+            // make readAheadLimit huge -
+            // in practice, AVA was passed a StringReader from X500Name,
+            // and StringReader ignores readAheadLimit anyways
+            in.mark(9999);
+            while (true) {
+                int nextChar = in.read();
+                if (nextChar == -1) {
+                    trailing = true;
+                    break;
+                } else if (nextChar == ' ') {
+                    continue;
+                } else if (nextChar == '\\') {
+                    int followingChar = in.read();
+                    if (followingChar != ' ') {
+                        trailing = false;
+                        break;
+                    }
+                } else {
+                    trailing = false;
+                    break;
+                }
+            }
+
+            in.reset();
+            return trailing;
+        }
+    }
+
+    /*
+     * Return true if DerValue can be represented as a String.
+     */
+    private static boolean isDerString(DerValue value, boolean canonical) {
+        if (canonical) {
+            switch (value.tag) {
+                case DerValue.tag_PrintableString:
+                case DerValue.tag_UTF8String:
+                    return true;
+                default:
+                    return false;
+            }
+        } else {
+            switch (value.tag) {
+                case DerValue.tag_PrintableString:
+                case DerValue.tag_T61String:
+                case DerValue.tag_IA5String:
+                case DerValue.tag_GeneralString:
+                case DerValue.tag_BMPString:
+                case DerValue.tag_UTF8String:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    }
+
+    /**
+     * Get the ObjectIdentifier of this AVA.
+     */
+    public ObjectIdentifier getObjectIdentifier() {
+        return oid;
+    }
+
+    /**
+     * Get the value of this AVA as a DerValue.
+     */
+    public DerValue getDerValue() {
+        return value;
+    }
+
+    /**
+     * Get the value of this AVA as a String.
+     *
+     * @throws RuntimeException if we could not obtain the string form
+     *                          (should not occur)
+     */
+    public String getValueString() {
+        try {
+            String s = value.getAsString();
+            if (s == null) {
+                throw new RuntimeException("AVA string is null");
+            }
+            return s;
+        } catch (IOException e) {
+            // should not occur
+            throw new RuntimeException("AVA error: " + e, e);
+        }
     }
 
     private DerValue parseQuotedString(Reader in, StringBuilder temp) throws IOException {
@@ -486,105 +610,6 @@ public class AVA implements DerEncoder {
         } else {
             return new DerValue(DerValue.tag_UTF8String, temp.toString());
         }
-    }
-
-    private static Byte getEmbeddedHexPair(int c1, Reader in) throws IOException {
-        if (hexDigits.indexOf(Character.toUpperCase((char) c1)) >= 0) {
-            int c2 = readChar(in, "unexpected EOF - escaped hex value must include two valid digits");
-
-            if (hexDigits.indexOf(Character.toUpperCase((char) c2)) >= 0) {
-                int hi = Character.digit((char) c1, 16);
-                int lo = Character.digit((char) c2, 16);
-                return (byte) ((hi << 4) + lo);
-            } else {
-                throw new IOException("escaped hex value must include two valid digits");
-            }
-        }
-        return null;
-    }
-
-    private static String getEmbeddedHexString(List<Byte> hexList) {
-        int n = hexList.size();
-        byte[] hexBytes = new byte[n];
-        for (int i = 0; i < n; i++) {
-            hexBytes[i] = hexList.get(i);
-        }
-        return new String(hexBytes, StandardCharsets.UTF_8);
-    }
-
-    private static boolean isTerminator(int ch, int format) {
-        switch (ch) {
-            case -1:
-            case '+':
-            case ',':
-                return true;
-            case ';':
-            case '>':
-                return format != RFC2253;
-            default:
-                return false;
-        }
-    }
-
-    private static int readChar(Reader in, String errMsg) throws IOException {
-        int c = in.read();
-        if (c == -1) {
-            throw new IOException(errMsg);
-        }
-        return c;
-    }
-
-    private static boolean trailingSpace(Reader in) throws IOException {
-        boolean trailing;
-        if (!in.markSupported()) {
-            // oh well
-            return true;
-        } else {
-            // make readAheadLimit huge -
-            // in practice, AVA was passed a StringReader from X500Name,
-            // and StringReader ignores readAheadLimit anyways
-            in.mark(9999);
-            while (true) {
-                int nextChar = in.read();
-                if (nextChar == -1) {
-                    trailing = true;
-                    break;
-                } else if (nextChar == ' ') {
-                    continue;
-                } else if (nextChar == '\\') {
-                    int followingChar = in.read();
-                    if (followingChar != ' ') {
-                        trailing = false;
-                        break;
-                    }
-                } else {
-                    trailing = false;
-                    break;
-                }
-            }
-
-            in.reset();
-            return trailing;
-        }
-    }
-
-    AVA(DerValue derval) throws IOException {
-        // Individual attribute value assertions are SEQUENCE of two values.
-        // That'd be a "struct" outside of ASN.1.
-        if (derval.tag != DerValue.tag_Sequence) {
-            throw new IOException("AVA not a sequence");
-        }
-        oid = X500Name.intern(derval.data.getOID());
-        value = derval.data.getDerValue();
-
-        if (derval.data.available() != 0) {
-            throw new IOException("AVA, extra bytes = "
-                    + derval.data.available());
-        }
-    }
-
-    AVA(DerInputStream in) throws IOException {
-        this(in.getDerValue());
     }
 
     public boolean equals(Object obj) {
@@ -942,33 +967,6 @@ public class AVA implements DerEncoder {
         return Normalizer.normalize(canon, Normalizer.Form.NFKD);
     }
 
-    /*
-     * Return true if DerValue can be represented as a String.
-     */
-    private static boolean isDerString(DerValue value, boolean canonical) {
-        if (canonical) {
-            switch (value.tag) {
-                case DerValue.tag_PrintableString:
-                case DerValue.tag_UTF8String:
-                    return true;
-                default:
-                    return false;
-            }
-        } else {
-            switch (value.tag) {
-                case DerValue.tag_PrintableString:
-                case DerValue.tag_T61String:
-                case DerValue.tag_IA5String:
-                case DerValue.tag_GeneralString:
-                case DerValue.tag_BMPString:
-                case DerValue.tag_UTF8String:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-    }
-
     boolean hasRFC2253Keyword() {
         return AVAKeyword.hasKeyword(oid, RFC2253);
     }
@@ -1089,6 +1087,35 @@ class AVAKeyword {
     private static final Map<ObjectIdentifier, AVAKeyword> oidMap;
     private static final Map<String, AVAKeyword> keywordMap;
 
+    static {
+        oidMap = new HashMap<>();
+        keywordMap = new HashMap<>();
+
+        // NOTE if multiple keywords are available for one OID, order
+        // is significant!! Preferred *LAST*.
+        new AVAKeyword("CN", X500Name.commonName_oid, true, true);
+        new AVAKeyword("C", X500Name.countryName_oid, true, true);
+        new AVAKeyword("L", X500Name.localityName_oid, true, true);
+        new AVAKeyword("S", X500Name.stateName_oid, false, false);
+        new AVAKeyword("ST", X500Name.stateName_oid, true, true);
+        new AVAKeyword("O", X500Name.orgName_oid, true, true);
+        new AVAKeyword("OU", X500Name.orgUnitName_oid, true, true);
+        new AVAKeyword("T", X500Name.title_oid, false, false);
+        new AVAKeyword("IP", X500Name.ipAddress_oid, false, false);
+        new AVAKeyword("STREET", X500Name.streetAddress_oid, true, true);
+        new AVAKeyword("DC", X500Name.DOMAIN_COMPONENT_OID, false, true);
+        new AVAKeyword("DNQUALIFIER", X500Name.DNQUALIFIER_OID, false, false);
+        new AVAKeyword("DNQ", X500Name.DNQUALIFIER_OID, false, false);
+        new AVAKeyword("SURNAME", X500Name.SURNAME_OID, false, false);
+        new AVAKeyword("GIVENNAME", X500Name.GIVENNAME_OID, false, false);
+        new AVAKeyword("INITIALS", X500Name.INITIALS_OID, false, false);
+        new AVAKeyword("GENERATION", X500Name.GENERATIONQUALIFIER_OID, false, false);
+        new AVAKeyword("EMAIL", PKCS9Attribute.EMAIL_ADDRESS_OID, false, false);
+        new AVAKeyword("EMAILADDRESS", PKCS9Attribute.EMAIL_ADDRESS_OID, false, false);
+        new AVAKeyword("UID", X500Name.userid_oid, false, true);
+        new AVAKeyword("SERIALNUMBER", X500Name.SERIALNUMBER_OID, false, false);
+    }
+
     private final String keyword;
     private final ObjectIdentifier oid;
     private final boolean rfc1779Compliant;
@@ -1103,20 +1130,6 @@ class AVAKeyword {
         // register it
         oidMap.put(oid, this);
         keywordMap.put(keyword, this);
-    }
-
-    private boolean isCompliant(int standard) {
-        switch (standard) {
-            case AVA.RFC1779:
-                return rfc1779Compliant;
-            case AVA.RFC2253:
-                return rfc2253Compliant;
-            case AVA.DEFAULT:
-                return true;
-            default:
-                // should not occur, internal error
-                throw new IllegalArgumentException("Invalid standard " + standard);
-        }
     }
 
     /**
@@ -1254,32 +1267,17 @@ class AVAKeyword {
         return ak.isCompliant(standard);
     }
 
-    static {
-        oidMap = new HashMap<>();
-        keywordMap = new HashMap<>();
-
-        // NOTE if multiple keywords are available for one OID, order
-        // is significant!! Preferred *LAST*.
-        new AVAKeyword("CN", X500Name.commonName_oid, true, true);
-        new AVAKeyword("C", X500Name.countryName_oid, true, true);
-        new AVAKeyword("L", X500Name.localityName_oid, true, true);
-        new AVAKeyword("S", X500Name.stateName_oid, false, false);
-        new AVAKeyword("ST", X500Name.stateName_oid, true, true);
-        new AVAKeyword("O", X500Name.orgName_oid, true, true);
-        new AVAKeyword("OU", X500Name.orgUnitName_oid, true, true);
-        new AVAKeyword("T", X500Name.title_oid, false, false);
-        new AVAKeyword("IP", X500Name.ipAddress_oid, false, false);
-        new AVAKeyword("STREET", X500Name.streetAddress_oid, true, true);
-        new AVAKeyword("DC", X500Name.DOMAIN_COMPONENT_OID, false, true);
-        new AVAKeyword("DNQUALIFIER", X500Name.DNQUALIFIER_OID, false, false);
-        new AVAKeyword("DNQ", X500Name.DNQUALIFIER_OID, false, false);
-        new AVAKeyword("SURNAME", X500Name.SURNAME_OID, false, false);
-        new AVAKeyword("GIVENNAME", X500Name.GIVENNAME_OID, false, false);
-        new AVAKeyword("INITIALS", X500Name.INITIALS_OID, false, false);
-        new AVAKeyword("GENERATION", X500Name.GENERATIONQUALIFIER_OID, false, false);
-        new AVAKeyword("EMAIL", PKCS9Attribute.EMAIL_ADDRESS_OID, false, false);
-        new AVAKeyword("EMAILADDRESS", PKCS9Attribute.EMAIL_ADDRESS_OID, false, false);
-        new AVAKeyword("UID", X500Name.userid_oid, false, true);
-        new AVAKeyword("SERIALNUMBER", X500Name.SERIALNUMBER_OID, false, false);
+    private boolean isCompliant(int standard) {
+        switch (standard) {
+            case AVA.RFC1779:
+                return rfc1779Compliant;
+            case AVA.RFC2253:
+                return rfc2253Compliant;
+            case AVA.DEFAULT:
+                return true;
+            default:
+                // should not occur, internal error
+                throw new IllegalArgumentException("Invalid standard " + standard);
+        }
     }
 }

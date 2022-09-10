@@ -1,15 +1,15 @@
 package io.github.skylot.raung.asm.impl.utils;
 
 public class RaungAsmException extends RuntimeException {
-	public RaungAsmException(String message) {
-		super(message);
-	}
+    public RaungAsmException(String message) {
+        super(message);
+    }
 
-	public RaungAsmException(String message, String token) {
-		super(message + ": '" + token + "'");
-	}
+    public RaungAsmException(String message, String token) {
+        super(message + ": '" + token + "'");
+    }
 
-	public RaungAsmException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public RaungAsmException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

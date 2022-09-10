@@ -15,243 +15,243 @@ import jadx.plugins.input.dex.sections.DexCodeReader;
 import jadx.plugins.input.dex.sections.SectionReader;
 
 public class DexInsnData implements InsnData {
-	private final DexCodeReader codeData;
-	private final SectionReader externalReader;
-	private final SectionReader secondExtReader;
+    private final DexCodeReader codeData;
+    private final SectionReader externalReader;
+    private final SectionReader secondExtReader;
 
-	private DexInsnInfo insnInfo;
-	private boolean decoded;
-	private int opcodeUnit;
-	private int length;
-	private int insnStart;
+    private DexInsnInfo insnInfo;
+    private boolean decoded;
+    private int opcodeUnit;
+    private int length;
+    private int insnStart;
 
-	private int offset;
-	private int[] argsReg = new int[5];
-	private int regsCount;
-	private long literal;
-	private int target;
-	private int index;
-	@Nullable
-	private ICustomPayload payload;
+    private int offset;
+    private int[] argsReg = new int[5];
+    private int regsCount;
+    private long literal;
+    private int target;
+    private int index;
+    @Nullable
+    private ICustomPayload payload;
 
-	public DexInsnData(DexCodeReader codeData, SectionReader externalReader) {
-		this.codeData = codeData;
-		this.externalReader = externalReader;
-		this.secondExtReader = externalReader.copy();
-	}
+    public DexInsnData(DexCodeReader codeData, SectionReader externalReader) {
+        this.codeData = codeData;
+        this.externalReader = externalReader;
+        this.secondExtReader = externalReader.copy();
+    }
 
-	@Override
-	public void decode() {
-		if (insnInfo != null && !decoded) {
-			codeData.decode(this);
-		}
-	}
+    @Override
+    public void decode() {
+        if (insnInfo != null && !decoded) {
+            codeData.decode(this);
+        }
+    }
 
-	@Override
-	public int getOffset() {
-		return offset;
-	}
+    @Override
+    public int getOffset() {
+        return offset;
+    }
 
-	@Override
-	public int getFileOffset() {
-		return insnStart;
-	}
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
 
-	@Override
-	public Opcode getOpcode() {
-		DexInsnInfo info = this.insnInfo;
-		if (info == null) {
-			return Opcode.UNKNOWN;
-		}
-		return info.getApiOpcode();
-	}
+    @Override
+    public int getFileOffset() {
+        return insnStart;
+    }
 
-	@Override
-	public String getOpcodeMnemonic() {
-		return DexInsnMnemonics.get(opcodeUnit);
-	}
+    @Override
+    public Opcode getOpcode() {
+        DexInsnInfo info = this.insnInfo;
+        if (info == null) {
+            return Opcode.UNKNOWN;
+        }
+        return info.getApiOpcode();
+    }
 
-	@Override
-	public byte[] getByteCode() {
-		return externalReader.getByteCode(insnStart, length * 2); // a unit is 2 bytes
-	}
+    @Override
+    public String getOpcodeMnemonic() {
+        return DexInsnMnemonics.get(opcodeUnit);
+    }
 
-	@Override
-	public int getRawOpcodeUnit() {
-		return opcodeUnit;
-	}
+    @Override
+    public byte[] getByteCode() {
+        return externalReader.getByteCode(insnStart, length * 2); // a unit is 2 bytes
+    }
 
-	@Override
-	public int getRegsCount() {
-		return regsCount;
-	}
+    @Override
+    public int getRawOpcodeUnit() {
+        return opcodeUnit;
+    }
 
-	@Override
-	public int getReg(int argNum) {
-		return argsReg[argNum];
-	}
+    @Override
+    public int getRegsCount() {
+        return regsCount;
+    }
 
-	@Override
-	public int getResultReg() {
-		return -1;
-	}
+    public void setRegsCount(int regsCount) {
+        this.regsCount = regsCount;
+    }
 
-	@Override
-	public long getLiteral() {
-		return literal;
-	}
+    @Override
+    public int getReg(int argNum) {
+        return argsReg[argNum];
+    }
 
-	@Override
-	public int getTarget() {
-		return target;
-	}
+    @Override
+    public int getResultReg() {
+        return -1;
+    }
 
-	@Override
-	public int getIndex() {
-		return index;
-	}
+    @Override
+    public long getLiteral() {
+        return literal;
+    }
 
-	@Override
-	public InsnIndexType getIndexType() {
-		return insnInfo.getIndexType();
-	}
+    public void setLiteral(long literal) {
+        this.literal = literal;
+    }
 
-	@Override
-	public String getIndexAsString() {
-		return externalReader.getString(index);
-	}
+    @Override
+    public int getTarget() {
+        return target;
+    }
 
-	@Override
-	public String getIndexAsType() {
-		return externalReader.getType(index);
-	}
+    public void setTarget(int target) {
+        this.target = target;
+    }
 
-	@Override
-	public IFieldRef getIndexAsField() {
-		return externalReader.getFieldRef(index);
-	}
+    @Override
+    public int getIndex() {
+        return index;
+    }
 
-	@Override
-	public IMethodRef getIndexAsMethod() {
-		return externalReader.getMethodRef(index);
-	}
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
-	@Override
-	public ICallSite getIndexAsCallSite() {
-		return externalReader.getCallSite(index, secondExtReader);
-	}
+    @Override
+    public InsnIndexType getIndexType() {
+        return insnInfo.getIndexType();
+    }
 
-	/**
-	 * Currently, protoIndex is either being stored at index or target, index for const-method-type,
-	 * target for invoke-polymorphic(/range)
-	 */
-	@Override
-	public IMethodProto getIndexAsProto(int protoIndex) {
-		return externalReader.getMethodProto(protoIndex);
-	}
+    @Override
+    public String getIndexAsString() {
+        return externalReader.getString(index);
+    }
 
-	@Override
-	public IMethodHandle getIndexAsMethodHandle() {
-		return externalReader.getMethodHandle(index);
-	}
+    @Override
+    public String getIndexAsType() {
+        return externalReader.getType(index);
+    }
 
-	@Nullable
-	@Override
-	public ICustomPayload getPayload() {
-		return payload;
-	}
+    @Override
+    public IFieldRef getIndexAsField() {
+        return externalReader.getFieldRef(index);
+    }
 
-	public int[] getArgsReg() {
-		return argsReg;
-	}
+    @Override
+    public IMethodRef getIndexAsMethod() {
+        return externalReader.getMethodRef(index);
+    }
 
-	public void setArgsReg(int[] argsReg) {
-		this.argsReg = argsReg;
-	}
+    @Override
+    public ICallSite getIndexAsCallSite() {
+        return externalReader.getCallSite(index, secondExtReader);
+    }
 
-	public void setRegsCount(int regsCount) {
-		this.regsCount = regsCount;
-	}
+    /**
+     * Currently, protoIndex is either being stored at index or target, index for const-method-type,
+     * target for invoke-polymorphic(/range)
+     */
+    @Override
+    public IMethodProto getIndexAsProto(int protoIndex) {
+        return externalReader.getMethodProto(protoIndex);
+    }
 
-	public int getLength() {
-		return length;
-	}
+    @Override
+    public IMethodHandle getIndexAsMethodHandle() {
+        return externalReader.getMethodHandle(index);
+    }
 
-	public void setLength(int length) {
-		this.length = length;
-	}
+    @Nullable
+    @Override
+    public ICustomPayload getPayload() {
+        return payload;
+    }
 
-	public void setInsnStart(int start) {
-		this.insnStart = start;
-	}
+    public void setPayload(ICustomPayload payload) {
+        this.payload = payload;
+    }
 
-	public void setLiteral(long literal) {
-		this.literal = literal;
-	}
+    public int[] getArgsReg() {
+        return argsReg;
+    }
 
-	public void setTarget(int target) {
-		this.target = target;
-	}
+    public void setArgsReg(int[] argsReg) {
+        this.argsReg = argsReg;
+    }
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
+    public int getLength() {
+        return length;
+    }
 
-	public boolean isDecoded() {
-		return decoded;
-	}
+    public void setLength(int length) {
+        this.length = length;
+    }
 
-	public void setDecoded(boolean decoded) {
-		this.decoded = decoded;
-	}
+    public void setInsnStart(int start) {
+        this.insnStart = start;
+    }
 
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
+    public boolean isDecoded() {
+        return decoded;
+    }
 
-	public DexInsnInfo getInsnInfo() {
-		return insnInfo;
-	}
+    public void setDecoded(boolean decoded) {
+        this.decoded = decoded;
+    }
 
-	public void setInsnInfo(DexInsnInfo insnInfo) {
-		this.insnInfo = insnInfo;
-	}
+    public DexInsnInfo getInsnInfo() {
+        return insnInfo;
+    }
 
-	public DexCodeReader getCodeData() {
-		return codeData;
-	}
+    public void setInsnInfo(DexInsnInfo insnInfo) {
+        this.insnInfo = insnInfo;
+    }
 
-	public int getOpcodeUnit() {
-		return opcodeUnit;
-	}
+    public DexCodeReader getCodeData() {
+        return codeData;
+    }
 
-	public void setOpcodeUnit(int opcodeUnit) {
-		this.opcodeUnit = opcodeUnit;
-	}
+    public int getOpcodeUnit() {
+        return opcodeUnit;
+    }
 
-	public void setPayload(ICustomPayload payload) {
-		this.payload = payload;
-	}
+    public void setOpcodeUnit(int opcodeUnit) {
+        this.opcodeUnit = opcodeUnit;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("0x%04X", offset));
-		sb.append(": ").append(getOpcode());
-		if (insnInfo == null) {
-			sb.append(String.format("(0x%04X)", opcodeUnit));
-		} else {
-			int regsCount = getRegsCount();
-			if (isDecoded()) {
-				sb.append(' ');
-				for (int i = 0; i < regsCount; i++) {
-					if (i != 0) {
-						sb.append(", ");
-					}
-					sb.append("r").append(argsReg[i]);
-				}
-			}
-		}
-		return sb.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("0x%04X", offset));
+        sb.append(": ").append(getOpcode());
+        if (insnInfo == null) {
+            sb.append(String.format("(0x%04X)", opcodeUnit));
+        } else {
+            int regsCount = getRegsCount();
+            if (isDecoded()) {
+                sb.append(' ');
+                for (int i = 0; i < regsCount; i++) {
+                    if (i != 0) {
+                        sb.append(", ");
+                    }
+                    sb.append("r").append(argsReg[i]);
+                }
+            }
+        }
+        return sb.toString();
+    }
 }

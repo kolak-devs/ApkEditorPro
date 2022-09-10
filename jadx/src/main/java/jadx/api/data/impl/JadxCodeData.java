@@ -8,24 +8,24 @@ import jadx.api.data.ICodeData;
 import jadx.api.data.ICodeRename;
 
 public class JadxCodeData implements ICodeData {
-	private List<ICodeComment> comments = Collections.emptyList();
-	private List<ICodeRename> renames = Collections.emptyList();
+    private List<ICodeComment> comments = Collections.emptyList();
+    private List<ICodeRename> renames = Collections.emptyList();
 
-	@Override
-	public List<ICodeComment> getComments() {
-		return comments;
-	}
+    @Override
+    public List<ICodeComment> getComments() {
+        return comments;
+    }
 
-	public void setComments(List<ICodeComment> comments) {
-		this.comments = comments;
-	}
+    public void setComments(List<ICodeComment> comments) {
+        this.comments = comments;
+    }
 
-	@Override
-	public List<ICodeRename> getRenames() {
-		return renames;
-	}
+    @Override
+    public List<ICodeRename> getRenames() {
+        return renames;
+    }
 
-	public void setRenames(List<ICodeRename> renames) {
-		this.renames = renames;
-	}
+    public void setRenames(List<ICodeRename> renames) {
+        this.renames = renames;
+    }
 }

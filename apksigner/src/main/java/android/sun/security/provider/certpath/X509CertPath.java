@@ -25,25 +25,31 @@
 
 package android.sun.security.provider.certpath;
 
-import java.io.BufferedInputStream;
+import android.sun.security.pkcs.ContentInfo;
+import android.sun.security.pkcs.PKCS7;
+import android.sun.security.pkcs.SignerInfo;
+import android.sun.security.util.DerInputStream;
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.x509.AlgorithmId;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertPath;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.*;
-import java.security.cert.CertPath;
-import android.sun.security.pkcs.ContentInfo;
-import android.sun.security.pkcs.PKCS7;
-import android.sun.security.pkcs.SignerInfo;
-import android.sun.security.x509.AlgorithmId;
-import android.sun.security.util.DerValue;
-import android.sun.security.util.DerOutputStream;
-import android.sun.security.util.DerInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 
 /**
@@ -59,25 +65,18 @@ import android.sun.security.util.DerInputStream;
  * departure from this convention and throw a
  * <code>CertPathValidatorException</code>.
  *
- * @author      Yassir Elley
- * @since       1.4
+ * @author Yassir Elley
+ * @since 1.4
  */
 public class X509CertPath extends CertPath {
 
     private static final long serialVersionUID = 4989800333263052980L;
-
-    /**
-     * List of certificates in this chain
-     */
-    private List<X509Certificate> certs;
-
     /**
      * The names of our encodings.  PkiPath is the default.
      */
     private static final String COUNT_ENCODING = "count";
     private static final String PKCS7_ENCODING = "PKCS7";
     private static final String PKIPATH_ENCODING = "PkiPath";
-
     /**
      * List of supported encodings
      */
@@ -91,6 +90,11 @@ public class X509CertPath extends CertPath {
     }
 
     /**
+     * List of certificates in this chain
+     */
+    private List<X509Certificate> certs;
+
+    /**
      * Creates an <code>X509CertPath</code> from a <code>List</code> of
      * <code>X509Certificate</code>s.
      * <p>
@@ -98,18 +102,18 @@ public class X509CertPath extends CertPath {
      * object.
      *
      * @param certs a <code>List</code> of <code>X509Certificate</code>s
-     * @exception CertificateException if <code>certs</code> contains an element
-     *                      that is not an <code>X509Certificate</code>
+     * @throws CertificateException if <code>certs</code> contains an element
+     *                              that is not an <code>X509Certificate</code>
      */
     public X509CertPath(List<? extends Certificate> certs) throws CertificateException {
         super("X.509");
 
         // Ensure that the List contains only X509Certificates
-        for (Object obj : (List<?>)certs) {
+        for (Object obj : (List<?>) certs) {
             if (obj instanceof X509Certificate == false) {
                 throw new CertificateException
-                    ("List is not all X509Certificates: "
-                    + obj.getClass().getName());
+                        ("List is not all X509Certificates: "
+                                + obj.getClass().getName());
             }
         }
 
@@ -118,7 +122,7 @@ public class X509CertPath extends CertPath {
         // and the methods in the Sun JDK 1.4 implementation of ArrayList that
         // allow read-only access are thread-safe.
         this.certs = Collections.unmodifiableList(
-                new ArrayList<X509Certificate>((List<X509Certificate>)certs));
+                new ArrayList<X509Certificate>((List<X509Certificate>) certs));
     }
 
     /**
@@ -127,7 +131,7 @@ public class X509CertPath extends CertPath {
      * the default encoding.
      *
      * @param is the <code>InputStream</code> to read the data from
-     * @exception CertificateException if an exception occurs while decoding
+     * @throws CertificateException if an exception occurs while decoding
      */
     public X509CertPath(InputStream is) throws CertificateException {
         this(is, PKIPATH_ENCODING);
@@ -138,10 +142,10 @@ public class X509CertPath extends CertPath {
      * from an InputStream. The data is assumed to be in the specified
      * encoding.
      *
-     * @param is the <code>InputStream</code> to read the data from
+     * @param is       the <code>InputStream</code> to read the data from
      * @param encoding the encoding used
-     * @exception CertificateException if an exception occurs while decoding or
-     *   the encoding requested is not supported
+     * @throws CertificateException if an exception occurs while decoding or
+     *                              the encoding requested is not supported
      */
     public X509CertPath(InputStream is, String encoding)
             throws CertificateException {
@@ -162,7 +166,7 @@ public class X509CertPath extends CertPath {
      *
      * @param is the <code>InputStream</code> to read the data from
      * @return an unmodifiable List of the certificates
-     * @exception CertificateException if an exception occurs
+     * @throws CertificateException if an exception occurs
      */
     private static List<X509Certificate> parsePKIPATH(InputStream is)
             throws CertificateException {
@@ -184,16 +188,16 @@ public class X509CertPath extends CertPath {
             certList = new ArrayList<X509Certificate>(seq.length);
 
             // append certs in reverse order (target to trust anchor)
-            for (int i = seq.length-1; i >= 0; i--) {
-                certList.add((X509Certificate)certFac.generateCertificate
-                    (new ByteArrayInputStream(seq[i].toByteArray())));
+            for (int i = seq.length - 1; i >= 0; i--) {
+                certList.add((X509Certificate) certFac.generateCertificate
+                        (new ByteArrayInputStream(seq[i].toByteArray())));
             }
 
             return Collections.unmodifiableList(certList);
 
         } catch (IOException ioe) {
             CertificateException ce = new CertificateException("IOException" +
-                " parsing PkiPath data: " + ioe);
+                    " parsing PkiPath data: " + ioe);
             ce.initCause(ioe);
             throw ce;
         }
@@ -205,7 +209,7 @@ public class X509CertPath extends CertPath {
      *
      * @param is the <code>InputStream</code> to read the data from
      * @return an unmodifiable List of the certificates
-     * @exception CertificateException if an exception occurs
+     * @throws CertificateException if an exception occurs
      */
     private static List<X509Certificate> parsePKCS7(InputStream is)
             throws CertificateException {
@@ -220,7 +224,8 @@ public class X509CertPath extends CertPath {
                 // Copy the entire input stream into an InputStream that does
                 // support mark
                 is = new ByteArrayInputStream(readAllBytes(is));
-            };
+            }
+            ;
             PKCS7 pkcs7 = new PKCS7(is);
 
             X509Certificate[] certArray = pkcs7.getCertificates();
@@ -233,7 +238,7 @@ public class X509CertPath extends CertPath {
             }
         } catch (IOException ioe) {
             throw new CertificateException("IOException parsing PKCS7 data: " +
-                                        ioe);
+                    ioe);
         }
         // Assumes that the resulting List is thread-safe. This is true
         // because we ensure that it cannot be modified after construction
@@ -259,11 +264,22 @@ public class X509CertPath extends CertPath {
     }
 
     /**
+     * Returns the encodings supported by this certification path, with the
+     * default encoding first.
+     *
+     * @return an <code>Iterator</code> over the names of the supported
+     * encodings (as Strings)
+     */
+    public static Iterator<String> getEncodingsStatic() {
+        return encodingList.iterator();
+    }
+
+    /**
      * Returns the encoded form of this certification path, using the
      * default encoding.
      *
      * @return the encoded bytes
-     * @exception CertificateEncodingException if an encoding error occurs
+     * @throws CertificateEncodingException if an encoding error occurs
      */
     public byte[] getEncoded() throws CertificateEncodingException {
         // @@@ Should cache the encoded form
@@ -274,7 +290,7 @@ public class X509CertPath extends CertPath {
      * Encode the CertPath using PKIPATH format.
      *
      * @return a byte array containing the binary encoding of the PkiPath object
-     * @exception CertificateEncodingException if an exception occurs
+     * @throws CertificateEncodingException if an exception occurs
      */
     private byte[] encodePKIPATH() throws CertificateEncodingException {
 
@@ -288,7 +304,7 @@ public class X509CertPath extends CertPath {
                 // check for duplicate cert
                 if (certs.lastIndexOf(cert) != certs.indexOf(cert)) {
                     throw new CertificateEncodingException
-                        ("Duplicate Certificate");
+                            ("Duplicate Certificate");
                 }
                 // get encoded certificates
                 byte[] encoded = cert.getEncoded();
@@ -301,10 +317,10 @@ public class X509CertPath extends CertPath {
             return derout.toByteArray();
 
         } catch (IOException ioe) {
-           CertificateEncodingException ce = new CertificateEncodingException
-                ("IOException encoding PkiPath data: " + ioe);
-           ce.initCause(ioe);
-           throw ce;
+            CertificateEncodingException ce = new CertificateEncodingException
+                    ("IOException encoding PkiPath data: " + ioe);
+            ce.initCause(ioe);
+            throw ce;
         }
     }
 
@@ -312,13 +328,13 @@ public class X509CertPath extends CertPath {
      * Encode the CertPath using PKCS#7 format.
      *
      * @return a byte array containing the binary encoding of the PKCS#7 object
-     * @exception CertificateEncodingException if an exception occurs
+     * @throws CertificateEncodingException if an exception occurs
      */
     private byte[] encodePKCS7() throws CertificateEncodingException {
         PKCS7 p7 = new PKCS7(new AlgorithmId[0],
-                             new ContentInfo(ContentInfo.DATA_OID, null),
-                             certs.toArray(new X509Certificate[certs.size()]),
-                             new SignerInfo[0]);
+                new ContentInfo(ContentInfo.DATA_OID, null),
+                certs.toArray(new X509Certificate[certs.size()]),
+                new SignerInfo[0]);
         DerOutputStream derout = new DerOutputStream();
         try {
             p7.encodeSignedData(derout);
@@ -334,8 +350,8 @@ public class X509CertPath extends CertPath {
      *
      * @param encoding the name of the encoding to use
      * @return the encoded bytes
-     * @exception CertificateEncodingException if an encoding error occurs or
-     *   the encoding requested is not supported
+     * @throws CertificateEncodingException if an encoding error occurs or
+     *                                      the encoding requested is not supported
      */
     public byte[] getEncoded(String encoding)
             throws CertificateEncodingException {
@@ -349,17 +365,6 @@ public class X509CertPath extends CertPath {
     }
 
     /**
-     * Returns the encodings supported by this certification path, with the
-     * default encoding first.
-     *
-     * @return an <code>Iterator</code> over the names of the supported
-     *         encodings (as Strings)
-     */
-    public static Iterator<String> getEncodingsStatic() {
-        return encodingList.iterator();
-    }
-
-    /**
      * Returns an iteration of the encodings supported by this certification
      * path, with the default encoding first.
      * <p>
@@ -368,7 +373,7 @@ public class X509CertPath extends CertPath {
      * <code>UnsupportedOperationException</code>.
      *
      * @return an <code>Iterator</code> over the names of the supported
-     *         encodings (as Strings)
+     * encodings (as Strings)
      */
     public Iterator<String> getEncodings() {
         return getEncodingsStatic();
@@ -379,7 +384,7 @@ public class X509CertPath extends CertPath {
      * The <code>List</code> returned must be immutable and thread-safe.
      *
      * @return an immutable <code>List</code> of <code>X509Certificate</code>s
-     *         (may be empty, but not null)
+     * (may be empty, but not null)
      */
     public List<X509Certificate> getCertificates() {
         return certs;

@@ -42,19 +42,16 @@ import java.util.Map;
 public class SqliteRowViewActivity extends CustomizedLangActivity implements
         OnItemClickListener, OnClickListener {
 
+    // All versions now editable
+    private final boolean editable = true;
     private String originDbFilePath;
     private String dbFilePath;
     private String tableName;
-
     private ArrayList<String> columnNames;
     private ArrayList<String> columnTypes;
     private ArrayList<String> columnIsPKs;
     private ArrayList<String> rowData;
-
     private ListView valueListView;
-
-    // All versions now editable
-    private final boolean editable = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

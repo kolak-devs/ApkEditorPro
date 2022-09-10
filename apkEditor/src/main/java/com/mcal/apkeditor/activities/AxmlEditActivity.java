@@ -28,16 +28,14 @@ import com.mcal.apkeditor.se.IDirChanged;
 import com.mcal.apkeditor.se.ZipFileListAdapter;
 import com.mcal.apkeditor.se.ZipHelper;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
+import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.view.ProgressDialog;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.Map;
-
-import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
 public class AxmlEditActivity extends CustomizedLangActivity implements IDirChanged, View.OnClickListener {
     private String apkPath;

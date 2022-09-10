@@ -25,14 +25,15 @@
 
 package android.sun.security.x509;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import java.util.*;
-
 import android.sun.security.util.DerOutputStream;
 import android.sun.security.util.DerValue;
 import android.sun.security.util.ObjectIdentifier;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Represent the CRL Distribution Points Extension (OID = 2.5.29.31).
@@ -72,12 +73,13 @@ import android.sun.security.util.ObjectIdentifier;
  * CRLDistPointsSyntax ::= SEQUENCE SIZE (1..MAX) OF DistributionPoint
  * </pre>
  * <p>
+ *
  * @author Anne Anderson
  * @author Andreas Sterbenz
- * @since 1.4.2
  * @see android.sun.security.x509.DistributionPoint
  * @see android.sun.security.x509.Extension
  * @see android.sun.security.x509.CertAttrSet
+ * @since 1.4.2
  */
 public class CRLDistributionPointsExtension extends Extension
         implements CertAttrSet<String> {
@@ -87,7 +89,7 @@ public class CRLDistributionPointsExtension extends Extension
      * get, set, delete methods of Certificate, x509 type.
      */
     public static final String IDENT =
-                                "x509.info.extensions.CRLDistributionPoints";
+            "x509.info.extensions.CRLDistributionPoints";
 
     /**
      * Attribute name.
@@ -110,7 +112,7 @@ public class CRLDistributionPointsExtension extends Extension
      * @throws IOException on error
      */
     public CRLDistributionPointsExtension(
-        List<android.sun.security.x509.DistributionPoint> distributionPoints) throws IOException {
+            List<android.sun.security.x509.DistributionPoint> distributionPoints) throws IOException {
 
         this(false, distributionPoints);
     }
@@ -119,23 +121,23 @@ public class CRLDistributionPointsExtension extends Extension
      * Create a CRLDistributionPointsExtension from a List of
      * DistributionPoint.
      *
-     * @param isCritical the criticality setting.
+     * @param isCritical         the criticality setting.
      * @param distributionPoints the list of distribution points
      * @throws IOException on error
      */
     public CRLDistributionPointsExtension(boolean isCritical,
-        List<android.sun.security.x509.DistributionPoint> distributionPoints) throws IOException {
+                                          List<android.sun.security.x509.DistributionPoint> distributionPoints) throws IOException {
 
         this(android.sun.security.x509.PKIXExtensions.CRLDistributionPoints_Id, isCritical,
-            distributionPoints, NAME);
+                distributionPoints, NAME);
     }
 
     /**
      * Creates the extension (also called by the subclass).
      */
     protected CRLDistributionPointsExtension(ObjectIdentifier extensionId,
-        boolean isCritical, List<android.sun.security.x509.DistributionPoint> distributionPoints,
-            String extensionName) throws IOException {
+                                             boolean isCritical, List<android.sun.security.x509.DistributionPoint> distributionPoints,
+                                             String extensionName) throws IOException {
 
         this.extensionId = extensionId;
         this.critical = isCritical;
@@ -148,8 +150,8 @@ public class CRLDistributionPointsExtension extends Extension
      * Create the extension from the passed DER encoded value of the same.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value Array of DER encoded bytes of the actual value.
-     * @exception IOException on error.
+     * @param value    Array of DER encoded bytes of the actual value.
+     * @throws IOException on error.
      */
     public CRLDistributionPointsExtension(Boolean critical, Object value)
             throws IOException {
@@ -160,7 +162,7 @@ public class CRLDistributionPointsExtension extends Extension
      * Creates the extension (also called by the subclass).
      */
     protected CRLDistributionPointsExtension(ObjectIdentifier extensionId,
-        Boolean critical, Object value, String extensionName)
+                                             Boolean critical, Object value, String extensionName)
             throws IOException {
 
         this.extensionId = extensionId;
@@ -170,11 +172,11 @@ public class CRLDistributionPointsExtension extends Extension
             throw new IOException("Illegal argument type");
         }
 
-        extensionValue = (byte[])value;
+        extensionValue = (byte[]) value;
         DerValue val = new DerValue(extensionValue);
         if (val.tag != DerValue.tag_Sequence) {
             throw new IOException("Invalid encoding for " + extensionName +
-                                  " extension.");
+                    " extension.");
         }
         distributionPoints = new ArrayList<android.sun.security.x509.DistributionPoint>();
         while (val.data.available() != 0) {
@@ -196,7 +198,7 @@ public class CRLDistributionPointsExtension extends Extension
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         encode(out, PKIXExtensions.CRLDistributionPoints_Id, false);
@@ -207,7 +209,7 @@ public class CRLDistributionPointsExtension extends Extension
      * (Also called by the subclass)
      */
     protected void encode(OutputStream out, ObjectIdentifier extensionId,
-        boolean isCritical) throws IOException {
+                          boolean isCritical) throws IOException {
 
         DerOutputStream tmp = new DerOutputStream();
         if (this.extensionValue == null) {
@@ -227,11 +229,11 @@ public class CRLDistributionPointsExtension extends Extension
             if (!(obj instanceof List)) {
                 throw new IOException("Attribute value should be of type List.");
             }
-            distributionPoints = (List<android.sun.security.x509.DistributionPoint>)obj;
+            distributionPoints = (List<android.sun.security.x509.DistributionPoint>) obj;
         } else {
             throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:" + extensionName + ".");
+                    "] not recognized by " +
+                    "CertAttrSet:" + extensionName + ".");
         }
         encodeThis();
     }
@@ -244,8 +246,8 @@ public class CRLDistributionPointsExtension extends Extension
             return distributionPoints;
         } else {
             throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:" + extensionName + ".");
+                    "] not recognized by " +
+                    "CertAttrSet:" + extensionName + ".");
         }
     }
 
@@ -257,8 +259,8 @@ public class CRLDistributionPointsExtension extends Extension
             distributionPoints = new ArrayList<android.sun.security.x509.DistributionPoint>();
         } else {
             throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:" + extensionName + ".");
+                    "] not recognized by " +
+                    "CertAttrSet:" + extensionName + ".");
         }
         encodeThis();
     }
@@ -273,7 +275,7 @@ public class CRLDistributionPointsExtension extends Extension
         return elements.elements();
     }
 
-     // Encode this extension value
+    // Encode this extension value
     private void encodeThis() throws IOException {
         if (distributionPoints.isEmpty()) {
             this.extensionValue = null;
@@ -293,7 +295,7 @@ public class CRLDistributionPointsExtension extends Extension
      */
     public String toString() {
         return super.toString() + extensionName + " [\n  "
-               + distributionPoints + "]\n";
+                + distributionPoints + "]\n";
     }
 
 }

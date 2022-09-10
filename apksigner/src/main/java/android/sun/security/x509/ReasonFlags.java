@@ -62,56 +62,24 @@ public class ReasonFlags {
     public static final String AFFILIATION_CHANGED = "affiliation_changed";
     public static final String SUPERSEDED = "superseded";
     public static final String CESSATION_OF_OPERATION
-                                   = "cessation_of_operation";
+            = "cessation_of_operation";
     public static final String CERTIFICATE_HOLD = "certificate_hold";
     public static final String PRIVILEGE_WITHDRAWN = "privilege_withdrawn";
     public static final String AA_COMPROMISE = "aa_compromise";
 
     private final static String[] NAMES = {
-        UNUSED,
-        KEY_COMPROMISE,
-        CA_COMPROMISE,
-        AFFILIATION_CHANGED,
-        SUPERSEDED,
-        CESSATION_OF_OPERATION,
-        CERTIFICATE_HOLD,
-        PRIVILEGE_WITHDRAWN,
-        AA_COMPROMISE,
+            UNUSED,
+            KEY_COMPROMISE,
+            CA_COMPROMISE,
+            AFFILIATION_CHANGED,
+            SUPERSEDED,
+            CESSATION_OF_OPERATION,
+            CERTIFICATE_HOLD,
+            PRIVILEGE_WITHDRAWN,
+            AA_COMPROMISE,
     };
-
-    private static int name2Index(String name) throws IOException {
-        for( int i=0; i<NAMES.length; i++ ) {
-            if( NAMES[i].equalsIgnoreCase(name) ) {
-                return i;
-            }
-        }
-        throw new IOException("Name not recognized by ReasonFlags");
-    }
-
     // Private data members
     private boolean[] bitString;
-
-    /**
-     * Check if bit is set.
-     *
-     * @param position the position in the bit string to check.
-     */
-    private boolean isSet(int position) {
-        return bitString[position];
-    }
-
-    /**
-     * Set the bit at the specified position.
-     */
-    private void set(int position, boolean val) {
-        // enlarge bitString if necessary
-        if (position >= bitString.length) {
-            boolean[] tmp = new boolean[position+1];
-            System.arraycopy(bitString, 0, tmp, 0, bitString.length);
-            bitString = tmp;
-        }
-        bitString[position] = val;
-    }
 
     /**
      * Create a ReasonFlags with the passed bit settings.
@@ -119,7 +87,7 @@ public class ReasonFlags {
      * @param reasons the bits to be set for the ReasonFlags.
      */
     public ReasonFlags(byte[] reasons) {
-        bitString = new android.sun.security.util.BitArray(reasons.length*8, reasons).toBooleanArray();
+        bitString = new android.sun.security.util.BitArray(reasons.length * 8, reasons).toBooleanArray();
     }
 
     /**
@@ -144,7 +112,7 @@ public class ReasonFlags {
      * Create the object from the passed DER encoded value.
      *
      * @param in the DerInputStream to read the ReasonFlags from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public ReasonFlags(DerInputStream in) throws IOException {
         android.sun.security.util.DerValue derVal = in.getDerValue();
@@ -155,10 +123,41 @@ public class ReasonFlags {
      * Create the object from the passed DER encoded value.
      *
      * @param derVal the DerValue decoded from the stream.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public ReasonFlags(android.sun.security.util.DerValue derVal) throws IOException {
         this.bitString = derVal.getUnalignedBitString(true).toBooleanArray();
+    }
+
+    private static int name2Index(String name) throws IOException {
+        for (int i = 0; i < NAMES.length; i++) {
+            if (NAMES[i].equalsIgnoreCase(name)) {
+                return i;
+            }
+        }
+        throw new IOException("Name not recognized by ReasonFlags");
+    }
+
+    /**
+     * Check if bit is set.
+     *
+     * @param position the position in the bit string to check.
+     */
+    private boolean isSet(int position) {
+        return bitString[position];
+    }
+
+    /**
+     * Set the bit at the specified position.
+     */
+    private void set(int position, boolean val) {
+        // enlarge bitString if necessary
+        if (position >= bitString.length) {
+            boolean[] tmp = new boolean[position + 1];
+            System.arraycopy(bitString, 0, tmp, 0, bitString.length);
+            bitString = tmp;
+        }
+        bitString[position] = val;
     }
 
     /**
@@ -175,7 +174,7 @@ public class ReasonFlags {
         if (!(obj instanceof Boolean)) {
             throw new IOException("Attribute must be of type Boolean.");
         }
-        boolean val = ((Boolean)obj).booleanValue();
+        boolean val = ((Boolean) obj).booleanValue();
         set(name2Index(name), val);
     }
 
@@ -209,7 +208,8 @@ public class ReasonFlags {
             if (isSet(6)) s += "  Certificate Hold\n";
             if (isSet(7)) s += "  Privilege Withdrawn\n";
             if (isSet(8)) s += "  AA Compromise\n";
-        } catch (ArrayIndexOutOfBoundsException ex) {}
+        } catch (ArrayIndexOutOfBoundsException ex) {
+        }
 
         s += "]\n";
 
@@ -220,7 +220,7 @@ public class ReasonFlags {
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         out.putTruncatedUnalignedBitString(new android.sun.security.util.BitArray(this.bitString));
@@ -230,9 +230,9 @@ public class ReasonFlags {
      * Return an enumeration of names of attributes existing within this
      * attribute.
      */
-    public Enumeration<String> getElements () {
+    public Enumeration<String> getElements() {
         android.sun.security.x509.AttributeNameEnumeration elements = new AttributeNameEnumeration();
-        for( int i=0; i<NAMES.length; i++ ) {
+        for (int i = 0; i < NAMES.length; i++) {
             elements.addElement(NAMES[i]);
         }
         return (elements.elements());

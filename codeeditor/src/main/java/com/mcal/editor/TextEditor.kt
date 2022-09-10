@@ -1,9 +1,8 @@
-package com.mcal.neweditor
+package com.mcal.editor
 
 import android.content.Context
 import android.content.Intent
 import com.mcal.common.utilsOld.ActivityUtils
-import com.mcal.neweditor.editor2.EditorActivity
 
 object TextEditor {
     @JvmStatic

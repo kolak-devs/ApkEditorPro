@@ -10,26 +10,22 @@ import java.io.OutputStream;
 // Referenced classes of package com.mcal.pmaster.asn1:
 //            Asn1Data
 
-public class Asn1OctetString extends Asn1Data
-{
+public class Asn1OctetString extends Asn1Data {
 
-    public Asn1OctetString(byte abyte0[])
-    {
+    private byte mData[];
+
+    public Asn1OctetString(byte abyte0[]) {
         mData = abyte0;
     }
 
-    public int getBodyLength()
-    {
+    public int getBodyLength() {
         return mData.length;
     }
 
     public void write(OutputStream outputstream)
-        throws IOException
-    {
+            throws IOException {
         outputstream.write(4);
         writeLength(outputstream, getBodyLength());
         outputstream.write(mData);
     }
-
-    private byte mData[];
 }

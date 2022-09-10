@@ -19,27 +19,23 @@ import java.io.IOException;
  * @author Naresh Bhatia
  */
 public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
-    implements XmlPullParserWrapper
-{
+        implements XmlPullParserWrapper {
     public StaticXmlPullParserWrapper(XmlPullParser pp) {
         super(pp);
     }
 
-    public String getAttributeValue(String name)
-    {
+    public String getAttributeValue(String name) {
         return XmlPullUtil.getAttributeValue(pp, name);
     }
 
     public String getRequiredAttributeValue(String name)
-        throws IOException, XmlPullParserException
-    {
+            throws IOException, XmlPullParserException {
         return XmlPullUtil.getRequiredAttributeValue(pp, null, name);
     }
 
 
     public String getRequiredAttributeValue(String namespace, String name)
-        throws IOException, XmlPullParserException
-    {
+            throws IOException, XmlPullParserException {
         return XmlPullUtil.getRequiredAttributeValue(pp, namespace, name);
     }
 
@@ -53,8 +49,7 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
      */
 
     public String getRequiredElementText(String namespace, String name)
-        throws IOException, XmlPullParserException
-    {
+            throws IOException, XmlPullParserException {
         if (name == null) {
             throw new XmlPullParserException("name for element can not be null");
         }
@@ -63,8 +58,7 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
         nextStartTag(namespace, name);
         if (isNil()) {
             nextEndTag(namespace, name);
-        }
-        else {
+        } else {
             text = pp.nextText();
         }
         pp.require(XmlPullParser.END_TAG, namespace, name);
@@ -72,8 +66,7 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
     }
 
     public boolean isNil()
-        throws IOException, XmlPullParserException
-    {
+            throws IOException, XmlPullParserException {
 
         boolean result = false;
         String value = pp.getAttributeValue(XSI_NS, "nil");
@@ -93,30 +86,26 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
     }
 
     public boolean matches(int type, String namespace, String name)
-        throws XmlPullParserException
-    {
+            throws XmlPullParserException {
         return XmlPullUtil.matches(pp, type, namespace, name);
     }
 
     public void nextStartTag()
-        throws XmlPullParserException, IOException
-    {
-        if(pp.nextTag() != XmlPullParser.START_TAG) {
+            throws XmlPullParserException, IOException {
+        if (pp.nextTag() != XmlPullParser.START_TAG) {
             throw new XmlPullParserException(
-                "expected START_TAG and not "+pp.getPositionDescription());
+                    "expected START_TAG and not " + pp.getPositionDescription());
         }
     }
 
     public void nextStartTag(String name)
-        throws XmlPullParserException, IOException
-    {
+            throws XmlPullParserException, IOException {
         pp.nextTag();
         pp.require(XmlPullParser.START_TAG, null, name);
     }
 
     public void nextStartTag(String namespace, String name)
-        throws XmlPullParserException, IOException
-    {
+            throws XmlPullParserException, IOException {
         pp.nextTag();
         pp.require(XmlPullParser.START_TAG, namespace, name);
     }
@@ -126,20 +115,17 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
     }
 
     public void nextEndTag(String name)
-        throws XmlPullParserException, IOException
-    {
+            throws XmlPullParserException, IOException {
         XmlPullUtil.nextEndTag(pp, null, name);
     }
 
     public void nextEndTag(String namespace, String name)
-        throws XmlPullParserException, IOException
-    {
+            throws XmlPullParserException, IOException {
         XmlPullUtil.nextEndTag(pp, namespace, name);
     }
 
     public String nextText(String namespace, String name)
-        throws IOException, XmlPullParserException
-    {
+            throws IOException, XmlPullParserException {
         return XmlPullUtil.nextText(pp, namespace, name);
     }
 
@@ -153,16 +139,16 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
         double d;
         try {
             d = Double.parseDouble(value);
-        } catch(NumberFormatException ex) {
-            if(value.equals("INF") || value.toLowerCase().equals("infinity")) {
+        } catch (NumberFormatException ex) {
+            if (value.equals("INF") || value.toLowerCase().equals("infinity")) {
                 d = Double.POSITIVE_INFINITY;
             } else if (value.equals("-INF")
-                       || value.toLowerCase().equals("-infinity")) {
+                    || value.toLowerCase().equals("-infinity")) {
                 d = Double.NEGATIVE_INFINITY;
             } else if (value.equals("NaN")) {
                 d = Double.NaN;
             } else {
-                throw new XmlPullParserException("can't parse double value '"+value+"'", this, ex);
+                throw new XmlPullParserException("can't parse double value '" + value + "'", this, ex);
             }
         }
         return d;
@@ -173,16 +159,16 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
         float f;
         try {
             f = Float.parseFloat(value);
-        } catch(NumberFormatException ex) {
-            if(value.equals("INF") || value.toLowerCase().equals("infinity")) {
+        } catch (NumberFormatException ex) {
+            if (value.equals("INF") || value.toLowerCase().equals("infinity")) {
                 f = Float.POSITIVE_INFINITY;
             } else if (value.equals("-INF")
-                       || value.toLowerCase().equals("-infinity")) {
+                    || value.toLowerCase().equals("-infinity")) {
                 f = Float.NEGATIVE_INFINITY;
             } else if (value.equals("NaN")) {
                 f = Float.NaN;
             } else {
-                throw new XmlPullParserException("can't parse float value '"+value+"'", this, ex);
+                throw new XmlPullParserException("can't parse float value '" + value + "'", this, ex);
             }
         }
         return f;
@@ -190,8 +176,7 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
 
     // method copied from JiBX see http://sourceforge.net/projects/jibx/ for details
     private int parseDigits(String text, int offset, int length)
-        throws XmlPullParserException
-    {
+            throws XmlPullParserException {
 
         // check if overflow a potential problem
         int value = 0;
@@ -199,7 +184,7 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
 
             // use library parse code for potential overflow
             try {
-                value = Integer.parseInt(text.substring(offset, offset+length));
+                value = Integer.parseInt(text.substring(offset, offset + length));
             } catch (NumberFormatException ex) {
                 throw new XmlPullParserException(ex.getMessage());
             }
@@ -213,7 +198,7 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
                 if (chr >= '0' && chr <= '9') {
                     value = value * 10 + (chr - '0');
                 } else {
-                    throw new XmlPullParserException("non-digit in number value",this, null);
+                    throw new XmlPullParserException("non-digit in number value", this, null);
                 }
             }
 
@@ -256,7 +241,7 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
         }
 
         // handle actual value conversion
-        int value = parseDigits(text, offset, limit-offset);
+        int value = parseDigits(text, offset, limit - offset);
         if (negate) {
             return -value;
         } else {
@@ -269,14 +254,14 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
             //int i = Integer.parseInt(pp.nextText());
             int i = parseInt(pp.nextText());
             return i;
-        } catch(NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             throw new XmlPullParserException("can't parse int value", this, ex);
         }
     }
 
     public String readString() throws XmlPullParserException, IOException {
         String xsiNil = pp.getAttributeValue(XSD_NS, "nil");
-        if("true".equals(xsiNil)) {
+        if ("true".equals(xsiNil)) {
             nextEndTag();
             return null;
         }
@@ -284,29 +269,25 @@ public class StaticXmlPullParserWrapper extends XmlPullParserDelegate
     }
 
     public double readDoubleElement(String namespace, String name)
-        throws XmlPullParserException, IOException
-    {
+            throws XmlPullParserException, IOException {
         pp.require(XmlPullParser.START_TAG, namespace, name);
         return readDouble();
     }
 
     public float readFloatElement(String namespace, String name)
-        throws XmlPullParserException, IOException
-    {
+            throws XmlPullParserException, IOException {
         pp.require(XmlPullParser.START_TAG, namespace, name);
         return readFloat();
     }
 
     public int readIntElement(String namespace, String name)
-        throws XmlPullParserException, IOException
-    {
+            throws XmlPullParserException, IOException {
         pp.require(XmlPullParser.START_TAG, namespace, name);
         return readInt();
     }
 
     public String readStringElemet(String namespace, String name)
-        throws XmlPullParserException, IOException
-    {
+            throws XmlPullParserException, IOException {
         pp.require(XmlPullParser.START_TAG, namespace, name);
         return readString();
     }

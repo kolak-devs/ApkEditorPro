@@ -36,7 +36,7 @@ import java.util.Arrays;
  * ASN.1 object. It supplies the generic framework to allow specific
  * Other Name types, and also provides minimal support for unrecognized
  * Other Name types.
- *
+ * <p>
  * The ASN.1 definition for OtherName is:
  * <pre>
  * OtherName ::= SEQUENCE {
@@ -44,24 +44,23 @@ import java.util.Arrays;
  *     value      [0] EXPLICIT ANY DEFINED BY type-id
  * }
  * </pre>
+ *
  * @author Hemma Prafullchandra
  */
 public class OtherName implements android.sun.security.x509.GeneralNameInterface {
 
+    private static final byte TAG_VALUE = 0;
     private String name;
     private android.sun.security.util.ObjectIdentifier oid;
     private byte[] nameValue = null;
     private android.sun.security.x509.GeneralNameInterface gni = null;
-
-    private static final byte TAG_VALUE = 0;
-
     private int myhash = -1;
 
     /**
      * Create the OtherName object from a passed ObjectIdentfier and
      * byte array name value
      *
-     * @param oid ObjectIdentifier of this OtherName object
+     * @param oid   ObjectIdentifier of this OtherName object
      * @param value the DER-encoded value of the OtherName
      * @throws IOException on error
      */
@@ -83,7 +82,7 @@ public class OtherName implements android.sun.security.x509.GeneralNameInterface
      * Create the OtherName object from the passed encoded Der value.
      *
      * @param derValue the encoded DER OtherName.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public OtherName(android.sun.security.util.DerValue derValue) throws IOException {
         android.sun.security.util.DerInputStream in = derValue.toDerInputStream();
@@ -124,15 +123,15 @@ public class OtherName implements android.sun.security.x509.GeneralNameInterface
             if (extClass == null) {   // Unsupported OtherName
                 return null;
             }
-            Class[] params = { Object.class };
-            Constructor cons = ((Class<?>)extClass).getConstructor(params);
+            Class[] params = {Object.class};
+            Constructor cons = ((Class<?>) extClass).getConstructor(params);
 
-            Object[] passed = new Object[] { nameValue };
+            Object[] passed = new Object[]{nameValue};
             android.sun.security.x509.GeneralNameInterface gni =
-                       (android.sun.security.x509.GeneralNameInterface)cons.newInstance(passed);
+                    (android.sun.security.x509.GeneralNameInterface) cons.newInstance(passed);
             return gni;
         } catch (Exception e) {
-            throw (IOException)new IOException("Instantiation error: " + e).initCause(e);
+            throw (IOException) new IOException("Instantiation error: " + e).initCause(e);
         }
     }
 
@@ -147,7 +146,7 @@ public class OtherName implements android.sun.security.x509.GeneralNameInterface
      * Encode the Other name into the DerOutputStream.
      *
      * @param out the DER stream to encode the Other-Name to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         if (gni != null) {
@@ -175,7 +174,7 @@ public class OtherName implements android.sun.security.x509.GeneralNameInterface
         if (!(other instanceof OtherName)) {
             return false;
         }
-        OtherName otherOther = (OtherName)other;
+        OtherName otherOther = (OtherName) other;
         if (!(otherOther.oid.equals(oid))) {
             return false;
         }
@@ -224,22 +223,22 @@ public class OtherName implements android.sun.security.x509.GeneralNameInterface
 
     /**
      * Return type of constraint inputName places on this name:<ul>
-     *   <li>NAME_DIFF_TYPE = -1: input name is different type from name
-     *       (i.e. does not constrain).
-     *   <li>NAME_MATCH = 0: input name matches name.
-     *   <li>NAME_NARROWS = 1: input name narrows name (is lower in the
-     *       naming subtree)
-     *   <li>NAME_WIDENS = 2: input name widens name (is higher in the
-     *       naming subtree)
-     *   <li>NAME_SAME_TYPE = 3: input name does not match or narrow name,
-     *       but is same type.
+     * <li>NAME_DIFF_TYPE = -1: input name is different type from name
+     * (i.e. does not constrain).
+     * <li>NAME_MATCH = 0: input name matches name.
+     * <li>NAME_NARROWS = 1: input name narrows name (is lower in the
+     * naming subtree)
+     * <li>NAME_WIDENS = 2: input name widens name (is higher in the
+     * naming subtree)
+     * <li>NAME_SAME_TYPE = 3: input name does not match or narrow name,
+     * but is same type.
      * </ul>.  These results are used in checking NameConstraints during
      * certification path verification.
      *
      * @param inputName to be checked for being constrained
-     * @returns constraint type above
      * @throws UnsupportedOperationException if name is same type, but
-     *         comparison operations are not supported for this name type.
+     *                                       comparison operations are not supported for this name type.
+     * @returns constraint type above
      */
     public int constrains(GeneralNameInterface inputName) {
         int constraintType;
@@ -249,7 +248,7 @@ public class OtherName implements android.sun.security.x509.GeneralNameInterface
             constraintType = NAME_DIFF_TYPE;
         } else {
             throw new UnsupportedOperationException("Narrowing, widening, "
-                + "and matching are not supported for OtherName.");
+                    + "and matching are not supported for OtherName.");
         }
         return constraintType;
     }
@@ -258,12 +257,12 @@ public class OtherName implements android.sun.security.x509.GeneralNameInterface
      * Return subtree depth of this name for purposes of determining
      * NameConstraints minimum and maximum bounds.
      *
-     * @returns distance of name from root
      * @throws UnsupportedOperationException if not supported for this name type
+     * @returns distance of name from root
      */
     public int subtreeDepth() {
         throw new UnsupportedOperationException
-            ("subtreeDepth() not supported for generic OtherName");
+                ("subtreeDepth() not supported for generic OtherName");
     }
 
 }

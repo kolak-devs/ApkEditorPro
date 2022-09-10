@@ -82,29 +82,6 @@ public class NameConstraintsExtension extends Extension implements CertAttrSet<S
     private GeneralSubtrees permitted = null;
     private GeneralSubtrees excluded = null;
 
-    // Encode this extension value.
-    private void encodeThis() throws IOException {
-        if (permitted == null && excluded == null) {
-            this.extensionValue = null;
-            return;
-        }
-        DerOutputStream seq = new DerOutputStream();
-
-        DerOutputStream tagged = new DerOutputStream();
-        if (permitted != null) {
-            DerOutputStream tmp = new DerOutputStream();
-            permitted.encode(tmp);
-            tagged.writeImplicit(DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_PERMITTED), tmp);
-        }
-        if (excluded != null) {
-            DerOutputStream tmp = new DerOutputStream();
-            excluded.encode(tmp);
-            tagged.writeImplicit(DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_EXCLUDED), tmp);
-        }
-        seq.write(DerValue.tag_Sequence, tagged);
-        this.extensionValue = seq.toByteArray();
-    }
-
     /**
      * The default constructor for this class. Both parameters
      * are optional and can be set to null.  The extension criticality
@@ -168,6 +145,29 @@ public class NameConstraintsExtension extends Extension implements CertAttrSet<S
             } else
                 throw new IOException("Invalid encoding of NameConstraintsExtension.");
         }
+    }
+
+    // Encode this extension value.
+    private void encodeThis() throws IOException {
+        if (permitted == null && excluded == null) {
+            this.extensionValue = null;
+            return;
+        }
+        DerOutputStream seq = new DerOutputStream();
+
+        DerOutputStream tagged = new DerOutputStream();
+        if (permitted != null) {
+            DerOutputStream tmp = new DerOutputStream();
+            permitted.encode(tmp);
+            tagged.writeImplicit(DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_PERMITTED), tmp);
+        }
+        if (excluded != null) {
+            DerOutputStream tmp = new DerOutputStream();
+            excluded.encode(tmp);
+            tagged.writeImplicit(DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_EXCLUDED), tmp);
+        }
+        seq.write(DerValue.tag_Sequence, tagged);
+        this.extensionValue = seq.toByteArray();
     }
 
     /**

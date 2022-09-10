@@ -2,11 +2,11 @@ package jadx.api.plugins.input.data;
 
 public interface IMethodHandle {
 
-	MethodHandleType getType();
+    MethodHandleType getType();
 
-	IFieldRef getFieldRef();
+    IFieldRef getFieldRef();
 
-	IMethodRef getMethodRef();
+    IMethodRef getMethodRef();
 
-	void load();
+    void load();
 }

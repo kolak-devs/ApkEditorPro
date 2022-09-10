@@ -1,72 +1,72 @@
 package jadx.api;
 
-import java.util.Map;
-
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Map;
 
 import jadx.api.metadata.ICodeAnnotation;
 import jadx.api.metadata.ICodeNodeRef;
 
 public interface ICodeWriter {
-	String NL = System.getProperty("line.separator");
-	String INDENT_STR = "    ";
+    String NL = System.getProperty("line.separator");
+    String INDENT_STR = "    ";
 
-	boolean isMetadataSupported();
+    boolean isMetadataSupported();
 
-	ICodeWriter startLine();
+    ICodeWriter startLine();
 
-	ICodeWriter startLine(char c);
+    ICodeWriter startLine(char c);
 
-	ICodeWriter startLine(String str);
+    ICodeWriter startLine(String str);
 
-	ICodeWriter startLineWithNum(int sourceLine);
+    ICodeWriter startLineWithNum(int sourceLine);
 
-	ICodeWriter addMultiLine(String str);
+    ICodeWriter addMultiLine(String str);
 
-	ICodeWriter add(String str);
+    ICodeWriter add(String str);
 
-	ICodeWriter add(char c);
+    ICodeWriter add(char c);
 
-	ICodeWriter add(ICodeWriter code);
+    ICodeWriter add(ICodeWriter code);
 
-	ICodeWriter newLine();
+    ICodeWriter newLine();
 
-	ICodeWriter addIndent();
+    ICodeWriter addIndent();
 
-	void incIndent();
+    void incIndent();
 
-	void decIndent();
+    void decIndent();
 
-	int getIndent();
+    int getIndent();
 
-	void setIndent(int indent);
+    void setIndent(int indent);
 
-	/**
-	 * Return current line (only if metadata is supported)
-	 */
-	int getLine();
+    /**
+     * Return current line (only if metadata is supported)
+     */
+    int getLine();
 
-	/**
-	 * Return start line position (only if metadata is supported)
-	 */
-	int getLineStartPos();
+    /**
+     * Return start line position (only if metadata is supported)
+     */
+    int getLineStartPos();
 
-	void attachDefinition(ICodeNodeRef obj);
+    void attachDefinition(ICodeNodeRef obj);
 
-	void attachAnnotation(ICodeAnnotation obj);
+    void attachAnnotation(ICodeAnnotation obj);
 
-	void attachLineAnnotation(ICodeAnnotation obj);
+    void attachLineAnnotation(ICodeAnnotation obj);
 
-	void attachSourceLine(int sourceLine);
+    void attachSourceLine(int sourceLine);
 
-	ICodeInfo finish();
+    ICodeInfo finish();
 
-	String getCodeStr();
+    String getCodeStr();
 
-	int getLength();
+    int getLength();
 
-	StringBuilder getRawBuf();
+    StringBuilder getRawBuf();
 
-	@ApiStatus.Internal
-	Map<Integer, ICodeAnnotation> getRawAnnotations();
+    @ApiStatus.Internal
+    Map<Integer, ICodeAnnotation> getRawAnnotations();
 }

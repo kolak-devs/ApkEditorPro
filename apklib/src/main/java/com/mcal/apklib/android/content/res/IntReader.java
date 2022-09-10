@@ -21,13 +21,17 @@ import java.io.InputStream;
 
 /**
  * @author Dmitry Skiba
- *         <p>
- *         Simple helper class that allows reading of integers.
- *         <p>
+ * <p>
+ * Simple helper class that allows reading of integers.
+ * <p>
  *         TODO:
  *         * implement buffering
  */
 public final class IntReader {
+
+    private InputStream m_stream;
+    private boolean m_bigEndian;
+    private int m_position;
 
     public IntReader() {
     }
@@ -138,6 +142,8 @@ public final class IntReader {
         }
     }
 
+    /////////////////////////////////// data
+
     public final void skipInt() throws IOException {
         skip(4);
     }
@@ -149,12 +155,6 @@ public final class IntReader {
     public final int getPosition() {
         return m_position;
     }
-
-    /////////////////////////////////// data
-
-    private InputStream m_stream;
-    private boolean m_bigEndian;
-    private int m_position;
 
     // Read to full fill the buffer
     public void readFully(byte[] buf) throws IOException {

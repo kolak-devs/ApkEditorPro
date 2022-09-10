@@ -14,9 +14,9 @@ import com.balsikandar.crashreporter.ui.ExceptionLogFragment;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
+    private final String[] titles;
     private CrashLogFragment crashLogFragment;
     private ExceptionLogFragment exceptionLogFragment;
-    private final String[] titles;
 
     public MainPagerAdapter(FragmentManager fm, String[] titles) {
         super(fm);

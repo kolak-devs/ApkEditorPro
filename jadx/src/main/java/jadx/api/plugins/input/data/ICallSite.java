@@ -7,7 +7,7 @@ import jadx.api.plugins.input.insns.custom.ICustomPayload;
 
 public interface ICallSite extends ICustomPayload {
 
-	List<EncodedValue> getValues();
+    List<EncodedValue> getValues();
 
-	void load();
+    void load();
 }

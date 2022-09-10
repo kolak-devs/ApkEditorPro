@@ -4,10 +4,10 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ICodeComment extends Comparable<ICodeComment> {
 
-	IJavaNodeRef getNodeRef();
+    IJavaNodeRef getNodeRef();
 
-	@Nullable
-	IJavaCodeRef getCodeRef();
+    @Nullable
+    IJavaCodeRef getCodeRef();
 
-	String getComment();
+    String getComment();
 }

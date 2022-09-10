@@ -25,12 +25,12 @@
 
 package android.sun.security.util;
 
-import java.io.InputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Vector;
-import java.math.BigInteger;
-import java.io.DataInputStream;
 
 /**
  * A DER input stream, used for parsing ASN.1 DER-encoded data such as
@@ -49,7 +49,6 @@ import java.io.DataInputStream;
  * data encodings which are defined.  That subset is sufficient for parsing
  * most X.509 certificates.
  *
- *
  * @author David Brownell
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
@@ -57,6 +56,10 @@ import java.io.DataInputStream;
 
 public class DerInputStream {
 
+    /**
+     * The DER tag of the value; one of the tag_ constants.
+     */
+    public byte tag;
     /*
      * This version only supports fully buffered DER.  This is easy to
      * work with, though if large objects are manipulated DER becomes
@@ -64,9 +67,6 @@ public class DerInputStream {
      * handles streaming data relatively well.
      */
     android.sun.security.util.DerInputBuffer buffer;
-
-    /** The DER tag of the value; one of the tag_ constants. */
-    public byte         tag;
 
     /**
      * Create a DER input stream from a data buffer.  The buffer is not
@@ -84,25 +84,76 @@ public class DerInputStream {
      * The buffer is not copied, it is shared.  Accordingly, the
      * buffer should be treated as read-only.
      *
-     * @param data the buffer from which to create the string (CONSUMED)
+     * @param data   the buffer from which to create the string (CONSUMED)
      * @param offset the first index of <em>data</em> which will
-     *          be read as DER input in the new stream
-     * @param len how long a chunk of the buffer to use,
-     *          starting at "offset"
+     *               be read as DER input in the new stream
+     * @param len    how long a chunk of the buffer to use,
+     *               starting at "offset"
      */
     public DerInputStream(byte[] data, int offset, int len) throws IOException {
         init(data, offset, len);
+    }
+
+    DerInputStream(android.sun.security.util.DerInputBuffer buf) {
+        buffer = buf;
+        buffer.mark(Integer.MAX_VALUE);
+    }
+
+    /*
+     * Get a length from the input stream, allowing for at most 32 bits of
+     * encoding to be used.  (Not the same as getting a tagged integer!)
+     *
+     * @return the length or -1 if indefinite length found.
+     * @exception IOException on parsing error or unsupported lengths.
+     */
+    static int getLength(InputStream in) throws IOException {
+        return getLength(in.read(), in);
+    }
+
+    /*
+     * Get a length from the input stream, allowing for at most 32 bits of
+     * encoding to be used.  (Not the same as getting a tagged integer!)
+     *
+     * @return the length or -1 if indefinite length found.
+     * @exception IOException on parsing error or unsupported lengths.
+     */
+    static int getLength(int lenByte, InputStream in) throws IOException {
+        int value, tmp;
+
+        tmp = lenByte;
+        if ((tmp & 0x080) == 0x00) { // short form, 1 byte datum
+            value = tmp;
+        } else {                     // long form or indefinite
+            tmp &= 0x07f;
+
+            /*
+             * NOTE:  tmp == 0 indicates indefinite length encoded data.
+             * tmp > 4 indicates more than 4Gb of data.
+             */
+            if (tmp == 0)
+                return -1;
+            if (tmp < 0 || tmp > 4)
+                throw new IOException("DerInputStream.getLength(): lengthTag="
+                        + tmp + ", "
+                        + ((tmp < 0) ? "incorrect DER encoding." : "too big."));
+
+            for (value = 0; tmp > 0; tmp--) {
+                value <<= 8;
+                value += 0x0ff & in.read();
+            }
+        }
+        return value;
     }
 
     /*
      * private helper routine
      */
     private void init(byte[] data, int offset, int len) throws IOException {
-        if ((offset+2 > data.length) || (offset+len > data.length)) {
+        if ((offset + 2 > data.length) || (offset + len > data.length)) {
             throw new IOException("Encoding bytes too short");
         }
         // check for indefinite length encoding
-        if (android.sun.security.util.DerIndefLenConverter.isIndefinite(data[offset+1])) {
+        if (android.sun.security.util.DerIndefLenConverter.isIndefinite(data[offset + 1])) {
             byte[] inData = new byte[len];
             System.arraycopy(data, offset, inData, 0, len);
 
@@ -113,23 +164,28 @@ public class DerInputStream {
         buffer.mark(Integer.MAX_VALUE);
     }
 
-    DerInputStream(android.sun.security.util.DerInputBuffer buf) {
-        buffer = buf;
-        buffer.mark(Integer.MAX_VALUE);
-    }
+    /*
+     * PRIMITIVES -- these are "universal" ASN.1 simple types.
+     *
+     *  INTEGER, ENUMERATED, BIT STRING, OCTET STRING, NULL
+     *  OBJECT IDENTIFIER, SEQUENCE (OF), SET (OF)
+     *  UTF8String, PrintableString, T61String, IA5String, UTCTime,
+     *  GeneralizedTime, BMPString.
+     * Note: UniversalString not supported till encoder is available.
+     */
 
     /**
      * Creates a new DER input stream from part of this input stream.
      *
-     * @param len how long a chunk of the current input stream to use,
-     *          starting at the current position.
+     * @param len     how long a chunk of the current input stream to use,
+     *                starting at the current position.
      * @param do_skip true if the existing data in the input stream should
-     *          be skipped.  If this value is false, the next data read
-     *          on this stream and the newly created stream will be the
-     *          same.
+     *                be skipped.  If this value is false, the next data read
+     *                on this stream and the newly created stream will be the
+     *                same.
      */
     public DerInputStream subStream(int len, boolean do_skip)
-    throws IOException {
+            throws IOException {
         android.sun.security.util.DerInputBuffer newbuf = buffer.dup();
 
         newbuf.truncate(len);
@@ -146,16 +202,6 @@ public class DerInputStream {
     public byte[] toByteArray() {
         return buffer.toByteArray();
     }
-
-    /*
-     * PRIMITIVES -- these are "universal" ASN.1 simple types.
-     *
-     *  INTEGER, ENUMERATED, BIT STRING, OCTET STRING, NULL
-     *  OBJECT IDENTIFIER, SEQUENCE (OF), SET (OF)
-     *  UTF8String, PrintableString, T61String, IA5String, UTCTime,
-     *  GeneralizedTime, BMPString.
-     * Note: UniversalString not supported till encoder is available.
-     */
 
     /**
      * Get an integer from the input stream as an integer.
@@ -232,7 +278,7 @@ public class DerInputStream {
          * First byte = number of excess bits in the last octet of the
          * representation.
          */
-        int validBits = length*8 - buffer.read();
+        int validBits = length * 8 - buffer.read();
 
         byte[] repn = new byte[length];
 
@@ -287,11 +333,11 @@ public class DerInputStream {
      * specific values.
      *
      * @param startLen guess about how long the sequence will be
-     *          (used to initialize an auto-growing data structure)
+     *                 (used to initialize an auto-growing data structure)
      * @return array of the values in the sequence
      */
     public android.sun.security.util.DerValue[] getSequence(int startLen) throws IOException {
-        tag = (byte)buffer.read();
+        tag = (byte) buffer.read();
         if (tag != android.sun.security.util.DerValue.tag_Sequence)
             throw new IOException("Sequence tag error");
         return readVector(startLen);
@@ -304,11 +350,11 @@ public class DerInputStream {
      * to facilitate binary comparisons of encoded values.
      *
      * @param startLen guess about how large the set will be
-     *          (used to initialize an auto-growing data structure)
+     *                 (used to initialize an auto-growing data structure)
      * @return array of the values in the sequence
      */
     public android.sun.security.util.DerValue[] getSet(int startLen) throws IOException {
-        tag = (byte)buffer.read();
+        tag = (byte) buffer.read();
         if (tag != android.sun.security.util.DerValue.tag_Set)
             throw new IOException("Set tag error");
         return readVector(startLen);
@@ -321,13 +367,13 @@ public class DerInputStream {
      * to facilitate binary comparisons of encoded values.
      *
      * @param startLen guess about how large the set will be
-     *          (used to initialize an auto-growing data structure)
+     *                 (used to initialize an auto-growing data structure)
      * @param implicit if true tag is assumed implicit.
      * @return array of the values in the sequence
      */
     public android.sun.security.util.DerValue[] getSet(int startLen, boolean implicit)
-        throws IOException {
-        tag = (byte)buffer.read();
+            throws IOException {
+        tag = (byte) buffer.read();
         if (!implicit) {
             if (tag != android.sun.security.util.DerValue.tag_Set) {
                 throw new IOException("Set tag error");
@@ -342,27 +388,27 @@ public class DerInputStream {
      * this same helper routine.
      */
     protected android.sun.security.util.DerValue[] readVector(int startLen) throws IOException {
-        DerInputStream  newstr;
+        DerInputStream newstr;
 
-        byte lenByte = (byte)buffer.read();
+        byte lenByte = (byte) buffer.read();
         int len = getLength((lenByte & 0xff), buffer);
 
         if (len == -1) {
-           // indefinite length encoding found
-           int readLen = buffer.available();
-           int offset = 2;     // for tag and length bytes
-           byte[] indefData = new byte[readLen + offset];
-           indefData[0] = tag;
-           indefData[1] = lenByte;
-           DataInputStream dis = new DataInputStream(buffer);
-           dis.readFully(indefData, offset, readLen);
-           dis.close();
-           android.sun.security.util.DerIndefLenConverter derIn = new android.sun.security.util.DerIndefLenConverter();
-           buffer = new android.sun.security.util.DerInputBuffer(derIn.convert(indefData));
-           if (tag != buffer.read())
+            // indefinite length encoding found
+            int readLen = buffer.available();
+            int offset = 2;     // for tag and length bytes
+            byte[] indefData = new byte[readLen + offset];
+            indefData[0] = tag;
+            indefData[1] = lenByte;
+            DataInputStream dis = new DataInputStream(buffer);
+            dis.readFully(indefData, offset, readLen);
+            dis.close();
+            android.sun.security.util.DerIndefLenConverter derIn = new android.sun.security.util.DerIndefLenConverter();
+            buffer = new android.sun.security.util.DerInputBuffer(derIn.convert(indefData));
+            if (tag != buffer.read())
                 throw new IOException("Indefinite length encoding" +
                         " not supported");
-           len = DerInputStream.getLength(buffer);
+            len = DerInputStream.getLength(buffer);
         }
 
         if (len == 0)
@@ -396,8 +442,8 @@ public class DerInputStream {
         /*
          * Now stick them into the array we're returning.
          */
-        int             i, max = vec.size();
-        android.sun.security.util.DerValue[]      retval = new android.sun.security.util.DerValue[max];
+        int i, max = vec.size();
+        android.sun.security.util.DerValue[] retval = new android.sun.security.util.DerValue[max];
 
         for (i = 0; i < max; i++)
             retval[i] = vec.elementAt(i);
@@ -428,7 +474,7 @@ public class DerInputStream {
      */
     public String getPrintableString() throws IOException {
         return readString(android.sun.security.util.DerValue.tag_PrintableString, "Printable",
-                          "ASCII");
+                "ASCII");
     }
 
     /**
@@ -453,7 +499,7 @@ public class DerInputStream {
      */
     public String getBMPString() throws IOException {
         return readString(android.sun.security.util.DerValue.tag_BMPString, "BMP",
-                          "UnicodeBigUnmarked");
+                "UnicodeBigUnmarked");
     }
 
     /**
@@ -461,29 +507,30 @@ public class DerInputStream {
      */
     public String getGeneralString() throws IOException {
         return readString(android.sun.security.util.DerValue.tag_GeneralString, "General",
-                          "ASCII");
+                "ASCII");
     }
 
     /**
      * Private helper routine to read an encoded string from the input
      * stream.
-     * @param stringTag the tag for the type of string to read
+     *
+     * @param stringTag  the tag for the type of string to read
      * @param stringName a name to display in error messages
-     * @param enc the encoder to use to interpret the data. Should
-     * correspond to the stringTag above.
+     * @param enc        the encoder to use to interpret the data. Should
+     *                   correspond to the stringTag above.
      */
     private String readString(byte stringTag, String stringName,
                               String enc) throws IOException {
 
         if (buffer.read() != stringTag)
             throw new IOException("DER input not a " +
-                                  stringName + " string");
+                    stringName + " string");
 
         int length = getLength(buffer);
         byte[] retval = new byte[length];
         if ((length != 0) && (buffer.read(retval) != length))
             throw new IOException("short read of DER " +
-                                  stringName + " string");
+                    stringName + " string");
 
         return new String(retval, enc);
     }
@@ -523,57 +570,13 @@ public class DerInputStream {
         return getLength(buffer);
     }
 
-    /*
-     * Get a length from the input stream, allowing for at most 32 bits of
-     * encoding to be used.  (Not the same as getting a tagged integer!)
-     *
-     * @return the length or -1 if indefinite length found.
-     * @exception IOException on parsing error or unsupported lengths.
-     */
-    static int getLength(InputStream in) throws IOException {
-        return getLength(in.read(), in);
-    }
-
-    /*
-     * Get a length from the input stream, allowing for at most 32 bits of
-     * encoding to be used.  (Not the same as getting a tagged integer!)
-     *
-     * @return the length or -1 if indefinite length found.
-     * @exception IOException on parsing error or unsupported lengths.
-     */
-    static int getLength(int lenByte, InputStream in) throws IOException {
-        int value, tmp;
-
-        tmp = lenByte;
-        if ((tmp & 0x080) == 0x00) { // short form, 1 byte datum
-            value = tmp;
-        } else {                     // long form or indefinite
-            tmp &= 0x07f;
-
-            /*
-             * NOTE:  tmp == 0 indicates indefinite length encoded data.
-             * tmp > 4 indicates more than 4Gb of data.
-             */
-            if (tmp == 0)
-                return -1;
-            if (tmp < 0 || tmp > 4)
-                throw new IOException("DerInputStream.getLength(): lengthTag="
-                    + tmp + ", "
-                    + ((tmp < 0) ? "incorrect DER encoding." : "too big."));
-
-            for (value = 0; tmp > 0; tmp --) {
-                value <<= 8;
-                value += 0x0ff & in.read();
-            }
-        }
-        return value;
-    }
-
     /**
      * Mark the current position in the buffer, so that
      * a later call to <code>reset</code> will return here.
      */
-    public void mark(int value) { buffer.mark(value); }
+    public void mark(int value) {
+        buffer.mark(value);
+    }
 
 
     /**
@@ -581,7 +584,9 @@ public class DerInputStream {
      * call.  A mark is implicitly set at the beginning of
      * the stream when it is created.
      */
-    public void reset() { buffer.reset(); }
+    public void reset() {
+        buffer.reset();
+    }
 
 
     /**
@@ -589,5 +594,7 @@ public class DerInputStream {
      * This is most useful for testing whether the stream is
      * empty.
      */
-    public int available() { return buffer.available(); }
+    public int available() {
+        return buffer.available();
+    }
 }

@@ -79,13 +79,16 @@ public class SignApk {
     private static final String OTACERT_NAME = "META-INF/com/android/otacert";
 
     private static final int LINE_LENGTH_LIMIT = 72;
-    private static final byte[] LINE_SEPARATOR = new byte[] { 13, 10 };
-    private static final byte[] VALUE_SEPARATOR = new byte[] { 58, 32 };
+    private static final byte[] LINE_SEPARATOR = new byte[]{13, 10};
+    private static final byte[] VALUE_SEPARATOR = new byte[]{58, 32};
     private static final Attributes.Name NAME_ATTRIBUTE = new Attributes.Name(
             "Name");
-
+    static String noCompressExt[] = {".jpg", ".jpeg", ".png", ".gif", ".wav",
+            ".mp2", ".mp3", ".ogg", ".aac", ".mpg", ".mpeg", ".mid", ".midi",
+            ".smf", ".jet", ".rtttl", ".imy", ".xmf", ".mp4", ".m4a", ".m4v",
+            ".3gp", ".3gpp", ".3g2", ".3gpp2", ".amr", ".awb", ".wma", ".wmv"};
+    static String noCompressExt2[] = {"res/xml"};
     private static int ALIGNMENT = 4;
-
     // Files matching this pattern are not copied to the output.
     private static Pattern stripPattern = Pattern
             .compile("^META-INF/(.*)[.](SF|RSA|DSA)$");
@@ -114,9 +117,8 @@ public class SignApk {
 
     /**
      * Reads the password from stdin and returns it as a string.
-     * 
-     * @param keyFile
-     *            The file containing the private key. Used to prompt the user.
+     *
+     * @param keyFile The file containing the private key. Used to prompt the user.
      */
     private static String readPassword(InputStream keyInput) {
         // TODO: use Console.readPassword() when it's available.
@@ -134,17 +136,15 @@ public class SignApk {
 
     /**
      * Decrypt an encrypted PKCS 8 format private key.
-     * 
+     * <p>
      * Based on ghstark's post on Aug 6, 2006 at
      * http://forums.sun.com/thread.jspa?threadID=758133&messageID=4330949
-     * 
-     * @param encryptedPrivateKey
-     *            The raw data of the private key
-     * @param keyFile
-     *            The file containing the private key
+     *
+     * @param encryptedPrivateKey The raw data of the private key
+     * @param keyFile             The file containing the private key
      */
     private static KeySpec decryptPrivateKey(byte[] encryptedPrivateKey,
-            InputStream keyInput) throws GeneralSecurityException {
+                                             InputStream keyInput) throws GeneralSecurityException {
         EncryptedPrivateKeyInfo epkInfo;
         try {
             epkInfo = new EncryptedPrivateKeyInfo(encryptedPrivateKey);
@@ -170,7 +170,9 @@ public class SignApk {
         }
     }
 
-    /** Read a PKCS 8 format private key. */
+    /**
+     * Read a PKCS 8 format private key.
+     */
     private static PrivateKey readPrivateKey(InputStream input)
             throws IOException, GeneralSecurityException {
 
@@ -196,10 +198,12 @@ public class SignApk {
         }
     }
 
-    /** Add the SHA1 of every file to the manifest, creating it if necessary. */
+    /**
+     * Add the SHA1 of every file to the manifest, creating it if necessary.
+     */
     private static Manifest addDigestsToManifest(JarFile jar,
-            Map<String, String> repalces, Map<String, String> addedAssetFiles,
-            Set<String> deletedFiles) throws IOException,
+                                                 Map<String, String> repalces, Map<String, String> addedAssetFiles,
+                                                 Set<String> deletedFiles) throws IOException,
             GeneralSecurityException {
         Manifest input = jar.getManifest();
         Manifest output = new Manifest();
@@ -221,7 +225,7 @@ public class SignApk {
 
         TreeMap<String, JarEntry> byName = new TreeMap<String, JarEntry>();
 
-        for (Enumeration<JarEntry> e = jar.entries(); e.hasMoreElements();) {
+        for (Enumeration<JarEntry> e = jar.entries(); e.hasMoreElements(); ) {
             JarEntry entry = e.nextElement();
             byName.put(entry.getName(), entry);
         }
@@ -239,7 +243,7 @@ public class SignApk {
                     && !name.equals(CERT_RSA_NAME)
                     && !name.equals(OTACERT_NAME)
                     && (stripPattern == null || !stripPattern.matcher(name)
-                            .matches())) {
+                    .matches())) {
 
                 // Modified by Pujiang
                 if (repalces.keySet().contains(name)) {
@@ -297,7 +301,7 @@ public class SignApk {
      * to get at.)
      */
     private static void addOtacert(JarOutputStream outputJar,
-            InputStream publicKeyInput, long timestamp, Manifest manifest)
+                                   InputStream publicKeyInput, long timestamp, Manifest manifest)
             throws IOException, GeneralSecurityException {
         MessageDigest md = MessageDigest.getInstance("SHA1");
 
@@ -317,32 +321,9 @@ public class SignApk {
         manifest.getEntries().put(OTACERT_NAME, attr);
     }
 
-    /** Write to another stream and also feed it to the Signature object. */
-    private static class SignatureOutputStream extends FilterOutputStream {
-        private Signature mSignature;
-        private int mCount;
-
-        public SignatureOutputStream(OutputStream out, Signature sig) {
-            super(out);
-            mSignature = sig;
-            mCount = 0;
-        }
-
-        @Override
-        public void write(int b) throws IOException {
-            try {
-                mSignature.update((byte) b);
-            } catch (SignatureException e) {
-                throw new IOException("SignatureException: " + e);
-            }
-            super.write(b);
-            mCount++;
-        }
-    }
-
     private static void writeEntry(OutputStream paramOutputStream,
-            Attributes.Name paramName, String paramString,
-            CharsetEncoder paramCharsetEncoder, ByteBuffer paramByteBuffer)
+                                   Attributes.Name paramName, String paramString,
+                                   CharsetEncoder paramCharsetEncoder, ByteBuffer paramByteBuffer)
             throws IOException {
         String str = paramName.toString();
         //paramOutputStream.write(str.getBytes("US_ASCII"));
@@ -405,9 +386,9 @@ public class SignApk {
             String value = e.getKey();
             // Comment at 20161127
             //if (value != null) {
-                //byte[] vb = value.getBytes("UTF8");
-                //byte[] vb = value.getBytes();
-                //value = new String(vb, 0, 0, vb.length);
+            //byte[] vb = value.getBytes("UTF8");
+            //byte[] vb = value.getBytes();
+            //value = new String(vb, 0, 0, vb.length);
             //}
             buffer.append(value);
             buffer.append("\r\n");
@@ -441,9 +422,11 @@ public class SignApk {
         return;
     }
 
-    /** Write a .SF file with a digest of the specified manifest. */
+    /**
+     * Write a .SF file with a digest of the specified manifest.
+     */
     private static void writeSignatureFile(Manifest manifest,
-            SignatureOutputStream out) throws IOException,
+                                           SignatureOutputStream out) throws IOException,
             GeneralSecurityException {
         Manifest sf = new Manifest();
         Attributes main = sf.getMainAttributes();
@@ -494,7 +477,9 @@ public class SignApk {
         // }
     }
 
-    /** Write a .RSA file with a digital signature. */
+    /**
+     * Write a .RSA file with a digital signature.
+     */
     // private static void writeSignatureBlock(Signature signature,
     // X509Certificate publicKey, OutputStream out) throws IOException,
     // GeneralSecurityException {
@@ -510,9 +495,8 @@ public class SignApk {
     //
     // pkcs7.encodeSignedData(out);
     // }
-
     private static void writeSignatureBlockM(Signature signature,
-            X509Certificate publicKey, OutputStream out)
+                                             X509Certificate publicKey, OutputStream out)
             throws SignatureException, IOException,
             CertificateEncodingException {
         // BigInteger serialNumber = new BigInteger(
@@ -628,8 +612,8 @@ public class SignApk {
     }
 
     private static void signWholeOutputFile(byte[] zipData,
-            OutputStream outputStream, X509Certificate publicKey,
-            PrivateKey privateKey) throws IOException, GeneralSecurityException {
+                                            OutputStream outputStream, X509Certificate publicKey,
+                                            PrivateKey privateKey) throws IOException, GeneralSecurityException {
 
         // For a zip with no archive comment, the
         // end-of-central-directory record will be 22 bytes long, so
@@ -698,18 +682,11 @@ public class SignApk {
         temp.writeTo(outputStream);
     }
 
-    static String noCompressExt[] = { ".jpg", ".jpeg", ".png", ".gif", ".wav",
-            ".mp2", ".mp3", ".ogg", ".aac", ".mpg", ".mpeg", ".mid", ".midi",
-            ".smf", ".jet", ".rtttl", ".imy", ".xmf", ".mp4", ".m4a", ".m4v",
-            ".3gp", ".3gpp", ".3g2", ".3gpp2", ".amr", ".awb", ".wma", ".wmv" };
-
-    static String noCompressExt2[] = { "res/xml"};
-
     static boolean isNoCompressFileType(String entryName) {
 
         for (int i = 0; i < noCompressExt.length; i++) {
             if (entryName.endsWith(noCompressExt[i])) {
-                 Log.d("DEBUG", entryName+ " not compress.");
+                Log.d("DEBUG", entryName + " not compress.");
                 return true;
             }
         }
@@ -723,9 +700,9 @@ public class SignApk {
      */
     // NOTE: this method will modify jarPath2FilePath
     private static void copyFiles(Manifest manifest, JarFile in,
-            JarOutputStream out, CountingOutputStream outCount, long timestamp,
-            Map<String, String> jarPath2FilePath,
-            Map<String, String> addedAssetFiles, Set<String> deletedFiles)
+                                  JarOutputStream out, CountingOutputStream outCount, long timestamp,
+                                  Map<String, String> jarPath2FilePath,
+                                  Map<String, String> addedAssetFiles, Set<String> deletedFiles)
             throws IOException {
         byte[] buffer = new byte[4096];
         int num;
@@ -862,28 +839,19 @@ public class SignApk {
                 9);
     }
 
-    protected void test() {
-        // java.security.KeyStore keyStoreFile = java.security.KeyStore
-        // .getInstance("PKCS12");
-        // keyStoreFile.load(new FileInputStream("keyStore.pfx"),
-        // "password".toCharArray());
-        // PrivateKey privateKey = (PrivateKey) keyStoreFile.getKey(
-        // "alais", "password".toCharArray());
-    }
-
     // The simple version: no asset adding
     public static void signAPK(InputStream publicKeyInput,
-            InputStream privateKeyInput, String inputApkPath,
-            String outputApkPath, Map<String, String> jarPath2FilePath,
-            int level) {
+                               InputStream privateKeyInput, String inputApkPath,
+                               String outputApkPath, Map<String, String> jarPath2FilePath,
+                               int level) {
         signAPK(publicKeyInput, privateKeyInput, inputApkPath, outputApkPath,
                 jarPath2FilePath, null, level);
     }
 
     public static void signAPK(InputStream publicKeyInput,
-            InputStream privateKeyInput, String inputApkPath,
-            String outputApkPath, Map<String, String> jarPath2FilePath,
-            int level, boolean encrypted) {
+                               InputStream privateKeyInput, String inputApkPath,
+                               String outputApkPath, Map<String, String> jarPath2FilePath,
+                               int level, boolean encrypted) {
         // Play tricks
         if (encrypted) {
             InputStream privateInput = new PrivateKeyTransformer(
@@ -894,9 +862,9 @@ public class SignApk {
     }
 
     public static void signAPK(InputStream publicKeyInput,
-            InputStream privateKeyInput, String inputApkPath,
-            String outputApkPath, Map<String, String> jarPath2FilePath,
-            Map<String, String> addedAssetFiles, int level) {
+                               InputStream privateKeyInput, String inputApkPath,
+                               String outputApkPath, Map<String, String> jarPath2FilePath,
+                               Map<String, String> addedAssetFiles, int level) {
 
         JarFile inputJar = null;
         JarOutputStream outputJar = null;
@@ -910,7 +878,7 @@ public class SignApk {
 
             PrivateKey privateKey = readPrivateKey(privateKeyInput);
             inputJar = new JarFile(new File(inputApkPath), false); // Don't
-                                                                   // verify.
+            // verify.
 
             OutputStream outputStream = null;
             outputStream = outputFile = new FileOutputStream(outputApkPath);
@@ -969,10 +937,10 @@ public class SignApk {
     // This function aims to remove the merge process
     // resourceApkPath: the resource need to be merged
     public static void signAPK(InputStream publicKeyInput,
-            InputStream privateKeyInput, String inputApkPath,
-            String outputApkPath, Map<String, String> addedFiles,
-            Set<String> deletedFiles, Map<String, String> replacedFiles,
-            int level) {
+                               InputStream privateKeyInput, String inputApkPath,
+                               String outputApkPath, Map<String, String> addedFiles,
+                               Set<String> deletedFiles, Map<String, String> replacedFiles,
+                               int level) {
 
         JarFile inputJar = null;
         JarOutputStream outputJar = null;
@@ -986,7 +954,7 @@ public class SignApk {
 
             PrivateKey privateKey = readPrivateKey(privateKeyInput);
             inputJar = new JarFile(new File(inputApkPath), false); // Don't
-                                                                   // verify.
+            // verify.
 
             OutputStream outputStream = null;
             outputStream = outputFile = new FileOutputStream(outputApkPath);
@@ -1030,7 +998,7 @@ public class SignApk {
 
         } catch (Exception e) {
             e.printStackTrace();
-       //     Log.d("sawsem", e.toString());
+            //     Log.d("sawsem", e.toString());
         } finally {
             try {
                 if (inputJar != null)
@@ -1039,8 +1007,42 @@ public class SignApk {
                     outputFile.close();
             } catch (IOException e) {
                 e.printStackTrace();
-  //              Log.d("sawsem", e.toString());
+                //              Log.d("sawsem", e.toString());
             }
+        }
+    }
+
+    protected void test() {
+        // java.security.KeyStore keyStoreFile = java.security.KeyStore
+        // .getInstance("PKCS12");
+        // keyStoreFile.load(new FileInputStream("keyStore.pfx"),
+        // "password".toCharArray());
+        // PrivateKey privateKey = (PrivateKey) keyStoreFile.getKey(
+        // "alais", "password".toCharArray());
+    }
+
+    /**
+     * Write to another stream and also feed it to the Signature object.
+     */
+    private static class SignatureOutputStream extends FilterOutputStream {
+        private Signature mSignature;
+        private int mCount;
+
+        public SignatureOutputStream(OutputStream out, Signature sig) {
+            super(out);
+            mSignature = sig;
+            mCount = 0;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            try {
+                mSignature.update((byte) b);
+            } catch (SignatureException e) {
+                throw new IOException("SignatureException: " + e);
+            }
+            super.write(b);
+            mCount++;
         }
     }
 
@@ -1052,7 +1054,9 @@ public class SignApk {
             this.mOut = out;
         }
 
-        /** Returns the number of bytes written. */
+        /**
+         * Returns the number of bytes written.
+         */
         public long getCount() {
             return mCount;
         }

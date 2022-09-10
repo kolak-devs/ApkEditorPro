@@ -58,7 +58,7 @@ import java.util.Enumeration;
  * @author Sean Mullan
  */
 public class InvalidityDateExtension extends Extension
-    implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
 
     /**
      * Attribute name and Reason codes
@@ -67,16 +67,6 @@ public class InvalidityDateExtension extends Extension
     public static final String DATE = "date";
 
     private Date date;
-
-    private void encodeThis() throws IOException {
-        if (date == null) {
-            this.extensionValue = null;
-            return;
-        }
-        android.sun.security.util.DerOutputStream dos = new android.sun.security.util.DerOutputStream();
-        dos.putGeneralizedTime(date);
-        this.extensionValue = dos.toByteArray();
-    }
 
     /**
      * Create a InvalidityDateExtension with the passed in date.
@@ -92,10 +82,10 @@ public class InvalidityDateExtension extends Extension
      * Create a InvalidityDateExtension with the passed in date.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param date the invalidity date
+     * @param date     the invalidity date
      */
     public InvalidityDateExtension(boolean critical, Date date)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.InvalidityDate_Id;
         this.critical = critical;
         this.date = date;
@@ -106,17 +96,38 @@ public class InvalidityDateExtension extends Extension
      * Create the extension from the passed DER encoded value of the same.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
      */
     public InvalidityDateExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.InvalidityDate_Id;
         this.critical = critical.booleanValue();
         this.extensionValue = (byte[]) value;
         android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(this.extensionValue);
         this.date = val.getGeneralizedTime();
+    }
+
+    // ANDROID: java.security.cert.Extension is not available before API 24
+    public static InvalidityDateExtension toImpl(Extension ext)
+            throws IOException {
+        if (ext instanceof InvalidityDateExtension) {
+            return (InvalidityDateExtension) ext;
+        } else {
+            return new InvalidityDateExtension
+                    (Boolean.valueOf(ext.isCritical()), ext.getValue());
+        }
+    }
+
+    private void encodeThis() throws IOException {
+        if (date == null) {
+            this.extensionValue = null;
+            return;
+        }
+        android.sun.security.util.DerOutputStream dos = new android.sun.security.util.DerOutputStream();
+        dos.putGeneralizedTime(date);
+        this.extensionValue = dos.toByteArray();
     }
 
     /**
@@ -130,7 +141,7 @@ public class InvalidityDateExtension extends Extension
             date = (Date) obj;
         } else {
             throw new IOException
-                ("Name not supported by InvalidityDateExtension");
+                    ("Name not supported by InvalidityDateExtension");
         }
         encodeThis();
     }
@@ -147,7 +158,7 @@ public class InvalidityDateExtension extends Extension
             }
         } else {
             throw new IOException
-                ("Name not supported by InvalidityDateExtension");
+                    ("Name not supported by InvalidityDateExtension");
         }
     }
 
@@ -159,7 +170,7 @@ public class InvalidityDateExtension extends Extension
             date = null;
         } else {
             throw new IOException
-                ("Name not supported by InvalidityDateExtension");
+                    ("Name not supported by InvalidityDateExtension");
         }
         encodeThis();
     }
@@ -175,7 +186,7 @@ public class InvalidityDateExtension extends Extension
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to
-     * @exception IOException on encoding errors
+     * @throws IOException on encoding errors
      */
     public void encode(OutputStream out) throws IOException {
         DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
@@ -205,16 +216,5 @@ public class InvalidityDateExtension extends Extension
      */
     public String getName() {
         return NAME;
-    }
-
-    // ANDROID: java.security.cert.Extension is not available before API 24
-    public static InvalidityDateExtension toImpl(Extension ext)
-        throws IOException {
-        if (ext instanceof InvalidityDateExtension) {
-            return (InvalidityDateExtension) ext;
-        } else {
-            return new InvalidityDateExtension
-                (Boolean.valueOf(ext.isCritical()), ext.getValue());
-        }
     }
 }

@@ -5,10 +5,10 @@ import java.util.Map;
 
 public interface IDebugInfo {
 
-	/**
-	 * Map instruction offset to source line number
-	 */
-	Map<Integer, Integer> getSourceLineMapping();
+    /**
+     * Map instruction offset to source line number
+     */
+    Map<Integer, Integer> getSourceLineMapping();
 
-	List<ILocalVar> getLocalVars();
+    List<ILocalVar> getLocalVars();
 }

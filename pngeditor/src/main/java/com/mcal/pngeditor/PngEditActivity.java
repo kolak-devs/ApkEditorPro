@@ -79,6 +79,16 @@ public class PngEditActivity extends AppCompatActivity implements
     private PopupWindow scaleOptionWindow;
     private PopupWindow bgColorWindow;
 
+    ////////////////////////////////////////////////////////////////////////////////
+    // For seek bar
+    public static void setMargins(@NonNull View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(l, t, r, b);
+            v.requestLayout();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(
             int requestCode, String[] permissions, int[] grantResults) {
@@ -463,7 +473,6 @@ public class PngEditActivity extends AppCompatActivity implements
         heightValueTv.setText(String.valueOf(imageBitmap.getHeight()));
     }
 
-
     private void switchToNormalLayout() {
         this.editor = null;
 
@@ -475,16 +484,6 @@ public class PngEditActivity extends AppCompatActivity implements
 
         editButtons.setVisibility(View.INVISIBLE);
         normalButtons.setVisibility(View.VISIBLE);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // For seek bar
-    public static void setMargins(@NonNull View v, int l, int t, int r, int b) {
-        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            p.setMargins(l, t, r, b);
-            v.requestLayout();
-        }
     }
 
     @Override

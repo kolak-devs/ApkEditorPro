@@ -25,20 +25,23 @@
 
 package android.sun.security.ec;
 
+import android.sun.security.x509.AlgorithmId;
+import android.sun.security.x509.X509Key;
+
 import java.io.IOException;
-
-import java.security.*;
-import java.security.interfaces.*;
-import java.security.spec.*;
-
-import android.sun.security.util.*;
-import android.sun.security.x509.*;
+import java.security.AlgorithmParameters;
+import java.security.InvalidKeyException;
+import java.security.KeyRep;
+import java.security.interfaces.ECPublicKey;
+import java.security.spec.ECParameterSpec;
+import java.security.spec.ECPoint;
+import java.security.spec.InvalidParameterSpecException;
 
 /**
  * Key implementation for EC public keys.
  *
- * @since   1.6
- * @author  Andreas Sterbenz
+ * @author Andreas Sterbenz
+ * @since 1.6
  */
 public final class ECPublicKeyImpl extends X509Key implements ECPublicKey {
 
@@ -57,7 +60,7 @@ public final class ECPublicKeyImpl extends X509Key implements ECPublicKey {
         this.params = params;
         // generate the encoding
         algid = new AlgorithmId
-            (AlgorithmId.EC_oid, ECParameters.getAlgorithmParameters(params));
+                (AlgorithmId.EC_oid, ECParameters.getAlgorithmParameters(params));
         key = ECParameters.encodePoint(w, params.getCurve());
     }
 
@@ -107,15 +110,15 @@ public final class ECPublicKeyImpl extends X509Key implements ECPublicKey {
     // return a string representation of this key for debugging
     public String toString() {
         return "Sun EC public key, " + params.getCurve().getField().getFieldSize()
-            + " bits\n  public x coord: " + w.getAffineX()
-            + "\n  public y coord: " + w.getAffineY()
-            + "\n  parameters: " + params;
+                + " bits\n  public x coord: " + w.getAffineX()
+                + "\n  public y coord: " + w.getAffineY()
+                + "\n  parameters: " + params;
     }
 
     protected Object writeReplace() throws java.io.ObjectStreamException {
         return new KeyRep(KeyRep.Type.PUBLIC,
-                        getAlgorithm(),
-                        getFormat(),
-                        getEncoded());
+                getAlgorithm(),
+                getFormat(),
+                getEncoded());
     }
 }

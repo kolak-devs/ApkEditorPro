@@ -23,10 +23,12 @@ public class DynamicExpandListView extends ListView implements OnScrollListener 
 
         this.setOnScrollListener(this);
     }
+
     public DynamicExpandListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setOnScrollListener(this);
     }
+
     public DynamicExpandListView(Context context, AttributeSet attrs,
                                  int defStyle) {
         super(context, attrs, defStyle);

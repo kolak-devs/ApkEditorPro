@@ -11,24 +11,24 @@ import jadx.api.plugins.options.impl.JadxOptionDescription;
 
 public class DexInputOptions extends BaseOptionsParser {
 
-	private static final String VERIFY_CHECKSUM_OPT = DexInputPlugin.PLUGIN_ID + ".verify-checksum";
+    private static final String VERIFY_CHECKSUM_OPT = DexInputPlugin.PLUGIN_ID + ".verify-checksum";
 
-	private boolean verifyChecksum = true;
+    private boolean verifyChecksum = true;
 
-	public void apply(Map<String, String> options) {
-		verifyChecksum = getBooleanOption(options, VERIFY_CHECKSUM_OPT, true);
-	}
+    public void apply(Map<String, String> options) {
+        verifyChecksum = getBooleanOption(options, VERIFY_CHECKSUM_OPT, true);
+    }
 
-	public List<OptionDescription> buildOptionsDescriptions() {
-		return Collections.singletonList(
-				new JadxOptionDescription(
-						VERIFY_CHECKSUM_OPT,
-						"verify dex file checksum before load",
-						"yes",
-						Arrays.asList("yes", "no")));
-	}
+    public List<OptionDescription> buildOptionsDescriptions() {
+        return Collections.singletonList(
+                new JadxOptionDescription(
+                        VERIFY_CHECKSUM_OPT,
+                        "verify dex file checksum before load",
+                        "yes",
+                        Arrays.asList("yes", "no")));
+    }
 
-	public boolean isVerifyChecksum() {
-		return verifyChecksum;
-	}
+    public boolean isVerifyChecksum() {
+        return verifyChecksum;
+    }
 }

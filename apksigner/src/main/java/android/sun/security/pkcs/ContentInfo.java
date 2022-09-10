@@ -25,9 +25,12 @@
 
 package android.sun.security.pkcs;
 
-import java.io.*;
+import android.sun.security.util.DerInputStream;
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.util.ObjectIdentifier;
 
-import android.sun.security.util.*;
+import java.io.IOException;
 
 /**
  * A ContentInfo type, as defined in PKCS#7.
@@ -37,17 +40,6 @@ import android.sun.security.util.*;
 
 public class ContentInfo {
 
-    // pkcs7 pre-defined content types
-    private static int[]  pkcs7 = {1, 2, 840, 113549, 1, 7};
-    private static int[]   data = {1, 2, 840, 113549, 1, 7, 1};
-    private static int[]  sdata = {1, 2, 840, 113549, 1, 7, 2};
-    private static int[]  edata = {1, 2, 840, 113549, 1, 7, 3};
-    private static int[] sedata = {1, 2, 840, 113549, 1, 7, 4};
-    private static int[]  ddata = {1, 2, 840, 113549, 1, 7, 5};
-    private static int[] crdata = {1, 2, 840, 113549, 1, 7, 6};
-    private static int[] nsdata = {2, 16, 840, 1, 113730, 2, 5};
-    // timestamp token (id-ct-TSTInfo) from RFC 3161
-    private static int[] tstInfo = {1, 2, 840, 113549, 1, 9, 16, 1, 4};
     // this is for backwards-compatibility with JDK 1.1.x
     private static final int[] OLD_SDATA = {1, 2, 840, 1113549, 1, 7, 2};
     private static final int[] OLD_DATA = {1, 2, 840, 1113549, 1, 7, 1};
@@ -62,9 +54,20 @@ public class ContentInfo {
     public static ObjectIdentifier OLD_DATA_OID;
     public static ObjectIdentifier NETSCAPE_CERT_SEQUENCE_OID;
     public static ObjectIdentifier TIMESTAMP_TOKEN_INFO_OID;
+    // pkcs7 pre-defined content types
+    private static int[] pkcs7 = {1, 2, 840, 113549, 1, 7};
+    private static int[] data = {1, 2, 840, 113549, 1, 7, 1};
+    private static int[] sdata = {1, 2, 840, 113549, 1, 7, 2};
+    private static int[] edata = {1, 2, 840, 113549, 1, 7, 3};
+    private static int[] sedata = {1, 2, 840, 113549, 1, 7, 4};
+    private static int[] ddata = {1, 2, 840, 113549, 1, 7, 5};
+    private static int[] crdata = {1, 2, 840, 113549, 1, 7, 6};
+    private static int[] nsdata = {2, 16, 840, 1, 113730, 2, 5};
+    // timestamp token (id-ct-TSTInfo) from RFC 3161
+    private static int[] tstInfo = {1, 2, 840, 113549, 1, 9, 16, 1, 4};
 
     static {
-        PKCS7_OID =  ObjectIdentifier.newInternal(pkcs7);
+        PKCS7_OID = ObjectIdentifier.newInternal(pkcs7);
         DATA_OID = ObjectIdentifier.newInternal(data);
         SIGNED_DATA_OID = ObjectIdentifier.newInternal(sdata);
         ENVELOPED_DATA_OID = ObjectIdentifier.newInternal(edata);
@@ -104,8 +107,7 @@ public class ContentInfo {
      * Parses a PKCS#7 content info.
      */
     public ContentInfo(DerInputStream derin)
-        throws IOException, ParsingException
-    {
+            throws IOException, ParsingException {
         this(derin, false);
     }
 
@@ -115,13 +117,12 @@ public class ContentInfo {
      * <p>This constructor is used only for backwards compatibility with
      * PKCS#7 blocks that were generated using JDK1.1.x.
      *
-     * @param derin the ASN.1 encoding of the content info.
+     * @param derin    the ASN.1 encoding of the content info.
      * @param oldStyle flag indicating whether or not the given content info
-     * is encoded according to JDK1.1.x.
+     *                 is encoded according to JDK1.1.x.
      */
     public ContentInfo(DerInputStream derin, boolean oldStyle)
-        throws IOException, ParsingException
-    {
+            throws IOException, ParsingException {
         DerInputStream disType;
         DerInputStream disTaggedContent;
         DerValue type;
@@ -147,7 +148,7 @@ public class ContentInfo {
             if (typeAndContent.length > 1) { // content is OPTIONAL
                 taggedContent = typeAndContent[1];
                 disTaggedContent
-                    = new DerInputStream(taggedContent.toByteArray());
+                        = new DerInputStream(taggedContent.toByteArray());
                 contents = disTaggedContent.getSet(1, true);
                 content = contents[0];
             }
@@ -164,8 +165,8 @@ public class ContentInfo {
 
     public byte[] getData() throws IOException {
         if (contentType.equals(DATA_OID) ||
-            contentType.equals(OLD_DATA_OID) ||
-            contentType.equals(TIMESTAMP_TOKEN_INFO_OID)) {
+                contentType.equals(OLD_DATA_OID) ||
+                contentType.equals(TIMESTAMP_TOKEN_INFO_OID)) {
             if (content == null)
                 return null;
             else
@@ -188,8 +189,8 @@ public class ContentInfo {
             content.encode(contentDerCode);
 
             // Add the [0] EXPLICIT tag in front of the content encoding
-            taggedContent = new DerValue((byte)0xA0,
-                                         contentDerCode.toByteArray());
+            taggedContent = new DerValue((byte) 0xA0,
+                    contentDerCode.toByteArray());
             seq.putDerValue(taggedContent);
         }
 

@@ -2,74 +2,74 @@ package jadx.core.dex.instructions;
 
 public enum InsnType {
 
-	CONST,
-	CONST_STR,
-	CONST_CLASS,
+    CONST,
+    CONST_STR,
+    CONST_CLASS,
 
-	ARITH,
-	NEG,
-	NOT,
+    ARITH,
+    NEG,
+    NOT,
 
-	MOVE,
-	MOVE_MULTI,
-	CAST,
+    MOVE,
+    MOVE_MULTI,
+    CAST,
 
-	RETURN,
-	GOTO,
+    RETURN,
+    GOTO,
 
-	THROW,
-	MOVE_EXCEPTION,
+    THROW,
+    MOVE_EXCEPTION,
 
-	CMP_L,
-	CMP_G,
-	IF,
-	SWITCH,
-	SWITCH_DATA,
+    CMP_L,
+    CMP_G,
+    IF,
+    SWITCH,
+    SWITCH_DATA,
 
-	MONITOR_ENTER,
-	MONITOR_EXIT,
+    MONITOR_ENTER,
+    MONITOR_EXIT,
 
-	CHECK_CAST,
-	INSTANCE_OF,
+    CHECK_CAST,
+    INSTANCE_OF,
 
-	ARRAY_LENGTH,
-	FILL_ARRAY,
-	FILL_ARRAY_DATA,
-	FILLED_NEW_ARRAY,
+    ARRAY_LENGTH,
+    FILL_ARRAY,
+    FILL_ARRAY_DATA,
+    FILLED_NEW_ARRAY,
 
-	AGET,
-	APUT,
+    AGET,
+    APUT,
 
-	NEW_ARRAY,
-	NEW_INSTANCE,
+    NEW_ARRAY,
+    NEW_INSTANCE,
 
-	IGET,
-	IPUT,
+    IGET,
+    IPUT,
 
-	SGET,
-	SPUT,
+    SGET,
+    SPUT,
 
-	INVOKE,
-	MOVE_RESULT,
+    INVOKE,
+    MOVE_RESULT,
 
-	// *** Additional instructions ***
+    // *** Additional instructions ***
 
-	// replacement for removed instructions
-	NOP,
+    // replacement for removed instructions
+    NOP,
 
-	TERNARY,
-	CONSTRUCTOR,
+    TERNARY,
+    CONSTRUCTOR,
 
-	BREAK,
-	CONTINUE,
+    BREAK,
+    CONTINUE,
 
-	// strings concatenation
-	STR_CONCAT,
+    // strings concatenation
+    STR_CONCAT,
 
-	// just generate one argument
-	ONE_ARG,
-	PHI,
+    // just generate one argument
+    ONE_ARG,
+    PHI,
 
-	// fake insn to keep arguments which will be used in regions codegen
-	REGION_ARG
+    // fake insn to keep arguments which will be used in regions codegen
+    REGION_ARG
 }

@@ -9,7 +9,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import com.mcal.apkeditor.R
 import com.mcal.common.activities.CustomizedLangActivity
-import ru.svolf.melissa.swipeback.SwipeBackActivity
 
 class EditorHelpActivity : CustomizedLangActivity() {
     @SuppressLint("SetJavaScriptEnabled")

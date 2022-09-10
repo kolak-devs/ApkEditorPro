@@ -1,17 +1,20 @@
 package com.balsikandar.crashreporter.utils;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.balsikandar.crashreporter.utils.Constants.CHANNEL_NOTIFICATION_ID;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.balsikandar.crashreporter.CrashReporter;
 import com.balsikandar.crashreporter.R;
@@ -25,9 +28,6 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.balsikandar.crashreporter.utils.Constants.CHANNEL_NOTIFICATION_ID;
 
 public class CrashUtil {
 

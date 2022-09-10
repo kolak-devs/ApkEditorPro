@@ -65,7 +65,7 @@ public class GetPropertyAction
      * Constructor that takes the name of the system property and the default
      * value of that property.
      *
-     * @param theProp the name of the system property.
+     * @param theProp    the name of the system property.
      * @param defaultVal the default value.
      */
     public GetPropertyAction(String theProp, String defaultVal) {
@@ -78,7 +78,7 @@ public class GetPropertyAction
      * name was specified in the constructor.
      *
      * @return the string value of the system property,
-     *         or the default value if there is no property with that key.
+     * or the default value if there is no property with that key.
      */
     public String run() {
         String value = System.getProperty(theProp);

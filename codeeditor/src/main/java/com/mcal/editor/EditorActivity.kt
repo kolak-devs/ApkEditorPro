@@ -1,4 +1,4 @@
-package com.mcal.neweditor.editor2
+package com.mcal.editor
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -20,11 +20,10 @@ import com.mcal.common.utilsOld.FileCopyUtils
 import com.mcal.common.utilsOld.SDCard
 import com.mcal.common.view.ProgressDialog
 import com.mcal.neweditor.R
-import com.mcal.neweditor.TextEditor
 import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
-import com.mcal.neweditor.editor2.smali.SmaliMethodsDialogs
-import com.mcal.neweditor.editor2.utils.FileUtils
-import com.mcal.neweditor.editor2.utils.JavaExtractor
+import com.mcal.editor.smali.SmaliMethodsDialogs
+import com.mcal.editor.utils.FileUtils
+import com.mcal.editor.utils.JavaExtractor
 import io.github.rosemoe.sora.event.*
 import io.github.rosemoe.sora.lang.EmptyLanguage
 import io.github.rosemoe.sora.lang.diagnostic.DiagnosticRegion

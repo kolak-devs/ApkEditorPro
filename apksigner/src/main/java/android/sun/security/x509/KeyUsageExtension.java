@@ -46,7 +46,7 @@ import java.util.Enumeration;
  * @see android.sun.security.x509.CertAttrSet
  */
 public class KeyUsageExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
 
     /**
      * Identifier for this attribute, to be used with the
@@ -70,35 +70,6 @@ implements CertAttrSet<String> {
     // Private data members
     private boolean[] bitString;
 
-    // Encode this extension value
-    private void encodeThis() throws IOException {
-        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
-        os.putTruncatedUnalignedBitString(new android.sun.security.util.BitArray(this.bitString));
-        this.extensionValue = os.toByteArray();
-    }
-
-    /**
-     * Check if bit is set.
-     *
-     * @param position the position in the bit string to check.
-     */
-    private boolean isSet(int position) {
-        return bitString[position];
-    }
-
-    /**
-     * Set the bit at the specified position.
-     */
-    private void set(int position, boolean val) {
-        // enlarge bitString if necessary
-        if (position >= bitString.length) {
-            boolean[] tmp = new boolean[position+1];
-            System.arraycopy(bitString, 0, tmp, 0, bitString.length);
-            bitString = tmp;
-        }
-        bitString[position] = val;
-    }
-
     /**
      * Create a KeyUsageExtension with the passed bit settings. The criticality
      * is set to true.
@@ -107,7 +78,7 @@ implements CertAttrSet<String> {
      */
     public KeyUsageExtension(byte[] bitString) throws IOException {
         this.bitString =
-            new android.sun.security.util.BitArray(bitString.length*8,bitString).toBooleanArray();
+                new android.sun.security.util.BitArray(bitString.length * 8, bitString).toBooleanArray();
         this.extensionId = android.sun.security.x509.PKIXExtensions.KeyUsage_Id;
         this.critical = true;
         encodeThis();
@@ -144,13 +115,13 @@ implements CertAttrSet<String> {
      * The DER encoded value may be wrapped in an OCTET STRING.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value (possibly
-     * wrapped in an OCTET STRING).
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value (possibly
+     *                 wrapped in an OCTET STRING).
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
      */
     public KeyUsageExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.KeyUsage_Id;
         this.critical = critical.booleanValue();
         /*
@@ -181,6 +152,35 @@ implements CertAttrSet<String> {
         bitString = new boolean[0];
     }
 
+    // Encode this extension value
+    private void encodeThis() throws IOException {
+        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
+        os.putTruncatedUnalignedBitString(new android.sun.security.util.BitArray(this.bitString));
+        this.extensionValue = os.toByteArray();
+    }
+
+    /**
+     * Check if bit is set.
+     *
+     * @param position the position in the bit string to check.
+     */
+    private boolean isSet(int position) {
+        return bitString[position];
+    }
+
+    /**
+     * Set the bit at the specified position.
+     */
+    private void set(int position, boolean val) {
+        // enlarge bitString if necessary
+        if (position >= bitString.length) {
+            boolean[] tmp = new boolean[position + 1];
+            System.arraycopy(bitString, 0, tmp, 0, bitString.length);
+            bitString = tmp;
+        }
+        bitString[position] = val;
+    }
+
     /**
      * Set the attribute value.
      */
@@ -188,28 +188,28 @@ implements CertAttrSet<String> {
         if (!(obj instanceof Boolean)) {
             throw new IOException("Attribute must be of type Boolean.");
         }
-        boolean val = ((Boolean)obj).booleanValue();
+        boolean val = ((Boolean) obj).booleanValue();
         if (name.equalsIgnoreCase(DIGITAL_SIGNATURE)) {
-            set(0,val);
+            set(0, val);
         } else if (name.equalsIgnoreCase(NON_REPUDIATION)) {
-            set(1,val);
+            set(1, val);
         } else if (name.equalsIgnoreCase(KEY_ENCIPHERMENT)) {
-            set(2,val);
+            set(2, val);
         } else if (name.equalsIgnoreCase(DATA_ENCIPHERMENT)) {
-            set(3,val);
+            set(3, val);
         } else if (name.equalsIgnoreCase(KEY_AGREEMENT)) {
-            set(4,val);
+            set(4, val);
         } else if (name.equalsIgnoreCase(KEY_CERTSIGN)) {
-            set(5,val);
+            set(5, val);
         } else if (name.equalsIgnoreCase(CRL_SIGN)) {
-            set(6,val);
+            set(6, val);
         } else if (name.equalsIgnoreCase(ENCIPHER_ONLY)) {
-            set(7,val);
+            set(7, val);
         } else if (name.equalsIgnoreCase(DECIPHER_ONLY)) {
-            set(8,val);
+            set(8, val);
         } else {
-          throw new IOException("Attribute name not recognized by"
-                                + " CertAttrSet:KeyUsage.");
+            throw new IOException("Attribute name not recognized by"
+                    + " CertAttrSet:KeyUsage.");
         }
         encodeThis();
     }
@@ -237,8 +237,8 @@ implements CertAttrSet<String> {
         } else if (name.equalsIgnoreCase(DECIPHER_ONLY)) {
             return Boolean.valueOf(isSet(8));
         } else {
-          throw new IOException("Attribute name not recognized by"
-                                + " CertAttrSet:KeyUsage.");
+            throw new IOException("Attribute name not recognized by"
+                    + " CertAttrSet:KeyUsage.");
         }
     }
 
@@ -247,26 +247,26 @@ implements CertAttrSet<String> {
      */
     public void delete(String name) throws IOException {
         if (name.equalsIgnoreCase(DIGITAL_SIGNATURE)) {
-            set(0,false);
+            set(0, false);
         } else if (name.equalsIgnoreCase(NON_REPUDIATION)) {
-            set(1,false);
+            set(1, false);
         } else if (name.equalsIgnoreCase(KEY_ENCIPHERMENT)) {
-            set(2,false);
+            set(2, false);
         } else if (name.equalsIgnoreCase(DATA_ENCIPHERMENT)) {
-            set(3,false);
+            set(3, false);
         } else if (name.equalsIgnoreCase(KEY_AGREEMENT)) {
-            set(4,false);
+            set(4, false);
         } else if (name.equalsIgnoreCase(KEY_CERTSIGN)) {
-            set(5,false);
+            set(5, false);
         } else if (name.equalsIgnoreCase(CRL_SIGN)) {
-            set(6,false);
+            set(6, false);
         } else if (name.equalsIgnoreCase(ENCIPHER_ONLY)) {
-            set(7,false);
+            set(7, false);
         } else if (name.equalsIgnoreCase(DECIPHER_ONLY)) {
-            set(8,false);
+            set(8, false);
         } else {
-          throw new IOException("Attribute name not recognized by"
-                                + " CertAttrSet:KeyUsage.");
+            throw new IOException("Attribute name not recognized by"
+                    + " CertAttrSet:KeyUsage.");
         }
         encodeThis();
     }
@@ -305,7 +305,8 @@ implements CertAttrSet<String> {
             if (isSet(8)) {
                 s += "  Decipher_Only\n";
             }
-        } catch (ArrayIndexOutOfBoundsException ex) {}
+        } catch (ArrayIndexOutOfBoundsException ex) {
+        }
 
         s += "]\n";
 
@@ -316,18 +317,18 @@ implements CertAttrSet<String> {
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
-       DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
+        DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
 
-       if (this.extensionValue == null) {
-           this.extensionId = PKIXExtensions.KeyUsage_Id;
-           this.critical = true;
-           encodeThis();
-       }
-       super.encode(tmp);
-       out.write(tmp.toByteArray());
+        if (this.extensionValue == null) {
+            this.extensionId = PKIXExtensions.KeyUsage_Id;
+            this.critical = true;
+            encodeThis();
+        }
+        super.encode(tmp);
+        out.write(tmp.toByteArray());
     }
 
     /**

@@ -45,13 +45,14 @@ import java.util.Enumeration;
  *     pathLenConstraint INTEGER (0..MAX) OPTIONAL
  * }
  * </pre>
+ *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  * @see android.sun.security.x509.CertAttrSet
  * @see android.sun.security.x509.Extension
  */
 public class BasicConstraintsExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
@@ -65,8 +66,90 @@ implements CertAttrSet<String> {
     public static final String PATH_LEN = "path_len";
 
     // Private data members
-    private boolean     ca = false;
+    private boolean ca = false;
     private int pathLen = -1;
+
+    /**
+     * Default constructor for this object. The extension is marked
+     * critical if the ca flag is true, false otherwise.
+     *
+     * @param ca  true, if the subject of the Certificate is a CA.
+     * @param len specifies the depth of the certification path.
+     */
+    public BasicConstraintsExtension(boolean ca, int len) throws IOException {
+        this(Boolean.valueOf(ca), ca, len);
+    }
+
+    /**
+     * Constructor for this object with specified criticality.
+     *
+     * @param critical true, if the extension should be marked critical
+     * @param ca       true, if the subject of the Certificate is a CA.
+     * @param len      specifies the depth of the certification path.
+     */
+    public BasicConstraintsExtension(Boolean critical, boolean ca, int len)
+            throws IOException {
+        this.ca = ca;
+        this.pathLen = len;
+        this.extensionId = android.sun.security.x509.PKIXExtensions.BasicConstraints_Id;
+        this.critical = critical.booleanValue();
+        encodeThis();
+    }
+
+    /**
+     * Create the extension from the passed DER encoded value of the same.
+     *
+     * @param critical flag indicating if extension is critical or not
+     * @param value    an array containing the DER encoded bytes of the extension.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
+     */
+    public BasicConstraintsExtension(Boolean critical, Object value)
+            throws IOException {
+        this.extensionId = android.sun.security.x509.PKIXExtensions.BasicConstraints_Id;
+        this.critical = critical.booleanValue();
+
+        this.extensionValue = (byte[]) value;
+        android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(this.extensionValue);
+        if (val.tag != android.sun.security.util.DerValue.tag_Sequence) {
+            throw new IOException("Invalid encoding of BasicConstraints");
+        }
+
+        if (val.data == null || val.data.available() == 0) {
+            // non-CA cert ("cA" field is FALSE by default), return -1
+            return;
+        }
+        android.sun.security.util.DerValue opt = val.data.getDerValue();
+        if (opt.tag != android.sun.security.util.DerValue.tag_Boolean) {
+            // non-CA cert ("cA" field is FALSE by default), return -1
+            return;
+        }
+
+        this.ca = opt.getBoolean();
+        if (val.data.available() == 0) {
+            // From PKIX profile:
+            // Where pathLenConstraint does not appear, there is no
+            // limit to the allowed length of the certification path.
+            this.pathLen = Integer.MAX_VALUE;
+            return;
+        }
+
+        opt = val.data.getDerValue();
+        if (opt.tag != android.sun.security.util.DerValue.tag_Integer) {
+            throw new IOException("Invalid encoding of BasicConstraints");
+        }
+        this.pathLen = opt.getInteger();
+        /*
+         * Activate this check once again after PKIX profiling
+         * is a standard and this check no longer imposes an
+         * interoperability barrier.
+         * if (ca) {
+         *   if (!this.critical) {
+         *   throw new IOException("Criticality cannot be false for CA.");
+         *   }
+         * }
+         */
+    }
 
     // Encode this extension value
     private void encodeThis() throws IOException {
@@ -85,123 +168,40 @@ implements CertAttrSet<String> {
     }
 
     /**
-     * Default constructor for this object. The extension is marked
-     * critical if the ca flag is true, false otherwise.
-     *
-     * @param ca true, if the subject of the Certificate is a CA.
-     * @param len specifies the depth of the certification path.
+     * Return user readable form of extension.
      */
-    public BasicConstraintsExtension(boolean ca, int len) throws IOException {
-        this(Boolean.valueOf(ca), ca, len);
+    public String toString() {
+        String s = super.toString() + "BasicConstraints:[\n";
+
+        s += ((ca) ? ("  CA:true") : ("  CA:false")) + "\n";
+        if (pathLen >= 0) {
+            s += "  PathLen:" + pathLen + "\n";
+        } else {
+            s += "  PathLen: undefined\n";
+        }
+        return (s + "]\n");
     }
 
     /**
-     * Constructor for this object with specified criticality.
+     * Encode this extension value to the output stream.
      *
-     * @param critical true, if the extension should be marked critical
-     * @param ca true, if the subject of the Certificate is a CA.
-     * @param len specifies the depth of the certification path.
+     * @param out the DerOutputStream to encode the extension to.
      */
-    public BasicConstraintsExtension(Boolean critical, boolean ca, int len)
-    throws IOException {
-        this.ca = ca;
-        this.pathLen = len;
-        this.extensionId = android.sun.security.x509.PKIXExtensions.BasicConstraints_Id;
-        this.critical = critical.booleanValue();
-        encodeThis();
+    public void encode(OutputStream out) throws IOException {
+        android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
+        if (extensionValue == null) {
+            this.extensionId = PKIXExtensions.BasicConstraints_Id;
+            if (ca) {
+                critical = true;
+            } else {
+                critical = false;
+            }
+            encodeThis();
+        }
+        super.encode(tmp);
+
+        out.write(tmp.toByteArray());
     }
-
-    /**
-     * Create the extension from the passed DER encoded value of the same.
-     *
-     * @param critical flag indicating if extension is critical or not
-     * @param value an array containing the DER encoded bytes of the extension.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
-     */
-     public BasicConstraintsExtension(Boolean critical, Object value)
-         throws IOException
-    {
-         this.extensionId = android.sun.security.x509.PKIXExtensions.BasicConstraints_Id;
-         this.critical = critical.booleanValue();
-
-         this.extensionValue = (byte[]) value;
-         android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(this.extensionValue);
-         if (val.tag != android.sun.security.util.DerValue.tag_Sequence) {
-             throw new IOException("Invalid encoding of BasicConstraints");
-         }
-
-         if (val.data == null || val.data.available() == 0) {
-             // non-CA cert ("cA" field is FALSE by default), return -1
-             return;
-         }
-         android.sun.security.util.DerValue opt = val.data.getDerValue();
-         if (opt.tag != android.sun.security.util.DerValue.tag_Boolean) {
-             // non-CA cert ("cA" field is FALSE by default), return -1
-             return;
-         }
-
-         this.ca = opt.getBoolean();
-         if (val.data.available() == 0) {
-             // From PKIX profile:
-             // Where pathLenConstraint does not appear, there is no
-             // limit to the allowed length of the certification path.
-             this.pathLen = Integer.MAX_VALUE;
-             return;
-         }
-
-         opt = val.data.getDerValue();
-         if (opt.tag != android.sun.security.util.DerValue.tag_Integer) {
-             throw new IOException("Invalid encoding of BasicConstraints");
-         }
-         this.pathLen = opt.getInteger();
-         /*
-          * Activate this check once again after PKIX profiling
-          * is a standard and this check no longer imposes an
-          * interoperability barrier.
-          * if (ca) {
-          *   if (!this.critical) {
-          *   throw new IOException("Criticality cannot be false for CA.");
-          *   }
-          * }
-          */
-     }
-
-     /**
-      * Return user readable form of extension.
-      */
-     public String toString() {
-         String s = super.toString() + "BasicConstraints:[\n";
-
-         s += ((ca) ? ("  CA:true") : ("  CA:false")) + "\n";
-         if (pathLen >= 0) {
-             s += "  PathLen:" + pathLen + "\n";
-         } else {
-             s += "  PathLen: undefined\n";
-         }
-         return (s + "]\n");
-     }
-
-     /**
-      * Encode this extension value to the output stream.
-      *
-      * @param out the DerOutputStream to encode the extension to.
-      */
-     public void encode(OutputStream out) throws IOException {
-         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
-         if (extensionValue == null) {
-             this.extensionId = PKIXExtensions.BasicConstraints_Id;
-             if (ca) {
-                 critical = true;
-             } else {
-                 critical = false;
-             }
-             encodeThis();
-         }
-         super.encode(tmp);
-
-         out.write(tmp.toByteArray());
-     }
 
     /**
      * Set the attribute value.
@@ -209,17 +209,17 @@ implements CertAttrSet<String> {
     public void set(String name, Object obj) throws IOException {
         if (name.equalsIgnoreCase(IS_CA)) {
             if (!(obj instanceof Boolean)) {
-              throw new IOException("Attribute value should be of type Boolean.");
+                throw new IOException("Attribute value should be of type Boolean.");
             }
-            ca = ((Boolean)obj).booleanValue();
+            ca = ((Boolean) obj).booleanValue();
         } else if (name.equalsIgnoreCase(PATH_LEN)) {
             if (!(obj instanceof Integer)) {
-              throw new IOException("Attribute value should be of type Integer.");
+                throw new IOException("Attribute value should be of type Integer.");
             }
-            pathLen = ((Integer)obj).intValue();
+            pathLen = ((Integer) obj).intValue();
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                                "CertAttrSet:BasicConstraints.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:BasicConstraints.");
         }
         encodeThis();
     }
@@ -233,8 +233,8 @@ implements CertAttrSet<String> {
         } else if (name.equalsIgnoreCase(PATH_LEN)) {
             return (Integer.valueOf(pathLen));
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                                "CertAttrSet:BasicConstraints.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:BasicConstraints.");
         }
     }
 
@@ -247,8 +247,8 @@ implements CertAttrSet<String> {
         } else if (name.equalsIgnoreCase(PATH_LEN)) {
             pathLen = -1;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                                "CertAttrSet:BasicConstraints.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:BasicConstraints.");
         }
         encodeThis();
     }

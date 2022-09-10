@@ -2,14 +2,14 @@ package com.mcal.apkeditor.dialogs
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.google.android.material.textfield.TextInputLayout
-import com.google.android.material.textfield.TextInputEditText
+import android.content.DialogInterface
 import android.view.LayoutInflater
-import com.mcal.apkeditor.R
 import android.widget.ImageButton
 import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import android.content.DialogInterface
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import com.mcal.apkeditor.R
 import com.mcal.apkeditor.StringListAdapter
 import com.mcal.common.utils.ClipboardUtils
 

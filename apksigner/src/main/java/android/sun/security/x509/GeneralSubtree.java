@@ -27,7 +27,7 @@ package android.sun.security.x509;
 
 import android.sun.security.util.DerOutputStream;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * Represent the GeneralSubtree ASN.1 object, whose syntax is:
@@ -39,17 +39,18 @@ import java.io.*;
  * }
  * BaseDistance ::= INTEGER (0..MAX)
  * </pre>
+ *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  */
 public class GeneralSubtree {
     private static final byte TAG_MIN = 0;
     private static final byte TAG_MAX = 1;
-    private static final int  MIN_DEFAULT = 0;
+    private static final int MIN_DEFAULT = 0;
 
     private android.sun.security.x509.GeneralName name;
-    private int         minimum = MIN_DEFAULT;
-    private int         maximum = -1;
+    private int minimum = MIN_DEFAULT;
+    private int maximum = -1;
 
     private int myhash = -1;
 
@@ -128,13 +129,13 @@ public class GeneralSubtree {
      */
     public String toString() {
         String s = "\n   GeneralSubtree: [\n" +
-            "    GeneralName: " + ((name == null) ? "" : name.toString()) +
-            "\n    Minimum: " + minimum;
-            if (maximum == -1) {
-                s += "\t    Maximum: undefined";
-            } else
-                s += "\t    Maximum: " + maximum;
-            s += "    ]\n";
+                "    GeneralName: " + ((name == null) ? "" : name.toString()) +
+                "\n    Minimum: " + minimum;
+        if (maximum == -1) {
+            s += "\t    Maximum: undefined";
+        } else
+            s += "\t    Maximum: " + maximum;
+        s += "    ]\n";
         return (s);
     }
 
@@ -147,7 +148,7 @@ public class GeneralSubtree {
     public boolean equals(Object other) {
         if (!(other instanceof GeneralSubtree))
             return false;
-        GeneralSubtree otherGS = (GeneralSubtree)other;
+        GeneralSubtree otherGS = (GeneralSubtree) other;
         if (this.name == null) {
             if (otherGS.name != null) {
                 return false;
@@ -198,13 +199,13 @@ public class GeneralSubtree {
             android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
             tmp.putInteger(minimum);
             seq.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
-                              false, TAG_MIN), tmp);
+                    false, TAG_MIN), tmp);
         }
         if (maximum != -1) {
             android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
             tmp.putInteger(maximum);
             seq.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
-                              false, TAG_MAX), tmp);
+                    false, TAG_MAX), tmp);
         }
         out.write(android.sun.security.util.DerValue.tag_Sequence, seq);
     }

@@ -25,12 +25,12 @@
 
 package android.sun.misc;
 
-import java.io.InputStream;
 import java.io.ByteArrayInputStream;
-import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.ByteBuffer;
 
 
@@ -39,7 +39,7 @@ import java.nio.ByteBuffer;
  * A character encoder is an algorithim for transforming 8 bit binary
  * data into text (generally 7 bit ASCII or 8 bit ISO-Latin-1 text)
  * for transmition over text channels such as e-mail and network news.
- *
+ * <p>
  * The character encoders have been structured around a central theme
  * that, in general, the encoded text has the form:
  *
@@ -48,12 +48,12 @@ import java.nio.ByteBuffer;
  *      [Line Prefix][encoded data atoms][Line Suffix]
  *      [Buffer Suffix]
  * </pre>
- *
+ * <p>
  * In the CharacterEncoder and CharacterDecoder classes, one complete
  * chunk of data is referred to as a <i>buffer</i>. Encoded buffers
  * are all text, and decoded buffers (sometimes just referred to as
  * buffers) are binary octets.
- *
+ * <p>
  * To create a custom encoder, you must, at a minimum,  overide three
  * abstract methods in this class.
  * <DL>
@@ -63,25 +63,31 @@ import java.nio.ByteBuffer;
  * <DD>bytesPerLine which tells the encoder the maximum number of
  * bytes per line.
  * </DL>
- *
+ * <p>
  * Several useful encoders have already been written and are
  * referenced in the See Also list below.
  *
- * @author      Chuck McManis
- * @see         CharacterDecoder;
- * @see         UCEncoder
- * @see         UUEncoder
- * @see         BASE64Encoder
+ * @author Chuck McManis
+ * @see CharacterDecoder;
+ * @see UCEncoder
+ * @see UUEncoder
+ * @see BASE64Encoder
  */
 public abstract class CharacterEncoder {
 
-    /** Stream that understands "printing" */
+    /**
+     * Stream that understands "printing"
+     */
     protected PrintStream pStream;
 
-    /** Return the number of bytes per atom of encoding */
+    /**
+     * Return the number of bytes per atom of encoding
+     */
     abstract protected int bytesPerAtom();
 
-    /** Return the number of bytes that can be encoded per line */
+    /**
+     * Return the number of bytes that can be encoded per line
+     */
     abstract protected int bytesPerLine();
 
     /**
@@ -102,7 +108,7 @@ public abstract class CharacterEncoder {
      * Encode the prefix that starts every output line.
      */
     protected void encodeLinePrefix(OutputStream aStream, int aLength)
-    throws IOException {
+            throws IOException {
     }
 
     /**
@@ -113,21 +119,23 @@ public abstract class CharacterEncoder {
         pStream.println();
     }
 
-    /** Encode one "atom" of information into characters. */
+    /**
+     * Encode one "atom" of information into characters.
+     */
     abstract protected void encodeAtom(OutputStream aStream, byte someBytes[],
-                int anOffset, int aLength) throws IOException;
+                                       int anOffset, int aLength) throws IOException;
 
     /**
      * This method works around the bizarre semantics of BufferedInputStream's
      * read method.
      */
     protected int readFully(InputStream in, byte buffer[])
-        throws java.io.IOException {
+            throws java.io.IOException {
         for (int i = 0; i < buffer.length; i++) {
             int q = in.read();
             if (q == -1)
                 return i;
-            buffer[i] = (byte)q;
+            buffer[i] = (byte) q;
         }
         return buffer.length;
     }
@@ -139,10 +147,10 @@ public abstract class CharacterEncoder {
      * line that is shorter than bytesPerLine().
      */
     public void encode(InputStream inStream, OutputStream outStream)
-        throws IOException {
-        int     j;
-        int     numBytes;
-        byte    tmpbuffer[] = new byte[bytesPerLine()];
+            throws IOException {
+        int j;
+        int numBytes;
+        byte tmpbuffer[] = new byte[bytesPerLine()];
 
         encodeBufferPrefix(outStream);
 
@@ -157,7 +165,7 @@ public abstract class CharacterEncoder {
                 if ((j + bytesPerAtom()) <= numBytes) {
                     encodeAtom(outStream, tmpbuffer, j, bytesPerAtom());
                 } else {
-                    encodeAtom(outStream, tmpbuffer, j, (numBytes)- j);
+                    encodeAtom(outStream, tmpbuffer, j, (numBytes) - j);
                 }
             }
             if (numBytes < bytesPerLine()) {
@@ -174,7 +182,7 @@ public abstract class CharacterEncoder {
      * result to the OutputStream <i>aStream</i>.
      */
     public void encode(byte aBuffer[], OutputStream aStream)
-    throws IOException {
+            throws IOException {
         ByteArrayInputStream inStream = new ByteArrayInputStream(aBuffer);
         encode(inStream, aStream);
     }
@@ -184,8 +192,8 @@ public abstract class CharacterEncoder {
      * bytes and returns a string containing the encoded buffer.
      */
     public String encode(byte aBuffer[]) {
-        ByteArrayOutputStream   outStream = new ByteArrayOutputStream();
-        ByteArrayInputStream    inStream = new ByteArrayInputStream(aBuffer);
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        ByteArrayInputStream inStream = new ByteArrayInputStream(aBuffer);
         String retVal = null;
         try {
             encode(inStream, outStream);
@@ -200,26 +208,26 @@ public abstract class CharacterEncoder {
 
     /**
      * Return a byte array from the remaining bytes in this ByteBuffer.
-     * <P>
+     * <p>
      * The ByteBuffer's position will be advanced to ByteBuffer's limit.
-     * <P>
+     * <p>
      * To avoid an extra copy, the implementation will attempt to return the
      * byte array backing the ByteBuffer.  If this is not possible, a
      * new byte array will be created.
      */
-    private byte [] getBytes(ByteBuffer bb) {
+    private byte[] getBytes(ByteBuffer bb) {
         /*
          * This should never return a BufferOverflowException, as we're
          * careful to allocate just the right amount.
          */
-        byte [] buf = null;
+        byte[] buf = null;
 
         /*
          * If it has a usable backing byte buffer, use it.  Use only
          * if the array exactly represents the current ByteBuffer.
          */
         if (bb.hasArray()) {
-            byte [] tmp = bb.array();
+            byte[] tmp = bb.array();
             if ((tmp.length == bb.capacity()) &&
                     (tmp.length == bb.remaining())) {
                 buf = tmp;
@@ -247,23 +255,23 @@ public abstract class CharacterEncoder {
     /**
      * Encode the <i>aBuffer</i> ByteBuffer and write the encoded
      * result to the OutputStream <i>aStream</i>.
-     * <P>
+     * <p>
      * The ByteBuffer's position will be advanced to ByteBuffer's limit.
      */
     public void encode(ByteBuffer aBuffer, OutputStream aStream)
-        throws IOException {
-        byte [] buf = getBytes(aBuffer);
+            throws IOException {
+        byte[] buf = getBytes(aBuffer);
         encode(buf, aStream);
     }
 
     /**
      * A 'streamless' version of encode that simply takes a ByteBuffer
      * and returns a string containing the encoded buffer.
-     * <P>
+     * <p>
      * The ByteBuffer's position will be advanced to ByteBuffer's limit.
      */
     public String encode(ByteBuffer aBuffer) {
-        byte [] buf = getBytes(aBuffer);
+        byte[] buf = getBytes(aBuffer);
         return encode(buf);
     }
 
@@ -274,10 +282,10 @@ public abstract class CharacterEncoder {
      * line at the end of a final line that is shorter than bytesPerLine().
      */
     public void encodeBuffer(InputStream inStream, OutputStream outStream)
-        throws IOException {
-        int     j;
-        int     numBytes;
-        byte    tmpbuffer[] = new byte[bytesPerLine()];
+            throws IOException {
+        int j;
+        int numBytes;
+        byte tmpbuffer[] = new byte[bytesPerLine()];
 
         encodeBufferPrefix(outStream);
 
@@ -291,7 +299,7 @@ public abstract class CharacterEncoder {
                 if ((j + bytesPerAtom()) <= numBytes) {
                     encodeAtom(outStream, tmpbuffer, j, bytesPerAtom());
                 } else {
-                    encodeAtom(outStream, tmpbuffer, j, (numBytes)- j);
+                    encodeAtom(outStream, tmpbuffer, j, (numBytes) - j);
                 }
             }
             encodeLineSuffix(outStream);
@@ -307,7 +315,7 @@ public abstract class CharacterEncoder {
      * result to the OutputStream <i>aStream</i>.
      */
     public void encodeBuffer(byte aBuffer[], OutputStream aStream)
-    throws IOException {
+            throws IOException {
         ByteArrayInputStream inStream = new ByteArrayInputStream(aBuffer);
         encodeBuffer(inStream, aStream);
     }
@@ -317,8 +325,8 @@ public abstract class CharacterEncoder {
      * bytes and returns a string containing the encoded buffer.
      */
     public String encodeBuffer(byte aBuffer[]) {
-        ByteArrayOutputStream   outStream = new ByteArrayOutputStream();
-        ByteArrayInputStream    inStream = new ByteArrayInputStream(aBuffer);
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        ByteArrayInputStream inStream = new ByteArrayInputStream(aBuffer);
         try {
             encodeBuffer(inStream, outStream);
         } catch (Exception IOException) {
@@ -331,23 +339,23 @@ public abstract class CharacterEncoder {
     /**
      * Encode the <i>aBuffer</i> ByteBuffer and write the encoded
      * result to the OutputStream <i>aStream</i>.
-     * <P>
+     * <p>
      * The ByteBuffer's position will be advanced to ByteBuffer's limit.
      */
     public void encodeBuffer(ByteBuffer aBuffer, OutputStream aStream)
-        throws IOException {
-        byte [] buf = getBytes(aBuffer);
+            throws IOException {
+        byte[] buf = getBytes(aBuffer);
         encodeBuffer(buf, aStream);
     }
 
     /**
      * A 'streamless' version of encode that simply takes a ByteBuffer
      * and returns a string containing the encoded buffer.
-     * <P>
+     * <p>
      * The ByteBuffer's position will be advanced to ByteBuffer's limit.
      */
     public String encodeBuffer(ByteBuffer aBuffer) {
-        byte [] buf = getBytes(aBuffer);
+        byte[] buf = getBytes(aBuffer);
         return encodeBuffer(buf);
     }
 

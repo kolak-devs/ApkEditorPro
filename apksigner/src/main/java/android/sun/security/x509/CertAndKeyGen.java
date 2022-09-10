@@ -25,14 +25,23 @@
 
 package android.sun.security.x509;
 
-import java.io.IOException;
-import java.security.cert.X509Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateEncodingException;
-import java.security.*;
-import java.util.Date;
-
 import android.sun.security.pkcs.PKCS10;
+
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Date;
 
 
 /**
@@ -60,36 +69,44 @@ import android.sun.security.pkcs.PKCS10;
  * @see android.sun.security.x509.X509CertImpl
  */
 public final class CertAndKeyGen {
+    private SecureRandom prng;
+    private String sigAlg;
+    private KeyPairGenerator keyGen;
+
+    // want "public void generate (X509Certificate)" ... inherit DSA/D-H param
+    private PublicKey publicKey;
+    private PrivateKey privateKey;
+
+
     /**
      * Creates a CertAndKeyGen object for a particular key type
      * and signature algorithm.
      *
      * @param keyType type of key, e.g. "RSA", "DSA"
-     * @param sigAlg name of the signature algorithm, e.g. "MD5WithRSA",
-     *          "MD2WithRSA", "SHAwithDSA".
-     * @exception NoSuchAlgorithmException on unrecognized algorithms.
+     * @param sigAlg  name of the signature algorithm, e.g. "MD5WithRSA",
+     *                "MD2WithRSA", "SHAwithDSA".
+     * @throws NoSuchAlgorithmException on unrecognized algorithms.
      */
-    public CertAndKeyGen (String keyType, String sigAlg)
-    throws NoSuchAlgorithmException
-    {
+    public CertAndKeyGen(String keyType, String sigAlg)
+            throws NoSuchAlgorithmException {
         keyGen = KeyPairGenerator.getInstance(keyType);
         this.sigAlg = sigAlg;
     }
+
 
     /**
      * Creates a CertAndKeyGen object for a particular key type,
      * signature algorithm, and provider.
      *
-     * @param keyType type of key, e.g. "RSA", "DSA"
-     * @param sigAlg name of the signature algorithm, e.g. "MD5WithRSA",
-     *          "MD2WithRSA", "SHAwithDSA".
+     * @param keyType      type of key, e.g. "RSA", "DSA"
+     * @param sigAlg       name of the signature algorithm, e.g. "MD5WithRSA",
+     *                     "MD2WithRSA", "SHAwithDSA".
      * @param providerName name of the provider
-     * @exception NoSuchAlgorithmException on unrecognized algorithms.
-     * @exception NoSuchProviderException on unrecognized providers.
+     * @throws NoSuchAlgorithmException on unrecognized algorithms.
+     * @throws NoSuchProviderException  on unrecognized providers.
      */
-    public CertAndKeyGen (String keyType, String sigAlg, String providerName)
-    throws NoSuchAlgorithmException, NoSuchProviderException
-    {
+    public CertAndKeyGen(String keyType, String sigAlg, String providerName)
+            throws NoSuchAlgorithmException, NoSuchProviderException {
         if (providerName == null) {
             keyGen = KeyPairGenerator.getInstance(keyType);
         } else {
@@ -111,12 +128,9 @@ public final class CertAndKeyGen {
      * because you may be able to take advantage of strong sources
      * of randomness/entropy in your environment.
      */
-    public void         setRandom (SecureRandom generator)
-    {
+    public void setRandom(SecureRandom generator) {
         prng = generator;
     }
-
-    // want "public void generate (X509Certificate)" ... inherit DSA/D-H param
 
     /**
      * Generates a random public/private key pair, with a given key
@@ -132,12 +146,11 @@ public final class CertAndKeyGen {
      * invalid key exception is thrown.
      *
      * @param keyBits the number of bits in the keys.
-     * @exception InvalidKeyException if the environment does not
-     *  provide X.509 public keys for this signature algorithm.
+     * @throws InvalidKeyException if the environment does not
+     *                             provide X.509 public keys for this signature algorithm.
      */
-    public void generate (int keyBits)
-    throws InvalidKeyException
-    {
+    public void generate(int keyBits)
+            throws InvalidKeyException {
         KeyPair pair;
 
         try {
@@ -155,25 +168,22 @@ public final class CertAndKeyGen {
         privateKey = pair.getPrivate();
     }
 
-
     /**
      * Returns the public key of the generated key pair if it is of type
      * <code>X509Key</code>, or null if the public key is of a different type.
-     *
+     * <p>
      * XXX Note: This behaviour is needed for backwards compatibility.
      * What this method really should return is the public key of the
      * generated key pair, regardless of whether or not it is an instance of
      * <code>X509Key</code>. Accordingly, the return type of this method
      * should be <code>PublicKey</code>.
      */
-    public android.sun.security.x509.X509Key getPublicKey()
-    {
+    public android.sun.security.x509.X509Key getPublicKey() {
         if (!(publicKey instanceof android.sun.security.x509.X509Key)) {
             return null;
         }
-        return (X509Key)publicKey;
+        return (X509Key) publicKey;
     }
-
 
     /**
      * Returns the private key of the generated key pair.
@@ -183,11 +193,9 @@ public final class CertAndKeyGen {
      * to securely authenticate specific entities ... that is a huge
      * security risk!</em></STRONG>
      */
-    public PrivateKey getPrivateKey ()
-    {
+    public PrivateKey getPrivateKey() {
         return privateKey;
     }
-
 
     /**
      * Returns a self-signed X.509v3 certificate for the public key.
@@ -199,39 +207,38 @@ public final class CertAndKeyGen {
      * you are bootstrapping your security infrastructure, or deploying
      * system prototypes.
      *
-     * @param myname X.500 name of the subject (who is also the issuer)
+     * @param myname    X.500 name of the subject (who is also the issuer)
      * @param firstDate the issue time of the certificate
-     * @param validity how long the certificate should be valid, in seconds
-     * @exception CertificateException on certificate handling errors.
-     * @exception InvalidKeyException on key handling errors.
-     * @exception SignatureException on signature handling errors.
-     * @exception NoSuchAlgorithmException on unrecognized algorithms.
-     * @exception NoSuchProviderException on unrecognized providers.
+     * @param validity  how long the certificate should be valid, in seconds
+     * @throws CertificateException     on certificate handling errors.
+     * @throws InvalidKeyException      on key handling errors.
+     * @throws SignatureException       on signature handling errors.
+     * @throws NoSuchAlgorithmException on unrecognized algorithms.
+     * @throws NoSuchProviderException  on unrecognized providers.
      */
-    public X509Certificate getSelfCertificate (
+    public X509Certificate getSelfCertificate(
             android.sun.security.x509.X500Name myname, Date firstDate, long validity)
-    throws CertificateException, InvalidKeyException, SignatureException,
-        NoSuchAlgorithmException, NoSuchProviderException
-    {
+            throws CertificateException, InvalidKeyException, SignatureException,
+            NoSuchAlgorithmException, NoSuchProviderException {
         android.sun.security.x509.X509CertImpl cert;
-        Date            lastDate;
+        Date lastDate;
 
         try {
-            lastDate = new Date ();
-            lastDate.setTime (firstDate.getTime () + validity * 1000);
+            lastDate = new Date();
+            lastDate.setTime(firstDate.getTime() + validity * 1000);
 
             android.sun.security.x509.CertificateValidity interval =
-                                   new CertificateValidity(firstDate,lastDate);
+                    new CertificateValidity(firstDate, lastDate);
 
             android.sun.security.x509.X509CertInfo info = new android.sun.security.x509.X509CertInfo();
             // Add all mandatory attributes
             info.set(android.sun.security.x509.X509CertInfo.VERSION,
-                     new android.sun.security.x509.CertificateVersion(CertificateVersion.V3));
+                    new android.sun.security.x509.CertificateVersion(CertificateVersion.V3));
             info.set(android.sun.security.x509.X509CertInfo.SERIAL_NUMBER, new CertificateSerialNumber(
                     new java.util.Random().nextInt() & 0x7fffffff));
             android.sun.security.x509.AlgorithmId algID = AlgorithmId.getAlgorithmId(sigAlg);
             info.set(android.sun.security.x509.X509CertInfo.ALGORITHM_ID,
-                     new CertificateAlgorithmId(algID));
+                    new CertificateAlgorithmId(algID));
             info.set(android.sun.security.x509.X509CertInfo.SUBJECT, new CertificateSubjectName(myname));
             info.set(android.sun.security.x509.X509CertInfo.KEY, new CertificateX509Key(publicKey));
             info.set(android.sun.security.x509.X509CertInfo.VALIDITY, interval);
@@ -240,19 +247,18 @@ public final class CertAndKeyGen {
             cert = new X509CertImpl(info);
             cert.sign(privateKey, this.sigAlg);
 
-            return (X509Certificate)cert;
+            return (X509Certificate) cert;
 
         } catch (IOException e) {
-             throw new CertificateEncodingException("getSelfCert: " +
-                                                    e.getMessage());
+            throw new CertificateEncodingException("getSelfCert: " +
+                    e.getMessage());
         }
     }
 
     // Keep the old method
-    public X509Certificate getSelfCertificate (android.sun.security.x509.X500Name myname, long validity)
-    throws CertificateException, InvalidKeyException, SignatureException,
-        NoSuchAlgorithmException, NoSuchProviderException
-    {
+    public X509Certificate getSelfCertificate(android.sun.security.x509.X500Name myname, long validity)
+            throws CertificateException, InvalidKeyException, SignatureException,
+            NoSuchAlgorithmException, NoSuchProviderException {
         return getSelfCertificate(myname, new Date(), validity);
     }
 
@@ -267,35 +273,28 @@ public final class CertAndKeyGen {
      * X.509 public key certificates.
      *
      * @param myname X.500 name of the subject
-     * @exception InvalidKeyException on key handling errors.
-     * @exception SignatureException on signature handling errors.
+     * @throws InvalidKeyException on key handling errors.
+     * @throws SignatureException  on signature handling errors.
      */
-    public PKCS10 getCertRequest (X500Name myname)
-    throws InvalidKeyException, SignatureException
-    {
-        PKCS10  req = new PKCS10 (publicKey);
+    public PKCS10 getCertRequest(X500Name myname)
+            throws InvalidKeyException, SignatureException {
+        PKCS10 req = new PKCS10(publicKey);
 
         try {
             Signature signature = Signature.getInstance(sigAlg);
-            signature.initSign (privateKey);
+            signature.initSign(privateKey);
             req.encodeAndSign(myname, signature);
 
         } catch (CertificateException e) {
-            throw new SignatureException (sigAlg + " CertificateException");
+            throw new SignatureException(sigAlg + " CertificateException");
 
         } catch (IOException e) {
-            throw new SignatureException (sigAlg + " IOException");
+            throw new SignatureException(sigAlg + " IOException");
 
         } catch (NoSuchAlgorithmException e) {
             // "can't happen"
-            throw new SignatureException (sigAlg + " unavailable?");
+            throw new SignatureException(sigAlg + " unavailable?");
         }
         return req;
     }
-
-    private SecureRandom        prng;
-    private String              sigAlg;
-    private KeyPairGenerator    keyGen;
-    private PublicKey           publicKey;
-    private PrivateKey          privateKey;
 }

@@ -49,14 +49,14 @@ import java.util.Enumeration;
  * @see android.sun.security.x509.CertAttrSet
  */
 public class OCSPNoCheckExtension extends Extension
-    implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
 
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
      */
     public static final String IDENT =
-                         "x509.info.extensions.OCSPNoCheck";
+            "x509.info.extensions.OCSPNoCheck";
     /**
      * Attribute names.
      */
@@ -75,11 +75,11 @@ public class OCSPNoCheckExtension extends Extension
      * Create the extension from the passed DER encoded value.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws IOException on error.
      */
     public OCSPNoCheckExtension(Boolean critical, Object value)
-        throws IOException {
+            throws IOException {
 
         this.extensionId = PKIXExtensions.OCSPNoCheck_Id;
         this.critical = critical.booleanValue();
@@ -93,7 +93,7 @@ public class OCSPNoCheckExtension extends Extension
      */
     public void set(String name, Object obj) throws IOException {
         throw new IOException("No attribute is allowed by " +
-                        "CertAttrSet:OCSPNoCheckExtension.");
+                "CertAttrSet:OCSPNoCheckExtension.");
     }
 
     /**
@@ -101,7 +101,7 @@ public class OCSPNoCheckExtension extends Extension
      */
     public Object get(String name) throws IOException {
         throw new IOException("No attribute is allowed by " +
-                        "CertAttrSet:OCSPNoCheckExtension.");
+                "CertAttrSet:OCSPNoCheckExtension.");
     }
 
     /**
@@ -109,7 +109,7 @@ public class OCSPNoCheckExtension extends Extension
      */
     public void delete(String name) throws IOException {
         throw new IOException("No attribute is allowed by " +
-                        "CertAttrSet:OCSPNoCheckExtension.");
+                "CertAttrSet:OCSPNoCheckExtension.");
     }
 
     /**

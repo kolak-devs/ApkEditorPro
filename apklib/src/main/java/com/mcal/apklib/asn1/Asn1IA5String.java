@@ -10,26 +10,22 @@ import java.io.OutputStream;
 // Referenced classes of package com.mcal.pmaster.asn1:
 //            Asn1Data
 
-public class Asn1IA5String extends Asn1Data
-{
+public class Asn1IA5String extends Asn1Data {
 
-    public Asn1IA5String(String s)
-    {
+    protected String mData;
+
+    public Asn1IA5String(String s) {
         mData = s;
     }
 
-    public int getBodyLength()
-    {
+    public int getBodyLength() {
         return mData.length();
     }
 
     public void write(OutputStream outputstream)
-        throws IOException
-    {
+            throws IOException {
         outputstream.write(22);
         writeLength(outputstream, getBodyLength());
         outputstream.write(mData.getBytes());
     }
-
-    protected String mData;
 }

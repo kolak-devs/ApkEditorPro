@@ -25,20 +25,21 @@
 
 package android.sun.security.pkcs;
 
+import android.sun.misc.HexDumpEncoder;
+import android.sun.security.util.Debug;
+import android.sun.security.util.DerEncoder;
+import android.sun.security.util.DerInputStream;
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.util.ObjectIdentifier;
+import android.sun.security.x509.CertificateExtensions;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.cert.CertificateException;
-import java.util.Locale;
 import java.util.Date;
 import java.util.Hashtable;
-import android.sun.security.x509.CertificateExtensions;
-import android.sun.security.util.Debug;
-import android.sun.security.util.DerEncoder;
-import android.sun.security.util.DerValue;
-import android.sun.security.util.DerInputStream;
-import android.sun.security.util.DerOutputStream;
-import android.sun.security.util.ObjectIdentifier;
-import android.sun.misc.HexDumpEncoder;
+import java.util.Locale;
 
 /**
  * Class supporting any PKCS9 attributes.
@@ -49,7 +50,7 @@ import android.sun.misc.HexDumpEncoder;
  * The following table shows the correspondence between
  * PKCS9 attribute types and value component classes.
  *
- * <P>
+ * <p>
  * <TABLE BORDER CELLPADDING=8 ALIGN=CENTER>
  *
  * <TR>
@@ -177,27 +178,26 @@ import android.sun.misc.HexDumpEncoder;
  */
 public class PKCS9Attribute implements DerEncoder {
 
-    /* Are we debugging ? */
-    private static final Debug debug = Debug.getInstance("jar");
-
+    public static final String EMAIL_ADDRESS_STR = "EmailAddress";
+    public static final String UNSTRUCTURED_NAME_STR = "UnstructuredName";
+    public static final String CONTENT_TYPE_STR = "ContentType";
+    public static final String MESSAGE_DIGEST_STR = "MessageDigest";
+    public static final String SIGNING_TIME_STR = "SigningTime";
+    public static final String COUNTERSIGNATURE_STR = "Countersignature";
+    public static final String CHALLENGE_PASSWORD_STR = "ChallengePassword";
+    public static final String UNSTRUCTURED_ADDRESS_STR = "UnstructuredAddress";
+    public static final String EXTENDED_CERTIFICATE_ATTRIBUTES_STR =
+            "ExtendedCertificateAttributes";
+    public static final String ISSUER_SERIALNUMBER_STR = "IssuerAndSerialNumber";
+    public static final String EXTENSION_REQUEST_STR = "ExtensionRequest";
+    public static final String SMIME_CAPABILITY_STR = "SMIMECapability";
+    public static final String SIGNING_CERTIFICATE_STR = "SigningCertificate";
+    public static final String SIGNATURE_TIMESTAMP_TOKEN_STR =
+            "SignatureTimestampToken";
     /**
      * Array of attribute OIDs defined in PKCS9, by number.
      */
     static final ObjectIdentifier[] PKCS9_OIDS = new ObjectIdentifier[18];
-
-    static {   // static initializer for PKCS9_OIDS
-        for (int i = 1; i < PKCS9_OIDS.length - 2; i++) {
-            PKCS9_OIDS[i] =
-                ObjectIdentifier.newInternal(new int[]{1,2,840,113549,1,9,i});
-        }
-        // Initialize SigningCertificate and SignatureTimestampToken
-        // separately (because their values are out of sequence)
-        PKCS9_OIDS[PKCS9_OIDS.length - 2] =
-            ObjectIdentifier.newInternal(new int[]{1,2,840,113549,1,9,16,2,12});
-        PKCS9_OIDS[PKCS9_OIDS.length - 1] =
-            ObjectIdentifier.newInternal(new int[]{1,2,840,113549,1,9,16,2,14});
-    }
-
     // first element [0] not used
     public static final ObjectIdentifier EMAIL_ADDRESS_OID = PKCS9_OIDS[1];
     public static final ObjectIdentifier UNSTRUCTURED_NAME_OID = PKCS9_OIDS[2];
@@ -208,7 +208,7 @@ public class PKCS9Attribute implements DerEncoder {
     public static final ObjectIdentifier CHALLENGE_PASSWORD_OID = PKCS9_OIDS[7];
     public static final ObjectIdentifier UNSTRUCTURED_ADDRESS_OID = PKCS9_OIDS[8];
     public static final ObjectIdentifier EXTENDED_CERTIFICATE_ATTRIBUTES_OID
-                                         = PKCS9_OIDS[9];
+            = PKCS9_OIDS[9];
     public static final ObjectIdentifier ISSUER_SERIALNUMBER_OID = PKCS9_OIDS[10];
     // [11], [12] are RSA DSI proprietary
     // [13] ==> signingDescription, S/MIME, not used anymore
@@ -216,35 +216,93 @@ public class PKCS9Attribute implements DerEncoder {
     public static final ObjectIdentifier SMIME_CAPABILITY_OID = PKCS9_OIDS[15];
     public static final ObjectIdentifier SIGNING_CERTIFICATE_OID = PKCS9_OIDS[16];
     public static final ObjectIdentifier SIGNATURE_TIMESTAMP_TOKEN_OID =
-                                PKCS9_OIDS[17];
-    public static final String EMAIL_ADDRESS_STR = "EmailAddress";
-    public static final String UNSTRUCTURED_NAME_STR = "UnstructuredName";
-    public static final String CONTENT_TYPE_STR = "ContentType";
-    public static final String MESSAGE_DIGEST_STR = "MessageDigest";
-    public static final String SIGNING_TIME_STR = "SigningTime";
-    public static final String COUNTERSIGNATURE_STR = "Countersignature";
-    public static final String CHALLENGE_PASSWORD_STR = "ChallengePassword";
-    public static final String UNSTRUCTURED_ADDRESS_STR = "UnstructuredAddress";
-    public static final String EXTENDED_CERTIFICATE_ATTRIBUTES_STR =
-                               "ExtendedCertificateAttributes";
-    public static final String ISSUER_SERIALNUMBER_STR = "IssuerAndSerialNumber";
+            PKCS9_OIDS[17];
+    /* Are we debugging ? */
+    private static final Debug debug = Debug.getInstance("jar");
     // [11], [12] are RSA DSI proprietary
     private static final String RSA_PROPRIETARY_STR = "RSAProprietary";
     // [13] ==> signingDescription, S/MIME, not used anymore
     private static final String SMIME_SIGNING_DESC_STR = "SMIMESigningDesc";
-    public static final String EXTENSION_REQUEST_STR = "ExtensionRequest";
-    public static final String SMIME_CAPABILITY_STR = "SMIMECapability";
-    public static final String SIGNING_CERTIFICATE_STR = "SigningCertificate";
-    public static final String SIGNATURE_TIMESTAMP_TOKEN_STR =
-                                "SignatureTimestampToken";
-
     /**
      * Hashtable mapping names and variant names of supported
      * attributes to their OIDs. This table contains all name forms
      * that occur in PKCS9, in lower case.
      */
     private static final Hashtable<String, ObjectIdentifier> NAME_OID_TABLE =
-        new Hashtable<String, ObjectIdentifier>(18);
+            new Hashtable<String, ObjectIdentifier>(18);
+    /**
+     * Hashtable mapping attribute OIDs defined in PKCS9 to the
+     * corresponding attribute value type.
+     */
+    private static final Hashtable<ObjectIdentifier, String> OID_NAME_TABLE =
+            new Hashtable<ObjectIdentifier, String>(16);
+    /**
+     * Acceptable ASN.1 tags for DER encodings of values of PKCS9
+     * attributes, by index in <code>PKCS9_OIDS</code>.
+     * Sets of acceptable tags are represented as arrays.
+     */
+    private static final Byte[][] PKCS9_VALUE_TAGS = {
+            null,
+            {new Byte(DerValue.tag_IA5String)},   // EMailAddress
+            {new Byte(DerValue.tag_IA5String)},   // UnstructuredName
+            {new Byte(DerValue.tag_ObjectId)},    // ContentType
+            {new Byte(DerValue.tag_OctetString)}, // MessageDigest
+            {new Byte(DerValue.tag_UtcTime)},     // SigningTime
+            {new Byte(DerValue.tag_Sequence)},    // Countersignature
+            {new Byte(DerValue.tag_PrintableString),
+                    new Byte(DerValue.tag_T61String)},   // ChallengePassword
+            {new Byte(DerValue.tag_PrintableString),
+                    new Byte(DerValue.tag_T61String)},   // UnstructuredAddress
+            {new Byte(DerValue.tag_SetOf)},       // ExtendedCertificateAttributes
+            {new Byte(DerValue.tag_Sequence)},    // issuerAndSerialNumber
+            null,
+            null,
+            null,
+            {new Byte(DerValue.tag_Sequence)},    // extensionRequest
+            {new Byte(DerValue.tag_Sequence)},    // SMIMECapability
+            {new Byte(DerValue.tag_Sequence)},    // SigningCertificate
+            {new Byte(DerValue.tag_Sequence)}     // SignatureTimestampToken
+    };
+
+    ;
+    private static final Class[] VALUE_CLASSES = new Class[18];
+    /**
+     * Array indicating which PKCS9 attributes are single-valued,
+     * by index in <code>PKCS9_OIDS</code>.
+     */
+    private static final boolean[] SINGLE_VALUED = {
+            false,
+            false,   // EMailAddress
+            false,   // UnstructuredName
+            true,    // ContentType
+            true,    // MessageDigest
+            true,    // SigningTime
+            false,   // Countersignature
+            true,    // ChallengePassword
+            false,   // UnstructuredAddress
+            false,   // ExtendedCertificateAttributes
+            true,    // IssuerAndSerialNumber - not supported yet
+            false,   // not used
+            false,   // not used
+            false,   // not used
+            true,    // ExtensionRequest
+            true,    // SMIMECapability - not supported yet
+            true,    // SigningCertificate
+            true     // SignatureTimestampToken
+    };
+
+    static {   // static initializer for PKCS9_OIDS
+        for (int i = 1; i < PKCS9_OIDS.length - 2; i++) {
+            PKCS9_OIDS[i] =
+                    ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 9, i});
+        }
+        // Initialize SigningCertificate and SignatureTimestampToken
+        // separately (because their values are out of sequence)
+        PKCS9_OIDS[PKCS9_OIDS.length - 2] =
+                ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 9, 16, 2, 12});
+        PKCS9_OIDS[PKCS9_OIDS.length - 1] =
+                ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 9, 16, 2, 14});
+    }
 
     static { // static initializer for PCKS9_NAMES
         NAME_OID_TABLE.put("emailaddress", PKCS9_OIDS[1]);
@@ -264,14 +322,8 @@ public class PKCS9Attribute implements DerEncoder {
         NAME_OID_TABLE.put("smimecapability", PKCS9_OIDS[15]);
         NAME_OID_TABLE.put("signingcertificate", PKCS9_OIDS[16]);
         NAME_OID_TABLE.put("signaturetimestamptoken", PKCS9_OIDS[17]);
-    };
+    }
 
-    /**
-     * Hashtable mapping attribute OIDs defined in PKCS9 to the
-     * corresponding attribute value type.
-     */
-    private static final Hashtable<ObjectIdentifier, String> OID_NAME_TABLE =
-        new Hashtable<ObjectIdentifier, String>(16);
     static {
         OID_NAME_TABLE.put(PKCS9_OIDS[1], EMAIL_ADDRESS_STR);
         OID_NAME_TABLE.put(PKCS9_OIDS[2], UNSTRUCTURED_NAME_STR);
@@ -292,36 +344,6 @@ public class PKCS9Attribute implements DerEncoder {
         OID_NAME_TABLE.put(PKCS9_OIDS[17], SIGNATURE_TIMESTAMP_TOKEN_STR);
     }
 
-    /**
-     * Acceptable ASN.1 tags for DER encodings of values of PKCS9
-     * attributes, by index in <code>PKCS9_OIDS</code>.
-     * Sets of acceptable tags are represented as arrays.
-     */
-    private static final Byte[][] PKCS9_VALUE_TAGS = {
-        null,
-        {new Byte(DerValue.tag_IA5String)},   // EMailAddress
-        {new Byte(DerValue.tag_IA5String)},   // UnstructuredName
-        {new Byte(DerValue.tag_ObjectId)},    // ContentType
-        {new Byte(DerValue.tag_OctetString)}, // MessageDigest
-        {new Byte(DerValue.tag_UtcTime)},     // SigningTime
-        {new Byte(DerValue.tag_Sequence)},    // Countersignature
-        {new Byte(DerValue.tag_PrintableString),
-         new Byte(DerValue.tag_T61String)},   // ChallengePassword
-        {new Byte(DerValue.tag_PrintableString),
-         new Byte(DerValue.tag_T61String)},   // UnstructuredAddress
-        {new Byte(DerValue.tag_SetOf)},       // ExtendedCertificateAttributes
-        {new Byte(DerValue.tag_Sequence)},    // issuerAndSerialNumber
-        null,
-        null,
-        null,
-        {new Byte(DerValue.tag_Sequence)},    // extensionRequest
-        {new Byte(DerValue.tag_Sequence)},    // SMIMECapability
-        {new Byte(DerValue.tag_Sequence)},    // SigningCertificate
-        {new Byte(DerValue.tag_Sequence)}     // SignatureTimestampToken
-    };
-
-    private static final Class[] VALUE_CLASSES = new Class[18];
-
     static {
         try {
             Class str = Class.forName("[Ljava.lang.String;");
@@ -335,7 +357,7 @@ public class PKCS9Attribute implements DerEncoder {
             VALUE_CLASSES[6] =        // Countersignature
                     Class.forName("[L" + SignerInfo.class.getName() + ";");
             VALUE_CLASSES[7] =        // ChallengePassword
-                Class.forName("java.lang.String");
+                    Class.forName("java.lang.String");
             VALUE_CLASSES[8] = str;   // UnstructuredAddress
             VALUE_CLASSES[9] = null;  // ExtendedCertificateAttributes
             VALUE_CLASSES[10] = null;  // IssuerAndSerialNumber
@@ -350,31 +372,6 @@ public class PKCS9Attribute implements DerEncoder {
             throw new ExceptionInInitializerError(e.toString());
         }
     }
-
-    /**
-     * Array indicating which PKCS9 attributes are single-valued,
-     * by index in <code>PKCS9_OIDS</code>.
-     */
-    private static final boolean[] SINGLE_VALUED = {
-      false,
-      false,   // EMailAddress
-      false,   // UnstructuredName
-      true,    // ContentType
-      true,    // MessageDigest
-      true,    // SigningTime
-      false,   // Countersignature
-      true,    // ChallengePassword
-      false,   // UnstructuredAddress
-      false,   // ExtendedCertificateAttributes
-      true,    // IssuerAndSerialNumber - not supported yet
-      false,   // not used
-      false,   // not used
-      false,   // not used
-      true,    // ExtensionRequest
-      true,    // SMIMECapability - not supported yet
-      true,    // SigningCertificate
-      true     // SignatureTimestampToken
-    };
 
     /**
      * The OID of this attribute is <code>PKCS9_OIDS[index]</code>.
@@ -397,10 +394,9 @@ public class PKCS9Attribute implements DerEncoder {
      * <P> The
      * <a href=#classTable>table</a> gives the class that <code>value</code>
      * must have for a given attribute.
-     *
      */
     public PKCS9Attribute(ObjectIdentifier oid, Object value)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
         init(oid, value);
     }
 
@@ -416,55 +412,32 @@ public class PKCS9Attribute implements DerEncoder {
      * must have for a given attribute. Reasonable variants of these
      * attributes are accepted; in particular, case does not matter.
      *
-     * @exception IllegalArgumentException
-     * if the <code>name</code> is not recognized of the
-     * <code>value</code> has the wrong type.
+     * @throws IllegalArgumentException if the <code>name</code> is not recognized of the
+     *                                  <code>value</code> has the wrong type.
      */
     public PKCS9Attribute(String name, Object value)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
         ObjectIdentifier oid = getOID(name);
 
         if (oid == null)
             throw new IllegalArgumentException(
-                       "Unrecognized attribute name " + name +
-                       " constructing PKCS9Attribute.");
+                    "Unrecognized attribute name " + name +
+                            " constructing PKCS9Attribute.");
 
         init(oid, value);
     }
-
-    private void init(ObjectIdentifier oid, Object value)
-        throws IllegalArgumentException {
-
-        index = indexOf(oid, PKCS9_OIDS, 1);
-
-        if (index == -1)
-            throw new IllegalArgumentException(
-                       "Unsupported OID " + oid +
-                       " constructing PKCS9Attribute.");
-
-        if (!VALUE_CLASSES[index].isInstance(value))
-                throw new IllegalArgumentException(
-                           "Wrong value class " +
-                           " for attribute " + oid +
-                           " constructing PKCS9Attribute; was " +
-                           value.getClass().toString() + ", should be " +
-                           VALUE_CLASSES[index].toString());
-
-        this.value = value;
-    }
-
 
     /**
      * Construct a PKCS9Attribute from its encoding on an input
      * stream.
      *
      * @param derVal the DerValue representing the DER encoding of the attribute.
-     * @exception IOException on parsing error.
+     * @throws IOException on parsing error.
      */
     public PKCS9Attribute(DerValue derVal) throws IOException {
 
         DerInputStream derIn = new DerInputStream(derVal.toByteArray());
-        DerValue[] val =  derIn.getSequence(2);
+        DerValue[] val = derIn.getSequence(2);
 
         if (derIn.available() != 0)
             throw new IOException("Excess data parsing PKCS9Attribute");
@@ -489,7 +462,7 @@ public class PKCS9Attribute implements DerEncoder {
 
         // check for illegal element tags
         Byte tag;
-        for (int i=0; i < elems.length; i++) {
+        for (int i = 0; i < elems.length; i++) {
             tag = new Byte(elems[i].tag);
 
             if (indexOf(tag, PKCS9_VALUE_TAGS[index], 0) == -1)
@@ -497,79 +470,129 @@ public class PKCS9Attribute implements DerEncoder {
         }
 
         switch (index) {
-        case 1:     // email address
-        case 2:     // unstructured name
-        case 8:     // unstructured address
+            case 1:     // email address
+            case 2:     // unstructured name
+            case 8:     // unstructured address
             { // open scope
                 String[] values = new String[elems.length];
 
-                for (int i=0; i < elems.length; i++)
+                for (int i = 0; i < elems.length; i++)
                     values[i] = elems[i].getAsString();
                 value = values;
             } // close scope
             break;
 
-        case 3:     // content type
-            value = elems[0].getOID();
-            break;
+            case 3:     // content type
+                value = elems[0].getOID();
+                break;
 
-        case 4:     // message digest
-            value = elems[0].getOctetString();
-            break;
+            case 4:     // message digest
+                value = elems[0].getOctetString();
+                break;
 
-        case 5:     // signing time
-            value = (new DerInputStream(elems[0].toByteArray())).getUTCTime();
-            break;
+            case 5:     // signing time
+                value = (new DerInputStream(elems[0].toByteArray())).getUTCTime();
+                break;
 
-        case 6:     // countersignature
+            case 6:     // countersignature
             { // open scope
                 SignerInfo[] values = new SignerInfo[elems.length];
-                for (int i=0; i < elems.length; i++)
+                for (int i = 0; i < elems.length; i++)
                     values[i] =
-                        new SignerInfo(elems[i].toDerInputStream());
+                            new SignerInfo(elems[i].toDerInputStream());
                 value = values;
             } // close scope
             break;
 
-        case 7:     // challenge password
-            value = elems[0].getAsString();
-            break;
+            case 7:     // challenge password
+                value = elems[0].getAsString();
+                break;
 
-        case 9:     // extended-certificate attribute -- not supported
-            throw new IOException("PKCS9 extended-certificate " +
-                                  "attribute not supported.");
-            // break unnecessary
-        case 10:    // issuerAndserialNumber attribute -- not supported
-            throw new IOException("PKCS9 IssuerAndSerialNumber" +
-                                  "attribute not supported.");
-            // break unnecessary
-        case 11:    // RSA DSI proprietary
-        case 12:    // RSA DSI proprietary
-            throw new IOException("PKCS9 RSA DSI attributes" +
-                                  "11 and 12, not supported.");
-            // break unnecessary
-        case 13:    // S/MIME unused attribute
-            throw new IOException("PKCS9 attribute #13 not supported.");
-            // break unnecessary
+            case 9:     // extended-certificate attribute -- not supported
+                throw new IOException("PKCS9 extended-certificate " +
+                        "attribute not supported.");
+                // break unnecessary
+            case 10:    // issuerAndserialNumber attribute -- not supported
+                throw new IOException("PKCS9 IssuerAndSerialNumber" +
+                        "attribute not supported.");
+                // break unnecessary
+            case 11:    // RSA DSI proprietary
+            case 12:    // RSA DSI proprietary
+                throw new IOException("PKCS9 RSA DSI attributes" +
+                        "11 and 12, not supported.");
+                // break unnecessary
+            case 13:    // S/MIME unused attribute
+                throw new IOException("PKCS9 attribute #13 not supported.");
+                // break unnecessary
 
-        case 14:     // ExtensionRequest
-            value = new CertificateExtensions(
-                       new DerInputStream(elems[0].toByteArray()));
-            break;
+            case 14:     // ExtensionRequest
+                value = new CertificateExtensions(
+                        new DerInputStream(elems[0].toByteArray()));
+                break;
 
-        case 15:     // SMIME-capability attribute -- not supported
-            throw new IOException("PKCS9 SMIMECapability " +
-                                  "attribute not supported.");
-            // break unnecessary
-        case 16:     // SigningCertificate attribute
-            value = new SigningCertificateInfo(elems[0].toByteArray());
-            break;
+            case 15:     // SMIME-capability attribute -- not supported
+                throw new IOException("PKCS9 SMIMECapability " +
+                        "attribute not supported.");
+                // break unnecessary
+            case 16:     // SigningCertificate attribute
+                value = new SigningCertificateInfo(elems[0].toByteArray());
+                break;
 
-        case 17:     // SignatureTimestampToken attribute
-            value = elems[0].toByteArray();
-            break;
-        default: // can't happen
+            case 17:     // SignatureTimestampToken attribute
+                value = elems[0].toByteArray();
+                break;
+            default: // can't happen
         }
+    }
+
+    /**
+     * Return the OID for a given attribute name or null if we don't recognize
+     * the name.
+     */
+    public static ObjectIdentifier getOID(String name) {
+        return NAME_OID_TABLE.get(name.toLowerCase(Locale.ENGLISH));
+    }
+
+    /**
+     * Return the attribute name for a given OID or null if we don't recognize
+     * the oid.
+     */
+    public static String getName(ObjectIdentifier oid) {
+        return OID_NAME_TABLE.get(oid);
+    }
+
+    /**
+     * Beginning the search at <code>start</code>, find the first
+     * index <code>i</code> such that <code>a[i] = obj</code>.
+     *
+     * @return the index, if found, and -1 otherwise.
+     */
+    static int indexOf(Object obj, Object[] a, int start) {
+        for (int i = start; i < a.length; i++) {
+            if (obj.equals(a[i])) return i;
+        }
+        return -1;
+    }
+
+    private void init(ObjectIdentifier oid, Object value)
+            throws IllegalArgumentException {
+
+        index = indexOf(oid, PKCS9_OIDS, 1);
+
+        if (index == -1)
+            throw new IllegalArgumentException(
+                    "Unsupported OID " + oid +
+                            " constructing PKCS9Attribute.");
+
+        if (!VALUE_CLASSES[index].isInstance(value))
+            throw new IllegalArgumentException(
+                    "Wrong value class " +
+                            " for attribute " + oid +
+                            " constructing PKCS9Attribute; was " +
+                            value.getClass().toString() + ", should be " +
+                            VALUE_CLASSES[index].toString());
+
+        this.value = value;
     }
 
     /**
@@ -584,22 +607,22 @@ public class PKCS9Attribute implements DerEncoder {
         DerOutputStream temp = new DerOutputStream();
         temp.putOID(getOID());
         switch (index) {
-        case 1:     // email address
-        case 2:     // unstructured name
+            case 1:     // email address
+            case 2:     // unstructured name
             { // open scope
                 String[] values = (String[]) value;
                 DerOutputStream[] temps = new
-                    DerOutputStream[values.length];
+                        DerOutputStream[values.length];
 
-                for (int i=0; i < values.length; i++) {
+                for (int i = 0; i < values.length; i++) {
                     temps[i] = new DerOutputStream();
-                    temps[i].putIA5String( values[i]);
+                    temps[i].putIA5String(values[i]);
                 }
                 temp.putOrderedSetOf(DerValue.tag_Set, temps);
             } // close scope
             break;
 
-        case 3:     // content type
+            case 3:     // content type
             {
                 DerOutputStream temp2 = new DerOutputStream();
                 temp2.putOID((ObjectIdentifier) value);
@@ -607,7 +630,7 @@ public class PKCS9Attribute implements DerEncoder {
             }
             break;
 
-        case 4:     // message digest
+            case 4:     // message digest
             {
                 DerOutputStream temp2 = new DerOutputStream();
                 temp2.putOctetString((byte[]) value);
@@ -615,7 +638,7 @@ public class PKCS9Attribute implements DerEncoder {
             }
             break;
 
-        case 5:     // signing time
+            case 5:     // signing time
             {
                 DerOutputStream temp2 = new DerOutputStream();
                 temp2.putUTCTime((Date) value);
@@ -623,11 +646,11 @@ public class PKCS9Attribute implements DerEncoder {
             }
             break;
 
-        case 6:     // countersignature
-            temp.putOrderedSetOf(DerValue.tag_Set, (DerEncoder[]) value);
-            break;
+            case 6:     // countersignature
+                temp.putOrderedSetOf(DerValue.tag_Set, (DerEncoder[]) value);
+                break;
 
-        case 7:     // challenge password
+            case 7:     // challenge password
             {
                 DerOutputStream temp2 = new DerOutputStream();
                 temp2.putPrintableString((String) value);
@@ -635,13 +658,13 @@ public class PKCS9Attribute implements DerEncoder {
             }
             break;
 
-        case 8:     // unstructured address
+            case 8:     // unstructured address
             { // open scope
                 String[] values = (String[]) value;
                 DerOutputStream[] temps = new
-                    DerOutputStream[values.length];
+                        DerOutputStream[values.length];
 
-                for (int i=0; i < values.length; i++) {
+                for (int i = 0; i < values.length; i++) {
                     temps[i] = new DerOutputStream();
                     temps[i].putPrintableString(values[i]);
                 }
@@ -649,27 +672,27 @@ public class PKCS9Attribute implements DerEncoder {
             } // close scope
             break;
 
-        case 9:     // extended-certificate attribute -- not supported
-            throw new IOException("PKCS9 extended-certificate " +
-                                  "attribute not supported.");
-            // break unnecessary
-        case 10:    // issuerAndserialNumber attribute -- not supported
-            throw new IOException("PKCS9 IssuerAndSerialNumber" +
-                                  "attribute not supported.");
-            // break unnecessary
-        case 11:    // RSA DSI proprietary
-        case 12:    // RSA DSI proprietary
-            throw new IOException("PKCS9 RSA DSI attributes" +
-                                  "11 and 12, not supported.");
-            // break unnecessary
-        case 13:    // S/MIME unused attribute
-            throw new IOException("PKCS9 attribute #13 not supported.");
-            // break unnecessary
+            case 9:     // extended-certificate attribute -- not supported
+                throw new IOException("PKCS9 extended-certificate " +
+                        "attribute not supported.");
+                // break unnecessary
+            case 10:    // issuerAndserialNumber attribute -- not supported
+                throw new IOException("PKCS9 IssuerAndSerialNumber" +
+                        "attribute not supported.");
+                // break unnecessary
+            case 11:    // RSA DSI proprietary
+            case 12:    // RSA DSI proprietary
+                throw new IOException("PKCS9 RSA DSI attributes" +
+                        "11 and 12, not supported.");
+                // break unnecessary
+            case 13:    // S/MIME unused attribute
+                throw new IOException("PKCS9 attribute #13 not supported.");
+                // break unnecessary
 
-        case 14:     // ExtensionRequest
+            case 14:     // ExtensionRequest
             {
                 DerOutputStream temp2 = new DerOutputStream();
-                CertificateExtensions exts = (CertificateExtensions)value;
+                CertificateExtensions exts = (CertificateExtensions) value;
                 try {
                     exts.encode(temp2, true);
                 } catch (CertificateException ex) {
@@ -678,20 +701,20 @@ public class PKCS9Attribute implements DerEncoder {
                 temp.write(DerValue.tag_Set, temp2.toByteArray());
             }
             break;
-        case 15:    // SMIMECapability
-            throw new IOException("PKCS9 attribute #15 not supported.");
-            // break unnecessary
+            case 15:    // SMIMECapability
+                throw new IOException("PKCS9 attribute #15 not supported.");
+                // break unnecessary
 
-        case 16:    // SigningCertificate
-            throw new IOException(
-                "PKCS9 SigningCertificate attribute not supported.");
-            // break unnecessary
+            case 16:    // SigningCertificate
+                throw new IOException(
+                        "PKCS9 SigningCertificate attribute not supported.");
+                // break unnecessary
 
-        case 17:    // SignatureTimestampToken
-            temp.write(DerValue.tag_Set, (byte[])value);
-            break;
+            case 17:    // SignatureTimestampToken
+                temp.write(DerValue.tag_Set, (byte[]) value);
+                break;
 
-        default: // can't happen
+            default: // can't happen
         }
 
         DerOutputStream derOut = new DerOutputStream();
@@ -723,33 +746,17 @@ public class PKCS9Attribute implements DerEncoder {
     }
 
     /**
-     *  Return the OID of this attribute.
+     * Return the OID of this attribute.
      */
     public ObjectIdentifier getOID() {
         return PKCS9_OIDS[index];
     }
 
     /**
-     *  Return the name of this attribute.
+     * Return the name of this attribute.
      */
     public String getName() {
         return OID_NAME_TABLE.get(PKCS9_OIDS[index]);
-    }
-
-    /**
-     * Return the OID for a given attribute name or null if we don't recognize
-     * the name.
-     */
-    public static ObjectIdentifier getOID(String name) {
-        return NAME_OID_TABLE.get(name.toLowerCase(Locale.ENGLISH));
-    }
-
-    /**
-     * Return the attribute name for a given OID or null if we don't recognize
-     * the oid.
-     */
-    public static String getName(ObjectIdentifier oid) {
-        return OID_NAME_TABLE.get(oid);
     }
 
     /**
@@ -776,7 +783,7 @@ public class PKCS9Attribute implements DerEncoder {
             boolean first = true;
             Object[] values = (Object[]) value;
 
-            for (int j=0; j < values.length; j++) {
+            for (int j = 0; j < values.length; j++) {
                 if (first)
                     first = false;
                 else
@@ -789,26 +796,13 @@ public class PKCS9Attribute implements DerEncoder {
     }
 
     /**
-     * Beginning the search at <code>start</code>, find the first
-     * index <code>i</code> such that <code>a[i] = obj</code>.
-     *
-     * @return the index, if found, and -1 otherwise.
-     */
-    static int indexOf(Object obj, Object[] a, int start) {
-        for (int i=start; i < a.length; i++) {
-            if (obj.equals(a[i])) return i;
-        }
-        return -1;
-    }
-
-    /**
      * Throw an exception when there are multiple values for
      * a single-valued attribute.
      */
     private void throwSingleValuedException() throws IOException {
         throw new IOException("Single-value attribute " +
-                              getOID() + " (" + getName() + ")" +
-                              " has multiple values.");
+                getOID() + " (" + getName() + ")" +
+                " has multiple values.");
     }
 
     /**
@@ -816,7 +810,7 @@ public class PKCS9Attribute implements DerEncoder {
      * wrong for the attribute whose value it is.
      */
     private void throwTagException(Byte tag)
-    throws IOException {
+            throws IOException {
         Byte[] expectedTags = PKCS9_VALUE_TAGS[index];
         StringBuffer msg = new StringBuffer(100);
         msg.append("Value of attribute ");

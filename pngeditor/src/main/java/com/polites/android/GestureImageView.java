@@ -15,10 +15,6 @@
  */
 package com.polites.android;
 
-import java.io.InputStream;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -37,6 +33,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+
+import java.io.InputStream;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 public class GestureImageView extends ImageView {
 
@@ -441,12 +441,12 @@ public class GestureImageView extends ImageView {
         }
     }
 
-    public void setScale(float scale) {
-        scaleAdjust = scale;
-    }
-
     public float getScale() {
         return scaleAdjust;
+    }
+
+    public void setScale(float scale) {
+        scaleAdjust = scale;
     }
 
     public float getImageX() {
@@ -491,12 +491,12 @@ public class GestureImageView extends ImageView {
         this.rotation = rotation;
     }
 
-    public void setGestureImageViewListener(GestureImageViewListener pinchImageViewListener) {
-        this.gestureImageViewListener = pinchImageViewListener;
-    }
-
     public GestureImageViewListener getGestureImageViewListener() {
         return gestureImageViewListener;
+    }
+
+    public void setGestureImageViewListener(GestureImageViewListener pinchImageViewListener) {
+        this.gestureImageViewListener = pinchImageViewListener;
     }
 
     @Override
@@ -579,6 +579,13 @@ public class GestureImageView extends ImageView {
     }
 
     @Override
+    public void setImageMatrix(Matrix matrix) {
+        if (strict) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+    }
+
+    @Override
     public void setScaleType(ScaleType scaleType) {
         if (scaleType == ScaleType.CENTER ||
                 scaleType == ScaleType.CENTER_CROP ||
@@ -620,13 +627,6 @@ public class GestureImageView extends ImageView {
             throw new UnsupportedOperationException("Not supported");
         }
         super.setImageLevel(level);
-    }
-
-    @Override
-    public void setImageMatrix(Matrix matrix) {
-        if (strict) {
-            throw new UnsupportedOperationException("Not supported");
-        }
     }
 
     @Override

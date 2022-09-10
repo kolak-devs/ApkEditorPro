@@ -39,11 +39,12 @@ public class IOUtils {
     /**
      * Read up to <code>length</code> of bytes from <code>in</code>
      * until EOF is detected.
-     * @param is input stream, must not be null
-     * @param length number of bytes to read, -1 or Integer.MAX_VALUE means
-     *        read as much as possible
+     *
+     * @param is      input stream, must not be null
+     * @param length  number of bytes to read, -1 or Integer.MAX_VALUE means
+     *                read as much as possible
      * @param readAll if true, an EOFException will be thrown if not enough
-     *        bytes are read. Ignored when length is -1 or Integer.MAX_VALUE
+     *                bytes are read. Ignored when length is -1 or Integer.MAX_VALUE
      * @return bytes read
      * @throws IOException Any IO error or a premature EOF is detected
      */

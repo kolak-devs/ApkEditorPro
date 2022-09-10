@@ -16,7 +16,6 @@
  */
 package brut.androlib.res.decoder;
 
-import brut.androlib.res.xml.ResXmlEncoders;
 import com.google.common.base.Splitter;
 import com.google.common.base.Splitter.MapSplitter;
 import com.google.common.collect.Iterators;
@@ -26,7 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import brut.androlib.res.xml.ResXmlEncoders;
+
 public class StyledString {
+    private static final Logger LOGGER = Logger.getLogger(StyledString.class.getName());
     private final String mText;
     private final List<Span> mSpans;
 
@@ -50,7 +52,7 @@ public class StyledString {
 
     public static class Span implements Comparable<Span> {
         private static final MapSplitter ATTRIBUTES_SPLITTER =
-            Splitter.on(';').withKeyValueSeparator(Splitter.on('=').limit(2));
+                Splitter.on(';').withKeyValueSeparator(Splitter.on('=').limit(2));
 
         private final String tag;
         private final int firstChar;
@@ -82,7 +84,7 @@ public class StyledString {
         public Map<String, String> getAttributes() {
             int separatorIdx = tag.indexOf(';');
             return separatorIdx == -1 ? null : ATTRIBUTES_SPLITTER.split(
-                tag.substring(separatorIdx + 1, tag.endsWith(";") ? tag.length() - 1 : tag.length())
+                    tag.substring(separatorIdx + 1, tag.endsWith(";") ? tag.length() - 1 : tag.length())
             );
         }
 
@@ -166,6 +168,4 @@ public class StyledString {
             xmlValue.append("</").append(name).append('>');
         }
     }
-
-    private static final Logger LOGGER = Logger.getLogger(StyledString.class.getName());
 }

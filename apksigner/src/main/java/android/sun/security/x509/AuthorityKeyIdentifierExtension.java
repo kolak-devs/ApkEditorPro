@@ -49,19 +49,20 @@ import java.util.Enumeration;
  * }
  * KeyIdentifier ::= OCTET STRING
  * </pre>
+ *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  * @see android.sun.security.x509.Extension
  * @see android.sun.security.x509.CertAttrSet
  */
 public class AuthorityKeyIdentifierExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
      */
     public static final String IDENT =
-                         "x509.info.extensions.AuthorityKeyIdentifier";
+            "x509.info.extensions.AuthorityKeyIdentifier";
     /**
      * Attribute names.
      */
@@ -79,53 +80,19 @@ implements CertAttrSet<String> {
     private android.sun.security.x509.GeneralNames names = null;
     private android.sun.security.x509.SerialNumber serialNum = null;
 
-    // Encode only the extension value
-    private void encodeThis() throws IOException {
-        if (id == null && names == null && serialNum == null) {
-            this.extensionValue = null;
-            return;
-        }
-        android.sun.security.util.DerOutputStream seq = new android.sun.security.util.DerOutputStream();
-        android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
-        if (id != null) {
-            android.sun.security.util.DerOutputStream tmp1 = new android.sun.security.util.DerOutputStream();
-            id.encode(tmp1);
-            tmp.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
-                              false, TAG_ID), tmp1);
-        }
-        try {
-            if (names != null) {
-                android.sun.security.util.DerOutputStream tmp1 = new android.sun.security.util.DerOutputStream();
-                names.encode(tmp1);
-                tmp.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
-                                  true, TAG_NAMES), tmp1);
-            }
-        } catch (Exception e) {
-            throw new IOException(e.toString());
-        }
-        if (serialNum != null) {
-            android.sun.security.util.DerOutputStream tmp1 = new DerOutputStream();
-            serialNum.encode(tmp1);
-            tmp.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
-                              false, TAG_SERIAL_NUM), tmp1);
-        }
-        seq.write(android.sun.security.util.DerValue.tag_Sequence, tmp);
-        this.extensionValue = seq.toByteArray();
-    }
-
     /**
      * The default constructor for this extension.  Null parameters make
      * the element optional (not present).
      *
-     * @param id the KeyIdentifier associated with this extension.
-     * @param names the GeneralNames associated with this extension
+     * @param id        the KeyIdentifier associated with this extension.
+     * @param names     the GeneralNames associated with this extension
      * @param serialNum the CertificateSerialNumber associated with
-     *         this extension.
-     * @exception IOException on error.
+     *                  this extension.
+     * @throws IOException on error.
      */
     public AuthorityKeyIdentifierExtension(android.sun.security.x509.KeyIdentifier kid, android.sun.security.x509.GeneralNames name,
                                            android.sun.security.x509.SerialNumber sn)
-    throws IOException {
+            throws IOException {
         this.id = kid;
         this.names = name;
         this.serialNum = sn;
@@ -139,12 +106,12 @@ implements CertAttrSet<String> {
      * Create the extension from the passed DER encoded value of the same.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
      */
     public AuthorityKeyIdentifierExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.AuthorityKey_Id;
         this.critical = critical.booleanValue();
 
@@ -152,7 +119,7 @@ implements CertAttrSet<String> {
         android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(this.extensionValue);
         if (val.tag != android.sun.security.util.DerValue.tag_Sequence) {
             throw new IOException("Invalid encoding for " +
-                                  "AuthorityKeyIdentifierExtension.");
+                    "AuthorityKeyIdentifierExtension.");
         }
 
         // Note that all the fields in AuthorityKeyIdentifier are defined as
@@ -167,29 +134,63 @@ implements CertAttrSet<String> {
             if (opt.isContextSpecific(TAG_ID) && !opt.isConstructed()) {
                 if (id != null)
                     throw new IOException("Duplicate KeyIdentifier in " +
-                                          "AuthorityKeyIdentifier.");
+                            "AuthorityKeyIdentifier.");
                 opt.resetTag(android.sun.security.util.DerValue.tag_OctetString);
                 id = new android.sun.security.x509.KeyIdentifier(opt);
 
             } else if (opt.isContextSpecific(TAG_NAMES) &&
-                       opt.isConstructed()) {
+                    opt.isConstructed()) {
                 if (names != null)
                     throw new IOException("Duplicate GeneralNames in " +
-                                          "AuthorityKeyIdentifier.");
+                            "AuthorityKeyIdentifier.");
                 opt.resetTag(android.sun.security.util.DerValue.tag_Sequence);
                 names = new android.sun.security.x509.GeneralNames(opt);
 
             } else if (opt.isContextSpecific(TAG_SERIAL_NUM) &&
-                       !opt.isConstructed()) {
+                    !opt.isConstructed()) {
                 if (serialNum != null)
                     throw new IOException("Duplicate SerialNumber in " +
-                                          "AuthorityKeyIdentifier.");
+                            "AuthorityKeyIdentifier.");
                 opt.resetTag(android.sun.security.util.DerValue.tag_Integer);
                 serialNum = new android.sun.security.x509.SerialNumber(opt);
             } else
                 throw new IOException("Invalid encoding of " +
-                                      "AuthorityKeyIdentifierExtension.");
+                        "AuthorityKeyIdentifierExtension.");
         }
+    }
+
+    // Encode only the extension value
+    private void encodeThis() throws IOException {
+        if (id == null && names == null && serialNum == null) {
+            this.extensionValue = null;
+            return;
+        }
+        android.sun.security.util.DerOutputStream seq = new android.sun.security.util.DerOutputStream();
+        android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
+        if (id != null) {
+            android.sun.security.util.DerOutputStream tmp1 = new android.sun.security.util.DerOutputStream();
+            id.encode(tmp1);
+            tmp.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
+                    false, TAG_ID), tmp1);
+        }
+        try {
+            if (names != null) {
+                android.sun.security.util.DerOutputStream tmp1 = new android.sun.security.util.DerOutputStream();
+                names.encode(tmp1);
+                tmp.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
+                        true, TAG_NAMES), tmp1);
+            }
+        } catch (Exception e) {
+            throw new IOException(e.toString());
+        }
+        if (serialNum != null) {
+            android.sun.security.util.DerOutputStream tmp1 = new DerOutputStream();
+            serialNum.encode(tmp1);
+            tmp.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
+                    false, TAG_SERIAL_NUM), tmp1);
+        }
+        seq.write(android.sun.security.util.DerValue.tag_Sequence, tmp);
+        this.extensionValue = seq.toByteArray();
     }
 
     /**
@@ -213,7 +214,7 @@ implements CertAttrSet<String> {
      * Write the extension to the OutputStream.
      *
      * @param out the OutputStream to write the extension to.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
@@ -232,25 +233,25 @@ implements CertAttrSet<String> {
     public void set(String name, Object obj) throws IOException {
         if (name.equalsIgnoreCase(KEY_ID)) {
             if (!(obj instanceof android.sun.security.x509.KeyIdentifier)) {
-              throw new IOException("Attribute value should be of " +
-                                    "type KeyIdentifier.");
+                throw new IOException("Attribute value should be of " +
+                        "type KeyIdentifier.");
             }
-            id = (KeyIdentifier)obj;
+            id = (KeyIdentifier) obj;
         } else if (name.equalsIgnoreCase(AUTH_NAME)) {
             if (!(obj instanceof android.sun.security.x509.GeneralNames)) {
-              throw new IOException("Attribute value should be of " +
-                                    "type GeneralNames.");
+                throw new IOException("Attribute value should be of " +
+                        "type GeneralNames.");
             }
-            names = (GeneralNames)obj;
+            names = (GeneralNames) obj;
         } else if (name.equalsIgnoreCase(SERIAL_NUMBER)) {
             if (!(obj instanceof android.sun.security.x509.SerialNumber)) {
-              throw new IOException("Attribute value should be of " +
-                                    "type SerialNumber.");
+                throw new IOException("Attribute value should be of " +
+                        "type SerialNumber.");
             }
-            serialNum = (SerialNumber)obj;
+            serialNum = (SerialNumber) obj;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:AuthorityKeyIdentifier.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:AuthorityKeyIdentifier.");
         }
         encodeThis();
     }
@@ -266,8 +267,8 @@ implements CertAttrSet<String> {
         } else if (name.equalsIgnoreCase(SERIAL_NUMBER)) {
             return (serialNum);
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:AuthorityKeyIdentifier.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:AuthorityKeyIdentifier.");
         }
     }
 
@@ -282,8 +283,8 @@ implements CertAttrSet<String> {
         } else if (name.equalsIgnoreCase(SERIAL_NUMBER)) {
             serialNum = null;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:AuthorityKeyIdentifier.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:AuthorityKeyIdentifier.");
         }
         encodeThis();
     }

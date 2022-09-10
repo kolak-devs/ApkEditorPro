@@ -25,12 +25,12 @@
 
 package android.sun.security.util;
 
-import java.math.BigInteger;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.Locale;
-
 import android.sun.security.action.GetPropertyAction;
+
+import java.math.BigInteger;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A utility class for debuging.
@@ -39,8 +39,7 @@ import android.sun.security.action.GetPropertyAction;
  */
 public class Debug {
 
-    private String prefix;
-
+    private final static char[] hexDigits = "0123456789abcdef".toCharArray();
     private static String args;
 
     static {
@@ -54,7 +53,7 @@ public class Debug {
             args = args2;
         } else {
             if (args2 != null)
-               args = args + "," + args2;
+                args = args + "," + args2;
         }
 
         if (args != null) {
@@ -65,8 +64,9 @@ public class Debug {
         }
     }
 
-    public static void Help()
-    {
+    private String prefix;
+
+    public static void Help() {
         System.err.println();
         System.err.println("all           turn on all debugging");
         System.err.println("access        print all checkPermission results");
@@ -102,14 +102,12 @@ public class Debug {
         System.exit(0);
     }
 
-
     /**
      * Get a Debug object corresponding to whether or not the given
      * option is set. Set the prefix to be the same as option.
      */
 
-    public static Debug getInstance(String option)
-    {
+    public static Debug getInstance(String option) {
         return getInstance(option, option);
     }
 
@@ -117,8 +115,7 @@ public class Debug {
      * Get a Debug object corresponding to whether or not the given
      * option is set. Set the prefix to be prefix.
      */
-    public static Debug getInstance(String option, String prefix)
-    {
+    public static Debug getInstance(String option, String prefix) {
         if (isOn(option)) {
             Debug d = new Debug();
             d.prefix = prefix;
@@ -132,8 +129,7 @@ public class Debug {
      * True if the system property "security.debug" contains the
      * string "option".
      */
-    public static boolean isOn(String option)
-    {
+    public static boolean isOn(String option) {
         if (args == null)
             return false;
         else {
@@ -145,31 +141,11 @@ public class Debug {
     }
 
     /**
-     * print a message to stderr that is prefixed with the prefix
-     * created from the call to getInstance.
-     */
-
-    public void println(String message)
-    {
-        System.err.println(prefix + ": "+message);
-    }
-
-    /**
-     * print a blank line to stderr that is prefixed with the prefix.
-     */
-
-    public void println()
-    {
-        System.err.println(prefix + ":");
-    }
-
-    /**
      * print a message to stderr that is prefixed with the prefix.
      */
 
-    public static void println(String prefix, String message)
-    {
-        System.err.println(prefix + ": "+message);
+    public static void println(String prefix, String message) {
+        System.err.println(prefix + ": " + message);
     }
 
     /**
@@ -180,7 +156,7 @@ public class Debug {
      */
     public static String toHexString(BigInteger b) {
         String hexValue = b.toString(16);
-        StringBuffer buf = new StringBuffer(hexValue.length()*2);
+        StringBuffer buf = new StringBuffer(hexValue.length() * 2);
 
         if (hexValue.startsWith("-")) {
             buf.append("   -");
@@ -188,19 +164,19 @@ public class Debug {
         } else {
             buf.append("    ");     // four spaces
         }
-        if ((hexValue.length()%2) != 0) {
+        if ((hexValue.length() % 2) != 0) {
             // add back the leading 0
             hexValue = "0" + hexValue;
         }
-        int i=0;
+        int i = 0;
         while (i < hexValue.length()) {
             // one byte at a time
-            buf.append(hexValue.substring(i, i+2));
-            i+=2;
-            if (i!= hexValue.length()) {
-                if ((i%64) == 0) {
+            buf.append(hexValue.substring(i, i + 2));
+            i += 2;
+            if (i != hexValue.length()) {
+                if ((i % 64) == 0) {
                     buf.append("\n    ");     // line after eight words
-                } else if (i%8 == 0) {
+                } else if (i % 8 == 0) {
                     buf.append(" ");     // space between words
                 }
             }
@@ -223,7 +199,7 @@ public class Debug {
             String keyReg = "[Pp][Ee][Rr][Mm][Ii][Ss][Ss][Ii][Oo][Nn]=";
             String keyStr = "permission=";
             String reg = keyReg +
-                "[a-zA-Z_$][a-zA-Z0-9_$]*([.][a-zA-Z_$][a-zA-Z0-9_$]*)*";
+                    "[a-zA-Z_$][a-zA-Z0-9_$]*([.][a-zA-Z_$][a-zA-Z0-9_$]*)*";
             Pattern pattern = Pattern.compile(reg);
             Matcher matcher = pattern.matcher(source);
             StringBuffer left = new StringBuffer();
@@ -271,8 +247,6 @@ public class Debug {
         return null;
     }
 
-    private final static char[] hexDigits = "0123456789abcdef".toCharArray();
-
     public static String toString(byte[] b) {
         if (b == null) {
             return "(null)";
@@ -287,6 +261,23 @@ public class Debug {
             sb.append(hexDigits[k & 0xf]);
         }
         return sb.toString();
+    }
+
+    /**
+     * print a message to stderr that is prefixed with the prefix
+     * created from the call to getInstance.
+     */
+
+    public void println(String message) {
+        System.err.println(prefix + ": " + message);
+    }
+
+    /**
+     * print a blank line to stderr that is prefixed with the prefix.
+     */
+
+    public void println() {
+        System.err.println(prefix + ":");
     }
 
 }

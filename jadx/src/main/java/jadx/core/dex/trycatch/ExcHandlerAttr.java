@@ -5,27 +5,27 @@ import jadx.core.dex.attributes.AType;
 
 public class ExcHandlerAttr implements IJadxAttribute {
 
-	private final ExceptionHandler handler;
+    private final ExceptionHandler handler;
 
-	public ExcHandlerAttr(ExceptionHandler handler) {
-		this.handler = handler;
-	}
+    public ExcHandlerAttr(ExceptionHandler handler) {
+        this.handler = handler;
+    }
 
-	@Override
-	public AType<ExcHandlerAttr> getAttrType() {
-		return AType.EXC_HANDLER;
-	}
+    @Override
+    public AType<ExcHandlerAttr> getAttrType() {
+        return AType.EXC_HANDLER;
+    }
 
-	public TryCatchBlockAttr getTryBlock() {
-		return handler.getTryBlock();
-	}
+    public TryCatchBlockAttr getTryBlock() {
+        return handler.getTryBlock();
+    }
 
-	public ExceptionHandler getHandler() {
-		return handler;
-	}
+    public ExceptionHandler getHandler() {
+        return handler;
+    }
 
-	@Override
-	public String toString() {
-		return "ExcHandler: " + handler;
-	}
+    @Override
+    public String toString() {
+        return "ExcHandler: " + handler;
+    }
 }

@@ -21,48 +21,50 @@ public class XsdException extends RuntimeException {
     public XsdException(String s, Throwable thrwble) {
         super(s);
         this.detail = thrwble;
-        }
+    }
 
 
-    public Throwable getDetail() { return detail; }
+    public Throwable getDetail() {
+        return detail;
+    }
     //    public void setDetail(Throwable cause) { this.detail = cause; }
 
     public String getMessage() {
-        if(detail == null)
+        if (detail == null)
             return super.getMessage();
         else
             return super.getMessage() + "; nested exception is: \n\t"
-                + detail.getMessage();
+                    + detail.getMessage();
     }
 
 
-  public void printStackTrace(java.io.PrintStream ps) {
-    if (detail == null) {
-        super.printStackTrace(ps);
-    } else {
-        synchronized(ps) {
-          //ps.println(this);
-          ps.println(super.getMessage() + "; nested exception is:");
-          detail.printStackTrace(ps);
+    public void printStackTrace(java.io.PrintStream ps) {
+        if (detail == null) {
+            super.printStackTrace(ps);
+        } else {
+            synchronized (ps) {
+                //ps.println(this);
+                ps.println(super.getMessage() + "; nested exception is:");
+                detail.printStackTrace(ps);
+            }
         }
     }
-  }
 
-  public void printStackTrace() {
-    printStackTrace(System.err);
-  }
-
-  public void printStackTrace(java.io.PrintWriter pw){
-    if (detail == null) {
-        super.printStackTrace(pw);
-    } else {
-      synchronized(pw) {
-        //pw.println(this);
-        pw.println(super.getMessage() + "; nested exception is:");
-        detail.printStackTrace(pw);
-      }
+    public void printStackTrace() {
+        printStackTrace(System.err);
     }
-  }
+
+    public void printStackTrace(java.io.PrintWriter pw) {
+        if (detail == null) {
+            super.printStackTrace(pw);
+        } else {
+            synchronized (pw) {
+                //pw.println(this);
+                pw.println(super.getMessage() + "; nested exception is:");
+                detail.printStackTrace(pw);
+            }
+        }
+    }
 
 }
 

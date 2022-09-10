@@ -22,6 +22,7 @@ public class Section {
     public int getEnd() {
         return end;
     }
+
     /**
      * Возвращет первый индекс матчинга
      */

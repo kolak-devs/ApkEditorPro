@@ -60,7 +60,7 @@ public class CertificateSerialNumber implements CertAttrSet<String> {
      * @param serial the serial number for the certificate.
      */
     public CertificateSerialNumber(BigInteger num) {
-      this.serial = new android.sun.security.x509.SerialNumber(num);
+        this.serial = new android.sun.security.x509.SerialNumber(num);
     }
 
     /**
@@ -69,14 +69,14 @@ public class CertificateSerialNumber implements CertAttrSet<String> {
      * @param serial the serial number for the certificate.
      */
     public CertificateSerialNumber(int num) {
-      this.serial = new android.sun.security.x509.SerialNumber(num);
+        this.serial = new android.sun.security.x509.SerialNumber(num);
     }
 
     /**
      * Create the object, decoding the values from the passed DER stream.
      *
      * @param in the DerInputStream to read the serial number from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateSerialNumber(android.sun.security.util.DerInputStream in) throws IOException {
         serial = new android.sun.security.x509.SerialNumber(in);
@@ -86,7 +86,7 @@ public class CertificateSerialNumber implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed stream.
      *
      * @param in the InputStream to read the serial number from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateSerialNumber(InputStream in) throws IOException {
         serial = new android.sun.security.x509.SerialNumber(in);
@@ -96,7 +96,7 @@ public class CertificateSerialNumber implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed DerValue.
      *
      * @param val the DER encoded value.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateSerialNumber(android.sun.security.util.DerValue val) throws IOException {
         serial = new android.sun.security.x509.SerialNumber(val);
@@ -114,7 +114,7 @@ public class CertificateSerialNumber implements CertAttrSet<String> {
      * Encode the serial number in DER form to the stream.
      *
      * @param out the DerOutputStream to marshal the contents to.
-     * @exception IOException on errors.
+     * @throws IOException on errors.
      */
     public void encode(OutputStream out) throws IOException {
         DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
@@ -131,10 +131,10 @@ public class CertificateSerialNumber implements CertAttrSet<String> {
             throw new IOException("Attribute must be of type SerialNumber.");
         }
         if (name.equalsIgnoreCase(NUMBER)) {
-            serial = (SerialNumber)obj;
+            serial = (SerialNumber) obj;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                                "CertAttrSet:CertificateSerialNumber.");
+                    "CertAttrSet:CertificateSerialNumber.");
         }
     }
 
@@ -146,7 +146,7 @@ public class CertificateSerialNumber implements CertAttrSet<String> {
             return (serial);
         } else {
             throw new IOException("Attribute name not recognized by " +
-                                "CertAttrSet:CertificateSerialNumber.");
+                    "CertAttrSet:CertificateSerialNumber.");
         }
     }
 
@@ -158,7 +158,7 @@ public class CertificateSerialNumber implements CertAttrSet<String> {
             serial = null;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                                "CertAttrSet:CertificateSerialNumber.");
+                    "CertAttrSet:CertificateSerialNumber.");
         }
     }
 

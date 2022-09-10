@@ -9,23 +9,23 @@ import jadx.core.dex.nodes.MethodNode;
  */
 public class MethodReplaceAttr extends PinnedAttribute {
 
-	private final MethodNode replaceMth;
+    private final MethodNode replaceMth;
 
-	public MethodReplaceAttr(MethodNode replaceMth) {
-		this.replaceMth = replaceMth;
-	}
+    public MethodReplaceAttr(MethodNode replaceMth) {
+        this.replaceMth = replaceMth;
+    }
 
-	public MethodNode getReplaceMth() {
-		return replaceMth;
-	}
+    public MethodNode getReplaceMth() {
+        return replaceMth;
+    }
 
-	@Override
-	public AType<MethodReplaceAttr> getAttrType() {
-		return AType.METHOD_REPLACE;
-	}
+    @Override
+    public AType<MethodReplaceAttr> getAttrType() {
+        return AType.METHOD_REPLACE;
+    }
 
-	@Override
-	public String toString() {
-		return "REPLACED_BY: " + replaceMth;
-	}
+    @Override
+    public String toString() {
+        return "REPLACED_BY: " + replaceMth;
+    }
 }

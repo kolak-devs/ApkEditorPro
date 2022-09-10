@@ -60,16 +60,13 @@ public class ResListAdapter extends BaseAdapter implements
 
     final List<FileRecord> fileList = new ArrayList<>();
     private final WeakReference<Context> ctxRef;
-    private WeakReference<ResSelectionChangeListener> listenerRef;
     private final int resourceId;
     private final String apkPath;
     private final String rootPath;
-    private String curPath;
     private final String strResolution;
     private final FilenameFilter filter;
     // use this record to get the real entry inside the apk/zip
     private final Map<String, String> fileEntry2ZipEntry;
-
     // Record all the checked items
     // When it is not empty, it means in selection mode
     private final Set<Integer> checkedItems = new HashSet<>();
@@ -84,6 +81,8 @@ public class ResListAdapter extends BaseAdapter implements
     };
     // To support in zip exploring for folders like assets
     private final ZipNode rootNode = new ZipNode();
+    private WeakReference<ResSelectionChangeListener> listenerRef;
+    private String curPath;
     private ZipImageZoomer zipImageZoomer;
     private Map<String, String> allFileReplaced = new HashMap<>();
     private Map<String, String> allFileAdded = new HashMap<>();

@@ -30,7 +30,7 @@ import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 import com.mcal.apkeditor.dialogs.MatchedLineItem;
 import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.neweditor.TextEditor;
+import com.mcal.editor.TextEditor;
 
 import java.io.Closeable;
 import java.io.IOException;

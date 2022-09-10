@@ -30,28 +30,22 @@ import android.sun.security.util.DerInputStream;
 import java.io.IOException;
 
 /**
- * @author      Ram Marti
+ * @author Ram Marti
  */
 
 public final class AccessDescription {
 
-    private int myhash = -1;
-
-    private android.sun.security.util.ObjectIdentifier accessMethod;
-
-    private android.sun.security.x509.GeneralName accessLocation;
-
     public static final android.sun.security.util.ObjectIdentifier Ad_OCSP_Id =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 3, 6, 1, 5, 5, 7, 48, 1});
-
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 3, 6, 1, 5, 5, 7, 48, 1});
     public static final android.sun.security.util.ObjectIdentifier Ad_CAISSUERS_Id =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 3, 6, 1, 5, 5, 7, 48, 2});
-
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 3, 6, 1, 5, 5, 7, 48, 2});
     public static final android.sun.security.util.ObjectIdentifier Ad_TIMESTAMPING_Id =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 3, 6, 1, 5, 5, 7, 48, 3});
-
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 3, 6, 1, 5, 5, 7, 48, 3});
     public static final android.sun.security.util.ObjectIdentifier Ad_CAREPOSITORY_Id =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 3, 6, 1, 5, 5, 7, 48, 5});
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 3, 6, 1, 5, 5, 7, 48, 5});
+    private int myhash = -1;
+    private android.sun.security.util.ObjectIdentifier accessMethod;
+    private android.sun.security.x509.GeneralName accessLocation;
 
     public AccessDescription(android.sun.security.util.ObjectIdentifier accessMethod, android.sun.security.x509.GeneralName accessLocation) {
         this.accessMethod = accessMethod;
@@ -90,13 +84,13 @@ public final class AccessDescription {
         if (obj == null || (!(obj instanceof AccessDescription))) {
             return false;
         }
-        AccessDescription that = (AccessDescription)obj;
+        AccessDescription that = (AccessDescription) obj;
 
         if (this == that) {
             return true;
         }
         return (accessMethod.equals(that.getAccessMethod()) &&
-            accessLocation.equals(that.getAccessLocation()));
+                accessLocation.equals(that.getAccessLocation()));
     }
 
     public String toString() {

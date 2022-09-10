@@ -16,8 +16,6 @@
 
 package com.android.apksigner;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
 
 import com.android.apksig.ApkSigner;
@@ -42,8 +40,6 @@ import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
@@ -57,7 +53,6 @@ import java.security.interfaces.ECKey;
 import java.security.interfaces.RSAKey;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -361,7 +356,7 @@ public class ApkSignerTool {
             final File outputV4SignatureFile =
                     new File(outputApk.getCanonicalPath() + ".idsig");
             //Files.deleteIfExists(outputV4SignatureFile.toPath());
-            if (outputV4SignatureFile.exists()){
+            if (outputV4SignatureFile.exists()) {
                 outputV4SignatureFile.delete();
             }
 
@@ -385,7 +380,7 @@ public class ApkSignerTool {
                     e);
         }
         if (!tmpOutputApk.getCanonicalPath().equals(outputApk.getCanonicalPath())) {
-            if(FileUtils.moveFile(tmpOutputApk, outputApk)) {
+            if (FileUtils.moveFile(tmpOutputApk, outputApk)) {
                 System.out.println("Moved");
             }
         }

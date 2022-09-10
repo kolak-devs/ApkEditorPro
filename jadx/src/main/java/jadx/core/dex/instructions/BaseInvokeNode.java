@@ -7,19 +7,19 @@ import jadx.core.dex.instructions.args.InsnArg;
 import jadx.core.dex.nodes.InsnNode;
 
 public abstract class BaseInvokeNode extends InsnNode {
-	public BaseInvokeNode(InsnType type, int argsCount) {
-		super(type, argsCount);
-	}
+    public BaseInvokeNode(InsnType type, int argsCount) {
+        super(type, argsCount);
+    }
 
-	public abstract MethodInfo getCallMth();
+    public abstract MethodInfo getCallMth();
 
-	@Nullable
-	public abstract InsnArg getInstanceArg();
+    @Nullable
+    public abstract InsnArg getInstanceArg();
 
-	public abstract boolean isStaticCall();
+    public abstract boolean isStaticCall();
 
-	/**
-	 * Return offset to match method args from {@link #getCallMth()}
-	 */
-	public abstract int getFirstArgOffset();
+    /**
+     * Return offset to match method args from {@link #getCallMth()}
+     */
+    public abstract int getFirstArgOffset();
 }

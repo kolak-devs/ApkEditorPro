@@ -108,8 +108,7 @@ public class XmlPullParserDelegate implements XmlPullParser {
 
     public void defineEntityReplacementText(String entityName,
                                             String replacementText)
-        throws XmlPullParserException
-    {
+            throws XmlPullParserException {
         pp.defineEntityReplacementText(entityName, replacementText);
     }
 

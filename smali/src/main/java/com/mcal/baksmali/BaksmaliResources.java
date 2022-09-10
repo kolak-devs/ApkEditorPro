@@ -58,21 +58,13 @@ public class BaksmaliResources {
         }
         for (final ClassDef classDef : classDefs) {
             if (classSet == null || classSet.contains(classDef.getType())) {
-                tasks.add(executor.submit(new Callable<Boolean>() {
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public Boolean call() throws Exception {
-                        return BaksmaliResources.disassembleClass(classDef, fileNameHandler, options);
-                    }
-                }));
+                tasks.add(executor.submit(() ->
+                        BaksmaliResources.disassembleClass(classDef, fileNameHandler, options)));
             }
         }
         boolean errorOccurred = false;
         try {
             for (Future<Boolean> task : tasks) {
-                while (true) {
-                    break;
-                }
                 if (!task.get()) {
                     errorOccurred = true;
                 }
@@ -85,7 +77,6 @@ public class BaksmaliResources {
         return errorOccurred;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static boolean disassembleClass(@NonNull ClassDef classDef, ClassFileNameHandler fileNameHandler, BaksmaliOptions options) throws IOException {
         String classDescriptor = classDef.getType();
         if (classDescriptor.charAt(0) == 'L' && classDescriptor.charAt(classDescriptor.length() - 1) == ';') {
@@ -96,7 +87,7 @@ public class BaksmaliResources {
                 File smaliParent = smaliFile.getParentFile();
                 if (!smaliParent.exists() && !smaliParent.mkdirs() && !smaliParent.exists()) {
                     PrintStream printStream = System.err;
-                    printStream.println("Unable to create directory " + smaliParent.toString() + " - skipping class");
+                    printStream.println("Unable to create directory " + smaliParent + " - skipping class");
                     if (writer != null) {
                         try {
                             writer.close();
@@ -115,14 +106,14 @@ public class BaksmaliResources {
                             writer2.close();
                         } catch (Throwable t) {
                             PrintStream printStream3 = System.err;
-                            printStream3.println("\n\nError occurred while closing file " + smaliFile.toString());
+                            printStream3.println("\n\nError occurred while closing file " + smaliFile);
                             t.printStackTrace();
                         }
                     }
                     return true;
                 } else {
                     PrintStream printStream = System.err;
-                    printStream.println("Unable to create file " + smaliFile.toString() + " - skipping class");
+                    printStream.println("Unable to create file " + smaliFile + " - skipping class");
                     if (writer != null) {
                         try {
                             writer.close();

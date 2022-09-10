@@ -13,30 +13,6 @@ public class HttpService extends Service {
     private String projectDirectory;
 
     private HttpServer httpServer = null;
-
-    public class HttpServiceBinder extends Binder {
-        public void setProjectDirectory(String projectDirectory) {
-            HttpService.this.projectDirectory = projectDirectory;
-            if (httpServer != null) {
-                httpServer.setProjectDirectory(projectDirectory);
-            }
-        }
-
-        public void setHttpDirectory(String httpDirectory) {
-            HttpService.this.httpDirectory = httpDirectory;
-            if (httpServer != null) {
-                httpServer.setHttpDirectory(httpDirectory);
-            }
-        }
-
-        public String getURL() {
-            if (httpServer != null && httpServer.isAlive()) {
-                return httpServer.getServiceURL();
-            }
-            return null;
-        }
-    }
-
     private HttpServiceBinder binder = new HttpServiceBinder();
 
     @Override
@@ -92,5 +68,28 @@ public class HttpService extends Service {
             }
         }
         super.onDestroy();
+    }
+
+    public class HttpServiceBinder extends Binder {
+        public void setProjectDirectory(String projectDirectory) {
+            HttpService.this.projectDirectory = projectDirectory;
+            if (httpServer != null) {
+                httpServer.setProjectDirectory(projectDirectory);
+            }
+        }
+
+        public void setHttpDirectory(String httpDirectory) {
+            HttpService.this.httpDirectory = httpDirectory;
+            if (httpServer != null) {
+                httpServer.setHttpDirectory(httpDirectory);
+            }
+        }
+
+        public String getURL() {
+            if (httpServer != null && httpServer.isAlive()) {
+                return httpServer.getServiceURL();
+            }
+            return null;
+        }
     }
 }

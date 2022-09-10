@@ -16,7 +16,29 @@
  */
 package brut.apktool;
 
-import brut.androlib.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.ErrorManager;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+import brut.androlib.Androlib;
+import brut.androlib.AndrolibException;
+import brut.androlib.ApkDecoder;
+import brut.androlib.ApktoolProperties;
 import brut.androlib.err.CantFindFrameworkResException;
 import brut.androlib.err.InFileNotFoundException;
 import brut.androlib.err.OutDirExistsException;
@@ -25,13 +47,30 @@ import brut.common.BrutException;
 import brut.directory.DirectoryException;
 import brut.util.AaptManager;
 import brut.util.OSDetection;
-import org.apache.commons.cli.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.*;
 
 public class Main {
+    private final static Options normalOptions;
+    private final static Options decodeOptions;
+    private final static Options buildOptions;
+    private final static Options frameOptions;
+    private final static Options allOptions;
+    private final static Options emptyOptions;
+    private final static Options emptyFrameworkOptions;
+    private final static Options listFrameworkOptions;
+    private static boolean advanceMode = false;
+
+    static {
+        //normal and advance usage output
+        normalOptions = new Options();
+        buildOptions = new Options();
+        decodeOptions = new Options();
+        frameOptions = new Options();
+        allOptions = new Options();
+        emptyOptions = new Options();
+        emptyFrameworkOptions = new Options();
+        listFrameworkOptions = new Options();
+    }
+
     public static void main(String[] args) throws BrutException {
 
         // headless
@@ -50,7 +89,7 @@ public class Main {
         try {
             commandLine = parser.parse(allOptions, args, false);
 
-            if (! OSDetection.is64Bit()) {
+            if (!OSDetection.is64Bit()) {
                 System.err.println("32 bit support is deprecated. Apktool will not support 32bit on v3.0.0.");
             }
         } catch (ParseException ex) {
@@ -199,7 +238,8 @@ public class Main {
         } finally {
             try {
                 decoder.close();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
     }
 
@@ -278,7 +318,7 @@ public class Main {
         if (cli.hasOption("t") || cli.hasOption("tag")) {
             buildOptions.frameworkTag = cli.getOptionValue("t");
         }
-        new Androlib(buildOptions,null).installFramework(new File(apkName));
+        new Androlib(buildOptions, null).installFramework(new File(apkName));
     }
 
     private static void cmdListFrameworks(CommandLine cli) throws AndrolibException {
@@ -287,7 +327,7 @@ public class Main {
             buildOptions.frameworkFolderLocation = cli.getOptionValue("p");
         }
 
-        new Androlib(buildOptions,null).listFrameworks();
+        new Androlib(buildOptions, null).listFrameworks();
     }
 
     private static void cmdPublicizeResources(CommandLine cli) throws AndrolibException {
@@ -307,7 +347,7 @@ public class Main {
             buildOptions.frameworkFolderLocation = cli.getOptionValue("p");
         }
 
-        new Androlib(buildOptions,null).emptyFrameworkDirectory();
+        new Androlib(buildOptions, null).emptyFrameworkDirectory();
     }
 
     private static void _version() {
@@ -375,9 +415,9 @@ public class Main {
                 .build();
 
         Option netSecConfOption = Option.builder("n")
-            .longOpt("net-sec-conf")
-            .desc("Adds a generic Network Security Configuration file in the output APK")
-            .build();
+                .longOpt("net-sec-conf")
+                .desc("Adds a generic Network Security Configuration file in the output APK")
+                .build();
 
         Option noDbgOption = Option.builder("b")
                 .longOpt("no-debug-info")
@@ -571,10 +611,10 @@ public class Main {
                         "with smali v" + ApktoolProperties.get("smaliVersion") +
                         " and baksmali v" + ApktoolProperties.get("baksmaliVersion") + "\n" +
                         "Copyright 2010 Ryszard Wiśniewski <brut.alll@gmail.com>\n" +
-                        "Copyright 2010 Connor Tumbleson <connor.tumbleson@gmail.com>" );
+                        "Copyright 2010 Connor Tumbleson <connor.tumbleson@gmail.com>");
         if (isAdvanceMode()) {
             System.out.println("Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0)\n");
-        }else {
+        } else {
             System.out.println();
         }
 
@@ -607,7 +647,7 @@ public class Main {
             return;
         }
 
-        Handler handler = new Handler(){
+        Handler handler = new Handler() {
             @Override
             public void publish(LogRecord record) {
                 if (getFormatter() == null) {
@@ -631,10 +671,14 @@ public class Main {
                     reportError(null, exception, ErrorManager.FORMAT_FAILURE);
                 }
             }
+
             @Override
-            public void close() throws SecurityException {}
+            public void close() throws SecurityException {
+            }
+
             @Override
-            public void flush(){}
+            public void flush() {
+            }
         };
 
         logger.addHandler(handler);
@@ -664,28 +708,5 @@ public class Main {
 
     private enum Verbosity {
         NORMAL, VERBOSE, QUIET
-    }
-
-    private static boolean advanceMode = false;
-
-    private final static Options normalOptions;
-    private final static Options decodeOptions;
-    private final static Options buildOptions;
-    private final static Options frameOptions;
-    private final static Options allOptions;
-    private final static Options emptyOptions;
-    private final static Options emptyFrameworkOptions;
-    private final static Options listFrameworkOptions;
-
-    static {
-        //normal and advance usage output
-        normalOptions = new Options();
-        buildOptions = new Options();
-        decodeOptions = new Options();
-        frameOptions = new Options();
-        allOptions = new Options();
-        emptyOptions = new Options();
-        emptyFrameworkOptions = new Options();
-        listFrameworkOptions = new Options();
     }
 }

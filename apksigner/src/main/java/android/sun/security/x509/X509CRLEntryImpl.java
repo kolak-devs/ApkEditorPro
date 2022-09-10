@@ -25,25 +25,24 @@
 
 package android.sun.security.x509;
 
+import android.sun.misc.HexDumpEncoder;
 import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.cert.CRLException;
 import java.security.cert.CRLReason;
 import java.security.cert.X509CRLEntry;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
 
 import javax.security.auth.x500.X500Principal;
-
-import android.sun.misc.HexDumpEncoder;
-import android.sun.security.util.DerValue;
 
 /**
  * <p>Abstract class for a revoked certificate in a CRL.
@@ -77,20 +76,19 @@ import android.sun.security.util.DerValue;
 
 public class X509CRLEntryImpl extends X509CRLEntry {
 
+    private final static boolean isExplicit = false;
+    private static final long YR_2050 = 2524636800000L;
     private android.sun.security.x509.SerialNumber serialNumber = null;
     private Date revocationDate = null;
     private android.sun.security.x509.CRLExtensions extensions = null;
     private byte[] revokedCert = null;
     private X500Principal certIssuer;
 
-    private final static boolean isExplicit = false;
-    private static final long YR_2050 = 2524636800000L;
-
     /**
      * Constructs a revoked certificate entry using the given
      * serial number and revocation date.
      *
-     * @param num the serial number of the revoked certificate.
+     * @param num  the serial number of the revoked certificate.
      * @param date the Date on which revocation took place.
      */
     public X509CRLEntryImpl(BigInteger num, Date date) {
@@ -103,12 +101,12 @@ public class X509CRLEntryImpl extends X509CRLEntry {
      * serial number, revocation date and the entry
      * extensions.
      *
-     * @param num the serial number of the revoked certificate.
-     * @param date the Date on which revocation took place.
+     * @param num          the serial number of the revoked certificate.
+     * @param date         the Date on which revocation took place.
      * @param crlEntryExts the extensions for this entry.
      */
     public X509CRLEntryImpl(BigInteger num, Date date,
-                           android.sun.security.x509.CRLExtensions crlEntryExts) {
+                            android.sun.security.x509.CRLExtensions crlEntryExts) {
         this.serialNumber = new android.sun.security.x509.SerialNumber(num);
         this.revocationDate = date;
         this.extensions = crlEntryExts;
@@ -118,7 +116,7 @@ public class X509CRLEntryImpl extends X509CRLEntry {
      * Unmarshals a revoked certificate from its encoded form.
      *
      * @param revokedCert the encoded bytes.
-     * @exception CRLException on parsing errors.
+     * @throws CRLException on parsing errors.
      */
     public X509CRLEntryImpl(byte[] revokedCert) throws CRLException {
         try {
@@ -133,7 +131,7 @@ public class X509CRLEntryImpl extends X509CRLEntry {
      * Unmarshals a revoked certificate from its encoded form.
      *
      * @param derValue the DER value containing the revoked certificate.
-     * @exception CRLException on parsing errors.
+     * @throws CRLException on parsing errors.
      */
     public X509CRLEntryImpl(DerValue derValue) throws CRLException {
         try {
@@ -141,6 +139,41 @@ public class X509CRLEntryImpl extends X509CRLEntry {
         } catch (IOException e) {
             revokedCert = null;
             throw new CRLException("Parsing error: " + e.toString());
+        }
+    }
+
+    /**
+     * This static method is the default implementation of the
+     * getRevocationReason method in X509CRLEntry.
+     */
+    public static CRLReason getRevocationReason(X509CRLEntry crlEntry) {
+        try {
+            byte[] ext = crlEntry.getExtensionValue("2.5.29.21");
+            if (ext == null) {
+                return null;
+            }
+            android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(ext);
+            byte[] data = val.getOctetString();
+
+            android.sun.security.x509.CRLReasonCodeExtension rcExt =
+                    new android.sun.security.x509.CRLReasonCodeExtension(Boolean.FALSE, data);
+            return rcExt.getReasonCode();
+        } catch (IOException ioe) {
+            return null;
+        }
+    }
+
+    /**
+     * Utility method to convert an arbitrary instance of X509CRLEntry
+     * to a X509CRLEntryImpl. Does a cast if possible, otherwise reparses
+     * the encoding.
+     */
+    public static X509CRLEntryImpl toImpl(X509CRLEntry entry)
+            throws CRLException {
+        if (entry instanceof X509CRLEntryImpl) {
+            return (X509CRLEntryImpl) entry;
+        } else {
+            return new X509CRLEntryImpl(entry.getEncoded());
         }
     }
 
@@ -159,8 +192,8 @@ public class X509CRLEntryImpl extends X509CRLEntry {
      * Encodes the revoked certificate to an output stream.
      *
      * @param outStrm an output stream to which the encoded revoked
-     * certificate is written.
-     * @exception CRLException on encoding errors.
+     *                certificate is written.
+     * @throws CRLException on encoding errors.
      */
     public void encode(android.sun.security.util.DerOutputStream outStrm) throws CRLException {
         try {
@@ -185,7 +218,7 @@ public class X509CRLEntryImpl extends X509CRLEntry {
             }
             outStrm.write(revokedCert);
         } catch (IOException e) {
-             throw new CRLException("Encoding error: " + e.toString());
+            throw new CRLException("Encoding error: " + e.toString());
         }
     }
 
@@ -193,7 +226,7 @@ public class X509CRLEntryImpl extends X509CRLEntry {
      * Returns the ASN.1 DER-encoded form of this CRL Entry,
      * which corresponds to the inner SEQUENCE.
      *
-     * @exception CRLException if an encoding error occurs.
+     * @throws CRLException if an encoding error occurs.
      */
     public byte[] getEncoded() throws CRLException {
         if (revokedCert == null)
@@ -250,38 +283,17 @@ public class X509CRLEntryImpl extends X509CRLEntry {
     }
 
     /**
-     * This static method is the default implementation of the
-     * getRevocationReason method in X509CRLEntry.
-     */
-    public static CRLReason getRevocationReason(X509CRLEntry crlEntry) {
-        try {
-            byte[] ext = crlEntry.getExtensionValue("2.5.29.21");
-            if (ext == null) {
-                return null;
-            }
-            android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(ext);
-            byte[] data = val.getOctetString();
-
-            android.sun.security.x509.CRLReasonCodeExtension rcExt =
-                new android.sun.security.x509.CRLReasonCodeExtension(Boolean.FALSE, data);
-            return rcExt.getReasonCode();
-        } catch (IOException ioe) {
-            return null;
-        }
-    }
-
-    /**
      * get Reason Code from CRL entry.
      *
-     * @returns Integer or null, if no such extension
      * @throws IOException on error
+     * @returns Integer or null, if no such extension
      */
     public Integer getReasonCode() throws IOException {
         Object obj = getExtension(android.sun.security.x509.PKIXExtensions.ReasonCode_Id);
         if (obj == null)
             return null;
-        android.sun.security.x509.CRLReasonCodeExtension reasonCode = (CRLReasonCodeExtension)obj;
-        return (Integer)(reasonCode.get(reasonCode.REASON));
+        android.sun.security.x509.CRLReasonCodeExtension reasonCode = (CRLReasonCodeExtension) obj;
+        return (Integer) (reasonCode.get(reasonCode.REASON));
     }
 
     /**
@@ -304,8 +316,8 @@ public class X509CRLEntryImpl extends X509CRLEntry {
 
             sb.append("\n    CRL Entry Extensions: " + objs.length);
             for (int i = 0; i < objs.length; i++) {
-                sb.append("\n    [" + (i+1) + "]: ");
-                android.sun.security.x509.Extension ext = (android.sun.security.x509.Extension)objs[i];
+                sb.append("\n    [" + (i + 1) + "]: ");
+                android.sun.security.x509.Extension ext = (android.sun.security.x509.Extension) objs[i];
                 try {
                     if (android.sun.security.x509.OIDMap.getClass(ext.getExtensionId()) == null) {
                         sb.append(ext.toString());
@@ -316,8 +328,8 @@ public class X509CRLEntryImpl extends X509CRLEntry {
                             extValue = out.toByteArray();
                             HexDumpEncoder enc = new HexDumpEncoder();
                             sb.append("Extension unknown: "
-                                      + "DER encoded OCTET string =\n"
-                                      + enc.encodeBuffer(extValue) + "\n");
+                                    + "DER encoded OCTET string =\n"
+                                    + enc.encodeBuffer(extValue) + "\n");
                         }
                     } else
                         sb.append(ext.toString()); //sub-class exists
@@ -406,7 +418,7 @@ public class X509CRLEntryImpl extends X509CRLEntry {
                 android.sun.security.x509.Extension ex = null;
                 android.sun.security.util.ObjectIdentifier inCertOID;
                 for (Enumeration<android.sun.security.x509.Extension> e = extensions.getElements();
-                     e.hasMoreElements();) {
+                     e.hasMoreElements(); ) {
                     ex = e.nextElement();
                     inCertOID = ex.getExtensionId();
                     if (inCertOID.equals(findOID)) {
@@ -446,11 +458,11 @@ public class X509CRLEntryImpl extends X509CRLEntry {
     }
 
     private void parse(android.sun.security.util.DerValue derVal)
-    throws CRLException, IOException {
+            throws CRLException, IOException {
 
         if (derVal.tag != android.sun.security.util.DerValue.tag_Sequence) {
             throw new CRLException("Invalid encoded RevokedCertificate, " +
-                                  "starting sequence tag missing.");
+                    "starting sequence tag missing.");
         }
         if (derVal.data.available() == 0)
             throw new CRLException("No data encoded for RevokedCertificates");
@@ -463,9 +475,9 @@ public class X509CRLEntryImpl extends X509CRLEntry {
 
         // revocationDate
         int nextByte = derVal.data.peekByte();
-        if ((byte)nextByte == android.sun.security.util.DerValue.tag_UtcTime) {
+        if ((byte) nextByte == android.sun.security.util.DerValue.tag_UtcTime) {
             this.revocationDate = derVal.data.getUTCTime();
-        } else if ((byte)nextByte == android.sun.security.util.DerValue.tag_GeneralizedTime) {
+        } else if ((byte) nextByte == android.sun.security.util.DerValue.tag_GeneralizedTime) {
             this.revocationDate = derVal.data.getGeneralizedTime();
         } else
             throw new CRLException("Invalid encoding for revocation date");
@@ -478,27 +490,13 @@ public class X509CRLEntryImpl extends X509CRLEntry {
     }
 
     /**
-     * Utility method to convert an arbitrary instance of X509CRLEntry
-     * to a X509CRLEntryImpl. Does a cast if possible, otherwise reparses
-     * the encoding.
-     */
-    public static X509CRLEntryImpl toImpl(X509CRLEntry entry)
-            throws CRLException {
-        if (entry instanceof X509CRLEntryImpl) {
-            return (X509CRLEntryImpl)entry;
-        } else {
-            return new X509CRLEntryImpl(entry.getEncoded());
-        }
-    }
-
-    /**
      * Returns the CertificateIssuerExtension
      *
      * @return the CertificateIssuerExtension, or null if it does not exist
      */
     android.sun.security.x509.CertificateIssuerExtension getCertificateIssuerExtension() {
         return (CertificateIssuerExtension)
-            getExtension(PKIXExtensions.CertificateIssuer_Id);
+                getExtension(PKIXExtensions.CertificateIssuer_Id);
     }
 
     // ANDROID: java.security.cert.Extension is not available before API 24

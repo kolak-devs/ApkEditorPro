@@ -27,7 +27,7 @@ import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.utilsOld.FileCopyUtils;
 import com.mcal.common.utilsOld.RootCommand;
 import com.mcal.common.utilsOld.SDCard;
-import com.mcal.neweditor.TextEditor;
+import com.mcal.editor.TextEditor;
 import com.mcal.sqliteutil.util.PaddingTable;
 import com.mcal.sqliteutil.util.PaddingTable.ITableRowClicked;
 

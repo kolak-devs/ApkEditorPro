@@ -25,6 +25,12 @@
 
 package android.sun.security.provider;
 
+import android.sun.security.pkcs.EncryptedPrivateKeyInfo;
+import android.sun.security.pkcs.PKCS8Key;
+import android.sun.security.util.DerValue;
+import android.sun.security.util.ObjectIdentifier;
+import android.sun.security.x509.AlgorithmId;
+
 import java.io.IOException;
 import java.security.Key;
 import java.security.KeyStoreException;
@@ -32,71 +38,61 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
-import java.util.*;
-
-import android.sun.security.pkcs.PKCS8Key;
-import android.sun.security.pkcs.EncryptedPrivateKeyInfo;
-
-import android.sun.security.x509.AlgorithmId;
-import android.sun.security.util.ObjectIdentifier;
-import android.sun.security.util.DerValue;
+import java.util.Arrays;
 
 /**
  * This is an implementation of a Sun proprietary, exportable algorithm
  * intended for use when protecting (or recovering the cleartext version of)
  * sensitive keys.
  * This algorithm is not intended as a general purpose cipher.
- *
+ * <p>
  * This is how the algorithm works for key protection:
- *
+ * <p>
  * p - user password
  * s - random salt
  * X - xor key
  * P - to-be-protected key
  * Y - protected key
  * R - what gets stored in the keystore
- *
+ * <p>
  * Step 1:
  * Take the user's password, append a random salt (of fixed size) to it,
  * and hash it: d1 = digest(p, s)
  * Store d1 in X.
- *
+ * <p>
  * Step 2:
  * Take the user's password, append the digest result from the previous step,
  * and hash it: dn = digest(p, dn-1).
  * Store dn in X (append it to the previously stored digests).
  * Repeat this step until the length of X matches the length of the private key
  * P.
- *
+ * <p>
  * Step 3:
  * XOR X and P, and store the result in Y: Y = X XOR P.
- *
+ * <p>
  * Step 4:
  * Store s, Y, and digest(p, P) in the result buffer R:
  * R = s + Y + digest(p, P), where "+" denotes concatenation.
  * (NOTE: digest(p, P) is stored in the result buffer, so that when the key is
  * recovered, we can check if the recovered key indeed matches the original
  * key.) R is stored in the keystore.
- *
+ * <p>
  * The protected key is recovered as follows:
- *
+ * <p>
  * Step1 and Step2 are the same as above, except that the salt is not randomly
  * generated, but taken from the result R of step 4 (the first length(s)
  * bytes).
- *
+ * <p>
  * Step 3 (XOR operation) yields the plaintext key.
- *
+ * <p>
  * Then concatenate the password with the recovered key, and compare with the
  * last length(digest(p, P)) bytes of R. If they match, the recovered key is
  * indeed the same key as the original key.
  *
  * @author Jan Luehe
- *
- *
  * @see java.security.KeyStore
  * @see android.sun.security.provider.JavaKeyStore
  * @see KeyTool
- *
  * @since 1.2
  */
 
@@ -127,19 +123,18 @@ final class KeyProtector {
      * being found in dictionaries, are bad.
      */
     public KeyProtector(char[] password)
-        throws NoSuchAlgorithmException
-    {
+            throws NoSuchAlgorithmException {
         int i, j;
 
         if (password == null) {
-           throw new IllegalArgumentException("password can't be null");
+            throw new IllegalArgumentException("password can't be null");
         }
         md = MessageDigest.getInstance(DIGEST_ALG);
         // Convert password to byte array, so that it can be digested
         passwdBytes = new byte[password.length * 2];
-        for (i=0, j=0; i<password.length; i++) {
-            passwdBytes[j++] = (byte)(password[i] >> 8);
-            passwdBytes[j++] = (byte)password[i];
+        for (i = 0, j = 0; i < password.length; i++) {
+            passwdBytes[j++] = (byte) (password[i] >> 8);
+            passwdBytes[j++] = (byte) password[i];
         }
     }
 
@@ -149,7 +144,7 @@ final class KeyProtector {
      */
     protected void finalize() {
         if (passwdBytes != null) {
-            Arrays.fill(passwdBytes, (byte)0x00);
+            Arrays.fill(passwdBytes, (byte) 0x00);
             passwdBytes = null;
         }
     }
@@ -158,8 +153,7 @@ final class KeyProtector {
      * Protects the given plaintext key, using the password provided at
      * construction time.
      */
-    public byte[] protect(Key key) throws KeyStoreException
-    {
+    public byte[] protect(Key key) throws KeyStoreException {
         int i;
         int numRounds;
         byte[] digest;
@@ -172,13 +166,13 @@ final class KeyProtector {
 
         if (!"PKCS#8".equalsIgnoreCase(key.getFormat())) {
             throw new KeyStoreException(
-                "Cannot get key bytes, not PKCS#8 encoded");
+                    "Cannot get key bytes, not PKCS#8 encoded");
         }
 
         byte[] plainKey = key.getEncoded();
         if (plainKey == null) {
             throw new KeyStoreException(
-                "Cannot get key bytes, encoding not supported");
+                    "Cannot get key bytes, encoding not supported");
         }
 
         // Determine the number of digest rounds
@@ -205,17 +199,17 @@ final class KeyProtector {
             // Copy the digest into "xorKey"
             if (i < numRounds - 1) {
                 System.arraycopy(digest, 0, xorKey, xorOffset,
-                                 digest.length);
+                        digest.length);
             } else {
                 System.arraycopy(digest, 0, xorKey, xorOffset,
-                                 xorKey.length - xorOffset);
+                        xorKey.length - xorOffset);
             }
         }
 
         // XOR "plainKey" with "xorKey", and store the result in "tmpKey"
         byte[] tmpKey = new byte[plainKey.length];
         for (i = 0; i < tmpKey.length; i++) {
-            tmpKey[i] = (byte)(plainKey[i] ^ xorKey[i]);
+            tmpKey[i] = (byte) (plainKey[i] ^ xorKey[i]);
         }
 
         // Store salt and "tmpKey" in "encrKey"
@@ -227,7 +221,7 @@ final class KeyProtector {
 
         // Append digest(password, plainKey) as an integrity check to "encrKey"
         md.update(passwdBytes);
-        Arrays.fill(passwdBytes, (byte)0x00);
+        Arrays.fill(passwdBytes, (byte) 0x00);
         passwdBytes = null;
         md.update(plainKey);
         digest = md.digest();
@@ -239,7 +233,7 @@ final class KeyProtector {
         AlgorithmId encrAlg;
         try {
             encrAlg = new AlgorithmId(new ObjectIdentifier(KEY_PROTECTOR_OID));
-            return new EncryptedPrivateKeyInfo(encrAlg,encrKey).getEncoded();
+            return new EncryptedPrivateKeyInfo(encrAlg, encrKey).getEncoded();
         } catch (IOException ioe) {
             throw new KeyStoreException(ioe.getMessage());
         }
@@ -250,8 +244,7 @@ final class KeyProtector {
      * using the password provided at construction time.
      */
     public Key recover(EncryptedPrivateKeyInfo encrInfo)
-        throws UnrecoverableKeyException
-    {
+            throws UnrecoverableKeyException {
         int i;
         byte[] digest;
         int numRounds;
@@ -262,7 +255,7 @@ final class KeyProtector {
         AlgorithmId encrAlg = encrInfo.getAlgorithm();
         if (!(encrAlg.getOID().toString().equals(KEY_PROTECTOR_OID))) {
             throw new UnrecoverableKeyException("Unsupported key protection "
-                                                + "algorithm");
+                    + "algorithm");
         }
 
         byte[] protectedKey = encrInfo.getEncryptedData();
@@ -297,17 +290,17 @@ final class KeyProtector {
             // Copy the digest into "xorKey"
             if (i < numRounds - 1) {
                 System.arraycopy(digest, 0, xorKey, xorOffset,
-                                 digest.length);
+                        digest.length);
             } else {
                 System.arraycopy(digest, 0, xorKey, xorOffset,
-                                 xorKey.length - xorOffset);
+                        xorKey.length - xorOffset);
             }
         }
 
         // XOR "encrKey" with "xorKey", and store the result in "plainKey"
         byte[] plainKey = new byte[encrKey.length];
         for (i = 0; i < plainKey.length; i++) {
-            plainKey[i] = (byte)(encrKey[i] ^ xorKey[i]);
+            plainKey[i] = (byte) (encrKey[i] ^ xorKey[i]);
         }
 
         /*
@@ -318,7 +311,7 @@ final class KeyProtector {
          * different, throw an exception.
          */
         md.update(passwdBytes);
-        Arrays.fill(passwdBytes, (byte)0x00);
+        Arrays.fill(passwdBytes, (byte) 0x00);
         passwdBytes = null;
         md.update(plainKey);
         digest = md.digest();

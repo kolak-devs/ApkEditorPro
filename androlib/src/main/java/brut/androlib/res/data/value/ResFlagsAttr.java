@@ -16,15 +16,20 @@
  */
 package brut.androlib.res.data.value;
 
-import brut.androlib.AndrolibException;
-import brut.androlib.res.data.ResResource;
-import brut.util.Duo;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
 import java.util.Arrays;
 
+import brut.androlib.AndrolibException;
+import brut.androlib.res.data.ResResource;
+import brut.util.Duo;
+
 public class ResFlagsAttr extends ResAttr {
+    private final FlagItem[] mItems;
+    private FlagItem[] mZeroFlags;
+    private FlagItem[] mFlags;
+
     ResFlagsAttr(ResReferenceValue parent, int type, Integer min, Integer max,
                  Boolean l10n, Duo<ResReferenceValue, ResIntValue>[] items) {
         super(parent, type, min, max, l10n);
@@ -38,7 +43,7 @@ public class ResFlagsAttr extends ResAttr {
     @Override
     public String convertToResXmlFormat(ResScalarValue value)
             throws AndrolibException {
-        if(value instanceof ResReferenceValue) {
+        if (value instanceof ResReferenceValue) {
             return value.encodeAsResXml();
         }
         if (!(value instanceof ResIntValue)) {
@@ -76,7 +81,7 @@ public class ResFlagsAttr extends ResAttr {
             serializer.startTag(null, "flag");
             serializer.attribute(null, "name", item.getValue());
             serializer.attribute(null, "value",
-                String.format("0x%08x", item.flag));
+                    String.format("0x%08x", item.flag));
             serializer.endTag(null, "flag");
         }
     }
@@ -124,11 +129,6 @@ public class ResFlagsAttr extends ResAttr {
 
         Arrays.sort(mFlags, (o1, o2) -> Integer.compare(Integer.bitCount(o2.flag), Integer.bitCount(o1.flag)));
     }
-
-    private final FlagItem[] mItems;
-
-    private FlagItem[] mZeroFlags;
-    private FlagItem[] mFlags;
 
     private static class FlagItem {
         public final ResReferenceValue ref;

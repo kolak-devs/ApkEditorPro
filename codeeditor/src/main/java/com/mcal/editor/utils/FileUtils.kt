@@ -1,4 +1,4 @@
-package com.mcal.neweditor.editor2.utils
+package com.mcal.editor.utils
 
 import java.io.File
 

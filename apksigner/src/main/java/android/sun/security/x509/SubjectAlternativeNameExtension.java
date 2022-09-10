@@ -33,7 +33,7 @@ import java.util.Enumeration;
 
 /**
  * This represents the Subject Alternative Name Extension.
- *
+ * <p>
  * This extension, if present, allows the subject to specify multiple
  * alternative names.
  *
@@ -47,19 +47,20 @@ import java.util.Enumeration;
  * SubjectAltName ::= GeneralNames
  * GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName
  * </pre>
+ *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  * @see android.sun.security.x509.Extension
  * @see android.sun.security.x509.CertAttrSet
  */
 public class SubjectAlternativeNameExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
      */
     public static final String IDENT =
-                         "x509.info.extensions.SubjectAlternativeName";
+            "x509.info.extensions.SubjectAlternativeName";
     /**
      * Attribute names.
      */
@@ -69,26 +70,15 @@ implements CertAttrSet<String> {
     // private data members
     android.sun.security.x509.GeneralNames names = null;
 
-    // Encode this extension
-    private void encodeThis() throws IOException {
-        if (names == null || names.isEmpty()) {
-            this.extensionValue = null;
-            return;
-        }
-        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
-        names.encode(os);
-        this.extensionValue = os.toByteArray();
-    }
-
     /**
      * Create a SubjectAlternativeNameExtension with the passed GeneralNames.
      * The extension is marked non-critical.
      *
      * @param names the GeneralNames for the subject.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public SubjectAlternativeNameExtension(android.sun.security.x509.GeneralNames names)
-    throws IOException {
+            throws IOException {
         this(Boolean.FALSE, names);
     }
 
@@ -97,11 +87,11 @@ implements CertAttrSet<String> {
      * criticality and GeneralNames.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param names the GeneralNames for the subject.
-     * @exception IOException on error.
+     * @param names    the GeneralNames for the subject.
+     * @throws IOException on error.
      */
     public SubjectAlternativeNameExtension(Boolean critical, android.sun.security.x509.GeneralNames names)
-    throws IOException {
+            throws IOException {
         this.names = names;
         this.extensionId = android.sun.security.x509.PKIXExtensions.SubjectAlternativeName_Id;
         this.critical = critical.booleanValue();
@@ -122,12 +112,12 @@ implements CertAttrSet<String> {
      * Create the extension from the passed DER encoded value.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
      */
     public SubjectAlternativeNameExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.SubjectAlternativeName_Id;
         this.critical = critical.booleanValue();
 
@@ -141,17 +131,28 @@ implements CertAttrSet<String> {
         names = new android.sun.security.x509.GeneralNames(val);
     }
 
+    // Encode this extension
+    private void encodeThis() throws IOException {
+        if (names == null || names.isEmpty()) {
+            this.extensionValue = null;
+            return;
+        }
+        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
+        names.encode(os);
+        this.extensionValue = os.toByteArray();
+    }
+
     /**
      * Returns a printable representation of the SubjectAlternativeName.
      */
     public String toString() {
 
         String result = super.toString() + "SubjectAlternativeName [\n";
-        if(names == null) {
+        if (names == null) {
             result += "  null\n";
         } else {
-            for(GeneralName name: names.names()) {
-                result += "  "+name+"\n";
+            for (GeneralName name : names.names()) {
+                result += "  " + name + "\n";
             }
         }
         result += "]\n";
@@ -162,7 +163,7 @@ implements CertAttrSet<String> {
      * Write the extension to the OutputStream.
      *
      * @param out the OutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new DerOutputStream();
@@ -181,13 +182,13 @@ implements CertAttrSet<String> {
     public void set(String name, Object obj) throws IOException {
         if (name.equalsIgnoreCase(SUBJECT_NAME)) {
             if (!(obj instanceof android.sun.security.x509.GeneralNames)) {
-              throw new IOException("Attribute value should be of " +
-                                    "type GeneralNames.");
+                throw new IOException("Attribute value should be of " +
+                        "type GeneralNames.");
             }
-            names = (GeneralNames)obj;
+            names = (GeneralNames) obj;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:SubjectAlternativeName.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:SubjectAlternativeName.");
         }
         encodeThis();
     }
@@ -199,8 +200,8 @@ implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(SUBJECT_NAME)) {
             return (names);
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:SubjectAlternativeName.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:SubjectAlternativeName.");
         }
     }
 
@@ -211,8 +212,8 @@ implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(SUBJECT_NAME)) {
             names = null;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:SubjectAlternativeName.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:SubjectAlternativeName.");
         }
         encodeThis();
     }

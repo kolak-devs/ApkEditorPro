@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?attr/actionBarSize"
-    app:titleTextAppearance="@style/AppTheme.ToolbarStyle"
+    app:subtitleCentered="true"
     app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Body2"
     app:titleCentered="true"
-    app:subtitleCentered="true"
+    app:titleTextAppearance="@style/AppTheme.ToolbarStyle"
+    tools:menu="@menu/menu_main"
     tools:navigationIcon="@drawable/ic_pan"
-    tools:title="Toolbar title centered"
     tools:subtitle="test"
-    tools:menu="@menu/menu_main"/>
+    tools:title="Toolbar title centered" />

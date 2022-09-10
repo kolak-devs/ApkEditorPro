@@ -45,21 +45,21 @@ import java.util.Locale;
  * instead of wpolk@nist.gov) is not permitted; such identities are to
  * be encoded as rfc822Name.
  * <p>
+ *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  */
 public class DNSName implements android.sun.security.x509.GeneralNameInterface {
-    private String name;
-
     private static final String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final String digitsAndHyphen = "0123456789-";
     private static final String alphaDigitsAndHyphen = alpha + digitsAndHyphen;
+    private String name;
 
     /**
      * Create the DNSName object from the passed encoded Der value.
      *
      * @param derValue the encoded DER DNSName.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public DNSName(android.sun.security.util.DerValue derValue) throws IOException {
         name = derValue.getIA5String();
@@ -76,24 +76,24 @@ public class DNSName implements android.sun.security.x509.GeneralNameInterface {
             throw new IOException("DNS name must not be null");
         if (name.indexOf(' ') != -1)
             throw new IOException("DNS names or NameConstraints with blank components are not permitted");
-        if (name.charAt(0) == '.' || name.charAt(name.length() -1) == '.')
+        if (name.charAt(0) == '.' || name.charAt(name.length() - 1) == '.')
             throw new IOException("DNS names or NameConstraints may not begin or end with a .");
         //Name will consist of label components separated by "."
         //startIndex is the index of the first character of a component
         //endIndex is the index of the last character of a component plus 1
-        for (int endIndex,startIndex=0; startIndex < name.length(); startIndex = endIndex+1) {
+        for (int endIndex, startIndex = 0; startIndex < name.length(); startIndex = endIndex + 1) {
             endIndex = name.indexOf('.', startIndex);
             if (endIndex < 0) {
                 endIndex = name.length();
             }
-            if ((endIndex-startIndex) < 1)
+            if ((endIndex - startIndex) < 1)
                 throw new IOException("DNSName SubjectAltNames with empty components are not permitted");
 
             //DNSName components must begin with a letter A-Z or a-z
             if (alpha.indexOf(name.charAt(startIndex)) < 0)
                 throw new IOException("DNSName components must begin with a letter");
             //nonStartIndex: index for characters in the component beyond the first one
-            for (int nonStartIndex=startIndex+1; nonStartIndex < endIndex; nonStartIndex++) {
+            for (int nonStartIndex = startIndex + 1; nonStartIndex < endIndex; nonStartIndex++) {
                 char x = name.charAt(nonStartIndex);
                 if ((alphaDigitsAndHyphen).indexOf(x) < 0)
                     throw new IOException("DNSName components must consist of letters, digits, and hyphens");
@@ -120,7 +120,7 @@ public class DNSName implements android.sun.security.x509.GeneralNameInterface {
      * Encode the DNS name into the DerOutputStream.
      *
      * @param out the DER stream to encode the DNSName to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(DerOutputStream out) throws IOException {
         out.putIA5String(name);
@@ -146,7 +146,7 @@ public class DNSName implements android.sun.security.x509.GeneralNameInterface {
         if (!(obj instanceof DNSName))
             return false;
 
-        DNSName other = (DNSName)obj;
+        DNSName other = (DNSName) obj;
 
         // RFC2459 mandates that these names are
         // not case-sensitive
@@ -164,11 +164,11 @@ public class DNSName implements android.sun.security.x509.GeneralNameInterface {
 
     /**
      * Return type of constraint inputName places on this name:<ul>
-     *   <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain).
-     *   <li>NAME_MATCH = 0: input name matches name.
-     *   <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming subtree)
-     *   <li>NAME_WIDENS = 2: input name widens name (is higher in the naming subtree)
-     *   <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type.
+     * <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain).
+     * <li>NAME_MATCH = 0: input name matches name.
+     * <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming subtree)
+     * <li>NAME_WIDENS = 2: input name widens name (is higher in the naming subtree)
+     * <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type.
      * </ul>.  These results are used in checking NameConstraints during
      * certification path verification.
      * <p>
@@ -187,10 +187,11 @@ public class DNSName implements android.sun.security.x509.GeneralNameInterface {
      * case-insensitive manner, assuming an ASCII character set, and a high
      * order zero bit.
      * <p>
+     *
      * @param inputName to be checked for being constrained
-     * @returns constraint type above
      * @throws UnsupportedOperationException if name is not exact match, but narrowing and widening are
-     *          not supported for this name type.
+     *                                       not supported for this name type.
+     * @returns constraint type above
      */
     public int constrains(GeneralNameInterface inputName) throws UnsupportedOperationException {
         int constraintType;
@@ -200,19 +201,19 @@ public class DNSName implements android.sun.security.x509.GeneralNameInterface {
             constraintType = NAME_DIFF_TYPE;
         else {
             String inName =
-                (((DNSName)inputName).getName()).toLowerCase(Locale.ENGLISH);
+                    (((DNSName) inputName).getName()).toLowerCase(Locale.ENGLISH);
             String thisName = name.toLowerCase(Locale.ENGLISH);
             if (inName.equals(thisName))
                 constraintType = NAME_MATCH;
             else if (thisName.endsWith(inName)) {
                 int inNdx = thisName.lastIndexOf(inName);
-                if (thisName.charAt(inNdx-1) == '.' )
+                if (thisName.charAt(inNdx - 1) == '.')
                     constraintType = NAME_WIDENS;
                 else
                     constraintType = NAME_SAME_TYPE;
             } else if (inName.endsWith(thisName)) {
                 int ndx = inName.lastIndexOf(thisName);
-                if (inName.charAt(ndx-1) == '.' )
+                if (inName.charAt(ndx - 1) == '.')
                     constraintType = NAME_NARROWS;
                 else
                     constraintType = NAME_SAME_TYPE;
@@ -228,16 +229,16 @@ public class DNSName implements android.sun.security.x509.GeneralNameInterface {
      * NameConstraints minimum and maximum bounds and for calculating
      * path lengths in name subtrees.
      *
-     * @returns distance of name from root
      * @throws UnsupportedOperationException if not supported for this name type
+     * @returns distance of name from root
      */
     public int subtreeDepth() throws UnsupportedOperationException {
-        String subtree=name;
-        int i=1;
+        String subtree = name;
+        int i = 1;
 
         /* count dots */
         for (; subtree.lastIndexOf('.') >= 0; i++) {
-            subtree=subtree.substring(0,subtree.lastIndexOf('.'));
+            subtree = subtree.substring(0, subtree.lastIndexOf('.'));
         }
 
         return i;

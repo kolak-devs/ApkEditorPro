@@ -3,11 +3,12 @@
 
 package org.xmlpull.v1.xsd;
 
+import org.xmlpull.v1.wrapper.XmlSerializerWrapper;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
-import org.xmlpull.v1.wrapper.XmlSerializerWrapper;
 
 /**
  * Set of method to write XSD types into XML stream.
@@ -97,15 +98,19 @@ public interface XsdSerializer extends XmlSerializerWrapper {
     //---- xsd:double
 
     public void writeXsdDouble(double d)
-        throws XsdException, IOException;
+            throws XsdException, IOException;
+
     public void writeXsdDoubleElement(String namespace, String name, double d)
-        throws XsdException, IOException;
+            throws XsdException, IOException;
+
     public void writeXsdDoubleElement(String namespace, String name, double d, boolean addXsiType)
-        throws XsdException, IOException;
+            throws XsdException, IOException;
+
     public void writeXsdDoubleAttribute(String name, double d)
-        throws XsdException, IOException;
+            throws XsdException, IOException;
+
     public void writeXsdDoubleAttribute(String namespace, String name, double d)
-        throws XsdException, IOException;
+            throws XsdException, IOException;
 
     // ----- xsd:float
 

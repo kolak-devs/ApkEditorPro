@@ -18,7 +18,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.view.ProgressDialog;

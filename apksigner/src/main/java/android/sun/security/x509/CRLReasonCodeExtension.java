@@ -57,6 +57,7 @@ import java.util.Enumeration;
  *    privilegeWithdrawn      (9),
  *    aACompromise           (10) }
  * </pre>
+ *
  * @author Hemma Prafullchandra
  * @see android.sun.security.x509.Extension
  * @see android.sun.security.x509.CertAttrSet
@@ -86,16 +87,6 @@ public class CRLReasonCodeExtension extends Extension
 
     private int reasonCode = 0;
 
-    private void encodeThis() throws IOException {
-        if (reasonCode == 0) {
-            this.extensionValue = null;
-            return;
-        }
-        android.sun.security.util.DerOutputStream dos = new DerOutputStream();
-        dos.putEnumerated(reasonCode);
-        this.extensionValue = dos.toByteArray();
-    }
-
     /**
      * Create a CRLReasonCodeExtension with the passed in reason.
      * Criticality automatically set to false.
@@ -110,10 +101,10 @@ public class CRLReasonCodeExtension extends Extension
      * Create a CRLReasonCodeExtension with the passed in reason.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param reason the enumerated value for the reason code.
+     * @param reason   the enumerated value for the reason code.
      */
     public CRLReasonCodeExtension(boolean critical, int reason)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.ReasonCode_Id;
         this.critical = critical;
         this.reasonCode = reason;
@@ -124,17 +115,27 @@ public class CRLReasonCodeExtension extends Extension
      * Create the extension from the passed DER encoded value of the same.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
      */
     public CRLReasonCodeExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.ReasonCode_Id;
         this.critical = critical.booleanValue();
         this.extensionValue = (byte[]) value;
         android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(this.extensionValue);
         this.reasonCode = val.getEnumerated();
+    }
+
+    private void encodeThis() throws IOException {
+        if (reasonCode == 0) {
+            this.extensionValue = null;
+            return;
+        }
+        android.sun.security.util.DerOutputStream dos = new DerOutputStream();
+        dos.putEnumerated(reasonCode);
+        this.extensionValue = dos.toByteArray();
     }
 
     /**
@@ -145,10 +146,10 @@ public class CRLReasonCodeExtension extends Extension
             throw new IOException("Attribute must be of type Integer.");
         }
         if (name.equalsIgnoreCase(REASON)) {
-            reasonCode = ((Integer)obj).intValue();
+            reasonCode = ((Integer) obj).intValue();
         } else {
             throw new IOException
-                ("Name not supported by CRLReasonCodeExtension");
+                    ("Name not supported by CRLReasonCodeExtension");
         }
         encodeThis();
     }
@@ -161,7 +162,7 @@ public class CRLReasonCodeExtension extends Extension
             return new Integer(reasonCode);
         } else {
             throw new IOException
-                ("Name not supported by CRLReasonCodeExtension");
+                    ("Name not supported by CRLReasonCodeExtension");
         }
     }
 
@@ -173,7 +174,7 @@ public class CRLReasonCodeExtension extends Extension
             reasonCode = 0;
         } else {
             throw new IOException
-                ("Name not supported by CRLReasonCodeExtension");
+                    ("Name not supported by CRLReasonCodeExtension");
         }
         encodeThis();
     }
@@ -189,7 +190,7 @@ public class CRLReasonCodeExtension extends Extension
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();

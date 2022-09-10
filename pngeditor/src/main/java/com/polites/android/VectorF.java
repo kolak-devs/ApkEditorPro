@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 Jason Polites
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,16 +16,14 @@
 package com.polites.android;
 
 import android.graphics.PointF;
-import android.util.FloatMath;
 import android.view.MotionEvent;
 
 public class VectorF {
 
-    public float angle;
-    public float length;
-
     public final PointF start = new PointF();
     public final PointF end = new PointF();
+    public float angle;
+    public float length;
 
     public void calculateEndPoint() {
         end.x = (float) Math.cos(angle) * length + start.x;

@@ -26,15 +26,15 @@
 package android.sun.security.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.Comparator;
-import java.util.Arrays;
+import java.io.OutputStream;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
 /**
@@ -46,24 +46,37 @@ import java.util.Locale;
  * DER data encodings which are defined.  That subset is sufficient for
  * generating most X.509 certificates.
  *
- *
  * @author David Brownell
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  */
 public class DerOutputStream
-extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
+        extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
+    /**
+     * Lexicographical order comparison on byte arrays, for ordering
+     * elements of a SET OF objects in DER encoding.
+     */
+    private static android.sun.security.util.ByteArrayLexOrder lexOrder = new ByteArrayLexOrder();
+    /**
+     * Tag order comparison on byte arrays, for ordering elements of
+     * SET objects in DER encoding.
+     */
+    private static android.sun.security.util.ByteArrayTagOrder tagOrder = new ByteArrayTagOrder();
+
     /**
      * Construct an DER output stream.
      *
      * @param size how large a buffer to preallocate.
      */
-    public DerOutputStream(int size) { super(size); }
+    public DerOutputStream(int size) {
+        super(size);
+    }
 
     /**
      * Construct an DER output stream.
      */
-    public DerOutputStream() { }
+    public DerOutputStream() {
+    }
 
     /**
      * Writes tagged, pre-marshaled data.  This calcuates and encodes
@@ -71,7 +84,7 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
      * { tag, length, data } used by all DER values.
      *
      * @param tag the DER value tag for the data, such as
-     *          <em>DerValue.tag_Sequence</em>
+     *            <em>DerValue.tag_Sequence</em>
      * @param buf buffered data, which must be DER-encoded
      */
     public void write(byte tag, byte[] buf) throws IOException {
@@ -86,43 +99,13 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
      * efficiently encapsulating values in sequences.
      *
      * @param tag the DER value tag for the data, such as
-     *          <em>DerValue.tag_Sequence</em>
+     *            <em>DerValue.tag_Sequence</em>
      * @param out buffered data
      */
     public void write(byte tag, DerOutputStream out) throws IOException {
         write(tag);
         putLength(out.count);
         write(out.buf, 0, out.count);
-    }
-
-    /**
-     * Writes implicitly tagged data using buffer-to-buffer copy.  As above,
-     * this writes a standard DER record.  This is often used when
-     * efficiently encapsulating implicitly tagged values.
-     *
-     * @param tag the DER value of the context-specific tag that replaces
-     * original tag of the value in the output, such as in
-     * <pre>
-     *          <em> <field> [N] IMPLICIT <type></em>
-     * </pre>
-     * For example, <em>FooLength [1] IMPLICIT INTEGER</em>, with value=4;
-     * would be encoded as "81 01 04"  whereas in explicit
-     * tagging it would be encoded as "A1 03 02 01 04".
-     * Notice that the tag is A1 and not 81, this is because with
-     * explicit tagging the form is always constructed.
-     * @param value original value being implicitly tagged
-     */
-    public void writeImplicit(byte tag, DerOutputStream value)
-    throws IOException {
-        write(tag);
-        write(value.buf, 1, value.count-1);
-    }
-
-    /**
-     * Marshals pre-encoded DER value onto the output stream.
-     */
-    public void putDerValue(android.sun.security.util.DerValue val) throws IOException {
-        val.encode(this);
     }
 
     /*
@@ -132,6 +115,36 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
      *  OBJECT IDENTIFIER, SEQUENCE(OF), SET(OF)
      *  PrintableString, T61String, IA5String, UTCTime
      */
+
+    /**
+     * Writes implicitly tagged data using buffer-to-buffer copy.  As above,
+     * this writes a standard DER record.  This is often used when
+     * efficiently encapsulating implicitly tagged values.
+     *
+     * @param tag   the DER value of the context-specific tag that replaces
+     *              original tag of the value in the output, such as in
+     *              <pre>
+     *                       <em> <field> [N] IMPLICIT <type></em>
+     *              </pre>
+     *              For example, <em>FooLength [1] IMPLICIT INTEGER</em>, with value=4;
+     *              would be encoded as "81 01 04"  whereas in explicit
+     *              tagging it would be encoded as "A1 03 02 01 04".
+     *              Notice that the tag is A1 and not 81, this is because with
+     *              explicit tagging the form is always constructed.
+     * @param value original value being implicitly tagged
+     */
+    public void writeImplicit(byte tag, DerOutputStream value)
+            throws IOException {
+        write(tag);
+        write(value.buf, 1, value.count - 1);
+    }
+
+    /**
+     * Marshals pre-encoded DER value onto the output stream.
+     */
+    public void putDerValue(android.sun.security.util.DerValue val) throws IOException {
+        val.encode(this);
+    }
 
     /**
      * Marshals a DER boolean on the output stream.
@@ -148,6 +161,7 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
 
     /**
      * Marshals a DER enumerated on the output stream.
+     *
      * @param i the enumerated value.
      */
     public void putEnumerated(int i) throws IOException {
@@ -162,13 +176,14 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
      */
     public void putInteger(BigInteger i) throws IOException {
         write(android.sun.security.util.DerValue.tag_Integer);
-        byte[]    buf = i.toByteArray(); // least number  of bytes
+        byte[] buf = i.toByteArray(); // least number  of bytes
         putLength(buf.length);
         write(buf, 0, buf.length);
     }
 
     /**
      * Marshals a DER integer on the output stream.
+     *
      * @param i the integer in the form of an Integer.
      */
     public void putInteger(Integer i) throws IOException {
@@ -177,6 +192,7 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
 
     /**
      * Marshals a DER integer on the output stream.
+     *
      * @param i the integer.
      */
     public void putInteger(int i) throws IOException {
@@ -192,31 +208,31 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
         // Obtain the four bytes of the int
 
         bytes[3] = (byte) (i & 0xff);
-        bytes[2] = (byte)((i & 0xff00) >>> 8);
-        bytes[1] = (byte)((i & 0xff0000) >>> 16);
-        bytes[0] = (byte)((i & 0xff000000) >>> 24);
+        bytes[2] = (byte) ((i & 0xff00) >>> 8);
+        bytes[1] = (byte) ((i & 0xff0000) >>> 16);
+        bytes[0] = (byte) ((i & 0xff000000) >>> 24);
 
         // Reduce them to the least number of bytes needed to
         // represent this int
 
-        if (bytes[0] == (byte)0xff) {
+        if (bytes[0] == (byte) 0xff) {
 
             // Eliminate redundant 0xff
 
             for (int j = 0; j < 3; j++) {
-                if ((bytes[j] == (byte)0xff) &&
-                    ((bytes[j+1] & 0x80) == 0x80))
+                if ((bytes[j] == (byte) 0xff) &&
+                        ((bytes[j + 1] & 0x80) == 0x80))
                     start++;
                 else
                     break;
-             }
-         } else if (bytes[0] == 0x00) {
+            }
+        } else if (bytes[0] == 0x00) {
 
-             // Eliminate redundant 0x00
+            // Eliminate redundant 0x00
 
             for (int j = 0; j < 3; j++) {
                 if ((bytes[j] == 0x00) &&
-                    ((bytes[j+1] & 0x80) == 0))
+                        ((bytes[j + 1] & 0x80) == 0))
                     start++;
                 else
                     break;
@@ -252,7 +268,7 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
 
         write(android.sun.security.util.DerValue.tag_BitString);
         putLength(bits.length + 1);
-        write(bits.length*8 - ba.length()); // excess bits in last octet
+        write(bits.length * 8 - ba.length()); // excess bits in last octet
         write(bits);
     }
 
@@ -311,7 +327,7 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
      * Marshals the contents of a set on the output stream without
      * ordering the elements.  Ok for BER encoding, but not for DER
      * encoding.
-     *
+     * <p>
      * For DER encoding, use orderedPutSet() or orderedPutSetOf().
      */
     public void putSet(android.sun.security.util.DerValue[] set) throws IOException {
@@ -330,7 +346,7 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
      * set elements be sorted into ascending lexicographical order
      * before being output.  Hence sets with the same tags and
      * elements have the same DER encoding.
-     *
+     * <p>
      * This method supports the ASN.1 "SET OF" construct, but not
      * "SET", which uses a different order.
      */
@@ -344,25 +360,13 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
      * set elements be sorted into ascending tag order
      * before being output.  Hence sets with the same tags and
      * elements have the same DER encoding.
-     *
+     * <p>
      * This method supports the ASN.1 "SET" construct, but not
      * "SET OF", which uses a different order.
      */
     public void putOrderedSet(byte tag, android.sun.security.util.DerEncoder[] set) throws IOException {
         putOrderedSet(tag, set, tagOrder);
     }
-
-    /**
-     *  Lexicographical order comparison on byte arrays, for ordering
-     *  elements of a SET OF objects in DER encoding.
-     */
-    private static android.sun.security.util.ByteArrayLexOrder lexOrder = new ByteArrayLexOrder();
-
-    /**
-     *  Tag order comparison on byte arrays, for ordering elements of
-     *  SET objects in DER encoding.
-     */
-    private static android.sun.security.util.ByteArrayTagOrder tagOrder = new ByteArrayTagOrder();
 
     /**
      * Marshals a the contents of a set on the output stream with the
@@ -442,14 +446,15 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
 
     /**
      * Private helper routine for writing DER encoded string values.
-     * @param s the string to write
+     *
+     * @param s         the string to write
      * @param stringTag one of the DER string tags that indicate which
-     * encoding should be used to write the string out.
-     * @param enc the name of the encoder that should be used corresponding
-     * to the above tag.
+     *                  encoding should be used to write the string out.
+     * @param enc       the name of the encoder that should be used corresponding
+     *                  to the above tag.
      */
     private void writeString(String s, byte stringTag, String enc)
-        throws IOException {
+            throws IOException {
 
         byte[] data = s.getBytes(enc);
         write(stringTag);
@@ -481,7 +486,8 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
      * Private helper routine for marshalling a DER UTC/Generalized
      * time/date value. If the tag specified is not that for UTC Time
      * then it defaults to Generalized Time.
-     * @param d the date to be marshalled
+     *
+     * @param d   the date to be marshalled
      * @param tag the tag for UTC Time or Generalized Time
      */
     private void putTime(Date d, byte tag) throws IOException {
@@ -516,34 +522,34 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
     /**
      * Put the encoding of the length in the stream.
      *
+     * @throws IOException on writing errors.
      * @params len the length of the attribute.
-     * @exception IOException on writing errors.
      */
     public void putLength(int len) throws IOException {
         if (len < 128) {
-            write((byte)len);
+            write((byte) len);
 
         } else if (len < (1 << 8)) {
-            write((byte)0x081);
-            write((byte)len);
+            write((byte) 0x081);
+            write((byte) len);
 
         } else if (len < (1 << 16)) {
-            write((byte)0x082);
-            write((byte)(len >> 8));
-            write((byte)len);
+            write((byte) 0x082);
+            write((byte) (len >> 8));
+            write((byte) len);
 
         } else if (len < (1 << 24)) {
-            write((byte)0x083);
-            write((byte)(len >> 16));
-            write((byte)(len >> 8));
-            write((byte)len);
+            write((byte) 0x083);
+            write((byte) (len >> 16));
+            write((byte) (len >> 8));
+            write((byte) len);
 
         } else {
-            write((byte)0x084);
-            write((byte)(len >> 24));
-            write((byte)(len >> 16));
-            write((byte)(len >> 8));
-            write((byte)len);
+            write((byte) 0x084);
+            write((byte) (len >> 24));
+            write((byte) (len >> 16));
+            write((byte) (len >> 8));
+            write((byte) len);
         }
     }
 
@@ -551,24 +557,24 @@ extends ByteArrayOutputStream implements android.sun.security.util.DerEncoder {
      * Put the tag of the attribute in the stream.
      *
      * @params class the tag class type, one of UNIVERSAL, CONTEXT,
-     *                            APPLICATION or PRIVATE
+     * APPLICATION or PRIVATE
      * @params form if true, the value is constructed, otherwise it is
      * primitive.
      * @params val the tag value
      */
     public void putTag(byte tagClass, boolean form, byte val) {
-        byte tag = (byte)(tagClass | val);
+        byte tag = (byte) (tagClass | val);
         if (form) {
-            tag |= (byte)0x20;
+            tag |= (byte) 0x20;
         }
         write(tag);
     }
 
     /**
-     *  Write the current contents of this <code>DerOutputStream</code>
-     *  to an <code>OutputStream</code>.
+     * Write the current contents of this <code>DerOutputStream</code>
+     * to an <code>OutputStream</code>.
      *
-     *  @exception IOException on output error.
+     * @throws IOException on output error.
      */
     public void derEncode(OutputStream out) throws IOException {
         out.write(toByteArray());

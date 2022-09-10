@@ -40,7 +40,7 @@ import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.utilsOld.RootCommand;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.ProgressDialog;
-import com.mcal.neweditor.TextEditor;
+import com.mcal.editor.TextEditor;
 
 import java.io.File;
 import java.io.FilenameFilter;

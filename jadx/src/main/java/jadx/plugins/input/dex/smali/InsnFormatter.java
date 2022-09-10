@@ -1,5 +1,5 @@
 package jadx.plugins.input.dex.smali;
 
 interface InsnFormatter {
-	void format(InsnFormatterInfo insnFormatInfo);
+    void format(InsnFormatterInfo insnFormatInfo);
 }

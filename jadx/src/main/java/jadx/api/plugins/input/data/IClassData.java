@@ -1,28 +1,28 @@
 package jadx.api.plugins.input.data;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import jadx.api.plugins.input.data.attributes.IJadxAttribute;
 
 public interface IClassData {
-	IClassData copy();
+    IClassData copy();
 
-	String getInputFileName();
+    String getInputFileName();
 
-	String getType();
+    String getType();
 
-	int getAccessFlags();
+    int getAccessFlags();
 
-	@Nullable
-	String getSuperType();
+    @Nullable
+    String getSuperType();
 
-	List<String> getInterfacesTypes();
+    List<String> getInterfacesTypes();
 
-	void visitFieldsAndMethods(ISeqConsumer<IFieldData> fieldsConsumer, ISeqConsumer<IMethodData> mthConsumer);
+    void visitFieldsAndMethods(ISeqConsumer<IFieldData> fieldsConsumer, ISeqConsumer<IMethodData> mthConsumer);
 
-	List<IJadxAttribute> getAttributes();
+    List<IJadxAttribute> getAttributes();
 
-	String getDisassembledCode();
+    String getDisassembledCode();
 }

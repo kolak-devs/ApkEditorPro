@@ -51,8 +51,8 @@ import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInstaller;
 import com.mcal.common.utils.ClipboardUtils;
-import com.mcal.common.utilsOld.ITaskCallback;
 import com.mcal.common.utils.PackageHelper;
+import com.mcal.common.utilsOld.ITaskCallback;
 import com.mcal.common.utilsOld.PreferenceUtils;
 import com.mcal.common.view.ProgressDialog;
 
@@ -61,8 +61,6 @@ import org.jetbrains.annotations.Contract;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.Map;
-
-import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
 public class ApkComposeActivity extends CustomizedLangActivity
         implements ITaskCallback, OnClickListener {

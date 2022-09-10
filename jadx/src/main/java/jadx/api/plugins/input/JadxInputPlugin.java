@@ -7,5 +7,5 @@ import jadx.api.plugins.JadxPlugin;
 import jadx.api.plugins.input.data.ILoadResult;
 
 public interface JadxInputPlugin extends JadxPlugin {
-	ILoadResult loadFiles(List<Path> input);
+    ILoadResult loadFiles(List<Path> input);
 }

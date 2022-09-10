@@ -31,7 +31,7 @@ import java.util.ArrayList;
 /**
  * A package private utility class to convert indefinite length DER
  * encoded byte arrays to definite length DER encoded byte arrays.
- *
+ * <p>
  * This assumes that the basic data structure is "tag, length, value"
  * triplet. In the case where the length is "indefinite", terminating
  * end-of-contents bytes are expected.
@@ -40,13 +40,13 @@ import java.util.ArrayList;
  */
 class DerIndefLenConverter {
 
-    private static final int TAG_MASK            = 0x1f; // bits 5-1
-    private static final int FORM_MASK           = 0x20; // bits 6
-    private static final int CLASS_MASK          = 0xC0; // bits 8 and 7
+    private static final int TAG_MASK = 0x1f; // bits 5-1
+    private static final int FORM_MASK = 0x20; // bits 6
+    private static final int CLASS_MASK = 0xC0; // bits 8 and 7
 
-    private static final int LEN_LONG            = 0x80; // bit 8 set
-    private static final int LEN_MASK            = 0x7f; // bits 7 - 1
-    private static final int SKIP_EOC_BYTES      = 2;
+    private static final int LEN_LONG = 0x80; // bit 8 set
+    private static final int LEN_MASK = 0x7f; // bits 7 - 1
+    private static final int SKIP_EOC_BYTES = 2;
 
     private byte[] data, newData;
     private int newDataPos, dataPos, dataSize, index;
@@ -56,10 +56,10 @@ class DerIndefLenConverter {
 
     private int numOfTotalLenBytes = 0;
 
-    private boolean isEOC(int tag) {
-        return (((tag & TAG_MASK) == 0x00) &&  // EOC
-                ((tag & FORM_MASK) == 0x00) && // primitive
-                ((tag & CLASS_MASK) == 0x00)); // universal
+    /*
+     * Default package private constructor
+     */
+    DerIndefLenConverter() {
     }
 
     // if bit 8 is set then it implies either indefinite length or long form
@@ -67,22 +67,23 @@ class DerIndefLenConverter {
         return ((lengthByte & LEN_LONG) == LEN_LONG);
     }
 
-    /*
-     * Default package private constructor
-     */
-    DerIndefLenConverter() { }
-
     /**
      * Checks whether the given length byte is of the form
      * <em>Indefinite</em>.
      *
      * @param lengthByte the length byte from a DER encoded
-     *        object.
+     *                   object.
      * @return true if the byte is of Indefinite form otherwise
-     *         returns false.
+     * returns false.
      */
     static boolean isIndefinite(int lengthByte) {
         return (isLongForm(lengthByte) && ((lengthByte & LEN_MASK) == 0));
+    }
+
+    private boolean isEOC(int tag) {
+        return (((tag & TAG_MASK) == 0x00) &&  // EOC
+                ((tag & FORM_MASK) == 0x00) && // primitive
+                ((tag & CLASS_MASK) == 0x00)); // universal
     }
 
     /**
@@ -96,22 +97,22 @@ class DerIndefLenConverter {
             int numOfEncapsulatedLenBytes = 0;
             Object elem = null;
             int index;
-            for (index = ndefsList.size()-1; index >= 0; index--) {
+            for (index = ndefsList.size() - 1; index >= 0; index--) {
                 // Determine the first element in the vector that does not
                 // have a matching EOC
                 elem = ndefsList.get(index);
                 if (elem instanceof Integer) {
                     break;
                 } else {
-                    numOfEncapsulatedLenBytes += ((byte[])elem).length - 3;
+                    numOfEncapsulatedLenBytes += ((byte[]) elem).length - 3;
                 }
             }
             if (index < 0) {
                 throw new IOException("EOC does not have matching " +
-                                      "indefinite-length tag");
+                        "indefinite-length tag");
             }
-            int sectionLen = dataPos - ((Integer)elem).intValue() +
-                             numOfEncapsulatedLenBytes;
+            int sectionLen = dataPos - ((Integer) elem).intValue() +
+                    numOfEncapsulatedLenBytes;
             byte[] sectionLenBytes = getLengthBytes(sectionLen);
             ndefsList.set(index, sectionLenBytes);
             unresolved--;
@@ -137,7 +138,7 @@ class DerIndefLenConverter {
             dataPos++;  // skip length
             writeTag();
         } else
-            newData[newDataPos++] = (byte)tag;
+            newData[newDataPos++] = (byte) tag;
     }
 
     /**
@@ -163,7 +164,7 @@ class DerIndefLenConverter {
             for (int i = 0; i < lenByte; i++)
                 curLen = (curLen << 8) + (data[dataPos++] & 0xff);
         } else {
-           curLen = (lenByte & LEN_MASK);
+            curLen = (lenByte & LEN_MASK);
         }
         return curLen;
     }
@@ -176,13 +177,13 @@ class DerIndefLenConverter {
      */
     private void writeLengthAndValue() throws IOException {
         if (dataPos == dataSize)
-           return;
+            return;
         int curLen = 0;
         int lenByte = data[dataPos++] & 0xff;
         if (isIndefinite(lenByte)) {
-            byte[] lenBytes = (byte[])ndefsList.get(index++);
+            byte[] lenBytes = (byte[]) ndefsList.get(index++);
             System.arraycopy(lenBytes, 0, newData, newDataPos,
-                             lenBytes.length);
+                    lenBytes.length);
             newDataPos += lenBytes.length;
             return;
         }
@@ -198,29 +199,29 @@ class DerIndefLenConverter {
 
     private void writeLength(int curLen) {
         if (curLen < 128) {
-            newData[newDataPos++] = (byte)curLen;
+            newData[newDataPos++] = (byte) curLen;
 
         } else if (curLen < (1 << 8)) {
-            newData[newDataPos++] = (byte)0x81;
-            newData[newDataPos++] = (byte)curLen;
+            newData[newDataPos++] = (byte) 0x81;
+            newData[newDataPos++] = (byte) curLen;
 
         } else if (curLen < (1 << 16)) {
-            newData[newDataPos++] = (byte)0x82;
-            newData[newDataPos++] = (byte)(curLen >> 8);
-            newData[newDataPos++] = (byte)curLen;
+            newData[newDataPos++] = (byte) 0x82;
+            newData[newDataPos++] = (byte) (curLen >> 8);
+            newData[newDataPos++] = (byte) curLen;
 
         } else if (curLen < (1 << 24)) {
-            newData[newDataPos++] = (byte)0x83;
-            newData[newDataPos++] = (byte)(curLen >> 16);
-            newData[newDataPos++] = (byte)(curLen >> 8);
-            newData[newDataPos++] = (byte)curLen;
+            newData[newDataPos++] = (byte) 0x83;
+            newData[newDataPos++] = (byte) (curLen >> 16);
+            newData[newDataPos++] = (byte) (curLen >> 8);
+            newData[newDataPos++] = (byte) curLen;
 
         } else {
-            newData[newDataPos++] = (byte)0x84;
-            newData[newDataPos++] = (byte)(curLen >> 24);
-            newData[newDataPos++] = (byte)(curLen >> 16);
-            newData[newDataPos++] = (byte)(curLen >> 8);
-            newData[newDataPos++] = (byte)curLen;
+            newData[newDataPos++] = (byte) 0x84;
+            newData[newDataPos++] = (byte) (curLen >> 24);
+            newData[newDataPos++] = (byte) (curLen >> 16);
+            newData[newDataPos++] = (byte) (curLen >> 8);
+            newData[newDataPos++] = (byte) curLen;
         }
     }
 
@@ -230,33 +231,33 @@ class DerIndefLenConverter {
 
         if (curLen < 128) {
             lenBytes = new byte[1];
-            lenBytes[index++] = (byte)curLen;
+            lenBytes[index++] = (byte) curLen;
 
         } else if (curLen < (1 << 8)) {
             lenBytes = new byte[2];
-            lenBytes[index++] = (byte)0x81;
-            lenBytes[index++] = (byte)curLen;
+            lenBytes[index++] = (byte) 0x81;
+            lenBytes[index++] = (byte) curLen;
 
         } else if (curLen < (1 << 16)) {
             lenBytes = new byte[3];
-            lenBytes[index++] = (byte)0x82;
-            lenBytes[index++] = (byte)(curLen >> 8);
-            lenBytes[index++] = (byte)curLen;
+            lenBytes[index++] = (byte) 0x82;
+            lenBytes[index++] = (byte) (curLen >> 8);
+            lenBytes[index++] = (byte) curLen;
 
         } else if (curLen < (1 << 24)) {
             lenBytes = new byte[4];
-            lenBytes[index++] = (byte)0x83;
-            lenBytes[index++] = (byte)(curLen >> 16);
-            lenBytes[index++] = (byte)(curLen >> 8);
-            lenBytes[index++] = (byte)curLen;
+            lenBytes[index++] = (byte) 0x83;
+            lenBytes[index++] = (byte) (curLen >> 16);
+            lenBytes[index++] = (byte) (curLen >> 8);
+            lenBytes[index++] = (byte) curLen;
 
         } else {
             lenBytes = new byte[5];
-            lenBytes[index++] = (byte)0x84;
-            lenBytes[index++] = (byte)(curLen >> 24);
-            lenBytes[index++] = (byte)(curLen >> 16);
-            lenBytes[index++] = (byte)(curLen >> 8);
-            lenBytes[index++] = (byte)curLen;
+            lenBytes[index++] = (byte) 0x84;
+            lenBytes[index++] = (byte) (curLen >> 24);
+            lenBytes[index++] = (byte) (curLen >> 16);
+            lenBytes[index++] = (byte) (curLen >> 8);
+            lenBytes[index++] = (byte) curLen;
         }
 
         return lenBytes;
@@ -292,7 +293,7 @@ class DerIndefLenConverter {
      * Write the value;
      */
     private void writeValue(int curLen) {
-        for (int i=0; i < curLen; i++)
+        for (int i = 0; i < curLen; i++)
             newData[newDataPos++] = data[dataPos++];
     }
 
@@ -301,16 +302,17 @@ class DerIndefLenConverter {
      * a definte length DER encoding.
      *
      * @param indefData the byte array holding the indefinite
-     *        length encoding.
+     *                  length encoding.
      * @return the byte array containing the definite length
-     *         DER encoding.
-     * @exception IOException on parsing or re-writing errors.
+     * DER encoding.
+     * @throws IOException on parsing or re-writing errors.
      */
     byte[] convert(byte[] indefData) throws IOException {
         data = indefData;
-        dataPos=0; index=0;
+        dataPos = 0;
+        index = 0;
         dataSize = data.length;
-        int len=0;
+        int len = 0;
         int unused = 0;
 
         // parse and set up the vectors of all the indefinite-lengths
@@ -326,16 +328,18 @@ class DerIndefLenConverter {
         }
 
         newData = new byte[dataSize + numOfTotalLenBytes + unused];
-        dataPos=0; newDataPos=0; index=0;
+        dataPos = 0;
+        newDataPos = 0;
+        index = 0;
 
         // write out the new byte array replacing all the indefinite-lengths
         // and EOCs
         while (dataPos < dataSize) {
-           writeTag();
-           writeLengthAndValue();
+            writeTag();
+            writeLengthAndValue();
         }
         System.arraycopy(indefData, dataSize,
-                         newData, dataSize + numOfTotalLenBytes, unused);
+                newData, dataSize + numOfTotalLenBytes, unused);
 
         return newData;
     }

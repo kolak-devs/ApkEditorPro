@@ -10,27 +10,27 @@ import jadx.core.dex.instructions.PhiInsn;
 
 public class PhiListAttr implements IJadxAttribute {
 
-	private final List<PhiInsn> list = new LinkedList<>();
+    private final List<PhiInsn> list = new LinkedList<>();
 
-	@Override
-	public AType<PhiListAttr> getAttrType() {
-		return AType.PHI_LIST;
-	}
+    @Override
+    public AType<PhiListAttr> getAttrType() {
+        return AType.PHI_LIST;
+    }
 
-	public List<PhiInsn> getList() {
-		return list;
-	}
+    public List<PhiInsn> getList() {
+        return list;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("PHI: ");
-		for (PhiInsn phiInsn : list) {
-			sb.append('r').append(phiInsn.getResult().getRegNum()).append(' ');
-		}
-		for (PhiInsn phiInsn : list) {
-			sb.append(ICodeWriter.NL).append("  ").append(phiInsn).append(' ').append(phiInsn.getAttributesString());
-		}
-		return sb.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("PHI: ");
+        for (PhiInsn phiInsn : list) {
+            sb.append('r').append(phiInsn.getResult().getRegNum()).append(' ');
+        }
+        for (PhiInsn phiInsn : list) {
+            sb.append(ICodeWriter.NL).append("  ").append(phiInsn).append(' ').append(phiInsn.getAttributesString());
+        }
+        return sb.toString();
+    }
 }

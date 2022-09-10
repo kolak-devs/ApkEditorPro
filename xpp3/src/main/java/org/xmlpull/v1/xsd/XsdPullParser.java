@@ -2,12 +2,13 @@
 
 package org.xmlpull.v1.xsd;
 
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.wrapper.XmlPullParserWrapper;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.wrapper.XmlPullParserWrapper;
 
 //TODO: add mapping ofr QName
 
@@ -21,7 +22,7 @@ public interface XsdPullParser extends XmlPullParserWrapper {
     //---- xsd:anyURI
 
     public URI nextXsdAnyUriElement(String namespace, String name)
-        throws XmlPullParserException, IOException;
+            throws XmlPullParserException, IOException;
 
     public URI readXsdAnyUriAttribute(String namespace, String name) throws XmlPullParserException, IOException;
 
@@ -32,7 +33,7 @@ public interface XsdPullParser extends XmlPullParserWrapper {
     //---- xsd:base64Binary
 
     public byte[] nextXsdBase64Element(String namespace, String name)
-        throws XmlPullParserException, IOException;
+            throws XmlPullParserException, IOException;
 
     public byte[] readXsdBase64Attribute(String namespace, String name) throws XmlPullParserException, IOException;
 
@@ -43,7 +44,7 @@ public interface XsdPullParser extends XmlPullParserWrapper {
     //---- xsd:boolean
 
     public boolean nextXsdBooleanElement(String namespace, String name)
-        throws XmlPullParserException, IOException;
+            throws XmlPullParserException, IOException;
 
     public boolean readXsdBooleanAttribute(String namespace, String name) throws XmlPullParserException, IOException;
 
@@ -54,7 +55,7 @@ public interface XsdPullParser extends XmlPullParserWrapper {
     //---- xsd:byte
 
     public byte nextXsdByteElement(String namespace, String name)
-        throws XmlPullParserException, IOException;
+            throws XmlPullParserException, IOException;
 
     public byte readXsdByteAttribute(String namespace, String name) throws XmlPullParserException, IOException;
 
@@ -65,7 +66,7 @@ public interface XsdPullParser extends XmlPullParserWrapper {
     //---- xsd:decimal
 
     public BigDecimal nextXsdDecimalElement(String namespace, String name)
-        throws XmlPullParserException, IOException;
+            throws XmlPullParserException, IOException;
 
     public BigDecimal readXsdDecimalAttribute(String namespace, String name) throws XmlPullParserException, IOException;
 
@@ -81,7 +82,7 @@ public interface XsdPullParser extends XmlPullParserWrapper {
      * Then calls readXsdDoubleElement().
      */
     public double nextXsdDoubleElement(String namespace, String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     /**
      * Read string content of attribute name and try to convert it to xsd:double.
@@ -89,10 +90,10 @@ public interface XsdPullParser extends XmlPullParserWrapper {
      * Parser must be on START_TAG.
      */
     public double readXsdDoubleAttribute(String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     public double readXsdDoubleAttribute(String namesoace, String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     /**
      * Read string content of element and try to convert it to xsd:double.
@@ -101,8 +102,7 @@ public interface XsdPullParser extends XmlPullParserWrapper {
      * After this method executed the parser is positioned on END_TAG.
      */
     public double readXsdDoubleElement()
-        throws XsdException, XmlPullParserException, IOException;
-
+            throws XsdException, XmlPullParserException, IOException;
 
 
     //------ xsd:float
@@ -113,7 +113,7 @@ public interface XsdPullParser extends XmlPullParserWrapper {
      * After this method executed the parser is positioned on END_TAG.
      */
     public float nextXsdFloatElement(String namespace, String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     public float readXsdFloatAttribute(String namespace, String name) throws XmlPullParserException, IOException;
 
@@ -129,16 +129,16 @@ public interface XsdPullParser extends XmlPullParserWrapper {
      * After this method executed the parser is positioned on END_TAG.
      */
     public int nextXsdIntElement(String namespace, String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     public int readXsdIntAttribute(String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     public int readXsdIntAttribute(String namesoace, String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     public int readXsdIntElement()
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     //---- xsd:integer
 
@@ -181,16 +181,16 @@ public interface XsdPullParser extends XmlPullParserWrapper {
      * After this method executed the parser is positioned on END_TAG.
      */
     public String nextXsdStringElement(String namespace, String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     public String readXsdStringAttribute(String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     public String readXsdStringAttribute(String namesoace, String name)
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
     public String readXsdStringElement()
-        throws XsdException, XmlPullParserException, IOException;
+            throws XsdException, XmlPullParserException, IOException;
 
 
 }

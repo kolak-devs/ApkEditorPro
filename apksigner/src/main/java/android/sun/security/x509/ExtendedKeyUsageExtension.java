@@ -25,6 +25,10 @@
 
 package android.sun.security.x509;
 
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.util.ObjectIdentifier;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -34,33 +38,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import android.sun.security.util.DerValue;
-import android.sun.security.util.DerOutputStream;
-import android.sun.security.util.ObjectIdentifier;
-
 /**
  * This class defines the Extended Key Usage Extension, which
  * indicates one or more purposes for which the certified public key
  * may be used, in addition to or in place of the basic purposes
  * indicated in the key usage extension field.  This field is defined
  * as follows:<p>
- *
+ * <p>
  * id-ce-extKeyUsage OBJECT IDENTIFIER ::= {id-ce 37}<p>
- *
+ * <p>
  * ExtKeyUsageSyntax ::= SEQUENCE SIZE (1..MAX) OF KeyPurposeId<p>
- *
+ * <p>
  * KeyPurposeId ::= OBJECT IDENTIFIER<p>
- *
+ * <p>
  * Key purposes may be defined by any organization with a need. Object
  * identifiers used to identify key purposes shall be assigned in
  * accordance with IANA or ITU-T Rec. X.660 | ISO/IEC/ITU 9834-1.<p>
- *
+ * <p>
  * This extension may, at the option of the certificate issuer, be
  * either critical or non-critical.<p>
- *
+ * <p>
  * If the extension is flagged critical, then the certificate MUST be
  * used only for one of the purposes indicated.<p>
- *
+ * <p>
  * If the extension is flagged non-critical, then it indicates the
  * intended purpose or purposes of the key, and may be used in finding
  * the correct key/certificate of an entity that has multiple
@@ -69,7 +69,7 @@ import android.sun.security.util.ObjectIdentifier;
  * the purpose indicated. Certificate using applications may
  * nevertheless require that a particular purpose be indicated in
  * order for the certificate to be acceptable to that application.<p>
-
+ * <p>
  * If a certificate contains both a critical key usage field and a
  * critical extended key usage field, then both fields MUST be
  * processed independently and the certificate MUST only be used for a
@@ -77,10 +77,10 @@ import android.sun.security.util.ObjectIdentifier;
  * consistent with both fields, then the certificate MUST NOT be used
  * for any purpose.<p>
  *
- * @since       1.4
+ * @since 1.4
  */
 public class ExtendedKeyUsageExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
 
     /**
      * Identifier for this attribute, to be used with the
@@ -96,8 +96,8 @@ implements CertAttrSet<String> {
 
     // OID defined in RFC 3280 Sections 4.2.1.13
     // more from http://www.alvestrand.no/objectid/1.3.6.1.5.5.7.3.html
-    private static final Map <ObjectIdentifier, String> map =
-            new HashMap <ObjectIdentifier, String> ();
+    private static final Map<ObjectIdentifier, String> map =
+            new HashMap<ObjectIdentifier, String>();
 
     private static final int[] anyExtendedKeyUsageOidData = {2, 5, 29, 37, 0};
     private static final int[] serverAuthOidData = {1, 3, 6, 1, 5, 5, 7, 3, 1};
@@ -121,12 +121,66 @@ implements CertAttrSet<String> {
         map.put(ObjectIdentifier.newInternal(ipsecUserOidData), "ipsecUser");
         map.put(ObjectIdentifier.newInternal(timeStampingOidData), "timeStamping");
         map.put(ObjectIdentifier.newInternal(OCSPSigningOidData), "OCSPSigning");
-    };
+    }
+
+    ;
 
     /**
      * Vector of KeyUsages for this object.
      */
     private Vector<ObjectIdentifier> keyUsages;
+
+    /**
+     * Create a ExtendedKeyUsageExtension object from
+     * a Vector of Key Usages; the criticality is set to false.
+     *
+     * @param keyUsages the Vector of KeyUsages (ObjectIdentifiers)
+     */
+    public ExtendedKeyUsageExtension(Vector<ObjectIdentifier> keyUsages)
+            throws IOException {
+        this(Boolean.FALSE, keyUsages);
+    }
+
+    /**
+     * Create a ExtendedKeyUsageExtension object from
+     * a Vector of KeyUsages with specified criticality.
+     *
+     * @param critical  true if the extension is to be treated as critical.
+     * @param keyUsages the Vector of KeyUsages (ObjectIdentifiers)
+     */
+    public ExtendedKeyUsageExtension(Boolean critical, Vector<ObjectIdentifier> keyUsages)
+            throws IOException {
+        this.keyUsages = keyUsages;
+        this.extensionId = android.sun.security.x509.PKIXExtensions.ExtendedKeyUsage_Id;
+        this.critical = critical.booleanValue();
+        encodeThis();
+    }
+
+    /**
+     * Create the extension from its DER encoded value and criticality.
+     *
+     * @param critical true if the extension is to be treated as critical.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
+     */
+    public ExtendedKeyUsageExtension(Boolean critical, Object value)
+            throws IOException {
+        this.extensionId = android.sun.security.x509.PKIXExtensions.ExtendedKeyUsage_Id;
+        this.critical = critical.booleanValue();
+        this.extensionValue = (byte[]) value;
+        DerValue val = new DerValue(this.extensionValue);
+        if (val.tag != DerValue.tag_Sequence) {
+            throw new IOException("Invalid encoding for " +
+                    "ExtendedKeyUsageExtension.");
+        }
+        keyUsages = new Vector<ObjectIdentifier>();
+        while (val.data.available() != 0) {
+            DerValue seq = val.data.getDerValue();
+            ObjectIdentifier usage = seq.getOID();
+            keyUsages.addElement(usage);
+        }
+    }
 
     // Encode this extension value.
     private void encodeThis() throws IOException {
@@ -146,66 +200,14 @@ implements CertAttrSet<String> {
     }
 
     /**
-     * Create a ExtendedKeyUsageExtension object from
-     * a Vector of Key Usages; the criticality is set to false.
-     *
-     * @param keyUsages the Vector of KeyUsages (ObjectIdentifiers)
-     */
-    public ExtendedKeyUsageExtension(Vector<ObjectIdentifier> keyUsages)
-    throws IOException {
-        this(Boolean.FALSE, keyUsages);
-    }
-
-    /**
-     * Create a ExtendedKeyUsageExtension object from
-     * a Vector of KeyUsages with specified criticality.
-     *
-     * @param critical true if the extension is to be treated as critical.
-     * @param keyUsages the Vector of KeyUsages (ObjectIdentifiers)
-     */
-    public ExtendedKeyUsageExtension(Boolean critical, Vector<ObjectIdentifier> keyUsages)
-    throws IOException {
-        this.keyUsages = keyUsages;
-        this.extensionId = android.sun.security.x509.PKIXExtensions.ExtendedKeyUsage_Id;
-        this.critical = critical.booleanValue();
-        encodeThis();
-    }
-
-    /**
-     * Create the extension from its DER encoded value and criticality.
-     *
-     * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
-     */
-    public ExtendedKeyUsageExtension(Boolean critical, Object value)
-    throws IOException {
-        this.extensionId = android.sun.security.x509.PKIXExtensions.ExtendedKeyUsage_Id;
-        this.critical = critical.booleanValue();
-        this.extensionValue = (byte[]) value;
-        DerValue val = new DerValue(this.extensionValue);
-        if (val.tag != DerValue.tag_Sequence) {
-            throw new IOException("Invalid encoding for " +
-                                   "ExtendedKeyUsageExtension.");
-        }
-        keyUsages = new Vector<ObjectIdentifier>();
-        while (val.data.available() != 0) {
-            DerValue seq = val.data.getDerValue();
-            ObjectIdentifier usage = seq.getOID();
-            keyUsages.addElement(usage);
-        }
-    }
-
-    /**
      * Return the extension as user readable string.
      */
     public String toString() {
         if (keyUsages == null) return "";
         String usage = "  ";
         boolean first = true;
-        for (ObjectIdentifier oid: keyUsages) {
-            if(!first) {
+        for (ObjectIdentifier oid : keyUsages) {
+            if (!first) {
                 usage += "\n  ";
             }
 
@@ -218,21 +220,21 @@ implements CertAttrSet<String> {
             first = false;
         }
         return super.toString() + "ExtendedKeyUsages [\n"
-               + usage + "\n]\n";
+                + usage + "\n]\n";
     }
 
     /**
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         DerOutputStream tmp = new DerOutputStream();
         if (extensionValue == null) {
-          extensionId = PKIXExtensions.ExtendedKeyUsage_Id;
-          critical = false;
-          encodeThis();
+            extensionId = PKIXExtensions.ExtendedKeyUsage_Id;
+            critical = false;
+            encodeThis();
         }
         super.encode(tmp);
         out.write(tmp.toByteArray());
@@ -246,11 +248,11 @@ implements CertAttrSet<String> {
             if (!(obj instanceof Vector)) {
                 throw new IOException("Attribute value should be of type Vector.");
             }
-            this.keyUsages = (Vector<ObjectIdentifier>)obj;
+            this.keyUsages = (Vector<ObjectIdentifier>) obj;
         } else {
-          throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:ExtendedKeyUsageExtension.");
+            throw new IOException("Attribute name [" + name +
+                    "] not recognized by " +
+                    "CertAttrSet:ExtendedKeyUsageExtension.");
         }
         encodeThis();
     }
@@ -263,9 +265,9 @@ implements CertAttrSet<String> {
             //XXXX May want to consider cloning this
             return keyUsages;
         } else {
-          throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:ExtendedKeyUsageExtension.");
+            throw new IOException("Attribute name [" + name +
+                    "] not recognized by " +
+                    "CertAttrSet:ExtendedKeyUsageExtension.");
         }
     }
 
@@ -276,9 +278,9 @@ implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(USAGES)) {
             keyUsages = null;
         } else {
-          throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:ExtendedKeyUsageExtension.");
+            throw new IOException("Attribute name [" + name +
+                    "] not recognized by " +
+                    "CertAttrSet:ExtendedKeyUsageExtension.");
         }
         encodeThis();
     }

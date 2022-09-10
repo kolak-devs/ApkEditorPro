@@ -12,87 +12,87 @@ import jadx.core.utils.BlockUtils;
 
 public class LoopInfo {
 
-	private final BlockNode start;
-	private final BlockNode end;
-	private final Set<BlockNode> loopBlocks;
+    private final BlockNode start;
+    private final BlockNode end;
+    private final Set<BlockNode> loopBlocks;
 
-	private int id;
-	private LoopInfo parentLoop;
+    private int id;
+    private LoopInfo parentLoop;
 
-	public LoopInfo(BlockNode start, BlockNode end, Set<BlockNode> loopBlocks) {
-		this.start = start;
-		this.end = end;
-		this.loopBlocks = loopBlocks;
-	}
+    public LoopInfo(BlockNode start, BlockNode end, Set<BlockNode> loopBlocks) {
+        this.start = start;
+        this.end = end;
+        this.loopBlocks = loopBlocks;
+    }
 
-	public BlockNode getStart() {
-		return start;
-	}
+    public BlockNode getStart() {
+        return start;
+    }
 
-	public BlockNode getEnd() {
-		return end;
-	}
+    public BlockNode getEnd() {
+        return end;
+    }
 
-	public Set<BlockNode> getLoopBlocks() {
-		return loopBlocks;
-	}
+    public Set<BlockNode> getLoopBlocks() {
+        return loopBlocks;
+    }
 
-	/**
-	 * Return source blocks of exit edges. <br>
-	 * Exit nodes belongs to loop (contains in {@code loopBlocks})
-	 */
-	public Set<BlockNode> getExitNodes() {
-		Set<BlockNode> nodes = new HashSet<>();
-		Set<BlockNode> blocks = getLoopBlocks();
-		for (BlockNode block : blocks) {
-			// exit: successor node not from this loop, (don't change to getCleanSuccessors)
-			for (BlockNode s : block.getSuccessors()) {
-				if (!blocks.contains(s) && !s.contains(AType.EXC_HANDLER)) {
-					nodes.add(block);
-				}
-			}
-		}
-		return nodes;
-	}
+    /**
+     * Return source blocks of exit edges. <br>
+     * Exit nodes belongs to loop (contains in {@code loopBlocks})
+     */
+    public Set<BlockNode> getExitNodes() {
+        Set<BlockNode> nodes = new HashSet<>();
+        Set<BlockNode> blocks = getLoopBlocks();
+        for (BlockNode block : blocks) {
+            // exit: successor node not from this loop, (don't change to getCleanSuccessors)
+            for (BlockNode s : block.getSuccessors()) {
+                if (!blocks.contains(s) && !s.contains(AType.EXC_HANDLER)) {
+                    nodes.add(block);
+                }
+            }
+        }
+        return nodes;
+    }
 
-	/**
-	 * Return loop exit edges.
-	 */
-	public List<Edge> getExitEdges() {
-		List<Edge> edges = new ArrayList<>();
-		Set<BlockNode> blocks = getLoopBlocks();
-		for (BlockNode block : blocks) {
-			for (BlockNode s : block.getSuccessors()) { // don't use clean successors to include loop back edges
-				if (!blocks.contains(s) && !BlockUtils.isExceptionHandlerPath(s)) {
-					edges.add(new Edge(block, s));
-				}
-			}
-		}
-		return edges;
-	}
+    /**
+     * Return loop exit edges.
+     */
+    public List<Edge> getExitEdges() {
+        List<Edge> edges = new ArrayList<>();
+        Set<BlockNode> blocks = getLoopBlocks();
+        for (BlockNode block : blocks) {
+            for (BlockNode s : block.getSuccessors()) { // don't use clean successors to include loop back edges
+                if (!blocks.contains(s) && !BlockUtils.isExceptionHandlerPath(s)) {
+                    edges.add(new Edge(block, s));
+                }
+            }
+        }
+        return edges;
+    }
 
-	public BlockNode getPreHeader() {
-		return BlockUtils.selectOther(end, start.getPredecessors());
-	}
+    public BlockNode getPreHeader() {
+        return BlockUtils.selectOther(end, start.getPredecessors());
+    }
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public LoopInfo getParentLoop() {
-		return parentLoop;
-	}
+    public LoopInfo getParentLoop() {
+        return parentLoop;
+    }
 
-	public void setParentLoop(LoopInfo parentLoop) {
-		this.parentLoop = parentLoop;
-	}
+    public void setParentLoop(LoopInfo parentLoop) {
+        this.parentLoop = parentLoop;
+    }
 
-	@Override
-	public String toString() {
-		return "LOOP:" + id + ": " + start + "->" + end;
-	}
+    @Override
+    public String toString() {
+        return "LOOP:" + id + ": " + start + "->" + end;
+    }
 }

@@ -6,20 +6,20 @@ import jadx.api.metadata.ICodeAnnotation;
 
 public interface JavaNode {
 
-	String getName();
+    String getName();
 
-	String getFullName();
+    String getFullName();
 
-	JavaClass getDeclaringClass();
+    JavaClass getDeclaringClass();
 
-	JavaClass getTopParentClass();
+    JavaClass getTopParentClass();
 
-	int getDefPos();
+    int getDefPos();
 
-	List<JavaNode> getUseIn();
+    List<JavaNode> getUseIn();
 
-	default void removeAlias() {
-	}
+    default void removeAlias() {
+    }
 
-	boolean isOwnCodeAnnotation(ICodeAnnotation ann);
+    boolean isOwnCodeAnnotation(ICodeAnnotation ann);
 }

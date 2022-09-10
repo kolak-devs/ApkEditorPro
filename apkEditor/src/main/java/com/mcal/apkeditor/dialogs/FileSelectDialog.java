@@ -77,7 +77,6 @@ public class FileSelectDialog implements OnItemClickListener, AdapterView.OnItem
     }
 
 
-
     // When selectFolder = true, means to select a folder
     // tag is used to differentiate remembered directory
     @SuppressLint("InflateParams")

@@ -13,7 +13,6 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.mcal.common.App;
 import com.mcal.common.data.Preferences;
 import com.mcal.patchview.R;
 

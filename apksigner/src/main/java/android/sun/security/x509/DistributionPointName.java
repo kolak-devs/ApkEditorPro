@@ -25,14 +25,14 @@
 
 package android.sun.security.x509;
 
-import java.io.IOException;
-
 import android.sun.security.util.DerOutputStream;
 import android.sun.security.util.DerValue;
 
+import java.io.IOException;
+
 /**
  * Represents the DistributionPointName ASN.1 type.
- *
+ * <p>
  * It is used in the CRL Distribution Points Extension (OID = 2.5.29.31)
  * and the Issuing Distribution Point Extension (OID = 2.5.29.28).
  * <p>
@@ -94,7 +94,7 @@ public class DistributionPointName {
      * Creates a distribution point name using a full name.
      *
      * @param fullName the name for the distribution point.
-     * @exception IllegalArgumentException if <code>fullName</code> is null.
+     * @throws IllegalArgumentException if <code>fullName</code> is null.
      */
     public DistributionPointName(android.sun.security.x509.GeneralNames fullName) {
 
@@ -108,8 +108,8 @@ public class DistributionPointName {
      * Creates a distribution point name using a relative name.
      *
      * @param relativeName the name of the distribution point relative to
-     *        the name of the issuer of the CRL.
-     * @exception IllegalArgumentException if <code>relativeName</code> is null.
+     *                     the name of the issuer of the CRL.
+     * @throws IllegalArgumentException if <code>relativeName</code> is null.
      */
     public DistributionPointName(android.sun.security.x509.RDN relativeName) {
 
@@ -128,13 +128,13 @@ public class DistributionPointName {
     public DistributionPointName(DerValue encoding) throws IOException {
 
         if (encoding.isContextSpecific(TAG_FULL_NAME) &&
-            encoding.isConstructed()) {
+                encoding.isConstructed()) {
 
             encoding.resetTag(DerValue.tag_Sequence);
             fullName = new android.sun.security.x509.GeneralNames(encoding);
 
         } else if (encoding.isContextSpecific(TAG_RELATIVE_NAME) &&
-            encoding.isConstructed()) {
+                encoding.isConstructed()) {
 
             encoding.resetTag(DerValue.tag_Set);
             relativeName = new android.sun.security.x509.RDN(encoding);
@@ -143,6 +143,13 @@ public class DistributionPointName {
             throw new IOException("Invalid encoding for DistributionPointName");
         }
 
+    }
+
+    /*
+     * Utility function for a.equals(b) where both a and b may be null.
+     */
+    private static boolean equals(Object a, Object b) {
+        return (a == null) ? (b == null) : a.equals(b);
     }
 
     /**
@@ -163,7 +170,7 @@ public class DistributionPointName {
      * Encodes the distribution point name and writes it to the DerOutputStream.
      *
      * @param out the output stream.
-     * @exception IOException on encoding error.
+     * @throws IOException on encoding error.
      */
     public void encode(DerOutputStream out) throws IOException {
 
@@ -172,15 +179,15 @@ public class DistributionPointName {
         if (fullName != null) {
             fullName.encode(theChoice);
             out.writeImplicit(
-                DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_FULL_NAME),
-                theChoice);
+                    DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_FULL_NAME),
+                    theChoice);
 
         } else {
             relativeName.encode(theChoice);
             out.writeImplicit(
-                DerValue.createTag(DerValue.TAG_CONTEXT, true,
-                    TAG_RELATIVE_NAME),
-                theChoice);
+                    DerValue.createTag(DerValue.TAG_CONTEXT, true,
+                            TAG_RELATIVE_NAME),
+                    theChoice);
         }
     }
 
@@ -197,10 +204,10 @@ public class DistributionPointName {
         if (obj instanceof DistributionPointName == false) {
             return false;
         }
-        DistributionPointName other = (DistributionPointName)obj;
+        DistributionPointName other = (DistributionPointName) obj;
 
         return equals(this.fullName, other.fullName) &&
-               equals(this.relativeName, other.relativeName);
+                equals(this.relativeName, other.relativeName);
     }
 
     /**
@@ -236,12 +243,5 @@ public class DistributionPointName {
         }
 
         return sb.toString();
-    }
-
-    /*
-     * Utility function for a.equals(b) where both a and b may be null.
-     */
-    private static boolean equals(Object a, Object b) {
-        return (a == null) ? (b == null) : a.equals(b);
     }
 }

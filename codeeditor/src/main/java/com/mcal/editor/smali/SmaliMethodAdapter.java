@@ -1,4 +1,4 @@
-package com.mcal.neweditor.editor2.smali;
+package com.mcal.editor.smali;
 
 import android.content.Context;
 import android.view.LayoutInflater;

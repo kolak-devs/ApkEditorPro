@@ -35,7 +35,7 @@ import com.mcal.common.view.ProgressDialog
 import com.mcal.folderlist.FolderListWrapper
 import com.mcal.folderlist.IListEventListener
 import com.mcal.folderlist.IListItemProducer
-import com.mcal.neweditor.TextEditor.getSoraEditor
+import com.mcal.editor.TextEditor.getSoraEditor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

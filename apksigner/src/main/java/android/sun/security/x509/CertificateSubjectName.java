@@ -76,7 +76,7 @@ public class CertificateSubjectName implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed DER stream.
      *
      * @param in the DerInputStream to read the X500Name from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateSubjectName(android.sun.security.util.DerInputStream in) throws IOException {
         dnName = new android.sun.security.x509.X500Name(in);
@@ -86,7 +86,7 @@ public class CertificateSubjectName implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed stream.
      *
      * @param in the InputStream to read the X500Name from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateSubjectName(InputStream in) throws IOException {
         DerValue derVal = new android.sun.security.util.DerValue(in);
@@ -98,14 +98,14 @@ public class CertificateSubjectName implements CertAttrSet<String> {
      */
     public String toString() {
         if (dnName == null) return "";
-        return(dnName.toString());
+        return (dnName.toString());
     }
 
     /**
      * Encode the name in DER form to the stream.
      *
      * @param out the DerOutputStream to marshal the contents to.
-     * @exception IOException on errors.
+     * @throws IOException on errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
@@ -122,11 +122,11 @@ public class CertificateSubjectName implements CertAttrSet<String> {
             throw new IOException("Attribute must be of type X500Name.");
         }
         if (name.equalsIgnoreCase(DN_NAME)) {
-            this.dnName = (X500Name)obj;
+            this.dnName = (X500Name) obj;
             this.dnPrincipal = null;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                                  "CertAttrSet:CertificateSubjectName.");
+                    "CertAttrSet:CertificateSubjectName.");
         }
     }
 
@@ -135,7 +135,7 @@ public class CertificateSubjectName implements CertAttrSet<String> {
      */
     public Object get(String name) throws IOException {
         if (name.equalsIgnoreCase(DN_NAME)) {
-            return(dnName);
+            return (dnName);
         } else if (name.equalsIgnoreCase(DN_PRINCIPAL)) {
             if ((dnPrincipal == null) && (dnName != null)) {
                 dnPrincipal = dnName.asX500Principal();
@@ -143,7 +143,7 @@ public class CertificateSubjectName implements CertAttrSet<String> {
             return dnPrincipal;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                                  "CertAttrSet:CertificateSubjectName.");
+                    "CertAttrSet:CertificateSubjectName.");
         }
     }
 
@@ -156,7 +156,7 @@ public class CertificateSubjectName implements CertAttrSet<String> {
             dnPrincipal = null;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                                  "CertAttrSet:CertificateSubjectName.");
+                    "CertAttrSet:CertificateSubjectName.");
         }
     }
 
@@ -168,13 +168,13 @@ public class CertificateSubjectName implements CertAttrSet<String> {
         android.sun.security.x509.AttributeNameEnumeration elements = new AttributeNameEnumeration();
         elements.addElement(DN_NAME);
 
-        return(elements.elements());
+        return (elements.elements());
     }
 
     /**
      * Return the name of this attribute.
      */
     public String getName() {
-        return(NAME);
+        return (NAME);
     }
 }

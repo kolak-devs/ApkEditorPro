@@ -3,11 +3,12 @@
 
 package org.xmlpull.v1.parser_pool;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // add aging so parser used more than X times is not resused ...
 
@@ -26,43 +27,12 @@ public class XmlPullParserPool {
     }
 
     public XmlPullParserPool(XmlPullParserFactory factory) {
-        if(factory == null) throw new IllegalArgumentException();
+        if (factory == null) throw new IllegalArgumentException();
         this.factory = factory;
     }
 
-    protected XmlPullParser newParser() throws XmlPullParserException {
-        return factory.newPullParser();
-    }
-
-    public XmlPullParser getPullParserFromPool()
-        throws XmlPullParserException
-    {
-        XmlPullParser pp = null;
-        if(pool.size() > 0) {
-            synchronized(pool) {
-                if(pool.size() > 0) {
-                    pp = (XmlPullParser) pool.remove(pool.size() - 1);
-                }
-            }
-        }
-        if(pp == null) {
-            pp = newParser();
-            //System.err.println("new parser instance created pp="+pp);
-        }
-        return pp;
-    }
-
-    public void returnPullParserToPool(XmlPullParser pp) {
-        if(pp == null) throw new IllegalArgumentException();
-        synchronized(pool) {
-            pool.add(pp);
-        }
-    }
-
-
     // simple inline test
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         //XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         //XmlPullParserPool pool = new XmlPullParserPool(factory);
         XmlPullParserPool pool = new XmlPullParserPool();
@@ -70,9 +40,37 @@ public class XmlPullParserPool {
         pool.returnPullParserToPool(p1);
         XmlPullParser p2 = pool.getPullParserFromPool();
         //assert p1 == p2;
-        if(p1 != p2) throw new RuntimeException();
+        if (p1 != p2) throw new RuntimeException();
         pool.returnPullParserToPool(p2);
-        System.out.println(pool.getClass()+" OK");
+        System.out.println(pool.getClass() + " OK");
+    }
+
+    protected XmlPullParser newParser() throws XmlPullParserException {
+        return factory.newPullParser();
+    }
+
+    public XmlPullParser getPullParserFromPool()
+            throws XmlPullParserException {
+        XmlPullParser pp = null;
+        if (pool.size() > 0) {
+            synchronized (pool) {
+                if (pool.size() > 0) {
+                    pp = (XmlPullParser) pool.remove(pool.size() - 1);
+                }
+            }
+        }
+        if (pp == null) {
+            pp = newParser();
+            //System.err.println("new parser instance created pp="+pp);
+        }
+        return pp;
+    }
+
+    public void returnPullParserToPool(XmlPullParser pp) {
+        if (pp == null) throw new IllegalArgumentException();
+        synchronized (pool) {
+            pool.add(pp);
+        }
     }
 }
 

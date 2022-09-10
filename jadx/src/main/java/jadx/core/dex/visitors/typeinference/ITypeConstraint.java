@@ -6,7 +6,7 @@ import jadx.core.dex.instructions.args.SSAVar;
 
 public interface ITypeConstraint {
 
-	List<SSAVar> getRelatedVars();
+    List<SSAVar> getRelatedVars();
 
-	boolean check(TypeSearchState state);
+    boolean check(TypeSearchState state);
 }

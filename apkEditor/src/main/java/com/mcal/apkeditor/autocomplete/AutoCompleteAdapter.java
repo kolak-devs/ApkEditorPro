@@ -22,9 +22,9 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
     private static final int MAX_RECORDS = 32;
     private final Context mContext;
     private final String mTag;
+    private final ItemFilter filter;
     public List<String> filteredData;
     private String[] historyWords;
-    private final ItemFilter filter;
 
     public AutoCompleteAdapter(Context context, String tag) {
         mContext = context;

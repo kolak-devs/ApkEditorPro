@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.balsikandar.crashreporter.R;
 import com.balsikandar.crashreporter.ui.LogMessageActivity;
-import com.balsikandar.crashreporter.utils.CrashUtil;
 import com.balsikandar.crashreporter.utils.FileUtils;
 
 import java.io.File;

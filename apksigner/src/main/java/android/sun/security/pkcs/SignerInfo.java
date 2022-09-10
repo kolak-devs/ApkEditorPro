@@ -25,19 +25,29 @@
 
 package android.sun.security.pkcs;
 
-import java.io.OutputStream;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.cert.X509Certificate;
-import java.security.*;
-import java.util.ArrayList;
-
-import android.sun.security.util.*;
-import android.sun.security.x509.AlgorithmId;
-import android.sun.security.x509.X500Name;
-import android.sun.security.x509.KeyUsageExtension;
-import android.sun.security.x509.PKIXExtensions;
 import android.sun.misc.HexDumpEncoder;
+import android.sun.security.util.Debug;
+import android.sun.security.util.DerEncoder;
+import android.sun.security.util.DerInputStream;
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.util.ObjectIdentifier;
+import android.sun.security.x509.AlgorithmId;
+import android.sun.security.x509.KeyUsageExtension;
+import android.sun.security.x509.X500Name;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 
 /**
  * A SignerInfo, as defined in PKCS#7's signedData type.
@@ -56,7 +66,7 @@ public class SignerInfo implements DerEncoder {
     PKCS9Attributes authenticatedAttributes;
     PKCS9Attributes unauthenticatedAttributes;
 
-    public SignerInfo(X500Name  issuerName,
+    public SignerInfo(X500Name issuerName,
                       BigInteger serial,
                       AlgorithmId digestAlgorithmId,
                       AlgorithmId digestEncryptionAlgorithmId,
@@ -69,7 +79,7 @@ public class SignerInfo implements DerEncoder {
         this.encryptedDigest = encryptedDigest;
     }
 
-    public SignerInfo(X500Name  issuerName,
+    public SignerInfo(X500Name issuerName,
                       BigInteger serial,
                       AlgorithmId digestAlgorithmId,
                       PKCS9Attributes authenticatedAttributes,
@@ -90,8 +100,7 @@ public class SignerInfo implements DerEncoder {
      * Parses a PKCS#7 signer info.
      */
     public SignerInfo(DerInputStream derin)
-        throws IOException, ParsingException
-    {
+            throws IOException, ParsingException {
         this(derin, false);
     }
 
@@ -101,13 +110,12 @@ public class SignerInfo implements DerEncoder {
      * <p>This constructor is used only for backwards compatibility with
      * PKCS#7 blocks that were generated using JDK1.1.x.
      *
-     * @param derin the ASN.1 encoding of the signer info.
+     * @param derin    the ASN.1 encoding of the signer info.
      * @param oldStyle flag indicating whether or not the given signer info
-     * is encoded according to JDK1.1.x.
+     *                 is encoded according to JDK1.1.x.
      */
     public SignerInfo(DerInputStream derin, boolean oldStyle)
-        throws IOException, ParsingException
-    {
+            throws IOException, ParsingException {
         // version
         version = derin.getBigInteger();
 
@@ -115,7 +123,7 @@ public class SignerInfo implements DerEncoder {
         DerValue[] issuerAndSerialNumber = derin.getSequence(2);
         byte[] issuerBytes = issuerAndSerialNumber[0].toByteArray();
         issuerName = new X500Name(new DerValue(DerValue.tag_Sequence,
-                                               issuerBytes));
+                issuerBytes));
         certificateSerialNumber = issuerAndSerialNumber[1].getBigInteger();
 
         // digestAlgorithmId
@@ -131,7 +139,7 @@ public class SignerInfo implements DerEncoder {
         } else {
             // check if set of auth attributes (implicit tag) is provided
             // (auth attributes are OPTIONAL)
-            if ((byte)(derin.peekByte()) == (byte)0xA0) {
+            if ((byte) (derin.peekByte()) == (byte) 0xA0) {
                 authenticatedAttributes = new PKCS9Attributes(derin);
             }
         }
@@ -154,9 +162,9 @@ public class SignerInfo implements DerEncoder {
             // check if set of unauth attributes (implicit tag) is provided
             // (unauth attributes are OPTIONAL)
             if (derin.available() != 0
-                && (byte)(derin.peekByte()) == (byte)0xA1) {
+                    && (byte) (derin.peekByte()) == (byte) 0xA1) {
                 unauthenticatedAttributes =
-                    new PKCS9Attributes(derin, true);// ignore unsupported attrs
+                        new PKCS9Attributes(derin, true);// ignore unsupported attrs
             }
         }
 
@@ -175,10 +183,8 @@ public class SignerInfo implements DerEncoder {
      * DER encode this object onto an output stream.
      * Implements the <code>DerEncoder</code> interface.
      *
-     * @param out
-     * the output stream on which to write the DER encoding.
-     *
-     * @exception IOException on encoding error.
+     * @param out the output stream on which to write the DER encoding.
+     * @throws IOException on encoding error.
      */
     public void derEncode(OutputStream out) throws IOException {
         DerOutputStream seq = new DerOutputStream();
@@ -192,7 +198,7 @@ public class SignerInfo implements DerEncoder {
 
         // encode authenticated attributes if there are any
         if (authenticatedAttributes != null)
-            authenticatedAttributes.encode((byte)0xA0, seq);
+            authenticatedAttributes.encode((byte) 0xA0, seq);
 
         digestEncryptionAlgorithmId.encode(seq);
 
@@ -200,7 +206,7 @@ public class SignerInfo implements DerEncoder {
 
         // encode unauthenticated attributes if there are any
         if (unauthenticatedAttributes != null)
-            unauthenticatedAttributes.encode((byte)0xA1, seq);
+            unauthenticatedAttributes.encode((byte) 0xA1, seq);
 
         DerOutputStream tmp = new DerOutputStream();
         tmp.write(DerValue.tag_Sequence, seq);
@@ -209,13 +215,11 @@ public class SignerInfo implements DerEncoder {
     }
 
 
-
     /*
      * Returns the (user) certificate pertaining to this SignerInfo.
      */
     public X509Certificate getCertificate(PKCS7 block)
-        throws IOException
-    {
+            throws IOException {
         return block.getCertificate(certificateSerialNumber, issuerName);
     }
 
@@ -223,8 +227,7 @@ public class SignerInfo implements DerEncoder {
      * Returns the certificate chain pertaining to this SignerInfo.
      */
     public ArrayList<X509Certificate> getCertificateChain(PKCS7 block)
-        throws IOException
-    {
+            throws IOException {
         X509Certificate userCert;
         userCert = block.getCertificate(certificateSerialNumber, issuerName);
         if (userCert == null)
@@ -235,7 +238,7 @@ public class SignerInfo implements DerEncoder {
 
         X509Certificate[] pkcsCerts = block.getCertificates();
         if (pkcsCerts == null
-            || userCert.getSubjectDN().equals(userCert.getIssuerDN())) {
+                || userCert.getSubjectDN().equals(userCert.getIssuerDN())) {
             return certList;
         }
 
@@ -251,7 +254,7 @@ public class SignerInfo implements DerEncoder {
                     // if selected cert is self-signed, we're done
                     // constructing the chain
                     if (pkcsCerts[i].getSubjectDN().equals(
-                                            pkcsCerts[i].getIssuerDN())) {
+                            pkcsCerts[i].getIssuerDN())) {
                         start = pkcsCerts.length;
                     } else {
                         issuer = pkcsCerts[i].getIssuerDN();
@@ -276,7 +279,7 @@ public class SignerInfo implements DerEncoder {
     /* Returns null if verify fails, this signerInfo if
        verify succeeds. */
     SignerInfo verify(PKCS7 block, byte[] data)
-    throws NoSuchAlgorithmException, SignatureException {
+            throws NoSuchAlgorithmException, SignatureException {
 
         try {
 
@@ -297,16 +300,16 @@ public class SignerInfo implements DerEncoder {
 
                 // first, check content type
                 ObjectIdentifier contentType = (ObjectIdentifier)
-                       authenticatedAttributes.getAttributeValue(
-                         PKCS9Attribute.CONTENT_TYPE_OID);
+                        authenticatedAttributes.getAttributeValue(
+                                PKCS9Attribute.CONTENT_TYPE_OID);
                 if (contentType == null ||
-                    !contentType.equals(content.contentType))
+                        !contentType.equals(content.contentType))
                     return null;  // contentType does not match, bad SignerInfo
 
                 // now, check message digest
                 byte[] messageDigest = (byte[])
-                    authenticatedAttributes.getAttributeValue(
-                         PKCS9Attribute.MESSAGE_DIGEST_OID);
+                        authenticatedAttributes.getAttributeValue(
+                                PKCS9Attribute.MESSAGE_DIGEST_OID);
 
                 if (messageDigest == null) // fail if there is no message digest
                     return null;
@@ -333,7 +336,7 @@ public class SignerInfo implements DerEncoder {
             // put together digest algorithm and encryption algorithm
             // to form signing algorithm
             String encryptionAlgname =
-                getDigestEncryptionAlgorithmId().getName();
+                    getDigestEncryptionAlgorithmId().getName();
 
             // Workaround: sometimes the encryptionAlgname is actually
             // a signature name
@@ -350,7 +353,7 @@ public class SignerInfo implements DerEncoder {
             }
             if (cert.hasUnsupportedCriticalExtension()) {
                 throw new SignatureException("Certificate has unsupported "
-                                             + "critical extension(s)");
+                        + "critical extension(s)");
             }
 
             // Make sure that if the usage of the key in the certificate is
@@ -368,19 +371,19 @@ public class SignerInfo implements DerEncoder {
                     keyUsage = new KeyUsageExtension(keyUsageBits);
                 } catch (IOException ioe) {
                     throw new SignatureException("Failed to parse keyUsage "
-                                                 + "extension");
+                            + "extension");
                 }
 
-                boolean digSigAllowed = ((Boolean)keyUsage.get(
+                boolean digSigAllowed = ((Boolean) keyUsage.get(
                         KeyUsageExtension.DIGITAL_SIGNATURE)).booleanValue();
 
-                boolean nonRepuAllowed = ((Boolean)keyUsage.get(
+                boolean nonRepuAllowed = ((Boolean) keyUsage.get(
                         KeyUsageExtension.NON_REPUDIATION)).booleanValue();
 
                 if (!digSigAllowed && !nonRepuAllowed) {
                     throw new SignatureException("Key usage restricted: "
-                                                 + "cannot be used for "
-                                                 + "digital signatures");
+                            + "cannot be used for "
+                            + "digital signatures");
                 }
             }
 
@@ -395,7 +398,7 @@ public class SignerInfo implements DerEncoder {
 
         } catch (IOException e) {
             throw new SignatureException("IO error verifying signature:\n" +
-                                         e.getMessage());
+                    e.getMessage());
 
         } catch (InvalidKeyException e) {
             throw new SignatureException("InvalidKey: " + e.getMessage());
@@ -406,13 +409,13 @@ public class SignerInfo implements DerEncoder {
 
     /* Verify the content of the pkcs7 block. */
     SignerInfo verify(PKCS7 block)
-    throws NoSuchAlgorithmException, SignatureException {
+            throws NoSuchAlgorithmException, SignatureException {
         return verify(block, null);
     }
 
 
     public BigInteger getVersion() {
-            return version;
+        return version;
     }
 
     public X500Name getIssuerName() {
@@ -451,20 +454,20 @@ public class SignerInfo implements DerEncoder {
         out += "Signer Info for (issuer): " + issuerName + "\n";
         out += "\tversion: " + Debug.toHexString(version) + "\n";
         out += "\tcertificateSerialNumber: " +
-               Debug.toHexString(certificateSerialNumber) + "\n";
+                Debug.toHexString(certificateSerialNumber) + "\n";
         out += "\tdigestAlgorithmId: " + digestAlgorithmId + "\n";
         if (authenticatedAttributes != null) {
             out += "\tauthenticatedAttributes: " + authenticatedAttributes +
-                   "\n";
+                    "\n";
         }
         out += "\tdigestEncryptionAlgorithmId: " + digestEncryptionAlgorithmId +
-            "\n";
+                "\n";
 
         out += "\tencryptedDigest: " + "\n" +
-            hexDump.encodeBuffer(encryptedDigest) + "\n";
+                hexDump.encodeBuffer(encryptedDigest) + "\n";
         if (unauthenticatedAttributes != null) {
             out += "\tunauthenticatedAttributes: " +
-                   unauthenticatedAttributes + "\n";
+                    unauthenticatedAttributes + "\n";
         }
         return out;
     }

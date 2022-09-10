@@ -31,8 +31,8 @@ public class AddFolderDialog implements View.OnClickListener, FileSelectDialog.I
 
     // Callback functions for folder selection
     private final TextInputEditText folderPathEt;
-    private boolean addFolder = true;
     private final AlertDialog materialDialog;
+    private boolean addFolder = true;
 
     public AddFolderDialog(final Context context, AddFolderCallback callback, boolean showImportFolder) {
         contextRef = new WeakReference<>(context);

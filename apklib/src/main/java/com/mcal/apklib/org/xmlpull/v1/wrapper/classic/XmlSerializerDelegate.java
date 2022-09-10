@@ -4,6 +4,7 @@
 package com.mcal.apklib.org.xmlpull.v1.wrapper.classic;
 
 import org.xmlpull.v1.XmlSerializer;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
@@ -29,8 +30,7 @@ public class XmlSerializerDelegate implements XmlSerializer {
     }
 
     public void setPrefix(String prefix, String namespace)
-        throws IOException, IllegalArgumentException, IllegalStateException
-    {
+            throws IOException, IllegalArgumentException, IllegalStateException {
         xs.setPrefix(prefix, namespace);
     }
 
@@ -119,8 +119,7 @@ public class XmlSerializerDelegate implements XmlSerializer {
     }
 
     public XmlSerializer endTag(String namespace, String name)
-        throws IOException, IllegalArgumentException, IllegalStateException
-    {
+            throws IOException, IllegalArgumentException, IllegalStateException {
         return xs.endTag(namespace, name);
     }
 

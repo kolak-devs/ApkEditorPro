@@ -2,19 +2,17 @@ package com.mcal.apkeditor.activities
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.fragments.SettingsFragment
 import com.mcal.common.activities.CustomizedLangActivity
-import ru.svolf.melissa.swipeback.SwipeBackActivity
 
 class SettingsActivity : CustomizedLangActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         setupToolbar(getString(R.string.settings))
-        if(supportFragmentManager.fragments.isEmpty()) {
+        if (supportFragmentManager.fragments.isEmpty()) {
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.frame_container, SettingsFragment())

@@ -1,27 +1,27 @@
 package jadx.api.plugins.input.data;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.function.Consumer;
-
-import org.jetbrains.annotations.Nullable;
 
 import jadx.api.plugins.input.insns.InsnData;
 
 public interface ICodeReader {
-	ICodeReader copy();
+    ICodeReader copy();
 
-	void visitInstructions(Consumer<InsnData> insnConsumer);
+    void visitInstructions(Consumer<InsnData> insnConsumer);
 
-	int getRegistersCount();
+    int getRegistersCount();
 
-	int getArgsStartReg();
+    int getArgsStartReg();
 
-	int getUnitsCount();
+    int getUnitsCount();
 
-	@Nullable
-	IDebugInfo getDebugInfo();
+    @Nullable
+    IDebugInfo getDebugInfo();
 
-	int getCodeOffset();
+    int getCodeOffset();
 
-	List<ITry> getTries();
+    List<ITry> getTries();
 }

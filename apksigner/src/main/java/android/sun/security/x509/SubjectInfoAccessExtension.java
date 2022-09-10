@@ -25,13 +25,14 @@
 
 package android.sun.security.x509;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import java.util.*;
-
 import android.sun.security.util.DerOutputStream;
 import android.sun.security.util.DerValue;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * The Subject Information Access Extension (OID = 1.3.6.1.5.5.7.1.11).
@@ -63,6 +64,7 @@ import android.sun.security.util.DerValue;
  *          accessLocation        GeneralName  }
  * </pre>
  * <p>
+ *
  * @see android.sun.security.x509.Extension
  * @see android.sun.security.x509.CertAttrSet
  */
@@ -75,7 +77,7 @@ public class SubjectInfoAccessExtension extends Extension
      * get, set, delete methods of Certificate, x509 type.
      */
     public static final String IDENT =
-                                "x509.info.extensions.SubjectInfoAccess";
+            "x509.info.extensions.SubjectInfoAccess";
 
     /**
      * Attribute name.
@@ -107,8 +109,8 @@ public class SubjectInfoAccessExtension extends Extension
      * Create the extension from the passed DER encoded value of the same.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value Array of DER encoded bytes of the actual value.
-     * @exception IOException on error.
+     * @param value    Array of DER encoded bytes of the actual value.
+     * @throws IOException on error.
      */
     public SubjectInfoAccessExtension(Boolean critical, Object value)
             throws IOException {
@@ -119,11 +121,11 @@ public class SubjectInfoAccessExtension extends Extension
             throw new IOException("Illegal argument type");
         }
 
-        extensionValue = (byte[])value;
+        extensionValue = (byte[]) value;
         DerValue val = new DerValue(extensionValue);
         if (val.tag != DerValue.tag_Sequence) {
             throw new IOException("Invalid encoding for " +
-                                  "SubjectInfoAccessExtension.");
+                    "SubjectInfoAccessExtension.");
         }
         accessDescriptions = new ArrayList<android.sun.security.x509.AccessDescription>();
         while (val.data.available() != 0) {
@@ -151,7 +153,7 @@ public class SubjectInfoAccessExtension extends Extension
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         DerOutputStream tmp = new DerOutputStream();
@@ -172,11 +174,11 @@ public class SubjectInfoAccessExtension extends Extension
             if (!(obj instanceof List)) {
                 throw new IOException("Attribute value should be of type List.");
             }
-            accessDescriptions = (List<android.sun.security.x509.AccessDescription>)obj;
+            accessDescriptions = (List<android.sun.security.x509.AccessDescription>) obj;
         } else {
             throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:SubjectInfoAccessExtension.");
+                    "] not recognized by " +
+                    "CertAttrSet:SubjectInfoAccessExtension.");
         }
         encodeThis();
     }
@@ -189,8 +191,8 @@ public class SubjectInfoAccessExtension extends Extension
             return accessDescriptions;
         } else {
             throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:SubjectInfoAccessExtension.");
+                    "] not recognized by " +
+                    "CertAttrSet:SubjectInfoAccessExtension.");
         }
     }
 
@@ -202,8 +204,8 @@ public class SubjectInfoAccessExtension extends Extension
             accessDescriptions = new ArrayList<android.sun.security.x509.AccessDescription>();
         } else {
             throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:SubjectInfoAccessExtension.");
+                    "] not recognized by " +
+                    "CertAttrSet:SubjectInfoAccessExtension.");
         }
         encodeThis();
     }
@@ -218,7 +220,7 @@ public class SubjectInfoAccessExtension extends Extension
         return elements.elements();
     }
 
-     // Encode this extension value
+    // Encode this extension value
     private void encodeThis() throws IOException {
         if (accessDescriptions.isEmpty()) {
             this.extensionValue = null;
@@ -238,7 +240,7 @@ public class SubjectInfoAccessExtension extends Extension
      */
     public String toString() {
         return super.toString() + "SubjectInfoAccess [\n  "
-               + accessDescriptions + "\n]\n";
+                + accessDescriptions + "\n]\n";
     }
 
 }

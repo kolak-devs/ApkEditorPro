@@ -33,7 +33,6 @@ import com.mcal.httpserver.HttpServiceManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
-import ru.svolf.melissa.swipeback.SwipeBackActivity
 import java.io.File
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {

@@ -12,6 +12,7 @@ package ru.svolf.melissa.swipeback;
 public interface OnTabSwipeListener {
     /**
      * Вызывается при изменении состояния ViewPager
+     *
      * @param tabNumber номер текущей выбранной вкладки
      */
     void onTabSwipe(int tabNumber);

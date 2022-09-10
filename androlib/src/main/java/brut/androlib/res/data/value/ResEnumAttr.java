@@ -16,17 +16,21 @@
  */
 package brut.androlib.res.data.value;
 
-import brut.androlib.AndrolibException;
-import brut.androlib.res.data.ResResSpec;
-import brut.androlib.res.data.ResResource;
-import brut.util.Duo;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import brut.androlib.AndrolibException;
+import brut.androlib.res.data.ResResSpec;
+import brut.androlib.res.data.ResResource;
+import brut.util.Duo;
+
 public class ResEnumAttr extends ResAttr {
+    private final Duo<ResReferenceValue, ResIntValue>[] mItems;
+    private final Map<Integer, String> mItemsCache = new HashMap<>();
+
     ResEnumAttr(ResReferenceValue parent, int type, Integer min, Integer max,
                 Boolean l10n, Duo<ResReferenceValue, ResIntValue>[] items) {
         super(parent, type, min, max, l10n);
@@ -78,7 +82,4 @@ public class ResEnumAttr extends ResAttr {
         }
         return value2;
     }
-
-    private final Duo<ResReferenceValue, ResIntValue>[] mItems;
-    private final Map<Integer, String> mItemsCache = new HashMap<>();
 }

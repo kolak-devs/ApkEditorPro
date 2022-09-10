@@ -40,13 +40,13 @@ import java.io.IOException;
  * @see android.sun.security.x509.GeneralNameInterface
  */
 public class OIDName implements android.sun.security.x509.GeneralNameInterface {
-     private android.sun.security.util.ObjectIdentifier oid;
+    private android.sun.security.util.ObjectIdentifier oid;
 
     /**
      * Create the OIDName object from the passed encoded Der value.
      *
      * @param derValue the encoded DER OIDName.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public OIDName(DerValue derValue) throws IOException {
         oid = derValue.getOID();
@@ -86,7 +86,7 @@ public class OIDName implements android.sun.security.x509.GeneralNameInterface {
      * Encode the OID name into the DerOutputStream.
      *
      * @param out the DER stream to encode the OIDName to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         out.putOID(oid);
@@ -118,7 +118,7 @@ public class OIDName implements android.sun.security.x509.GeneralNameInterface {
         if (!(obj instanceof OIDName))
             return false;
 
-        OIDName other = (OIDName)obj;
+        OIDName other = (OIDName) obj;
 
         return oid.equals(other.oid);
     }
@@ -134,18 +134,18 @@ public class OIDName implements android.sun.security.x509.GeneralNameInterface {
 
     /**
      * Return type of constraint inputName places on this name:<ul>
-     *   <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain).
-     *   <li>NAME_MATCH = 0: input name matches name.
-     *   <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming subtree)
-     *   <li>NAME_WIDENS = 2: input name widens name (is higher in the naming subtree)
-     *   <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type.
+     * <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain).
+     * <li>NAME_MATCH = 0: input name matches name.
+     * <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming subtree)
+     * <li>NAME_WIDENS = 2: input name widens name (is higher in the naming subtree)
+     * <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type.
      * </ul>.  These results are used in checking NameConstraints during
      * certification path verification.
      *
      * @param inputName to be checked for being constrained
-     * @returns constraint type above
      * @throws UnsupportedOperationException if name is not exact match, but narrowing and widening are
-     *          not supported for this name type.
+     *                                       not supported for this name type.
+     * @returns constraint type above
      */
     public int constrains(GeneralNameInterface inputName) throws UnsupportedOperationException {
         int constraintType;
@@ -153,7 +153,7 @@ public class OIDName implements android.sun.security.x509.GeneralNameInterface {
             constraintType = NAME_DIFF_TYPE;
         else if (inputName.getType() != NAME_OID)
             constraintType = NAME_DIFF_TYPE;
-        else if (this.equals((OIDName)inputName))
+        else if (this.equals((OIDName) inputName))
             constraintType = NAME_MATCH;
         else
             //widens and narrows not defined in RFC2459 for OIDName (aka registeredID)
@@ -166,10 +166,10 @@ public class OIDName implements android.sun.security.x509.GeneralNameInterface {
      * NameConstraints minimum and maximum bounds and for calculating
      * path lengths in name subtrees.
      *
-     * @returns distance of name from root
      * @throws UnsupportedOperationException if not supported for this name type
+     * @returns distance of name from root
      */
     public int subtreeDepth() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("subtreeDepth() not supported for OIDName.");
-   }
+    }
 }

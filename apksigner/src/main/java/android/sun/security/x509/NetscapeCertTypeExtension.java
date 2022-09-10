@@ -29,7 +29,8 @@ import android.sun.security.util.BitArray;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * Represents Netscape Certificate Type Extension.
@@ -49,7 +50,7 @@ import java.util.*;
  */
 
 public class NetscapeCertTypeExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
 
     /**
      * Identifier for this attribute, to be used with the
@@ -69,12 +70,22 @@ implements CertAttrSet<String> {
     public static final String S_MIME_CA = "s_mime_ca";
     public static final String OBJECT_SIGNING_CA = "object_signing_ca";
 
-    private static final int CertType_data[] = { 2, 16, 840, 1, 113730, 1, 1 };
-
+    private static final int CertType_data[] = {2, 16, 840, 1, 113730, 1, 1};
+    private static final Vector<String> mAttributeNames = new Vector<String>();
     /**
      * Object identifier for the Netscape-Cert-Type extension.
      */
     public static android.sun.security.util.ObjectIdentifier NetscapeCertType_Id;
+    private static MapEntry[] mMapData = {
+            new MapEntry(SSL_CLIENT, 0),
+            new MapEntry(SSL_SERVER, 1),
+            new MapEntry(S_MIME, 2),
+            new MapEntry(OBJECT_SIGNING, 3),
+            // note that bit 4 is reserved
+            new MapEntry(SSL_CA, 5),
+            new MapEntry(S_MIME_CA, 6),
+            new MapEntry(OBJECT_SIGNING_CA, 7),
+    };
 
     static {
         try {
@@ -84,34 +95,65 @@ implements CertAttrSet<String> {
         }
     }
 
-    private boolean[] bitString;
-
-    private static class MapEntry {
-        String mName;
-        int mPosition;
-
-        MapEntry(String name, int position) {
-            mName = name;
-            mPosition = position;
-        }
-    }
-
-    private static MapEntry[] mMapData = {
-        new MapEntry(SSL_CLIENT, 0),
-        new MapEntry(SSL_SERVER, 1),
-        new MapEntry(S_MIME, 2),
-        new MapEntry(OBJECT_SIGNING, 3),
-        // note that bit 4 is reserved
-        new MapEntry(SSL_CA, 5),
-        new MapEntry(S_MIME_CA, 6),
-        new MapEntry(OBJECT_SIGNING_CA, 7),
-    };
-
-    private static final Vector<String> mAttributeNames = new Vector<String>();
     static {
         for (MapEntry entry : mMapData) {
             mAttributeNames.add(entry.mName);
         }
+    }
+
+    private boolean[] bitString;
+
+    /**
+     * Create a NetscapeCertTypeExtension with the passed bit settings.
+     * The criticality is set to true.
+     *
+     * @param bitString the bits to be set for the extension.
+     */
+    public NetscapeCertTypeExtension(byte[] bitString) throws IOException {
+        this.bitString =
+                new android.sun.security.util.BitArray(bitString.length * 8, bitString).toBooleanArray();
+        this.extensionId = NetscapeCertType_Id;
+        this.critical = true;
+        encodeThis();
+    }
+
+    /**
+     * Create a NetscapeCertTypeExtension with the passed bit settings.
+     * The criticality is set to true.
+     *
+     * @param bitString the bits to be set for the extension.
+     */
+    public NetscapeCertTypeExtension(boolean[] bitString) throws IOException {
+        this.bitString = bitString;
+        this.extensionId = NetscapeCertType_Id;
+        this.critical = true;
+        encodeThis();
+    }
+
+    /**
+     * Create the extension from the passed DER encoded value of the same.
+     *
+     * @param critical true if the extension is to be treated as critical.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
+     */
+    public NetscapeCertTypeExtension(Boolean critical, Object value)
+            throws IOException {
+        this.extensionId = NetscapeCertType_Id;
+        this.critical = critical.booleanValue();
+        this.extensionValue = (byte[]) value;
+        android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(this.extensionValue);
+        this.bitString = val.getUnalignedBitString().toBooleanArray();
+    }
+
+    /**
+     * Create a default key usage.
+     */
+    public NetscapeCertTypeExtension() {
+        extensionId = NetscapeCertType_Id;
+        critical = true;
+        bitString = new boolean[0];
     }
 
     private static int getPosition(String name) throws IOException {
@@ -120,7 +162,7 @@ implements CertAttrSet<String> {
                 return mMapData[i].mPosition;
         }
         throw new IOException("Attribute name [" + name
-                             + "] not recognized by CertAttrSet:NetscapeCertType.");
+                + "] not recognized by CertAttrSet:NetscapeCertType.");
     }
 
     // Encode this extension value
@@ -145,64 +187,11 @@ implements CertAttrSet<String> {
     private void set(int position, boolean val) {
         // enlarge bitString if necessary
         if (position >= bitString.length) {
-            boolean[] tmp = new boolean[position+1];
+            boolean[] tmp = new boolean[position + 1];
             System.arraycopy(bitString, 0, tmp, 0, bitString.length);
             bitString = tmp;
         }
         bitString[position] = val;
-    }
-
-    /**
-     * Create a NetscapeCertTypeExtension with the passed bit settings.
-     * The criticality is set to true.
-     *
-     * @param bitString the bits to be set for the extension.
-     */
-    public NetscapeCertTypeExtension(byte[] bitString) throws IOException {
-        this.bitString =
-            new android.sun.security.util.BitArray(bitString.length*8, bitString).toBooleanArray();
-        this.extensionId = NetscapeCertType_Id;
-        this.critical = true;
-        encodeThis();
-    }
-
-    /**
-     * Create a NetscapeCertTypeExtension with the passed bit settings.
-     * The criticality is set to true.
-     *
-     * @param bitString the bits to be set for the extension.
-     */
-    public NetscapeCertTypeExtension(boolean[] bitString) throws IOException {
-        this.bitString = bitString;
-        this.extensionId = NetscapeCertType_Id;
-        this.critical = true;
-        encodeThis();
-    }
-
-    /**
-     * Create the extension from the passed DER encoded value of the same.
-     *
-     * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
-     */
-    public NetscapeCertTypeExtension(Boolean critical, Object value)
-    throws IOException {
-        this.extensionId = NetscapeCertType_Id;
-        this.critical = critical.booleanValue();
-        this.extensionValue = (byte[]) value;
-        android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(this.extensionValue);
-        this.bitString = val.getUnalignedBitString().toBooleanArray();
-    }
-
-    /**
-     * Create a default key usage.
-     */
-    public NetscapeCertTypeExtension() {
-        extensionId = NetscapeCertType_Id;
-        critical = true;
-        bitString = new boolean[0];
     }
 
     /**
@@ -212,7 +201,7 @@ implements CertAttrSet<String> {
         if (!(obj instanceof Boolean))
             throw new IOException("Attribute must be of type Boolean.");
 
-        boolean val = ((Boolean)obj).booleanValue();
+        boolean val = ((Boolean) obj).booleanValue();
         set(getPosition(name), val);
         encodeThis();
     }
@@ -239,21 +228,22 @@ implements CertAttrSet<String> {
         String s = super.toString() + "NetscapeCertType [\n";
 
         try {
-           if (isSet(getPosition(SSL_CLIENT)))
-               s += "   SSL client\n";
-           if (isSet(getPosition(SSL_SERVER)))
-               s += "   SSL server\n";
-           if (isSet(getPosition(S_MIME)))
-               s += "   S/MIME\n";
-           if (isSet(getPosition(OBJECT_SIGNING)))
-               s += "   Object Signing\n";
-           if (isSet(getPosition(SSL_CA)))
-               s += "   SSL CA\n";
-           if (isSet(getPosition(S_MIME_CA)))
-               s += "   S/MIME CA\n";
-           if (isSet(getPosition(OBJECT_SIGNING_CA)))
-               s += "   Object Signing CA" ;
-        } catch (Exception e) { }
+            if (isSet(getPosition(SSL_CLIENT)))
+                s += "   SSL client\n";
+            if (isSet(getPosition(SSL_SERVER)))
+                s += "   SSL server\n";
+            if (isSet(getPosition(S_MIME)))
+                s += "   S/MIME\n";
+            if (isSet(getPosition(OBJECT_SIGNING)))
+                s += "   Object Signing\n";
+            if (isSet(getPosition(SSL_CA)))
+                s += "   SSL CA\n";
+            if (isSet(getPosition(S_MIME_CA)))
+                s += "   S/MIME CA\n";
+            if (isSet(getPosition(OBJECT_SIGNING_CA)))
+                s += "   Object Signing CA";
+        } catch (Exception e) {
+        }
 
         s += "]\n";
         return (s);
@@ -263,7 +253,7 @@ implements CertAttrSet<String> {
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
@@ -295,6 +285,7 @@ implements CertAttrSet<String> {
     /**
      * Get a boolean array representing the bits of this extension,
      * as it maps to the KeyUsage extension.
+     *
      * @return the bit values of this extension mapped to the bit values
      * of the KeyUsage extension as an array of booleans.
      */
@@ -304,18 +295,29 @@ implements CertAttrSet<String> {
 
         try {
             if (isSet(getPosition(SSL_CLIENT)) ||
-                isSet(getPosition(S_MIME)) ||
-                isSet(getPosition(OBJECT_SIGNING)))
+                    isSet(getPosition(S_MIME)) ||
+                    isSet(getPosition(OBJECT_SIGNING)))
                 keyUsage.set(keyUsage.DIGITAL_SIGNATURE, val);
 
             if (isSet(getPosition(SSL_SERVER)))
                 keyUsage.set(keyUsage.KEY_ENCIPHERMENT, val);
 
             if (isSet(getPosition(SSL_CA)) ||
-                isSet(getPosition(S_MIME_CA)) ||
-                isSet(getPosition(OBJECT_SIGNING_CA)))
+                    isSet(getPosition(S_MIME_CA)) ||
+                    isSet(getPosition(OBJECT_SIGNING_CA)))
                 keyUsage.set(keyUsage.KEY_CERTSIGN, val);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
         return keyUsage.getBits();
+    }
+
+    private static class MapEntry {
+        String mName;
+        int mPosition;
+
+        MapEntry(String name, int position) {
+            mName = name;
+            mPosition = position;
+        }
     }
 }

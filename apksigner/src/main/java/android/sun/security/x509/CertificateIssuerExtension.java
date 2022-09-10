@@ -24,12 +24,12 @@
  */
 package android.sun.security.x509;
 
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
-
-import android.sun.security.util.DerValue;
-import android.sun.security.util.DerOutputStream;
 
 /**
  * Represents the CRL Certificate Issuer Extension (OID = 2.5.29.29).
@@ -56,12 +56,12 @@ import android.sun.security.util.DerOutputStream;
  *
  * @author Anne Anderson
  * @author Sean Mullan
- * @since 1.5
  * @see android.sun.security.x509.Extension
  * @see android.sun.security.x509.CertAttrSet
+ * @since 1.5
  */
 public class CertificateIssuerExtension extends Extension
-    implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
 
     /**
      * Attribute names.
@@ -70,19 +70,6 @@ public class CertificateIssuerExtension extends Extension
     public static final String ISSUER = "issuer";
 
     private android.sun.security.x509.GeneralNames names;
-
-    /**
-     * Encode this extension
-     */
-    private void encodeThis() throws IOException {
-        if (names == null || names.isEmpty()) {
-            this.extensionValue = null;
-            return;
-        }
-        DerOutputStream os = new DerOutputStream();
-        names.encode(os);
-        this.extensionValue = os.toByteArray();
-    }
 
     /**
      * Create a CertificateIssuerExtension containing the specified issuer name.
@@ -103,18 +90,31 @@ public class CertificateIssuerExtension extends Extension
      * value of the same.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value
+     * @param value    an array of DER encoded bytes of the actual value
      * @throws ClassCastException if value is not an array of bytes
-     * @throws IOException on error
+     * @throws IOException        on error
      */
     public CertificateIssuerExtension(Boolean critical, Object value)
-        throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.CertificateIssuer_Id;
         this.critical = critical.booleanValue();
 
         this.extensionValue = (byte[]) value;
         DerValue val = new DerValue(this.extensionValue);
         this.names = new android.sun.security.x509.GeneralNames(val);
+    }
+
+    /**
+     * Encode this extension
+     */
+    private void encodeThis() throws IOException {
+        if (names == null || names.isEmpty()) {
+            this.extensionValue = null;
+            return;
+        }
+        DerOutputStream os = new DerOutputStream();
+        names.encode(os);
+        this.extensionValue = os.toByteArray();
     }
 
     /**
@@ -126,12 +126,12 @@ public class CertificateIssuerExtension extends Extension
         if (name.equalsIgnoreCase(ISSUER)) {
             if (!(obj instanceof android.sun.security.x509.GeneralNames)) {
                 throw new IOException("Attribute value must be of type " +
-                    "GeneralNames");
+                        "GeneralNames");
             }
-            this.names = (GeneralNames)obj;
+            this.names = (GeneralNames) obj;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                "CertAttrSet:CertificateIssuer");
+                    "CertAttrSet:CertificateIssuer");
         }
         encodeThis();
     }
@@ -146,7 +146,7 @@ public class CertificateIssuerExtension extends Extension
             return names;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                "CertAttrSet:CertificateIssuer");
+                    "CertAttrSet:CertificateIssuer");
         }
     }
 
@@ -160,7 +160,7 @@ public class CertificateIssuerExtension extends Extension
             names = null;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                "CertAttrSet:CertificateIssuer");
+                    "CertAttrSet:CertificateIssuer");
         }
         encodeThis();
     }
@@ -170,17 +170,17 @@ public class CertificateIssuerExtension extends Extension
      */
     public String toString() {
         return super.toString() + "Certificate Issuer [\n" +
-            String.valueOf(names) + "]\n";
+                String.valueOf(names) + "]\n";
     }
 
     /**
      * Write the extension to the OutputStream.
      *
      * @param out the OutputStream to write the extension to
-     * @exception IOException on encoding errors
+     * @throws IOException on encoding errors
      */
     public void encode(OutputStream out) throws IOException {
-        DerOutputStream  tmp = new DerOutputStream();
+        DerOutputStream tmp = new DerOutputStream();
         if (extensionValue == null) {
             extensionId = PKIXExtensions.CertificateIssuer_Id;
             critical = true;

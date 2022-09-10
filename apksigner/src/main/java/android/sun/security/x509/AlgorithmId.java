@@ -28,9 +28,17 @@ package android.sun.security.x509;
 import android.sun.security.ec.ECKeyFactory;
 import android.sun.security.util.ObjectIdentifier;
 
-import java.io.*;
-import java.util.*;
-import java.security.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.security.AlgorithmParameters;
+import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
+import java.security.Security;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -51,24 +59,302 @@ import java.security.*;
  * Note that the mappings between algorithm IDs and algorithm names is
  * not one-to-one.
  *
- *
  * @author David Brownell
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  */
 public class AlgorithmId implements Serializable, android.sun.security.util.DerEncoder {
 
-    /** use serialVersionUID from JDK 1.1. for interoperability */
-    private static final long serialVersionUID = 7205873507486557157L;
-
     /**
-     * The object identitifer being used for this algorithm.
+     * Algorithm ID for the MD2 Message Digest Algorthm, from RFC 1319.
+     * OID = 1.2.840.113549.2.2
      */
-    private android.sun.security.util.ObjectIdentifier algid;
+    public static final android.sun.security.util.ObjectIdentifier MD2_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 2, 2});
+    /**
+     * Algorithm ID for the MD5 Message Digest Algorthm, from RFC 1321.
+     * OID = 1.2.840.113549.2.5
+     */
+    public static final android.sun.security.util.ObjectIdentifier MD5_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 2, 5});
+    /**
+     * Algorithm ID for the SHA1 Message Digest Algorithm, from FIPS 180-1.
+     * This is sometimes called "SHA", though that is often confusing since
+     * many people refer to FIPS 180 (which has an error) as defining SHA.
+     * OID = 1.3.14.3.2.26. Old SHA-0 OID: 1.3.14.3.2.18.
+     */
+    public static final android.sun.security.util.ObjectIdentifier SHA_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 3, 14, 3, 2, 26});
+    public static final android.sun.security.util.ObjectIdentifier SHA256_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{2, 16, 840, 1, 101, 3, 4, 2, 1});
+    public static final android.sun.security.util.ObjectIdentifier SHA384_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{2, 16, 840, 1, 101, 3, 4, 2, 2});
+    public static final android.sun.security.util.ObjectIdentifier SHA512_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{2, 16, 840, 1, 101, 3, 4, 2, 3});
+    public static final ObjectIdentifier DH_oid;
+    public static final android.sun.security.util.ObjectIdentifier DH_PKIX_oid;
+    public static final android.sun.security.util.ObjectIdentifier DSA_oid;
+    public static final android.sun.security.util.ObjectIdentifier DSA_OIW_oid;
+    public static final android.sun.security.util.ObjectIdentifier EC_oid = oid(1, 2, 840, 10045, 2, 1);
+    public static final android.sun.security.util.ObjectIdentifier RSA_oid;
+    public static final android.sun.security.util.ObjectIdentifier RSAEncryption_oid;
+    public static final android.sun.security.util.ObjectIdentifier md2WithRSAEncryption_oid;
+    public static final android.sun.security.util.ObjectIdentifier md5WithRSAEncryption_oid;
+    public static final android.sun.security.util.ObjectIdentifier sha1WithRSAEncryption_oid;
+    public static final android.sun.security.util.ObjectIdentifier sha1WithRSAEncryption_OIW_oid;
+    public static final android.sun.security.util.ObjectIdentifier sha256WithRSAEncryption_oid;
+    public static final android.sun.security.util.ObjectIdentifier sha384WithRSAEncryption_oid;
+    public static final android.sun.security.util.ObjectIdentifier sha512WithRSAEncryption_oid;
+    public static final android.sun.security.util.ObjectIdentifier shaWithDSA_OIW_oid;
+    public static final android.sun.security.util.ObjectIdentifier sha1WithDSA_OIW_oid;
+    public static final android.sun.security.util.ObjectIdentifier sha1WithDSA_oid;
+    public static final android.sun.security.util.ObjectIdentifier sha1WithECDSA_oid =
+            oid(1, 2, 840, 10045, 4, 1);
+    public static final android.sun.security.util.ObjectIdentifier sha224WithECDSA_oid =
+            oid(1, 2, 840, 10045, 4, 3, 1);
+    public static final android.sun.security.util.ObjectIdentifier sha256WithECDSA_oid =
+            oid(1, 2, 840, 10045, 4, 3, 2);
+    public static final android.sun.security.util.ObjectIdentifier sha384WithECDSA_oid =
+            oid(1, 2, 840, 10045, 4, 3, 3);
+    public static final android.sun.security.util.ObjectIdentifier sha512WithECDSA_oid =
+            oid(1, 2, 840, 10045, 4, 3, 4);
+    public static final android.sun.security.util.ObjectIdentifier specifiedWithECDSA_oid =
+            oid(1, 2, 840, 10045, 4, 3);
+    /**
+     * Algorithm ID for the PBE encryption algorithms from PKCS#5 and
+     * PKCS#12.
+     */
+    public static final android.sun.security.util.ObjectIdentifier pbeWithMD5AndDES_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 5, 3});
+    public static final android.sun.security.util.ObjectIdentifier pbeWithMD5AndRC2_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 5, 6});
+    public static final android.sun.security.util.ObjectIdentifier pbeWithSHA1AndDES_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 5, 10});
 
-    // The (parsed) parameters
-    private AlgorithmParameters algParams;
-    private boolean constructedFromDer = true;
+    /*****************************************************************/
+
+    /*
+     * HASHING ALGORITHMS
+     */
+    public static final android.sun.security.util.ObjectIdentifier pbeWithSHA1AndRC2_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 5, 11});
+    /**
+     * use serialVersionUID from JDK 1.1. for interoperability
+     */
+    private static final long serialVersionUID = 7205873507486557157L;
+    private static final Map<android.sun.security.util.ObjectIdentifier, String> nameTable;
+    /*
+     * COMMON PUBLIC KEY TYPES
+     */
+    private static final int DH_data[] = {1, 2, 840, 113549, 1, 3, 1};
+    private static final int DH_PKIX_data[] = {1, 2, 840, 10046, 2, 1};
+    private static final int DSA_OIW_data[] = {1, 3, 14, 3, 2, 12};
+    private static final int DSA_PKIX_data[] = {1, 2, 840, 10040, 4, 1};
+    private static final int RSA_data[] = {2, 5, 8, 1, 1};
+    private static final int RSAEncryption_data[] =
+            {1, 2, 840, 113549, 1, 1, 1};
+    /*
+     * COMMON SIGNATURE ALGORITHMS
+     */
+    private static final int md2WithRSAEncryption_data[] =
+            {1, 2, 840, 113549, 1, 1, 2};
+    private static final int md5WithRSAEncryption_data[] =
+            {1, 2, 840, 113549, 1, 1, 4};
+    private static final int sha1WithRSAEncryption_data[] =
+            {1, 2, 840, 113549, 1, 1, 5};
+    private static final int sha1WithRSAEncryption_OIW_data[] =
+            {1, 3, 14, 3, 2, 29};
+    private static final int sha256WithRSAEncryption_data[] =
+            {1, 2, 840, 113549, 1, 1, 11};
+    private static final int sha384WithRSAEncryption_data[] =
+            {1, 2, 840, 113549, 1, 1, 12};
+    private static final int sha512WithRSAEncryption_data[] =
+            {1, 2, 840, 113549, 1, 1, 13};
+    private static final int shaWithDSA_OIW_data[] =
+            {1, 3, 14, 3, 2, 13};
+    private static final int sha1WithDSA_OIW_data[] =
+            {1, 3, 14, 3, 2, 27};
+    private static final int dsaWithSHA1_PKIX_data[] =
+            {1, 2, 840, 10040, 4, 3};
+    public static android.sun.security.util.ObjectIdentifier pbeWithSHA1AndDESede_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 12, 1, 3});
+    public static android.sun.security.util.ObjectIdentifier pbeWithSHA1AndRC2_40_oid =
+            android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 12, 1, 6});
+    private static boolean initOidTable = false;
+    private static Map<String, android.sun.security.util.ObjectIdentifier> oidTable;
+
+    static {
+        /*
+         * Note the preferred OIDs are named simply with no "OIW" or
+         * "PKIX" in them, even though they may point to data from these
+         * specs; e.g. SHA_oid, DH_oid, DSA_oid, SHA1WithDSA_oid...
+         */
+        /**
+         * Algorithm ID for Diffie Hellman Key agreement, from PKCS #3.
+         * Parameters include public values P and G, and may optionally specify
+         * the length of the private key X.  Alternatively, algorithm parameters
+         * may be derived from another source such as a Certificate Authority's
+         * certificate.
+         * OID = 1.2.840.113549.1.3.1
+         */
+        DH_oid = android.sun.security.util.ObjectIdentifier.newInternal(DH_data);
+
+        /**
+         * Algorithm ID for the Diffie Hellman Key Agreement (DH), from RFC 3279.
+         * Parameters may include public values P and G.
+         * OID = 1.2.840.10046.2.1
+         */
+        DH_PKIX_oid = android.sun.security.util.ObjectIdentifier.newInternal(DH_PKIX_data);
+
+        /**
+         * Algorithm ID for the Digital Signing Algorithm (DSA), from the
+         * NIST OIW Stable Agreements part 12.
+         * Parameters may include public values P, Q, and G; or these may be
+         * derived from
+         * another source such as a Certificate Authority's certificate.
+         * OID = 1.3.14.3.2.12
+         */
+        DSA_OIW_oid = android.sun.security.util.ObjectIdentifier.newInternal(DSA_OIW_data);
+
+        /**
+         * Algorithm ID for the Digital Signing Algorithm (DSA), from RFC 3279.
+         * Parameters may include public values P, Q, and G; or these may be
+         * derived from another source such as a Certificate Authority's
+         * certificate.
+         * OID = 1.2.840.10040.4.1
+         */
+        DSA_oid = android.sun.security.util.ObjectIdentifier.newInternal(DSA_PKIX_data);
+
+        /**
+         * Algorithm ID for RSA keys used for any purpose, as defined in X.509.
+         * The algorithm parameter is a single value, the number of bits in the
+         * public modulus.
+         * OID = 2.5.8.1.1
+         */
+        RSA_oid = android.sun.security.util.ObjectIdentifier.newInternal(RSA_data);
+
+        /**
+         * Algorithm ID for RSA keys used with RSA encryption, as defined
+         * in PKCS #1.  There are no parameters associated with this algorithm.
+         * OID = 1.2.840.113549.1.1.1
+         */
+        RSAEncryption_oid = android.sun.security.util.ObjectIdentifier.newInternal(RSAEncryption_data);
+
+        /**
+         * Identifies a signing algorithm where an MD2 digest is encrypted
+         * using an RSA private key; defined in PKCS #1.  Use of this
+         * signing algorithm is discouraged due to MD2 vulnerabilities.
+         * OID = 1.2.840.113549.1.1.2
+         */
+        md2WithRSAEncryption_oid =
+                android.sun.security.util.ObjectIdentifier.newInternal(md2WithRSAEncryption_data);
+
+        /**
+         * Identifies a signing algorithm where an MD5 digest is
+         * encrypted using an RSA private key; defined in PKCS #1.
+         * OID = 1.2.840.113549.1.1.4
+         */
+        md5WithRSAEncryption_oid =
+                android.sun.security.util.ObjectIdentifier.newInternal(md5WithRSAEncryption_data);
+
+        /**
+         * Identifies a signing algorithm where a SHA1 digest is
+         * encrypted using an RSA private key; defined by RSA DSI.
+         * OID = 1.2.840.113549.1.1.5
+         */
+        sha1WithRSAEncryption_oid =
+                android.sun.security.util.ObjectIdentifier.newInternal(sha1WithRSAEncryption_data);
+
+        /**
+         * Identifies a signing algorithm where a SHA1 digest is
+         * encrypted using an RSA private key; defined in NIST OIW.
+         * OID = 1.3.14.3.2.29
+         */
+        sha1WithRSAEncryption_OIW_oid =
+                android.sun.security.util.ObjectIdentifier.newInternal(sha1WithRSAEncryption_OIW_data);
+
+        /**
+         * Identifies a signing algorithm where a SHA256 digest is
+         * encrypted using an RSA private key; defined by PKCS #1.
+         * OID = 1.2.840.113549.1.1.11
+         */
+        sha256WithRSAEncryption_oid =
+                android.sun.security.util.ObjectIdentifier.newInternal(sha256WithRSAEncryption_data);
+
+        /**
+         * Identifies a signing algorithm where a SHA384 digest is
+         * encrypted using an RSA private key; defined by PKCS #1.
+         * OID = 1.2.840.113549.1.1.12
+         */
+        sha384WithRSAEncryption_oid =
+                android.sun.security.util.ObjectIdentifier.newInternal(sha384WithRSAEncryption_data);
+
+        /**
+         * Identifies a signing algorithm where a SHA512 digest is
+         * encrypted using an RSA private key; defined by PKCS #1.
+         * OID = 1.2.840.113549.1.1.13
+         */
+        sha512WithRSAEncryption_oid =
+                android.sun.security.util.ObjectIdentifier.newInternal(sha512WithRSAEncryption_data);
+
+        /**
+         * Identifies the FIPS 186 "Digital Signature Standard" (DSS), where a
+         * SHA digest is signed using the Digital Signing Algorithm (DSA).
+         * This should not be used.
+         * OID = 1.3.14.3.2.13
+         */
+        shaWithDSA_OIW_oid = android.sun.security.util.ObjectIdentifier.newInternal(shaWithDSA_OIW_data);
+
+        /**
+         * Identifies the FIPS 186 "Digital Signature Standard" (DSS), where a
+         * SHA1 digest is signed using the Digital Signing Algorithm (DSA).
+         * OID = 1.3.14.3.2.27
+         */
+        sha1WithDSA_OIW_oid = android.sun.security.util.ObjectIdentifier.newInternal(sha1WithDSA_OIW_data);
+
+        /**
+         * Identifies the FIPS 186 "Digital Signature Standard" (DSS), where a
+         * SHA1 digest is signed using the Digital Signing Algorithm (DSA).
+         * OID = 1.2.840.10040.4.3
+         */
+        sha1WithDSA_oid = android.sun.security.util.ObjectIdentifier.newInternal(dsaWithSHA1_PKIX_data);
+
+        nameTable = new HashMap<android.sun.security.util.ObjectIdentifier, String>();
+        nameTable.put(MD5_oid, "MD5");
+        nameTable.put(MD2_oid, "MD2");
+        nameTable.put(SHA_oid, "SHA");
+        nameTable.put(SHA256_oid, "SHA256");
+        nameTable.put(SHA384_oid, "SHA384");
+        nameTable.put(SHA512_oid, "SHA512");
+        nameTable.put(RSAEncryption_oid, "RSA");
+        nameTable.put(RSA_oid, "RSA");
+        nameTable.put(DH_oid, "Diffie-Hellman");
+        nameTable.put(DH_PKIX_oid, "Diffie-Hellman");
+        nameTable.put(DSA_oid, "DSA");
+        nameTable.put(DSA_OIW_oid, "DSA");
+        nameTable.put(EC_oid, "EC");
+        nameTable.put(sha1WithECDSA_oid, "SHA1withECDSA");
+        nameTable.put(sha224WithECDSA_oid, "SHA224withECDSA");
+        nameTable.put(sha256WithECDSA_oid, "SHA256withECDSA");
+        nameTable.put(sha384WithECDSA_oid, "SHA384withECDSA");
+        nameTable.put(sha512WithECDSA_oid, "SHA512withECDSA");
+        nameTable.put(md5WithRSAEncryption_oid, "MD5withRSA");
+        nameTable.put(md2WithRSAEncryption_oid, "MD2withRSA");
+        nameTable.put(sha1WithDSA_oid, "SHA1withDSA");
+        nameTable.put(sha1WithDSA_OIW_oid, "SHA1withDSA");
+        nameTable.put(shaWithDSA_OIW_oid, "SHA1withDSA");
+        nameTable.put(sha1WithRSAEncryption_oid, "SHA1withRSA");
+        nameTable.put(sha1WithRSAEncryption_OIW_oid, "SHA1withRSA");
+        nameTable.put(sha256WithRSAEncryption_oid, "SHA256withRSA");
+        nameTable.put(sha384WithRSAEncryption_oid, "SHA384withRSA");
+        nameTable.put(sha512WithRSAEncryption_oid, "SHA512withRSA");
+        nameTable.put(pbeWithMD5AndDES_oid, "PBEWithMD5AndDES");
+        nameTable.put(pbeWithMD5AndRC2_oid, "PBEWithMD5AndRC2");
+        nameTable.put(pbeWithSHA1AndDES_oid, "PBEWithSHA1AndDES");
+        nameTable.put(pbeWithSHA1AndRC2_oid, "PBEWithSHA1AndRC2");
+        nameTable.put(pbeWithSHA1AndDESede_oid, "PBEWithSHA1AndDESede");
+        nameTable.put(pbeWithSHA1AndRC2_40_oid, "PBEWithSHA1AndRC2_40");
+    }
 
     /**
      * Parameters for this algorithm.  These are stored in unparsed
@@ -76,15 +362,22 @@ public class AlgorithmId implements Serializable, android.sun.security.util.DerE
      * them so there is fast access to these parameters.
      */
     protected android.sun.security.util.DerValue params;
-
-
+    /**
+     * The object identitifer being used for this algorithm.
+     */
+    private android.sun.security.util.ObjectIdentifier algid;
+    // The (parsed) parameters
+    private AlgorithmParameters algParams;
+    private boolean constructedFromDer = true;
     /**
      * Constructs an algorithm ID which will be initialized
      * separately, for example by deserialization.
+     *
      * @deprecated use one of the other constructors.
      */
     @Deprecated
-    public AlgorithmId() { }
+    public AlgorithmId() {
+    }
 
     /**
      * Constructs a parameterless algorithm ID.
@@ -94,11 +387,10 @@ public class AlgorithmId implements Serializable, android.sun.security.util.DerE
     public AlgorithmId(android.sun.security.util.ObjectIdentifier oid) {
         algid = oid;
     }
-
     /**
      * Constructs an algorithm ID with algorithm parameters.
      *
-     * @param oid the identifier for the algorithm.
+     * @param oid       the identifier for the algorithm.
      * @param algparams the associated algorithm parameters.
      */
     public AlgorithmId(android.sun.security.util.ObjectIdentifier oid, AlgorithmParameters algparams) {
@@ -106,7 +398,6 @@ public class AlgorithmId implements Serializable, android.sun.security.util.DerE
         algParams = algparams;
         constructedFromDer = false;
     }
-
     private AlgorithmId(android.sun.security.util.ObjectIdentifier oid, android.sun.security.util.DerValue params)
             throws IOException {
         this.algid = oid;
@@ -114,6 +405,310 @@ public class AlgorithmId implements Serializable, android.sun.security.util.DerE
         if (this.params != null) {
             decodeParams();
         }
+    }
+
+    /**
+     * Parse (unmarshal) an ID from a DER sequence input value.  This form
+     * parsing might be used when expanding a value which has already been
+     * partially unmarshaled as a set or sequence member.
+     *
+     * @param val the input value, which contains the algid and, if
+     *            there are any parameters, those parameters.
+     * @return an ID for the algorithm.  If the system is configured
+     * appropriately, this may be an instance of a class
+     * with some kind of special support for this algorithm.
+     * In that case, you may "narrow" the type of the ID.
+     * @throws IOException on error.
+     */
+    public static AlgorithmId parse(android.sun.security.util.DerValue val) throws IOException {
+        if (val.tag != android.sun.security.util.DerValue.tag_Sequence) {
+            throw new IOException("algid parse error, not a sequence");
+        }
+
+        /*
+         * Get the algorithm ID and any parameters.
+         */
+        android.sun.security.util.ObjectIdentifier algid;
+        android.sun.security.util.DerValue params;
+        android.sun.security.util.DerInputStream in = val.toDerInputStream();
+
+        algid = in.getOID();
+        if (in.available() == 0) {
+            params = null;
+        } else {
+            params = in.getDerValue();
+            if (params.tag == android.sun.security.util.DerValue.tag_Null) {
+                if (params.length() != 0) {
+                    throw new IOException("invalid NULL");
+                }
+                params = null;
+            }
+            if (in.available() != 0) {
+                throw new IOException("Invalid AlgorithmIdentifier: extra data");
+            }
+        }
+
+        return new AlgorithmId(algid, params);
+    }
+
+    /**
+     * Returns one of the algorithm IDs most commonly associated
+     * with this algorithm name.
+     *
+     * @param algname the name being used
+     * @throws NoSuchAlgorithmException on error.
+     * @deprecated use the short get form of this method.
+     */
+    @Deprecated
+    public static AlgorithmId getAlgorithmId(String algname)
+            throws NoSuchAlgorithmException {
+        return get(algname);
+    }
+
+    /**
+     * Returns one of the algorithm IDs most commonly associated
+     * with this algorithm name.
+     *
+     * @param algname the name being used
+     * @throws NoSuchAlgorithmException on error.
+     */
+    public static AlgorithmId get(String algname)
+            throws NoSuchAlgorithmException {
+        android.sun.security.util.ObjectIdentifier oid;
+        try {
+            oid = algOID(algname);
+        } catch (IOException ioe) {
+            throw new NoSuchAlgorithmException
+                    ("Invalid ObjectIdentifier " + algname);
+        }
+
+        if (oid == null) {
+            throw new NoSuchAlgorithmException
+                    ("unrecognized algorithm name: " + algname);
+        }
+        return new AlgorithmId(oid);
+    }
+
+    /**
+     * Returns one of the algorithm IDs most commonly associated
+     * with this algorithm parameters.
+     *
+     * @param algparams the associated algorithm parameters.
+     * @throws NoSuchAlgorithmException on error.
+     */
+    public static AlgorithmId get(AlgorithmParameters algparams)
+            throws NoSuchAlgorithmException {
+        android.sun.security.util.ObjectIdentifier oid;
+        String algname = algparams.getAlgorithm();
+        try {
+            oid = algOID(algname);
+        } catch (IOException ioe) {
+            throw new NoSuchAlgorithmException
+                    ("Invalid ObjectIdentifier " + algname);
+        }
+        if (oid == null) {
+            throw new NoSuchAlgorithmException
+                    ("unrecognized algorithm name: " + algname);
+        }
+        return new AlgorithmId(oid, algparams);
+    }
+
+    /*
+     * Translates from some common algorithm names to the
+     * OID with which they're usually associated ... this mapping
+     * is the reverse of the one below, except in those cases
+     * where synonyms are supported or where a given algorithm
+     * is commonly associated with multiple OIDs.
+     *
+     * XXX This method needs to be enhanced so that we can also pass the
+     * scope of the algorithm name to it, e.g., the algorithm name "DSA"
+     * may have a different OID when used as a "Signature" algorithm than when
+     * used as a "KeyPairGenerator" algorithm.
+     */
+    private static android.sun.security.util.ObjectIdentifier algOID(String name) throws IOException {
+        // See if algname is in printable OID ("dot-dot") notation
+        if (name.indexOf('.') != -1) {
+            if (name.startsWith("OID.")) {
+                return new android.sun.security.util.ObjectIdentifier(name.substring("OID.".length()));
+            } else {
+                return new android.sun.security.util.ObjectIdentifier(name);
+            }
+        }
+
+        // Digesting algorithms
+        if (name.equalsIgnoreCase("MD5")) {
+            return AlgorithmId.MD5_oid;
+        }
+        if (name.equalsIgnoreCase("MD2")) {
+            return AlgorithmId.MD2_oid;
+        }
+        if (name.equalsIgnoreCase("SHA") || name.equalsIgnoreCase("SHA1")
+                || name.equalsIgnoreCase("SHA-1")) {
+            return AlgorithmId.SHA_oid;
+        }
+        if (name.equalsIgnoreCase("SHA-256") ||
+                name.equalsIgnoreCase("SHA256")) {
+            return AlgorithmId.SHA256_oid;
+        }
+        if (name.equalsIgnoreCase("SHA-384") ||
+                name.equalsIgnoreCase("SHA384")) {
+            return AlgorithmId.SHA384_oid;
+        }
+        if (name.equalsIgnoreCase("SHA-512") ||
+                name.equalsIgnoreCase("SHA512")) {
+            return AlgorithmId.SHA512_oid;
+        }
+
+
+        // Various public key algorithms
+        if (name.equalsIgnoreCase("RSA")) {
+            return AlgorithmId.RSAEncryption_oid;
+        }
+        if (name.equalsIgnoreCase("Diffie-Hellman")
+                || name.equalsIgnoreCase("DH")) {
+            return AlgorithmId.DH_oid;
+        }
+        if (name.equalsIgnoreCase("DSA")) {
+            return AlgorithmId.DSA_oid;
+        }
+        if (name.equalsIgnoreCase("EC")) {
+            return EC_oid;
+        }
+
+        // Common signature types
+        if (name.equalsIgnoreCase("MD5withRSA")
+                || name.equalsIgnoreCase("MD5/RSA")) {
+            return AlgorithmId.md5WithRSAEncryption_oid;
+        }
+        if (name.equalsIgnoreCase("MD2withRSA")
+                || name.equalsIgnoreCase("MD2/RSA")) {
+            return AlgorithmId.md2WithRSAEncryption_oid;
+        }
+        if (name.equalsIgnoreCase("SHAwithDSA")
+                || name.equalsIgnoreCase("SHA1withDSA")
+                || name.equalsIgnoreCase("SHA/DSA")
+                || name.equalsIgnoreCase("SHA1/DSA")
+                || name.equalsIgnoreCase("DSAWithSHA1")
+                || name.equalsIgnoreCase("DSS")
+                || name.equalsIgnoreCase("SHA-1/DSA")) {
+            return AlgorithmId.sha1WithDSA_oid;
+        }
+        if (name.equalsIgnoreCase("SHA1WithRSA")
+                || name.equalsIgnoreCase("SHA1/RSA")) {
+            return AlgorithmId.sha1WithRSAEncryption_oid;
+        }
+        if (name.equalsIgnoreCase("SHA1withECDSA")
+                || name.equalsIgnoreCase("ECDSA")) {
+            return AlgorithmId.sha1WithECDSA_oid;
+        }
+        if (name.equalsIgnoreCase("SHA224withECDSA")) {
+            return AlgorithmId.sha224WithECDSA_oid;
+        }
+        if (name.equalsIgnoreCase("SHA256withECDSA")) {
+            return AlgorithmId.sha256WithECDSA_oid;
+        }
+        if (name.equalsIgnoreCase("SHA384withECDSA")) {
+            return AlgorithmId.sha384WithECDSA_oid;
+        }
+        if (name.equalsIgnoreCase("SHA512withECDSA")) {
+            return AlgorithmId.sha512WithECDSA_oid;
+        }
+
+        // See if any of the installed providers supply a mapping from
+        // the given algorithm name to an OID string
+        String oidString;
+        if (!initOidTable) {
+            Provider[] provs = Security.getProviders();
+            for (int i = 0; i < provs.length; i++) {
+                for (Enumeration<Object> enum_ = provs[i].keys();
+                     enum_.hasMoreElements(); ) {
+                    String alias = (String) enum_.nextElement();
+                    String upperCaseAlias = alias.toUpperCase(Locale.ENGLISH);
+                    int index;
+                    if (upperCaseAlias.startsWith("ALG.ALIAS") &&
+                            (index = upperCaseAlias.indexOf("OID.", 0)) != -1) {
+                        index += "OID.".length();
+                        if (index == alias.length()) {
+                            // invalid alias entry
+                            break;
+                        }
+                        if (oidTable == null) {
+                            oidTable = new HashMap<String, android.sun.security.util.ObjectIdentifier>();
+                        }
+                        oidString = alias.substring(index);
+                        String stdAlgName = provs[i].getProperty(alias);
+                        if (stdAlgName != null) {
+                            stdAlgName = stdAlgName.toUpperCase(Locale.ENGLISH);
+                        }
+                        if (stdAlgName != null &&
+                                oidTable.get(stdAlgName) == null) {
+                            oidTable.put(stdAlgName,
+                                    new android.sun.security.util.ObjectIdentifier(oidString));
+                        }
+                    }
+                }
+            }
+
+            if (oidTable == null) {
+                oidTable = new HashMap<String, android.sun.security.util.ObjectIdentifier>(1);
+            }
+            initOidTable = true;
+        }
+
+        return oidTable.get(name.toUpperCase(Locale.ENGLISH));
+    }
+
+    private static android.sun.security.util.ObjectIdentifier oid(int... values) {
+        return android.sun.security.util.ObjectIdentifier.newInternal(values);
+    }
+
+    /**
+     * Creates a signature algorithm name from a digest algorithm
+     * name and a encryption algorithm name.
+     */
+    public static String makeSigAlg(String digAlg, String encAlg) {
+        digAlg = digAlg.replace("-", "").toUpperCase(Locale.ENGLISH);
+        if (digAlg.equalsIgnoreCase("SHA")) digAlg = "SHA1";
+
+        encAlg = encAlg.toUpperCase(Locale.ENGLISH);
+        if (encAlg.equals("EC")) encAlg = "ECDSA";
+
+        return digAlg + "with" + encAlg;
+    }
+
+    /**
+     * Extracts the encryption algorithm name from a signature
+     * algorithm name.
+     */
+    public static String getEncAlgFromSigAlg(String signatureAlgorithm) {
+        signatureAlgorithm = signatureAlgorithm.toUpperCase(Locale.ENGLISH);
+        int with = signatureAlgorithm.indexOf("WITH");
+        String keyAlgorithm = null;
+        if (with > 0) {
+            int and = signatureAlgorithm.indexOf("AND", with + 4);
+            if (and > 0) {
+                keyAlgorithm = signatureAlgorithm.substring(with + 4, and);
+            } else {
+                keyAlgorithm = signatureAlgorithm.substring(with + 4);
+            }
+            if (keyAlgorithm.equalsIgnoreCase("ECDSA")) {
+                keyAlgorithm = "EC";
+            }
+        }
+        return keyAlgorithm;
+    }
+
+    /**
+     * Extracts the digest algorithm name from a signature
+     * algorithm name.
+     */
+    public static String getDigAlgFromSigAlg(String signatureAlgorithm) {
+        signatureAlgorithm = signatureAlgorithm.toUpperCase(Locale.ENGLISH);
+        int with = signatureAlgorithm.indexOf("WITH");
+        if (with > 0) {
+            return signatureAlgorithm.substring(0, with);
+        }
+        return null;
     }
 
     protected void decodeParams() throws IOException {
@@ -150,12 +745,10 @@ public class AlgorithmId implements Serializable, android.sun.security.util.DerE
      * DER encode this object onto an output stream.
      * Implements the <code>DerEncoder</code> interface.
      *
-     * @param out
-     * the output stream on which to write the DER encoding.
-     *
-     * @exception IOException on encoding error.
+     * @param out the output stream on which to write the DER encoding.
+     * @throws IOException on encoding error.
      */
-    public void derEncode (OutputStream out) throws IOException {
+    public void derEncode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream bytes = new android.sun.security.util.DerOutputStream();
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
 
@@ -202,7 +795,6 @@ public class AlgorithmId implements Serializable, android.sun.security.util.DerE
         out.write(tmp.toByteArray());
     }
 
-
     /**
      * Returns the DER-encoded X.509 AlgorithmId as a byte array.
      */
@@ -219,7 +811,7 @@ public class AlgorithmId implements Serializable, android.sun.security.util.DerE
      * call when you do not need to ensure cross-system portability
      * of algorithm names, or need a user friendly name.
      */
-    public final android.sun.security.util.ObjectIdentifier getOID () {
+    public final android.sun.security.util.ObjectIdentifier getOID() {
         return algid;
     }
 
@@ -272,7 +864,7 @@ public class AlgorithmId implements Serializable, android.sun.security.util.DerE
      */
     public boolean equals(AlgorithmId other) {
         boolean paramsEqual =
-          (params == null ? other.params == null : params.equals(other.params));
+                (params == null ? other.params == null : params.equals(other.params));
         return (algid.equals(other.algid) && paramsEqual);
     }
 
@@ -335,609 +927,5 @@ public class AlgorithmId implements Serializable, android.sun.security.util.DerE
      */
     public String toString() {
         return getName() + paramsToString();
-    }
-
-    /**
-     * Parse (unmarshal) an ID from a DER sequence input value.  This form
-     * parsing might be used when expanding a value which has already been
-     * partially unmarshaled as a set or sequence member.
-     *
-     * @exception IOException on error.
-     * @param val the input value, which contains the algid and, if
-     *          there are any parameters, those parameters.
-     * @return an ID for the algorithm.  If the system is configured
-     *          appropriately, this may be an instance of a class
-     *          with some kind of special support for this algorithm.
-     *          In that case, you may "narrow" the type of the ID.
-     */
-    public static AlgorithmId parse(android.sun.security.util.DerValue val) throws IOException {
-        if (val.tag != android.sun.security.util.DerValue.tag_Sequence) {
-            throw new IOException("algid parse error, not a sequence");
-        }
-
-        /*
-         * Get the algorithm ID and any parameters.
-         */
-        android.sun.security.util.ObjectIdentifier algid;
-        android.sun.security.util.DerValue params;
-        android.sun.security.util.DerInputStream in = val.toDerInputStream();
-
-        algid = in.getOID();
-        if (in.available() == 0) {
-            params = null;
-        } else {
-            params = in.getDerValue();
-            if (params.tag == android.sun.security.util.DerValue.tag_Null) {
-                if (params.length() != 0) {
-                    throw new IOException("invalid NULL");
-                }
-                params = null;
-            }
-            if (in.available() != 0) {
-                throw new IOException("Invalid AlgorithmIdentifier: extra data");
-            }
-        }
-
-        return new AlgorithmId(algid, params);
-    }
-
-    /**
-     * Returns one of the algorithm IDs most commonly associated
-     * with this algorithm name.
-     *
-     * @param algname the name being used
-     * @deprecated use the short get form of this method.
-     * @exception NoSuchAlgorithmException on error.
-     */
-    @Deprecated
-    public static AlgorithmId getAlgorithmId(String algname)
-            throws NoSuchAlgorithmException {
-        return get(algname);
-    }
-
-    /**
-     * Returns one of the algorithm IDs most commonly associated
-     * with this algorithm name.
-     *
-     * @param algname the name being used
-     * @exception NoSuchAlgorithmException on error.
-     */
-    public static AlgorithmId get(String algname)
-            throws NoSuchAlgorithmException {
-        android.sun.security.util.ObjectIdentifier oid;
-        try {
-            oid = algOID(algname);
-        } catch (IOException ioe) {
-            throw new NoSuchAlgorithmException
-                ("Invalid ObjectIdentifier " + algname);
-        }
-
-        if (oid == null) {
-            throw new NoSuchAlgorithmException
-                ("unrecognized algorithm name: " + algname);
-        }
-        return new AlgorithmId(oid);
-    }
-
-    /**
-     * Returns one of the algorithm IDs most commonly associated
-     * with this algorithm parameters.
-     *
-     * @param algparams the associated algorithm parameters.
-     * @exception NoSuchAlgorithmException on error.
-     */
-    public static AlgorithmId get(AlgorithmParameters algparams)
-            throws NoSuchAlgorithmException {
-        android.sun.security.util.ObjectIdentifier oid;
-        String algname = algparams.getAlgorithm();
-        try {
-            oid = algOID(algname);
-        } catch (IOException ioe) {
-            throw new NoSuchAlgorithmException
-                ("Invalid ObjectIdentifier " + algname);
-        }
-        if (oid == null) {
-            throw new NoSuchAlgorithmException
-                ("unrecognized algorithm name: " + algname);
-        }
-        return new AlgorithmId(oid, algparams);
-    }
-
-    /*
-     * Translates from some common algorithm names to the
-     * OID with which they're usually associated ... this mapping
-     * is the reverse of the one below, except in those cases
-     * where synonyms are supported or where a given algorithm
-     * is commonly associated with multiple OIDs.
-     *
-     * XXX This method needs to be enhanced so that we can also pass the
-     * scope of the algorithm name to it, e.g., the algorithm name "DSA"
-     * may have a different OID when used as a "Signature" algorithm than when
-     * used as a "KeyPairGenerator" algorithm.
-     */
-    private static android.sun.security.util.ObjectIdentifier algOID(String name) throws IOException {
-        // See if algname is in printable OID ("dot-dot") notation
-        if (name.indexOf('.') != -1) {
-            if (name.startsWith("OID.")) {
-                return new android.sun.security.util.ObjectIdentifier(name.substring("OID.".length()));
-            } else {
-                return new android.sun.security.util.ObjectIdentifier(name);
-            }
-        }
-
-        // Digesting algorithms
-        if (name.equalsIgnoreCase("MD5")) {
-            return AlgorithmId.MD5_oid;
-        }
-        if (name.equalsIgnoreCase("MD2")) {
-            return AlgorithmId.MD2_oid;
-        }
-        if (name.equalsIgnoreCase("SHA") || name.equalsIgnoreCase("SHA1")
-            || name.equalsIgnoreCase("SHA-1")) {
-            return AlgorithmId.SHA_oid;
-        }
-        if (name.equalsIgnoreCase("SHA-256") ||
-            name.equalsIgnoreCase("SHA256")) {
-            return AlgorithmId.SHA256_oid;
-        }
-        if (name.equalsIgnoreCase("SHA-384") ||
-            name.equalsIgnoreCase("SHA384")) {
-            return AlgorithmId.SHA384_oid;
-        }
-        if (name.equalsIgnoreCase("SHA-512") ||
-            name.equalsIgnoreCase("SHA512")) {
-            return AlgorithmId.SHA512_oid;
-        }
-
-
-        // Various public key algorithms
-        if (name.equalsIgnoreCase("RSA")) {
-            return AlgorithmId.RSAEncryption_oid;
-        }
-        if (name.equalsIgnoreCase("Diffie-Hellman")
-            || name.equalsIgnoreCase("DH")) {
-            return AlgorithmId.DH_oid;
-        }
-        if (name.equalsIgnoreCase("DSA")) {
-            return AlgorithmId.DSA_oid;
-        }
-        if (name.equalsIgnoreCase("EC")) {
-            return EC_oid;
-        }
-
-        // Common signature types
-        if (name.equalsIgnoreCase("MD5withRSA")
-            || name.equalsIgnoreCase("MD5/RSA")) {
-            return AlgorithmId.md5WithRSAEncryption_oid;
-        }
-        if (name.equalsIgnoreCase("MD2withRSA")
-            || name.equalsIgnoreCase("MD2/RSA")) {
-            return AlgorithmId.md2WithRSAEncryption_oid;
-        }
-        if (name.equalsIgnoreCase("SHAwithDSA")
-            || name.equalsIgnoreCase("SHA1withDSA")
-            || name.equalsIgnoreCase("SHA/DSA")
-            || name.equalsIgnoreCase("SHA1/DSA")
-            || name.equalsIgnoreCase("DSAWithSHA1")
-            || name.equalsIgnoreCase("DSS")
-            || name.equalsIgnoreCase("SHA-1/DSA")) {
-            return AlgorithmId.sha1WithDSA_oid;
-        }
-        if (name.equalsIgnoreCase("SHA1WithRSA")
-            || name.equalsIgnoreCase("SHA1/RSA")) {
-            return AlgorithmId.sha1WithRSAEncryption_oid;
-        }
-        if (name.equalsIgnoreCase("SHA1withECDSA")
-                || name.equalsIgnoreCase("ECDSA")) {
-            return AlgorithmId.sha1WithECDSA_oid;
-        }
-        if (name.equalsIgnoreCase("SHA224withECDSA")) {
-            return AlgorithmId.sha224WithECDSA_oid;
-        }
-        if (name.equalsIgnoreCase("SHA256withECDSA")) {
-            return AlgorithmId.sha256WithECDSA_oid;
-        }
-        if (name.equalsIgnoreCase("SHA384withECDSA")) {
-            return AlgorithmId.sha384WithECDSA_oid;
-        }
-        if (name.equalsIgnoreCase("SHA512withECDSA")) {
-            return AlgorithmId.sha512WithECDSA_oid;
-        }
-
-        // See if any of the installed providers supply a mapping from
-        // the given algorithm name to an OID string
-        String oidString;
-        if (!initOidTable) {
-            Provider[] provs = Security.getProviders();
-            for (int i=0; i<provs.length; i++) {
-                for (Enumeration<Object> enum_ = provs[i].keys();
-                     enum_.hasMoreElements(); ) {
-                    String alias = (String)enum_.nextElement();
-                    String upperCaseAlias = alias.toUpperCase(Locale.ENGLISH);
-                    int index;
-                    if (upperCaseAlias.startsWith("ALG.ALIAS") &&
-                            (index=upperCaseAlias.indexOf("OID.", 0)) != -1) {
-                        index += "OID.".length();
-                        if (index == alias.length()) {
-                            // invalid alias entry
-                            break;
-                        }
-                        if (oidTable == null) {
-                            oidTable = new HashMap<String, android.sun.security.util.ObjectIdentifier>();
-                        }
-                        oidString = alias.substring(index);
-                        String stdAlgName = provs[i].getProperty(alias);
-                        if (stdAlgName != null) {
-                            stdAlgName = stdAlgName.toUpperCase(Locale.ENGLISH);
-                        }
-                        if (stdAlgName != null &&
-                                oidTable.get(stdAlgName) == null) {
-                            oidTable.put(stdAlgName,
-                                         new android.sun.security.util.ObjectIdentifier(oidString));
-                        }
-                    }
-                }
-            }
-
-            if (oidTable == null) {
-                oidTable = new HashMap<String, android.sun.security.util.ObjectIdentifier>(1);
-            }
-            initOidTable = true;
-        }
-
-        return oidTable.get(name.toUpperCase(Locale.ENGLISH));
-    }
-
-    private static android.sun.security.util.ObjectIdentifier oid(int ... values) {
-        return android.sun.security.util.ObjectIdentifier.newInternal(values);
-    }
-
-    private static boolean initOidTable = false;
-    private static Map<String, android.sun.security.util.ObjectIdentifier> oidTable;
-    private static final Map<android.sun.security.util.ObjectIdentifier,String> nameTable;
-
-    /*****************************************************************/
-
-    /*
-     * HASHING ALGORITHMS
-     */
-
-    /**
-     * Algorithm ID for the MD2 Message Digest Algorthm, from RFC 1319.
-     * OID = 1.2.840.113549.2.2
-     */
-    public static final android.sun.security.util.ObjectIdentifier MD2_oid =
-    android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 2, 840, 113549, 2, 2});
-
-    /**
-     * Algorithm ID for the MD5 Message Digest Algorthm, from RFC 1321.
-     * OID = 1.2.840.113549.2.5
-     */
-    public static final android.sun.security.util.ObjectIdentifier MD5_oid =
-    android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 2, 840, 113549, 2, 5});
-
-    /**
-     * Algorithm ID for the SHA1 Message Digest Algorithm, from FIPS 180-1.
-     * This is sometimes called "SHA", though that is often confusing since
-     * many people refer to FIPS 180 (which has an error) as defining SHA.
-     * OID = 1.3.14.3.2.26. Old SHA-0 OID: 1.3.14.3.2.18.
-     */
-    public static final android.sun.security.util.ObjectIdentifier SHA_oid =
-    android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 3, 14, 3, 2, 26});
-
-    public static final android.sun.security.util.ObjectIdentifier SHA256_oid =
-    android.sun.security.util.ObjectIdentifier.newInternal(new int[] {2, 16, 840, 1, 101, 3, 4, 2, 1});
-
-    public static final android.sun.security.util.ObjectIdentifier SHA384_oid =
-    android.sun.security.util.ObjectIdentifier.newInternal(new int[] {2, 16, 840, 1, 101, 3, 4, 2, 2});
-
-    public static final android.sun.security.util.ObjectIdentifier SHA512_oid =
-    android.sun.security.util.ObjectIdentifier.newInternal(new int[] {2, 16, 840, 1, 101, 3, 4, 2, 3});
-
-    /*
-     * COMMON PUBLIC KEY TYPES
-     */
-    private static final int DH_data[] = { 1, 2, 840, 113549, 1, 3, 1 };
-    private static final int DH_PKIX_data[] = { 1, 2, 840, 10046, 2, 1 };
-    private static final int DSA_OIW_data[] = { 1, 3, 14, 3, 2, 12 };
-    private static final int DSA_PKIX_data[] = { 1, 2, 840, 10040, 4, 1 };
-    private static final int RSA_data[] = { 2, 5, 8, 1, 1 };
-    private static final int RSAEncryption_data[] =
-                                 { 1, 2, 840, 113549, 1, 1, 1 };
-
-    public static final ObjectIdentifier DH_oid;
-    public static final android.sun.security.util.ObjectIdentifier DH_PKIX_oid;
-    public static final android.sun.security.util.ObjectIdentifier DSA_oid;
-    public static final android.sun.security.util.ObjectIdentifier DSA_OIW_oid;
-    public static final android.sun.security.util.ObjectIdentifier EC_oid = oid(1, 2, 840, 10045, 2, 1);
-    public static final android.sun.security.util.ObjectIdentifier RSA_oid;
-    public static final android.sun.security.util.ObjectIdentifier RSAEncryption_oid;
-
-    /*
-     * COMMON SIGNATURE ALGORITHMS
-     */
-    private static final int md2WithRSAEncryption_data[] =
-                                       { 1, 2, 840, 113549, 1, 1, 2 };
-    private static final int md5WithRSAEncryption_data[] =
-                                       { 1, 2, 840, 113549, 1, 1, 4 };
-    private static final int sha1WithRSAEncryption_data[] =
-                                       { 1, 2, 840, 113549, 1, 1, 5 };
-    private static final int sha1WithRSAEncryption_OIW_data[] =
-                                       { 1, 3, 14, 3, 2, 29 };
-    private static final int sha256WithRSAEncryption_data[] =
-                                       { 1, 2, 840, 113549, 1, 1, 11 };
-    private static final int sha384WithRSAEncryption_data[] =
-                                       { 1, 2, 840, 113549, 1, 1, 12 };
-    private static final int sha512WithRSAEncryption_data[] =
-                                       { 1, 2, 840, 113549, 1, 1, 13 };
-    private static final int shaWithDSA_OIW_data[] =
-                                       { 1, 3, 14, 3, 2, 13 };
-    private static final int sha1WithDSA_OIW_data[] =
-                                       { 1, 3, 14, 3, 2, 27 };
-    private static final int dsaWithSHA1_PKIX_data[] =
-                                       { 1, 2, 840, 10040, 4, 3 };
-
-    public static final android.sun.security.util.ObjectIdentifier md2WithRSAEncryption_oid;
-    public static final android.sun.security.util.ObjectIdentifier md5WithRSAEncryption_oid;
-    public static final android.sun.security.util.ObjectIdentifier sha1WithRSAEncryption_oid;
-    public static final android.sun.security.util.ObjectIdentifier sha1WithRSAEncryption_OIW_oid;
-    public static final android.sun.security.util.ObjectIdentifier sha256WithRSAEncryption_oid;
-    public static final android.sun.security.util.ObjectIdentifier sha384WithRSAEncryption_oid;
-    public static final android.sun.security.util.ObjectIdentifier sha512WithRSAEncryption_oid;
-    public static final android.sun.security.util.ObjectIdentifier shaWithDSA_OIW_oid;
-    public static final android.sun.security.util.ObjectIdentifier sha1WithDSA_OIW_oid;
-    public static final android.sun.security.util.ObjectIdentifier sha1WithDSA_oid;
-
-    public static final android.sun.security.util.ObjectIdentifier sha1WithECDSA_oid =
-                                            oid(1, 2, 840, 10045, 4, 1);
-    public static final android.sun.security.util.ObjectIdentifier sha224WithECDSA_oid =
-                                            oid(1, 2, 840, 10045, 4, 3, 1);
-    public static final android.sun.security.util.ObjectIdentifier sha256WithECDSA_oid =
-                                            oid(1, 2, 840, 10045, 4, 3, 2);
-    public static final android.sun.security.util.ObjectIdentifier sha384WithECDSA_oid =
-                                            oid(1, 2, 840, 10045, 4, 3, 3);
-    public static final android.sun.security.util.ObjectIdentifier sha512WithECDSA_oid =
-                                            oid(1, 2, 840, 10045, 4, 3, 4);
-    public static final android.sun.security.util.ObjectIdentifier specifiedWithECDSA_oid =
-                                            oid(1, 2, 840, 10045, 4, 3);
-
-    /**
-     * Algorithm ID for the PBE encryption algorithms from PKCS#5 and
-     * PKCS#12.
-     */
-    public static final android.sun.security.util.ObjectIdentifier pbeWithMD5AndDES_oid =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[]{1, 2, 840, 113549, 1, 5, 3});
-    public static final android.sun.security.util.ObjectIdentifier pbeWithMD5AndRC2_oid =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 2, 840, 113549, 1, 5, 6});
-    public static final android.sun.security.util.ObjectIdentifier pbeWithSHA1AndDES_oid =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 2, 840, 113549, 1, 5, 10});
-    public static final android.sun.security.util.ObjectIdentifier pbeWithSHA1AndRC2_oid =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 2, 840, 113549, 1, 5, 11});
-    public static android.sun.security.util.ObjectIdentifier pbeWithSHA1AndDESede_oid =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 2, 840, 113549, 1, 12, 1, 3});
-    public static android.sun.security.util.ObjectIdentifier pbeWithSHA1AndRC2_40_oid =
-        android.sun.security.util.ObjectIdentifier.newInternal(new int[] {1, 2, 840, 113549, 1, 12, 1, 6});
-
-
-    static {
-    /*
-     * Note the preferred OIDs are named simply with no "OIW" or
-     * "PKIX" in them, even though they may point to data from these
-     * specs; e.g. SHA_oid, DH_oid, DSA_oid, SHA1WithDSA_oid...
-     */
-    /**
-     * Algorithm ID for Diffie Hellman Key agreement, from PKCS #3.
-     * Parameters include public values P and G, and may optionally specify
-     * the length of the private key X.  Alternatively, algorithm parameters
-     * may be derived from another source such as a Certificate Authority's
-     * certificate.
-     * OID = 1.2.840.113549.1.3.1
-     */
-        DH_oid = android.sun.security.util.ObjectIdentifier.newInternal(DH_data);
-
-    /**
-     * Algorithm ID for the Diffie Hellman Key Agreement (DH), from RFC 3279.
-     * Parameters may include public values P and G.
-     * OID = 1.2.840.10046.2.1
-     */
-        DH_PKIX_oid = android.sun.security.util.ObjectIdentifier.newInternal(DH_PKIX_data);
-
-    /**
-     * Algorithm ID for the Digital Signing Algorithm (DSA), from the
-     * NIST OIW Stable Agreements part 12.
-     * Parameters may include public values P, Q, and G; or these may be
-     * derived from
-     * another source such as a Certificate Authority's certificate.
-     * OID = 1.3.14.3.2.12
-     */
-        DSA_OIW_oid = android.sun.security.util.ObjectIdentifier.newInternal(DSA_OIW_data);
-
-    /**
-     * Algorithm ID for the Digital Signing Algorithm (DSA), from RFC 3279.
-     * Parameters may include public values P, Q, and G; or these may be
-     * derived from another source such as a Certificate Authority's
-     * certificate.
-     * OID = 1.2.840.10040.4.1
-     */
-        DSA_oid = android.sun.security.util.ObjectIdentifier.newInternal(DSA_PKIX_data);
-
-    /**
-     * Algorithm ID for RSA keys used for any purpose, as defined in X.509.
-     * The algorithm parameter is a single value, the number of bits in the
-     * public modulus.
-     * OID = 2.5.8.1.1
-     */
-        RSA_oid = android.sun.security.util.ObjectIdentifier.newInternal(RSA_data);
-
-    /**
-     * Algorithm ID for RSA keys used with RSA encryption, as defined
-     * in PKCS #1.  There are no parameters associated with this algorithm.
-     * OID = 1.2.840.113549.1.1.1
-     */
-        RSAEncryption_oid = android.sun.security.util.ObjectIdentifier.newInternal(RSAEncryption_data);
-
-    /**
-     * Identifies a signing algorithm where an MD2 digest is encrypted
-     * using an RSA private key; defined in PKCS #1.  Use of this
-     * signing algorithm is discouraged due to MD2 vulnerabilities.
-     * OID = 1.2.840.113549.1.1.2
-     */
-        md2WithRSAEncryption_oid =
-            android.sun.security.util.ObjectIdentifier.newInternal(md2WithRSAEncryption_data);
-
-    /**
-     * Identifies a signing algorithm where an MD5 digest is
-     * encrypted using an RSA private key; defined in PKCS #1.
-     * OID = 1.2.840.113549.1.1.4
-     */
-        md5WithRSAEncryption_oid =
-            android.sun.security.util.ObjectIdentifier.newInternal(md5WithRSAEncryption_data);
-
-    /**
-     * Identifies a signing algorithm where a SHA1 digest is
-     * encrypted using an RSA private key; defined by RSA DSI.
-     * OID = 1.2.840.113549.1.1.5
-     */
-        sha1WithRSAEncryption_oid =
-            android.sun.security.util.ObjectIdentifier.newInternal(sha1WithRSAEncryption_data);
-
-    /**
-     * Identifies a signing algorithm where a SHA1 digest is
-     * encrypted using an RSA private key; defined in NIST OIW.
-     * OID = 1.3.14.3.2.29
-     */
-        sha1WithRSAEncryption_OIW_oid =
-            android.sun.security.util.ObjectIdentifier.newInternal(sha1WithRSAEncryption_OIW_data);
-
-    /**
-     * Identifies a signing algorithm where a SHA256 digest is
-     * encrypted using an RSA private key; defined by PKCS #1.
-     * OID = 1.2.840.113549.1.1.11
-     */
-        sha256WithRSAEncryption_oid =
-            android.sun.security.util.ObjectIdentifier.newInternal(sha256WithRSAEncryption_data);
-
-    /**
-     * Identifies a signing algorithm where a SHA384 digest is
-     * encrypted using an RSA private key; defined by PKCS #1.
-     * OID = 1.2.840.113549.1.1.12
-     */
-        sha384WithRSAEncryption_oid =
-            android.sun.security.util.ObjectIdentifier.newInternal(sha384WithRSAEncryption_data);
-
-    /**
-     * Identifies a signing algorithm where a SHA512 digest is
-     * encrypted using an RSA private key; defined by PKCS #1.
-     * OID = 1.2.840.113549.1.1.13
-     */
-        sha512WithRSAEncryption_oid =
-            android.sun.security.util.ObjectIdentifier.newInternal(sha512WithRSAEncryption_data);
-
-    /**
-     * Identifies the FIPS 186 "Digital Signature Standard" (DSS), where a
-     * SHA digest is signed using the Digital Signing Algorithm (DSA).
-     * This should not be used.
-     * OID = 1.3.14.3.2.13
-     */
-        shaWithDSA_OIW_oid = android.sun.security.util.ObjectIdentifier.newInternal(shaWithDSA_OIW_data);
-
-    /**
-     * Identifies the FIPS 186 "Digital Signature Standard" (DSS), where a
-     * SHA1 digest is signed using the Digital Signing Algorithm (DSA).
-     * OID = 1.3.14.3.2.27
-     */
-        sha1WithDSA_OIW_oid = android.sun.security.util.ObjectIdentifier.newInternal(sha1WithDSA_OIW_data);
-
-    /**
-     * Identifies the FIPS 186 "Digital Signature Standard" (DSS), where a
-     * SHA1 digest is signed using the Digital Signing Algorithm (DSA).
-     * OID = 1.2.840.10040.4.3
-     */
-        sha1WithDSA_oid = android.sun.security.util.ObjectIdentifier.newInternal(dsaWithSHA1_PKIX_data);
-
-        nameTable = new HashMap<android.sun.security.util.ObjectIdentifier,String>();
-        nameTable.put(MD5_oid, "MD5");
-        nameTable.put(MD2_oid, "MD2");
-        nameTable.put(SHA_oid, "SHA");
-        nameTable.put(SHA256_oid, "SHA256");
-        nameTable.put(SHA384_oid, "SHA384");
-        nameTable.put(SHA512_oid, "SHA512");
-        nameTable.put(RSAEncryption_oid, "RSA");
-        nameTable.put(RSA_oid, "RSA");
-        nameTable.put(DH_oid, "Diffie-Hellman");
-        nameTable.put(DH_PKIX_oid, "Diffie-Hellman");
-        nameTable.put(DSA_oid, "DSA");
-        nameTable.put(DSA_OIW_oid, "DSA");
-        nameTable.put(EC_oid, "EC");
-        nameTable.put(sha1WithECDSA_oid, "SHA1withECDSA");
-        nameTable.put(sha224WithECDSA_oid, "SHA224withECDSA");
-        nameTable.put(sha256WithECDSA_oid, "SHA256withECDSA");
-        nameTable.put(sha384WithECDSA_oid, "SHA384withECDSA");
-        nameTable.put(sha512WithECDSA_oid, "SHA512withECDSA");
-        nameTable.put(md5WithRSAEncryption_oid, "MD5withRSA");
-        nameTable.put(md2WithRSAEncryption_oid, "MD2withRSA");
-        nameTable.put(sha1WithDSA_oid, "SHA1withDSA");
-        nameTable.put(sha1WithDSA_OIW_oid, "SHA1withDSA");
-        nameTable.put(shaWithDSA_OIW_oid, "SHA1withDSA");
-        nameTable.put(sha1WithRSAEncryption_oid, "SHA1withRSA");
-        nameTable.put(sha1WithRSAEncryption_OIW_oid, "SHA1withRSA");
-        nameTable.put(sha256WithRSAEncryption_oid, "SHA256withRSA");
-        nameTable.put(sha384WithRSAEncryption_oid, "SHA384withRSA");
-        nameTable.put(sha512WithRSAEncryption_oid, "SHA512withRSA");
-        nameTable.put(pbeWithMD5AndDES_oid, "PBEWithMD5AndDES");
-        nameTable.put(pbeWithMD5AndRC2_oid, "PBEWithMD5AndRC2");
-        nameTable.put(pbeWithSHA1AndDES_oid, "PBEWithSHA1AndDES");
-        nameTable.put(pbeWithSHA1AndRC2_oid, "PBEWithSHA1AndRC2");
-        nameTable.put(pbeWithSHA1AndDESede_oid, "PBEWithSHA1AndDESede");
-        nameTable.put(pbeWithSHA1AndRC2_40_oid, "PBEWithSHA1AndRC2_40");
-    }
-
-    /**
-     * Creates a signature algorithm name from a digest algorithm
-     * name and a encryption algorithm name.
-     */
-    public static String makeSigAlg(String digAlg, String encAlg) {
-        digAlg = digAlg.replace("-", "").toUpperCase(Locale.ENGLISH);
-        if (digAlg.equalsIgnoreCase("SHA")) digAlg = "SHA1";
-
-        encAlg = encAlg.toUpperCase(Locale.ENGLISH);
-        if (encAlg.equals("EC")) encAlg = "ECDSA";
-
-        return digAlg + "with" + encAlg;
-    }
-
-    /**
-     * Extracts the encryption algorithm name from a signature
-     * algorithm name.
-      */
-    public static String getEncAlgFromSigAlg(String signatureAlgorithm) {
-        signatureAlgorithm = signatureAlgorithm.toUpperCase(Locale.ENGLISH);
-        int with = signatureAlgorithm.indexOf("WITH");
-        String keyAlgorithm = null;
-        if (with > 0) {
-            int and = signatureAlgorithm.indexOf("AND", with + 4);
-            if (and > 0) {
-                keyAlgorithm = signatureAlgorithm.substring(with + 4, and);
-            } else {
-                keyAlgorithm = signatureAlgorithm.substring(with + 4);
-            }
-            if (keyAlgorithm.equalsIgnoreCase("ECDSA")) {
-                keyAlgorithm = "EC";
-            }
-        }
-        return keyAlgorithm;
-    }
-
-    /**
-     * Extracts the digest algorithm name from a signature
-     * algorithm name.
-      */
-    public static String getDigAlgFromSigAlg(String signatureAlgorithm) {
-        signatureAlgorithm = signatureAlgorithm.toUpperCase(Locale.ENGLISH);
-        int with = signatureAlgorithm.indexOf("WITH");
-        if (with > 0) {
-            return signatureAlgorithm.substring(0, with);
-        }
-        return null;
     }
 }

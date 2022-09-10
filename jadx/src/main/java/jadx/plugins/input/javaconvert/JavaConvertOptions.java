@@ -11,40 +11,39 @@ import jadx.api.plugins.options.impl.JadxOptionDescription;
 
 public class JavaConvertOptions extends BaseOptionsParser {
 
-	private static final String MODE_OPT = JavaConvertPlugin.PLUGIN_ID + ".mode";
-	private static final String D8_DESUGAR_OPT = JavaConvertPlugin.PLUGIN_ID + ".d8-desugar";
+    private static final String MODE_OPT = JavaConvertPlugin.PLUGIN_ID + ".mode";
+    private static final String D8_DESUGAR_OPT = JavaConvertPlugin.PLUGIN_ID + ".d8-desugar";
+    private Mode mode = Mode.BOTH;
+    private boolean d8Desugar = false;
 
-	public enum Mode {
-		DX, D8, BOTH
-	}
+    public void apply(Map<String, String> options) {
+        mode = getOption(options, MODE_OPT, name -> Mode.valueOf(name.toUpperCase(Locale.ROOT)), Mode.BOTH);
+        d8Desugar = getBooleanOption(options, D8_DESUGAR_OPT, false);
+    }
 
-	private Mode mode = Mode.BOTH;
-	private boolean d8Desugar = false;
+    public List<OptionDescription> buildOptionsDescriptions() {
+        return Arrays.asList(
+                new JadxOptionDescription(
+                        MODE_OPT,
+                        "convert mode",
+                        "both",
+                        Arrays.asList("dx", "d8", "both")),
+                new JadxOptionDescription(
+                        D8_DESUGAR_OPT,
+                        "use desugar in d8",
+                        "no",
+                        Arrays.asList("yes", "no")));
+    }
 
-	public void apply(Map<String, String> options) {
-		mode = getOption(options, MODE_OPT, name -> Mode.valueOf(name.toUpperCase(Locale.ROOT)), Mode.BOTH);
-		d8Desugar = getBooleanOption(options, D8_DESUGAR_OPT, false);
-	}
+    public Mode getMode() {
+        return mode;
+    }
 
-	public List<OptionDescription> buildOptionsDescriptions() {
-		return Arrays.asList(
-				new JadxOptionDescription(
-						MODE_OPT,
-						"convert mode",
-						"both",
-						Arrays.asList("dx", "d8", "both")),
-				new JadxOptionDescription(
-						D8_DESUGAR_OPT,
-						"use desugar in d8",
-						"no",
-						Arrays.asList("yes", "no")));
-	}
+    public boolean isD8Desugar() {
+        return d8Desugar;
+    }
 
-	public Mode getMode() {
-		return mode;
-	}
-
-	public boolean isD8Desugar() {
-		return d8Desugar;
-	}
+    public enum Mode {
+        DX, D8, BOTH
+    }
 }

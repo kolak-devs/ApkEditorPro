@@ -25,7 +25,10 @@
 
 package android.sun.security.util;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -51,16 +54,7 @@ import java.util.Arrays;
  */
 
 final public
-class ObjectIdentifier implements Serializable
-{
-    /**
-     * We use the DER value (no tag, no length) as the internal format
-     * @serial
-     */
-    private byte[] encoding = null;
-
-    private transient volatile String stringForm;
-
+class ObjectIdentifier implements Serializable {
     /*
      * IMPORTANT NOTES FOR CODE CHANGES (bug 4811968) IN JDK 1.7.0
      * ===========================================================
@@ -92,55 +86,32 @@ class ObjectIdentifier implements Serializable
      * huge OID is not.
      */
     private static final long serialVersionUID = 8697030238860181294L;
-
+    /**
+     * We use the DER value (no tag, no length) as the internal format
+     *
+     * @serial
+     */
+    private byte[] encoding = null;
+    private transient volatile String stringForm;
     /**
      * Changed to Object
+     *
      * @serial
      */
-    private Object      components   = null;          // path from root
+    private Object components = null;          // path from root
     /**
      * @serial
      */
-    private int         componentLen = -1;            // how much is used.
+    private int componentLen = -1;            // how much is used.
 
     // Is the components field calculated?
-    transient private boolean   componentsCalculated = false;
-
-    private void readObject(ObjectInputStream is)
-            throws IOException, ClassNotFoundException {
-        is.defaultReadObject();
-
-        if (encoding == null) {  // from an old version
-            init((int[])components, componentLen);
-        }
-    }
-
-    private void writeObject(ObjectOutputStream os)
-            throws IOException {
-        if (!componentsCalculated) {
-            int[] comps = toIntArray();
-            if (comps != null) {    // every one understands this
-                components = comps;
-                componentLen = comps.length;
-            } else {
-                components = HugeOidNotSupportedByOldJDK.theOne;
-            }
-            componentsCalculated = true;
-        }
-        os.defaultWriteObject();
-    }
-
-    static class HugeOidNotSupportedByOldJDK implements Serializable {
-        private static final long serialVersionUID = 1L;
-        static HugeOidNotSupportedByOldJDK theOne = new HugeOidNotSupportedByOldJDK();
-    }
+    transient private boolean componentsCalculated = false;
 
     /**
      * Constructs, from a string.  This string should be of the form 1.23.56.
      * Validity check included.
      */
-    public ObjectIdentifier (String oid) throws IOException
-    {
+    public ObjectIdentifier(String oid) throws IOException {
         int ch = '.';
         int start = 0;
         int end = 0;
@@ -154,12 +125,12 @@ class ObjectIdentifier implements Serializable
             String comp = null;
             do {
                 int length = 0; // length of one section
-                end = oid.indexOf(ch,start);
+                end = oid.indexOf(ch, start);
                 if (end == -1) {
                     comp = oid.substring(start);
                     length = oid.length() - start;
                 } else {
-                    comp = oid.substring(start,end);
+                    comp = oid.substring(start, end);
                     length = end - start;
                 }
 
@@ -171,7 +142,7 @@ class ObjectIdentifier implements Serializable
                     } else {
                         if (count == 1) {
                             checkSecondComponent(first, bignum);
-                            bignum = bignum.add(BigInteger.valueOf(40*first));
+                            bignum = bignum.add(BigInteger.valueOf(40 * first));
                         } else {
                             checkOtherComponent(count, bignum);
                         }
@@ -212,12 +183,11 @@ class ObjectIdentifier implements Serializable
      * Constructor, from an array of integers.
      * Validity check included.
      */
-    public ObjectIdentifier (int values []) throws IOException
-    {
+    public ObjectIdentifier(int values[]) throws IOException {
         checkCount(values.length);
         checkFirstComponent(values[0]);
         checkSecondComponent(values[0], values[1]);
-        for (int i=2; i<values.length; i++)
+        for (int i = 2; i < values.length; i++)
             checkOtherComponent(i, values[i]);
         init(values, values.length);
     }
@@ -232,12 +202,11 @@ class ObjectIdentifier implements Serializable
      * input stream has not been returned to its "initial" state.
      *
      * @param in DER-encoded data holding an object ID
-     * @exception IOException indicates a decoding error
+     * @throws IOException indicates a decoding error
      */
-    public ObjectIdentifier (android.sun.security.util.DerInputStream in) throws IOException
-    {
-        byte    type_id;
-        int     bufferEnd;
+    public ObjectIdentifier(android.sun.security.util.DerInputStream in) throws IOException {
+        byte type_id;
+        int bufferEnd;
 
         /*
          * Object IDs are a "universal" type, and their tag needs only
@@ -248,12 +217,12 @@ class ObjectIdentifier implements Serializable
          * up so that we can use in.available() to check for the end of
          * this value in the data stream.
          */
-        type_id = (byte) in.getByte ();
+        type_id = (byte) in.getByte();
         if (type_id != android.sun.security.util.DerValue.tag_ObjectId)
-            throw new IOException (
-                "ObjectIdentifier() -- data isn't an object ID"
-                + " (tag = " +  type_id + ")"
-                );
+            throw new IOException(
+                    "ObjectIdentifier() -- data isn't an object ID"
+                            + " (tag = " + type_id + ")"
+            );
 
         encoding = new byte[in.getLength()];
         in.getBytes(encoding);
@@ -265,31 +234,11 @@ class ObjectIdentifier implements Serializable
      * the tag and length have been removed/verified
      * Validity check NOT included.
      */
-    ObjectIdentifier (android.sun.security.util.DerInputBuffer buf) throws IOException
-    {
+    ObjectIdentifier(android.sun.security.util.DerInputBuffer buf) throws IOException {
         android.sun.security.util.DerInputStream in = new DerInputStream(buf);
         encoding = new byte[in.available()];
         in.getBytes(encoding);
         check(encoding);
-    }
-
-    private void init(int[] components, int length) {
-        int pos = 0;
-        byte[] tmp = new byte[length*5+1];  // +1 for empty input
-
-        if (components[1] < Integer.MAX_VALUE - components[0]*40)
-            pos += pack7Oid(components[0]*40+components[1], tmp, pos);
-        else {
-            BigInteger big = BigInteger.valueOf(components[1]);
-            big = big.add(BigInteger.valueOf(components[0]*40));
-            pos += pack7Oid(big, tmp, pos);
-        }
-
-        for (int i=2; i<length; i++) {
-            pos += pack7Oid(components[i], tmp, pos);
-        }
-        encoding = new byte[pos];
-        System.arraycopy(tmp, 0, encoding, 0, pos);
     }
 
     /**
@@ -297,7 +246,7 @@ class ObjectIdentifier implements Serializable
      * does the check and conversion. All around the JDK, the method is called
      * in static blocks to initialize pre-defined ObjectIdentifieies. No
      * obvious performance hurt will be made after this change.
-     *
+     * <p>
      * Old doc: Create a new ObjectIdentifier for internal use. The values are
      * neither checked nor cloned.
      */
@@ -310,12 +259,257 @@ class ObjectIdentifier implements Serializable
         }
     }
 
+    /**
+     * Repack all bits from input to output. On the both sides, only a portion
+     * (from the least significant bit) of the 8 bits in a byte is used. This
+     * number is defined as the number of useful bits (NUB) for the array. All the
+     * used bits from the input byte array and repacked into the output in the
+     * exactly same order. The output bits are aligned so that the final bit of
+     * the input (the least significant bit in the last byte), when repacked as
+     * the final bit of the output, is still at the least significant position.
+     * Zeroes will be padded on the left side of the first output byte if
+     * necessary. All unused bits in the output are also zeroed.
+     * <p>
+     * For example: if the input is 01001100 with NUB 8, the output which
+     * has a NUB 6 will look like:
+     * 00000001 00001100
+     * The first 2 bits of the output bytes are unused bits. The other bits
+     * turn out to be 000001 001100. While the 8 bits on the right are from
+     * the input, the left 4 zeroes are padded to fill the 6 bits space.
+     *
+     * @param in      the input byte array
+     * @param ioffset start point inside <code>in</code>
+     * @param ilength number of bytes to repack
+     * @param iw      NUB for input
+     * @param ow      NUB for output
+     * @return the repacked bytes
+     */
+    private static byte[] pack(byte[] in, int ioffset, int ilength, int iw, int ow) {
+        assert (iw > 0 && iw <= 8) : "input NUB must be between 1 and 8";
+        assert (ow > 0 && ow <= 8) : "output NUB must be between 1 and 8";
+
+        if (iw == ow) {
+            return in.clone();
+        }
+
+        int bits = ilength * iw;    // number of all used bits
+        byte[] out = new byte[(bits + ow - 1) / ow];
+
+        // starting from the 0th bit in the input
+        int ipos = 0;
+
+        // the number of padding 0's needed in the output, skip them
+        int opos = (bits + ow - 1) / ow * ow - bits;
+
+        while (ipos < bits) {
+            int count = iw - ipos % iw;   // unpacked bits in current input byte
+            if (count > ow - opos % ow) { // free space available in output byte
+                count = ow - opos % ow;   // choose the smaller number
+            }
+            // and move them!
+            out[opos / ow] |=                         // paste!
+                    (((in[ioffset + ipos / iw] + 256)         // locate the byte (+256 so that it's never negative)
+                            >> (iw - ipos % iw - count))          // move to the end of a byte
+                            & ((1 << (count)) - 1))       // zero out all other bits
+                            << (ow - opos % ow - count);  // move to the output position
+            ipos += count;  // advance
+            opos += count;  // advance
+        }
+        return out;
+    }
+
+    /**
+     * Repack from NUB 8 to a NUB 7 OID sub-identifier, remove all
+     * unnecessary 0 headings, set the first bit of all non-tail
+     * output bytes to 1 (as ITU-T Rec. X.690 8.19.2 says), and
+     * paste it into an existing byte array.
+     *
+     * @param out     the existing array to be pasted into
+     * @param ooffset the starting position to paste
+     * @return the number of bytes pasted
+     */
+    private static int pack7Oid(byte[] in, int ioffset, int ilength, byte[] out, int ooffset) {
+        byte[] pack = pack(in, ioffset, ilength, 8, 7);
+        int firstNonZero = pack.length - 1;   // paste at least one byte
+        for (int i = pack.length - 2; i >= 0; i--) {
+            if (pack[i] != 0) {
+                firstNonZero = i;
+            }
+            pack[i] |= 0x80;
+        }
+        System.arraycopy(pack, firstNonZero, out, ooffset, pack.length - firstNonZero);
+        return pack.length - firstNonZero;
+    }
+
+    /**
+     * Repack from NUB 7 to NUB 8, remove all unnecessary 0
+     * headings, and paste it into an existing byte array.
+     *
+     * @param out     the existing array to be pasted into
+     * @param ooffset the starting position to paste
+     * @return the number of bytes pasted
+     */
+    private static int pack8(byte[] in, int ioffset, int ilength, byte[] out, int ooffset) {
+        byte[] pack = pack(in, ioffset, ilength, 7, 8);
+        int firstNonZero = pack.length - 1;   // paste at least one byte
+        for (int i = pack.length - 2; i >= 0; i--) {
+            if (pack[i] != 0) {
+                firstNonZero = i;
+            }
+        }
+        System.arraycopy(pack, firstNonZero, out, ooffset, pack.length - firstNonZero);
+        return pack.length - firstNonZero;
+    }
+
+    /**
+     * Pack the int into a OID sub-identifier DER encoding
+     */
+    private static int pack7Oid(int input, byte[] out, int ooffset) {
+        byte[] b = new byte[4];
+        b[0] = (byte) (input >> 24);
+        b[1] = (byte) (input >> 16);
+        b[2] = (byte) (input >> 8);
+        b[3] = (byte) (input);
+        return pack7Oid(b, 0, 4, out, ooffset);
+    }
+
+    /**
+     * Pack the BigInteger into a OID subidentifier DER encoding
+     */
+    private static int pack7Oid(BigInteger input, byte[] out, int ooffset) {
+        byte[] b = input.toByteArray();
+        return pack7Oid(b, 0, b.length, out, ooffset);
+    }
+
+    /**
+     * Check the DER encoding. Since DER encoding defines that the integer bits
+     * are unsigned, so there's no need to check the MSB.
+     */
+    private static void check(byte[] encoding) throws IOException {
+        int length = encoding.length;
+        if (length < 1 ||      // too short
+                (encoding[length - 1] & 0x80) != 0) {  // not ended
+            throw new IOException("ObjectIdentifier() -- " +
+                    "Invalid DER encoding, not ended");
+        }
+        for (int i = 0; i < length; i++) {
+            // 0x80 at the beginning of a subidentifier
+            if (encoding[i] == (byte) 0x80 &&
+                    (i == 0 || (encoding[i - 1] & 0x80) == 0)) {
+                throw new IOException("ObjectIdentifier() -- " +
+                        "Invalid DER encoding, useless extra octet detected");
+            }
+        }
+    }
+
+    private static void checkCount(int count) throws IOException {
+        if (count < 2) {
+            throw new IOException("ObjectIdentifier() -- " +
+                    "Must be at least two oid components ");
+        }
+    }
+
+    private static void checkFirstComponent(int first) throws IOException {
+        if (first < 0 || first > 2) {
+            throw new IOException("ObjectIdentifier() -- " +
+                    "First oid component is invalid ");
+        }
+    }
+
+    private static void checkFirstComponent(BigInteger first) throws IOException {
+        if (first.signum() == -1 ||
+                first.compareTo(BigInteger.valueOf(2)) == 1) {
+            throw new IOException("ObjectIdentifier() -- " +
+                    "First oid component is invalid ");
+        }
+    }
+
+    private static void checkSecondComponent(int first, int second) throws IOException {
+        if (second < 0 || first != 2 && second > 39) {
+            throw new IOException("ObjectIdentifier() -- " +
+                    "Second oid component is invalid ");
+        }
+    }
+
+    private static void checkSecondComponent(int first, BigInteger second) throws IOException {
+        if (second.signum() == -1 ||
+                first != 2 &&
+                        second.compareTo(BigInteger.valueOf(39)) == 1) {
+            throw new IOException("ObjectIdentifier() -- " +
+                    "Second oid component is invalid ");
+        }
+    }
+
+    private static void checkOtherComponent(int i, int num) throws IOException {
+        if (num < 0) {
+            throw new IOException("ObjectIdentifier() -- " +
+                    "oid component #" + (i + 1) + " must be non-negative ");
+        }
+    }
+
+    private static void checkOtherComponent(int i, BigInteger num) throws IOException {
+        if (num.signum() == -1) {
+            throw new IOException("ObjectIdentifier() -- " +
+                    "oid component #" + (i + 1) + " must be non-negative ");
+        }
+    }
+
+    private void readObject(ObjectInputStream is)
+            throws IOException, ClassNotFoundException {
+        is.defaultReadObject();
+
+        if (encoding == null) {  // from an old version
+            init((int[]) components, componentLen);
+        }
+    }
+
+    private void writeObject(ObjectOutputStream os)
+            throws IOException {
+        if (!componentsCalculated) {
+            int[] comps = toIntArray();
+            if (comps != null) {    // every one understands this
+                components = comps;
+                componentLen = comps.length;
+            } else {
+                components = HugeOidNotSupportedByOldJDK.theOne;
+            }
+            componentsCalculated = true;
+        }
+        os.defaultWriteObject();
+    }
+
+    /**
+     * Private methods to check validity of OID. They must be --
+     * 1. at least 2 components
+     * 2. all components must be non-negative
+     * 3. the first must be 0, 1 or 2
+     * 4. if the first is 0 or 1, the second must be <40
+     */
+
+    private void init(int[] components, int length) {
+        int pos = 0;
+        byte[] tmp = new byte[length * 5 + 1];  // +1 for empty input
+
+        if (components[1] < Integer.MAX_VALUE - components[0] * 40)
+            pos += pack7Oid(components[0] * 40 + components[1], tmp, pos);
+        else {
+            BigInteger big = BigInteger.valueOf(components[1]);
+            big = big.add(BigInteger.valueOf(components[0] * 40));
+            pos += pack7Oid(big, tmp, pos);
+        }
+
+        for (int i = 2; i < length; i++) {
+            pos += pack7Oid(components[i], tmp, pos);
+        }
+        encoding = new byte[pos];
+        System.arraycopy(tmp, 0, encoding, 0, pos);
+    }
+
     /*
      * n.b. the only public interface is DerOutputStream.putOID()
      */
-    void encode (DerOutputStream out) throws IOException
-    {
-        out.write (DerValue.tag_ObjectId, encoding);
+    void encode(DerOutputStream out) throws IOException {
+        out.write(DerValue.tag_ObjectId, encoding);
     }
 
     /**
@@ -323,7 +517,7 @@ class ObjectIdentifier implements Serializable
      */
     @Deprecated
     public boolean equals(ObjectIdentifier other) {
-        return equals((Object)other);
+        return equals((Object) other);
     }
 
     /**
@@ -339,7 +533,7 @@ class ObjectIdentifier implements Serializable
         if (obj instanceof ObjectIdentifier == false) {
             return false;
         }
-        ObjectIdentifier other = (ObjectIdentifier)obj;
+        ObjectIdentifier other = (ObjectIdentifier) obj;
         return Arrays.equals(encoding, other.encoding);
     }
 
@@ -351,8 +545,9 @@ class ObjectIdentifier implements Serializable
     /**
      * Private helper method for serialization. To be compatible with old
      * versions of JDK.
+     *
      * @return components in an int array, if all the components are less than
-     *         Integer.MAX_VALUE. Otherwise, null.
+     * Integer.MAX_VALUE. Otherwise, null.
      */
     private int[] toIntArray() {
         int length = encoding.length;
@@ -363,7 +558,7 @@ class ObjectIdentifier implements Serializable
             if ((encoding[i] & 0x80) == 0) {
                 // one section [fromPos..i]
                 if (i - fromPos + 1 > 4) {
-                    BigInteger big = new BigInteger(pack(encoding, fromPos, i-fromPos+1, 7, 8));
+                    BigInteger big = new BigInteger(pack(encoding, fromPos, i - fromPos + 1, 7, 8));
                     if (fromPos == 0) {
                         result[which++] = 2;
                         BigInteger second = big.subtract(BigInteger.valueOf(80));
@@ -398,7 +593,7 @@ class ObjectIdentifier implements Serializable
                         result[which++] = retval;
                     }
                 }
-                fromPos = i+1;
+                fromPos = i + 1;
             }
             if (which >= result.length) {
                 result = Arrays.copyOf(result, which + 10);
@@ -428,7 +623,7 @@ class ObjectIdentifier implements Serializable
                         sb.append('.');
                     }
                     if (i - fromPos + 1 > 4) { // maybe big integer
-                        BigInteger big = new BigInteger(pack(encoding, fromPos, i-fromPos+1, 7, 8));
+                        BigInteger big = new BigInteger(pack(encoding, fromPos, i - fromPos + 1, 7, 8));
                         if (fromPos == 0) {
                             // first section encoded with more than 4 bytes,
                             // must be 2.something
@@ -446,9 +641,9 @@ class ObjectIdentifier implements Serializable
                         }
                         if (fromPos == 0) {
                             if (retval < 80) {
-                                sb.append(retval/40);
+                                sb.append(retval / 40);
                                 sb.append('.');
-                                sb.append(retval%40);
+                                sb.append(retval % 40);
                             } else {
                                 sb.append("2.");
                                 sb.append(retval - 80);
@@ -457,7 +652,7 @@ class ObjectIdentifier implements Serializable
                             sb.append(retval);
                         }
                     }
-                    fromPos = i+1;
+                    fromPos = i + 1;
                 }
             }
             s = sb.toString();
@@ -466,197 +661,8 @@ class ObjectIdentifier implements Serializable
         return s;
     }
 
-    /**
-     * Repack all bits from input to output. On the both sides, only a portion
-     * (from the least significant bit) of the 8 bits in a byte is used. This
-     * number is defined as the number of useful bits (NUB) for the array. All the
-     * used bits from the input byte array and repacked into the output in the
-     * exactly same order. The output bits are aligned so that the final bit of
-     * the input (the least significant bit in the last byte), when repacked as
-     * the final bit of the output, is still at the least significant position.
-     * Zeroes will be padded on the left side of the first output byte if
-     * necessary. All unused bits in the output are also zeroed.
-     *
-     * For example: if the input is 01001100 with NUB 8, the output which
-     * has a NUB 6 will look like:
-     *      00000001 00001100
-     * The first 2 bits of the output bytes are unused bits. The other bits
-     * turn out to be 000001 001100. While the 8 bits on the right are from
-     * the input, the left 4 zeroes are padded to fill the 6 bits space.
-     *
-     * @param in        the input byte array
-     * @param ioffset   start point inside <code>in</code>
-     * @param ilength   number of bytes to repack
-     * @param iw        NUB for input
-     * @param ow        NUB for output
-     * @return          the repacked bytes
-     */
-    private static byte[] pack(byte[] in, int ioffset, int ilength, int iw, int ow) {
-        assert (iw > 0 && iw <= 8): "input NUB must be between 1 and 8";
-        assert (ow > 0 && ow <= 8): "output NUB must be between 1 and 8";
-
-        if (iw == ow) {
-            return in.clone();
-        }
-
-        int bits = ilength * iw;    // number of all used bits
-        byte[] out = new byte[(bits+ow-1)/ow];
-
-        // starting from the 0th bit in the input
-        int ipos = 0;
-
-        // the number of padding 0's needed in the output, skip them
-        int opos = (bits+ow-1)/ow*ow-bits;
-
-        while(ipos < bits) {
-            int count = iw - ipos%iw;   // unpacked bits in current input byte
-            if (count > ow - opos%ow) { // free space available in output byte
-                count = ow - opos%ow;   // choose the smaller number
-            }
-            // and move them!
-            out[opos/ow] |=                         // paste!
-                (((in[ioffset+ipos/iw]+256)         // locate the byte (+256 so that it's never negative)
-                    >> (iw-ipos%iw-count))          // move to the end of a byte
-                        & ((1 << (count))-1))       // zero out all other bits
-                            << (ow-opos%ow-count);  // move to the output position
-            ipos += count;  // advance
-            opos += count;  // advance
-        }
-        return out;
-    }
-
-    /**
-     * Repack from NUB 8 to a NUB 7 OID sub-identifier, remove all
-     * unnecessary 0 headings, set the first bit of all non-tail
-     * output bytes to 1 (as ITU-T Rec. X.690 8.19.2 says), and
-     * paste it into an existing byte array.
-     * @param out the existing array to be pasted into
-     * @param ooffset the starting position to paste
-     * @return the number of bytes pasted
-     */
-    private static int pack7Oid(byte[] in, int ioffset, int ilength, byte[] out, int ooffset) {
-        byte[] pack = pack(in, ioffset, ilength, 8, 7);
-        int firstNonZero = pack.length-1;   // paste at least one byte
-        for (int i=pack.length-2; i>=0; i--) {
-            if (pack[i] != 0) {
-                firstNonZero = i;
-            }
-            pack[i] |= 0x80;
-        }
-        System.arraycopy(pack, firstNonZero, out, ooffset, pack.length-firstNonZero);
-        return pack.length-firstNonZero;
-    }
-
-    /**
-     * Repack from NUB 7 to NUB 8, remove all unnecessary 0
-     * headings, and paste it into an existing byte array.
-     * @param out the existing array to be pasted into
-     * @param ooffset the starting position to paste
-     * @return the number of bytes pasted
-     */
-    private static int pack8(byte[] in, int ioffset, int ilength, byte[] out, int ooffset) {
-        byte[] pack = pack(in, ioffset, ilength, 7, 8);
-        int firstNonZero = pack.length-1;   // paste at least one byte
-        for (int i=pack.length-2; i>=0; i--) {
-            if (pack[i] != 0) {
-                firstNonZero = i;
-            }
-        }
-        System.arraycopy(pack, firstNonZero, out, ooffset, pack.length-firstNonZero);
-        return pack.length-firstNonZero;
-    }
-
-    /**
-     * Pack the int into a OID sub-identifier DER encoding
-     */
-    private static int pack7Oid(int input, byte[] out, int ooffset) {
-        byte[] b = new byte[4];
-        b[0] = (byte)(input >> 24);
-        b[1] = (byte)(input >> 16);
-        b[2] = (byte)(input >> 8);
-        b[3] = (byte)(input);
-        return pack7Oid(b, 0, 4, out, ooffset);
-    }
-
-    /**
-     * Pack the BigInteger into a OID subidentifier DER encoding
-     */
-    private static int pack7Oid(BigInteger input, byte[] out, int ooffset) {
-        byte[] b = input.toByteArray();
-        return pack7Oid(b, 0, b.length, out, ooffset);
-    }
-
-    /**
-     * Private methods to check validity of OID. They must be --
-     * 1. at least 2 components
-     * 2. all components must be non-negative
-     * 3. the first must be 0, 1 or 2
-     * 4. if the first is 0 or 1, the second must be <40
-     */
-
-    /**
-     * Check the DER encoding. Since DER encoding defines that the integer bits
-     * are unsigned, so there's no need to check the MSB.
-     */
-    private static void check(byte[] encoding) throws IOException {
-        int length = encoding.length;
-        if (length < 1 ||      // too short
-                (encoding[length - 1] & 0x80) != 0) {  // not ended
-            throw new IOException("ObjectIdentifier() -- " +
-                    "Invalid DER encoding, not ended");
-        }
-        for (int i=0; i<length; i++) {
-            // 0x80 at the beginning of a subidentifier
-            if (encoding[i] == (byte)0x80 &&
-                    (i==0 || (encoding[i-1] & 0x80) == 0)) {
-                throw new IOException("ObjectIdentifier() -- " +
-                        "Invalid DER encoding, useless extra octet detected");
-            }
-        }
-    }
-    private static void checkCount(int count) throws IOException {
-        if (count < 2) {
-            throw new IOException("ObjectIdentifier() -- " +
-                    "Must be at least two oid components ");
-        }
-    }
-    private static void checkFirstComponent(int first) throws IOException {
-        if (first < 0 || first > 2) {
-            throw new IOException("ObjectIdentifier() -- " +
-                    "First oid component is invalid ");
-        }
-    }
-    private static void checkFirstComponent(BigInteger first) throws IOException {
-        if (first.signum() == -1 ||
-                first.compareTo(BigInteger.valueOf(2)) == 1) {
-            throw new IOException("ObjectIdentifier() -- " +
-                    "First oid component is invalid ");
-        }
-    }
-    private static void checkSecondComponent(int first, int second) throws IOException {
-        if (second < 0 || first != 2 && second > 39) {
-            throw new IOException("ObjectIdentifier() -- " +
-                    "Second oid component is invalid ");
-        }
-    }
-    private static void checkSecondComponent(int first, BigInteger second) throws IOException {
-        if (second.signum() == -1 ||
-                first != 2 &&
-                second.compareTo(BigInteger.valueOf(39)) == 1) {
-            throw new IOException("ObjectIdentifier() -- " +
-                    "Second oid component is invalid ");
-        }
-    }
-    private static void checkOtherComponent(int i, int num) throws IOException {
-        if (num < 0) {
-            throw new IOException("ObjectIdentifier() -- " +
-                    "oid component #" + (i+1) + " must be non-negative ");
-        }
-    }
-    private static void checkOtherComponent(int i, BigInteger num) throws IOException {
-        if (num.signum() == -1) {
-            throw new IOException("ObjectIdentifier() -- " +
-                    "oid component #" + (i+1) + " must be non-negative ");
-        }
+    static class HugeOidNotSupportedByOldJDK implements Serializable {
+        private static final long serialVersionUID = 1L;
+        static HugeOidNotSupportedByOldJDK theOne = new HugeOidNotSupportedByOldJDK();
     }
 }

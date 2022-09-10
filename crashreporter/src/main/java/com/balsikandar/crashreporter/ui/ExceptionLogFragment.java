@@ -72,14 +72,14 @@ public class ExceptionLogFragment extends Fragment {
         String directoryPath;
         String crashReportPath = CrashReporter.getCrashReportPath();
 
-        if (TextUtils.isEmpty(crashReportPath)){
+        if (TextUtils.isEmpty(crashReportPath)) {
             directoryPath = CrashUtil.getDefaultPath();
-        } else{
+        } else {
             directoryPath = crashReportPath;
         }
 
         File directory = new File(directoryPath);
-        if (!directory.exists() || !directory.isDirectory()){
+        if (!directory.exists() || !directory.isDirectory()) {
             throw new RuntimeException("The path provided doesn't exists : " + directoryPath);
         }
 

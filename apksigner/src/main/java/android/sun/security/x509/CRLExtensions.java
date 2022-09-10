@@ -61,20 +61,22 @@ import java.util.Hashtable;
  */
 public class CRLExtensions {
 
+    private static final Class[] PARAMS = {Boolean.class, Object.class};
     private Hashtable<String, android.sun.security.x509.Extension> map = new Hashtable<String, android.sun.security.x509.Extension>();
     private boolean unsupportedCritExt = false;
 
     /**
      * Default constructor.
      */
-    public CRLExtensions() { }
+    public CRLExtensions() {
+    }
 
     /**
      * Create the object, decoding the values from the passed DER stream.
      *
      * @param in the DerInputStream to read the Extension from, i.e. the
-     *        sequence of extensions.
-     * @exception CRLException on decoding errors.
+     *           sequence of extensions.
+     * @throws CRLException on decoding errors.
      */
     public CRLExtensions(android.sun.security.util.DerInputStream in) throws CRLException {
         init(in);
@@ -85,10 +87,10 @@ public class CRLExtensions {
         try {
             android.sun.security.util.DerInputStream str = derStrm;
 
-            byte nextByte = (byte)derStrm.peekByte();
+            byte nextByte = (byte) derStrm.peekByte();
             // check for context specific byte 0; skip it
             if (((nextByte & 0x0c0) == 0x080) &&
-                ((nextByte & 0x01f) == 0x000)) {
+                    ((nextByte & 0x01f) == 0x000)) {
                 android.sun.security.util.DerValue val = str.getDerValue();
                 str = val.data;
             }
@@ -103,8 +105,6 @@ public class CRLExtensions {
         }
     }
 
-    private static final Class[] PARAMS = {Boolean.class, Object.class};
-
     // Parse the encoded extension
     private void parseExtension(android.sun.security.x509.Extension ext) throws CRLException {
         try {
@@ -116,11 +116,11 @@ public class CRLExtensions {
                     throw new CRLException("Duplicate extensions not allowed");
                 return;
             }
-            Constructor cons = ((Class<?>)extClass).getConstructor(PARAMS);
-            Object[] passed = new Object[] {Boolean.valueOf(ext.isCritical()),
-                                            ext.getExtensionValue()};
-            android.sun.security.x509.CertAttrSet crlExt = (android.sun.security.x509.CertAttrSet)cons.newInstance(passed);
-            if (map.put(crlExt.getName(), (android.sun.security.x509.Extension)crlExt) != null) {
+            Constructor cons = ((Class<?>) extClass).getConstructor(PARAMS);
+            Object[] passed = new Object[]{Boolean.valueOf(ext.isCritical()),
+                    ext.getExtensionValue()};
+            android.sun.security.x509.CertAttrSet crlExt = (android.sun.security.x509.CertAttrSet) cons.newInstance(passed);
+            if (map.put(crlExt.getName(), (android.sun.security.x509.Extension) crlExt) != null) {
                 throw new CRLException("Duplicate extensions not allowed");
             }
         } catch (InvocationTargetException invk) {
@@ -133,13 +133,13 @@ public class CRLExtensions {
     /**
      * Encode the extensions in DER form to the stream.
      *
-     * @param out the DerOutputStream to marshal the contents to.
+     * @param out        the DerOutputStream to marshal the contents to.
      * @param isExplicit the tag indicating whether this is an entry
-     * extension (false) or a CRL extension (true).
-     * @exception CRLException on encoding errors.
+     *                   extension (false) or a CRL extension (true).
+     * @throws CRLException on encoding errors.
      */
     public void encode(OutputStream out, boolean isExplicit)
-    throws CRLException {
+            throws CRLException {
         try {
             android.sun.security.util.DerOutputStream extOut = new android.sun.security.util.DerOutputStream();
             Collection<android.sun.security.x509.Extension> allExts = map.values();
@@ -147,9 +147,9 @@ public class CRLExtensions {
 
             for (int i = 0; i < objs.length; i++) {
                 if (objs[i] instanceof android.sun.security.x509.CertAttrSet)
-                    ((android.sun.security.x509.CertAttrSet)objs[i]).encode(extOut);
+                    ((android.sun.security.x509.CertAttrSet) objs[i]).encode(extOut);
                 else if (objs[i] instanceof android.sun.security.x509.Extension)
-                    ((android.sun.security.x509.Extension)objs[i]).encode(extOut);
+                    ((android.sun.security.x509.Extension) objs[i]).encode(extOut);
                 else
                     throw new CRLException("Illegal extension object");
             }
@@ -160,7 +160,7 @@ public class CRLExtensions {
             android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
             if (isExplicit)
                 tmp.write(android.sun.security.util.DerValue.createTag(DerValue.TAG_CONTEXT,
-                                             true, (byte)0), seq);
+                        true, (byte) 0), seq);
             else
                 tmp = seq;
 
@@ -193,11 +193,11 @@ public class CRLExtensions {
      * Set the extension value with this alias.
      *
      * @param alias the identifier string for the extension to set.
-     * @param obj the Object to set the extension identified by the
-     *        alias.
+     * @param obj   the Object to set the extension identified by the
+     *              alias.
      */
     public void set(String alias, Object obj) {
-        map.put(alias, (android.sun.security.x509.Extension)obj);
+        map.put(alias, (android.sun.security.x509.Extension) obj);
     }
 
     /**
@@ -211,6 +211,7 @@ public class CRLExtensions {
 
     /**
      * Return an enumeration of the extensions.
+     *
      * @return an enumeration of the extensions in this CRL.
      */
     public Enumeration<android.sun.security.x509.Extension> getElements() {
@@ -219,6 +220,7 @@ public class CRLExtensions {
 
     /**
      * Return a collection view of the extensions.
+     *
      * @return a collection view of the extensions in this CRL.
      */
     public Collection<android.sun.security.x509.Extension> getAllExtensions() {
@@ -249,7 +251,7 @@ public class CRLExtensions {
         if (!(other instanceof CRLExtensions))
             return false;
         Collection<android.sun.security.x509.Extension> otherC =
-                        ((CRLExtensions)other).getAllExtensions();
+                ((CRLExtensions) other).getAllExtensions();
         Object[] objs = otherC.toArray();
 
         int len = objs.length;
@@ -260,14 +262,14 @@ public class CRLExtensions {
         String key = null;
         for (int i = 0; i < len; i++) {
             if (objs[i] instanceof android.sun.security.x509.CertAttrSet)
-                key = ((CertAttrSet)objs[i]).getName();
-            otherExt = (Extension)objs[i];
+                key = ((CertAttrSet) objs[i]).getName();
+            otherExt = (Extension) objs[i];
             if (key == null)
                 key = otherExt.getExtensionId().toString();
             thisExt = map.get(key);
             if (thisExt == null)
                 return false;
-            if (! thisExt.equals(otherExt))
+            if (!thisExt.equals(otherExt))
                 return false;
         }
         return true;
@@ -288,7 +290,7 @@ public class CRLExtensions {
      * by the ASCII characters "<tt>,&nbsp;</tt>" (comma and space).
      * <p>Overrides to <tt>toString</tt> method of <tt>Object</tt>.
      *
-     * @return  a string representation of this CRLExtensions.
+     * @return a string representation of this CRLExtensions.
      */
     public String toString() {
         return map.toString();

@@ -14,208 +14,205 @@ import java.util.List;
 
 public class TableRecordDialog extends Dialog {
 
-	private WeakReference<SqliteRowViewActivity> activityRef;
-	private int index;
+    private final boolean editable;
+    private WeakReference<SqliteRowViewActivity> activityRef;
+    private int index;
+    private String dbFilePath;
+    private String tableName;
+    private List<String> typeList;
+    private List<String> nameList;
+    private List<String> valueList;
+    private List<String> pkFlagList;
+    private TextView typeTv;
+    private TextView pkFlagTv;
+    private EditText nameEdit;
+    private EditText valueEdit;
+    private View nextIv;
+    private View prevIv;
+    private Button saveBtn;
+    private Button cancelBtn;
 
-	private String dbFilePath;
-	private String tableName;
-	private List<String> typeList;
-	private List<String> nameList;
-	private List<String> valueList;
-	private List<String> pkFlagList;
+    public TableRecordDialog(SqliteRowViewActivity activity,
+                             List<String> typeList, List<String> nameList,
+                             List<String> pkFlagList, List<String> valueList, int index,
+                             boolean editable) {
+        super(activity);
+        this.activityRef = new WeakReference<>(activity);
+        this.index = index;
 
-	private TextView typeTv;
-	private TextView pkFlagTv;
-	private EditText nameEdit;
-	private EditText valueEdit;
-	private View nextIv;
-	private View prevIv;
-	private Button saveBtn;
-	private Button cancelBtn;
+        this.typeList = typeList;
+        this.nameList = nameList;
+        this.valueList = valueList;
+        this.pkFlagList = pkFlagList;
+        this.editable = editable;
 
-	private final boolean editable;
+        initView();
+    }
 
-	public TableRecordDialog(SqliteRowViewActivity activity,
-			List<String> typeList, List<String> nameList,
-			List<String> pkFlagList, List<String> valueList, int index,
-			boolean editable) {
-		super(activity);
-		this.activityRef = new WeakReference<>(activity);
-		this.index = index;
+    @SuppressLint("InflateParams")
+    private void initView() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.sql_dialog_tablerecord, null);
+        this.typeTv = (TextView) layout.findViewById(R.id.tv_type);
+        this.nameEdit = (EditText) layout.findViewById(R.id.et_name);
+        this.valueEdit = (EditText) layout.findViewById(R.id.et_valuey);
+        this.nextIv = layout.findViewById(R.id.image_next);
+        this.prevIv = layout.findViewById(R.id.image_prev);
+        this.pkFlagTv = (TextView) layout.findViewById(R.id.tv_pkflag);
 
-		this.typeList = typeList;
-		this.nameList = nameList;
-		this.valueList = valueList;
-		this.pkFlagList = pkFlagList;
-		this.editable = editable;
+        TextView tipTv = (TextView) layout.findViewById(R.id.tv_noteditable);
+        if (!this.editable) {
+            tipTv.setVisibility(View.VISIBLE);
+            this.valueEdit.setEnabled(false);
+        } else {
+            tipTv.setVisibility(View.INVISIBLE);
+        }
 
-		initView();
-	}
+        nextIv.setClickable(true);
+        nextIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNextItem();
+            }
+        });
+        prevIv.setClickable(true);
+        prevIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPrevItem();
+            }
+        });
 
-	@SuppressLint("InflateParams")
-	private void initView() {
-		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.sql_dialog_tablerecord, null);
-		this.typeTv = (TextView) layout.findViewById(R.id.tv_type);
-		this.nameEdit = (EditText) layout.findViewById(R.id.et_name);
-		this.valueEdit = (EditText) layout.findViewById(R.id.et_valuey);
-		this.nextIv = layout.findViewById(R.id.image_next);
-		this.prevIv = layout.findViewById(R.id.image_prev);
-		this.pkFlagTv = (TextView) layout.findViewById(R.id.tv_pkflag);
+        this.saveBtn = (Button) layout.findViewById(R.id.btn_save);
+        if (!this.editable) {
+            saveBtn.setVisibility(View.GONE);
+        } else {
+            saveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // saveBtn.setEnabled(false);
+                    saveValue();
+                    // saveBtn.setEnabled(true);
+                }
+            });
+        }
+        this.cancelBtn = (Button) layout.findViewById(R.id.btn_cancel);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TableRecordDialog.this.cancel();
+                // activity.refresh();
+            }
+        });
 
-		TextView tipTv = (TextView) layout.findViewById(R.id.tv_noteditable);
-		if (!this.editable) {
-			tipTv.setVisibility(View.VISIBLE);
-			this.valueEdit.setEnabled(false);
-		} else {
-			tipTv.setVisibility(View.INVISIBLE);
-		}
+        showItemByIndex(index);
+        super.setContentView(layout);
+        super.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent);
+        super.setCancelable(false);
+        super.setCanceledOnTouchOutside(false);
+    }
 
-		nextIv.setClickable(true);
-		nextIv.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showNextItem();
-			}
-		});
-		prevIv.setClickable(true);
-		prevIv.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showPrevItem();
-			}
-		});
+    // Save values to DB
+    @SuppressLint("DefaultLocale")
+    protected void saveValue() {
+        try {
+            boolean isPK = isPrimaryKey(index);
+            if (isPK) {
+                throw new Exception("Can not edit primary key!");
+            }
 
-		this.saveBtn = (Button) layout.findViewById(R.id.btn_save);
-		if (!this.editable) {
-			saveBtn.setVisibility(View.GONE);
-		} else {
-			saveBtn.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// saveBtn.setEnabled(false);
-					saveValue();
-					// saveBtn.setEnabled(true);
-				}
-			});
-		}
-		this.cancelBtn = (Button) layout.findViewById(R.id.btn_cancel);
-		cancelBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				TableRecordDialog.this.cancel();
-				// activity.refresh();
-			}
-		});
+            String valueType = this.typeList.get(index);
+            valueType = valueType.toUpperCase();
+            String strValue = valueEdit.getText().toString();
+            Object newValue = null;
 
-		showItemByIndex(index);
-		super.setContentView(layout);
-		super.getWindow().setBackgroundDrawableResource(
-				android.R.color.transparent);
-		super.setCancelable(false);
-		super.setCanceledOnTouchOutside(false);
-	}
+            if (SqliteTableViewActivity.isStringType(valueType)) {
+                newValue = strValue;
+            } else if (SqliteTableViewActivity.isIntType(valueType)) {
+                newValue = Long.valueOf(strValue);
+            } else if (SqliteTableViewActivity.isBoolType(valueType)) {
+                newValue = Boolean.valueOf(strValue);
+            } else if (SqliteTableViewActivity.isFloatType(valueType)) {
+                newValue = Float.valueOf(strValue);
+            } else if (SqliteTableViewActivity.isDoubleType(valueType)) {
+                newValue = Double.valueOf(strValue);
+            } else if (SqliteTableViewActivity.isBlobType(valueType)) {
+                throw new Exception("Value type not supported!");
+            } else {
+                newValue = strValue;
+            }
+            // if ("string".equals(valueType) || "text".equals(valueType)
+            // || "varchar".equals(valueType)) {
+            // } else if ("integer".equals(valueType) ||
+            // "int".equals(valueType)) {
+            // } else if ("long".equals(valueType)) {
+            // } else if ("boolean".equals(valueType)) {
+            // } else if ("float".equals(valueType)) {
+            //
+            // } else if ("double".equals(valueType)) {
+            //
+            // } else {
+            //
+            // }
 
-	// Save values to DB
-	@SuppressLint("DefaultLocale")
-	protected void saveValue() {
-		try {
-			boolean isPK = isPrimaryKey(index);
-			if (isPK) {
-				throw new Exception("Can not edit primary key!");
-			}
+            activityRef.get().saveValue(index, newValue);
 
-			String valueType = this.typeList.get(index);
-			valueType = valueType.toUpperCase();
-			String strValue = valueEdit.getText().toString();
-			Object newValue = null;
+            Toast.makeText(activityRef.get(), "Succeed!", Toast.LENGTH_SHORT)
+                    .show();
 
-			if (SqliteTableViewActivity.isStringType(valueType)) {
-				newValue = strValue;
-			} else if (SqliteTableViewActivity.isIntType(valueType)) {
-				newValue = Long.valueOf(strValue);
-			} else if (SqliteTableViewActivity.isBoolType(valueType)) {
-				newValue = Boolean.valueOf(strValue);
-			} else if (SqliteTableViewActivity.isFloatType(valueType)) {
-				newValue = Float.valueOf(strValue);
-			} else if (SqliteTableViewActivity.isDoubleType(valueType)) {
-				newValue = Double.valueOf(strValue);
-			} else if (SqliteTableViewActivity.isBlobType(valueType)) {
-				throw new Exception("Value type not supported!");
-			} else {
-				newValue = strValue;
-			}
-			// if ("string".equals(valueType) || "text".equals(valueType)
-			// || "varchar".equals(valueType)) {
-			// } else if ("integer".equals(valueType) ||
-			// "int".equals(valueType)) {
-			// } else if ("long".equals(valueType)) {
-			// } else if ("boolean".equals(valueType)) {
-			// } else if ("float".equals(valueType)) {
-			//
-			// } else if ("double".equals(valueType)) {
-			//
-			// } else {
-			//
-			// }
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            Toast.makeText(activityRef.get(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
 
-			activityRef.get().saveValue(index, newValue);
+    private boolean isPrimaryKey(int idx) {
+        boolean isPK = (!"0".equals(pkFlagList.get(idx)));
+        return isPK;
+    }
 
-			Toast.makeText(activityRef.get(), "Succeed!", Toast.LENGTH_SHORT)
-					.show();
+    private void showItemByIndex(int idx) {
+        boolean isPK = isPrimaryKey(idx);
+        typeTv.setText("Type: " + typeList.get(idx));
+        pkFlagTv.setText("Primary Key: " + isPK);
+        nameEdit.setText(nameList.get(idx));
+        valueEdit.setText(valueList.get(idx));
 
-		} catch (Exception e) {
-			String msg = e.getMessage();
-			Toast.makeText(activityRef.get(), msg, Toast.LENGTH_SHORT).show();
-		}
-	}
+        if (!editable) {
+            if (isPK) {
+                valueEdit.setEnabled(false);
+                saveBtn.setVisibility(View.GONE);
+            } else {
+                valueEdit.setEnabled(true);
+                saveBtn.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 
-	private boolean isPrimaryKey(int idx) {
-		boolean isPK = (!"0".equals(pkFlagList.get(idx)));
-		return isPK;
-	}
+    protected void showPrevItem() {
+        if (index > 0) {
+            showItemByIndex(index - 1);
+            this.index = index - 1;
+        } else {
+            Toast.makeText(activityRef.get(), "No more values!",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
-	private void showItemByIndex(int idx) {
-		boolean isPK = isPrimaryKey(idx);
-		typeTv.setText("Type: " + typeList.get(idx));
-		pkFlagTv.setText("Primary Key: " + isPK);
-		nameEdit.setText(nameList.get(idx));
-		valueEdit.setText(valueList.get(idx));
+    protected void showNextItem() {
+        if (index + 1 < valueList.size()) {
+            showItemByIndex(index + 1);
+            this.index = index + 1;
+        } else {
+            Toast.makeText(activityRef.get(), "No more values!",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
-		if (!editable) {
-			if (isPK) {
-				valueEdit.setEnabled(false);
-				saveBtn.setVisibility(View.GONE);
-			} else {
-				valueEdit.setEnabled(true);
-				saveBtn.setVisibility(View.VISIBLE);
-			}
-		}
-	}
-
-	protected void showPrevItem() {
-		if (index > 0) {
-			showItemByIndex(index - 1);
-			this.index = index - 1;
-		} else {
-			Toast.makeText(activityRef.get(), "No more values!",
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	protected void showNextItem() {
-		if (index + 1 < valueList.size()) {
-			showItemByIndex(index + 1);
-			this.index = index + 1;
-		} else {
-			Toast.makeText(activityRef.get(), "No more values!",
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	public void setTableInfo(String dbFilePath, String tableName) {
-		this.dbFilePath = dbFilePath;
-		this.tableName = tableName;
-	}
+    public void setTableInfo(String dbFilePath, String tableName) {
+        this.dbFilePath = dbFilePath;
+        this.tableName = tableName;
+    }
 
 }

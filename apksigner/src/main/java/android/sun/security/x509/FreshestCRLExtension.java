@@ -39,7 +39,7 @@ import java.util.List;
  * <p>
  * The extension is defined in Section 5.2.6 of
  * <a href="http://www.ietf.org/rfc/rfc3280.txt">Internet X.509 PKI Certific
-ate and Certificate Revocation List (CRL) Profile</a>.
+ * ate and Certificate Revocation List (CRL) Profile</a>.
  *
  * <p>
  * Its ASN.1 definition is as follows:
@@ -65,7 +65,7 @@ public class FreshestCRLExtension extends CRLDistributionPointsExtension {
      * @param distributionPoints the list of delta CRL distribution points.
      */
     public FreshestCRLExtension(List<DistributionPoint> distributionPoints)
-        throws IOException {
+            throws IOException {
 
         super(android.sun.security.x509.PKIXExtensions.FreshestCRL_Id, false, distributionPoints, NAME);
     }
@@ -74,20 +74,20 @@ public class FreshestCRLExtension extends CRLDistributionPointsExtension {
      * Creates the extension from the passed DER encoded value of the same.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception IOException on decoding error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws IOException on decoding error.
      */
     public FreshestCRLExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         super(android.sun.security.x509.PKIXExtensions.FreshestCRL_Id, critical.booleanValue(), value,
-            NAME);
+                NAME);
     }
 
     /**
      * Writes the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         super.encode(out, PKIXExtensions.FreshestCRL_Id, false);

@@ -58,7 +58,7 @@ public class EDIPartyName implements android.sun.security.x509.GeneralNameInterf
      * Create the EDIPartyName object from the specified names.
      *
      * @param assignerName the name of the assigner
-     * @param partyName the name of the EDI party.
+     * @param partyName    the name of the EDI party.
      */
     public EDIPartyName(String assignerName, String partyName) {
         this.assigner = assignerName;
@@ -78,7 +78,7 @@ public class EDIPartyName implements android.sun.security.x509.GeneralNameInterf
      * Create the EDIPartyName object from the passed encoded Der value.
      *
      * @param derValue the encoded DER EDIPartyName.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public EDIPartyName(android.sun.security.util.DerValue derValue) throws IOException {
         android.sun.security.util.DerInputStream in = new android.sun.security.util.DerInputStream(derValue.toByteArray());
@@ -91,18 +91,18 @@ public class EDIPartyName implements android.sun.security.x509.GeneralNameInterf
         for (int i = 0; i < len; i++) {
             android.sun.security.util.DerValue opt = seq[i];
             if (opt.isContextSpecific(TAG_ASSIGNER) &&
-                !opt.isConstructed()) {
+                    !opt.isConstructed()) {
                 if (assigner != null)
                     throw new IOException("Duplicate nameAssigner found in"
-                                          + " EDIPartyName");
+                            + " EDIPartyName");
                 opt = opt.data.getDerValue();
                 assigner = opt.getAsString();
             }
             if (opt.isContextSpecific(TAG_PARTYNAME) &&
-                !opt.isConstructed()) {
+                    !opt.isConstructed()) {
                 if (party != null)
                     throw new IOException("Duplicate partyName found in"
-                                          + " EDIPartyName");
+                            + " EDIPartyName");
                 opt = opt.data.getDerValue();
                 party = opt.getAsString();
             }
@@ -120,7 +120,7 @@ public class EDIPartyName implements android.sun.security.x509.GeneralNameInterf
      * Encode the EDI party name into the DerOutputStream.
      *
      * @param out the DER stream to encode the EDIPartyName to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tagged = new DerOutputStream();
@@ -131,15 +131,15 @@ public class EDIPartyName implements android.sun.security.x509.GeneralNameInterf
             // XXX - shd check is chars fit into PrintableString
             tmp2.putPrintableString(assigner);
             tagged.write(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
-                                 false, TAG_ASSIGNER), tmp2);
+                    false, TAG_ASSIGNER), tmp2);
         }
         if (party == null)
-            throw  new IOException("Cannot have null partyName");
+            throw new IOException("Cannot have null partyName");
 
         // XXX - shd check is chars fit into PrintableString
         tmp.putPrintableString(party);
         tagged.write(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
-                                 false, TAG_PARTYNAME), tmp);
+                false, TAG_PARTYNAME), tmp);
 
         out.write(android.sun.security.util.DerValue.tag_Sequence, tagged);
     }
@@ -172,7 +172,7 @@ public class EDIPartyName implements android.sun.security.x509.GeneralNameInterf
     public boolean equals(Object other) {
         if (!(other instanceof EDIPartyName))
             return false;
-        String otherAssigner = ((EDIPartyName)other).assigner;
+        String otherAssigner = ((EDIPartyName) other).assigner;
         if (this.assigner == null) {
             if (otherAssigner != null)
                 return false;
@@ -180,7 +180,7 @@ public class EDIPartyName implements android.sun.security.x509.GeneralNameInterf
             if (!(this.assigner.equals(otherAssigner)))
                 return false;
         }
-        String otherParty = ((EDIPartyName)other).party;
+        String otherParty = ((EDIPartyName) other).party;
         if (this.party == null) {
             if (otherParty != null)
                 return false;
@@ -211,25 +211,25 @@ public class EDIPartyName implements android.sun.security.x509.GeneralNameInterf
      */
     public String toString() {
         return ("EDIPartyName: " +
-                 ((assigner == null) ? "" :
-                   ("  nameAssigner = " + assigner + ","))
-                 + "  partyName = " + party);
+                ((assigner == null) ? "" :
+                        ("  nameAssigner = " + assigner + ","))
+                + "  partyName = " + party);
     }
 
     /**
      * Return constraint type:<ul>
-     *   <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain)
-     *   <li>NAME_MATCH = 0: input name matches name
-     *   <li>NAME_NARROWS = 1: input name narrows name
-     *   <li>NAME_WIDENS = 2: input name widens name
-     *   <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type
+     * <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain)
+     * <li>NAME_MATCH = 0: input name matches name
+     * <li>NAME_NARROWS = 1: input name narrows name
+     * <li>NAME_WIDENS = 2: input name widens name
+     * <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type
      * </ul>.  These results are used in checking NameConstraints during
      * certification path verification.
      *
      * @param inputName to be checked for being constrained
-     * @returns constraint type above
      * @throws UnsupportedOperationException if name is same type, but comparison operations are
-     *          not supported for this name type.
+     *                                       not supported for this name type.
+     * @returns constraint type above
      */
     public int constrains(GeneralNameInterface inputName) throws UnsupportedOperationException {
         int constraintType;
@@ -248,8 +248,8 @@ public class EDIPartyName implements android.sun.security.x509.GeneralNameInterf
      * NameConstraints minimum and maximum bounds and for calculating
      * path lengths in name subtrees.
      *
-     * @returns distance of name from root
      * @throws UnsupportedOperationException if not supported for this name type
+     * @returns distance of name from root
      */
     public int subtreeDepth() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("subtreeDepth() not supported for EDIPartyName");

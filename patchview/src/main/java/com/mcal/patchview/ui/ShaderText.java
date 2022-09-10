@@ -5,10 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spannable;
@@ -19,6 +15,10 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 
 import com.mcal.common.data.Preferences;
 import com.mcal.patchview.R;
@@ -58,7 +58,6 @@ public class ShaderText extends AppCompatTextView {
                 @Override
                 public void run() {
                     Editable e = getEditableText();
-
                     if (onTextChangedListener != null)
                         onTextChangedListener.onTextChanged(
                                 e.toString());
@@ -282,20 +281,20 @@ public class ShaderText extends AppCompatTextView {
             for (Matcher m = PATTERN_SUB_ATTRIBUTE.matcher(e); m.find(); )
                 e.setSpan(new ForegroundColorSpan(colorBuiltin), m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            for(Matcher m = PATTERN_NUMBER_ATTRIBUTE.matcher(e); m.find(); ) {
+            for (Matcher m = PATTERN_NUMBER_ATTRIBUTE.matcher(e); m.find(); ) {
                 e.setSpan(new ForegroundColorSpan(colorOperator), m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            for(Matcher m = Pattern.compile("\"(.*?)\"|'(.*?)'").matcher(e); m.find(); ) {
+            for (Matcher m = Pattern.compile("\"(.*?)\"|'(.*?)'").matcher(e); m.find(); ) {
                 ForegroundColorSpan[] spans = e.getSpans(m.start(), m.end(), ForegroundColorSpan.class);
-                for(ForegroundColorSpan span : spans)
+                for (ForegroundColorSpan span : spans)
                     e.removeSpan(span);
                 e.setSpan(new ForegroundColorSpan(Color.parseColor("#81C784")), m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             for (Matcher m = PATTERN_COMMENTS_STRING.matcher(e); m.find(); ) {
                 ForegroundColorSpan[] spans = e.getSpans(m.start(), m.end(), ForegroundColorSpan.class);
-                for(ForegroundColorSpan span : spans)
+                for (ForegroundColorSpan span : spans)
                     e.removeSpan(span);
                 e.setSpan(new ForegroundColorSpan(colorComment), m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }

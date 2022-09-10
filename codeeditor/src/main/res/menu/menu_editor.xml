@@ -110,7 +110,7 @@
                 android:id="@+id/useIcu"
                 android:checkable="true"
                 android:checked="true"
-                android:title="@string/use_icu_library"/>
+                android:title="@string/use_icu_library" />
 
         </menu>
 

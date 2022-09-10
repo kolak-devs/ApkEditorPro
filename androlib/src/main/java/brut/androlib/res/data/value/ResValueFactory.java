@@ -17,6 +17,7 @@
 package brut.androlib.res.data.value;
 
 import android.util.TypedValue;
+
 import brut.androlib.AndrolibException;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResTypeSpec;
@@ -41,7 +42,7 @@ public class ResValueFactory {
             case TypedValue.TYPE_REFERENCE:
                 return newReference(value, null);
             case TypedValue.TYPE_ATTRIBUTE:
-            case TypedValue.TYPE_DYNAMIC_ATTRIBUTE:
+            case 0x08: //TypedValue.TYPE_DYNAMIC_ATTRIBUTE:
                 return newReference(value, rawValue, true);
             case TypedValue.TYPE_STRING:
                 return new ResStringValue(rawValue, value);
@@ -53,7 +54,7 @@ public class ResValueFactory {
                 return new ResFractionValue(value, rawValue);
             case TypedValue.TYPE_INT_BOOLEAN:
                 return new ResBoolValue(value != 0, value, rawValue);
-            case TypedValue.TYPE_DYNAMIC_REFERENCE:
+            case 0x07: //TypedValue.TYPE_DYNAMIC_REFERENCE:
                 return newReference(value, rawValue);
         }
 

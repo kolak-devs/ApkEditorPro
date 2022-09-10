@@ -4,77 +4,76 @@ import java.util.Arrays;
 
 public class StackState {
 
-	/**
-	 * Stack value type
-	 */
-	public enum SVType {
-		NARROW, // int, float, etc
-		WIDE, // long, double
-	}
+    private final SVType[] stack;
+    private int pos = -1;
+    public StackState(int maxStack) {
+        this.stack = new SVType[maxStack];
+    }
 
-	private int pos = -1;
-	private final SVType[] stack;
+    private StackState(int pos, SVType[] stack) {
+        this.pos = pos;
+        this.stack = stack;
+    }
 
-	public StackState(int maxStack) {
-		this.stack = new SVType[maxStack];
-	}
+    public StackState copy() {
+        return new StackState(pos, Arrays.copyOf(stack, stack.length));
+    }
 
-	private StackState(int pos, SVType[] stack) {
-		this.pos = pos;
-		this.stack = stack;
-	}
+    public int peek() {
+        return pos;
+    }
 
-	public StackState copy() {
-		return new StackState(pos, Arrays.copyOf(stack, stack.length));
-	}
+    public int peekAt(int at) {
+        return pos - at;
+    }
 
-	public int peek() {
-		return pos;
-	}
+    public SVType peekTypeAt(int at) {
+        int p = pos - at;
+        if (checkStackIndex(p)) {
+            return stack[p];
+        }
+        return SVType.NARROW;
+    }
 
-	public int peekAt(int at) {
-		return pos - at;
-	}
+    public int push(SVType type) {
+        int p = ++pos;
+        if (checkStackIndex(p)) {
+            stack[p] = type;
+        }
+        return p;
+    }
 
-	public SVType peekTypeAt(int at) {
-		int p = pos - at;
-		if (checkStackIndex(p)) {
-			return stack[p];
-		}
-		return SVType.NARROW;
-	}
+    private boolean checkStackIndex(int p) {
+        return p >= 0 && p < stack.length;
+    }
 
-	public int push(SVType type) {
-		int p = ++pos;
-		if (checkStackIndex(p)) {
-			stack[p] = type;
-		}
-		return p;
-	}
+    public int pop() {
+        return pos--;
+    }
 
-	private boolean checkStackIndex(int p) {
-		return p >= 0 && p < stack.length;
-	}
+    public void clear() {
+        pos = -1;
+    }
 
-	public int pop() {
-		return pos--;
-	}
+    @Override
+    public String toString() {
+        int size = pos + 1;
+        String arr;
+        if (size == 0) {
+            arr = "empty";
+        } else if (size > 0 && size < stack.length) {
+            arr = Arrays.toString(Arrays.copyOf(stack, size));
+        } else {
+            arr = Arrays.toString(stack) + " (max)";
+        }
+        return "Stack: " + size + ": " + arr;
+    }
 
-	public void clear() {
-		pos = -1;
-	}
-
-	@Override
-	public String toString() {
-		int size = pos + 1;
-		String arr;
-		if (size == 0) {
-			arr = "empty";
-		} else if (size > 0 && size < stack.length) {
-			arr = Arrays.toString(Arrays.copyOf(stack, size));
-		} else {
-			arr = Arrays.toString(stack) + " (max)";
-		}
-		return "Stack: " + size + ": " + arr;
-	}
+    /**
+     * Stack value type
+     */
+    public enum SVType {
+        NARROW, // int, float, etc
+        WIDE, // long, double
+    }
 }

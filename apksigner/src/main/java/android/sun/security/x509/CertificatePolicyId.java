@@ -69,8 +69,8 @@ public class CertificatePolicyId {
      */
     public String toString() {
         String s = "CertificatePolicyId: ["
-                 + id.toString()
-                 + "]\n";
+                + id.toString()
+                + "]\n";
 
         return (s);
     }
@@ -79,7 +79,7 @@ public class CertificatePolicyId {
      * Write the CertificatePolicyId to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the object to.
-     * @exception IOException on errors.
+     * @throws IOException on errors.
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         out.putOID(id);
@@ -105,6 +105,6 @@ public class CertificatePolicyId {
      * @return a hash code value
      */
     public int hashCode() {
-      return id.hashCode();
+        return id.hashCode();
     }
 }

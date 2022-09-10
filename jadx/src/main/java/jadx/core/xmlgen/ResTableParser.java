@@ -1,5 +1,8 @@
 package jadx.core.xmlgen;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -9,9 +12,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import jadx.api.ICodeInfo;
 import jadx.core.deobf.NameMapper;
@@ -25,413 +25,411 @@ import jadx.core.xmlgen.entry.ResourceEntry;
 import jadx.core.xmlgen.entry.ValuesParser;
 
 public class ResTableParser extends CommonBinaryParser {
-	private static final Logger LOG = LoggerFactory.getLogger(ResTableParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ResTableParser.class);
 
-	private static final Pattern VALID_RES_KEY_PATTERN = Pattern.compile("[\\w\\d_]+");
+    private static final Pattern VALID_RES_KEY_PATTERN = Pattern.compile("[\\w\\d_]+");
+    /**
+     * No renaming, pattern checking or name generation. Required for res-map.txt building
+     */
+    private final boolean useRawResName;
+    private final RootNode root;
+    private final ResourceStorage resStorage = new ResourceStorage();
+    private String[] strings;
+    public ResTableParser(RootNode root) {
+        this(root, false);
+    }
 
-	private static final class PackageChunk {
-		private final int id;
-		private final String name;
-		private final String[] typeStrings;
-		private final String[] keyStrings;
+    public ResTableParser(RootNode root, boolean useRawResNames) {
+        this.root = root;
+        this.useRawResName = useRawResNames;
+    }
 
-		private PackageChunk(int id, String name, String[] typeStrings, String[] keyStrings) {
-			this.id = id;
-			this.name = name;
-			this.typeStrings = typeStrings;
-			this.keyStrings = keyStrings;
-		}
+    public void decode(InputStream inputStream) throws IOException {
+        is = new ParserStream(inputStream);
+        decodeTableChunk();
+        resStorage.finish();
+    }
 
-		public int getId() {
-			return id;
-		}
+    public ResContainer decodeFiles(InputStream inputStream) throws IOException {
+        decode(inputStream);
 
-		public String getName() {
-			return name;
-		}
+        ValuesParser vp = new ValuesParser(strings, resStorage.getResourcesNames());
+        ResXmlGen resGen = new ResXmlGen(resStorage, vp);
 
-		public String[] getTypeStrings() {
-			return typeStrings;
-		}
+        ICodeInfo content = XmlGenUtils.makeXmlDump(root.makeCodeWriter(), resStorage);
+        List<ResContainer> xmlFiles = resGen.makeResourcesXml();
+        return ResContainer.resourceTable("res", xmlFiles, content);
+    }
 
-		public String[] getKeyStrings() {
-			return keyStrings;
-		}
-	}
+    public ResourceStorage getResStorage() {
+        return resStorage;
+    }
 
-	/**
-	 * No renaming, pattern checking or name generation. Required for res-map.txt building
-	 */
-	private final boolean useRawResName;
-	private final RootNode root;
-	private final ResourceStorage resStorage = new ResourceStorage();
-	private String[] strings;
+    public String[] getStrings() {
+        return strings;
+    }
 
-	public ResTableParser(RootNode root) {
-		this(root, false);
-	}
+    void decodeTableChunk() throws IOException {
+        is.checkInt16(RES_TABLE_TYPE, "Not a table chunk");
+        is.checkInt16(0x000c, "Unexpected table header size");
+        /* int size = */
+        is.readInt32();
+        int pkgCount = is.readInt32();
 
-	public ResTableParser(RootNode root, boolean useRawResNames) {
-		this.root = root;
-		this.useRawResName = useRawResNames;
-	}
+        strings = parseStringPool();
+        for (int i = 0; i < pkgCount; i++) {
+            parsePackage();
+        }
+    }
 
-	public void decode(InputStream inputStream) throws IOException {
-		is = new ParserStream(inputStream);
-		decodeTableChunk();
-		resStorage.finish();
-	}
+    private PackageChunk parsePackage() throws IOException {
+        long start = is.getPos();
+        is.checkInt16(RES_TABLE_PACKAGE_TYPE, "Not a table chunk");
+        int headerSize = is.readInt16();
+        if (headerSize != 0x011c && headerSize != 0x0120) {
+            die("Unexpected package header size");
+        }
+        long size = is.readUInt32();
+        long endPos = start + size;
 
-	public ResContainer decodeFiles(InputStream inputStream) throws IOException {
-		decode(inputStream);
+        int id = is.readInt32();
+        String name = is.readString16Fixed(128);
 
-		ValuesParser vp = new ValuesParser(strings, resStorage.getResourcesNames());
-		ResXmlGen resGen = new ResXmlGen(resStorage, vp);
+        long typeStringsOffset = start + is.readInt32();
+        /* int lastPublicType = */
+        is.readInt32();
+        long keyStringsOffset = start + is.readInt32();
+        /* int lastPublicKey = */
+        is.readInt32();
+        if (headerSize == 0x0120) {
+            /* int typeIdOffset = */
+            is.readInt32();
+        }
 
-		ICodeInfo content = XmlGenUtils.makeXmlDump(root.makeCodeWriter(), resStorage);
-		List<ResContainer> xmlFiles = resGen.makeResourcesXml();
-		return ResContainer.resourceTable("res", xmlFiles, content);
-	}
+        String[] typeStrings = null;
+        if (typeStringsOffset != 0) {
+            is.skipToPos(typeStringsOffset, "Expected typeStrings string pool");
+            typeStrings = parseStringPool();
+        }
+        String[] keyStrings = null;
+        if (keyStringsOffset != 0) {
+            is.skipToPos(keyStringsOffset, "Expected keyStrings string pool");
+            keyStrings = parseStringPool();
+            deobfKeyStrings(keyStrings);
+        }
 
-	public ResourceStorage getResStorage() {
-		return resStorage;
-	}
+        PackageChunk pkg = new PackageChunk(id, name, typeStrings, keyStrings);
+        resStorage.setAppPackage(name);
 
-	public String[] getStrings() {
-		return strings;
-	}
+        while (is.getPos() < endPos) {
+            long chunkStart = is.getPos();
+            int type = is.readInt16();
+            if (type == RES_NULL_TYPE) {
+                continue;
+            }
+            if (type == RES_TABLE_TYPE_SPEC_TYPE) {
+                parseTypeSpecChunk();
+            } else if (type == RES_TABLE_TYPE_TYPE) {
+                parseTypeChunk(chunkStart, pkg);
+            }
+        }
+        return pkg;
+    }
 
-	void decodeTableChunk() throws IOException {
-		is.checkInt16(RES_TABLE_TYPE, "Not a table chunk");
-		is.checkInt16(0x000c, "Unexpected table header size");
-		/* int size = */
-		is.readInt32();
-		int pkgCount = is.readInt32();
+    private void deobfKeyStrings(String[] keyStrings) {
+        int keysCount = keyStrings.length;
+        if (root.getArgs().isRenamePrintable()) {
+            for (int i = 0; i < keysCount; i++) {
+                String keyString = keyStrings[i];
+                if (!NameMapper.isAllCharsPrintable(keyString)) {
+                    keyStrings[i] = makeNewKeyName(i);
+                }
+            }
+        }
+        if (root.getArgs().isRenameValid()) {
+            Set<String> keySet = new HashSet<>(keysCount);
+            for (int i = 0; i < keysCount; i++) {
+                String keyString = keyStrings[i];
+                boolean isNew = keySet.add(keyString);
+                if (!isNew) {
+                    keyStrings[i] = makeNewKeyName(i);
+                }
+            }
+        }
+    }
 
-		strings = parseStringPool();
-		for (int i = 0; i < pkgCount; i++) {
-			parsePackage();
-		}
-	}
+    private String makeNewKeyName(int idx) {
+        return String.format("jadx_deobf_0x%08x", idx);
+    }
 
-	private PackageChunk parsePackage() throws IOException {
-		long start = is.getPos();
-		is.checkInt16(RES_TABLE_PACKAGE_TYPE, "Not a table chunk");
-		int headerSize = is.readInt16();
-		if (headerSize != 0x011c && headerSize != 0x0120) {
-			die("Unexpected package header size");
-		}
-		long size = is.readUInt32();
-		long endPos = start + size;
+    @SuppressWarnings("unused")
+    private void parseTypeSpecChunk() throws IOException {
+        is.checkInt16(0x0010, "Unexpected type spec header size");
+        /* int size = */
+        is.readInt32();
 
-		int id = is.readInt32();
-		String name = is.readString16Fixed(128);
+        int id = is.readInt8();
+        is.skip(3);
+        int entryCount = is.readInt32();
+        for (int i = 0; i < entryCount; i++) {
+            int entryFlag = is.readInt32();
+        }
+    }
 
-		long typeStringsOffset = start + is.readInt32();
-		/* int lastPublicType = */
-		is.readInt32();
-		long keyStringsOffset = start + is.readInt32();
-		/* int lastPublicKey = */
-		is.readInt32();
-		if (headerSize == 0x0120) {
-			/* int typeIdOffset = */
-			is.readInt32();
-		}
+    private void parseTypeChunk(long start, PackageChunk pkg) throws IOException {
+        /* int headerSize = */
+        is.readInt16();
+        /* int size = */
+        long chunkSize = is.readUInt32();
+        long chunkEnd = start + chunkSize;
 
-		String[] typeStrings = null;
-		if (typeStringsOffset != 0) {
-			is.skipToPos(typeStringsOffset, "Expected typeStrings string pool");
-			typeStrings = parseStringPool();
-		}
-		String[] keyStrings = null;
-		if (keyStringsOffset != 0) {
-			is.skipToPos(keyStringsOffset, "Expected keyStrings string pool");
-			keyStrings = parseStringPool();
-			deobfKeyStrings(keyStrings);
-		}
+        int id = is.readInt8();
+        is.checkInt8(0, "type chunk, res0");
+        is.checkInt16(0, "type chunk, res1");
+        int entryCount = is.readInt32();
+        long entriesStart = start + is.readInt32();
 
-		PackageChunk pkg = new PackageChunk(id, name, typeStrings, keyStrings);
-		resStorage.setAppPackage(name);
+        EntryConfig config = parseConfig();
 
-		while (is.getPos() < endPos) {
-			long chunkStart = is.getPos();
-			int type = is.readInt16();
-			if (type == RES_NULL_TYPE) {
-				continue;
-			}
-			if (type == RES_TABLE_TYPE_SPEC_TYPE) {
-				parseTypeSpecChunk();
-			} else if (type == RES_TABLE_TYPE_TYPE) {
-				parseTypeChunk(chunkStart, pkg);
-			}
-		}
-		return pkg;
-	}
+        if (config.isInvalid) {
+            String typeName = pkg.getTypeStrings()[id - 1];
+            LOG.warn("Invalid config flags detected: {}{}", typeName, config.getQualifiers());
+        }
 
-	private void deobfKeyStrings(String[] keyStrings) {
-		int keysCount = keyStrings.length;
-		if (root.getArgs().isRenamePrintable()) {
-			for (int i = 0; i < keysCount; i++) {
-				String keyString = keyStrings[i];
-				if (!NameMapper.isAllCharsPrintable(keyString)) {
-					keyStrings[i] = makeNewKeyName(i);
-				}
-			}
-		}
-		if (root.getArgs().isRenameValid()) {
-			Set<String> keySet = new HashSet<>(keysCount);
-			for (int i = 0; i < keysCount; i++) {
-				String keyString = keyStrings[i];
-				boolean isNew = keySet.add(keyString);
-				if (!isNew) {
-					keyStrings[i] = makeNewKeyName(i);
-				}
-			}
-		}
-	}
+        int[] entryIndexes = new int[entryCount];
+        for (int i = 0; i < entryCount; i++) {
+            entryIndexes[i] = is.readInt32();
+        }
+        is.checkPos(entriesStart, "Expected entry start");
+        for (int i = 0; i < entryCount; i++) {
+            if (entryIndexes[i] != NO_ENTRY) {
+                if (is.getPos() >= chunkEnd) {
+                    // Certain resource obfuscated apps like com.facebook.orca have more entries defined
+                    // than actually fit into the chunk size -> ignore the remaining entries
+                    LOG.warn("End of chunk reached - ignoring remaining {} entries", entryCount - i);
+                    break;
+                }
+                parseEntry(pkg, id, i, config.getQualifiers());
+            }
+        }
+    }
 
-	private String makeNewKeyName(int idx) {
-		return String.format("jadx_deobf_0x%08x", idx);
-	}
+    private void parseEntry(PackageChunk pkg, int typeId, int entryId, String config) throws IOException {
+        int size = is.readInt16();
+        int flags = is.readInt16();
+        int key = is.readInt32();
+        if (key == -1) {
+            return;
+        }
 
-	@SuppressWarnings("unused")
-	private void parseTypeSpecChunk() throws IOException {
-		is.checkInt16(0x0010, "Unexpected type spec header size");
-		/* int size = */
-		is.readInt32();
+        int resRef = pkg.getId() << 24 | typeId << 16 | entryId;
+        String typeName = pkg.getTypeStrings()[typeId - 1];
+        String origKeyName = pkg.getKeyStrings()[key];
+        ResourceEntry newResEntry = new ResourceEntry(resRef, pkg.getName(), typeName, getResName(typeName, resRef, origKeyName), config);
+        ResourceEntry prevResEntry = resStorage.searchEntryWithSameName(newResEntry);
+        if (prevResEntry != null) {
+            newResEntry = newResEntry.copyWithId();
 
-		int id = is.readInt8();
-		is.skip(3);
-		int entryCount = is.readInt32();
-		for (int i = 0; i < entryCount; i++) {
-			int entryFlag = is.readInt32();
-		}
-	}
+            // rename also previous entry for consistency
+            ResourceEntry replaceForPrevEntry = prevResEntry.copyWithId();
+            resStorage.replace(prevResEntry, replaceForPrevEntry);
+            resStorage.addRename(replaceForPrevEntry);
+        }
+        if (!Objects.equals(origKeyName, newResEntry.getKeyName())) {
+            resStorage.addRename(newResEntry);
+        }
 
-	private void parseTypeChunk(long start, PackageChunk pkg) throws IOException {
-		/* int headerSize = */
-		is.readInt16();
-		/* int size = */
-		long chunkSize = is.readUInt32();
-		long chunkEnd = start + chunkSize;
+        if ((flags & FLAG_COMPLEX) != 0 || size == 16) {
+            int parentRef = is.readInt32();
+            int count = is.readInt32();
+            newResEntry.setParentRef(parentRef);
+            List<RawNamedValue> values = new ArrayList<>(count);
+            for (int i = 0; i < count; i++) {
+                values.add(parseValueMap());
+            }
+            newResEntry.setNamedValues(values);
+        } else {
+            newResEntry.setSimpleValue(parseValue());
+        }
+        resStorage.add(newResEntry);
+    }
 
-		int id = is.readInt8();
-		is.checkInt8(0, "type chunk, res0");
-		is.checkInt16(0, "type chunk, res1");
-		int entryCount = is.readInt32();
-		long entriesStart = start + is.readInt32();
+    private String getResName(String typeName, int resRef, String origKeyName) {
+        if (this.useRawResName) {
+            return origKeyName;
+        }
+        String renamedKey = resStorage.getRename(resRef);
+        if (renamedKey != null) {
+            return renamedKey;
+        }
+        FieldNode constField = root.getConstValues().getGlobalConstFields().get(resRef);
+        if (constField != null) {
+            constField.add(AFlag.DONT_RENAME);
+            return constField.getName();
+        }
+        // styles might contain dots in name, use VALID_RES_KEY_PATTERN only for resource file name
+        if (typeName.equals("style")) {
+            return origKeyName;
+        } else if (VALID_RES_KEY_PATTERN.matcher(origKeyName).matches()) {
+            return origKeyName;
+        }
+        // Making sure origKeyName compliant with resource file name rules
+        Matcher m = VALID_RES_KEY_PATTERN.matcher(origKeyName);
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        while (m.find()) {
+            if (!first) {
+                sb.append("_");
+            }
+            sb.append(m.group());
+            first = false;
+        }
+        // autogenerate key name, appended with cleaned origKeyName to be human-friendly
+        String newResName = String.format("res_0x%08x", resRef);
+        String cleanedResName = sb.toString();
+        if (!cleanedResName.isEmpty()) {
+            newResName += "_" + cleanedResName.toLowerCase();
+        }
+        return newResName;
+    }
 
-		EntryConfig config = parseConfig();
+    private RawNamedValue parseValueMap() throws IOException {
+        int nameRef = is.readInt32();
+        return new RawNamedValue(nameRef, parseValue());
+    }
 
-		if (config.isInvalid) {
-			String typeName = pkg.getTypeStrings()[id - 1];
-			LOG.warn("Invalid config flags detected: {}{}", typeName, config.getQualifiers());
-		}
+    private RawValue parseValue() throws IOException {
+        is.checkInt16(8, "value size");
+        is.checkInt8(0, "value res0 not 0");
+        int dataType = is.readInt8();
+        int data = is.readInt32();
+        return new RawValue(dataType, data);
+    }
 
-		int[] entryIndexes = new int[entryCount];
-		for (int i = 0; i < entryCount; i++) {
-			entryIndexes[i] = is.readInt32();
-		}
-		is.checkPos(entriesStart, "Expected entry start");
-		for (int i = 0; i < entryCount; i++) {
-			if (entryIndexes[i] != NO_ENTRY) {
-				if (is.getPos() >= chunkEnd) {
-					// Certain resource obfuscated apps like com.facebook.orca have more entries defined
-					// than actually fit into the chunk size -> ignore the remaining entries
-					LOG.warn("End of chunk reached - ignoring remaining {} entries", entryCount - i);
-					break;
-				}
-				parseEntry(pkg, id, i, config.getQualifiers());
-			}
-		}
-	}
+    private EntryConfig parseConfig() throws IOException {
+        long start = is.getPos();
+        int size = is.readInt32();
+        if (size < 28) {
+            throw new IOException("Config size < 28");
+        }
 
-	private void parseEntry(PackageChunk pkg, int typeId, int entryId, String config) throws IOException {
-		int size = is.readInt16();
-		int flags = is.readInt16();
-		int key = is.readInt32();
-		if (key == -1) {
-			return;
-		}
+        short mcc = (short) is.readInt16();
+        short mnc = (short) is.readInt16();
 
-		int resRef = pkg.getId() << 24 | typeId << 16 | entryId;
-		String typeName = pkg.getTypeStrings()[typeId - 1];
-		String origKeyName = pkg.getKeyStrings()[key];
-		ResourceEntry newResEntry = new ResourceEntry(resRef, pkg.getName(), typeName, getResName(typeName, resRef, origKeyName), config);
-		ResourceEntry prevResEntry = resStorage.searchEntryWithSameName(newResEntry);
-		if (prevResEntry != null) {
-			newResEntry = newResEntry.copyWithId();
+        char[] language = unpackLocaleOrRegion((byte) is.readInt8(), (byte) is.readInt8(), 'a');
+        char[] country = unpackLocaleOrRegion((byte) is.readInt8(), (byte) is.readInt8(), '0');
 
-			// rename also previous entry for consistency
-			ResourceEntry replaceForPrevEntry = prevResEntry.copyWithId();
-			resStorage.replace(prevResEntry, replaceForPrevEntry);
-			resStorage.addRename(replaceForPrevEntry);
-		}
-		if (!Objects.equals(origKeyName, newResEntry.getKeyName())) {
-			resStorage.addRename(newResEntry);
-		}
+        byte orientation = (byte) is.readInt8();
+        byte touchscreen = (byte) is.readInt8();
+        int density = is.readInt16();
 
-		if ((flags & FLAG_COMPLEX) != 0 || size == 16) {
-			int parentRef = is.readInt32();
-			int count = is.readInt32();
-			newResEntry.setParentRef(parentRef);
-			List<RawNamedValue> values = new ArrayList<>(count);
-			for (int i = 0; i < count; i++) {
-				values.add(parseValueMap());
-			}
-			newResEntry.setNamedValues(values);
-		} else {
-			newResEntry.setSimpleValue(parseValue());
-		}
-		resStorage.add(newResEntry);
-	}
+        byte keyboard = (byte) is.readInt8();
+        byte navigation = (byte) is.readInt8();
+        byte inputFlags = (byte) is.readInt8();
+        is.readInt8(); // inputPad0
 
-	private String getResName(String typeName, int resRef, String origKeyName) {
-		if (this.useRawResName) {
-			return origKeyName;
-		}
-		String renamedKey = resStorage.getRename(resRef);
-		if (renamedKey != null) {
-			return renamedKey;
-		}
-		FieldNode constField = root.getConstValues().getGlobalConstFields().get(resRef);
-		if (constField != null) {
-			constField.add(AFlag.DONT_RENAME);
-			return constField.getName();
-		}
-		// styles might contain dots in name, use VALID_RES_KEY_PATTERN only for resource file name
-		if (typeName.equals("style")) {
-			return origKeyName;
-		} else if (VALID_RES_KEY_PATTERN.matcher(origKeyName).matches()) {
-			return origKeyName;
-		}
-		// Making sure origKeyName compliant with resource file name rules
-		Matcher m = VALID_RES_KEY_PATTERN.matcher(origKeyName);
-		StringBuilder sb = new StringBuilder();
-		boolean first = true;
-		while (m.find()) {
-			if (!first) {
-				sb.append("_");
-			}
-			sb.append(m.group());
-			first = false;
-		}
-		// autogenerate key name, appended with cleaned origKeyName to be human-friendly
-		String newResName = String.format("res_0x%08x", resRef);
-		String cleanedResName = sb.toString();
-		if (!cleanedResName.isEmpty()) {
-			newResName += "_" + cleanedResName.toLowerCase();
-		}
-		return newResName;
-	}
+        short screenWidth = (short) is.readInt16();
+        short screenHeight = (short) is.readInt16();
 
-	private RawNamedValue parseValueMap() throws IOException {
-		int nameRef = is.readInt32();
-		return new RawNamedValue(nameRef, parseValue());
-	}
+        short sdkVersion = (short) is.readInt16();
+        is.readInt16(); // minorVersion must always be 0
 
-	private RawValue parseValue() throws IOException {
-		is.checkInt16(8, "value size");
-		is.checkInt8(0, "value res0 not 0");
-		int dataType = is.readInt8();
-		int data = is.readInt32();
-		return new RawValue(dataType, data);
-	}
+        byte screenLayout = 0;
+        byte uiMode = 0;
+        short smallestScreenWidthDp = 0;
+        if (size >= 32) {
+            screenLayout = (byte) is.readInt8();
+            uiMode = (byte) is.readInt8();
+            smallestScreenWidthDp = (short) is.readInt16();
+        }
 
-	private EntryConfig parseConfig() throws IOException {
-		long start = is.getPos();
-		int size = is.readInt32();
-		if (size < 28) {
-			throw new IOException("Config size < 28");
-		}
+        short screenWidthDp = 0;
+        short screenHeightDp = 0;
+        if (size >= 36) {
+            screenWidthDp = (short) is.readInt16();
+            screenHeightDp = (short) is.readInt16();
+        }
 
-		short mcc = (short) is.readInt16();
-		short mnc = (short) is.readInt16();
+        char[] localeScript = null;
+        char[] localeVariant = null;
+        if (size >= 48) {
+            localeScript = readScriptOrVariantChar(4).toCharArray();
+            localeVariant = readScriptOrVariantChar(8).toCharArray();
+        }
 
-		char[] language = unpackLocaleOrRegion((byte) is.readInt8(), (byte) is.readInt8(), 'a');
-		char[] country = unpackLocaleOrRegion((byte) is.readInt8(), (byte) is.readInt8(), '0');
+        byte screenLayout2 = 0;
+        byte colorMode = 0;
+        if (size >= 52) {
+            screenLayout2 = (byte) is.readInt8();
+            colorMode = (byte) is.readInt8();
+            is.readInt16(); // reserved padding
+        }
 
-		byte orientation = (byte) is.readInt8();
-		byte touchscreen = (byte) is.readInt8();
-		int density = is.readInt16();
+        is.skipToPos(start + size, "Config skip trailing bytes");
 
-		byte keyboard = (byte) is.readInt8();
-		byte navigation = (byte) is.readInt8();
-		byte inputFlags = (byte) is.readInt8();
-		is.readInt8(); // inputPad0
+        return new EntryConfig(mcc, mnc, language, country,
+                orientation, touchscreen, density, keyboard, navigation,
+                inputFlags, screenWidth, screenHeight, sdkVersion,
+                screenLayout, uiMode, smallestScreenWidthDp, screenWidthDp,
+                screenHeightDp, localeScript, localeVariant, screenLayout2,
+                colorMode, false, size);
+    }
 
-		short screenWidth = (short) is.readInt16();
-		short screenHeight = (short) is.readInt16();
+    private char[] unpackLocaleOrRegion(byte in0, byte in1, char base) {
+        // check high bit, if so we have a packed 3 letter code
+        if (((in0 >> 7) & 1) == 1) {
+            int first = in1 & 0x1F;
+            int second = ((in1 & 0xE0) >> 5) + ((in0 & 0x03) << 3);
+            int third = (in0 & 0x7C) >> 2;
 
-		short sdkVersion = (short) is.readInt16();
-		is.readInt16(); // minorVersion must always be 0
+            // since this function handles languages & regions, we add the value(s) to the base char
+            // which is usually 'a' or '0' depending on language or region.
+            return new char[]{(char) (first + base), (char) (second + base), (char) (third + base)};
+        }
+        return new char[]{(char) in0, (char) in1};
+    }
 
-		byte screenLayout = 0;
-		byte uiMode = 0;
-		short smallestScreenWidthDp = 0;
-		if (size >= 32) {
-			screenLayout = (byte) is.readInt8();
-			uiMode = (byte) is.readInt8();
-			smallestScreenWidthDp = (short) is.readInt16();
-		}
+    private String readScriptOrVariantChar(int length) throws IOException {
+        long start = is.getPos();
+        StringBuilder sb = new StringBuilder(16);
+        for (int i = 0; i < length; i++) {
+            short ch = (short) is.readInt8();
+            if (ch == 0) {
+                break;
+            }
+            sb.append((char) ch);
+        }
+        is.skipToPos(start + length, "readScriptOrVariantChar");
+        return sb.toString();
+    }
 
-		short screenWidthDp = 0;
-		short screenHeightDp = 0;
-		if (size >= 36) {
-			screenWidthDp = (short) is.readInt16();
-			screenHeightDp = (short) is.readInt16();
-		}
+    private static final class PackageChunk {
+        private final int id;
+        private final String name;
+        private final String[] typeStrings;
+        private final String[] keyStrings;
 
-		char[] localeScript = null;
-		char[] localeVariant = null;
-		if (size >= 48) {
-			localeScript = readScriptOrVariantChar(4).toCharArray();
-			localeVariant = readScriptOrVariantChar(8).toCharArray();
-		}
+        private PackageChunk(int id, String name, String[] typeStrings, String[] keyStrings) {
+            this.id = id;
+            this.name = name;
+            this.typeStrings = typeStrings;
+            this.keyStrings = keyStrings;
+        }
 
-		byte screenLayout2 = 0;
-		byte colorMode = 0;
-		if (size >= 52) {
-			screenLayout2 = (byte) is.readInt8();
-			colorMode = (byte) is.readInt8();
-			is.readInt16(); // reserved padding
-		}
+        public int getId() {
+            return id;
+        }
 
-		is.skipToPos(start + size, "Config skip trailing bytes");
+        public String getName() {
+            return name;
+        }
 
-		return new EntryConfig(mcc, mnc, language, country,
-				orientation, touchscreen, density, keyboard, navigation,
-				inputFlags, screenWidth, screenHeight, sdkVersion,
-				screenLayout, uiMode, smallestScreenWidthDp, screenWidthDp,
-				screenHeightDp, localeScript, localeVariant, screenLayout2,
-				colorMode, false, size);
-	}
+        public String[] getTypeStrings() {
+            return typeStrings;
+        }
 
-	private char[] unpackLocaleOrRegion(byte in0, byte in1, char base) {
-		// check high bit, if so we have a packed 3 letter code
-		if (((in0 >> 7) & 1) == 1) {
-			int first = in1 & 0x1F;
-			int second = ((in1 & 0xE0) >> 5) + ((in0 & 0x03) << 3);
-			int third = (in0 & 0x7C) >> 2;
-
-			// since this function handles languages & regions, we add the value(s) to the base char
-			// which is usually 'a' or '0' depending on language or region.
-			return new char[] { (char) (first + base), (char) (second + base), (char) (third + base) };
-		}
-		return new char[] { (char) in0, (char) in1 };
-	}
-
-	private String readScriptOrVariantChar(int length) throws IOException {
-		long start = is.getPos();
-		StringBuilder sb = new StringBuilder(16);
-		for (int i = 0; i < length; i++) {
-			short ch = (short) is.readInt8();
-			if (ch == 0) {
-				break;
-			}
-			sb.append((char) ch);
-		}
-		is.skipToPos(start + length, "readScriptOrVariantChar");
-		return sb.toString();
-	}
+        public String[] getKeyStrings() {
+            return keyStrings;
+        }
+    }
 }

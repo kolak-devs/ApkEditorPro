@@ -16,7 +16,7 @@ import com.mcal.apkeditor.adapters.IManifestChangeCallback;
 import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.folderlist.util.OpenFiles;
-import com.mcal.neweditor.TextEditor;
+import com.mcal.editor.TextEditor;
 import com.mcal.patchview.ui.CodeText;
 
 import org.jetbrains.annotations.Contract;

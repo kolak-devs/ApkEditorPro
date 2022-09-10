@@ -25,14 +25,14 @@
 
 package android.sun.security.x509;
 
-import java.io.IOException;
-import java.lang.Integer;
-import java.net.InetAddress;
-import java.util.Arrays;
 import android.sun.misc.HexDumpEncoder;
 import android.sun.security.util.BitArray;
 import android.sun.security.util.DerOutputStream;
 import android.sun.security.util.DerValue;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.Arrays;
 
 /**
  * This class implements the IPAddressName as required by the GeneralNames
@@ -59,15 +59,23 @@ import android.sun.security.util.DerValue;
  * octets 0A 09 08 00 FF FF FF 00, representing the CIDR notation
  * 10.9.8.0/255.255.255.0.
  * <p>
- * @see GeneralName
- * @see android.sun.security.x509.GeneralNameInterface
- * @see GeneralNames
- *
  *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
+ * @see GeneralName
+ * @see android.sun.security.x509.GeneralNameInterface
+ * @see GeneralNames
  */
 public class IPAddressName implements android.sun.security.x509.GeneralNameInterface {
+    /**
+     * Parse an IPv6 address.
+     *
+     * @param name String IPv6 address with optional /<prefix length>
+     * If /<prefix length> is present, address[] array will
+     * be 32 bytes long, otherwise 16.
+     * @throws IOException on error
+     */
+    private final static int MASKSIZE = 16;
     private byte[] address;
     private boolean isIPv4;
     private String name;
@@ -75,8 +83,8 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
     /**
      * Create the IPAddressName object from the passed encoded Der value.
      *
+     * @throws IOException on error.
      * @params derValue the encoded DER IPAddressName.
-     * @exception IOException on error.
      */
     public IPAddressName(DerValue derValue) throws IOException {
         this(derValue.getOctetString());
@@ -85,8 +93,8 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
     /**
      * Create the IPAddressName object with the specified octets.
      *
-     * @params address the IP address
      * @throws IOException if address is not a valid IPv4 or IPv6 address
+     * @params address the IP address
      */
     public IPAddressName(byte[] address) throws IOException {
         /*
@@ -119,9 +127,10 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
      * of the leftmost contiguous bits of the address comprise the prefix for
      * this subnet. Internally, a mask value is created using the prefix length.
      * <p>
+     *
      * @param name String form of IPAddressName
      * @throws IOException if name can not be converted to a valid IPv4 or IPv6
-     *     address
+     *                     address
      */
     public IPAddressName(String name) throws IOException {
 
@@ -164,26 +173,17 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
 
             // parse mask
             byte[] mask = InetAddress.getByName
-                (name.substring(slashNdx+1)).getAddress();
+                    (name.substring(slashNdx + 1)).getAddress();
 
             // parse base address
             byte[] host = InetAddress.getByName
-                (name.substring(0, slashNdx)).getAddress();
+                    (name.substring(0, slashNdx)).getAddress();
 
             System.arraycopy(host, 0, address, 0, 4);
             System.arraycopy(mask, 0, address, 4, 4);
         }
     }
 
-    /**
-     * Parse an IPv6 address.
-     *
-     * @param name String IPv6 address with optional /<prefix length>
-     *             If /<prefix length> is present, address[] array will
-     *             be 32 bytes long, otherwise 16.
-     * @throws IOException on error
-     */
-    private final static int MASKSIZE = 16;
     private void parseIPv6(String name) throws IOException {
 
         int slashNdx = name.indexOf('/');
@@ -192,11 +192,11 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
         } else {
             address = new byte[32];
             byte[] base = InetAddress.getByName
-                (name.substring(0, slashNdx)).getAddress();
+                    (name.substring(0, slashNdx)).getAddress();
             System.arraycopy(base, 0, address, 0, 16);
 
             // append a mask corresponding to the num of prefix bits specified
-            int prefixLen = Integer.parseInt(name.substring(slashNdx+1));
+            int prefixLen = Integer.parseInt(name.substring(slashNdx + 1));
             if (prefixLen > 128)
                 throw new IOException("IPv6Address prefix is longer than 128");
 
@@ -210,7 +210,7 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
 
             // copy mask bytes into mask portion of address
             for (int i = 0; i < MASKSIZE; i++)
-                address[MASKSIZE+i] = maskArray[i];
+                address[MASKSIZE + i] = maskArray[i];
         }
     }
 
@@ -224,8 +224,8 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
     /**
      * Encode the IPAddress name into the DerOutputStream.
      *
+     * @throws IOException on encoding errors.
      * @params out the DER stream to encode the IPAddressName to.
-     * @exception IOException on encoding errors.
      */
     public void encode(DerOutputStream out) throws IOException {
         out.putOctetString(address);
@@ -264,7 +264,7 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
                 byte[] mask = new byte[4];
                 System.arraycopy(address, 4, mask, 0, 4);
                 name = name + "/" +
-                       InetAddress.getByAddress(mask).getHostAddress();
+                        InetAddress.getByAddress(mask).getHostAddress();
             }
         } else {
             //IPv6 address or subdomain
@@ -276,21 +276,21 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
 
                 // copy subdomain into new array and convert to BitArray
                 byte[] maskBytes = new byte[16];
-                for (int i=16; i < 32; i++)
-                    maskBytes[i-16] = address[i];
-                BitArray ba = new BitArray(16*8, maskBytes);
+                for (int i = 16; i < 32; i++)
+                    maskBytes[i - 16] = address[i];
+                BitArray ba = new BitArray(16 * 8, maskBytes);
                 // Find first zero bit
-                int i=0;
-                for (; i < 16*8; i++) {
+                int i = 0;
+                for (; i < 16 * 8; i++) {
                     if (!ba.get(i))
                         break;
                 }
                 name = name + "/" + i;
                 // Verify remaining bits 0
-                for (; i < 16*8; i++) {
+                for (; i < 16 * 8; i++) {
                     if (ba.get(i)) {
                         throw new IOException("Invalid IPv6 subdomain - set " +
-                            "bit " + i + " not contiguous");
+                                "bit " + i + " not contiguous");
                     }
                 }
             }
@@ -317,7 +317,7 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
         if (!(obj instanceof IPAddressName))
             return false;
 
-        byte[] other = ((IPAddressName)obj).getBytes();
+        byte[] other = ((IPAddressName) obj).getBytes();
 
         if (other.length != address.length)
             return false;
@@ -325,18 +325,18 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
         if (address.length == 8 || address.length == 32) {
             // Two subnet addresses
             // Mask each and compare masked values
-            int maskLen = address.length/2;
+            int maskLen = address.length / 2;
             byte[] maskedThis = new byte[maskLen];
             byte[] maskedOther = new byte[maskLen];
-            for (int i=0; i < maskLen; i++) {
-                maskedThis[i] = (byte)(address[i] & address[i+maskLen]);
-                maskedOther[i] = (byte)(other[i] & other[i+maskLen]);
+            for (int i = 0; i < maskLen; i++) {
+                maskedThis[i] = (byte) (address[i] & address[i + maskLen]);
+                maskedOther[i] = (byte) (other[i] & other[i + maskLen]);
                 if (maskedThis[i] != maskedOther[i]) {
                     return false;
                 }
             }
             // Now compare masks
-            for (int i=maskLen; i < address.length; i++)
+            for (int i = maskLen; i < address.length; i++)
                 if (address[i] != other[i])
                     return false;
             return true;
@@ -355,7 +355,7 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
     public int hashCode() {
         int retval = 0;
 
-        for (int i=0; i<address.length; i++)
+        for (int i = 0; i < address.length; i++)
             retval += address[i] * i;
 
         return retval;
@@ -363,15 +363,15 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
 
     /**
      * Return type of constraint inputName places on this name:<ul>
-     *   <li>NAME_DIFF_TYPE = -1: input name is different type from name
-     *       (i.e. does not constrain).
-     *   <li>NAME_MATCH = 0: input name matches name.
-     *   <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming
-     *       subtree)
-     *   <li>NAME_WIDENS = 2: input name widens name (is higher in the naming
-     *       subtree)
-     *   <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but
-     *       is same type.
+     * <li>NAME_DIFF_TYPE = -1: input name is different type from name
+     * (i.e. does not constrain).
+     * <li>NAME_MATCH = 0: input name matches name.
+     * <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming
+     * subtree)
+     * <li>NAME_WIDENS = 2: input name widens name (is higher in the naming
+     * subtree)
+     * <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but
+     * is same type.
      * </ul>.  These results are used in checking NameConstraints during
      * certification path verification.
      * <p>
@@ -385,45 +385,46 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
      * octets 0A 09 08 00 FF FF FF 00, representing the CIDR notation
      * 10.9.8.0/255.255.255.0.
      * <p>
+     *
      * @param inputName to be checked for being constrained
-     * @returns constraint type above
      * @throws UnsupportedOperationException if name is not exact match, but
-     * narrowing and widening are not supported for this name type.
+     *                                       narrowing and widening are not supported for this name type.
+     * @returns constraint type above
      */
     public int constrains(GeneralNameInterface inputName)
-    throws UnsupportedOperationException {
+            throws UnsupportedOperationException {
         int constraintType;
         if (inputName == null)
             constraintType = NAME_DIFF_TYPE;
         else if (inputName.getType() != NAME_IP)
             constraintType = NAME_DIFF_TYPE;
-        else if (((IPAddressName)inputName).equals(this))
+        else if (((IPAddressName) inputName).equals(this))
             constraintType = NAME_MATCH;
         else {
-            byte[] otherAddress = ((IPAddressName)inputName).getBytes();
+            byte[] otherAddress = ((IPAddressName) inputName).getBytes();
             if (otherAddress.length == 4 && address.length == 4)
                 // Two host addresses
                 constraintType = NAME_SAME_TYPE;
             else if ((otherAddress.length == 8 && address.length == 8) ||
-                     (otherAddress.length == 32 && address.length == 32)) {
+                    (otherAddress.length == 32 && address.length == 32)) {
                 // Two subnet addresses
                 // See if one address fully encloses the other address
                 boolean otherSubsetOfThis = true;
                 boolean thisSubsetOfOther = true;
                 boolean thisEmpty = false;
                 boolean otherEmpty = false;
-                int maskOffset = address.length/2;
-                for (int i=0; i < maskOffset; i++) {
-                    if ((byte)(address[i] & address[i+maskOffset]) != address[i])
-                        thisEmpty=true;
-                    if ((byte)(otherAddress[i] & otherAddress[i+maskOffset]) != otherAddress[i])
-                        otherEmpty=true;
-                    if (!(((byte)(address[i+maskOffset] & otherAddress[i+maskOffset]) == address[i+maskOffset]) &&
-                          ((byte)(address[i]   & address[i+maskOffset])      == (byte)(otherAddress[i] & address[i+maskOffset])))) {
+                int maskOffset = address.length / 2;
+                for (int i = 0; i < maskOffset; i++) {
+                    if ((byte) (address[i] & address[i + maskOffset]) != address[i])
+                        thisEmpty = true;
+                    if ((byte) (otherAddress[i] & otherAddress[i + maskOffset]) != otherAddress[i])
+                        otherEmpty = true;
+                    if (!(((byte) (address[i + maskOffset] & otherAddress[i + maskOffset]) == address[i + maskOffset]) &&
+                            ((byte) (address[i] & address[i + maskOffset]) == (byte) (otherAddress[i] & address[i + maskOffset])))) {
                         otherSubsetOfThis = false;
                     }
-                    if (!(((byte)(otherAddress[i+maskOffset] & address[i+maskOffset])      == otherAddress[i+maskOffset]) &&
-                          ((byte)(otherAddress[i]   & otherAddress[i+maskOffset]) == (byte)(address[i] & otherAddress[i+maskOffset])))) {
+                    if (!(((byte) (otherAddress[i + maskOffset] & address[i + maskOffset]) == otherAddress[i + maskOffset]) &&
+                            ((byte) (otherAddress[i] & otherAddress[i + maskOffset]) == (byte) (address[i] & otherAddress[i + maskOffset])))) {
                         thisSubsetOfOther = false;
                     }
                 }
@@ -443,11 +444,11 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
             } else if (otherAddress.length == 8 || otherAddress.length == 32) {
                 //Other is a subnet, this is a host address
                 int i = 0;
-                int maskOffset = otherAddress.length/2;
+                int maskOffset = otherAddress.length / 2;
                 for (; i < maskOffset; i++) {
                     // Mask this address by other address mask and compare to other address
                     // If all match, then this address is in other address subnet
-                    if ((address[i] & otherAddress[i+maskOffset]) != otherAddress[i])
+                    if ((address[i] & otherAddress[i + maskOffset]) != otherAddress[i])
                         break;
                 }
                 if (i == maskOffset)
@@ -457,10 +458,10 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
             } else if (address.length == 8 || address.length == 32) {
                 //This is a subnet, other is a host address
                 int i = 0;
-                int maskOffset = address.length/2;
+                int maskOffset = address.length / 2;
                 for (; i < maskOffset; i++) {
                     // Mask other address by this address mask and compare to this address
-                    if ((otherAddress[i] & address[i+maskOffset]) != address[i])
+                    if ((otherAddress[i] & address[i + maskOffset]) != address[i])
                         break;
                 }
                 if (i == maskOffset)
@@ -479,11 +480,11 @@ public class IPAddressName implements android.sun.security.x509.GeneralNameInter
      * NameConstraints minimum and maximum bounds and for calculating
      * path lengths in name subtrees.
      *
-     * @returns distance of name from root
      * @throws UnsupportedOperationException if not supported for this name type
+     * @returns distance of name from root
      */
     public int subtreeDepth() throws UnsupportedOperationException {
         throw new UnsupportedOperationException
-            ("subtreeDepth() not defined for IPAddressName");
+                ("subtreeDepth() not defined for IPAddressName");
     }
 }

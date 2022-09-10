@@ -6,7 +6,7 @@ import jadx.api.plugins.input.data.attributes.IJadxAttribute;
 
 public interface IFieldData extends IFieldRef {
 
-	int getAccessFlags();
+    int getAccessFlags();
 
-	List<IJadxAttribute> getAttributes();
+    List<IJadxAttribute> getAttributes();
 }

@@ -23,34 +23,31 @@ public class XmlPullWrapperFactory {
     protected XmlPullParserFactory f;
     //protected boolean useDynamic;
 
-    public static XmlPullWrapperFactory newInstance() throws XmlPullParserException
-    {
+    protected XmlPullWrapperFactory(XmlPullParserFactory factory) throws XmlPullParserException {
+        if (factory != null) {
+            this.f = factory;
+        } else {
+            this.f = XmlPullParserFactory.newInstance();
+        }
+    }
+
+    public static XmlPullWrapperFactory newInstance() throws XmlPullParserException {
         //TODO: make into real pluggable factory service (later ...)?
         return new XmlPullWrapperFactory(null);
     }
 
     public static XmlPullWrapperFactory newInstance(XmlPullParserFactory factory)
-        throws XmlPullParserException
-    {
-        return new XmlPullWrapperFactory(factory);
-    }
-
-    public static XmlPullWrapperFactory newInstance (String classNames, Class context)
-        throws XmlPullParserException
-    {
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance(classNames, context);
+            throws XmlPullParserException {
         return new XmlPullWrapperFactory(factory);
     }
 
 
     // ------------ IMPLEMENTATION
 
-    protected XmlPullWrapperFactory(XmlPullParserFactory factory) throws XmlPullParserException {
-        if(factory != null) {
-            this.f = factory;
-        } else {
-            this.f = XmlPullParserFactory.newInstance();
-        }
+    public static XmlPullWrapperFactory newInstance(String classNames, Class context)
+            throws XmlPullParserException {
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance(classNames, context);
+        return new XmlPullWrapperFactory(factory);
     }
 
     public XmlPullParserFactory getFactory() throws XmlPullParserException {
@@ -58,30 +55,29 @@ public class XmlPullWrapperFactory {
     }
 
     public void setFeature(String name,
-                           boolean state) throws XmlPullParserException
-    {
+                           boolean state) throws XmlPullParserException {
         f.setFeature(name, state);
     }
 
 
-    public boolean getFeature (String name) {
+    public boolean getFeature(String name) {
         return f.getFeature(name);
-    }
-
-    public void setNamespaceAware(boolean awareness) {
-        f.setNamespaceAware(awareness);
     }
 
     public boolean isNamespaceAware() {
         return f.isNamespaceAware();
     }
 
-    public void setValidating(boolean validating) {
-        f.setValidating(validating);
+    public void setNamespaceAware(boolean awareness) {
+        f.setNamespaceAware(awareness);
     }
 
     public boolean isValidating() {
         return f.isValidating();
+    }
+
+    public void setValidating(boolean validating) {
+        f.setValidating(validating);
     }
     //public void setUseDynamic(boolean enable) { useDynamic = enable; };
     //public boolean getUseDynamic() { return useDynamic; };

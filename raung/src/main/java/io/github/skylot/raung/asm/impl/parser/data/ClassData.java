@@ -1,95 +1,93 @@
 package io.github.skylot.raung.asm.impl.parser.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.TypePath;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.skylot.raung.asm.impl.asm.RaungAsmWriter;
 
 public class ClassData extends CommonData {
-	private ClassWriter classWriter;
+    private final List<String> interfaces = new ArrayList<>();
+    private final List<FieldData> fields = new ArrayList<>();
+    private final List<MethodData> methods = new ArrayList<>();
+    private ClassWriter classWriter;
+    private int version;
+    private String superCls;
+    private String source;
+    private AutoOption auto = AutoOption.DISABLE;
 
-	private int version;
-	private String superCls;
-	private final List<String> interfaces = new ArrayList<>();
-	private String source;
-	private AutoOption auto = AutoOption.DISABLE;
+    public int getVersion() {
+        return version;
+    }
 
-	private final List<FieldData> fields = new ArrayList<>();
-	private final List<MethodData> methods = new ArrayList<>();
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
-	public int getVersion() {
-		return version;
-	}
+    public String getSuperCls() {
+        if (superCls == null) {
+            return "java/lang/Object";
+        }
+        return superCls;
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    public void setSuperCls(String superCls) {
+        this.superCls = superCls;
+    }
 
-	public String getSuperCls() {
-		if (superCls == null) {
-			return "java/lang/Object";
-		}
-		return superCls;
-	}
+    public List<String> getInterfaces() {
+        return interfaces;
+    }
 
-	public void setSuperCls(String superCls) {
-		this.superCls = superCls;
-	}
+    public String getSource() {
+        return source;
+    }
 
-	public List<String> getInterfaces() {
-		return interfaces;
-	}
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-	public String getSource() {
-		return source;
-	}
+    public List<FieldData> getFields() {
+        return fields;
+    }
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    public List<MethodData> getMethods() {
+        return methods;
+    }
 
-	public List<FieldData> getFields() {
-		return fields;
-	}
+    public byte[] getBytes() {
+        return classWriter.toByteArray();
+    }
 
-	public List<MethodData> getMethods() {
-		return methods;
-	}
+    public boolean isVisited() {
+        return classWriter != null;
+    }
 
-	public byte[] getBytes() {
-		return classWriter.toByteArray();
-	}
+    public AutoOption getAuto() {
+        return auto;
+    }
 
-	public boolean isVisited() {
-		return classWriter != null;
-	}
+    public void setAuto(AutoOption auto) {
+        this.auto = auto;
+    }
 
-	public AutoOption getAuto() {
-		return auto;
-	}
+    public ClassWriter visitCls() {
+        if (classWriter == null) {
+            classWriter = RaungAsmWriter.visitCls(this);
+        }
+        return classWriter;
+    }
 
-	public void setAuto(AutoOption auto) {
-		this.auto = auto;
-	}
+    @Override
+    public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        return visitCls().visitAnnotation(descriptor, visible);
+    }
 
-	public ClassWriter visitCls() {
-		if (classWriter == null) {
-			classWriter = RaungAsmWriter.visitCls(this);
-		}
-		return classWriter;
-	}
-
-	@Override
-	public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-		return visitCls().visitAnnotation(descriptor, visible);
-	}
-
-	@Override
-	public AnnotationVisitor visitTypeAnnotation(int ref, TypePath path, String descriptor, boolean visible) {
-		return visitCls().visitTypeAnnotation(ref, path, descriptor, visible);
-	}
+    @Override
+    public AnnotationVisitor visitTypeAnnotation(int ref, TypePath path, String descriptor, boolean visible) {
+        return visitCls().visitTypeAnnotation(ref, path, descriptor, visible);
+    }
 }

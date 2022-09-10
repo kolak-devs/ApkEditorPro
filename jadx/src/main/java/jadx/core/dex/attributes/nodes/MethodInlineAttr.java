@@ -11,62 +11,60 @@ import jadx.core.dex.nodes.MethodNode;
 
 public class MethodInlineAttr extends PinnedAttribute {
 
-	private static final MethodInlineAttr INLINE_NOT_NEEDED = new MethodInlineAttr(null, null);
+    private static final MethodInlineAttr INLINE_NOT_NEEDED = new MethodInlineAttr(null, null);
+    private final InsnNode insn;
+    /**
+     * Store method arguments register numbers to allow remap registers
+     */
+    private final int[] argsRegNums;
 
-	public static MethodInlineAttr markForInline(MethodNode mth, InsnNode replaceInsn) {
-		Objects.requireNonNull(replaceInsn);
-		List<RegisterArg> allArgRegs = mth.getAllArgRegs();
-		int argsCount = allArgRegs.size();
-		int[] regNums = new int[argsCount];
-		for (int i = 0; i < argsCount; i++) {
-			RegisterArg reg = allArgRegs.get(i);
-			regNums[i] = reg.getRegNum();
-		}
-		MethodInlineAttr mia = new MethodInlineAttr(replaceInsn, regNums);
-		mth.addAttr(mia);
-		mth.addDebugComment("Marked for inline");
-		return mia;
-	}
+    private MethodInlineAttr(InsnNode insn, int[] argsRegNums) {
+        this.insn = insn;
+        this.argsRegNums = argsRegNums;
+    }
 
-	public static MethodInlineAttr inlineNotNeeded(MethodNode mth) {
-		mth.addAttr(INLINE_NOT_NEEDED);
-		return INLINE_NOT_NEEDED;
-	}
+    public static MethodInlineAttr markForInline(MethodNode mth, InsnNode replaceInsn) {
+        Objects.requireNonNull(replaceInsn);
+        List<RegisterArg> allArgRegs = mth.getAllArgRegs();
+        int argsCount = allArgRegs.size();
+        int[] regNums = new int[argsCount];
+        for (int i = 0; i < argsCount; i++) {
+            RegisterArg reg = allArgRegs.get(i);
+            regNums[i] = reg.getRegNum();
+        }
+        MethodInlineAttr mia = new MethodInlineAttr(replaceInsn, regNums);
+        mth.addAttr(mia);
+        mth.addDebugComment("Marked for inline");
+        return mia;
+    }
 
-	private final InsnNode insn;
+    public static MethodInlineAttr inlineNotNeeded(MethodNode mth) {
+        mth.addAttr(INLINE_NOT_NEEDED);
+        return INLINE_NOT_NEEDED;
+    }
 
-	/**
-	 * Store method arguments register numbers to allow remap registers
-	 */
-	private final int[] argsRegNums;
+    public boolean notNeeded() {
+        return insn == null;
+    }
 
-	private MethodInlineAttr(InsnNode insn, int[] argsRegNums) {
-		this.insn = insn;
-		this.argsRegNums = argsRegNums;
-	}
+    public InsnNode getInsn() {
+        return insn;
+    }
 
-	public boolean notNeeded() {
-		return insn == null;
-	}
+    public int[] getArgsRegNums() {
+        return argsRegNums;
+    }
 
-	public InsnNode getInsn() {
-		return insn;
-	}
+    @Override
+    public AType<MethodInlineAttr> getAttrType() {
+        return AType.METHOD_INLINE;
+    }
 
-	public int[] getArgsRegNums() {
-		return argsRegNums;
-	}
-
-	@Override
-	public AType<MethodInlineAttr> getAttrType() {
-		return AType.METHOD_INLINE;
-	}
-
-	@Override
-	public String toString() {
-		if (notNeeded()) {
-			return "INLINE_NOT_NEEDED";
-		}
-		return "INLINE: " + insn;
-	}
+    @Override
+    public String toString() {
+        if (notNeeded()) {
+            return "INLINE_NOT_NEEDED";
+        }
+        return "INLINE: " + insn;
+    }
 }

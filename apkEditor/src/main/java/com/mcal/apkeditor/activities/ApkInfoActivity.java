@@ -105,7 +105,7 @@ import com.mcal.common.utilsOld.ZipUtils;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.folderlist.util.OpenFiles;
 import com.mcal.httpserver.HttpServiceManager;
-import com.mcal.neweditor.TextEditor;
+import com.mcal.editor.TextEditor;
 import com.mcal.pngeditor.PngEditActivity;
 
 import org.jetbrains.annotations.Contract;

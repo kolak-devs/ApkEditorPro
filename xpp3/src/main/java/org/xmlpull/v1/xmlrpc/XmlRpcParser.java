@@ -4,8 +4,10 @@
 package org.xmlpull.v1.xmlrpc;
 
 
-import org.xmlpull.v1.*;
-import java.io.*;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 
 /**
  * @author Stefan Haustein
@@ -13,7 +15,7 @@ import java.io.*;
  * <p>A simple XML RPC parser based on the XML PULL API,
  * intended to show the XMLPULL and KXml2 API usage with
  * a real application example.</p>
- * 
+ *
  * <ul>
  * <li>For the XML RPC specification, please refer to
  * <a href="http://www.xmlrpc.com/spec">http://www.xmlrpc.com/spec</a></li>
@@ -27,15 +29,15 @@ import java.io.*;
 public class XmlRpcParser extends XmlRpcParserME {
 
     public XmlRpcParser(XmlPullParser parser) {
-           super(parser);
-       }
+        super(parser);
+    }
 
     protected Object parseType(String name) throws IOException, XmlPullParserException {
         if (name.equals("double"))
             return new Double(parser.nextText());
-        else       
+        else
             return super.parseType(name);
     }
 
- 
+
 }

@@ -1,26 +1,26 @@
 package jadx.core.dex.nodes;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import jadx.core.dex.regions.conditions.IfCondition;
 
 public interface IConditionRegion extends IRegion {
 
-	@Nullable
-	IfCondition getCondition();
+    @Nullable
+    IfCondition getCondition();
 
-	/**
-	 * Blocks merged into condition
-	 * Needed for backtracking
-	 * TODO: merge into condition object ???
-	 */
-	List<BlockNode> getConditionBlocks();
+    /**
+     * Blocks merged into condition
+     * Needed for backtracking
+     * TODO: merge into condition object ???
+     */
+    List<BlockNode> getConditionBlocks();
 
-	void invertCondition();
+    void invertCondition();
 
-	boolean simplifyCondition();
+    boolean simplifyCondition();
 
-	int getConditionSourceLine();
+    int getConditionSourceLine();
 }

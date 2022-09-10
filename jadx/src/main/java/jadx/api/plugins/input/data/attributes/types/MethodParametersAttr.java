@@ -10,45 +10,45 @@ import jadx.api.plugins.input.data.attributes.PinnedAttribute;
 
 public class MethodParametersAttr extends PinnedAttribute {
 
-	public static class Info {
-		private final int accFlags;
-		private final String name;
+    private final List<Info> list;
 
-		public Info(int accFlags, String name) {
-			this.accFlags = accFlags;
-			this.name = name;
-		}
+    public MethodParametersAttr(List<Info> list) {
+        this.list = list;
+    }
 
-		public int getAccFlags() {
-			return accFlags;
-		}
+    public List<Info> getList() {
+        return list;
+    }
 
-		public String getName() {
-			return name;
-		}
+    @Override
+    public IJadxAttrType<MethodParametersAttr> getAttrType() {
+        return JadxAttrType.METHOD_PARAMETERS;
+    }
 
-		public String toString() {
-			return AccessFlags.format(accFlags, AccessFlagsScope.METHOD) + name;
-		}
-	}
+    @Override
+    public String toString() {
+        return "METHOD_PARAMETERS: " + list;
+    }
 
-	private final List<Info> list;
+    public static class Info {
+        private final int accFlags;
+        private final String name;
 
-	public MethodParametersAttr(List<Info> list) {
-		this.list = list;
-	}
+        public Info(int accFlags, String name) {
+            this.accFlags = accFlags;
+            this.name = name;
+        }
 
-	public List<Info> getList() {
-		return list;
-	}
+        public int getAccFlags() {
+            return accFlags;
+        }
 
-	@Override
-	public IJadxAttrType<MethodParametersAttr> getAttrType() {
-		return JadxAttrType.METHOD_PARAMETERS;
-	}
+        public String getName() {
+            return name;
+        }
 
-	@Override
-	public String toString() {
-		return "METHOD_PARAMETERS: " + list;
-	}
+        public String toString() {
+            return AccessFlags.format(accFlags, AccessFlagsScope.METHOD) + name;
+        }
+    }
 }

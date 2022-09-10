@@ -25,12 +25,12 @@
 
 package android.sun.misc;
 
-import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PushbackInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PushbackInputStream;
 import java.nio.ByteBuffer;
 
 /**
@@ -38,7 +38,7 @@ import java.nio.ByteBuffer;
  * A character decoder is an algorithim for transforming 8 bit
  * binary data that has been encoded into text by a character
  * encoder, back into original binary form.
- *
+ * <p>
  * The character encoders, in general, have been structured
  * around a central theme that binary data can be encoded into
  * text that has the form:
@@ -48,16 +48,16 @@ import java.nio.ByteBuffer;
  *      [Line Prefix][encoded data atoms][Line Suffix]
  *      [Buffer Suffix]
  * </pre>
- *
+ * <p>
  * Of course in the simplest encoding schemes, the buffer has no
  * distinct prefix of suffix, however all have some fixed relationship
  * between the text in an 'atom' and the binary data itself.
- *
+ * <p>
  * In the CharacterEncoder and CharacterDecoder classes, one complete
  * chunk of data is referred to as a <i>buffer</i>. Encoded buffers
  * are all text, and decoded buffers (sometimes just referred to as
  * buffers) are binary octets.
- *
+ * <p>
  * To create a custom decoder, you must, at a minimum,  overide three
  * abstract methods in this class.
  * <DL>
@@ -67,37 +67,47 @@ import java.nio.ByteBuffer;
  * <DD>bytesPerLine which tells the encoder the maximum number of
  * bytes per line.
  * </DL>
- *
+ * <p>
  * In general, the character decoders return error in the form of a
  * CEFormatException. The syntax of the detail string is
  * <pre>
  *      DecoderClassName: Error message.
  * </pre>
- *
+ * <p>
  * Several useful decoders have already been written and are
  * referenced in the See Also list below.
  *
- * @author      Chuck McManis
- * @see         CEFormatException
- * @see         CharacterEncoder
- * @see         UCDecoder
- * @see         UUDecoder
- * @see         BASE64Decoder
+ * @author Chuck McManis
+ * @see CEFormatException
+ * @see CharacterEncoder
+ * @see UCDecoder
+ * @see UUDecoder
+ * @see BASE64Decoder
  */
 
 public abstract class CharacterDecoder {
 
-    /** Return the number of bytes per atom of decoding */
+    /**
+     * Return the number of bytes per atom of decoding
+     */
     abstract protected int bytesPerAtom();
 
-    /** Return the maximum number of bytes that can be encoded per line */
+    /**
+     * Return the maximum number of bytes that can be encoded per line
+     */
     abstract protected int bytesPerLine();
 
-    /** decode the beginning of the buffer, by default this is a NOP. */
-    protected void decodeBufferPrefix(PushbackInputStream aStream, OutputStream bStream) throws IOException { }
+    /**
+     * decode the beginning of the buffer, by default this is a NOP.
+     */
+    protected void decodeBufferPrefix(PushbackInputStream aStream, OutputStream bStream) throws IOException {
+    }
 
-    /** decode the buffer suffix, again by default it is a NOP. */
-    protected void decodeBufferSuffix(PushbackInputStream aStream, OutputStream bStream) throws IOException { }
+    /**
+     * decode the buffer suffix, again by default it is a NOP.
+     */
+    protected void decodeBufferSuffix(PushbackInputStream aStream, OutputStream bStream) throws IOException {
+    }
 
     /**
      * This method should return, if it knows, the number of bytes
@@ -115,7 +125,8 @@ public abstract class CharacterDecoder {
      * this method. The simplest version of this method looks for the
      * (newline) character.
      */
-    protected void decodeLineSuffix(PushbackInputStream aStream, OutputStream bStream) throws IOException { }
+    protected void decodeLineSuffix(PushbackInputStream aStream, OutputStream bStream) throws IOException {
+    }
 
     /**
      * This method does an actual decode. It takes the decoded bytes and
@@ -131,12 +142,12 @@ public abstract class CharacterDecoder {
      * read method.
      */
     protected int readFully(InputStream in, byte buffer[], int offset, int len)
-        throws java.io.IOException {
+            throws java.io.IOException {
         for (int i = 0; i < len; i++) {
             int q = in.read();
             if (q == -1)
                 return ((i == 0) ? -1 : i);
-            buffer[i+offset] = (byte)q;
+            buffer[i + offset] = (byte) q;
         }
         return len;
     }
@@ -145,21 +156,22 @@ public abstract class CharacterDecoder {
      * Decode the text from the InputStream and write the decoded
      * octets to the OutputStream. This method runs until the stream
      * is exhausted.
-     * @exception CEFormatException An error has occured while decoding
-     * @exception CEStreamExhausted The input stream is unexpectedly out of data
+     *
+     * @throws CEFormatException An error has occured while decoding
+     * @throws CEStreamExhausted The input stream is unexpectedly out of data
      */
     public void decodeBuffer(InputStream aStream, OutputStream bStream) throws IOException {
-        int     i;
-        int     totalBytes = 0;
+        int i;
+        int totalBytes = 0;
 
-        PushbackInputStream ps = new PushbackInputStream (aStream);
+        PushbackInputStream ps = new PushbackInputStream(aStream);
         decodeBufferPrefix(ps, bStream);
         while (true) {
             int length;
 
             try {
                 length = decodeLinePrefix(ps, bStream);
-                for (i = 0; (i+bytesPerAtom()) < length; i += bytesPerAtom()) {
+                for (i = 0; (i + bytesPerAtom()) < length; i += bytesPerAtom()) {
                     decodeAtom(ps, bStream, bytesPerAtom());
                     totalBytes += bytesPerAtom();
                 }
@@ -181,10 +193,11 @@ public abstract class CharacterDecoder {
     /**
      * Alternate decode interface that takes a String containing the encoded
      * buffer and returns a byte array containing the data.
-     * @exception CEFormatException An error has occured while decoding
+     *
+     * @throws CEFormatException An error has occured while decoding
      */
-    public byte decodeBuffer(String inputString)[] throws IOException {
-        byte    inputBuffer[] = new byte[inputString.length()];
+    public byte decodeBuffer(String inputString)[]throws IOException {
+        byte inputBuffer[] = new byte[inputString.length()];
         ByteArrayInputStream inStream;
         ByteArrayOutputStream outStream;
 
@@ -198,7 +211,7 @@ public abstract class CharacterDecoder {
     /**
      * Decode the contents of the inputstream into a buffer.
      */
-    public byte decodeBuffer(InputStream in)[] throws IOException {
+    public byte decodeBuffer(InputStream in)[]throws IOException {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         decodeBuffer(in, outStream);
         return (outStream.toByteArray());
@@ -208,7 +221,7 @@ public abstract class CharacterDecoder {
      * Decode the contents of the String into a ByteBuffer.
      */
     public ByteBuffer decodeBufferToByteBuffer(String inputString)
-        throws IOException {
+            throws IOException {
         return ByteBuffer.wrap(decodeBuffer(inputString));
     }
 
@@ -216,7 +229,7 @@ public abstract class CharacterDecoder {
      * Decode the contents of the inputStream into a ByteBuffer.
      */
     public ByteBuffer decodeBufferToByteBuffer(InputStream in)
-        throws IOException {
+            throws IOException {
         return ByteBuffer.wrap(decodeBuffer(in));
     }
 }

@@ -40,15 +40,14 @@ import java.util.Locale;
  * @see GeneralNames
  * @see android.sun.security.x509.GeneralNameInterface
  */
-public class RFC822Name implements android.sun.security.x509.GeneralNameInterface
-{
+public class RFC822Name implements android.sun.security.x509.GeneralNameInterface {
     private String name;
 
     /**
      * Create the RFC822Name object from the passed encoded Der value.
      *
      * @param derValue the encoded DER RFC822Name.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public RFC822Name(DerValue derValue) throws IOException {
         name = derValue.getIA5String();
@@ -83,7 +82,7 @@ public class RFC822Name implements android.sun.security.x509.GeneralNameInterfac
             throw new IOException("RFC822Name may not be null or empty");
         }
         // See if domain is a valid domain name
-        String domain = name.substring(name.indexOf('@')+1);
+        String domain = name.substring(name.indexOf('@') + 1);
         if (domain.length() == 0) {
             throw new IOException("RFC822Name may not end with @");
         } else {
@@ -114,7 +113,7 @@ public class RFC822Name implements android.sun.security.x509.GeneralNameInterfac
      * Encode the RFC822 name into the DerOutputStream.
      *
      * @param out the DER stream to encode the RFC822Name to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         out.putIA5String(name);
@@ -140,7 +139,7 @@ public class RFC822Name implements android.sun.security.x509.GeneralNameInterfac
         if (!(obj instanceof RFC822Name))
             return false;
 
-        RFC822Name other = (RFC822Name)obj;
+        RFC822Name other = (RFC822Name) obj;
 
         // RFC2459 mandates that these names are
         // not case-sensitive
@@ -158,11 +157,11 @@ public class RFC822Name implements android.sun.security.x509.GeneralNameInterfac
 
     /**
      * Return constraint type:<ul>
-     *   <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain)
-     *   <li>NAME_MATCH = 0: input name matches name
-     *   <li>NAME_NARROWS = 1: input name narrows name
-     *   <li>NAME_WIDENS = 2: input name widens name
-     *   <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type
+     * <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain)
+     * <li>NAME_MATCH = 0: input name matches name
+     * <li>NAME_NARROWS = 1: input name narrows name
+     * <li>NAME_WIDENS = 2: input name widens name
+     * <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type
      * </ul>.  These results are used in checking NameConstraints during
      * certification path verification.
      * <p>
@@ -175,10 +174,11 @@ public class RFC822Name implements android.sun.security.x509.GeneralNameInterfac
      * "&gt;". Note that while upper and lower case letters are allowed in an
      * RFC 822 addr-spec, no significance is attached to the case.
      * <p>
+     *
      * @param inputName to be checked for being constrained
-     * @returns constraint type above
      * @throws UnsupportedOperationException if name is not exact match, but narrowing and widening are
-     *          not supported for this name type.
+     *                                       not supported for this name type.
+     * @returns constraint type above
      */
     public int constrains(android.sun.security.x509.GeneralNameInterface inputName) throws UnsupportedOperationException {
         int constraintType;
@@ -189,7 +189,7 @@ public class RFC822Name implements android.sun.security.x509.GeneralNameInterfac
         } else {
             //RFC2459 specifies that case is not significant in RFC822Names
             String inName =
-                (((RFC822Name)inputName).getName()).toLowerCase(Locale.ENGLISH);
+                    (((RFC822Name) inputName).getName()).toLowerCase(Locale.ENGLISH);
             String thisName = name.toLowerCase(Locale.ENGLISH);
             if (inName.equals(thisName)) {
                 constraintType = NAME_MATCH;
@@ -201,7 +201,7 @@ public class RFC822Name implements android.sun.security.x509.GeneralNameInterfac
                     constraintType = NAME_WIDENS;
                 } else {
                     int inNdx = thisName.lastIndexOf(inName);
-                    if (thisName.charAt(inNdx-1) == '@' ) {
+                    if (thisName.charAt(inNdx - 1) == '@') {
                         constraintType = NAME_WIDENS;
                     } else {
                         constraintType = NAME_SAME_TYPE;
@@ -215,7 +215,7 @@ public class RFC822Name implements android.sun.security.x509.GeneralNameInterfac
                     constraintType = NAME_NARROWS;
                 } else {
                     int ndx = inName.lastIndexOf(thisName);
-                    if (inName.charAt(ndx-1) == '@') {
+                    if (inName.charAt(ndx - 1) == '@') {
                         constraintType = NAME_NARROWS;
                     } else {
                         constraintType = NAME_SAME_TYPE;
@@ -232,23 +232,23 @@ public class RFC822Name implements android.sun.security.x509.GeneralNameInterfac
      * Return subtree depth of this name for purposes of determining
      * NameConstraints minimum and maximum bounds.
      *
-     * @returns distance of name from root
      * @throws UnsupportedOperationException if not supported for this name type
+     * @returns distance of name from root
      */
     public int subtreeDepth() throws UnsupportedOperationException {
-        String subtree=name;
-        int i=1;
+        String subtree = name;
+        int i = 1;
 
         /* strip off name@ portion */
         int atNdx = subtree.lastIndexOf('@');
         if (atNdx >= 0) {
             i++;
-            subtree=subtree.substring(atNdx+1);
+            subtree = subtree.substring(atNdx + 1);
         }
 
         /* count dots in dnsname, adding one if dnsname preceded by @ */
         for (; subtree.lastIndexOf('.') >= 0; i++) {
-            subtree=subtree.substring(0,subtree.lastIndexOf('.'));
+            subtree = subtree.substring(0, subtree.lastIndexOf('.'));
         }
 
         return i;

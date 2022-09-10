@@ -70,6 +70,7 @@ import java.net.URISyntaxException;
  * colons that separate IPv6 components from the colons that separate
  * scheme-specific data.
  * <p>
+ *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  * @author Sean Mullan
@@ -90,7 +91,7 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
      * Create the URIName object from the passed encoded Der value.
      *
      * @param derValue the encoded DER URIName.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public URIName(DerValue derValue) throws IOException {
         this(derValue.getIA5String());
@@ -107,7 +108,7 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
             uri = new URI(name);
         } catch (URISyntaxException use) {
             throw (IOException) new IOException
-                ("invalid URI name:" + name).initCause(use);
+                    ("invalid URI name:" + name).initCause(use);
         }
         if (uri.getScheme() == null) {
             throw new IOException("URI name must include scheme:" + name);
@@ -121,12 +122,12 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
         if (host != null) {
             if (host.charAt(0) == '[') {
                 // Verify host is a valid IPv6 address name
-                String ipV6Host = host.substring(1, host.length()-1);
+                String ipV6Host = host.substring(1, host.length() - 1);
                 try {
                     hostIP = new android.sun.security.x509.IPAddressName(ipV6Host);
                 } catch (IOException ioe) {
                     throw new IOException("invalid URI name (host " +
-                        "portion is not a valid IPv6 address):" + name);
+                            "portion is not a valid IPv6 address):" + name);
                 }
             } else {
                 try {
@@ -138,12 +139,18 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
                         hostIP = new IPAddressName(host);
                     } catch (Exception ioe2) {
                         throw new IOException("invalid URI name (host " +
-                            "portion is not a valid DNS name, IPv4 address," +
-                            " or IPv6 address):" + name);
+                                "portion is not a valid DNS name, IPv4 address," +
+                                " or IPv6 address):" + name);
                     }
                 }
             }
         }
+    }
+
+    URIName(URI uri, String host, android.sun.security.x509.DNSName hostDNS) {
+        this.uri = uri;
+        this.host = host;
+        this.hostDNS = hostDNS;
     }
 
     /**
@@ -161,7 +168,7 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
             uri = new URI(name);
         } catch (URISyntaxException use) {
             throw (IOException) new IOException
-                ("invalid URI name constraint:" + name).initCause(use);
+                    ("invalid URI name constraint:" + name).initCause(use);
         }
         if (uri.getScheme() == null) {
             String host = uri.getSchemeSpecificPart();
@@ -175,18 +182,12 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
                 return new URIName(uri, host, hostDNS);
             } catch (IOException ioe) {
                 throw (IOException) new IOException
-                    ("invalid URI name constraint:" + name).initCause(ioe);
+                        ("invalid URI name constraint:" + name).initCause(ioe);
             }
         } else {
             throw new IOException("invalid URI name constraint (should not " +
-                "include scheme):" + name);
+                    "include scheme):" + name);
         }
-    }
-
-    URIName(URI uri, String host, android.sun.security.x509.DNSName hostDNS) {
-        this.uri = uri;
-        this.host = host;
-        this.hostDNS = hostDNS;
     }
 
     /**
@@ -200,7 +201,7 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
      * Encode the URI name into the DerOutputStream.
      *
      * @param out the DER stream to encode the URIName to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         out.putIA5String(uri.toASCIIString());
@@ -290,15 +291,15 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
 
     /**
      * Return type of constraint inputName places on this name:<ul>
-     *   <li>NAME_DIFF_TYPE = -1: input name is different type from name
-     *       (i.e. does not constrain).
-     *   <li>NAME_MATCH = 0: input name matches name.
-     *   <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming
-     *       subtree)
-     *   <li>NAME_WIDENS = 2: input name widens name (is higher in the naming
-     *       subtree)
-     *   <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but
-     *       is same type.
+     * <li>NAME_DIFF_TYPE = -1: input name is different type from name
+     * (i.e. does not constrain).
+     * <li>NAME_MATCH = 0: input name matches name.
+     * <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming
+     * subtree)
+     * <li>NAME_WIDENS = 2: input name widens name (is higher in the naming
+     * subtree)
+     * <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but
+     * is same type.
      * </ul>.
      * These results are used in checking NameConstraints during
      * certification path verification.
@@ -312,13 +313,14 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
      * by "xyz.com".  When the constraint does not begin with a period, it
      * specifies a host.
      * <p>
+     *
      * @param inputName to be checked for being constrained
-     * @returns constraint type above
      * @throws UnsupportedOperationException if name is not exact match, but
-     *  narrowing and widening are not supported for this name type.
+     *                                       narrowing and widening are not supported for this name type.
+     * @returns constraint type above
      */
     public int constrains(GeneralNameInterface inputName)
-        throws UnsupportedOperationException {
+            throws UnsupportedOperationException {
         int constraintType;
         if (inputName == null) {
             constraintType = NAME_DIFF_TYPE;
@@ -329,16 +331,16 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
             // actually a URI name constraint (not a URI), so we
             // only need to compare the host portion of the name
 
-            String otherHost = ((URIName)inputName).getHost();
+            String otherHost = ((URIName) inputName).getHost();
 
             // Quick check for equality
             if (otherHost.equalsIgnoreCase(host)) {
                 constraintType = NAME_MATCH;
             } else {
-                Object otherHostObject = ((URIName)inputName).getHostObject();
+                Object otherHostObject = ((URIName) inputName).getHostObject();
 
                 if ((hostDNS == null) ||
-                    !(otherHostObject instanceof android.sun.security.x509.DNSName)) {
+                        !(otherHostObject instanceof android.sun.security.x509.DNSName)) {
                     // If one (or both) is an IP address, only same type
                     constraintType = NAME_SAME_TYPE;
                 } else {
@@ -352,8 +354,8 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
                     // If neither one is a domain, then they can't
                     // widen or narrow. That's just SAME_TYPE.
                     if ((!thisDomain && !otherDomain) &&
-                        ((constraintType == NAME_WIDENS) ||
-                         (constraintType == NAME_NARROWS))) {
+                            ((constraintType == NAME_WIDENS) ||
+                                    (constraintType == NAME_NARROWS))) {
                         constraintType = NAME_SAME_TYPE;
                     }
 
@@ -362,7 +364,7 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
                     // domain doesn't include the one that's
                     // not a domain.
                     if ((thisDomain != otherDomain) &&
-                        (constraintType == NAME_MATCH)) {
+                            (constraintType == NAME_MATCH)) {
                         if (thisDomain) {
                             constraintType = NAME_WIDENS;
                         } else {
@@ -380,8 +382,8 @@ public class URIName implements android.sun.security.x509.GeneralNameInterface {
      * NameConstraints minimum and maximum bounds and for calculating
      * path lengths in name subtrees.
      *
-     * @returns distance of name from root
      * @throws UnsupportedOperationException if not supported for this name type
+     * @returns distance of name from root
      */
     public int subtreeDepth() throws UnsupportedOperationException {
         android.sun.security.x509.DNSName dnsName = null;

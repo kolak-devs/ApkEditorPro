@@ -13,67 +13,67 @@ import jadx.plugins.input.java.data.attributes.types.ConstValueAttr;
 import jadx.plugins.input.java.data.attributes.types.JavaAnnotationsAttr;
 
 public class JavaFieldData implements IFieldData {
-	private String name;
-	private String parentClassType;
-	private String type;
-	private int accessFlags;
-	private JavaAttrStorage attributes;
+    private String name;
+    private String parentClassType;
+    private String type;
+    private int accessFlags;
+    private JavaAttrStorage attributes;
 
-	@Override
-	public String getParentClassType() {
-		return parentClassType;
-	}
+    @Override
+    public String getParentClassType() {
+        return parentClassType;
+    }
 
-	public void setParentClassType(String parentClassType) {
-		this.parentClassType = parentClassType;
-	}
+    public void setParentClassType(String parentClassType) {
+        this.parentClassType = parentClassType;
+    }
 
-	@Override
-	public String getType() {
-		return type;
-	}
+    @Override
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public int getAccessFlags() {
-		return accessFlags;
-	}
+    @Override
+    public int getAccessFlags() {
+        return accessFlags;
+    }
 
-	public void setAccessFlags(int accessFlags) {
-		this.accessFlags = accessFlags;
-	}
+    public void setAccessFlags(int accessFlags) {
+        this.accessFlags = accessFlags;
+    }
 
-	public void setAttributes(JavaAttrStorage attributes) {
-		this.attributes = attributes;
-	}
+    @Override
+    public List<IJadxAttribute> getAttributes() {
+        int size = attributes.size();
+        if (size == 0) {
+            return Collections.emptyList();
+        }
+        List<IJadxAttribute> list = new ArrayList<>(size);
+        Utils.addToList(list, JavaAnnotationsAttr.merge(attributes));
+        Utils.addToList(list, attributes.get(JavaAttrType.CONST_VALUE), ConstValueAttr::getValue);
+        Utils.addToList(list, attributes.get(JavaAttrType.SIGNATURE));
+        return list;
+    }
 
-	@Override
-	public List<IJadxAttribute> getAttributes() {
-		int size = attributes.size();
-		if (size == 0) {
-			return Collections.emptyList();
-		}
-		List<IJadxAttribute> list = new ArrayList<>(size);
-		Utils.addToList(list, JavaAnnotationsAttr.merge(attributes));
-		Utils.addToList(list, attributes.get(JavaAttrType.CONST_VALUE), ConstValueAttr::getValue);
-		Utils.addToList(list, attributes.get(JavaAttrType.SIGNATURE));
-		return list;
-	}
+    public void setAttributes(JavaAttrStorage attributes) {
+        this.attributes = attributes;
+    }
 
-	@Override
-	public String toString() {
-		return parentClassType + "->" + name + ":" + type;
-	}
+    @Override
+    public String toString() {
+        return parentClassType + "->" + name + ":" + type;
+    }
 }

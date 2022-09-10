@@ -5,11 +5,11 @@ import jadx.api.metadata.ICodeMetadata;
 
 public interface ICodeInfo {
 
-	ICodeInfo EMPTY = new SimpleCodeInfo("");
+    ICodeInfo EMPTY = new SimpleCodeInfo("");
 
-	String getCodeStr();
+    String getCodeStr();
 
-	ICodeMetadata getCodeMetadata();
+    ICodeMetadata getCodeMetadata();
 
-	boolean hasMetadata();
+    boolean hasMetadata();
 }

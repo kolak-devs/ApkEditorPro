@@ -1,10 +1,5 @@
 package com.mcal.imageviewlib;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,9 +10,16 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
-import com.mcal.common.utilsOld.ActivityUtils;
+import androidx.annotation.Nullable;
+
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utilsOld.ActivityUtils;
 import com.polites.android.GestureImageView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class ViewZipImageActivity extends CustomizedLangActivity {
     protected GestureImageView view;
@@ -97,6 +99,7 @@ public class ViewZipImageActivity extends CustomizedLangActivity {
         }
     }
 
+    @Nullable
     private Bitmap decodeBitmapFromZip() {
         ZipFile zfile = null;
         ZipEntry entry = null;
@@ -118,16 +121,17 @@ public class ViewZipImageActivity extends CustomizedLangActivity {
                 try {
                     input.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
             if (zfile != null) {
                 try {
                     zfile.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
-
         return null;
     }
 }

@@ -43,6 +43,6 @@ public class AttributeNameEnumeration extends Vector<String> {
      * The default constructor for this class.
      */
     public AttributeNameEnumeration() {
-        super(4,2);
+        super(4, 2);
     }
 }

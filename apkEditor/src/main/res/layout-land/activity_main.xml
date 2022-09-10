@@ -15,8 +15,8 @@
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
-        tools:listitem="@layout/main_list_item"
-        tools:itemCount="8"/>
+        tools:itemCount="8"
+        tools:listitem="@layout/main_list_item" />
 
     <TextView
         android:id="@+id/pirated_version_detected"

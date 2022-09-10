@@ -25,14 +25,15 @@
 
 package android.sun.security.pkcs;
 
+import android.sun.security.util.DerEncoder;
+import android.sun.security.util.DerInputStream;
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.util.ObjectIdentifier;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Hashtable;
-import android.sun.security.util.DerEncoder;
-import android.sun.security.util.DerValue;
-import android.sun.security.util.DerInputStream;
-import android.sun.security.util.DerOutputStream;
-import android.sun.security.util.ObjectIdentifier;
 
 /**
  * A set of attributes of class PKCS9Attribute.
@@ -44,7 +45,7 @@ public class PKCS9Attributes {
      * Attributes in this set indexed by OID.
      */
     private final Hashtable<ObjectIdentifier, PKCS9Attribute> attributes =
-        new Hashtable<ObjectIdentifier, PKCS9Attribute>(3);
+            new Hashtable<ObjectIdentifier, PKCS9Attribute>(3);
 
     /**
      * The keys of this hashtable are the OIDs of permitted attributes.
@@ -70,27 +71,22 @@ public class PKCS9Attributes {
      * list.  If the array is null, accept all attributes supported by
      * class PKCS9Attribute.
      *
-     * @param permittedAttributes
-     * Array of attribute OIDs that will be accepted.
-     * @param in
-     * the contents of the DER encoding of the attribute set.
-     *
-     * @exception IOException
-     * on i/o error, encoding syntax error, unacceptable or
-     * unsupported attribute, or duplicate attribute.
-     *
+     * @param permittedAttributes Array of attribute OIDs that will be accepted.
+     * @param in                  the contents of the DER encoding of the attribute set.
+     * @throws IOException on i/o error, encoding syntax error, unacceptable or
+     *                     unsupported attribute, or duplicate attribute.
      * @see PKCS9Attribute
      */
     public PKCS9Attributes(ObjectIdentifier[] permittedAttributes,
                            DerInputStream in) throws IOException {
         if (permittedAttributes != null) {
             this.permittedAttributes =
-                new Hashtable<ObjectIdentifier, ObjectIdentifier>(
-                                                permittedAttributes.length);
+                    new Hashtable<ObjectIdentifier, ObjectIdentifier>(
+                            permittedAttributes.length);
 
             for (int i = 0; i < permittedAttributes.length; i++)
                 this.permittedAttributes.put(permittedAttributes[i],
-                                             permittedAttributes[i]);
+                        permittedAttributes[i]);
         } else {
             this.permittedAttributes = null;
         }
@@ -106,10 +102,8 @@ public class PKCS9Attributes {
      * attributes.
      *
      * @param in the contents of the DER encoding of the attribute set.
-     * @exception IOException
-     * on i/o error, encoding syntax error, or unsupported or
-     * duplicate attribute.
-     *
+     * @throws IOException on i/o error, encoding syntax error, or unsupported or
+     *                     duplicate attribute.
      * @see PKCS9Attribute
      */
     public PKCS9Attributes(DerInputStream in) throws IOException {
@@ -122,18 +116,16 @@ public class PKCS9Attributes {
      * supported by class PKCS9Attribute and ignore any unsupported
      * attributes, if directed.
      *
-     * @param in the contents of the DER encoding of the attribute set.
+     * @param in                          the contents of the DER encoding of the attribute set.
      * @param ignoreUnsupportedAttributes If true then any attributes
-     * not supported by the PKCS9Attribute class are ignored. Otherwise
-     * unsupported attributes cause an exception to be thrown.
-     * @exception IOException
-     * on i/o error, encoding syntax error, or unsupported or
-     * duplicate attribute.
-     *
+     *                                    not supported by the PKCS9Attribute class are ignored. Otherwise
+     *                                    unsupported attributes cause an exception to be thrown.
+     * @throws IOException on i/o error, encoding syntax error, or unsupported or
+     *                     duplicate attribute.
      * @see PKCS9Attribute
      */
     public PKCS9Attributes(DerInputStream in,
-        boolean ignoreUnsupportedAttributes) throws IOException {
+                           boolean ignoreUnsupportedAttributes) throws IOException {
 
         this.ignoreUnsupportedAttributes = ignoreUnsupportedAttributes;
         // derEncoding initialized in <code>decode()</code>
@@ -148,22 +140,20 @@ public class PKCS9Attributes {
      * <code>attribs</code> must be
      * supported by class PKCS9Attribute.
      *
-     * @exception IOException
-     * on i/o error, encoding syntax error, or unsupported or
-     * duplicate attribute.
-     *
+     * @throws IOException on i/o error, encoding syntax error, or unsupported or
+     *                     duplicate attribute.
      * @see PKCS9Attribute
      */
     public PKCS9Attributes(PKCS9Attribute[] attribs)
-    throws IllegalArgumentException, IOException {
+            throws IllegalArgumentException, IOException {
         ObjectIdentifier oid;
-        for (int i=0; i < attribs.length; i++) {
+        for (int i = 0; i < attribs.length; i++) {
             oid = attribs[i].getOID();
             if (attributes.containsKey(oid))
                 throw new IllegalArgumentException(
-                          "PKCSAttribute " + attribs[i].getOID() +
-                          " duplicated while constructing " +
-                          "PKCS9Attributes.");
+                        "PKCSAttribute " + attribs[i].getOID() +
+                                " duplicated while constructing " +
+                                "PKCS9Attributes.");
 
             attributes.put(oid, attribs[i]);
         }
@@ -171,17 +161,27 @@ public class PKCS9Attributes {
         permittedAttributes = null;
     }
 
+    /**
+     * Cast an object array whose components are
+     * <code>DerEncoder</code>s to <code>DerEncoder[]</code>.
+     */
+    static DerEncoder[] castToDerEncoder(Object[] objs) {
+
+        DerEncoder[] encoders = new DerEncoder[objs.length];
+
+        for (int i = 0; i < encoders.length; i++)
+            encoders[i] = (DerEncoder) objs[i];
+
+        return encoders;
+    }
 
     /**
      * Decode this set of PKCS9 attributes from the contents of its
      * DER encoding. Ignores unsupported attributes when directed.
      *
-     * @param in
-     * the contents of the DER encoding of the attribute set.
-     *
-     * @exception IOException
-     * on i/o error, encoding syntax error, unacceptable or
-     * unsupported attribute, or duplicate attribute.
+     * @param in the contents of the DER encoding of the attribute set.
+     * @throws IOException on i/o error, encoding syntax error, unacceptable or
+     *                     unsupported attribute, or duplicate attribute.
      */
     private byte[] decode(DerInputStream in) throws IOException {
 
@@ -192,13 +192,13 @@ public class PKCS9Attributes {
         derEncoding[0] = DerValue.tag_SetOf;
 
         DerInputStream derIn = new DerInputStream(derEncoding);
-        DerValue[] derVals = derIn.getSet(3,true);
+        DerValue[] derVals = derIn.getSet(3, true);
 
         PKCS9Attribute attrib;
         ObjectIdentifier oid;
         boolean reuseEncoding = true;
 
-        for (int i=0; i < derVals.length; i++) {
+        for (int i = 0; i < derVals.length; i++) {
 
             try {
                 attrib = new PKCS9Attribute(derVals[i]);
@@ -217,9 +217,9 @@ public class PKCS9Attributes {
                 throw new IOException("Duplicate PKCS9 attribute: " + oid);
 
             if (permittedAttributes != null &&
-                !permittedAttributes.containsKey(oid))
+                    !permittedAttributes.containsKey(oid))
                 throw new IOException("Attribute " + oid +
-                                      " not permitted in this attribute set");
+                        " not permitted in this attribute set");
 
             attributes.put(oid, attrib);
         }
@@ -232,12 +232,11 @@ public class PKCS9Attributes {
      *
      * @param tag the implicit tag to use in the DER encoding.
      * @param out the output stream on which to put the DER encoding.
-     *
-     * @exception IOException  on output error.
+     * @throws IOException on output error.
      */
     public void encode(byte tag, OutputStream out) throws IOException {
         out.write(tag);
-        out.write(derEncoding, 1, derEncoding.length -1);
+        out.write(derEncoding, 1, derEncoding.length - 1);
     }
 
     private byte[] generateDerEncoding() throws IOException {
@@ -245,7 +244,7 @@ public class PKCS9Attributes {
         Object[] attribVals = attributes.values().toArray();
 
         out.putOrderedSetOf(DerValue.tag_SetOf,
-                            castToDerEncoder(attribVals));
+                castToDerEncoder(attribVals));
         return out.toByteArray();
     }
 
@@ -272,7 +271,6 @@ public class PKCS9Attributes {
         return attributes.get(PKCS9Attribute.getOID(name));
     }
 
-
     /**
      * Get an array of all attributes in this set, in order of OID.
      */
@@ -281,8 +279,8 @@ public class PKCS9Attributes {
         ObjectIdentifier oid;
 
         int j = 0;
-        for (int i=1; i < PKCS9Attribute.PKCS9_OIDS.length &&
-                      j < attribs.length; i++) {
+        for (int i = 1; i < PKCS9Attribute.PKCS9_OIDS.length &&
+                j < attribs.length; i++) {
             attribs[j] = getAttribute(PKCS9Attribute.PKCS9_OIDS[i]);
 
             if (attribs[j] != null)
@@ -295,7 +293,7 @@ public class PKCS9Attributes {
      * Get an attribute value by OID.
      */
     public Object getAttributeValue(ObjectIdentifier oid)
-    throws IOException {
+            throws IOException {
         try {
             Object value = getAttribute(oid).getValue();
             return value;
@@ -306,18 +304,17 @@ public class PKCS9Attributes {
     }
 
     /**
-     *  Get an attribute value by type name.
+     * Get an attribute value by type name.
      */
     public Object getAttributeValue(String name) throws IOException {
         ObjectIdentifier oid = PKCS9Attribute.getOID(name);
 
         if (oid == null)
             throw new IOException("Attribute name " + name +
-                                  " not recognized or not supported.");
+                    " not recognized or not supported.");
 
         return getAttributeValue(oid);
     }
-
 
     /**
      * Returns the PKCS9 block in a printable string form.
@@ -347,19 +344,5 @@ public class PKCS9Attributes {
         buf.append("\n\t] (end PKCS9 Attributes)");
 
         return buf.toString();
-    }
-
-    /**
-     * Cast an object array whose components are
-     * <code>DerEncoder</code>s to <code>DerEncoder[]</code>.
-     */
-    static DerEncoder[] castToDerEncoder(Object[] objs) {
-
-        DerEncoder[] encoders = new DerEncoder[objs.length];
-
-        for (int i=0; i < encoders.length; i++)
-            encoders[i] = (DerEncoder) objs[i];
-
-        return encoders;
     }
 }

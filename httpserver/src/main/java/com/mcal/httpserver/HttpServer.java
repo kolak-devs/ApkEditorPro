@@ -22,24 +22,59 @@ import java.util.Map;
 import fi.iki.elonen.NanoHTTPD;
 
 public class HttpServer extends NanoHTTPD {
+    public static final int DEFAULT_PORT = 8000;
     private static final String TAG = "HttpServer";
-
     private static final String[] customizedUris = new String[]{
             "/listFiles",
             "/readFile",
             "/readImage",
             "/saveFile"
     };
-
-    public static final int DEFAULT_PORT = 8000;
-
     private String httpDirectory;
     private String projectDirectory;
+    private String editorTemplate = null;
 
     public HttpServer(String httpDirectory, String projectDirectory) {
         super(DEFAULT_PORT);
         this.httpDirectory = httpDirectory;
         this.projectDirectory = projectDirectory;
+    }
+
+    private static InetAddress getLocalHostLANAddress() throws UnknownHostException {
+        try {
+            InetAddress candidateAddress = null;
+            // 遍历所有的网络接口
+            for (Enumeration ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements(); ) {
+                NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
+                // 在所有的接口下再遍历IP
+                for (Enumeration inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements(); ) {
+                    InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
+                    if (!inetAddr.isLoopbackAddress()) {// 排除loopback类型地址
+                        if (inetAddr.isSiteLocalAddress()) {
+                            // 如果是site-local地址，就是它了
+                            return inetAddr;
+                        } else if (candidateAddress == null) {
+                            // site-local类型的地址未被发现，先记录候选地址
+                            candidateAddress = inetAddr;
+                        }
+                    }
+                }
+            }
+            if (candidateAddress != null) {
+                return candidateAddress;
+            }
+            // 如果没有发现 non-loopback地址.只能用最次选的方案
+            InetAddress jdkSuppliedAddress = InetAddress.getLocalHost();
+            if (jdkSuppliedAddress == null) {
+                throw new UnknownHostException("The JDK InetAddress.getLocalHost() method unexpectedly returned null.");
+            }
+            return jdkSuppliedAddress;
+        } catch (Exception e) {
+            UnknownHostException unknownHostException = new UnknownHostException(
+                    "Failed to determine LAN address: " + e);
+            unknownHostException.initCause(e);
+            throw unknownHostException;
+        }
     }
 
     public void tryStart(int portDelta) throws IOException {
@@ -110,7 +145,7 @@ public class HttpServer extends NanoHTTPD {
         return notFound();
     }
 
-    private Response saveTextFile(Map<String,String> params) {
+    private Response saveTextFile(Map<String, String> params) {
         String relativePath = params.get("path");
         String content = params.get("content");
 
@@ -151,8 +186,6 @@ public class HttpServer extends NanoHTTPD {
             return notFound();
         }
     }
-
-    private String editorTemplate = null;
 
     private Response readFile(Map<String, String> params) {
         String relativePath = params.get("path");
@@ -427,43 +460,6 @@ public class HttpServer extends NanoHTTPD {
 
         int port = getListeningPort();
         return "http://" + hostAddress[0] + ":" + String.valueOf(port);
-    }
-
-    private static InetAddress getLocalHostLANAddress() throws UnknownHostException {
-        try {
-            InetAddress candidateAddress = null;
-            // 遍历所有的网络接口
-            for (Enumeration ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {
-                NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
-                // 在所有的接口下再遍历IP
-                for (Enumeration inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
-                    InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
-                    if (!inetAddr.isLoopbackAddress()) {// 排除loopback类型地址
-                        if (inetAddr.isSiteLocalAddress()) {
-                            // 如果是site-local地址，就是它了
-                            return inetAddr;
-                        } else if (candidateAddress == null) {
-                            // site-local类型的地址未被发现，先记录候选地址
-                            candidateAddress = inetAddr;
-                        }
-                    }
-                }
-            }
-            if (candidateAddress != null) {
-                return candidateAddress;
-            }
-            // 如果没有发现 non-loopback地址.只能用最次选的方案
-            InetAddress jdkSuppliedAddress = InetAddress.getLocalHost();
-            if (jdkSuppliedAddress == null) {
-                throw new UnknownHostException("The JDK InetAddress.getLocalHost() method unexpectedly returned null.");
-            }
-            return jdkSuppliedAddress;
-        } catch (Exception e) {
-            UnknownHostException unknownHostException = new UnknownHostException(
-                    "Failed to determine LAN address: " + e);
-            unknownHostException.initCause(e);
-            throw unknownHostException;
-        }
     }
 
     public void setProjectDirectory(String projectDirectory) {

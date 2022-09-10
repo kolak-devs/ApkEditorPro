@@ -7,33 +7,33 @@ import jadx.api.metadata.ICodeNodeRef;
 
 public class NodeDeclareRef implements ICodeAnnotation {
 
-	private final ICodeNodeRef node;
+    private final ICodeNodeRef node;
 
-	private int defPos;
+    private int defPos;
 
-	public NodeDeclareRef(ICodeNodeRef node) {
-		this.node = Objects.requireNonNull(node);
-	}
+    public NodeDeclareRef(ICodeNodeRef node) {
+        this.node = Objects.requireNonNull(node);
+    }
 
-	public ICodeNodeRef getNode() {
-		return node;
-	}
+    public ICodeNodeRef getNode() {
+        return node;
+    }
 
-	public int getDefPos() {
-		return defPos;
-	}
+    public int getDefPos() {
+        return defPos;
+    }
 
-	public void setDefPos(int defPos) {
-		this.defPos = defPos;
-	}
+    public void setDefPos(int defPos) {
+        this.defPos = defPos;
+    }
 
-	@Override
-	public AnnType getAnnType() {
-		return AnnType.DECLARATION;
-	}
+    @Override
+    public AnnType getAnnType() {
+        return AnnType.DECLARATION;
+    }
 
-	@Override
-	public String toString() {
-		return "NodeDeclareRef{" + node + '}';
-	}
+    @Override
+    public String toString() {
+        return "NodeDeclareRef{" + node + '}';
+    }
 }

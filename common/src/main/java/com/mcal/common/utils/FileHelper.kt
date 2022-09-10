@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import com.mcal.common.utilsOld.CommandRunner
 import java.io.*
+import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
@@ -223,4 +224,8 @@ fun File.cleanup() {
     } catch (e: Exception) {
         e.printStackTrace()
     }
+}
+
+fun InputStream.readText(charset: Charset = Charsets.UTF_8): String {
+    return this.bufferedReader(charset).use { it.readText() }
 }

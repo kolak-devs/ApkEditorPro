@@ -59,13 +59,13 @@ public class X509AttributeName {
      * Return the prefix of the name.
      */
     public String getPrefix() {
-      return (prefix);
+        return (prefix);
     }
 
     /**
      * Return the suffix of the name.
      */
     public String getSuffix() {
-      return (suffix);
+        return (suffix);
     }
 }

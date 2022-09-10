@@ -30,9 +30,9 @@ import android.sun.security.util.DerValue;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateParsingException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
+import java.security.cert.CertificateParsingException;
 import java.util.Date;
 import java.util.Enumeration;
 
@@ -59,7 +59,7 @@ import java.util.Enumeration;
  * @see android.sun.security.x509.CertAttrSet
  */
 public class PrivateKeyUsageExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
@@ -76,44 +76,19 @@ implements CertAttrSet<String> {
     private static final byte TAG_BEFORE = 0;
     private static final byte TAG_AFTER = 1;
 
-    private Date        notBefore = null;
-    private Date        notAfter = null;
-
-    // Encode this extension value.
-    private void encodeThis() throws IOException {
-        if (notBefore == null && notAfter == null) {
-            this.extensionValue = null;
-            return;
-        }
-        android.sun.security.util.DerOutputStream seq = new android.sun.security.util.DerOutputStream();
-
-        android.sun.security.util.DerOutputStream tagged = new android.sun.security.util.DerOutputStream();
-        if (notBefore != null) {
-            android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
-            tmp.putGeneralizedTime(notBefore);
-            tagged.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
-                                 false, TAG_BEFORE), tmp);
-        }
-        if (notAfter != null) {
-            android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
-            tmp.putGeneralizedTime(notAfter);
-            tagged.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
-                                 false, TAG_AFTER), tmp);
-        }
-        seq.write(DerValue.tag_Sequence, tagged);
-        this.extensionValue = seq.toByteArray();
-    }
+    private Date notBefore = null;
+    private Date notAfter = null;
 
     /**
      * The default constructor for PrivateKeyUsageExtension.
      *
      * @param notBefore the date/time before which the private key
-     *         should not be used.
-     * @param notAfter the date/time after which the private key
-     *         should not be used.
+     *                  should not be used.
+     * @param notAfter  the date/time after which the private key
+     *                  should not be used.
      */
     public PrivateKeyUsageExtension(Date notBefore, Date notAfter)
-    throws IOException {
+            throws IOException {
         this.notBefore = notBefore;
         this.notAfter = notAfter;
 
@@ -126,13 +101,13 @@ implements CertAttrSet<String> {
      * Create the extension from the passed DER encoded value.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception CertificateException on certificate parsing errors.
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException   if value is not an array of bytes
+     * @throws CertificateException on certificate parsing errors.
+     * @throws IOException          on error.
      */
     public PrivateKeyUsageExtension(Boolean critical, Object value)
-    throws CertificateException, IOException {
+            throws CertificateException, IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.PrivateKeyUsage_Id;
         this.critical = critical.booleanValue();
 
@@ -147,35 +122,60 @@ implements CertAttrSet<String> {
             android.sun.security.util.DerValue opt = seq[i];
 
             if (opt.isContextSpecific(TAG_BEFORE) &&
-                !opt.isConstructed()) {
+                    !opt.isConstructed()) {
                 if (notBefore != null) {
                     throw new CertificateParsingException(
-                        "Duplicate notBefore in PrivateKeyUsage.");
+                            "Duplicate notBefore in PrivateKeyUsage.");
                 }
                 opt.resetTag(android.sun.security.util.DerValue.tag_GeneralizedTime);
                 str = new android.sun.security.util.DerInputStream(opt.toByteArray());
                 notBefore = str.getGeneralizedTime();
 
             } else if (opt.isContextSpecific(TAG_AFTER) &&
-                       !opt.isConstructed()) {
+                    !opt.isConstructed()) {
                 if (notAfter != null) {
                     throw new CertificateParsingException(
-                        "Duplicate notAfter in PrivateKeyUsage.");
+                            "Duplicate notAfter in PrivateKeyUsage.");
                 }
                 opt.resetTag(android.sun.security.util.DerValue.tag_GeneralizedTime);
                 str = new android.sun.security.util.DerInputStream(opt.toByteArray());
                 notAfter = str.getGeneralizedTime();
             } else
                 throw new IOException("Invalid encoding of " +
-                                      "PrivateKeyUsageExtension");
+                        "PrivateKeyUsageExtension");
         }
+    }
+
+    // Encode this extension value.
+    private void encodeThis() throws IOException {
+        if (notBefore == null && notAfter == null) {
+            this.extensionValue = null;
+            return;
+        }
+        android.sun.security.util.DerOutputStream seq = new android.sun.security.util.DerOutputStream();
+
+        android.sun.security.util.DerOutputStream tagged = new android.sun.security.util.DerOutputStream();
+        if (notBefore != null) {
+            android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
+            tmp.putGeneralizedTime(notBefore);
+            tagged.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
+                    false, TAG_BEFORE), tmp);
+        }
+        if (notAfter != null) {
+            android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
+            tmp.putGeneralizedTime(notAfter);
+            tagged.writeImplicit(android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,
+                    false, TAG_AFTER), tmp);
+        }
+        seq.write(DerValue.tag_Sequence, tagged);
+        this.extensionValue = seq.toByteArray();
     }
 
     /**
      * Return the printable string.
      */
     public String toString() {
-        return(super.toString() +
+        return (super.toString() +
                 "PrivateKeyUsage: [\n" +
                 ((notBefore == null) ? "" : "From: " + notBefore.toString() + ", ")
                 + ((notAfter == null) ? "" : "To: " + notAfter.toString())
@@ -185,12 +185,12 @@ implements CertAttrSet<String> {
     /**
      * Verify that that the current time is within the validity period.
      *
-     * @exception CertificateExpiredException if the certificate has expired.
-     * @exception CertificateNotYetValidException if the certificate is not
-     * yet valid.
+     * @throws CertificateExpiredException     if the certificate has expired.
+     * @throws CertificateNotYetValidException if the certificate is not
+     *                                         yet valid.
      */
     public void valid()
-    throws CertificateNotYetValidException, CertificateExpiredException {
+            throws CertificateNotYetValidException, CertificateExpiredException {
         Date now = new Date();
         valid(now);
     }
@@ -198,14 +198,13 @@ implements CertAttrSet<String> {
     /**
      * Verify that that the passed time is within the validity period.
      *
-     * @exception CertificateExpiredException if the certificate has expired
-     * with respect to the <code>Date</code> supplied.
-     * @exception CertificateNotYetValidException if the certificate is not
-     * yet valid with respect to the <code>Date</code> supplied.
-     *
+     * @throws CertificateExpiredException     if the certificate has expired
+     *                                         with respect to the <code>Date</code> supplied.
+     * @throws CertificateNotYetValidException if the certificate is not
+     *                                         yet valid with respect to the <code>Date</code> supplied.
      */
     public void valid(Date now)
-    throws CertificateNotYetValidException, CertificateExpiredException {
+            throws CertificateNotYetValidException, CertificateExpiredException {
         /*
          * we use the internal Dates rather than the passed in Date
          * because someone could override the Date methods after()
@@ -213,11 +212,11 @@ implements CertAttrSet<String> {
          */
         if (notBefore.after(now)) {
             throw new CertificateNotYetValidException("NotBefore: " +
-                                                      notBefore.toString());
+                    notBefore.toString());
         }
         if (notAfter.before(now)) {
             throw new CertificateExpiredException("NotAfter: " +
-                                                  notAfter.toString());
+                    notAfter.toString());
         }
     }
 
@@ -225,7 +224,7 @@ implements CertAttrSet<String> {
      * Write the extension to the OutputStream.
      *
      * @param out the OutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
@@ -240,42 +239,45 @@ implements CertAttrSet<String> {
 
     /**
      * Set the attribute value.
-     * @exception CertificateException on attribute handling errors.
+     *
+     * @throws CertificateException on attribute handling errors.
      */
     public void set(String name, Object obj)
-    throws CertificateException, IOException {
+            throws CertificateException, IOException {
         if (!(obj instanceof Date)) {
             throw new CertificateException("Attribute must be of type Date.");
         }
         if (name.equalsIgnoreCase(NOT_BEFORE)) {
-            notBefore = (Date)obj;
+            notBefore = (Date) obj;
         } else if (name.equalsIgnoreCase(NOT_AFTER)) {
-            notAfter = (Date)obj;
+            notAfter = (Date) obj;
         } else {
-          throw new CertificateException("Attribute name not recognized by"
-                           + " CertAttrSet:PrivateKeyUsage.");
+            throw new CertificateException("Attribute name not recognized by"
+                    + " CertAttrSet:PrivateKeyUsage.");
         }
         encodeThis();
     }
 
     /**
      * Get the attribute value.
-     * @exception CertificateException on attribute handling errors.
+     *
+     * @throws CertificateException on attribute handling errors.
      */
     public Object get(String name) throws CertificateException {
-      if (name.equalsIgnoreCase(NOT_BEFORE)) {
-          return (new Date(notBefore.getTime()));
-      } else if (name.equalsIgnoreCase(NOT_AFTER)) {
-          return (new Date(notAfter.getTime()));
-      } else {
-          throw new CertificateException("Attribute name not recognized by"
-                           + " CertAttrSet:PrivateKeyUsage.");
-      }
-  }
+        if (name.equalsIgnoreCase(NOT_BEFORE)) {
+            return (new Date(notBefore.getTime()));
+        } else if (name.equalsIgnoreCase(NOT_AFTER)) {
+            return (new Date(notAfter.getTime()));
+        } else {
+            throw new CertificateException("Attribute name not recognized by"
+                    + " CertAttrSet:PrivateKeyUsage.");
+        }
+    }
 
     /**
      * Delete the attribute value.
-     * @exception CertificateException on attribute handling errors.
+     *
+     * @throws CertificateException on attribute handling errors.
      */
     public void delete(String name) throws CertificateException, IOException {
         if (name.equalsIgnoreCase(NOT_BEFORE)) {
@@ -283,8 +285,8 @@ implements CertAttrSet<String> {
         } else if (name.equalsIgnoreCase(NOT_AFTER)) {
             notAfter = null;
         } else {
-          throw new CertificateException("Attribute name not recognized by"
-                           + " CertAttrSet:PrivateKeyUsage.");
+            throw new CertificateException("Attribute name not recognized by"
+                    + " CertAttrSet:PrivateKeyUsage.");
         }
         encodeThis();
     }
@@ -298,13 +300,13 @@ implements CertAttrSet<String> {
         elements.addElement(NOT_BEFORE);
         elements.addElement(NOT_AFTER);
 
-        return(elements.elements());
+        return (elements.elements());
     }
 
     /**
      * Return the name of this attribute.
      */
     public String getName() {
-      return(NAME);
+        return (NAME);
     }
 }

@@ -18,7 +18,6 @@ import com.mcal.common.utilsOld.ImageZoomer;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class FileListAdapter extends BaseAdapter {

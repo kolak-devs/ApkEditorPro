@@ -102,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp">
 
-            <com.mcal.neweditor.editor2.view.SymbolInputView
+            <com.mcal.editor.view.SymbolInputView
                 android:id="@+id/symbol_input"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp" />

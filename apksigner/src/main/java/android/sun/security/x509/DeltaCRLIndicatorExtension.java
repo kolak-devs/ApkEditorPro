@@ -45,7 +45,7 @@ import java.math.BigInteger;
  * <p>
  * The extension is defined in Section 5.2.4 of
  * <a href="http://www.ietf.org/rfc/rfc3280.txt">Internet X.509 PKI Certific
-ate and Certificate Revocation List (CRL) Profile</a>.
+ * ate and Certificate Revocation List (CRL) Profile</a>.
  *
  * <p>
  * Its ASN.1 definition is as follows:
@@ -75,7 +75,7 @@ public class DeltaCRLIndicatorExtension extends CRLNumberExtension {
      */
     public DeltaCRLIndicatorExtension(int crlNum) throws IOException {
         super(android.sun.security.x509.PKIXExtensions.DeltaCRLIndicator_Id, true,
-            BigInteger.valueOf(crlNum), NAME, LABEL);
+                BigInteger.valueOf(crlNum), NAME, LABEL);
     }
 
     /**
@@ -92,24 +92,24 @@ public class DeltaCRLIndicatorExtension extends CRLNumberExtension {
      * Creates the extension from the passed DER encoded value of the same.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on decoding error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on decoding error.
      */
     public DeltaCRLIndicatorExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         super(android.sun.security.x509.PKIXExtensions.DeltaCRLIndicator_Id, critical.booleanValue(),
-            value, NAME, LABEL);
+                value, NAME, LABEL);
     }
 
     /**
      * Writes the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
-       android.sun.security.util.DerOutputStream tmp = new DerOutputStream();
+        android.sun.security.util.DerOutputStream tmp = new DerOutputStream();
         super.encode(out, PKIXExtensions.DeltaCRLIndicator_Id, true);
     }
 }

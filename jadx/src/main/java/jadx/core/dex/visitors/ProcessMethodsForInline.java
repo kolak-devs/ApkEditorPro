@@ -10,52 +10,52 @@ import jadx.core.utils.ListUtils;
 import jadx.core.utils.exceptions.JadxException;
 
 @JadxVisitor(
-		name = "ProcessMethodsForInline",
-		desc = "Mark methods for future inline",
-		runAfter = {
-				UsageInfoVisitor.class
-		}
+        name = "ProcessMethodsForInline",
+        desc = "Mark methods for future inline",
+        runAfter = {
+                UsageInfoVisitor.class
+        }
 )
 public class ProcessMethodsForInline extends AbstractVisitor {
 
-	private boolean inlineMethods;
+    private boolean inlineMethods;
 
-	@Override
-	public void init(RootNode root) {
-		inlineMethods = root.getArgs().isInlineMethods();
-	}
+    private static boolean canInline(MethodNode mth) {
+        if (mth.isNoCode() || mth.contains(AFlag.DONT_GENERATE)) {
+            return false;
+        }
+        AccessInfo accessFlags = mth.getAccessFlags();
+        boolean isSynthetic = accessFlags.isSynthetic() || mth.getName().contains("$");
+        return isSynthetic && (accessFlags.isStatic() || mth.isConstructor());
+    }
 
-	@Override
-	public boolean visit(ClassNode cls) throws JadxException {
-		if (!inlineMethods) {
-			return false;
-		}
-		for (MethodNode mth : cls.getMethods()) {
-			if (canInline(mth)) {
-				mth.add(AFlag.METHOD_CANDIDATE_FOR_INLINE);
-				fixClassDependencies(mth);
-			}
-		}
-		return true;
-	}
+    private static void fixClassDependencies(MethodNode mth) {
+        ClassNode parentClass = mth.getTopParentClass();
+        for (MethodNode useInMth : mth.getUseIn()) {
+            // remove possible cross dependency
+            // to force class with inline method to be processed before its usage
+            ClassNode useTopCls = useInMth.getTopParentClass();
+            parentClass.setDependencies(ListUtils.safeRemoveAndTrim(parentClass.getDependencies(), useTopCls));
+            useTopCls.addCodegenDep(parentClass);
+        }
+    }
 
-	private static boolean canInline(MethodNode mth) {
-		if (mth.isNoCode() || mth.contains(AFlag.DONT_GENERATE)) {
-			return false;
-		}
-		AccessInfo accessFlags = mth.getAccessFlags();
-		boolean isSynthetic = accessFlags.isSynthetic() || mth.getName().contains("$");
-		return isSynthetic && (accessFlags.isStatic() || mth.isConstructor());
-	}
+    @Override
+    public void init(RootNode root) {
+        inlineMethods = root.getArgs().isInlineMethods();
+    }
 
-	private static void fixClassDependencies(MethodNode mth) {
-		ClassNode parentClass = mth.getTopParentClass();
-		for (MethodNode useInMth : mth.getUseIn()) {
-			// remove possible cross dependency
-			// to force class with inline method to be processed before its usage
-			ClassNode useTopCls = useInMth.getTopParentClass();
-			parentClass.setDependencies(ListUtils.safeRemoveAndTrim(parentClass.getDependencies(), useTopCls));
-			useTopCls.addCodegenDep(parentClass);
-		}
-	}
+    @Override
+    public boolean visit(ClassNode cls) throws JadxException {
+        if (!inlineMethods) {
+            return false;
+        }
+        for (MethodNode mth : cls.getMethods()) {
+            if (canInline(mth)) {
+                mth.add(AFlag.METHOD_CANDIDATE_FOR_INLINE);
+                fixClassDependencies(mth);
+            }
+        }
+        return true;
+    }
 }

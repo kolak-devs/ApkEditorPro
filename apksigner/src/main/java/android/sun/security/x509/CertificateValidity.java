@@ -28,7 +28,8 @@ import android.sun.security.util.DerInputStream;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.security.cert.*;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.util.Date;
 import java.util.Enumeration;
 
@@ -54,8 +55,38 @@ public class CertificateValidity implements CertAttrSet<String> {
     private static final long YR_2050 = 2524636800000L;
 
     // Private data members
-    private Date        notBefore;
-    private Date        notAfter;
+    private Date notBefore;
+    private Date notAfter;
+
+    /**
+     * Default constructor for the class.
+     */
+    public CertificateValidity() {
+    }
+
+    /**
+     * The default constructor for this class for the specified interval.
+     *
+     * @param notBefore the date and time before which the certificate
+     *                  is not valid.
+     * @param notAfter  the date and time after which the certificate is
+     *                  not valid.
+     */
+    public CertificateValidity(Date notBefore, Date notAfter) {
+        this.notBefore = notBefore;
+        this.notAfter = notAfter;
+    }
+
+    /**
+     * Create the object, decoding the values from the passed DER stream.
+     *
+     * @param in the DerInputStream to read the CertificateValidity from.
+     * @throws IOException on decoding errors.
+     */
+    public CertificateValidity(android.sun.security.util.DerInputStream in) throws IOException {
+        android.sun.security.util.DerValue derVal = in.getDerValue();
+        construct(derVal);
+    }
 
     // Returns the first time the certificate is valid.
     private Date getNotBefore() {
@@ -64,14 +95,14 @@ public class CertificateValidity implements CertAttrSet<String> {
 
     // Returns the last time the certificate is valid.
     private Date getNotAfter() {
-       return (new Date(notAfter.getTime()));
+        return (new Date(notAfter.getTime()));
     }
 
     // Construct the class from the DerValue
     private void construct(android.sun.security.util.DerValue derVal) throws IOException {
         if (derVal.tag != android.sun.security.util.DerValue.tag_Sequence) {
             throw new IOException("Invalid encoded CertificateValidity, " +
-                                  "starting sequence tag missing.");
+                    "starting sequence tag missing.");
         }
         // check if UTCTime encoded or GeneralizedTime
         if (derVal.data.available() == 0)
@@ -100,49 +131,20 @@ public class CertificateValidity implements CertAttrSet<String> {
     }
 
     /**
-     * Default constructor for the class.
-     */
-    public CertificateValidity() { }
-
-    /**
-     * The default constructor for this class for the specified interval.
-     *
-     * @param notBefore the date and time before which the certificate
-     *                   is not valid.
-     * @param notAfter the date and time after which the certificate is
-     *                  not valid.
-     */
-    public CertificateValidity(Date notBefore, Date notAfter) {
-        this.notBefore = notBefore;
-        this.notAfter = notAfter;
-    }
-
-    /**
-     * Create the object, decoding the values from the passed DER stream.
-     *
-     * @param in the DerInputStream to read the CertificateValidity from.
-     * @exception IOException on decoding errors.
-     */
-    public CertificateValidity(android.sun.security.util.DerInputStream in) throws IOException {
-        android.sun.security.util.DerValue derVal = in.getDerValue();
-        construct(derVal);
-    }
-
-    /**
      * Return the validity period as user readable string.
      */
     public String toString() {
         if (notBefore == null || notAfter == null)
             return "";
         return ("Validity: [From: " + notBefore.toString() +
-             ",\n               To: " + notAfter.toString() + "]");
+                ",\n               To: " + notAfter.toString() + "]");
     }
 
     /**
      * Encode the CertificateValidity period in DER form to the stream.
      *
      * @param out the OutputStream to marshal the contents to.
-     * @exception IOException on errors.
+     * @throws IOException on errors.
      */
     public void encode(OutputStream out) throws IOException {
 
@@ -150,7 +152,7 @@ public class CertificateValidity implements CertAttrSet<String> {
         // null values
         if (notBefore == null || notAfter == null) {
             throw new IOException("CertAttrSet:CertificateValidity:" +
-                                  " null values to encode.\n");
+                    " null values to encode.\n");
         }
         android.sun.security.util.DerOutputStream pair = new android.sun.security.util.DerOutputStream();
 
@@ -178,12 +180,12 @@ public class CertificateValidity implements CertAttrSet<String> {
             throw new IOException("Attribute must be of type Date.");
         }
         if (name.equalsIgnoreCase(NOT_BEFORE)) {
-            notBefore = (Date)obj;
+            notBefore = (Date) obj;
         } else if (name.equalsIgnoreCase(NOT_AFTER)) {
-            notAfter = (Date)obj;
+            notAfter = (Date) obj;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                            "CertAttrSet: CertificateValidity.");
+                    "CertAttrSet: CertificateValidity.");
         }
     }
 
@@ -197,7 +199,7 @@ public class CertificateValidity implements CertAttrSet<String> {
             return (getNotAfter());
         } else {
             throw new IOException("Attribute name not recognized by " +
-                            "CertAttrSet: CertificateValidity.");
+                    "CertAttrSet: CertificateValidity.");
         }
     }
 
@@ -211,7 +213,7 @@ public class CertificateValidity implements CertAttrSet<String> {
             notAfter = null;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                            "CertAttrSet: CertificateValidity.");
+                    "CertAttrSet: CertificateValidity.");
         }
     }
 
@@ -237,29 +239,28 @@ public class CertificateValidity implements CertAttrSet<String> {
     /**
      * Verify that the current time is within the validity period.
      *
-     * @exception CertificateExpiredException if the certificate has expired.
-     * @exception CertificateNotYetValidException if the certificate is not
-     * yet valid.
+     * @throws CertificateExpiredException     if the certificate has expired.
+     * @throws CertificateNotYetValidException if the certificate is not
+     *                                         yet valid.
      */
     public void valid()
-    throws CertificateNotYetValidException, CertificateExpiredException {
+            throws CertificateNotYetValidException, CertificateExpiredException {
         Date now = new Date();
         valid(now);
     }
 
     /**
      * Verify that the passed time is within the validity period.
+     *
      * @param now the Date against which to compare the validity
-     * period.
-     *
-     * @exception CertificateExpiredException if the certificate has expired
-     * with respect to the <code>Date</code> supplied.
-     * @exception CertificateNotYetValidException if the certificate is not
-     * yet valid with respect to the <code>Date</code> supplied.
-     *
+     *            period.
+     * @throws CertificateExpiredException     if the certificate has expired
+     *                                         with respect to the <code>Date</code> supplied.
+     * @throws CertificateNotYetValidException if the certificate is not
+     *                                         yet valid with respect to the <code>Date</code> supplied.
      */
     public void valid(Date now)
-    throws CertificateNotYetValidException, CertificateExpiredException {
+            throws CertificateNotYetValidException, CertificateExpiredException {
         /*
          * we use the internal Dates rather than the passed in Date
          * because someone could override the Date methods after()
@@ -267,11 +268,11 @@ public class CertificateValidity implements CertAttrSet<String> {
          */
         if (notBefore.after(now)) {
             throw new CertificateNotYetValidException("NotBefore: " +
-                                                      notBefore.toString());
+                    notBefore.toString());
         }
         if (notAfter.before(now)) {
             throw new CertificateExpiredException("NotAfter: " +
-                                                  notAfter.toString());
+                    notAfter.toString());
         }
     }
 }

@@ -46,7 +46,7 @@ import java.util.Enumeration;
  * @see android.sun.security.x509.CertAttrSet
  */
 public class CRLNumberExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
 
     /**
      * Attribute name.
@@ -60,17 +60,6 @@ implements CertAttrSet<String> {
     private String extensionName;
     private String extensionLabel;
 
-    // Encode this extension value
-    private void encodeThis() throws IOException {
-        if (crlNumber == null) {
-            this.extensionValue = null;
-            return;
-        }
-        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
-        os.putInteger(this.crlNumber);
-        this.extensionValue = os.toByteArray();
-    }
-
     /**
      * Create a CRLNumberExtension with the integer value .
      * The criticality is set to false.
@@ -79,7 +68,7 @@ implements CertAttrSet<String> {
      */
     public CRLNumberExtension(int crlNum) throws IOException {
         this(android.sun.security.x509.PKIXExtensions.CRLNumber_Id, false, BigInteger.valueOf(crlNum),
-        NAME, LABEL);
+                NAME, LABEL);
     }
 
     /**
@@ -111,12 +100,12 @@ implements CertAttrSet<String> {
      * Create the extension from the passed DER encoded value of the same.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
      */
     public CRLNumberExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         this(android.sun.security.x509.PKIXExtensions.CRLNumber_Id, critical, value, NAME, LABEL);
     }
 
@@ -136,6 +125,17 @@ implements CertAttrSet<String> {
         this.extensionLabel = extensionLabel;
     }
 
+    // Encode this extension value
+    private void encodeThis() throws IOException {
+        if (crlNumber == null) {
+            this.extensionValue = null;
+            return;
+        }
+        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
+        os.putInteger(this.crlNumber);
+        this.extensionValue = os.toByteArray();
+    }
+
     /**
      * Set the attribute value.
      */
@@ -144,10 +144,10 @@ implements CertAttrSet<String> {
             if (!(obj instanceof BigInteger)) {
                 throw new IOException("Attribute must be of type BigInteger.");
             }
-            crlNumber = (BigInteger)obj;
+            crlNumber = (BigInteger) obj;
         } else {
-          throw new IOException("Attribute name not recognized by"
-                                + " CertAttrSet:" + extensionName + ".");
+            throw new IOException("Attribute name not recognized by"
+                    + " CertAttrSet:" + extensionName + ".");
         }
         encodeThis();
     }
@@ -160,8 +160,8 @@ implements CertAttrSet<String> {
             if (crlNumber == null) return null;
             else return crlNumber;
         } else {
-          throw new IOException("Attribute name not recognized by"
-                                + " CertAttrSet:" + extensionName + ".");
+            throw new IOException("Attribute name not recognized by"
+                    + " CertAttrSet:" + extensionName + ".");
         }
     }
 
@@ -172,8 +172,8 @@ implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(NUMBER)) {
             crlNumber = null;
         } else {
-          throw new IOException("Attribute name not recognized by"
-                                + " CertAttrSet:" + extensionName + ".");
+            throw new IOException("Attribute name not recognized by"
+                    + " CertAttrSet:" + extensionName + ".");
         }
         encodeThis();
     }
@@ -183,8 +183,8 @@ implements CertAttrSet<String> {
      */
     public String toString() {
         String s = super.toString() + extensionLabel + ": " +
-                   ((crlNumber == null) ? "" : android.sun.security.util.Debug.toHexString(crlNumber))
-                   + "\n";
+                ((crlNumber == null) ? "" : android.sun.security.util.Debug.toHexString(crlNumber))
+                + "\n";
         return (s);
     }
 
@@ -192,10 +192,10 @@ implements CertAttrSet<String> {
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
-       android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
+        android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
         encode(out, PKIXExtensions.CRLNumber_Id, true);
     }
 
@@ -204,17 +204,17 @@ implements CertAttrSet<String> {
      * (Also called by the subclass)
      */
     protected void encode(OutputStream out, ObjectIdentifier extensionId,
-        boolean isCritical) throws IOException {
+                          boolean isCritical) throws IOException {
 
-       android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
+        android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
 
-       if (this.extensionValue == null) {
-           this.extensionId = extensionId;
-           this.critical = isCritical;
-           encodeThis();
-       }
-       super.encode(tmp);
-       out.write(tmp.toByteArray());
+        if (this.extensionValue == null) {
+            this.extensionId = extensionId;
+            this.critical = isCritical;
+            encodeThis();
+        }
+        super.encode(tmp);
+        out.write(tmp.toByteArray());
     }
 
     /**

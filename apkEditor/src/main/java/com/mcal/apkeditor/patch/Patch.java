@@ -18,28 +18,28 @@ public class Patch {
         return author;
     }
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public int getRequiredEngine() {
         return requiredEngine;
+    }
+
+    public void setRequiredEngine(int requiredEngine) {
+        this.requiredEngine = requiredEngine;
     }
 
     public String getPackageName() {
         return packagename;
     }
 
-    public List<PatchRule> getRules() {
-        return rules;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public void setPackageName(String packageName) {
         this.packagename = packageName;
     }
 
-    public void setRequiredEngine(int requiredEngine) {
-        this.requiredEngine = requiredEngine;
+    public List<PatchRule> getRules() {
+        return rules;
     }
 
     public void setRule(PatchRule rule) {

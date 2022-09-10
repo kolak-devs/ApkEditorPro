@@ -20,11 +20,12 @@ import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.Contract;
 
-import brut.androlib.options.BuildOptions;
-import brut.common.BrutException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import brut.androlib.options.BuildOptions;
+import brut.common.BrutException;
 
 public class AaptManager {
 
@@ -48,7 +49,7 @@ public class AaptManager {
     }
 
     public static String getAaptExecutionCommand(@NonNull String aaptPath, File aapt) throws BrutException {
-        if (! aaptPath.isEmpty()) {
+        if (!aaptPath.isEmpty()) {
             File aaptFile = new File(aaptPath);
             if (aaptFile.canRead() && aaptFile.exists()) {
                 aaptFile.setExecutable(true);

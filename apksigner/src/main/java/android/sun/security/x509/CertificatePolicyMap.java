@@ -42,7 +42,7 @@ public class CertificatePolicyMap {
     /**
      * Create a CertificatePolicyMap with the passed CertificatePolicyId's.
      *
-     * @param issuer the CertificatePolicyId for the issuer CA.
+     * @param issuer  the CertificatePolicyId for the issuer CA.
      * @param subject the CertificatePolicyId for the subject CA.
      */
     public CertificatePolicyMap(android.sun.security.x509.CertificatePolicyId issuer,
@@ -83,9 +83,9 @@ public class CertificatePolicyMap {
      */
     public String toString() {
         String s = "CertificatePolicyMap: [\n"
-                 + "IssuerDomain:" + issuerDomain.toString()
-                 + "SubjectDomain:" + subjectDomain.toString()
-                 + "]\n";
+                + "IssuerDomain:" + issuerDomain.toString()
+                + "SubjectDomain:" + subjectDomain.toString()
+                + "]\n";
 
         return (s);
     }
@@ -94,13 +94,13 @@ public class CertificatePolicyMap {
      * Write the CertificatePolicyMap to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the object to.
-     * @exception IOException on errors.
+     * @throws IOException on errors.
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
 
         issuerDomain.encode(tmp);
         subjectDomain.encode(tmp);
-        out.write(android.sun.security.util.DerValue.tag_Sequence,tmp);
+        out.write(android.sun.security.util.DerValue.tag_Sequence, tmp);
     }
 }

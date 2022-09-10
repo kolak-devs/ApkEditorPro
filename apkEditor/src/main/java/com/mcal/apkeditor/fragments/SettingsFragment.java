@@ -19,8 +19,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.common.data.Preferences;
-import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.utils.ScopedStorage;
+import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.view.ProgressDialog;
 
 import java.io.File;

@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.apkeditor.activities.ApkComposeActivity;
-import com.mcal.neweditor.TextEditor;
+import com.mcal.editor.TextEditor;
 
 import java.io.File;
 import java.lang.ref.WeakReference;

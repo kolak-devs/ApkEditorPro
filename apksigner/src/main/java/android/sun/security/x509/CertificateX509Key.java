@@ -27,10 +27,10 @@ package android.sun.security.x509;
 
 import android.sun.security.util.DerOutputStream;
 
-import java.security.PublicKey;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.PublicKey;
 import java.util.Enumeration;
 
 /**
@@ -68,7 +68,7 @@ public class CertificateX509Key implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed DER stream.
      *
      * @param in the DerInputStream to read the X509Key from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateX509Key(android.sun.security.util.DerInputStream in) throws IOException {
         android.sun.security.util.DerValue val = in.getDerValue();
@@ -79,7 +79,7 @@ public class CertificateX509Key implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed stream.
      *
      * @param in the InputStream to read the X509Key from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateX509Key(InputStream in) throws IOException {
         android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(in);
@@ -91,14 +91,14 @@ public class CertificateX509Key implements CertAttrSet<String> {
      */
     public String toString() {
         if (key == null) return "";
-        return(key.toString());
+        return (key.toString());
     }
 
     /**
      * Encode the key in DER form to the stream.
      *
      * @param out the OutputStream to marshal the contents to.
-     * @exception IOException on errors.
+     * @throws IOException on errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new DerOutputStream();
@@ -112,10 +112,10 @@ public class CertificateX509Key implements CertAttrSet<String> {
      */
     public void set(String name, Object obj) throws IOException {
         if (name.equalsIgnoreCase(KEY)) {
-            this.key = (PublicKey)obj;
+            this.key = (PublicKey) obj;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                                  "CertAttrSet: CertificateX509Key.");
+                    "CertAttrSet: CertificateX509Key.");
         }
     }
 
@@ -124,10 +124,10 @@ public class CertificateX509Key implements CertAttrSet<String> {
      */
     public Object get(String name) throws IOException {
         if (name.equalsIgnoreCase(KEY)) {
-            return(key);
+            return (key);
         } else {
             throw new IOException("Attribute name not recognized by " +
-                                  "CertAttrSet: CertificateX509Key.");
+                    "CertAttrSet: CertificateX509Key.");
         }
     }
 
@@ -135,12 +135,12 @@ public class CertificateX509Key implements CertAttrSet<String> {
      * Delete the attribute value.
      */
     public void delete(String name) throws IOException {
-      if (name.equalsIgnoreCase(KEY)) {
-        key = null;
-      } else {
+        if (name.equalsIgnoreCase(KEY)) {
+            key = null;
+        } else {
             throw new IOException("Attribute name not recognized by " +
-                                  "CertAttrSet: CertificateX509Key.");
-      }
+                    "CertAttrSet: CertificateX509Key.");
+        }
     }
 
     /**
@@ -151,13 +151,13 @@ public class CertificateX509Key implements CertAttrSet<String> {
         android.sun.security.x509.AttributeNameEnumeration elements = new AttributeNameEnumeration();
         elements.addElement(KEY);
 
-        return(elements.elements());
+        return (elements.elements());
     }
 
     /**
      * Return the name of this attribute.
      */
     public String getName() {
-        return(NAME);
+        return (NAME);
     }
 }

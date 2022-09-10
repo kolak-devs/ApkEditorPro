@@ -37,15 +37,7 @@ import java.math.BigInteger;
  * @author Hemma Prafullchandra
  */
 public class SerialNumber {
-    private BigInteger  serialNum;
-
-    // Construct the class from the DerValue
-    private void construct(android.sun.security.util.DerValue derVal) throws IOException {
-        serialNum = derVal.getBigInteger();
-        if (derVal.data.available() != 0) {
-            throw new IOException("Excess SerialNumber data");
-        }
-    }
+    private BigInteger serialNum;
 
     /**
      * The default constructor for this class using BigInteger.
@@ -69,7 +61,7 @@ public class SerialNumber {
      * Create the object, decoding the values from the passed DER stream.
      *
      * @param in the DerInputStream to read the SerialNumber from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public SerialNumber(android.sun.security.util.DerInputStream in) throws IOException {
         android.sun.security.util.DerValue derVal = in.getDerValue();
@@ -80,7 +72,7 @@ public class SerialNumber {
      * Create the object, decoding the values from the passed DerValue.
      *
      * @param val the DerValue to read the SerialNumber from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public SerialNumber(android.sun.security.util.DerValue val) throws IOException {
         construct(val);
@@ -90,11 +82,19 @@ public class SerialNumber {
      * Create the object, decoding the values from the passed stream.
      *
      * @param in the InputStream to read the SerialNumber from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public SerialNumber(InputStream in) throws IOException {
         android.sun.security.util.DerValue derVal = new android.sun.security.util.DerValue(in);
         construct(derVal);
+    }
+
+    // Construct the class from the DerValue
+    private void construct(android.sun.security.util.DerValue derVal) throws IOException {
+        serialNum = derVal.getBigInteger();
+        if (derVal.data.available() != 0) {
+            throw new IOException("Excess SerialNumber data");
+        }
     }
 
     /**
@@ -108,7 +108,7 @@ public class SerialNumber {
      * Encode the SerialNumber in DER form to the stream.
      *
      * @param out the DerOutputStream to marshal the contents to.
-     * @exception IOException on errors.
+     * @throws IOException on errors.
      */
     public void encode(DerOutputStream out) throws IOException {
         out.putInteger(serialNum);

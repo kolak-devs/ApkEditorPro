@@ -25,6 +25,9 @@
 
 package android.sun.security.x509;
 
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+
 import java.io.IOException;
 import java.security.cert.PolicyQualifierInfo;
 import java.util.Collections;
@@ -32,9 +35,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import android.sun.security.util.DerValue;
-import android.sun.security.util.DerOutputStream;
 
 /**
  * PolicyInformation is the class that contains a specific certificate policy
@@ -59,13 +59,13 @@ import android.sun.security.util.DerOutputStream;
  *
  * @author Sean Mullan
  * @author Anne Anderson
- * @since       1.4
+ * @since 1.4
  */
 public class PolicyInformation {
 
     // Attribute names
-    public static final String NAME       = "PolicyInformation";
-    public static final String ID         = "id";
+    public static final String NAME = "PolicyInformation";
+    public static final String ID = "id";
     public static final String QUALIFIERS = "qualifiers";
 
     /* The policy OID */
@@ -78,10 +78,10 @@ public class PolicyInformation {
      * Create an instance of PolicyInformation
      *
      * @param policyIdentifier the policyIdentifier as a
-     *          CertificatePolicyId
+     *                         CertificatePolicyId
      * @param policyQualifiers a Set of PolicyQualifierInfo objects.
-     *          Must not be NULL. Specify an empty Set for no qualifiers.
-     * @exception IOException on decoding errors.
+     *                         Must not be NULL. Specify an empty Set for no qualifiers.
+     * @throws IOException on decoding errors.
      */
     public PolicyInformation(android.sun.security.x509.CertificatePolicyId policyIdentifier,
                              Set<PolicyQualifierInfo> policyQualifiers) throws IOException {
@@ -89,7 +89,7 @@ public class PolicyInformation {
             throw new NullPointerException("policyQualifiers is null");
         }
         this.policyQualifiers =
-            new LinkedHashSet<PolicyQualifierInfo>(policyQualifiers);
+                new LinkedHashSet<PolicyQualifierInfo>(policyQualifiers);
         this.policyIdentifier = policyIdentifier;
     }
 
@@ -98,7 +98,7 @@ public class PolicyInformation {
      * the passed DerValue.
      *
      * @param val the DerValue to construct the PolicyInformation from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public PolicyInformation(DerValue val) throws IOException {
         if (val.tag != DerValue.tag_Sequence) {
@@ -129,7 +129,7 @@ public class PolicyInformation {
     public boolean equals(Object other) {
         if (!(other instanceof PolicyInformation))
             return false;
-        PolicyInformation piOther = (PolicyInformation)other;
+        PolicyInformation piOther = (PolicyInformation) other;
 
         if (!policyIdentifier.equals(piOther.getPolicyIdentifier()))
             return false;
@@ -152,7 +152,7 @@ public class PolicyInformation {
      * Return the policyIdentifier value
      *
      * @return The CertificatePolicyId object containing
-     *     the policyIdentifier (not a copy).
+     * the policyIdentifier (not a copy).
      */
     public android.sun.security.x509.CertificatePolicyId getPolicyIdentifier() {
         return policyIdentifier;
@@ -162,9 +162,9 @@ public class PolicyInformation {
      * Return the policyQualifiers value
      *
      * @return a Set of PolicyQualifierInfo objects associated
-     *    with this certificate policy (not a copy).
-     *    Returns an empty Set if there are no qualifiers.
-     *    Never returns null.
+     * with this certificate policy (not a copy).
+     * Returns an empty Set if there are no qualifiers.
+     * Never returns null.
      */
     public Set<PolicyQualifierInfo> getPolicyQualifiers() {
         return policyQualifiers;
@@ -180,7 +180,7 @@ public class PolicyInformation {
             return policyQualifiers;
         } else {
             throw new IOException("Attribute name [" + name +
-                "] not recognized by PolicyInformation.");
+                    "] not recognized by PolicyInformation.");
         }
     }
 
@@ -190,23 +190,23 @@ public class PolicyInformation {
     public void set(String name, Object obj) throws IOException {
         if (name.equalsIgnoreCase(ID)) {
             if (obj instanceof android.sun.security.x509.CertificatePolicyId)
-                policyIdentifier = (CertificatePolicyId)obj;
+                policyIdentifier = (CertificatePolicyId) obj;
             else
                 throw new IOException("Attribute value must be instance " +
-                    "of CertificatePolicyId.");
+                        "of CertificatePolicyId.");
         } else if (name.equalsIgnoreCase(QUALIFIERS)) {
             if (policyIdentifier == null) {
                 throw new IOException("Attribute must have a " +
-                    "CertificatePolicyIdentifier value before " +
-                    "PolicyQualifierInfo can be set.");
+                        "CertificatePolicyIdentifier value before " +
+                        "PolicyQualifierInfo can be set.");
             }
             if (obj instanceof Set) {
-                Iterator<?> i = ((Set<?>)obj).iterator();
+                Iterator<?> i = ((Set<?>) obj).iterator();
                 while (i.hasNext()) {
                     Object obj1 = i.next();
                     if (!(obj1 instanceof PolicyQualifierInfo)) {
                         throw new IOException("Attribute value must be a" +
-                                    "Set of PolicyQualifierInfo objects.");
+                                "Set of PolicyQualifierInfo objects.");
                     }
                 }
                 policyQualifiers = (Set<PolicyQualifierInfo>) obj;
@@ -215,7 +215,7 @@ public class PolicyInformation {
             }
         } else {
             throw new IOException("Attribute name [" + name +
-                "] not recognized by PolicyInformation");
+                    "] not recognized by PolicyInformation");
         }
     }
 
@@ -227,11 +227,11 @@ public class PolicyInformation {
             policyQualifiers = Collections.emptySet();
         } else if (name.equalsIgnoreCase(ID)) {
             throw new IOException("Attribute ID may not be deleted from " +
-                "PolicyInformation.");
+                    "PolicyInformation.");
         } else {
             //ID may not be deleted
             throw new IOException("Attribute name [" + name +
-                "] not recognized by PolicyInformation.");
+                    "] not recognized by PolicyInformation.");
         }
     }
 
@@ -267,7 +267,7 @@ public class PolicyInformation {
      * Write the PolicyInformation to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(DerOutputStream out) throws IOException {
         DerOutputStream tmp = new DerOutputStream();

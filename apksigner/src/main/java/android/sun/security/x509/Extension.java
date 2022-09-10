@@ -57,20 +57,24 @@ import java.util.Arrays;
  * </pre>
  * where the Object is typically an array of DER encoded bytes.
  * <p>
+ *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  */
 // ANDROID: java.security.cert.Extension is not available before API 24
 public class Extension /* implements java.security.cert.Extension */ {
 
+    // Value to mix up the hash
+    private static final int hashMagic = 31;
     protected ObjectIdentifier extensionId = null;
-    protected boolean           critical = false;
-    protected byte[]            extensionValue = null;
+    protected boolean critical = false;
+    protected byte[] extensionValue = null;
 
     /**
      * Default constructor.  Used only by sub-classes.
      */
-    public Extension() { }
+    public Extension() {
+    }
 
     /**
      * Constructs an extension from a DER encoded array of bytes.
@@ -100,8 +104,8 @@ public class Extension /* implements java.security.cert.Extension */ {
      * Constructs an Extension from individual components of ObjectIdentifier,
      * criticality and the DER encoded OctetString.
      *
-     * @param extensionId the ObjectIdentifier of the extension
-     * @param critical the boolean indicating if the extension is critical
+     * @param extensionId    the ObjectIdentifier of the extension
+     * @param critical       the boolean indicating if the extension is critical
      * @param extensionValue the DER encoded octet string of the value.
      */
     public Extension(ObjectIdentifier extensionId, boolean critical,
@@ -130,10 +134,10 @@ public class Extension /* implements java.security.cert.Extension */ {
      * Constructs an Extension from individual components of ObjectIdentifier,
      * criticality and the raw encoded extension value.
      *
-     * @param extensionId the ObjectIdentifier of the extension
-     * @param critical the boolean indicating if the extension is critical
+     * @param extensionId       the ObjectIdentifier of the extension
+     * @param critical          the boolean indicating if the extension is critical
      * @param rawExtensionValue the raw DER-encoded extension value (this
-     * is not the encoded OctetString).
+     *                          is not the encoded OctetString).
      */
     public static Extension newExtension(ObjectIdentifier extensionId,
                                          boolean critical, byte[] rawExtensionValue) throws IOException {
@@ -166,7 +170,7 @@ public class Extension /* implements java.security.cert.Extension */ {
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors
+     * @throws IOException on encoding errors
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
 
@@ -231,9 +235,6 @@ public class Extension /* implements java.security.cert.Extension */ {
         return (s);
     }
 
-    // Value to mix up the hash
-    private static final int hashMagic = 31;
-
     /**
      * Returns a hashcode value for this Extension.
      *
@@ -248,7 +249,7 @@ public class Extension /* implements java.security.cert.Extension */ {
                 h += len * val[--len];
         }
         h = h * hashMagic + extensionId.hashCode();
-        h = h * hashMagic + (critical?1231:1237);
+        h = h * hashMagic + (critical ? 1231 : 1237);
         return h;
     }
 

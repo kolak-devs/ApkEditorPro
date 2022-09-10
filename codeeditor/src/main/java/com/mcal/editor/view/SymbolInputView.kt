@@ -1,4 +1,4 @@
-package com.mcal.neweditor.editor2.view
+package com.mcal.editor.view
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable

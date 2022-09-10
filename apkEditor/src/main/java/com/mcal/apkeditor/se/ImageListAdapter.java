@@ -45,9 +45,6 @@ public class ImageListAdapter extends BaseAdapter implements
     private final HashMap<String, DrawableEntry> drawableEntries;
 
     private final ZipHelper zipHelper;
-    private ZipImageZoomer zipImageZoomer;
-    private ZipFile zfile;
-
     // All replaces (entry path -> file path)
     private final Map<String, String> replaces = new HashMap<>();
     private final LruCache<String, BitmapRec> imageBitmaps = new LruCache<>(32) {
@@ -58,6 +55,8 @@ public class ImageListAdapter extends BaseAdapter implements
             }
         }
     };
+    private ZipImageZoomer zipImageZoomer;
+    private ZipFile zfile;
 
     public ImageListAdapter(DynamicExpandListView listView, Activity ctx,
                             @NonNull ZipHelper zipHelper) {

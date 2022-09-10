@@ -13,12 +13,14 @@ package org.xmlpull.v1.xsd.impl.base64;
 /**
  * There was exception in BASE64 decoding.
  *
- * @version $Revision: 1.4 $ $Date: 2003/04/06 00:04:25 $ (GMT)
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ * @version $Revision: 1.4 $ $Date: 2003/04/06 00:04:25 $ (GMT)
  */
 
 public class Base64DecodingException extends RuntimeException {
-    public Base64DecodingException(String msg) { super(msg); }
+    public Base64DecodingException(String msg) {
+        super(msg);
+    }
 }
 
 /*

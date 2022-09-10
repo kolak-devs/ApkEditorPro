@@ -21,8 +21,8 @@ package org.xmlpull.v1.xsd.impl.base64;
  * http://www.extreme.indiana.edu/viewcvs/~checkout~/xsoap-java/src/java/soaprmi/util/soaprmi/util/base64/
  * </p>
  *
- * @version $Revision: 1.4 $ $Date: 2003/04/06 00:04:25 $ (GMT)
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ * @version $Revision: 1.4 $ $Date: 2003/04/06 00:04:25 $ (GMT)
  */
 
 public class Base64 {
@@ -52,62 +52,59 @@ public class Base64 {
     //        16 Q            33 h            50 y
 
     // this array is use to convert 6-bit value (0..63) to ASCII character
-    static private final char [] base64alphabet = //new char[64]
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-        .toCharArray();
-
+    static private final char[] base64alphabet = //new char[64]
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+                    .toCharArray();
 
 
     // this array is use to convert input ASCII char (0..127) into 6-bit value
     // -1 is used to signal improper ASCII character
-    static private byte [] base64lookup = new byte[128];
+    static private byte[] base64lookup = new byte[128];
 
     // initilaize lookup table
     static {
-        if(base64alphabet.length != 64) throw new IllegalStateException();
-        for (int i=0; i<128; i++) base64lookup[i] = -1;
-        for (int i = 'A'; i <= 'Z'; i++) base64lookup[i] = (byte)(i - 'A');
-        for (int i = 'a'; i <= 'z'; i++) base64lookup[i] = (byte)(i - 'a' + 26);
-        for (int i = '0'; i <= '9'; i++) base64lookup[i] = (byte)(i - '0' + 52);
+        if (base64alphabet.length != 64) throw new IllegalStateException();
+        for (int i = 0; i < 128; i++) base64lookup[i] = -1;
+        for (int i = 'A'; i <= 'Z'; i++) base64lookup[i] = (byte) (i - 'A');
+        for (int i = 'a'; i <= 'z'; i++) base64lookup[i] = (byte) (i - 'a' + 26);
+        for (int i = '0'; i <= '9'; i++) base64lookup[i] = (byte) (i - '0' + 52);
         base64lookup['+'] = 62;
         base64lookup['/'] = 63;
     }
 
 
-
     /**
+     *
      */
 
 
     public static byte[] decode(
-        Base64DecodingState state,
-        char[] data,
-        int off,
-        int len,
-        boolean finalize) throws RuntimeException
-    {
+            Base64DecodingState state,
+            char[] data,
+            int off,
+            int len,
+            boolean finalize) throws RuntimeException {
         try {
             int inputEnd = 0;
             byte[] input = new byte[4];
-            if(state != null) {
+            if (state != null) {
                 inputEnd = state.inputEnd;
-                for (int i = 0; i < state.input.length; i++)
-                {
+                for (int i = 0; i < state.input.length; i++) {
                     input[i] = state.input[i];
                 }
             }
 
             // skip initial white caharacters in input to better estimate output array size
             int end = off + len;
-            for(int i = off; i < end; ++i) {
-                if( Character.isWhitespace(data[i]) == false ) {
+            for (int i = off; i < end; ++i) {
+                if (Character.isWhitespace(data[i]) == false) {
                     off = i;
                     break;
                 }
             }
             // skip trailing white caharacters
-            for(int i = end - 1; i > off; --i) {
-                if( Character.isWhitespace(data[i]) == false ) {
+            for (int i = end - 1; i > off; --i) {
+                if (Character.isWhitespace(data[i]) == false) {
                     end = i + 1;
                     break;
                 }
@@ -131,60 +128,60 @@ public class Base64 {
 
             // start decoding by breaking data into 4-character chunks
             int bytesSoFar = 0; //GLOBAL
-            for(int i = off; i < end; ++i) {
+            for (int i = off; i < end; ++i) {
                 char ch = data[i];
-                if( Character.isWhitespace(ch) ) continue;
+                if (Character.isWhitespace(ch)) continue;
                 // now convert ASCII cahracter to value
-                if(ch != '=') {
+                if (ch != '=') {
                     int val = (int) ch;
-                    if(val > 127) {
+                    if (val > 127) {
                         throw new Base64EncodingException(
-                            "invalid base64 encoding character > 127 '"+ch+"''");
+                                "invalid base64 encoding character > 127 '" + ch + "''");
                     }
-                    byte bv = base64lookup[ val ];
-                    if(bv == -1) {
+                    byte bv = base64lookup[val];
+                    if (bv == -1) {
                         throw new Base64EncodingException(
-                            "invalid base64 encoding character '"+ch+"''");
+                                "invalid base64 encoding character '" + ch + "''");
                     }
                     input[inputEnd++] = bv;
                 }
 
                 // we have the chunk - now work on it
-                if(inputEnd == 4) {
+                if (inputEnd == 4) {
                     inputEnd = 0;
                     // no markers
-                    b[bytesSoFar++] = (byte)(input[0] << 2 | input[1] >> 4 ) ;
-                    b[bytesSoFar++] = (byte)(((input[1] & 0xf)<<4 ) |( (input[2]>>2) & 0xf) );
-                    b[bytesSoFar++] = (byte)( input[2] <<6 | input[3] );
+                    b[bytesSoFar++] = (byte) (input[0] << 2 | input[1] >> 4);
+                    b[bytesSoFar++] = (byte) (((input[1] & 0xf) << 4) | ((input[2] >> 2) & 0xf));
+                    b[bytesSoFar++] = (byte) (input[2] << 6 | input[3]);
 
-                } else if(ch == '=') {
+                } else if (ch == '=') {
                     // got marker - try extract final data
                     finalize = true;
-                    if(inputEnd == 3) {
+                    if (inputEnd == 3) {
                         // got three character and at least one end marker
                         // extract two bytes of data
-                        b[bytesSoFar++] = (byte)(input[0] << 2 | input[1] >> 4 ) ;
-                        b[bytesSoFar++] = (byte)(((input[1] & 0xf)<<4 ) |( (input[2]>>2) & 0xf) );
+                        b[bytesSoFar++] = (byte) (input[0] << 2 | input[1] >> 4);
+                        b[bytesSoFar++] = (byte) (((input[1] & 0xf) << 4) | ((input[2] >> 2) & 0xf));
 
-                    } else if(inputEnd == 2) {
+                    } else if (inputEnd == 2) {
                         // got two character and at least one end marker
                         // extract one byte of data
-                        b[bytesSoFar++] = (byte)(input[0] << 2 | input[1] >> 4 ) ;
+                        b[bytesSoFar++] = (byte) (input[0] << 2 | input[1] >> 4);
 
 
                     } else {
                         throw new RuntimeException(
-                            "end marker in wrong place to finish decoding base64");
+                                "end marker in wrong place to finish decoding base64");
                     }
                     inputEnd = 0;
                     break;
                 }
             }
 
-            if(finalize && inputEnd != 0) {
+            if (finalize && inputEnd != 0) {
                 throw new RuntimeException("missing base64 encoded data");
             }
-            if( bytesSoFar  < b.length) {
+            if (bytesSoFar < b.length) {
                 byte[] bb = new byte[bytesSoFar];
                 // logger.fine("ary adjustment "
                 System.arraycopy(b, 0, bb, 0, bb.length);
@@ -197,31 +194,27 @@ public class Base64 {
         }
     }
 
-    public static byte[] decode(char[] data, int off, int len) throws RuntimeException
-    {
+    public static byte[] decode(char[] data, int off, int len) throws RuntimeException {
         return decode(null, data, off, len, true);
     }
 
-    public static byte[] decode(char[] data) throws RuntimeException
-    {
+    public static byte[] decode(char[] data) throws RuntimeException {
         return decode(data, 0, data.length);
     }
 
     public static char[] encode(
-        Base64EncodingState state,
-        byte[] data,
-        int off,
-        int len,
-        boolean finalize) throws RuntimeException
-    {
+            Base64EncodingState state,
+            byte[] data,
+            int off,
+            int len,
+            boolean finalize) throws RuntimeException {
         try {
             //int outputEnd = (state != null) ? state.outputEnd : 0;
             int outputEnd = 0;
             int[] output = new int[4];
-            if(state != null) {
+            if (state != null) {
                 outputEnd = state.outputEnd;
-                for (int i = 0; i < state.output.length; i++)
-                {
+                for (int i = 0; i < state.output.length; i++) {
                     output[i] = state.output[i];
                 }
             }
@@ -232,7 +225,7 @@ public class Base64 {
             long dataTriples = (len + outputEnd + 2) / 3; //NOTE: adjusted with state from previous run
             long charsToOutputLong = 4 * dataTriples;
 
-            if(charsToOutputLong > Integer.MAX_VALUE) {
+            if (charsToOutputLong > Integer.MAX_VALUE) {
                 throw new RuntimeException("input data is too big to output in one char array");
             }
             int charsToOutput = (int) charsToOutputLong;
@@ -240,35 +233,35 @@ public class Base64 {
 
             // start decoding by breaking data into 4-character chunks
             int charsSoFar = 0;
-            for(int i = off; i < end; ++i) {
+            for (int i = off; i < end; ++i) {
                 //output[ outputEnd++ ] = data[i] < 0 ? ((int)data[i] + 256) : data[i] ;
-                output[ outputEnd++ ] = (int) data[i] & 0xFF;
+                output[outputEnd++] = (int) data[i] & 0xFF;
                 // we have the chunk - now work on it
-                if(outputEnd == 3) {
+                if (outputEnd == 3) {
                     outputEnd = 0;
                     // no markers
-                    b[charsSoFar++] = base64alphabet [ output[0] >> 2 ] ;
-                    b[charsSoFar++] = base64alphabet [ ((output[0] & 0x3) << 4) | (output[1] >> 4)];
-                    b[charsSoFar++] = base64alphabet [ ((output[1] & 0xf) << 2) | (output[2] >> 6)];
-                    b[charsSoFar++] = base64alphabet [ output[2] & 0x3f ];
+                    b[charsSoFar++] = base64alphabet[output[0] >> 2];
+                    b[charsSoFar++] = base64alphabet[((output[0] & 0x3) << 4) | (output[1] >> 4)];
+                    b[charsSoFar++] = base64alphabet[((output[1] & 0xf) << 2) | (output[2] >> 6)];
+                    b[charsSoFar++] = base64alphabet[output[2] & 0x3f];
                 }
             }
 
-            if(finalize) {
-                if(outputEnd == 2) {
-                    b[charsSoFar++] = base64alphabet [ output[0] >> 2 ] ;
-                    b[charsSoFar++] = base64alphabet [ ((output[0] & 0x3) << 4) | output[1] >> 4 ];
-                    b[charsSoFar++] = base64alphabet [ ((output[1] & 0xf) << 2) ];
+            if (finalize) {
+                if (outputEnd == 2) {
+                    b[charsSoFar++] = base64alphabet[output[0] >> 2];
+                    b[charsSoFar++] = base64alphabet[((output[0] & 0x3) << 4) | output[1] >> 4];
+                    b[charsSoFar++] = base64alphabet[((output[1] & 0xf) << 2)];
                     b[charsSoFar++] = '=';
 
 
-                } else if(outputEnd == 1) {
-                    b[charsSoFar++] = base64alphabet [ output[0] >> 2 ] ;
+                } else if (outputEnd == 1) {
+                    b[charsSoFar++] = base64alphabet[output[0] >> 2];
 
                     //b[charsSoFar++] = base64alphabet [ (output[0] & 0x3) << 4 ];
                     int t = (output[0] & 0x3);
                     t <<= 4;
-                    b[charsSoFar++] = base64alphabet [ t ];
+                    b[charsSoFar++] = base64alphabet[t];
                     b[charsSoFar++] = '=';
                     b[charsSoFar++] = '=';
 
@@ -282,13 +275,11 @@ public class Base64 {
         }
     }
 
-    public static char[] encode(byte[] data, int off, int len) throws RuntimeException
-    {
+    public static char[] encode(byte[] data, int off, int len) throws RuntimeException {
         return encode(null, data, off, len, true);
     }
 
-    public static char[] encode(byte[] data) throws RuntimeException
-    {
+    public static char[] encode(byte[] data) throws RuntimeException {
         return encode(data, 0, data.length);
     }
 

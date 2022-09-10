@@ -9,7 +9,7 @@
     <string name="appdm_label_shared_preference">Shared Preference: </string>
     <string name="appdm_search">搜索</string>
     <string name="appdm_save_apk">正在保存apk文件 &#8230;</string>
-    
+
     <string name="appdm_app_name">应用名称</string>
     <string name="appdm_package_name">包名称</string>
     <string name="appdm_app_size">应用大小</string>

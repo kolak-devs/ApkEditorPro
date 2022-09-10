@@ -20,6 +20,7 @@ object PossibleLanguages {
         "-ta", "-te", "-th", "-tr", "-uk", "-ur", "-uz", "-vi", "-cy",
         "-yi", "-yo", "-zu"
     )
+
     @JvmField
     val languages = arrayOf(
         "Afrikaans", "Albanian",

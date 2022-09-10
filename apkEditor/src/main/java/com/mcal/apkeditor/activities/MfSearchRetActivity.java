@@ -24,15 +24,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.svolf.melissa.swipeback.SwipeBackActivity;
-
 public class MfSearchRetActivity extends CustomizedLangActivity implements OnClickListener {
 
+    private final ArrayList<EditText> editViews = new ArrayList<>();
     private String xmlPath;
     private ArrayList<Integer> lineIndexs;
     private ArrayList<String> lineContents;
-
-    private final ArrayList<EditText> editViews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

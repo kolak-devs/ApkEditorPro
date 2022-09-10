@@ -25,20 +25,23 @@
 
 package android.sun.security.ec;
 
+import android.sun.security.pkcs.PKCS8Key;
+import android.sun.security.util.DerInputStream;
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.x509.AlgorithmId;
+
 import java.io.IOException;
 import java.math.BigInteger;
-
-import java.security.*;
-import java.security.interfaces.*;
-import java.security.spec.*;
-
-import android.sun.security.util.*;
-import android.sun.security.x509.AlgorithmId;
-import android.sun.security.pkcs.PKCS8Key;
+import java.security.AlgorithmParameters;
+import java.security.InvalidKeyException;
+import java.security.interfaces.ECPrivateKey;
+import java.security.spec.ECParameterSpec;
+import java.security.spec.InvalidParameterSpecException;
 
 /**
  * Key implementation for EC private keys.
- *
+ * <p>
  * ASN.1 syntax for EC private keys from SEC 1 v1.5 (draft):
  *
  * <pre>
@@ -51,13 +54,13 @@ import android.sun.security.pkcs.PKCS8Key;
  *   publicKey [1] BIT STRING OPTIONAL
  * }
  * </pre>
- *
+ * <p>
  * We currently ignore the optional parameters and publicKey fields. We
  * require that the parameters are encoded as part of the AlgorithmIdentifier,
  * not in the private key structure.
  *
- * @since   1.6
- * @author  Andreas Sterbenz
+ * @author Andreas Sterbenz
+ * @since 1.6
  */
 public final class ECPrivateKeyImpl extends PKCS8Key implements ECPrivateKey {
 
@@ -84,14 +87,14 @@ public final class ECPrivateKeyImpl extends PKCS8Key implements ECPrivateKey {
         this.params = params;
         // generate the encoding
         algid = new AlgorithmId
-            (AlgorithmId.EC_oid, ECParameters.getAlgorithmParameters(params));
+                (AlgorithmId.EC_oid, ECParameters.getAlgorithmParameters(params));
         try {
             DerOutputStream out = new DerOutputStream();
             out.putInteger(1); // version 1
             byte[] privBytes = ECParameters.trimZeroes(s.toByteArray());
             out.putOctetString(privBytes);
             DerValue val =
-                new DerValue(DerValue.tag_Sequence, out.toByteArray());
+                    new DerValue(DerValue.tag_Sequence, out.toByteArray());
             key = val.toByteArray();
         } catch (IOException exc) {
             // should never occur
@@ -133,9 +136,9 @@ public final class ECPrivateKeyImpl extends PKCS8Key implements ECPrivateKey {
             s = new BigInteger(1, privData);
             while (data.available() != 0) {
                 DerValue value = data.getDerValue();
-                if (value.isContextSpecific((byte)0)) {
+                if (value.isContextSpecific((byte) 0)) {
                     // ignore for now
-                } else if (value.isContextSpecific((byte)1)) {
+                } else if (value.isContextSpecific((byte) 1)) {
                     // ignore for now
                 } else {
                     throw new InvalidKeyException("Unexpected value: " + value);
@@ -144,7 +147,7 @@ public final class ECPrivateKeyImpl extends PKCS8Key implements ECPrivateKey {
             AlgorithmParameters algParams = this.algid.getParameters();
             if (algParams == null) {
                 throw new InvalidKeyException("EC domain parameters must be "
-                    + "encoded in the algorithm identifier");
+                        + "encoded in the algorithm identifier");
             }
             params = algParams.getParameterSpec(ECParameterSpec.class);
         } catch (IOException e) {
@@ -157,8 +160,8 @@ public final class ECPrivateKeyImpl extends PKCS8Key implements ECPrivateKey {
     // return a string representation of this key for debugging
     public String toString() {
         return "Sun EC private key, " + params.getCurve().getField().getFieldSize()
-            + " bits\n  private value:  "
-            + s + "\n  parameters: " + params;
+                + " bits\n  private value:  "
+                + s + "\n  parameters: " + params;
     }
 
 }

@@ -1,5 +1,10 @@
 package io.github.skylot.raung.asm.impl.parser.data;
 
+import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.TypePath;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -7,159 +12,151 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.TypePath;
-
 import io.github.skylot.raung.asm.impl.asm.InsnAnnotationNode;
 import io.github.skylot.raung.asm.impl.asm.RaungAsmWriter;
 
 public class MethodData extends CommonData {
-	private final ClassData classData;
+    private final ClassData classData;
+    private final List<String> throwsList = new ArrayList<>();
+    private final List<RaungLabel> labels = new ArrayList<>();
+    private final List<TryCatchBlock> catchBlocks = new ArrayList<>();
+    private final Map<String, RaungLabel> labelsMap = new HashMap<>();
+    private String descriptor;
+    private int maxStack = 0;
+    private int maxLocals = 0;
+    private MethodVisitor methodVisitor;
+    private int insnsCount = 0;
+    private Map<Integer, RaungLocalVar> localVars;
+    private InsnAnnotationNode insnAnnotationNode;
 
-	private String descriptor;
-	private final List<String> throwsList = new ArrayList<>();
-	private int maxStack = 0;
-	private int maxLocals = 0;
+    public MethodData(ClassData classData) {
+        this.classData = classData;
+    }
 
-	private MethodVisitor methodVisitor;
-	private int insnsCount = 0;
+    public int getMaxStack() {
+        return maxStack;
+    }
 
-	private Map<Integer, RaungLocalVar> localVars;
-	private final List<RaungLabel> labels = new ArrayList<>();
-	private final List<TryCatchBlock> catchBlocks = new ArrayList<>();
-	private final Map<String, RaungLabel> labelsMap = new HashMap<>();
-	private InsnAnnotationNode insnAnnotationNode;
+    public void setMaxStack(int maxStack) {
+        this.maxStack = maxStack;
+    }
 
-	public MethodData(ClassData classData) {
-		this.classData = classData;
-	}
+    public int getMaxLocals() {
+        return maxLocals;
+    }
 
-	public int getMaxStack() {
-		return maxStack;
-	}
+    public void setMaxLocals(int maxLocals) {
+        this.maxLocals = maxLocals;
+    }
 
-	public void setMaxStack(int maxStack) {
-		this.maxStack = maxStack;
-	}
+    public ClassData getClassData() {
+        return classData;
+    }
 
-	public int getMaxLocals() {
-		return maxLocals;
-	}
+    public MethodVisitor getAsmMethodVisitor() {
+        if (methodVisitor == null) {
+            this.methodVisitor = RaungAsmWriter.visitMethod(this);
+        }
+        return methodVisitor;
+    }
 
-	public void setMaxLocals(int maxLocals) {
-		this.maxLocals = maxLocals;
-	}
+    public String getDescriptor() {
+        return descriptor;
+    }
 
-	public ClassData getClassData() {
-		return classData;
-	}
+    public void setDescriptor(String descriptor) {
+        this.descriptor = descriptor;
+    }
 
-	public MethodVisitor getAsmMethodVisitor() {
-		if (methodVisitor == null) {
-			this.methodVisitor = RaungAsmWriter.visitMethod(this);
-		}
-		return methodVisitor;
-	}
+    public List<String> getThrows() {
+        return throwsList;
+    }
 
-	public String getDescriptor() {
-		return descriptor;
-	}
+    public void addThrow(String type) {
+        this.throwsList.add(type);
+    }
 
-	public void setDescriptor(String descriptor) {
-		this.descriptor = descriptor;
-	}
+    public int getInsnsCount() {
+        return insnsCount;
+    }
 
-	public List<String> getThrows() {
-		return throwsList;
-	}
+    public void addInsn() {
+        insnsCount++;
+        if (insnAnnotationNode != null) {
+            RaungAsmWriter.attachInsnAnnotation(this, insnAnnotationNode);
+            insnAnnotationNode = null;
+        }
+    }
 
-	public void addThrow(String type) {
-		this.throwsList.add(type);
-	}
+    public void addLocalVar(RaungLocalVar localVar) {
+        if (localVars == null) {
+            localVars = new HashMap<>();
+        }
+        localVars.put(localVar.getNumber(), localVar);
+    }
 
-	public int getInsnsCount() {
-		return insnsCount;
-	}
+    @Nullable
+    public RaungLocalVar getLocalVar(int number) {
+        if (this.localVars == null) {
+            return null;
+        }
+        return this.localVars.get(number);
+    }
 
-	public void addInsn() {
-		insnsCount++;
-		if (insnAnnotationNode != null) {
-			RaungAsmWriter.attachInsnAnnotation(this, insnAnnotationNode);
-			insnAnnotationNode = null;
-		}
-	}
+    public Collection<RaungLocalVar> getLocalVars() {
+        if (this.localVars == null) {
+            return Collections.emptyList();
+        }
+        return this.localVars.values();
+    }
 
-	public void addLocalVar(RaungLocalVar localVar) {
-		if (localVars == null) {
-			localVars = new HashMap<>();
-		}
-		localVars.put(localVar.getNumber(), localVar);
-	}
+    public void addLabel(RaungLabel label) {
+        this.labels.add(label);
+        this.labelsMap.put(label.getName(), label);
+    }
 
-	@Nullable
-	public RaungLocalVar getLocalVar(int number) {
-		if (this.localVars == null) {
-			return null;
-		}
-		return this.localVars.get(number);
-	}
+    @Nullable
+    public RaungLabel getLabel(String name) {
+        return this.labelsMap.get(name);
+    }
 
-	public Collection<RaungLocalVar> getLocalVars() {
-		if (this.localVars == null) {
-			return Collections.emptyList();
-		}
-		return this.localVars.values();
-	}
+    @Nullable
+    public RaungLabel getLabel(int pos) {
+        for (RaungLabel label : this.labels) {
+            if (label.getPos() == pos) {
+                return label;
+            }
+        }
+        return null;
+    }
 
-	public void addLabel(RaungLabel label) {
-		this.labels.add(label);
-		this.labelsMap.put(label.getName(), label);
-	}
+    public List<RaungLabel> getLabels() {
+        return labels;
+    }
 
-	@Nullable
-	public RaungLabel getLabel(String name) {
-		return this.labelsMap.get(name);
-	}
+    public void setAnnotationForNextInsn(InsnAnnotationNode annotationNode) {
+        this.insnAnnotationNode = annotationNode;
+    }
 
-	@Nullable
-	public RaungLabel getLabel(int pos) {
-		for (RaungLabel label : this.labels) {
-			if (label.getPos() == pos) {
-				return label;
-			}
-		}
-		return null;
-	}
+    public InsnAnnotationNode getInsnAnnotationNode() {
+        return insnAnnotationNode;
+    }
 
-	public List<RaungLabel> getLabels() {
-		return labels;
-	}
+    public void addTryCatchBlock(TryCatchBlock tryCatchBlock) {
+        this.catchBlocks.add(tryCatchBlock);
+    }
 
-	public void setAnnotationForNextInsn(InsnAnnotationNode annotationNode) {
-		this.insnAnnotationNode = annotationNode;
-	}
+    public List<TryCatchBlock> getCatchBlocks() {
+        return catchBlocks;
+    }
 
-	public InsnAnnotationNode getInsnAnnotationNode() {
-		return insnAnnotationNode;
-	}
+    @Override
+    public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        return getAsmMethodVisitor().visitAnnotation(descriptor, visible);
+    }
 
-	public void addTryCatchBlock(TryCatchBlock tryCatchBlock) {
-		this.catchBlocks.add(tryCatchBlock);
-	}
-
-	public List<TryCatchBlock> getCatchBlocks() {
-		return catchBlocks;
-	}
-
-	@Override
-	public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-		return getAsmMethodVisitor().visitAnnotation(descriptor, visible);
-	}
-
-	@Override
-	public AnnotationVisitor visitTypeAnnotation(int ref, TypePath path, String descriptor, boolean visible) {
-		return getAsmMethodVisitor().visitTypeAnnotation(ref, path, descriptor, visible);
-	}
+    @Override
+    public AnnotationVisitor visitTypeAnnotation(int ref, TypePath path, String descriptor, boolean visible) {
+        return getAsmMethodVisitor().visitTypeAnnotation(ref, path, descriptor, visible);
+    }
 }

@@ -8,33 +8,33 @@ import jadx.core.dex.nodes.IContainer;
 import jadx.core.dex.nodes.IRegion;
 
 public abstract class AbstractRegion extends AttrNode implements IRegion {
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractRegion.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractRegion.class);
 
-	private IRegion parent;
+    private IRegion parent;
 
-	public AbstractRegion(IRegion parent) {
-		this.parent = parent;
-	}
+    public AbstractRegion(IRegion parent) {
+        this.parent = parent;
+    }
 
-	@Override
-	public IRegion getParent() {
-		return parent;
-	}
+    @Override
+    public IRegion getParent() {
+        return parent;
+    }
 
-	@Override
-	public void setParent(IRegion parent) {
-		this.parent = parent;
-	}
+    @Override
+    public void setParent(IRegion parent) {
+        this.parent = parent;
+    }
 
-	@Override
-	public boolean replaceSubBlock(IContainer oldBlock, IContainer newBlock) {
-		LOG.warn("Replace sub block not supported for class \"{}\"", this.getClass());
-		return false;
-	}
+    @Override
+    public boolean replaceSubBlock(IContainer oldBlock, IContainer newBlock) {
+        LOG.warn("Replace sub block not supported for class \"{}\"", this.getClass());
+        return false;
+    }
 
-	public void updateParent(IContainer container, IRegion newParent) {
-		if (container instanceof IRegion) {
-			((IRegion) container).setParent(newParent);
-		}
-	}
+    public void updateParent(IContainer container, IRegion newParent) {
+        if (container instanceof IRegion) {
+            ((IRegion) container).setParent(newParent);
+        }
+    }
 }

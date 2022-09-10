@@ -10,15 +10,15 @@ import jadx.plugins.input.java.data.attributes.JavaAttrType;
 
 public class JavaAnnotationDefaultAttr extends AnnotationDefaultAttr implements IJavaAttribute {
 
-	public JavaAnnotationDefaultAttr(EncodedValue value) {
-		super(value);
-	}
+    public JavaAnnotationDefaultAttr(EncodedValue value) {
+        super(value);
+    }
 
-	public static IJavaAttributeReader reader() {
-		return (clsData, reader) -> new JavaAnnotationDefaultAttr(EncodedValueReader.read(clsData, reader));
-	}
+    public static IJavaAttributeReader reader() {
+        return (clsData, reader) -> new JavaAnnotationDefaultAttr(EncodedValueReader.read(clsData, reader));
+    }
 
-	public static AnnotationDefaultAttr convert(JavaAttrStorage attributes) {
-		return attributes.get(JavaAttrType.ANNOTATION_DEFAULT);
-	}
+    public static AnnotationDefaultAttr convert(JavaAttrStorage attributes) {
+        return attributes.get(JavaAttrType.ANNOTATION_DEFAULT);
+    }
 }

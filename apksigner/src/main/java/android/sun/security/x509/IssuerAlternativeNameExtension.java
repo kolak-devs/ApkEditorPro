@@ -33,7 +33,7 @@ import java.util.Enumeration;
 
 /**
  * This represents the Issuer Alternative Name Extension.
- *
+ * <p>
  * This extension, if present, allows the issuer to specify multiple
  * alternative names.
  *
@@ -48,13 +48,13 @@ import java.util.Enumeration;
  * @see android.sun.security.x509.CertAttrSet
  */
 public class IssuerAlternativeNameExtension
-extends Extension implements CertAttrSet<String> {
+        extends Extension implements CertAttrSet<String> {
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
      */
     public static final String IDENT =
-                         "x509.info.extensions.IssuerAlternativeName";
+            "x509.info.extensions.IssuerAlternativeName";
     /**
      * Attribute names.
      */
@@ -64,25 +64,14 @@ extends Extension implements CertAttrSet<String> {
     // private data members
     android.sun.security.x509.GeneralNames names = null;
 
-    // Encode this extension
-    private void encodeThis() throws IOException {
-        if (names == null || names.isEmpty()) {
-            this.extensionValue = null;
-            return;
-        }
-        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
-        names.encode(os);
-        this.extensionValue = os.toByteArray();
-    }
-
     /**
      * Create a IssuerAlternativeNameExtension with the passed GeneralNames.
      *
      * @param names the GeneralNames for the issuer.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public IssuerAlternativeNameExtension(android.sun.security.x509.GeneralNames names)
-    throws IOException {
+            throws IOException {
         this.names = names;
         this.extensionId = android.sun.security.x509.PKIXExtensions.IssuerAlternativeName_Id;
         this.critical = false;
@@ -94,11 +83,11 @@ extends Extension implements CertAttrSet<String> {
      * and GeneralNames.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param names the GeneralNames for the issuer.
-     * @exception IOException on error.
+     * @param names    the GeneralNames for the issuer.
+     * @throws IOException on error.
      */
     public IssuerAlternativeNameExtension(Boolean critical, android.sun.security.x509.GeneralNames names)
-    throws IOException {
+            throws IOException {
         this.names = names;
         this.extensionId = android.sun.security.x509.PKIXExtensions.IssuerAlternativeName_Id;
         this.critical = critical.booleanValue();
@@ -118,12 +107,12 @@ extends Extension implements CertAttrSet<String> {
      * Create the extension from the passed DER encoded value.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
      */
     public IssuerAlternativeNameExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.IssuerAlternativeName_Id;
         this.critical = critical.booleanValue();
         this.extensionValue = (byte[]) value;
@@ -136,17 +125,28 @@ extends Extension implements CertAttrSet<String> {
         names = new android.sun.security.x509.GeneralNames(val);
     }
 
+    // Encode this extension
+    private void encodeThis() throws IOException {
+        if (names == null || names.isEmpty()) {
+            this.extensionValue = null;
+            return;
+        }
+        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
+        names.encode(os);
+        this.extensionValue = os.toByteArray();
+    }
+
     /**
      * Returns a printable representation of the IssuerAlternativeName.
      */
     public String toString() {
 
         String result = super.toString() + "IssuerAlternativeName [\n";
-        if(names == null) {
+        if (names == null) {
             result += "  null\n";
         } else {
-            for(GeneralName name: names.names()) {
-                result += "  "+name+"\n";
+            for (GeneralName name : names.names()) {
+                result += "  " + name + "\n";
             }
         }
         result += "]\n";
@@ -157,7 +157,7 @@ extends Extension implements CertAttrSet<String> {
      * Write the extension to the OutputStream.
      *
      * @param out the OutputStream to write the extension to.
-     * @exception IOException on encoding error.
+     * @throws IOException on encoding error.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new DerOutputStream();
@@ -176,13 +176,13 @@ extends Extension implements CertAttrSet<String> {
     public void set(String name, Object obj) throws IOException {
         if (name.equalsIgnoreCase(ISSUER_NAME)) {
             if (!(obj instanceof android.sun.security.x509.GeneralNames)) {
-              throw new IOException("Attribute value should be of" +
-                                    " type GeneralNames.");
+                throw new IOException("Attribute value should be of" +
+                        " type GeneralNames.");
             }
-            names = (GeneralNames)obj;
+            names = (GeneralNames) obj;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:IssuerAlternativeName.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:IssuerAlternativeName.");
         }
         encodeThis();
     }
@@ -194,8 +194,8 @@ extends Extension implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(ISSUER_NAME)) {
             return (names);
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:IssuerAlternativeName.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:IssuerAlternativeName.");
         }
     }
 
@@ -206,8 +206,8 @@ extends Extension implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(ISSUER_NAME)) {
             names = null;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                        "CertAttrSet:IssuerAlternativeName.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:IssuerAlternativeName.");
         }
         encodeThis();
     }

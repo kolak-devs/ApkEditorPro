@@ -10,16 +10,15 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
+import com.google.android.material.appbar.MaterialToolbar
+import com.mcal.apkeditor.R
 import com.mcal.apkeditor.colormixer.ColorMixer
 import com.mcal.apkeditor.colormixer.ColorMixerDialog
 import com.mcal.apkeditor.colormixer.ColorValue
 import com.mcal.apkeditor.colormixer.ColorValueAdapter
-import com.google.android.material.appbar.MaterialToolbar
-import com.mcal.apkeditor.R
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utilsOld.ActivityUtils
-import com.mcal.neweditor.TextEditor.getSoraEditor
-import ru.svolf.melissa.swipeback.SwipeBackActivity
+import com.mcal.editor.TextEditor.getSoraEditor
 import java.io.*
 
 

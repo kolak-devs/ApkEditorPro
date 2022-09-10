@@ -25,12 +25,12 @@
 
 package android.sun.security.x509;
 
-import java.io.IOException;
-import java.util.*;
-
 import android.sun.security.util.BitArray;
 import android.sun.security.util.DerOutputStream;
 import android.sun.security.util.DerValue;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Represent the DistributionPoint sequence used in the CRL
@@ -90,32 +90,32 @@ import android.sun.security.util.DerValue;
  *
  * @author Anne Anderson
  * @author Andreas Sterbenz
- * @since 1.4.2
  * @see CRLDistributionPointsExtension
+ * @since 1.4.2
  */
 public class DistributionPoint {
 
     // reason flag bits
     // NOTE that these are NOT quite the same as the CRL reason code extension
-    public final static int KEY_COMPROMISE         = 1;
-    public final static int CA_COMPROMISE          = 2;
-    public final static int AFFILIATION_CHANGED    = 3;
-    public final static int SUPERSEDED             = 4;
+    public final static int KEY_COMPROMISE = 1;
+    public final static int CA_COMPROMISE = 2;
+    public final static int AFFILIATION_CHANGED = 3;
+    public final static int SUPERSEDED = 4;
     public final static int CESSATION_OF_OPERATION = 5;
-    public final static int CERTIFICATE_HOLD       = 6;
-    public final static int PRIVILEGE_WITHDRAWN    = 7;
-    public final static int AA_COMPROMISE          = 8;
+    public final static int CERTIFICATE_HOLD = 6;
+    public final static int PRIVILEGE_WITHDRAWN = 7;
+    public final static int AA_COMPROMISE = 8;
 
     private static final String[] REASON_STRINGS = {
-        null,
-        "key compromise",
-        "CA compromise",
-        "affiliation changed",
-        "superseded",
-        "cessation of operation",
-        "certificate hold",
-        "privilege withdrawn",
-        "AA compromise",
+            null,
+            "key compromise",
+            "CA compromise",
+            "affiliation changed",
+            "superseded",
+            "cessation of operation",
+            "certificate hold",
+            "privilege withdrawn",
+            "AA compromise",
     };
 
     // context specific tag values
@@ -143,16 +143,16 @@ public class DistributionPoint {
      * Constructor for the class using GeneralNames for DistributionPointName
      *
      * @param fullName the GeneralNames of the distribution point; may be null
-     * @param reasons the CRL reasons included in the CRL at this distribution
-     *        point; may be null
-     * @param issuer the name(s) of the CRL issuer for the CRL at this
-     *        distribution point; may be null
+     * @param reasons  the CRL reasons included in the CRL at this distribution
+     *                 point; may be null
+     * @param issuer   the name(s) of the CRL issuer for the CRL at this
+     *                 distribution point; may be null
      */
     public DistributionPoint(android.sun.security.x509.GeneralNames fullName, boolean[] reasonFlags,
                              android.sun.security.x509.GeneralNames crlIssuer) {
         if ((fullName == null) && (crlIssuer == null)) {
             throw new IllegalArgumentException
-                        ("fullName and crlIssuer may not both be null");
+                    ("fullName and crlIssuer may not both be null");
         }
         this.fullName = fullName;
         this.reasonFlags = reasonFlags;
@@ -164,17 +164,17 @@ public class DistributionPoint {
      * DistributionPointName
      *
      * @param relativeName the RelativeDistinguishedName of the distribution
-     *        point; may not be null
-     * @param reasons the CRL reasons included in the CRL at this distribution
-     *        point; may be null
-     * @param issuer the name(s) of the CRL issuer for the CRL at this
-     *        distribution point; may not be null or empty.
+     *                     point; may not be null
+     * @param reasons      the CRL reasons included in the CRL at this distribution
+     *                     point; may be null
+     * @param issuer       the name(s) of the CRL issuer for the CRL at this
+     *                     distribution point; may not be null or empty.
      */
     public DistributionPoint(android.sun.security.x509.RDN relativeName, boolean[] reasonFlags,
                              android.sun.security.x509.GeneralNames crlIssuer) {
         if ((relativeName == null) && (crlIssuer == null)) {
             throw new IllegalArgumentException
-                        ("relativeName and crlIssuer may not both be null");
+                    ("relativeName and crlIssuer may not both be null");
         }
         this.relativeName = relativeName;
         this.reasonFlags = reasonFlags;
@@ -201,7 +201,7 @@ public class DistributionPoint {
             if (opt.isContextSpecific(TAG_DIST_PT) && opt.isConstructed()) {
                 if ((fullName != null) || (relativeName != null)) {
                     throw new IOException("Duplicate DistributionPointName in "
-                                          + "DistributionPoint.");
+                            + "DistributionPoint.");
                 }
                 DerValue distPnt = opt.data.getDerValue();
                 if (distPnt.isContextSpecific(TAG_FULL_NAME)
@@ -214,33 +214,50 @@ public class DistributionPoint {
                     relativeName = new android.sun.security.x509.RDN(distPnt);
                 } else {
                     throw new IOException("Invalid DistributionPointName in "
-                                          + "DistributionPoint");
+                            + "DistributionPoint");
                 }
             } else if (opt.isContextSpecific(TAG_REASONS)
-                                                && !opt.isConstructed()) {
+                    && !opt.isConstructed()) {
                 if (reasonFlags != null) {
                     throw new IOException("Duplicate Reasons in " +
-                                          "DistributionPoint.");
+                            "DistributionPoint.");
                 }
                 opt.resetTag(DerValue.tag_BitString);
                 reasonFlags = (opt.getUnalignedBitString()).toBooleanArray();
             } else if (opt.isContextSpecific(TAG_ISSUER)
-                                                && opt.isConstructed()) {
+                    && opt.isConstructed()) {
                 if (crlIssuer != null) {
                     throw new IOException("Duplicate CRLIssuer in " +
-                                          "DistributionPoint.");
+                            "DistributionPoint.");
                 }
                 opt.resetTag(DerValue.tag_Sequence);
                 crlIssuer = new android.sun.security.x509.GeneralNames(opt);
             } else {
                 throw new IOException("Invalid encoding of " +
-                                      "DistributionPoint.");
+                        "DistributionPoint.");
             }
         }
         if ((crlIssuer == null) && (fullName == null) && (relativeName == null)) {
             throw new IOException("One of fullName, relativeName, "
-                + " and crlIssuer has to be set");
+                    + " and crlIssuer has to be set");
         }
+    }
+
+    /**
+     * Utility function for a.equals(b) where both a and b may be null.
+     */
+    private static boolean equals(Object a, Object b) {
+        return (a == null) ? (b == null) : a.equals(b);
+    }
+
+    /**
+     * Return a string representation for reasonFlag bit 'reason'.
+     */
+    private static String reasonToString(int reason) {
+        if ((reason > 0) && (reason < REASON_STRINGS.length)) {
+            return REASON_STRINGS[reason];
+        }
+        return "Unknown reason " + reason;
     }
 
     /**
@@ -275,7 +292,7 @@ public class DistributionPoint {
      * Write the DistributionPoint value to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public void encode(DerOutputStream out) throws IOException {
         DerOutputStream tagged = new DerOutputStream();
@@ -287,42 +304,35 @@ public class DistributionPoint {
                 DerOutputStream derOut = new DerOutputStream();
                 fullName.encode(derOut);
                 distributionPoint.writeImplicit(
-                    DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_FULL_NAME),
-                    derOut);
+                        DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_FULL_NAME),
+                        derOut);
             } else if (relativeName != null) {
                 DerOutputStream derOut = new DerOutputStream();
                 relativeName.encode(derOut);
                 distributionPoint.writeImplicit(
-                    DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_REL_NAME),
-                    derOut);
+                        DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_REL_NAME),
+                        derOut);
             }
             tagged.write(
-                DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_DIST_PT),
-                distributionPoint);
+                    DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_DIST_PT),
+                    distributionPoint);
         }
         if (reasonFlags != null) {
             DerOutputStream reasons = new DerOutputStream();
             BitArray rf = new BitArray(reasonFlags);
             reasons.putTruncatedUnalignedBitString(rf);
             tagged.writeImplicit(
-                DerValue.createTag(DerValue.TAG_CONTEXT, false, TAG_REASONS),
-                reasons);
+                    DerValue.createTag(DerValue.TAG_CONTEXT, false, TAG_REASONS),
+                    reasons);
         }
         if (crlIssuer != null) {
             DerOutputStream issuer = new DerOutputStream();
             crlIssuer.encode(issuer);
             tagged.writeImplicit(
-                DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_ISSUER),
-                issuer);
+                    DerValue.createTag(DerValue.TAG_CONTEXT, true, TAG_ISSUER),
+                    issuer);
         }
         out.write(DerValue.tag_Sequence, tagged);
-    }
-
-    /**
-     * Utility function for a.equals(b) where both a and b may be null.
-     */
-    private static boolean equals(Object a, Object b) {
-        return (a == null) ? (b == null) : a.equals(b);
     }
 
     /**
@@ -338,12 +348,12 @@ public class DistributionPoint {
         if (obj instanceof DistributionPoint == false) {
             return false;
         }
-        DistributionPoint other = (DistributionPoint)obj;
+        DistributionPoint other = (DistributionPoint) obj;
 
         boolean equal = equals(this.fullName, other.fullName)
-                     && equals(this.relativeName, other.relativeName)
-                     && equals(this.crlIssuer, other.crlIssuer)
-                     && Arrays.equals(this.reasonFlags, other.reasonFlags);
+                && equals(this.relativeName, other.relativeName)
+                && equals(this.crlIssuer, other.crlIssuer)
+                && Arrays.equals(this.reasonFlags, other.reasonFlags);
         return equal;
     }
 
@@ -370,16 +380,6 @@ public class DistributionPoint {
             hashCode = hash;
         }
         return hash;
-    }
-
-    /**
-     * Return a string representation for reasonFlag bit 'reason'.
-     */
-    private static String reasonToString(int reason) {
-        if ((reason > 0) && (reason < REASON_STRINGS.length)) {
-            return REASON_STRINGS[reason];
-        }
-        return "Unknown reason " + reason;
     }
 
     /**

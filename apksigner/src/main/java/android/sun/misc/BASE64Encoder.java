@@ -24,10 +24,8 @@
  */
 package android.sun.misc;
 
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * This class implements a BASE64 Character encoder as specified in RFC1521.
@@ -35,18 +33,35 @@ import java.io.IOException;
  * Engineering Task Force (IETF). Unlike some other encoding schemes there
  * is nothing in this encoding that indicates
  * where a buffer starts or ends.
- *
+ * <p>
  * This means that the encoded text will simply start with the first line
  * of encoded text and end with the last line of encoded text.
  *
- * @author      Chuck McManis
- * @see         CharacterEncoder
- * @see         BASE64Decoder
+ * @author Chuck McManis
+ * @see CharacterEncoder
+ * @see BASE64Decoder
  */
 
 public class BASE64Encoder extends CharacterEncoder {
 
-    /** this class encodes three bytes per atom. */
+    /**
+     * This array maps the characters to their 6 bit values
+     */
+    private final static char pem_array[] = {
+            //       0   1   2   3   4   5   6   7
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', // 0
+            'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', // 1
+            'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', // 2
+            'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', // 3
+            'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', // 4
+            'o', 'p', 'q', 'r', 's', 't', 'u', 'v', // 5
+            'w', 'x', 'y', 'z', '0', '1', '2', '3', // 6
+            '4', '5', '6', '7', '8', '9', '+', '/'  // 7
+    };
+
+    /**
+     * this class encodes three bytes per atom.
+     */
     protected int bytesPerAtom() {
         return (3);
     }
@@ -60,19 +75,6 @@ public class BASE64Encoder extends CharacterEncoder {
         return (57);
     }
 
-    /** This array maps the characters to their 6 bit values */
-    private final static char pem_array[] = {
-        //       0   1   2   3   4   5   6   7
-                'A','B','C','D','E','F','G','H', // 0
-                'I','J','K','L','M','N','O','P', // 1
-                'Q','R','S','T','U','V','W','X', // 2
-                'Y','Z','a','b','c','d','e','f', // 3
-                'g','h','i','j','k','l','m','n', // 4
-                'o','p','q','r','s','t','u','v', // 5
-                'w','x','y','z','0','1','2','3', // 6
-                '4','5','6','7','8','9','+','/'  // 7
-        };
-
     /**
      * encodeAtom - Take three bytes of input and encode it as 4
      * printable characters. Note that if the length in len is less
@@ -80,7 +82,7 @@ public class BASE64Encoder extends CharacterEncoder {
      * padding characters.
      */
     protected void encodeAtom(OutputStream outStream, byte data[], int offset, int len)
-        throws IOException {
+            throws IOException {
         byte a, b, c;
 
         if (len == 1) {
@@ -93,7 +95,7 @@ public class BASE64Encoder extends CharacterEncoder {
             outStream.write('=');
         } else if (len == 2) {
             a = data[offset];
-            b = data[offset+1];
+            b = data[offset + 1];
             c = 0;
             outStream.write(pem_array[(a >>> 2) & 0x3F]);
             outStream.write(pem_array[((a << 4) & 0x30) + ((b >>> 4) & 0xf)]);
@@ -101,8 +103,8 @@ public class BASE64Encoder extends CharacterEncoder {
             outStream.write('=');
         } else {
             a = data[offset];
-            b = data[offset+1];
-            c = data[offset+2];
+            b = data[offset + 1];
+            c = data[offset + 2];
             outStream.write(pem_array[(a >>> 2) & 0x3F]);
             outStream.write(pem_array[((a << 4) & 0x30) + ((b >>> 4) & 0xf)]);
             outStream.write(pem_array[((b << 2) & 0x3c) + ((c >>> 6) & 0x3)]);

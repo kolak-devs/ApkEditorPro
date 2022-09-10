@@ -28,9 +28,9 @@ package android.sun.security.x509;
 import android.sun.security.util.DerOutputStream;
 
 import java.io.IOException;
-import java.util.Vector;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * This class defines the certificate policy set ASN.1 object.
@@ -55,7 +55,7 @@ public class CertificatePolicySet {
      * Create the object from the DerValue.
      *
      * @param in the passed DerInputStream.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificatePolicySet(android.sun.security.util.DerInputStream in) throws IOException {
         ids = new Vector<android.sun.security.x509.CertificatePolicyId>();
@@ -72,8 +72,8 @@ public class CertificatePolicySet {
      */
     public String toString() {
         String s = "CertificatePolicySet:[\n"
-                 + ids.toString()
-                 + "]\n";
+                + ids.toString()
+                + "]\n";
 
         return (s);
     }
@@ -89,14 +89,13 @@ public class CertificatePolicySet {
         for (int i = 0; i < ids.size(); i++) {
             ids.elementAt(i).encode(tmp);
         }
-        out.write(android.sun.security.util.DerValue.tag_Sequence,tmp);
+        out.write(android.sun.security.util.DerValue.tag_Sequence, tmp);
     }
 
     /**
      * Return the sequence of CertificatePolicyIds.
      *
      * @return A List containing the CertificatePolicyId objects.
-     *
      */
     public List<CertificatePolicyId> getCertPolicyIds() {
         return Collections.unmodifiableList(ids);

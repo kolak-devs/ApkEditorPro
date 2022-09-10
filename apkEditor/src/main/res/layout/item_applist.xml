@@ -4,13 +4,13 @@
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"
+    android:foreground="?selectableItemBackground"
     android:gravity="center_vertical"
     android:minHeight="?android:listPreferredItemHeight"
     android:orientation="horizontal"
     android:paddingLeft="6.0dip"
     android:paddingTop="5.0dip"
     android:paddingRight="6.0dip"
-    android:foreground="?selectableItemBackground"
     android:paddingBottom="5.0dip">
 
     <ImageView

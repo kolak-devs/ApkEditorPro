@@ -1,4 +1,4 @@
-package com.mcal.neweditor.editor2.smali;
+package com.mcal.editor.smali;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

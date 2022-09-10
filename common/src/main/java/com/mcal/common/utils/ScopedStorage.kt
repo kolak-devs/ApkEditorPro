@@ -18,11 +18,11 @@ object ScopedStorage {
 
     @JvmStatic
     val binDir: File
-        get() = File(App.getContext().filesDir.path + File.separator +  "bin")
+        get() = File(App.getContext().filesDir.path + File.separator + "bin")
 
     @JvmStatic
     val dataDir: File
-        get() = File(App.getContext().filesDir.path + File.separator +  "data")
+        get() = File(App.getContext().filesDir.path + File.separator + "data")
 
     // Find the pattern
     @JvmStatic

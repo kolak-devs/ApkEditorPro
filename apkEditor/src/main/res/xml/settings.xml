@@ -5,10 +5,9 @@
         android:layout="@layout/preferences_category"
         android:title="@string/about">
         <Preference
-            android:title="@string/app_name"
-            android:icon="@drawable/info">
-            <intent
-                android:action="com.mcal.action.SHOW_ABOUT"/>
+            android:icon="@drawable/info"
+            android:title="@string/app_name">
+            <intent android:action="com.mcal.action.SHOW_ABOUT" />
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory

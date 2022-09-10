@@ -137,6 +137,129 @@ import javax.security.auth.x500.X500Principal;
 
 @SuppressWarnings("unused")
 public class X500Name implements GeneralNameInterface, Principal {
+    /**
+     * OID for the "CN=" attribute, denoting a person's common name.
+     */
+    public static final ObjectIdentifier commonName_oid;
+    /**
+     * OID for the "C=" attribute, denoting a country.
+     */
+    public static final ObjectIdentifier countryName_oid;
+    /**
+     * OID for the "L=" attribute, denoting a locality (such as a city)
+     */
+    public static final ObjectIdentifier localityName_oid;
+    /**
+     * OID for the "O=" attribute, denoting an organization name
+     */
+    public static final ObjectIdentifier orgName_oid;
+    /**
+     * OID for the "OU=" attribute, denoting an organizational unit name
+     */
+    public static final ObjectIdentifier orgUnitName_oid;
+    /**
+     * OID for the "S=" attribute, denoting a state (such as Delaware)
+     */
+    public static final ObjectIdentifier stateName_oid;
+    /**
+     * OID for the "STREET=" attribute, denoting a street address.
+     */
+    public static final ObjectIdentifier streetAddress_oid;
+    /**
+     * OID for the "T=" attribute, denoting a person's title.
+     */
+    public static final ObjectIdentifier title_oid;
+    /**
+     * OID for the "DNQUALIFIER=" or "DNQ=" attribute, denoting DN
+     * disambiguating information.
+     */
+    public static final ObjectIdentifier DNQUALIFIER_OID;
+    /**
+     * OID for the "SURNAME=" attribute, denoting a person's surname.
+     */
+    public static final ObjectIdentifier SURNAME_OID;
+    /**
+     * OID for the "GIVENNAME=" attribute, denoting a person's given name.
+     */
+    public static final ObjectIdentifier GIVENNAME_OID;
+    /**
+     * OID for the "INITIALS=" attribute, denoting a person's initials.
+     */
+    public static final ObjectIdentifier INITIALS_OID;
+    /**
+     * OID for the "GENERATION=" attribute, denoting Jr., II, etc.
+     */
+    public static final ObjectIdentifier GENERATIONQUALIFIER_OID;
+    /**
+     * OID for "IP=" IP address attributes, used with SKIP.
+     */
+    public static final ObjectIdentifier ipAddress_oid;
+    /**
+     * OID for "DC=" domain component attributes, used with DNS names in DN
+     * format
+     */
+    public static final ObjectIdentifier DOMAIN_COMPONENT_OID;
+    /**
+     * OID for "UID=" denoting a user id, defined in RFCs 1274 & 2798.
+     */
+    public static final ObjectIdentifier userid_oid;
+    /**
+     * OID for the "SERIALNUMBER=" attribute, denoting a serial number for.
+     * a name. Do not confuse with PKCS#9 issuerAndSerialNumber or the
+     * certificate serial number.
+     */
+    public static final ObjectIdentifier SERIALNUMBER_OID;
+    private static final Map<ObjectIdentifier, ObjectIdentifier> internedOIDs = new HashMap<>();
+    /*
+     * Selected OIDs from X.520
+     * Includes all those specified in RFC 3280 as MUST or SHOULD
+     * be recognized
+     */
+    private static final int[] commonName_data = {2, 5, 4, 3};
+    private static final int[] SURNAME_DATA = {2, 5, 4, 4};
+    private static final int[] SERIALNUMBER_DATA = {2, 5, 4, 5};
+    private static final int[] countryName_data = {2, 5, 4, 6};
+    private static final int[] localityName_data = {2, 5, 4, 7};
+    private static final int[] stateName_data = {2, 5, 4, 8};
+    private static final int[] streetAddress_data = {2, 5, 4, 9};
+    private static final int[] orgName_data = {2, 5, 4, 10};
+    private static final int[] orgUnitName_data = {2, 5, 4, 11};
+    private static final int[] title_data = {2, 5, 4, 12};
+    private static final int[] GIVENNAME_DATA = {2, 5, 4, 42};
+    private static final int[] INITIALS_DATA = {2, 5, 4, 43};
+    private static final int[] GENERATIONQUALIFIER_DATA = {2, 5, 4, 44};
+    private static final int[] DNQUALIFIER_DATA = {2, 5, 4, 46};
+    private static final int[] ipAddress_data = {1, 3, 6, 1, 4, 1, 42, 2, 11, 2, 1};
+    private static final int[] DOMAIN_COMPONENT_DATA = {0, 9, 2342, 19200300, 100, 1, 25};
+    private static final int[] userid_data = {0, 9, 2342, 19200300, 100, 1, 1};
+
+    static {
+        commonName_oid = intern(ObjectIdentifier.newInternal(commonName_data));
+        SERIALNUMBER_OID = intern(ObjectIdentifier.newInternal(SERIALNUMBER_DATA));
+        countryName_oid = intern(ObjectIdentifier.newInternal(countryName_data));
+        localityName_oid = intern(ObjectIdentifier.newInternal(localityName_data));
+        orgName_oid = intern(ObjectIdentifier.newInternal(orgName_data));
+        orgUnitName_oid = intern(ObjectIdentifier.newInternal(orgUnitName_data));
+        stateName_oid = intern(ObjectIdentifier.newInternal(stateName_data));
+        streetAddress_oid = intern(ObjectIdentifier.newInternal(streetAddress_data));
+        title_oid = intern(ObjectIdentifier.newInternal(title_data));
+        DNQUALIFIER_OID = intern(ObjectIdentifier.newInternal(DNQUALIFIER_DATA));
+        SURNAME_OID = intern(ObjectIdentifier.newInternal(SURNAME_DATA));
+        GIVENNAME_OID = intern(ObjectIdentifier.newInternal(GIVENNAME_DATA));
+        INITIALS_OID = intern(ObjectIdentifier.newInternal(INITIALS_DATA));
+        GENERATIONQUALIFIER_OID = intern(ObjectIdentifier.newInternal(GENERATIONQUALIFIER_DATA));
+        /*
+         * OIDs from other sources which show up in X.500 names we
+         * expect to deal with often
+         */
+        ipAddress_oid = intern(ObjectIdentifier.newInternal(ipAddress_data));
+        /*
+         * Domain component OID from RFC 1274, RFC 2247, RFC 3280
+         */
+        DOMAIN_COMPONENT_OID = intern(ObjectIdentifier.newInternal(DOMAIN_COMPONENT_DATA));
+        userid_oid = intern(ObjectIdentifier.newInternal(userid_data));
+    }
+
     private String dn; // roughly RFC 1779 DN, or null
     private String rfc1779Dn; // RFC 1779 compliant DN, or null
     private String rfc2253Dn; // RFC 2253 DN, or null
@@ -144,7 +267,6 @@ public class X500Name implements GeneralNameInterface, Principal {
     private RDN[] names;        // RDNs (never null)
     private X500Principal x500Principal;
     private byte[] encoded;
-
     // cached immutable list of the RDNs and all the AVAs
     private volatile List<RDN> rdnList;
     private volatile List<AVA> allAvaList;
@@ -312,6 +434,76 @@ public class X500Name implements GeneralNameInterface, Principal {
         parseDER(in);
     }
 
+    /*
+     * Counts double quotes in string.
+     * Escaped quotes are ignored.
+     */
+    static int countQuotes(String string, int from, int to) {
+        int count = 0;
+
+        for (int i = from; i < to; i++) {
+            if ((string.charAt(i) == '"' && i == from) ||
+                    (string.charAt(i) == '"' && string.charAt(i - 1) != '\\')) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private static boolean escaped(int rdnEnd, int searchOffset, String dnString) {
+
+        if (rdnEnd == 1 && dnString.charAt(0) == '\\') {
+
+            //  case 1:
+            //  \,
+
+            return true;
+
+        } else if (rdnEnd > 1 && dnString.charAt(rdnEnd - 1) == '\\' &&
+                dnString.charAt(rdnEnd - 2) != '\\') {
+
+            //  case 2:
+            //  foo\,
+
+            return true;
+
+        } else if (rdnEnd > 1 && dnString.charAt(rdnEnd - 1) == '\\' &&
+                dnString.charAt(rdnEnd - 2) == '\\') {
+
+            //  case 3:
+            //  foo\\\\\,
+
+            int count = 0;
+            rdnEnd--;   // back up to last backSlash
+            while (rdnEnd >= searchOffset) {
+                if (dnString.charAt(rdnEnd) == '\\') {
+                    count++;    // count consecutive backslashes
+                }
+                rdnEnd--;
+            }
+
+            // if count is odd, then rdnEnd is escaped
+            return (count % 2) != 0;
+        } else {
+            return false;
+        }
+    }
+
+    /*
+     * Maybe return a preallocated OID, to reduce storage costs
+     * and speed recognition of common X.500 attributes.
+     */
+    static ObjectIdentifier intern(ObjectIdentifier oid) {
+        ObjectIdentifier interned = internedOIDs.get(oid);
+        if (interned != null) {
+            return interned;
+        }
+        internedOIDs.put(oid, oid);
+        return oid;
+    }
+
     /**
      * Return an immutable List of all RDNs in this X500Name.
      */
@@ -450,7 +642,6 @@ public class X500Name implements GeneralNameInterface, Principal {
         return getString(attr);
     }
 
-
     /**
      * Returns an "Organization" name component.  If more than
      * one such attribute exists, the topmost one is returned.
@@ -462,7 +653,6 @@ public class X500Name implements GeneralNameInterface, Principal {
 
         return getString(attr);
     }
-
 
     /**
      * Returns an "Organizational Unit" name component.  If more
@@ -476,7 +666,6 @@ public class X500Name implements GeneralNameInterface, Principal {
         return getString(attr);
     }
 
-
     /**
      * Returns a "Common Name" component.  If more than one such
      * attribute exists, the topmost one is returned.
@@ -488,7 +677,6 @@ public class X500Name implements GeneralNameInterface, Principal {
 
         return getString(attr);
     }
-
 
     /**
      * Returns a "Locality" name component.  If more than one
@@ -985,63 +1173,6 @@ public class X500Name implements GeneralNameInterface, Principal {
     }
 
     /*
-     * Counts double quotes in string.
-     * Escaped quotes are ignored.
-     */
-    static int countQuotes(String string, int from, int to) {
-        int count = 0;
-
-        for (int i = from; i < to; i++) {
-            if ((string.charAt(i) == '"' && i == from) ||
-                    (string.charAt(i) == '"' && string.charAt(i - 1) != '\\')) {
-                count++;
-            }
-        }
-
-        return count;
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private static boolean escaped(int rdnEnd, int searchOffset, String dnString) {
-
-        if (rdnEnd == 1 && dnString.charAt(0) == '\\') {
-
-            //  case 1:
-            //  \,
-
-            return true;
-
-        } else if (rdnEnd > 1 && dnString.charAt(rdnEnd - 1) == '\\' &&
-                dnString.charAt(rdnEnd - 2) != '\\') {
-
-            //  case 2:
-            //  foo\,
-
-            return true;
-
-        } else if (rdnEnd > 1 && dnString.charAt(rdnEnd - 1) == '\\' &&
-                dnString.charAt(rdnEnd - 2) == '\\') {
-
-            //  case 3:
-            //  foo\\\\\,
-
-            int count = 0;
-            rdnEnd--;   // back up to last backSlash
-            while (rdnEnd >= searchOffset) {
-                if (dnString.charAt(rdnEnd) == '\\') {
-                    count++;    // count consecutive backslashes
-                }
-                rdnEnd--;
-            }
-
-            // if count is odd, then rdnEnd is escaped
-            return (count % 2) != 0;
-        } else {
-            return false;
-        }
-    }
-
-    /*
      * Dump the printable form of a distinguished name.  Each relative
      * name is separated from the next by a ",", and assertions in the
      * relative names have "label=value" syntax.
@@ -1092,144 +1223,6 @@ public class X500Name implements GeneralNameInterface, Principal {
         return sb.toString();
     }
 
-    /*
-     * Maybe return a preallocated OID, to reduce storage costs
-     * and speed recognition of common X.500 attributes.
-     */
-    static ObjectIdentifier intern(ObjectIdentifier oid) {
-        ObjectIdentifier interned = internedOIDs.get(oid);
-        if (interned != null) {
-            return interned;
-        }
-        internedOIDs.put(oid, oid);
-        return oid;
-    }
-
-    private static final Map<ObjectIdentifier, ObjectIdentifier> internedOIDs = new HashMap<>();
-
-    /*
-     * Selected OIDs from X.520
-     * Includes all those specified in RFC 3280 as MUST or SHOULD
-     * be recognized
-     */
-    private static final int[] commonName_data = {2, 5, 4, 3};
-    private static final int[] SURNAME_DATA = {2, 5, 4, 4};
-    private static final int[] SERIALNUMBER_DATA = {2, 5, 4, 5};
-    private static final int[] countryName_data = {2, 5, 4, 6};
-    private static final int[] localityName_data = {2, 5, 4, 7};
-    private static final int[] stateName_data = {2, 5, 4, 8};
-    private static final int[] streetAddress_data = {2, 5, 4, 9};
-    private static final int[] orgName_data = {2, 5, 4, 10};
-    private static final int[] orgUnitName_data = {2, 5, 4, 11};
-    private static final int[] title_data = {2, 5, 4, 12};
-    private static final int[] GIVENNAME_DATA = {2, 5, 4, 42};
-    private static final int[] INITIALS_DATA = {2, 5, 4, 43};
-    private static final int[] GENERATIONQUALIFIER_DATA = {2, 5, 4, 44};
-    private static final int[] DNQUALIFIER_DATA = {2, 5, 4, 46};
-    private static final int[] ipAddress_data = {1, 3, 6, 1, 4, 1, 42, 2, 11, 2, 1};
-    private static final int[] DOMAIN_COMPONENT_DATA = {0, 9, 2342, 19200300, 100, 1, 25};
-    private static final int[] userid_data = {0, 9, 2342, 19200300, 100, 1, 1};
-
-    /**
-     * OID for the "CN=" attribute, denoting a person's common name.
-     */
-    public static final ObjectIdentifier commonName_oid;
-    /**
-     * OID for the "C=" attribute, denoting a country.
-     */
-    public static final ObjectIdentifier countryName_oid;
-    /**
-     * OID for the "L=" attribute, denoting a locality (such as a city)
-     */
-    public static final ObjectIdentifier localityName_oid;
-    /**
-     * OID for the "O=" attribute, denoting an organization name
-     */
-    public static final ObjectIdentifier orgName_oid;
-    /**
-     * OID for the "OU=" attribute, denoting an organizational unit name
-     */
-    public static final ObjectIdentifier orgUnitName_oid;
-    /**
-     * OID for the "S=" attribute, denoting a state (such as Delaware)
-     */
-    public static final ObjectIdentifier stateName_oid;
-    /**
-     * OID for the "STREET=" attribute, denoting a street address.
-     */
-    public static final ObjectIdentifier streetAddress_oid;
-    /**
-     * OID for the "T=" attribute, denoting a person's title.
-     */
-    public static final ObjectIdentifier title_oid;
-    /**
-     * OID for the "DNQUALIFIER=" or "DNQ=" attribute, denoting DN
-     * disambiguating information.
-     */
-    public static final ObjectIdentifier DNQUALIFIER_OID;
-    /**
-     * OID for the "SURNAME=" attribute, denoting a person's surname.
-     */
-    public static final ObjectIdentifier SURNAME_OID;
-    /**
-     * OID for the "GIVENNAME=" attribute, denoting a person's given name.
-     */
-    public static final ObjectIdentifier GIVENNAME_OID;
-    /**
-     * OID for the "INITIALS=" attribute, denoting a person's initials.
-     */
-    public static final ObjectIdentifier INITIALS_OID;
-    /**
-     * OID for the "GENERATION=" attribute, denoting Jr., II, etc.
-     */
-    public static final ObjectIdentifier GENERATIONQUALIFIER_OID;
-    /**
-     * OID for "IP=" IP address attributes, used with SKIP.
-     */
-    public static final ObjectIdentifier ipAddress_oid;
-    /**
-     * OID for "DC=" domain component attributes, used with DNS names in DN
-     * format
-     */
-    public static final ObjectIdentifier DOMAIN_COMPONENT_OID;
-    /**
-     * OID for "UID=" denoting a user id, defined in RFCs 1274 & 2798.
-     */
-    public static final ObjectIdentifier userid_oid;
-    /**
-     * OID for the "SERIALNUMBER=" attribute, denoting a serial number for.
-     * a name. Do not confuse with PKCS#9 issuerAndSerialNumber or the
-     * certificate serial number.
-     */
-    public static final ObjectIdentifier SERIALNUMBER_OID;
-
-    static {
-        commonName_oid = intern(ObjectIdentifier.newInternal(commonName_data));
-        SERIALNUMBER_OID = intern(ObjectIdentifier.newInternal(SERIALNUMBER_DATA));
-        countryName_oid = intern(ObjectIdentifier.newInternal(countryName_data));
-        localityName_oid = intern(ObjectIdentifier.newInternal(localityName_data));
-        orgName_oid = intern(ObjectIdentifier.newInternal(orgName_data));
-        orgUnitName_oid = intern(ObjectIdentifier.newInternal(orgUnitName_data));
-        stateName_oid = intern(ObjectIdentifier.newInternal(stateName_data));
-        streetAddress_oid = intern(ObjectIdentifier.newInternal(streetAddress_data));
-        title_oid = intern(ObjectIdentifier.newInternal(title_data));
-        DNQUALIFIER_OID = intern(ObjectIdentifier.newInternal(DNQUALIFIER_DATA));
-        SURNAME_OID = intern(ObjectIdentifier.newInternal(SURNAME_DATA));
-        GIVENNAME_OID = intern(ObjectIdentifier.newInternal(GIVENNAME_DATA));
-        INITIALS_OID = intern(ObjectIdentifier.newInternal(INITIALS_DATA));
-        GENERATIONQUALIFIER_OID = intern(ObjectIdentifier.newInternal(GENERATIONQUALIFIER_DATA));
-        /*
-         * OIDs from other sources which show up in X.500 names we
-         * expect to deal with often
-         */
-        ipAddress_oid = intern(ObjectIdentifier.newInternal(ipAddress_data));
-        /*
-         * Domain component OID from RFC 1274, RFC 2247, RFC 3280
-         */
-        DOMAIN_COMPONENT_OID = intern(ObjectIdentifier.newInternal(DOMAIN_COMPONENT_DATA));
-        userid_oid = intern(ObjectIdentifier.newInternal(userid_data));
-    }
-
     /**
      * Return constraint type:<ul>
      * <li>NAME_DIFF_TYPE = -1: input name is different type from this name
@@ -1243,9 +1236,9 @@ public class X500Name implements GeneralNameInterface, Principal {
      * certification path verification.
      *
      * @param inputName to be checked for being constrained
+     * @return constraint type above
      * @throws UnsupportedOperationException if name is not exact match, but
      *                                       narrowing and widening are not supported for this name type.
-     * @return constraint type above
      */
     public int constrains(GeneralNameInterface inputName)
             throws UnsupportedOperationException {
@@ -1309,8 +1302,8 @@ public class X500Name implements GeneralNameInterface, Principal {
      * NameConstraints minimum and maximum bounds and for calculating
      * path lengths in name subtrees.
      *
-     * @throws UnsupportedOperationException if not supported for this name type
      * @return distance of name from root
+     * @throws UnsupportedOperationException if not supported for this name type
      */
     public int subtreeDepth() throws UnsupportedOperationException {
         return names.length;

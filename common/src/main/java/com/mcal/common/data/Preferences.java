@@ -6,8 +6,8 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 import com.mcal.common.App;
-import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.utils.ScopedStorage;
+import com.mcal.common.utilsOld.CommandRunner;
 
 public class Preferences {
     // Some aapt must pass "--no-version-vectors" option to get the correct result
@@ -69,20 +69,20 @@ public class Preferences {
         return App.getPreferences().getString("signatureAlias", "");
     }
 
-    public static String getCertPassword() {
-        return App.getPreferences().getString("certPass", "");
-    }
-
-    public static String getSignaturePassword() {
-        return App.getPreferences().getString("signaturePass", "");
-    }
-
     public static void setSignatureAlias(String key) {
         App.getPreferences().edit().putString("signatureAlias", key).apply();
     }
 
+    public static String getCertPassword() {
+        return App.getPreferences().getString("certPass", "");
+    }
+
     public static void setCertPassword(String key) {
         App.getPreferences().edit().putString("certPass", key).apply();
+    }
+
+    public static String getSignaturePassword() {
+        return App.getPreferences().getString("signaturePass", "");
     }
 
     public static void setSignaturePassword(String key) {

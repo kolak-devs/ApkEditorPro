@@ -3,10 +3,11 @@
 
 package org.xmlpull.v1.wrapper;
 
-import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
+
+import java.io.IOException;
 
 /**
  * Extensions to XmlSerialzier interface
@@ -39,16 +40,20 @@ public interface XmlSerializerWrapper extends XmlSerializer {
      * given namespace, a prefix will be defined automatically.
      * NOTE: current element namespace is not used attribute and attributre has no namespace.
      */
-    public XmlSerializerWrapper attribute (String name, String value)
-        throws IOException, IllegalArgumentException, IllegalStateException;
+    public XmlSerializerWrapper attribute(String name, String value)
+            throws IOException, IllegalArgumentException, IllegalStateException;
 
-    /** Write start tag in current namespace with name given as argument. */
+    /**
+     * Write start tag in current namespace with name given as argument.
+     */
     public XmlSerializerWrapper startTag(String name)
-        throws IOException, IllegalArgumentException, IllegalStateException;
+            throws IOException, IllegalArgumentException, IllegalStateException;
 
-    /** Write end tag in current namespace with name given as argument. */
+    /**
+     * Write end tag in current namespace with name given as argument.
+     */
     public XmlSerializerWrapper endTag(String name)
-        throws IOException, IllegalArgumentException, IllegalStateException;
+            throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
      * Writes a simple element such as &lt;username>johndoe&lt;/username>. The namespace
@@ -56,21 +61,28 @@ public interface XmlSerializerWrapper extends XmlSerializer {
      * will be added as an attribute.
      */
     public XmlSerializerWrapper element(String namespace, String elementName, String elementText)
-        throws IOException, XmlPullParserException;
+            throws IOException, XmlPullParserException;
 
-    /** Write simple text element in current namespace */
+    /**
+     * Write simple text element in current namespace
+     */
     public XmlSerializerWrapper element(String elementName, String elementText)
-        throws IOException, XmlPullParserException;
+            throws IOException, XmlPullParserException;
 
-    /** Write XML fragment using currently set namespace prefixes */
+    /**
+     * Write XML fragment using currently set namespace prefixes
+     */
     public void fragment(String xmlFragment)
-        throws IOException, IllegalArgumentException, IllegalStateException, XmlPullParserException;
+            throws IOException, IllegalArgumentException, IllegalStateException, XmlPullParserException;
 
-    /** Serializer current event form pull parser */
+    /**
+     * Serializer current event form pull parser
+     */
     public void event(XmlPullParser pp)
-        throws IOException, IllegalArgumentException, IllegalStateException, XmlPullParserException;
+            throws IOException, IllegalArgumentException, IllegalStateException, XmlPullParserException;
 
     public String escapeText(String text) throws IllegalArgumentException;
+
     public String escapeAttributeValue(String text) throws IllegalArgumentException;
 
     // set of methods to make easy to write XSD types

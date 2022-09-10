@@ -41,8 +41,6 @@ import java.util.Enumeration;
  * @see android.sun.security.x509.CertAttrSet
  */
 public class CertificateIssuerUniqueIdentity implements CertAttrSet<String> {
-    private android.sun.security.x509.UniqueIdentity id;
-
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
@@ -53,6 +51,7 @@ public class CertificateIssuerUniqueIdentity implements CertAttrSet<String> {
      */
     public static final String NAME = "issuerID";
     public static final String ID = "id";
+    private android.sun.security.x509.UniqueIdentity id;
 
     /**
      * Default constructor for the certificate attribute.
@@ -67,10 +66,10 @@ public class CertificateIssuerUniqueIdentity implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed DER stream.
      *
      * @param in the DerInputStream to read the UniqueIdentity from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateIssuerUniqueIdentity(DerInputStream in)
-    throws IOException {
+            throws IOException {
         id = new android.sun.security.x509.UniqueIdentity(in);
     }
 
@@ -78,10 +77,10 @@ public class CertificateIssuerUniqueIdentity implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed stream.
      *
      * @param in the InputStream to read the UniqueIdentity from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateIssuerUniqueIdentity(InputStream in)
-    throws IOException {
+            throws IOException {
         android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(in);
         id = new android.sun.security.x509.UniqueIdentity(val);
     }
@@ -90,10 +89,10 @@ public class CertificateIssuerUniqueIdentity implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed DER value.
      *
      * @param in the DerValue to read the UniqueIdentity from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateIssuerUniqueIdentity(android.sun.security.util.DerValue val)
-    throws IOException {
+            throws IOException {
         id = new android.sun.security.x509.UniqueIdentity(val);
     }
 
@@ -109,11 +108,11 @@ public class CertificateIssuerUniqueIdentity implements CertAttrSet<String> {
      * Encode the identity in DER form to the stream.
      *
      * @param out the DerOutputStream to marshal the contents to.
-     * @exception IOException on errors.
+     * @throws IOException on errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
-        id.encode(tmp, android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT,false,(byte)1));
+        id.encode(tmp, android.sun.security.util.DerValue.createTag(android.sun.security.util.DerValue.TAG_CONTEXT, false, (byte) 1));
 
         out.write(tmp.toByteArray());
     }
@@ -126,10 +125,10 @@ public class CertificateIssuerUniqueIdentity implements CertAttrSet<String> {
             throw new IOException("Attribute must be of type UniqueIdentity.");
         }
         if (name.equalsIgnoreCase(ID)) {
-            id = (UniqueIdentity)obj;
+            id = (UniqueIdentity) obj;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                      "CertAttrSet: CertificateIssuerUniqueIdentity.");
+                    "CertAttrSet: CertificateIssuerUniqueIdentity.");
         }
     }
 
@@ -141,7 +140,7 @@ public class CertificateIssuerUniqueIdentity implements CertAttrSet<String> {
             return (id);
         } else {
             throw new IOException("Attribute name not recognized by " +
-                      "CertAttrSet: CertificateIssuerUniqueIdentity.");
+                    "CertAttrSet: CertificateIssuerUniqueIdentity.");
         }
     }
 
@@ -153,7 +152,7 @@ public class CertificateIssuerUniqueIdentity implements CertAttrSet<String> {
             id = null;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                      "CertAttrSet: CertificateIssuerUniqueIdentity.");
+                    "CertAttrSet: CertificateIssuerUniqueIdentity.");
         }
     }
 

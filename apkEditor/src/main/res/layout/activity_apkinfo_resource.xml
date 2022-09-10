@@ -212,7 +212,7 @@
                     android:hint="@string/pls_input_keyword"
                     android:inputType="textNoSuggestions"
                     android:singleLine="true"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <ImageButton
                     android:id="@+id/menu_search_res"

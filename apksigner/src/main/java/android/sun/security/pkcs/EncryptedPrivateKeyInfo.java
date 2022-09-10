@@ -25,10 +25,11 @@
 
 package android.sun.security.pkcs;
 
-import java.io.*;
-import android.sun.security.x509.*;
-import android.sun.security.util.DerValue;
 import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+import android.sun.security.x509.AlgorithmId;
+
+import java.io.IOException;
 
 /**
  * This class implements the <code>EncryptedPrivateKeyInfo</code> type,
@@ -41,7 +42,6 @@ import android.sun.security.util.DerOutputStream;
  * </pre>
  *
  * @author Jan Luehe
- *
  */
 
 public class EncryptedPrivateKeyInfo {
@@ -60,8 +60,7 @@ public class EncryptedPrivateKeyInfo {
      * its encoding.
      */
     public EncryptedPrivateKeyInfo(byte[] encoded)
-        throws IOException
-    {
+            throws IOException {
         if (encoded == null) {
             throw new IllegalArgumentException("encoding must not be null");
         }
@@ -116,8 +115,7 @@ public class EncryptedPrivateKeyInfo {
      * Returns the ASN.1 encoding of this class.
      */
     public byte[] getEncoded()
-        throws IOException
-    {
+            throws IOException {
         if (this.encoded != null) return this.encoded.clone();
 
         DerOutputStream out = new DerOutputStream();
@@ -144,13 +142,13 @@ public class EncryptedPrivateKeyInfo {
         try {
             byte[] thisEncrInfo = this.getEncoded();
             byte[] otherEncrInfo
-                = ((EncryptedPrivateKeyInfo)other).getEncoded();
+                    = ((EncryptedPrivateKeyInfo) other).getEncoded();
 
             if (thisEncrInfo.length != otherEncrInfo.length)
                 return false;
             for (int i = 0; i < thisEncrInfo.length; i++)
-                 if (thisEncrInfo[i] != otherEncrInfo[i])
-                     return false;
+                if (thisEncrInfo[i] != otherEncrInfo[i])
+                    return false;
             return true;
         } catch (IOException e) {
             return false;

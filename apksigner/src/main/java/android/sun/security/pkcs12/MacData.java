@@ -25,14 +25,15 @@
 
 package android.sun.security.pkcs12;
 
-import java.io.*;
-import java.security.*;
-
+import android.sun.security.pkcs.ParsingException;
 import android.sun.security.util.DerInputStream;
 import android.sun.security.util.DerOutputStream;
 import android.sun.security.util.DerValue;
 import android.sun.security.x509.AlgorithmId;
-import android.sun.security.pkcs.ParsingException;
+
+import java.io.IOException;
+import java.security.AlgorithmParameters;
+import java.security.NoSuchAlgorithmException;
 
 
 /**
@@ -56,8 +57,7 @@ class MacData {
      * Parses a PKCS#12 MAC data.
      */
     MacData(DerInputStream derin)
-        throws IOException, ParsingException
-    {
+            throws IOException, ParsingException {
         DerValue[] macData = derin.getSequence(2);
 
         // Parse the digest info
@@ -83,11 +83,10 @@ class MacData {
     }
 
     MacData(String algName, byte[] digest, byte[] salt, int iterations)
-        throws NoSuchAlgorithmException
-    {
+            throws NoSuchAlgorithmException {
         if (algName == null)
-           throw new NullPointerException("the algName parameter " +
-                                               "must be non-null");
+            throw new NullPointerException("the algName parameter " +
+                    "must be non-null");
 
         AlgorithmId algid = AlgorithmId.get(algName);
         this.digestAlgorithmName = algid.getName();
@@ -95,10 +94,10 @@ class MacData {
 
         if (digest == null) {
             throw new NullPointerException("the digest " +
-                                           "parameter must be non-null");
+                    "parameter must be non-null");
         } else if (digest.length == 0) {
             throw new IllegalArgumentException("the digest " +
-                                                "parameter must not be empty");
+                    "parameter must not be empty");
         } else {
             this.digest = digest.clone();
         }
@@ -113,11 +112,10 @@ class MacData {
     }
 
     MacData(AlgorithmParameters algParams, byte[] digest,
-        byte[] salt, int iterations) throws NoSuchAlgorithmException
-    {
+            byte[] salt, int iterations) throws NoSuchAlgorithmException {
         if (algParams == null)
-           throw new NullPointerException("the algParams parameter " +
-                                               "must be non-null");
+            throw new NullPointerException("the algParams parameter " +
+                    "must be non-null");
 
         AlgorithmId algid = AlgorithmId.get(algParams);
         this.digestAlgorithmName = algid.getName();
@@ -125,10 +123,10 @@ class MacData {
 
         if (digest == null) {
             throw new NullPointerException("the digest " +
-                                           "parameter must be non-null");
+                    "parameter must be non-null");
         } else if (digest.length == 0) {
             throw new IllegalArgumentException("the digest " +
-                                                "parameter must not be empty");
+                    "parameter must not be empty");
         } else {
             this.digest = digest.clone();
         }
@@ -160,12 +158,12 @@ class MacData {
 
     /**
      * Returns the ASN.1 encoding of this object.
+     *
      * @return the ASN.1 encoding.
-     * @exception IOException if error occurs when constructing its
-     * ASN.1 encoding.
+     * @throws IOException if error occurs when constructing its
+     *                     ASN.1 encoding.
      */
-    public byte[] getEncoded() throws NoSuchAlgorithmException, IOException
-    {
+    public byte[] getEncoded() throws NoSuchAlgorithmException, IOException {
         if (this.encoded != null)
             return this.encoded.clone();
 

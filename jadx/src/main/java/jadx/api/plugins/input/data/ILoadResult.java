@@ -4,9 +4,9 @@ import java.io.Closeable;
 import java.util.function.Consumer;
 
 public interface ILoadResult extends Closeable {
-	void visitClasses(Consumer<IClassData> consumer);
+    void visitClasses(Consumer<IClassData> consumer);
 
-	void visitResources(Consumer<IResourceData> consumer);
+    void visitResources(Consumer<IResourceData> consumer);
 
-	boolean isEmpty();
+    boolean isEmpty();
 }

@@ -26,17 +26,33 @@
 
 package android.sun.security.provider;
 
+import android.sun.misc.IOUtils;
 import android.sun.security.pkcs.EncryptedPrivateKeyInfo;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.DigestInputStream;
+import java.security.DigestOutputStream;
+import java.security.Key;
+import java.security.KeyStoreException;
+import java.security.KeyStoreSpi;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateException;
-import java.util.*;
-
-import android.sun.misc.IOUtils;
+import java.security.cert.CertificateFactory;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * This class provides the keystore implementation referred to as "JKS".
@@ -50,43 +66,14 @@ import android.sun.misc.IOUtils;
  */
 
 abstract class JavaKeyStore extends KeyStoreSpi {
-    // regular JKS
-    public static final class JKS extends JavaKeyStore {
-        String convertAlias(String alias) {
-            return alias.toLowerCase();
-        }
-    }
-
-    // special JKS that uses case sensitive aliases
-    public static final class CaseExactJKS extends JavaKeyStore {
-        String convertAlias(String alias) {
-            return alias;
-        }
-    }
-
     private static final int MAGIC = 0xfeedfeed;
     private static final int VERSION_1 = 0x01;
     private static final int VERSION_2 = 0x02;
-
-    // Private keys and their supporting certificate chains
-    private static class KeyEntry {
-        Date date; // the creation date of this entry
-        byte[] protectedPrivKey;
-        Certificate[] chain;
-    }
-
-    // Trusted certificates
-    private static class TrustedCertEntry {
-        Date date; // the creation date of this entry
-        Certificate cert;
-    }
-
     /**
      * Private keys and certificates are stored in a hashtable.
      * Hash entries are keyed by alias names.
      */
     private final Hashtable<String, Object> entries;
-
     JavaKeyStore() {
         entries = new Hashtable<>();
     }
@@ -746,5 +733,32 @@ abstract class JavaKeyStore extends KeyStoreSpi {
             passwdBytes[i] = 0;
         md.update("Mighty Aphrodite".getBytes(StandardCharsets.UTF_8));
         return md;
+    }
+
+    // regular JKS
+    public static final class JKS extends JavaKeyStore {
+        String convertAlias(String alias) {
+            return alias.toLowerCase();
+        }
+    }
+
+    // special JKS that uses case sensitive aliases
+    public static final class CaseExactJKS extends JavaKeyStore {
+        String convertAlias(String alias) {
+            return alias;
+        }
+    }
+
+    // Private keys and their supporting certificate chains
+    private static class KeyEntry {
+        Date date; // the creation date of this entry
+        byte[] protectedPrivKey;
+        Certificate[] chain;
+    }
+
+    // Trusted certificates
+    private static class TrustedCertEntry {
+        Date date; // the creation date of this entry
+        Certificate cert;
     }
 }

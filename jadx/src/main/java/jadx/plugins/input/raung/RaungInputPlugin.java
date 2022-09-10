@@ -11,20 +11,20 @@ import jadx.plugins.input.java.JavaInputPlugin;
 
 public class RaungInputPlugin implements JadxInputPlugin {
 
-	@Override
-	public JadxPluginInfo getPluginInfo() {
-		return new JadxPluginInfo(
-				"raung-input",
-				"RaungInput",
-				"Load .raung files");
-	}
+    @Override
+    public JadxPluginInfo getPluginInfo() {
+        return new JadxPluginInfo(
+                "raung-input",
+                "RaungInput",
+                "Load .raung files");
+    }
 
-	@Override
-	public ILoadResult loadFiles(List<Path> input) {
-		RaungConvert convert = new RaungConvert();
-		if (!convert.execute(input)) {
-			return EmptyLoadResult.INSTANCE;
-		}
-		return JavaInputPlugin.loadClassFiles(convert.getFiles(), convert);
-	}
+    @Override
+    public ILoadResult loadFiles(List<Path> input) {
+        RaungConvert convert = new RaungConvert();
+        if (!convert.execute(input)) {
+            return EmptyLoadResult.INSTANCE;
+        }
+        return JavaInputPlugin.loadClassFiles(convert.getFiles(), convert);
+    }
 }

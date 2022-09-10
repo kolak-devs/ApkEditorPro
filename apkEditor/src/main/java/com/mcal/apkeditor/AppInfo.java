@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 
 import java.io.File;
-import java.util.Date;
 
 public class AppInfo {
     public ApplicationInfo applicationInfo;

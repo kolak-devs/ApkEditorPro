@@ -12,7 +12,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import com.mcal.apkeditor.R
 import com.mcal.common.activities.CustomizedLangActivity
-import ru.svolf.melissa.swipeback.SwipeBackActivity
 
 class AboutActivity : CustomizedLangActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

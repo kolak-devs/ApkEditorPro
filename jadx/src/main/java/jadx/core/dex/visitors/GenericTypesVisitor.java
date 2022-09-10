@@ -17,45 +17,45 @@ import jadx.core.dex.visitors.typeinference.TypeInferenceVisitor;
 import jadx.core.utils.exceptions.JadxException;
 
 @JadxVisitor(
-		name = "GenericTypesVisitor",
-		desc = "Fix and apply generic type info",
-		runAfter = TypeInferenceVisitor.class,
-		runBefore = { CodeShrinkVisitor.class, MethodInvokeVisitor.class }
+        name = "GenericTypesVisitor",
+        desc = "Fix and apply generic type info",
+        runAfter = TypeInferenceVisitor.class,
+        runBefore = {CodeShrinkVisitor.class, MethodInvokeVisitor.class}
 )
 public class GenericTypesVisitor extends AbstractVisitor {
-	private static final Logger LOG = LoggerFactory.getLogger(GenericTypesVisitor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GenericTypesVisitor.class);
 
-	@Override
-	public void visit(MethodNode mth) throws JadxException {
-		if (mth.isNoCode()) {
-			return;
-		}
-		for (BlockNode block : mth.getBasicBlocks()) {
-			for (InsnNode insn : block.getInstructions()) {
-				if (insn.getType() == InsnType.CONSTRUCTOR) {
-					attachGenericTypesInfo(mth, (ConstructorInsn) insn);
-				}
-			}
-		}
-	}
+    @Override
+    public void visit(MethodNode mth) throws JadxException {
+        if (mth.isNoCode()) {
+            return;
+        }
+        for (BlockNode block : mth.getBasicBlocks()) {
+            for (InsnNode insn : block.getInstructions()) {
+                if (insn.getType() == InsnType.CONSTRUCTOR) {
+                    attachGenericTypesInfo(mth, (ConstructorInsn) insn);
+                }
+            }
+        }
+    }
 
-	private void attachGenericTypesInfo(MethodNode mth, ConstructorInsn insn) {
-		try {
-			RegisterArg resultArg = insn.getResult();
-			if (resultArg == null) {
-				return;
-			}
-			ArgType argType = resultArg.getSVar().getCodeVar().getType();
-			if (argType == null || argType.getGenericTypes() == null) {
-				return;
-			}
-			ClassNode cls = mth.root().resolveClass(insn.getClassType());
-			if (cls != null && cls.getGenericTypeParameters().isEmpty()) {
-				return;
-			}
-			insn.addAttr(new GenericInfoAttr(argType.getGenericTypes()));
-		} catch (Exception e) {
-			LOG.error("Failed to attach constructor generic info", e);
-		}
-	}
+    private void attachGenericTypesInfo(MethodNode mth, ConstructorInsn insn) {
+        try {
+            RegisterArg resultArg = insn.getResult();
+            if (resultArg == null) {
+                return;
+            }
+            ArgType argType = resultArg.getSVar().getCodeVar().getType();
+            if (argType == null || argType.getGenericTypes() == null) {
+                return;
+            }
+            ClassNode cls = mth.root().resolveClass(insn.getClassType());
+            if (cls != null && cls.getGenericTypeParameters().isEmpty()) {
+                return;
+            }
+            insn.addAttr(new GenericInfoAttr(argType.getGenericTypes()));
+        } catch (Exception e) {
+            LOG.error("Failed to attach constructor generic info", e);
+        }
+    }
 }

@@ -26,10 +26,10 @@ class AxmlBodyChunk {
     public static int endTag = 0x00100103;
     public static int namespaceTag = 0x00100100;
     public static int cdataTag = 0x00100104;
+    private final int stringCount; // stringCount is already added by 1
     // index in the string table ("android" & "manifest")
     ResStringChunk stringChunk;
     private byte[] rawChunkData;
-    private final int stringCount; // stringCount is already added by 1
     private int androidIndex;
 
     // addedAttrPosition = the position of added attribute name in string table
@@ -171,13 +171,10 @@ class AxmlBodyChunk {
 public class ManifestParser implements IAttributeCallback {
 
     private final MyInputStream input;
-
-    private ResStringChunk strChunk;
-    private ResAttrIdChunk attrIdChunk;
-
     // Value we concerned
     private final ManifestInfo result;
-
+    private ResStringChunk strChunk;
+    private ResAttrIdChunk attrIdChunk;
     // Temp variable to record the string index of last activity[-alias]
     private int lastActivityNameIdx = -1;
 

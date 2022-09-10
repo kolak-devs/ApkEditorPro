@@ -10,21 +10,17 @@ import java.io.OutputStream;
 // Referenced classes of package com.mcal.pmaster.asn1:
 //            Asn1Data
 
-public class Asn1Null extends Asn1Data
-{
+public class Asn1Null extends Asn1Data {
 
-    public Asn1Null()
-    {
+    public Asn1Null() {
     }
 
-    public int getBodyLength()
-    {
+    public int getBodyLength() {
         return 0;
     }
 
     public void write(OutputStream outputstream)
-        throws IOException
-    {
+            throws IOException {
         outputstream.write(5);
         outputstream.write(0);
     }

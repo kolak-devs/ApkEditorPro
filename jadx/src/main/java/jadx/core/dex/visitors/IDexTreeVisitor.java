@@ -10,20 +10,20 @@ import jadx.core.utils.exceptions.JadxException;
  */
 public interface IDexTreeVisitor {
 
-	/**
-	 * Called after loading dex tree, but before visitor traversal.
-	 */
-	void init(RootNode root) throws JadxException;
+    /**
+     * Called after loading dex tree, but before visitor traversal.
+     */
+    void init(RootNode root) throws JadxException;
 
-	/**
-	 * Visit class
-	 *
-	 * @return false for disable child methods and inner classes traversal
-	 */
-	boolean visit(ClassNode cls) throws JadxException;
+    /**
+     * Visit class
+     *
+     * @return false for disable child methods and inner classes traversal
+     */
+    boolean visit(ClassNode cls) throws JadxException;
 
-	/**
-	 * Visit method
-	 */
-	void visit(MethodNode mth) throws JadxException;
+    /**
+     * Visit method
+     */
+    void visit(MethodNode mth) throws JadxException;
 }

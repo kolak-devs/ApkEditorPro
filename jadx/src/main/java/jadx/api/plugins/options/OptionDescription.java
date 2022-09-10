@@ -1,25 +1,25 @@
 package jadx.api.plugins.options;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public interface OptionDescription {
 
-	String name();
+    String name();
 
-	String description();
+    String description();
 
-	/**
-	 * Possible values.
-	 * Empty if not a limited set
-	 */
-	List<String> values();
+    /**
+     * Possible values.
+     * Empty if not a limited set
+     */
+    List<String> values();
 
-	/**
-	 * Default value.
-	 * Null if required
-	 */
-	@Nullable
-	String defaultValue();
+    /**
+     * Default value.
+     * Null if required
+     */
+    @Nullable
+    String defaultValue();
 }

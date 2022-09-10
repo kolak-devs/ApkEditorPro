@@ -25,83 +25,90 @@
 
 package android.sun.security.pkcs12;
 
-import java.io.*;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.KeyStoreSpi;
-import java.security.KeyStoreException;
-import java.security.UnrecoverableKeyException;
-import java.security.SecureRandom;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.security.cert.CertificateException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.*;
-import java.math.*;
-
-import java.security.AlgorithmParameters;
-import java.security.spec.AlgorithmParameterSpec;
-import javax.crypto.spec.PBEParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.SecretKey;
-import javax.crypto.Cipher;
-import javax.crypto.Mac;
-import javax.security.auth.x500.X500Principal;
-
+import android.sun.security.pkcs.ContentInfo;
+import android.sun.security.pkcs.EncryptedPrivateKeyInfo;
 import android.sun.security.util.DerInputStream;
 import android.sun.security.util.DerOutputStream;
 import android.sun.security.util.DerValue;
 import android.sun.security.util.ObjectIdentifier;
-import android.sun.security.pkcs.ContentInfo;
 import android.sun.security.x509.AlgorithmId;
-import android.sun.security.pkcs.EncryptedPrivateKeyInfo;
+
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.AlgorithmParameters;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyStoreException;
+import java.security.KeyStoreSpi;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
+
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
+import javax.security.auth.x500.X500Principal;
 
 
 /**
  * This class provides the keystore implementation referred to as "PKCS12".
  * Implements the PKCS#12 PFX protected using the Password privacy mode.
  * The contents are protected using Password integrity mode.
- *
+ * <p>
  * Currently we support following PBE algorithms:
- *  - pbeWithSHAAnd3KeyTripleDESCBC to encrypt private keys
- *  - pbeWithSHAAnd40BitRC2CBC to encrypt certificates
- *
+ * - pbeWithSHAAnd3KeyTripleDESCBC to encrypt private keys
+ * - pbeWithSHAAnd40BitRC2CBC to encrypt certificates
+ * <p>
  * Supported encryption of various implementations :
- *
+ * <p>
  * Software and mode.     Certificate encryption  Private key encryption
  * ---------------------------------------------------------------------
  * MSIE4 (domestic            40 bit RC2.            40 bit RC2
  * and xport versions)
  * PKCS#12 export.
- *
+ * <p>
  * MSIE4, 5 (domestic         40 bit RC2,            40 bit RC2,
  * and export versions)       3 key triple DES       3 key triple DES
  * PKCS#12 import.
- *
+ * <p>
  * MSIE5                      40 bit RC2             3 key triple DES,
  * PKCS#12 export.                                   with SHA1 (168 bits)
- *
+ * <p>
  * Netscape Communicator      40 bit RC2             3 key triple DES,
  * (domestic and export                              with SHA1 (168 bits)
  * versions) PKCS#12 export
- *
+ * <p>
  * Netscape Communicator      40 bit ciphers only    All.
  * (export version)
  * PKCS#12 import.
- *
+ * <p>
  * Netscape Communicator      All.                   All.
  * (domestic or fortified
  * version) PKCS#12 import.
- *
+ * <p>
  * OpenSSL PKCS#12 code.      All.                   All.
  * ---------------------------------------------------------------------
- *
+ * <p>
  * NOTE: Currently PKCS12 KeyStore does not support TrustedCertEntries.
  * PKCS#12 is mainly used to deliver private keys with their associated
  * certificate chain and aliases. In a PKCS12 keystore, entries are
@@ -111,30 +118,28 @@ import android.sun.security.pkcs.EncryptedPrivateKeyInfo;
  * @author Seema Malkani
  * @author Jeff Nisewanger
  * @author Jan Luehe
- *
  * @see KeyProtector
  * @see java.security.KeyStoreSpi
  * @see KeyTool
- *
- *
  */
 public final class PKCS12KeyStore extends KeyStoreSpi {
 
     public static final int VERSION_3 = 3;
 
-    private static final int keyBag[]  = {1, 2, 840, 113549, 1, 12, 10, 1, 2};
+    private static final int keyBag[] = {1, 2, 840, 113549, 1, 12, 10, 1, 2};
     private static final int certBag[] = {1, 2, 840, 113549, 1, 12, 10, 1, 3};
 
-    private static final int pkcs9Name[]  = {1, 2, 840, 113549, 1, 9, 20};
+    private static final int pkcs9Name[] = {1, 2, 840, 113549, 1, 9, 20};
     private static final int pkcs9KeyId[] = {1, 2, 840, 113549, 1, 9, 21};
 
     private static final int pkcs9certType[] = {1, 2, 840, 113549, 1, 9, 22, 1};
 
     private static final int pbeWithSHAAnd40BitRC2CBC[] =
-                                        {1, 2, 840, 113549, 1, 12, 1, 6};
+            {1, 2, 840, 113549, 1, 12, 1, 6};
     private static final int pbeWithSHAAnd3KeyTripleDESCBC[] =
-                                        {1, 2, 840, 113549, 1, 12, 1, 3};
-
+            {1, 2, 840, 113549, 1, 12, 1, 3};
+    private static final int iterationCount = 1024;
+    private static final int SALT_LEN = 20;
     private static ObjectIdentifier PKCS8ShroudedKeyBag_OID;
     private static ObjectIdentifier CertBag_OID;
     private static ObjectIdentifier PKCS9FriendlyName_OID;
@@ -142,18 +147,6 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
     private static ObjectIdentifier PKCS9CertType_OID;
     private static ObjectIdentifier pbeWithSHAAnd40BitRC2CBC_OID;
     private static ObjectIdentifier pbeWithSHAAnd3KeyTripleDESCBC_OID;
-
-    private int counter = 0;
-    private static final int iterationCount = 1024;
-    private static final int SALT_LEN = 20;
-
-    // private key count
-    // Note: This is a workaround to allow null localKeyID attribute
-    // in pkcs12 with one private key entry and associated cert-chain
-    private int privateKeyCount = 0;
-
-    // the source of randomness
-    private SecureRandom random;
 
     static {
         try {
@@ -163,42 +156,29 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             PKCS9LocalKeyId_OID = new ObjectIdentifier(pkcs9KeyId);
             PKCS9CertType_OID = new ObjectIdentifier(pkcs9certType);
             pbeWithSHAAnd40BitRC2CBC_OID =
-                        new ObjectIdentifier(pbeWithSHAAnd40BitRC2CBC);
+                    new ObjectIdentifier(pbeWithSHAAnd40BitRC2CBC);
             pbeWithSHAAnd3KeyTripleDESCBC_OID =
-                        new ObjectIdentifier(pbeWithSHAAnd3KeyTripleDESCBC);
+                    new ObjectIdentifier(pbeWithSHAAnd3KeyTripleDESCBC);
         } catch (IOException ioe) {
             // should not happen
         }
     }
 
-    // Private keys and their supporting certificate chains
-    private static class KeyEntry {
-        Date date; // the creation date of this entry
-        byte[] protectedPrivKey;
-        Certificate chain[];
-        byte[] keyId;
-        String alias;
-    };
-
-    // A certificate with its PKCS #9 attributes
-    private static class CertEntry {
-        final X509Certificate cert;
-        final byte[] keyId;
-        final String alias;
-        CertEntry(X509Certificate cert, byte[] keyId, String alias) {
-            this.cert = cert;
-            this.keyId = keyId;
-            this.alias = alias;
-        }
-    }
-
+    private int counter = 0;
+    // private key count
+    // Note: This is a workaround to allow null localKeyID attribute
+    // in pkcs12 with one private key entry and associated cert-chain
+    private int privateKeyCount = 0;
+    // the source of randomness
+    private SecureRandom random;
     /**
      * Private keys and certificates are stored in a hashtable.
      * Hash entries are keyed by alias names.
      */
     private Hashtable<String, KeyEntry> entries =
-                                new Hashtable<String, KeyEntry>();
+            new Hashtable<String, KeyEntry>();
 
+    ;
     private ArrayList<KeyEntry> keyList = new ArrayList<KeyEntry>();
     private LinkedHashMap<X500Principal, X509Certificate> certsMap =
             new LinkedHashMap<X500Principal, X509Certificate>();
@@ -208,20 +188,17 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * Returns the key associated with the given alias, using the given
      * password to recover it.
      *
-     * @param alias the alias name
+     * @param alias    the alias name
      * @param password the password for recovering the key
-     *
      * @return the requested key, or null if the given alias does not exist
      * or does not identify a <i>key entry</i>.
-     *
-     * @exception NoSuchAlgorithmException if the algorithm for recovering the
-     * key cannot be found
-     * @exception UnrecoverableKeyException if the key cannot be recovered
-     * (e.g., the given password is wrong).
+     * @throws NoSuchAlgorithmException  if the algorithm for recovering the
+     *                                   key cannot be found
+     * @throws UnrecoverableKeyException if the key cannot be recovered
+     *                                   (e.g., the given password is wrong).
      */
     public Key engineGetKey(String alias, char[] password)
-        throws NoSuchAlgorithmException, UnrecoverableKeyException
-    {
+            throws NoSuchAlgorithmException, UnrecoverableKeyException {
         KeyEntry entry = entries.get(alias.toLowerCase());
         Key key = null;
 
@@ -238,7 +215,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         try {
             // get the encrypted private key
             EncryptedPrivateKeyInfo encrInfo =
-                        new EncryptedPrivateKeyInfo(encrBytes);
+                    new EncryptedPrivateKeyInfo(encrBytes);
             encryptedKey = encrInfo.getEncryptedData();
 
             // parse Algorithm parameters
@@ -249,8 +226,8 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
 
         } catch (IOException ioe) {
             UnrecoverableKeyException uke =
-                new UnrecoverableKeyException("Private key not stored as "
-                                 + "PKCS#8 EncryptedPrivateKeyInfo: " + ioe);
+                    new UnrecoverableKeyException("Private key not stored as "
+                            + "PKCS#8 EncryptedPrivateKeyInfo: " + ioe);
             uke.initCause(ioe);
             throw uke;
         }
@@ -276,11 +253,11 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             String algName = algId.getName();
 
             KeyFactory kfac = KeyFactory.getInstance(algName);
-            key =  kfac.generatePrivate(kspec);
+            key = kfac.generatePrivate(kspec);
         } catch (Exception e) {
             UnrecoverableKeyException uke =
-                new UnrecoverableKeyException("Get Key failed: " +
-                                        e.getMessage());
+                    new UnrecoverableKeyException("Get Key failed: " +
+                            e.getMessage());
             uke.initCause(e);
             throw uke;
         }
@@ -291,7 +268,6 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * Returns the certificate chain associated with the given alias.
      *
      * @param alias the alias name
-     *
      * @return the certificate chain (ordered with the user's certificate first
      * and the root certificate authority last), or null if the given alias
      * does not exist or does not contain a certificate chain (i.e., the given
@@ -322,7 +298,6 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * chain.
      *
      * @param alias the alias name
-     *
      * @return the certificate, or null if the given alias does not exist or
      * does not contain a certificate.
      */
@@ -343,7 +318,6 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * Returns the creation date of the entry identified by the given alias.
      *
      * @param alias the alias name
-     *
      * @return the creation date of this entry, or null if the given alias does
      * not exist
      */
@@ -368,33 +342,31 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * associated with it is overridden by the given key (and possibly
      * certificate chain).
      *
-     * @param alias the alias name
-     * @param key the key to be associated with the alias
+     * @param alias    the alias name
+     * @param key      the key to be associated with the alias
      * @param password the password to protect the key
-     * @param chain the certificate chain for the corresponding public
-     * key (only required if the given key is of type
-     * <code>java.security.PrivateKey</code>).
-     *
-     * @exception KeyStoreException if the given key cannot be protected, or
-     * this operation fails for some other reason
+     * @param chain    the certificate chain for the corresponding public
+     *                 key (only required if the given key is of type
+     *                 <code>java.security.PrivateKey</code>).
+     * @throws KeyStoreException if the given key cannot be protected, or
+     *                           this operation fails for some other reason
      */
     public synchronized void engineSetKeyEntry(String alias, Key key,
-                        char[] password, Certificate[] chain)
-        throws KeyStoreException
-    {
+                                               char[] password, Certificate[] chain)
+            throws KeyStoreException {
         try {
             KeyEntry entry = new KeyEntry();
             entry.date = new Date();
 
             if (key instanceof PrivateKey) {
                 if ((key.getFormat().equals("PKCS#8")) ||
-                    (key.getFormat().equals("PKCS8"))) {
+                        (key.getFormat().equals("PKCS8"))) {
                     // Encrypt the private key
                     entry.protectedPrivKey =
-                        encryptPrivateKey(key.getEncoded(), password);
+                            encryptPrivateKey(key.getEncoded(), password);
                 } else {
                     throw new KeyStoreException("Private key is not encoded" +
-                                "as PKCS#8");
+                            "as PKCS#8");
                 }
             } else {
                 throw new KeyStoreException("Key is not a PrivateKey");
@@ -404,8 +376,8 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             if (chain != null) {
                 // validate cert-chain
                 if ((chain.length > 1) && (!validateChain(chain)))
-                   throw new KeyStoreException("Certificate chain is " +
-                                                "not validate");
+                    throw new KeyStoreException("Certificate chain is " +
+                            "not validate");
                 entry.chain = chain.clone();
             }
 
@@ -418,7 +390,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             entries.put(alias.toLowerCase(), entry);
         } catch (Exception nsae) {
             KeyStoreException ke = new KeyStoreException("Key protection " +
-                                        " algorithm not found: " + nsae);
+                    " algorithm not found: " + nsae);
             ke.initCause(nsae);
             throw ke;
         }
@@ -440,24 +412,22 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * certificate chain).
      *
      * @param alias the alias name
-     * @param key the key (in protected format) to be associated with the alias
+     * @param key   the key (in protected format) to be associated with the alias
      * @param chain the certificate chain for the corresponding public
-     * key (only useful if the protected key is of type
-     * <code>java.security.PrivateKey</code>).
-     *
-     * @exception KeyStoreException if this operation fails.
+     *              key (only useful if the protected key is of type
+     *              <code>java.security.PrivateKey</code>).
+     * @throws KeyStoreException if this operation fails.
      */
     public synchronized void engineSetKeyEntry(String alias, byte[] key,
-                                  Certificate[] chain)
-        throws KeyStoreException
-    {
+                                               Certificate[] chain)
+            throws KeyStoreException {
         // key must be encoded as EncryptedPrivateKeyInfo
         // as defined in PKCS#8
         try {
             new EncryptedPrivateKeyInfo(key);
         } catch (IOException ioe) {
             KeyStoreException ke = new KeyStoreException("Private key is not"
-                        + " stored as PKCS#8 EncryptedPrivateKeyInfo: " + ioe);
+                    + " stored as PKCS#8 EncryptedPrivateKeyInfo: " + ioe);
             ke.initCause(ioe);
             throw ke;
         }
@@ -476,23 +446,21 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
 
         entry.protectedPrivKey = key.clone();
         if (chain != null) {
-           entry.chain = chain.clone();
+            entry.chain = chain.clone();
         }
 
         // add the entry
         entries.put(alias.toLowerCase(), entry);
     }
 
-
     /*
      * Generate random salt
      */
-    private byte[] getSalt()
-    {
+    private byte[] getSalt() {
         // Generate a random salt.
         byte[] salt = new byte[SALT_LEN];
         if (random == null) {
-           random = new SecureRandom();
+            random = new SecureRandom();
         }
         random.nextBytes(salt);
         return salt;
@@ -502,22 +470,21 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * Generate PBE Algorithm Parameters
      */
     private AlgorithmParameters getAlgorithmParameters(String algorithm)
-        throws IOException
-    {
+            throws IOException {
         AlgorithmParameters algParams = null;
 
         // create PBE parameters from salt and iteration count
         PBEParameterSpec paramSpec =
                 new PBEParameterSpec(getSalt(), iterationCount);
         try {
-           algParams = AlgorithmParameters.getInstance(algorithm);
-           algParams.init(paramSpec);
+            algParams = AlgorithmParameters.getInstance(algorithm);
+            algParams.init(paramSpec);
         } catch (Exception e) {
-           IOException ioe =
-                new IOException("getAlgorithmParameters failed: " +
-                                e.getMessage());
-           ioe.initCause(e);
-           throw ioe;
+            IOException ioe =
+                    new IOException("getAlgorithmParameters failed: " +
+                            e.getMessage());
+            ioe.initCause(e);
+            throw ioe;
         }
         return algParams;
     }
@@ -526,8 +493,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * parse Algorithm Parameters
      */
     private AlgorithmParameters parseAlgParameters(DerInputStream in)
-        throws IOException
-    {
+            throws IOException {
         AlgorithmParameters algParams = null;
         try {
             DerValue params;
@@ -536,7 +502,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             } else {
                 params = in.getDerValue();
                 if (params.tag == DerValue.tag_Null) {
-                   params = null;
+                    params = null;
                 }
             }
             if (params != null) {
@@ -544,11 +510,11 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
                 algParams.init(params.toByteArray());
             }
         } catch (Exception e) {
-           IOException ioe =
-                new IOException("parseAlgParameters failed: " +
-                                e.getMessage());
-           ioe.initCause(e);
-           throw ioe;
+            IOException ioe =
+                    new IOException("parseAlgParameters failed: " +
+                            e.getMessage());
+            ioe.initCause(e);
+            throw ioe;
         }
         return algParams;
     }
@@ -556,8 +522,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
     /*
      * Generate PBE key
      */
-    private SecretKey getPBEKey(char[] password) throws IOException
-    {
+    private SecretKey getPBEKey(char[] password) throws IOException {
         SecretKey skey = null;
 
         try {
@@ -565,10 +530,10 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             SecretKeyFactory skFac = SecretKeyFactory.getInstance("PBE");
             skey = skFac.generateSecret(keySpec);
         } catch (Exception e) {
-           IOException ioe = new IOException("getSecretKey failed: " +
-                                        e.getMessage());
-           ioe.initCause(e);
-           throw ioe;
+            IOException ioe = new IOException("getSecretKey failed: " +
+                    e.getMessage());
+            ioe.initCause(e);
+            throw ioe;
         }
         return skey;
     }
@@ -583,14 +548,13 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * @return encrypted private key encoded as EncryptedPrivateKeyInfo
      */
     private byte[] encryptPrivateKey(byte[] data, char[] password)
-        throws IOException, NoSuchAlgorithmException, UnrecoverableKeyException
-    {
+            throws IOException, NoSuchAlgorithmException, UnrecoverableKeyException {
         byte[] key = null;
 
         try {
             // create AlgorithmParameters
             AlgorithmParameters algParams =
-                getAlgorithmParameters("PBEWithSHA1AndDESede");
+                    getAlgorithmParameters("PBEWithSHA1AndDESede");
 
             // Use JCE
             SecretKey skey = getPBEKey(password);
@@ -601,14 +565,14 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             // wrap encrypted private key in EncryptedPrivateKeyInfo
             // as defined in PKCS#8
             AlgorithmId algid =
-                new AlgorithmId(pbeWithSHAAnd3KeyTripleDESCBC_OID, algParams);
+                    new AlgorithmId(pbeWithSHAAnd3KeyTripleDESCBC_OID, algParams);
             EncryptedPrivateKeyInfo encrInfo =
-                new EncryptedPrivateKeyInfo(algid, encryptedKey);
+                    new EncryptedPrivateKeyInfo(algid, encryptedKey);
             key = encrInfo.getEncoded();
         } catch (Exception e) {
             UnrecoverableKeyException uke =
-                new UnrecoverableKeyException("Encrypt Private Key failed: "
-                                                + e.getMessage());
+                    new UnrecoverableKeyException("Encrypt Private Key failed: "
+                            + e.getMessage());
             uke.initCause(e);
             throw uke;
         }
@@ -624,15 +588,13 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * overridden by the given certificate.
      *
      * @param alias the alias name
-     * @param cert the certificate
-     *
-     * @exception KeyStoreException if the given alias already exists and does
-     * identify a <i>key entry</i>, or on an attempt to create a
-     * <i>trusted cert entry</i> which is currently not supported.
+     * @param cert  the certificate
+     * @throws KeyStoreException if the given alias already exists and does
+     *                           identify a <i>key entry</i>, or on an attempt to create a
+     *                           <i>trusted cert entry</i> which is currently not supported.
      */
     public synchronized void engineSetCertificateEntry(String alias,
-        Certificate cert) throws KeyStoreException
-    {
+                                                       Certificate cert) throws KeyStoreException {
         KeyEntry entry = entries.get(alias.toLowerCase());
         if (entry != null) {
             throw new KeyStoreException("Cannot overwrite own certificate");
@@ -644,12 +606,10 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * Deletes the entry identified by the given alias from this keystore.
      *
      * @param alias the alias name
-     *
-     * @exception KeyStoreException if the entry cannot be removed.
+     * @throws KeyStoreException if the entry cannot be removed.
      */
     public synchronized void engineDeleteEntry(String alias)
-        throws KeyStoreException
-    {
+            throws KeyStoreException {
         entries.remove(alias.toLowerCase());
     }
 
@@ -666,7 +626,6 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * Checks if the given alias exists in this keystore.
      *
      * @param alias the alias name
-     *
      * @return true if the alias exists, false otherwise
      */
     public boolean engineContainsAlias(String alias) {
@@ -722,7 +681,6 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * element of that entry's certificate chain (if a chain exists).
      *
      * @param cert the certificate to match with.
-     *
      * @return the (alias) name of the first entry with matching certificate,
      * or null if no such entry exists in this keystore.
      */
@@ -746,21 +704,19 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * Stores this keystore to the given output stream, and protects its
      * integrity with the given password.
      *
-     * @param stream the output stream to which this keystore is written.
+     * @param stream   the output stream to which this keystore is written.
      * @param password the password to generate the keystore integrity check
-     *
-     * @exception IOException if there was an I/O problem with data
-     * @exception NoSuchAlgorithmException if the appropriate data integrity
-     * algorithm could not be found
-     * @exception CertificateException if any of the certificates included in
-     * the keystore data could not be stored
+     * @throws IOException              if there was an I/O problem with data
+     * @throws NoSuchAlgorithmException if the appropriate data integrity
+     *                                  algorithm could not be found
+     * @throws CertificateException     if any of the certificates included in
+     *                                  the keystore data could not be stored
      */
     public synchronized void engineStore(OutputStream stream, char[] password)
-        throws IOException, NoSuchAlgorithmException, CertificateException
-    {
+            throws IOException, NoSuchAlgorithmException, CertificateException {
         // password is mandatory when storing
         if (password == null) {
-           throw new IllegalArgumentException("password can't be null");
+            throw new IllegalArgumentException("password can't be null");
         }
 
         // -- Create PFX
@@ -787,7 +743,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         byte[] encrData = createEncryptedData(password);
         ContentInfo encrContentInfo =
                 new ContentInfo(ContentInfo.ENCRYPTED_DATA_OID,
-                                new DerValue(encrData));
+                        new DerValue(encrData));
         encrContentInfo.encode(authSafeContentInfo);
 
         // wrap as SequenceOf ContentInfos
@@ -813,12 +769,10 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         stream.flush();
     }
 
-
     /*
      * Generate Hash.
      */
-    private byte[] generateHash(byte[] data) throws IOException
-    {
+    private byte[] generateHash(byte[] data) throws IOException {
         byte[] digest = null;
 
         try {
@@ -833,7 +787,6 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         return digest;
     }
 
-
     /*
      * Calculate MAC using HMAC algorithm (required for password integrity)
      *
@@ -841,8 +794,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * create a message authentication code (MAC)
      */
     private byte[] calculateMac(char[] passwd, byte[] data)
-        throws IOException
-    {
+            throws IOException {
         byte[] mData = null;
         String algName = "SHA1";
 
@@ -853,7 +805,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             // generate MAC (MAC key is generated within JCE)
             Mac m = Mac.getInstance("HmacPBESHA1");
             PBEParameterSpec params =
-                        new PBEParameterSpec(salt, iterationCount);
+                    new PBEParameterSpec(salt, iterationCount);
             SecretKey key = getPBEKey(passwd);
             m.init(key, params);
             m.update(data);
@@ -861,7 +813,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
 
             // encode as MacData
             MacData macData = new MacData(algName, macResult, salt,
-                                                iterationCount);
+                    iterationCount);
             DerOutputStream bytes = new DerOutputStream();
             bytes.write(macData.getEncoded());
             mData = bytes.toByteArray();
@@ -873,23 +825,20 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         return mData;
     }
 
-
     /*
      * Validate Certificate Chain
      */
-    private boolean validateChain(Certificate[] certChain)
-    {
-        for (int i = 0; i < certChain.length-1; i++) {
+    private boolean validateChain(Certificate[] certChain) {
+        for (int i = 0; i < certChain.length - 1; i++) {
             X500Principal issuerDN =
-                ((X509Certificate)certChain[i]).getIssuerX500Principal();
+                    ((X509Certificate) certChain[i]).getIssuerX500Principal();
             X500Principal subjectDN =
-                ((X509Certificate)certChain[i+1]).getSubjectX500Principal();
+                    ((X509Certificate) certChain[i + 1]).getSubjectX500Principal();
             if (!(issuerDN.equals(subjectDN)))
                 return false;
         }
         return true;
     }
-
 
     /*
      * Create PKCS#12 Attributes, friendlyName and localKeyId.
@@ -925,7 +874,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * add it, and assign it to the DN of the cert.
      */
     private byte[] getBagAttributes(String alias, byte[] keyId)
-        throws IOException {
+            throws IOException {
 
         byte[] localKeyID = null;
         byte[] friendlyName = null;
@@ -973,7 +922,6 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         return bagAttrs.toByteArray();
     }
 
-
     /*
      * Create EncryptedData content type, that contains EncryptedContentInfo.
      * Includes certificates in individual SafeBags of type CertBag.
@@ -981,8 +929,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * (see comments in getBagAttributes)
      */
     private byte[] createEncryptedData(char[] password)
-        throws CertificateException, IOException
-    {
+            throws CertificateException, IOException {
         DerOutputStream out = new DerOutputStream();
         for (Enumeration<String> e = entries.keys(); e.hasMoreElements(); ) {
 
@@ -1008,10 +955,10 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
 
                 // write encoded certs in a context-specific tag
                 DerOutputStream certValue = new DerOutputStream();
-                X509Certificate cert = (X509Certificate)entry.chain[i];
+                X509Certificate cert = (X509Certificate) entry.chain[i];
                 certValue.putOctetString(cert.getEncoded());
                 certBag.write(DerValue.createTag(DerValue.TAG_CONTEXT,
-                                        true, (byte) 0), certValue);
+                        true, (byte) 0), certValue);
 
                 // wrap CertBag in a Sequence
                 DerOutputStream certout = new DerOutputStream();
@@ -1023,7 +970,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
                 bagValue.write(certBagValue);
                 // write SafeBag Value
                 safeBag.write(DerValue.createTag(DerValue.TAG_CONTEXT,
-                                true, (byte) 0), bagValue);
+                        true, (byte) 0), bagValue);
 
                 // write SafeBag Attributes
                 // All Certs should have a unique friendlyName.
@@ -1075,7 +1022,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * (see comments in getBagAttributes)
      */
     private byte[] createSafeContent()
-        throws CertificateException, IOException {
+            throws CertificateException, IOException {
 
         DerOutputStream out = new DerOutputStream();
         for (Enumeration<String> e = entries.keys(); e.hasMoreElements(); ) {
@@ -1101,7 +1048,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             DerOutputStream bagValue = new DerOutputStream();
             bagValue.write(encrInfo.getEncoded());
             safeBag.write(DerValue.createTag(DerValue.TAG_CONTEXT,
-                                true, (byte) 0), bagValue);
+                    true, (byte) 0), bagValue);
 
             // write SafeBag Attributes
             byte[] bagAttrs = getBagAttributes(alias, entry.keyId);
@@ -1117,7 +1064,6 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         return safeBagValue.toByteArray();
     }
 
-
     /*
      * Encrypt the contents using Password-based (PBE) encryption
      * as defined in PKCS #5.
@@ -1128,7 +1074,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * @return encrypted contents encoded as EncryptedContentInfo
      */
     private byte[] encryptContent(byte[] data, char[] password)
-        throws IOException {
+            throws IOException {
 
         byte[] encryptedData = null;
 
@@ -1150,7 +1096,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
 
         } catch (Exception e) {
             IOException ioe = new IOException("Failed to encrypt" +
-                                " safe contents entry: " + e);
+                    " safe contents entry: " + e);
             ioe.initCause(e);
             throw ioe;
         }
@@ -1164,7 +1110,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         DerOutputStream tmpout2 = new DerOutputStream();
         tmpout2.putOctetString(encryptedData);
         bytes2.writeImplicit(DerValue.createTag(DerValue.TAG_CONTEXT,
-                                        false, (byte)0), tmpout2);
+                false, (byte) 0), tmpout2);
 
         // wrap EncryptedContentInfo in a Sequence
         DerOutputStream out = new DerOutputStream();
@@ -1178,27 +1124,25 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
      * <p>If a password is given, it is used to check the integrity of the
      * keystore data. Otherwise, the integrity of the keystore is not checked.
      *
-     * @param stream the input stream from which the keystore is loaded
+     * @param stream   the input stream from which the keystore is loaded
      * @param password the (optional) password used to check the integrity of
-     * the keystore.
-     *
-     * @exception IOException if there is an I/O or format problem with the
-     * keystore data
-     * @exception NoSuchAlgorithmException if the algorithm used to check
-     * the integrity of the keystore cannot be found
-     * @exception CertificateException if any of the certificates in the
-     * keystore could not be loaded
+     *                 the keystore.
+     * @throws IOException              if there is an I/O or format problem with the
+     *                                  keystore data
+     * @throws NoSuchAlgorithmException if the algorithm used to check
+     *                                  the integrity of the keystore cannot be found
+     * @throws CertificateException     if any of the certificates in the
+     *                                  keystore could not be loaded
      */
     public synchronized void engineLoad(InputStream stream, char[] password)
-        throws IOException, NoSuchAlgorithmException, CertificateException
-    {
+            throws IOException, NoSuchAlgorithmException, CertificateException {
         DataInputStream dis;
         CertificateFactory cf = null;
         ByteArrayInputStream bais = null;
         byte[] encoded = null;
 
         if (stream == null)
-           return;
+            return;
 
         // reset the counter
         counter = 0;
@@ -1208,7 +1152,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         int version = s.getInteger();
 
         if (version != VERSION_3) {
-           throw new IOException("PKCS12 keystore not in version 3 format");
+            throw new IOException("PKCS12 keystore not in version 3 format");
         }
 
         entries.clear();
@@ -1221,9 +1165,9 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         ObjectIdentifier contentType = authSafe.getContentType();
 
         if (contentType.equals(ContentInfo.DATA_OID)) {
-           authSafeData = authSafe.getData();
+            authSafeData = authSafe.getData();
         } else /* signed data */ {
-           throw new IOException("public key protected PKCS12 not supported");
+            throw new IOException("public key protected PKCS12 not supported");
         }
 
         DerInputStream as = new DerInputStream(authSafeData);
@@ -1250,20 +1194,20 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
                 safeContentsData = safeContents.getData();
             } else if (contentType.equals(ContentInfo.ENCRYPTED_DATA_OID)) {
                 if (password == null) {
-                   continue;
+                    continue;
                 }
                 DerInputStream edi =
-                                safeContents.getContent().toDerInputStream();
+                        safeContents.getContent().toDerInputStream();
                 int edVersion = edi.getInteger();
                 DerValue[] seq = edi.getSequence(2);
                 ObjectIdentifier edContentType = seq[0].getOID();
                 eAlgId = seq[1].toByteArray();
-                if (!seq[2].isContextSpecific((byte)0)) {
-                   throw new IOException("encrypted content not present!");
+                if (!seq[2].isContextSpecific((byte) 0)) {
+                    throw new IOException("encrypted content not present!");
                 }
                 byte newTag = DerValue.tag_OctetString;
                 if (seq[2].isConstructed())
-                   newTag |= 0x20;
+                    newTag |= 0x20;
                 seq[2].resetTag(newTag);
                 safeContentsData = seq[2].getOctetString();
 
@@ -1281,13 +1225,13 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
 
                 } catch (Exception e) {
                     IOException ioe = new IOException("failed to decrypt safe"
-                                        + " contents entry: " + e);
+                            + " contents entry: " + e);
                     ioe.initCause(e);
                     throw ioe;
                 }
             } else {
                 throw new IOException("public key protected PKCS12" +
-                                        " not supported");
+                        " not supported");
             }
             DerInputStream sc = new DerInputStream(safeContentsData);
             loadSafeContents(sc, password);
@@ -1295,12 +1239,12 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
 
         // The MacData is optional.
         if (password != null && s.available() > 0) {
-           MacData macData = new MacData(s);
-           try {
+            MacData macData = new MacData(s);
+            try {
                 String algName = macData.getDigestAlgName().toUpperCase();
-                if (algName.equals("SHA")  ||
-                    algName.equals("SHA1") ||
-                    algName.equals("SHA-1")) {
+                if (algName.equals("SHA") ||
+                        algName.equals("SHA1") ||
+                        algName.equals("SHA-1")) {
                     algName = "SHA1";
                 }
 
@@ -1308,22 +1252,22 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
                 Mac m = Mac.getInstance("HmacPBE" + algName);
                 PBEParameterSpec params =
                         new PBEParameterSpec(macData.getSalt(),
-                                        macData.getIterations());
+                                macData.getIterations());
                 SecretKey key = getPBEKey(password);
                 m.init(key, params);
                 m.update(authSafeData);
                 byte[] macResult = m.doFinal();
 
                 if (!Arrays.equals(macData.getDigest(), macResult)) {
-                   throw new SecurityException("Failed PKCS12" +
-                                        " integrity checking");
+                    throw new SecurityException("Failed PKCS12" +
+                            " integrity checking");
                 }
-           } catch (Exception e) {
+            } catch (Exception e) {
                 IOException ioe =
                         new IOException("Integrity check failed: " + e);
                 ioe.initCause(e);
                 throw ioe;
-           }
+            }
         }
 
         /*
@@ -1334,7 +1278,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             KeyEntry entry = list[m];
             if (entry.keyId != null) {
                 ArrayList<X509Certificate> chain =
-                                new ArrayList<X509Certificate>();
+                        new ArrayList<X509Certificate>();
                 X509Certificate cert = findMatchedCertificate(entry);
                 while (cert != null) {
                     chain.add(cert);
@@ -1356,13 +1300,14 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
 
     /**
      * Locates a matched CertEntry from certEntries, and returns its cert.
+     *
      * @param entry the KeyEntry to match
      * @return a certificate, null if not found
      */
     private X509Certificate findMatchedCertificate(KeyEntry entry) {
         CertEntry keyIdMatch = null;
         CertEntry aliasMatch = null;
-        for (CertEntry ce: certEntries) {
+        for (CertEntry ce : certEntries) {
             if (Arrays.equals(entry.keyId, ce.keyId)) {
                 keyIdMatch = ce;
                 if (entry.alias.equalsIgnoreCase(ce.alias)) {
@@ -1380,8 +1325,7 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
     }
 
     private void loadSafeContents(DerInputStream stream, char[] password)
-        throws IOException, NoSuchAlgorithmException, CertificateException
-    {
+            throws IOException, NoSuchAlgorithmException, CertificateException {
         DerValue[] safeBags = stream.getSequence(2);
         int count = safeBags.length;
 
@@ -1397,9 +1341,9 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             sbi = safeBags[i].toDerInputStream();
             bagId = sbi.getOID();
             bagValue = sbi.getDerValue();
-            if (!bagValue.isContextSpecific((byte)0)) {
+            if (!bagValue.isContextSpecific((byte) 0)) {
                 throw new IOException("unsupported PKCS12 bag value type "
-                                        + bagValue.tag);
+                        + bagValue.tag);
             }
             bagValue = bagValue.data.getDerValue();
             if (bagId.equals(PKCS8ShroudedKeyBag_OID)) {
@@ -1411,14 +1355,14 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
                 DerInputStream cs = new DerInputStream(bagValue.toByteArray());
                 DerValue[] certValues = cs.getSequence(2);
                 ObjectIdentifier certId = certValues[0].getOID();
-                if (!certValues[1].isContextSpecific((byte)0)) {
+                if (!certValues[1].isContextSpecific((byte) 0)) {
                     throw new IOException("unsupported PKCS12 cert value type "
-                                        + certValues[1].tag);
+                            + certValues[1].tag);
                 }
                 DerValue certValue = certValues[1].data.getDerValue();
                 CertificateFactory cf = CertificateFactory.getInstance("X509");
                 X509Certificate cert;
-                cert = (X509Certificate)cf.generateCertificate
+                cert = (X509Certificate) cf.generateCertificate
                         (new ByteArrayInputStream(certValue.getOctetString()));
                 bagItem = cert;
             } else {
@@ -1441,11 +1385,11 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
             if (attrSet != null) {
                 for (int j = 0; j < attrSet.length; j++) {
                     DerInputStream as =
-                        new DerInputStream(attrSet[j].toByteArray());
+                            new DerInputStream(attrSet[j].toByteArray());
                     DerValue[] attrSeq = as.getSequence(2);
                     ObjectIdentifier attrId = attrSeq[0].getOID();
                     DerInputStream vs =
-                        new DerInputStream(attrSeq[1].toByteArray());
+                            new DerInputStream(attrSeq[1].toByteArray());
                     DerValue[] valSet;
                     try {
                         valSet = vs.getSet(1);
@@ -1473,17 +1417,17 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
              * null keyId, we should skip it entirely.
              */
             if (bagItem instanceof KeyEntry) {
-                KeyEntry entry = (KeyEntry)bagItem;
+                KeyEntry entry = (KeyEntry) bagItem;
                 if (keyId == null) {
-                   // Insert a localKeyID for the privateKey
-                   // Note: This is a workaround to allow null localKeyID
-                   // attribute in pkcs12 with one private key entry and
-                   // associated cert-chain
-                   if (privateKeyCount == 1) {
+                    // Insert a localKeyID for the privateKey
+                    // Note: This is a workaround to allow null localKeyID
+                    // attribute in pkcs12 with one private key entry and
+                    // associated cert-chain
+                    if (privateKeyCount == 1) {
                         keyId = "01".getBytes("UTF8");
-                   } else {
+                    } else {
                         continue;
-                   }
+                    }
                 }
                 entry.keyId = keyId;
                 // restore date if it exists
@@ -1503,11 +1447,11 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
                 entry.date = date;
                 keyList.add(entry);
                 if (alias == null)
-                   alias = getUnfriendlyName();
+                    alias = getUnfriendlyName();
                 entry.alias = alias;
                 entries.put(alias.toLowerCase(), entry);
             } else if (bagItem instanceof X509Certificate) {
-                X509Certificate cert = (X509Certificate)bagItem;
+                X509Certificate cert = (X509Certificate) bagItem;
                 // Insert a localKeyID for the corresponding cert
                 // Note: This is a workaround to allow null localKeyID
                 // attribute in pkcs12 with one private key entry and
@@ -1532,5 +1476,27 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
     private String getUnfriendlyName() {
         counter++;
         return (String.valueOf(counter));
+    }
+
+    // Private keys and their supporting certificate chains
+    private static class KeyEntry {
+        Date date; // the creation date of this entry
+        byte[] protectedPrivKey;
+        Certificate chain[];
+        byte[] keyId;
+        String alias;
+    }
+
+    // A certificate with its PKCS #9 attributes
+    private static class CertEntry {
+        final X509Certificate cert;
+        final byte[] keyId;
+        final String alias;
+
+        CertEntry(X509Certificate cert, byte[] keyId, String alias) {
+            this.cert = cert;
+            this.keyId = keyId;
+            this.alias = alias;
+        }
     }
 }

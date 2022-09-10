@@ -3,12 +3,16 @@ package com.mcal.common.utils
 class FileRecord {
     @JvmField
     var fileName: String? = null
+
     @JvmField
     var isDir = false
+
     @JvmField
     var totalSize: Long = 0
+
     @JvmField
     var isInZip = false
+
     @JvmField
     var size = 0
 

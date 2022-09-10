@@ -15,86 +15,86 @@ import jadx.core.utils.exceptions.CodegenException;
 
 public final class SwitchRegion extends AbstractRegion implements IBranchRegion {
 
-	public static final Object DEFAULT_CASE_KEY = new Object();
+    public static final Object DEFAULT_CASE_KEY = new Object();
 
-	private final BlockNode header;
+    private final BlockNode header;
 
-	private final List<CaseInfo> cases;
+    private final List<CaseInfo> cases;
 
-	public SwitchRegion(IRegion parent, BlockNode header) {
-		super(parent);
-		this.header = header;
-		this.cases = new ArrayList<>();
-	}
+    public SwitchRegion(IRegion parent, BlockNode header) {
+        super(parent);
+        this.header = header;
+        this.cases = new ArrayList<>();
+    }
 
-	public static final class CaseInfo {
-		private final List<Object> keys;
-		private final IContainer container;
+    public BlockNode getHeader() {
+        return header;
+    }
 
-		public CaseInfo(List<Object> keys, IContainer container) {
-			this.keys = keys;
-			this.container = container;
-		}
+    public void addCase(List<Object> keysList, IContainer c) {
+        cases.add(new CaseInfo(keysList, c));
+    }
 
-		public List<Object> getKeys() {
-			return keys;
-		}
+    public List<CaseInfo> getCases() {
+        return cases;
+    }
 
-		public IContainer getContainer() {
-			return container;
-		}
-	}
+    public List<IContainer> getCaseContainers() {
+        return Utils.collectionMap(cases, caseInfo -> caseInfo.container);
+    }
 
-	public BlockNode getHeader() {
-		return header;
-	}
+    @Override
+    public List<IContainer> getSubBlocks() {
+        List<IContainer> all = new ArrayList<>(cases.size() + 1);
+        all.add(header);
+        all.addAll(getCaseContainers());
+        return Collections.unmodifiableList(all);
+    }
 
-	public void addCase(List<Object> keysList, IContainer c) {
-		cases.add(new CaseInfo(keysList, c));
-	}
+    @Override
+    public List<IContainer> getBranches() {
+        return Collections.unmodifiableList(getCaseContainers());
+    }
 
-	public List<CaseInfo> getCases() {
-		return cases;
-	}
+    @Override
+    public void generate(RegionGen regionGen, ICodeWriter code) throws CodegenException {
+        regionGen.makeSwitch(this, code);
+    }
 
-	public List<IContainer> getCaseContainers() {
-		return Utils.collectionMap(cases, caseInfo -> caseInfo.container);
-	}
+    @Override
+    public String baseString() {
+        return header.baseString();
+    }
 
-	@Override
-	public List<IContainer> getSubBlocks() {
-		List<IContainer> all = new ArrayList<>(cases.size() + 1);
-		all.add(header);
-		all.addAll(getCaseContainers());
-		return Collections.unmodifiableList(all);
-	}
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Switch: ").append(cases.size());
+        for (CaseInfo caseInfo : cases) {
+            List<String> keyStrings = Utils.collectionMap(caseInfo.getKeys(),
+                    k -> k == DEFAULT_CASE_KEY ? "default" : k.toString());
+            sb.append(ICodeWriter.NL).append(" case ")
+                    .append(Utils.listToString(keyStrings))
+                    .append(" -> ").append(caseInfo.getContainer());
+        }
+        return sb.toString();
+    }
 
-	@Override
-	public List<IContainer> getBranches() {
-		return Collections.unmodifiableList(getCaseContainers());
-	}
+    public static final class CaseInfo {
+        private final List<Object> keys;
+        private final IContainer container;
 
-	@Override
-	public void generate(RegionGen regionGen, ICodeWriter code) throws CodegenException {
-		regionGen.makeSwitch(this, code);
-	}
+        public CaseInfo(List<Object> keys, IContainer container) {
+            this.keys = keys;
+            this.container = container;
+        }
 
-	@Override
-	public String baseString() {
-		return header.baseString();
-	}
+        public List<Object> getKeys() {
+            return keys;
+        }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Switch: ").append(cases.size());
-		for (CaseInfo caseInfo : cases) {
-			List<String> keyStrings = Utils.collectionMap(caseInfo.getKeys(),
-					k -> k == DEFAULT_CASE_KEY ? "default" : k.toString());
-			sb.append(ICodeWriter.NL).append(" case ")
-					.append(Utils.listToString(keyStrings))
-					.append(" -> ").append(caseInfo.getContainer());
-		}
-		return sb.toString();
-	}
+        public IContainer getContainer() {
+            return container;
+        }
+    }
 }

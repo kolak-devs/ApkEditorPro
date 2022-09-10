@@ -11,19 +11,19 @@ import jadx.plugins.input.dex.DexInputPlugin;
 
 public class SmaliInputPlugin implements JadxInputPlugin {
 
-	private final DexInputPlugin dexInput = new DexInputPlugin();
+    private final DexInputPlugin dexInput = new DexInputPlugin();
 
-	@Override
-	public JadxPluginInfo getPluginInfo() {
-		return new JadxPluginInfo("smali-input", "SmaliInput", "Load .smali files");
-	}
+    @Override
+    public JadxPluginInfo getPluginInfo() {
+        return new JadxPluginInfo("smali-input", "SmaliInput", "Load .smali files");
+    }
 
-	@Override
-	public ILoadResult loadFiles(List<Path> input) {
-		SmaliConvert convert = new SmaliConvert();
-		if (!convert.execute(input)) {
-			return EmptyLoadResult.INSTANCE;
-		}
-		return dexInput.loadFiles(convert.getDexFiles(), convert);
-	}
+    @Override
+    public ILoadResult loadFiles(List<Path> input) {
+        SmaliConvert convert = new SmaliConvert();
+        if (!convert.execute(input)) {
+            return EmptyLoadResult.INSTANCE;
+        }
+        return dexInput.loadFiles(convert.getDexFiles(), convert);
+    }
 }

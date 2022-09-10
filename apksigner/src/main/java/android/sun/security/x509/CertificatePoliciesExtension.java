@@ -25,12 +25,14 @@
 
 package android.sun.security.x509;
 
+import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
-
-import android.sun.security.util.DerValue;
-import android.sun.security.util.DerOutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * This class defines the certificate policies extension which specifies the
@@ -46,7 +48,7 @@ import android.sun.security.util.DerOutputStream;
  * <p>
  * Optional qualifiers are not supported in this implementation, as they are
  * not recommended by RFC2459.
- *
+ * <p>
  * The ASN.1 syntax for this is (IMPLICIT tagging is defined in the
  * module definition):
  * <pre>
@@ -61,13 +63,14 @@ import android.sun.security.util.DerOutputStream;
  *
  * CertPolicyId ::= OBJECT IDENTIFIER
  * </pre>
+ *
  * @author Anne Anderson
- * @since       1.4
  * @see android.sun.security.x509.Extension
  * @see android.sun.security.x509.CertAttrSet
+ * @since 1.4
  */
 public class CertificatePoliciesExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
@@ -84,6 +87,58 @@ implements CertAttrSet<String> {
      */
     private List<android.sun.security.x509.PolicyInformation> certPolicies;
 
+    /**
+     * Create a CertificatePoliciesExtension object from
+     * a List of PolicyInformation; the criticality is set to false.
+     *
+     * @param certPolicies the List of PolicyInformation.
+     */
+    public CertificatePoliciesExtension(List<android.sun.security.x509.PolicyInformation> certPolicies)
+            throws IOException {
+        this(Boolean.FALSE, certPolicies);
+    }
+
+    /**
+     * Create a CertificatePoliciesExtension object from
+     * a List of PolicyInformation with specified criticality.
+     *
+     * @param critical     true if the extension is to be treated as critical.
+     * @param certPolicies the List of PolicyInformation.
+     */
+    public CertificatePoliciesExtension(Boolean critical,
+                                        List<android.sun.security.x509.PolicyInformation> certPolicies) throws IOException {
+        this.certPolicies = certPolicies;
+        this.extensionId = android.sun.security.x509.PKIXExtensions.CertificatePolicies_Id;
+        this.critical = critical.booleanValue();
+        encodeThis();
+    }
+
+    /**
+     * Create the extension from its DER encoded value and criticality.
+     *
+     * @param critical true if the extension is to be treated as critical.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
+     */
+    public CertificatePoliciesExtension(Boolean critical, Object value)
+            throws IOException {
+        this.extensionId = android.sun.security.x509.PKIXExtensions.CertificatePolicies_Id;
+        this.critical = critical.booleanValue();
+        this.extensionValue = (byte[]) value;
+        DerValue val = new DerValue(this.extensionValue);
+        if (val.tag != DerValue.tag_Sequence) {
+            throw new IOException("Invalid encoding for " +
+                    "CertificatePoliciesExtension.");
+        }
+        certPolicies = new ArrayList<android.sun.security.x509.PolicyInformation>();
+        while (val.data.available() != 0) {
+            DerValue seq = val.data.getDerValue();
+            android.sun.security.x509.PolicyInformation policy = new android.sun.security.x509.PolicyInformation(seq);
+            certPolicies.add(policy);
+        }
+    }
+
     // Encode this extension value.
     private void encodeThis() throws IOException {
         if (certPolicies == null || certPolicies.isEmpty()) {
@@ -98,58 +153,6 @@ implements CertAttrSet<String> {
 
             os.write(DerValue.tag_Sequence, tmp);
             this.extensionValue = os.toByteArray();
-        }
-    }
-
-    /**
-     * Create a CertificatePoliciesExtension object from
-     * a List of PolicyInformation; the criticality is set to false.
-     *
-     * @param certPolicies the List of PolicyInformation.
-     */
-    public CertificatePoliciesExtension(List<android.sun.security.x509.PolicyInformation> certPolicies)
-    throws IOException {
-        this(Boolean.FALSE, certPolicies);
-    }
-
-    /**
-     * Create a CertificatePoliciesExtension object from
-     * a List of PolicyInformation with specified criticality.
-     *
-     * @param critical true if the extension is to be treated as critical.
-     * @param certPolicies the List of PolicyInformation.
-     */
-    public CertificatePoliciesExtension(Boolean critical,
-            List<android.sun.security.x509.PolicyInformation> certPolicies) throws IOException {
-        this.certPolicies = certPolicies;
-        this.extensionId = android.sun.security.x509.PKIXExtensions.CertificatePolicies_Id;
-        this.critical = critical.booleanValue();
-        encodeThis();
-    }
-
-    /**
-     * Create the extension from its DER encoded value and criticality.
-     *
-     * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
-     */
-    public CertificatePoliciesExtension(Boolean critical, Object value)
-    throws IOException {
-        this.extensionId = android.sun.security.x509.PKIXExtensions.CertificatePolicies_Id;
-        this.critical = critical.booleanValue();
-        this.extensionValue = (byte[]) value;
-        DerValue val = new DerValue(this.extensionValue);
-        if (val.tag != DerValue.tag_Sequence) {
-            throw new IOException("Invalid encoding for " +
-                                   "CertificatePoliciesExtension.");
-        }
-        certPolicies = new ArrayList<android.sun.security.x509.PolicyInformation>();
-        while (val.data.available() != 0) {
-            DerValue seq = val.data.getDerValue();
-            android.sun.security.x509.PolicyInformation policy = new android.sun.security.x509.PolicyInformation(seq);
-            certPolicies.add(policy);
         }
     }
 
@@ -173,14 +176,14 @@ implements CertAttrSet<String> {
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         DerOutputStream tmp = new DerOutputStream();
         if (extensionValue == null) {
-          extensionId = PKIXExtensions.CertificatePolicies_Id;
-          critical = false;
-          encodeThis();
+            extensionId = PKIXExtensions.CertificatePolicies_Id;
+            critical = false;
+            encodeThis();
         }
         super.encode(tmp);
         out.write(tmp.toByteArray());
@@ -194,11 +197,11 @@ implements CertAttrSet<String> {
             if (!(obj instanceof List)) {
                 throw new IOException("Attribute value should be of type List.");
             }
-            certPolicies = (List<PolicyInformation>)obj;
+            certPolicies = (List<PolicyInformation>) obj;
         } else {
-          throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:CertificatePoliciesExtension.");
+            throw new IOException("Attribute name [" + name +
+                    "] not recognized by " +
+                    "CertAttrSet:CertificatePoliciesExtension.");
         }
         encodeThis();
     }
@@ -211,9 +214,9 @@ implements CertAttrSet<String> {
             //XXXX May want to consider cloning this
             return certPolicies;
         } else {
-          throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:CertificatePoliciesExtension.");
+            throw new IOException("Attribute name [" + name +
+                    "] not recognized by " +
+                    "CertAttrSet:CertificatePoliciesExtension.");
         }
     }
 
@@ -224,9 +227,9 @@ implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(POLICIES)) {
             certPolicies = null;
         } else {
-          throw new IOException("Attribute name [" + name +
-                                "] not recognized by " +
-                                "CertAttrSet:CertificatePoliciesExtension.");
+            throw new IOException("Attribute name [" + name +
+                    "] not recognized by " +
+                    "CertAttrSet:CertificatePoliciesExtension.");
         }
         encodeThis();
     }

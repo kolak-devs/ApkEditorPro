@@ -50,7 +50,7 @@ public interface CertAttrSet<T> {
      * Returns a short string describing this certificate attribute.
      *
      * @return value of this certificate attribute in
-     *         printable form.
+     * printable form.
      */
     String toString();
 
@@ -59,46 +59,42 @@ public interface CertAttrSet<T> {
      * that can be parsed by the <code>decode</code> method.
      *
      * @param out the OutputStream to encode the attribute to.
-     *
-     * @exception CertificateException on encoding or validity errors.
-     * @exception IOException on other errors.
+     * @throws CertificateException on encoding or validity errors.
+     * @throws IOException          on other errors.
      */
     void encode(OutputStream out)
-        throws CertificateException, IOException;
+            throws CertificateException, IOException;
 
     /**
      * Sets an attribute value within this CertAttrSet.
      *
      * @param name the name of the attribute (e.g. "x509.info.key")
-     * @param obj the attribute object.
-     *
-     * @exception CertificateException on attribute handling errors.
-     * @exception IOException on other errors.
+     * @param obj  the attribute object.
+     * @throws CertificateException on attribute handling errors.
+     * @throws IOException          on other errors.
      */
     void set(String name, Object obj)
-        throws CertificateException, IOException;
+            throws CertificateException, IOException;
 
     /**
      * Gets an attribute value for this CertAttrSet.
      *
      * @param name the name of the attribute to return.
-     *
-     * @exception CertificateException on attribute handling errors.
-     * @exception IOException on other errors.
+     * @throws CertificateException on attribute handling errors.
+     * @throws IOException          on other errors.
      */
     Object get(String name)
-        throws CertificateException, IOException;
+            throws CertificateException, IOException;
 
     /**
      * Deletes an attribute value from this CertAttrSet.
      *
      * @param name the name of the attribute to delete.
-     *
-     * @exception CertificateException on attribute handling errors.
-     * @exception IOException on other errors.
+     * @throws CertificateException on attribute handling errors.
+     * @throws IOException          on other errors.
      */
     void delete(String name)
-        throws CertificateException, IOException;
+            throws CertificateException, IOException;
 
     /**
      * Returns an enumeration of the names of the attributes existing within

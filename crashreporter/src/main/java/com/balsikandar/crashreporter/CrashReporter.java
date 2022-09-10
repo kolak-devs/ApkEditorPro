@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.balsikandar.crashreporter.ui.CrashReporterActivity;
-import com.balsikandar.crashreporter.utils.CrashReporterNotInitializedException;
 import com.balsikandar.crashreporter.utils.CrashReporterExceptionHandler;
+import com.balsikandar.crashreporter.utils.CrashReporterNotInitializedException;
 import com.balsikandar.crashreporter.utils.CrashUtil;
 
 public class CrashReporter {

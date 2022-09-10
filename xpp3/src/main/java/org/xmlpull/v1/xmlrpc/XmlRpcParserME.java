@@ -4,9 +4,12 @@
 
 package org.xmlpull.v1.xmlrpc;
 
-import java.util.*;
-import java.io.*;
-import org.xmlpull.v1.*;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * @author Stefan Haustein
@@ -16,7 +19,7 @@ public class XmlRpcParserME {
 
     XmlPullParser parser;
 
-    /** 
+    /**
      * Creates a new XmlRpcParser, using the given XmlPullParser.
      */
 
@@ -24,10 +27,10 @@ public class XmlRpcParserME {
         this.parser = parser;
     }
 
-    /** 
+    /**
      * Parses an XML RPC method call response.
      * The return values are collected in a Vector.
-     * 
+     *
      * @return The return values collected in a Vector.
      */
 
@@ -58,7 +61,7 @@ public class XmlRpcParserME {
     }
 
     protected Object parseType(String name) throws IOException, XmlPullParserException {
-	//	System.out.println("type:"+name);
+        //	System.out.println("type:"+name);
         if (name.equals("int") || name.equals("i4"))
             return new Integer(Integer.parseInt(parser.nextText()));
         else if (name.equals("array"))
@@ -66,13 +69,13 @@ public class XmlRpcParserME {
         else if (name.equals("struct"))
             return parseStruct();
         else // String and unrecognized types...
-	        return parser.nextText();
+            return parser.nextText();
 //            throw new RuntimeException("unexpected element: " + name);
     }
 
-    /** 
+    /**
      * Parses an XML-RPC value element. Returns the
-     * content of the element as a corresponding Java object. 
+     * content of the element as a corresponding Java object.
      * <p>
      * <b>precondition:</b> parser is on a "value" start tag<br />
      * <b>postcondition:</b> parser is on a "value" end tag</p>
@@ -83,18 +86,18 @@ public class XmlRpcParserME {
         parser.next();
 
         Object result = null;
-        
+
         if (parser.getEventType() == XmlPullParser.TEXT) {
             result = parser.getText();
             parser.nextTag();
         }
-        
-        
-		if (parser.getEventType() == XmlPullParser.START_TAG) {
-		    
-		    if (result != null && ((String) result).trim().length() > 0)
-		    	throw new RuntimeException("illegal mixed content!");
-		    
+
+
+        if (parser.getEventType() == XmlPullParser.START_TAG) {
+
+            if (result != null && ((String) result).trim().length() > 0)
+                throw new RuntimeException("illegal mixed content!");
+
             String name = parser.getName();
             result = parseType(name);
 
@@ -106,12 +109,13 @@ public class XmlRpcParserME {
         return result;
     }
 
-    /** Parses an XML-RPC array and returns it as a Java Vector
-     *  
-     *  <p>
-     *  <b>Precondition:</b> On "array" start tag<br />
-     *  <b>Postcondition:</b> On "array" end tag
-     *  </p>
+    /**
+     * Parses an XML-RPC array and returns it as a Java Vector
+     *
+     * <p>
+     * <b>Precondition:</b> On "array" start tag<br />
+     * <b>Postcondition:</b> On "array" end tag
+     * </p>
      */
 
     Vector parseArray() throws IOException, XmlPullParserException {

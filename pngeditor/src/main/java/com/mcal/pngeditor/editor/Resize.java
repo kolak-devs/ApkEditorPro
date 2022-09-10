@@ -13,35 +13,6 @@ public class Resize implements ImageEditor {
     private boolean zooming = true;
     private boolean bModified = false;
 
-    @Override
-    public void setParam(String name, Object value) {
-        if ("width".equals(name)) {
-            newWidth = (Integer) value;
-        } else if ("height".equals(name)) {
-            newHeight = (Integer) value;
-        } else if ("zooming".equals(name)) {
-            zooming = (Boolean)value;
-        }
-    }
-
-    @Override
-    public Bitmap edit(Bitmap bitmap) {
-        if (newWidth > 0 && newHeight > 0) {
-            bModified = true;
-            if (zooming) {
-                return getResizedBitmap(bitmap, newWidth, newHeight);
-            } else {
-                return getExpandShrinkBitmap(bitmap, newWidth, newHeight);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean isModified() {
-        return bModified;
-    }
-
     public static Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
         int height = bm.getHeight();
@@ -69,5 +40,34 @@ public class Resize implements ImageEditor {
         int top = (newHeight - height) / 2;
         canvas.drawBitmap(bm, left, top, new Paint());
         return image;
+    }
+
+    @Override
+    public void setParam(String name, Object value) {
+        if ("width".equals(name)) {
+            newWidth = (Integer) value;
+        } else if ("height".equals(name)) {
+            newHeight = (Integer) value;
+        } else if ("zooming".equals(name)) {
+            zooming = (Boolean) value;
+        }
+    }
+
+    @Override
+    public Bitmap edit(Bitmap bitmap) {
+        if (newWidth > 0 && newHeight > 0) {
+            bModified = true;
+            if (zooming) {
+                return getResizedBitmap(bitmap, newWidth, newHeight);
+            } else {
+                return getExpandShrinkBitmap(bitmap, newWidth, newHeight);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isModified() {
+        return bModified;
     }
 }

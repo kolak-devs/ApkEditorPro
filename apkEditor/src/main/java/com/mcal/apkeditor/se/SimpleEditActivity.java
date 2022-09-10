@@ -29,9 +29,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.mcal.apkeditor.R;
 import com.mcal.apklib.AXMLParser.IReferenceDecode;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
+import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.DynamicExpandListView;
 

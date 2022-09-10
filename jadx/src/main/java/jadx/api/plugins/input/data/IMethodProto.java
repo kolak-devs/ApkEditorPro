@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface IMethodProto {
 
-	String getReturnType();
+    String getReturnType();
 
-	List<String> getArgTypes();
+    List<String> getArgTypes();
 }

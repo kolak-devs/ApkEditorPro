@@ -21,17 +21,13 @@ public class PaddingTable implements OnClickListener, OnTouchListener {
 
     private final Context ctx;
     private final TableLayout tableView;
-
-    private ArrayList<String> columnNames;
-    private List<ArrayList<String>> tableData;
-
-    // View and its height
-    private TableRow headerRow;
     private final CustomScrollView scrollView;
-
     // Callback function
     private final ITableRowClicked rowClickInterface;
-
+    private ArrayList<String> columnNames;
+    private List<ArrayList<String>> tableData;
+    // View and its height
+    private TableRow headerRow;
     private LayoutParams tableLayoutParam;
     private android.widget.TableRow.LayoutParams rowLayoutParam;
     private TableRow[] tableRows;
@@ -44,10 +40,6 @@ public class PaddingTable implements OnClickListener, OnTouchListener {
     private int seperateColor = 0xffcccccc;
     private int headerTextColor = 0xffffffff;
     private int headerBgColor = 0xff7FAF7F;
-
-    public interface ITableRowClicked {
-        void tableRowClicked(int index, boolean bShowWholeTable);
-    }
 
     public PaddingTable(Context ctx, CustomScrollView scrollView,
                         TableLayout tableView, ITableRowClicked rowClickInterface) {
@@ -195,5 +187,9 @@ public class PaddingTable implements OnClickListener, OnTouchListener {
         }
 
         return true;
+    }
+
+    public interface ITableRowClicked {
+        void tableRowClicked(int index, boolean bShowWholeTable);
     }
 }

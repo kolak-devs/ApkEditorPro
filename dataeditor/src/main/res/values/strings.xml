@@ -9,7 +9,7 @@
     <string name="appdm_label_shared_preference">Shared Preference: </string>
     <string name="appdm_search">Search</string>
     <string name="appdm_save_apk">Saving the apk &#8230;</string>
-    
+
     <string name="appdm_app_name">App Name</string>
     <string name="appdm_package_name">Package Name</string>
     <string name="appdm_app_size">App Size</string>
@@ -20,15 +20,15 @@
     <string name="appdm_apk_build_time">Apk Build Time</string>
     <string name="appdm_install_time">Install Time</string>
     <string name="appdm_signature">Signature</string>
-    
+
     <string name="apk_saved_tip">Succeed! APK saved to SD card: \n%s</string>
     <string name="warning_keyword_empty">Keyword can not be empty.</string>
-    
+
     <string name="appdm_raw_file">Raw File</string>
     <string name="appdm_file_too_big">File is too big to open.</string>
     <string name="appdm_not_found">Not Found</string>
     <string name="appdm_file_saved">File Saved.</string>
-    
+
     <string name="appdm_files">Files</string>
     <string name="appdm_file_size">File Size:</string>
     <string name="appdm_open_in_editor">Open in Editor</string>

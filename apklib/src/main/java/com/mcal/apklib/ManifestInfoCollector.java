@@ -15,69 +15,20 @@
  */
 package com.mcal.apklib;
 
-import java.io.InputStream;
-
-import org.xmlpull.v1.XmlPullParser;
+import android.util.TypedValue;
 
 import com.mcal.apklib.android.content.res.AXmlResourceParser;
 
-import android.util.TypedValue;
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.InputStream;
 
 public class ManifestInfoCollector {
 
     private String value = null;
 
-    public void parse(InputStream input, String tagName, String attrName) {
-        AXmlResourceParser parser = null;
-        try {
-            parser = new AXmlResourceParser();
-            parser.open(input);
-            while (true) {
-                int type = parser.next();
-                if (type == XmlPullParser.END_DOCUMENT) {
-                    break;
-                }
-                switch (type) {
-                case XmlPullParser.START_DOCUMENT: {
-                    break;
-                }
-                case XmlPullParser.START_TAG: {
-                    if (tagName.equals(parser.getName())) {
-                        for (int i = 0; i != parser.getAttributeCount(); ++i) {
-                            String name = parser.getAttributeName(i);
-                            String value = getAttributeValue(parser, i);
-                            if (attrName.equals(name)) {
-                                this.value = value;
-                                return;
-                            }
-                        }
-                    }
-                    
-                    break;
-                }
-                case XmlPullParser.END_TAG: {
-                    break;
-                }
-                case XmlPullParser.TEXT: {
-                    break;
-                }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (parser != null) {
-                parser.close();
-            }
-        }
-    }
-
-    public String getValue() {
-        return value;
-    }
-
     private static String getAttributeValue(AXmlResourceParser parser,
-            int index) {
+                                            int index) {
         int type = parser.getAttributeValueType(index);
         int data = parser.getAttributeValueData(index);
         if (type == TypedValue.TYPE_STRING) {
@@ -120,5 +71,54 @@ public class ManifestInfoCollector {
             return "android:";
         }
         return "";
+    }
+
+    public void parse(InputStream input, String tagName, String attrName) {
+        AXmlResourceParser parser = null;
+        try {
+            parser = new AXmlResourceParser();
+            parser.open(input);
+            while (true) {
+                int type = parser.next();
+                if (type == XmlPullParser.END_DOCUMENT) {
+                    break;
+                }
+                switch (type) {
+                    case XmlPullParser.START_DOCUMENT: {
+                        break;
+                    }
+                    case XmlPullParser.START_TAG: {
+                        if (tagName.equals(parser.getName())) {
+                            for (int i = 0; i != parser.getAttributeCount(); ++i) {
+                                String name = parser.getAttributeName(i);
+                                String value = getAttributeValue(parser, i);
+                                if (attrName.equals(name)) {
+                                    this.value = value;
+                                    return;
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+                    case XmlPullParser.END_TAG: {
+                        break;
+                    }
+                    case XmlPullParser.TEXT: {
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (parser != null) {
+                parser.close();
+            }
+        }
+    }
+
+    public String getValue() {
+        return value;
     }
 }

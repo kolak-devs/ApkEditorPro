@@ -10,17 +10,15 @@
 package org.xmlpull.v1.xsd.impl.base64;
 
 /**
- *
- *
- * @version $Revision: 1.4 $ $Date: 2003/04/06 00:04:25 $ (GMT)
  * @author <a href="http://www.extreme.indiana.edu/~aslom/">Aleksander Slominski</a>
+ * @version $Revision: 1.4 $ $Date: 2003/04/06 00:04:25 $ (GMT)
  */
 
 public class Base64EncodingState {
-    public Base64EncodingState() { }
-
     int[] output = new int[3];
     int outputEnd;
+    public Base64EncodingState() {
+    }
 
 }
 

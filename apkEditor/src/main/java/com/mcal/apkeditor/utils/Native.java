@@ -6,11 +6,11 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 public class Native {
+    private static Native instance;
+
     static {
         System.loadLibrary("apkeditorpro");
     }
-
-    private static Native instance;
 
     private static Native getInstance() {
         if (instance == null) {

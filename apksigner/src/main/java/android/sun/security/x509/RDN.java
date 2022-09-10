@@ -29,16 +29,21 @@ import android.sun.security.util.DerInputStream;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * RDNs are a set of {attribute = value} assertions.  Some of those
  * attributes are "distinguished" (unique w/in context).  Order is
  * never relevant.
- *
+ * <p>
  * Some X.500 names include only a single distinguished attribute
  * per RDN.  This style is currently common.
- *
+ * <p>
  * Note that DER-encoded RDNs sort AVAs by assertion OID ... so that
  * when we parse this data we don't have to worry about canonicalizing
  * it, but we'll need to sort them when we expose the RDN class more.
@@ -56,9 +61,8 @@ import java.util.*;
  *
  * AttributeValue ::= ANY DEFINED BY AttributeType
  * </pre>
- *
+ * <p>
  * Note that instances of this class are immutable.
- *
  */
 public class RDN {
 
@@ -73,7 +77,7 @@ public class RDN {
 
     /**
      * Constructs an RDN from its printable representation.
-     *
+     * <p>
      * An RDN may consist of one or multiple Attribute Value Assertions (AVAs),
      * using '+' as a separator.
      * If the '+' should be considered part of an AVA value, it must be
@@ -88,13 +92,13 @@ public class RDN {
 
     /**
      * Constructs an RDN from its printable representation.
-     *
+     * <p>
      * An RDN may consist of one or multiple Attribute Value Assertions (AVAs),
      * using '+' as a separator.
      * If the '+' should be considered part of an AVA value, it must be
      * preceded by '\'.
      *
-     * @param name String form of RDN
+     * @param name    String form of RDN
      * @param keyword an additional mapping of keywords to OIDs
      * @throws IOException on parsing error
      */
@@ -114,7 +118,7 @@ public class RDN {
              * delimit the AVA under consideration from any subsequent AVAs.
              */
             if (nextPlus > 0 && name.charAt(nextPlus - 1) != '\\'
-                && quoteCount != 1) {
+                    && quoteCount != 1) {
                 /*
                  * Plus sign is a separator
                  */
@@ -176,7 +180,7 @@ public class RDN {
      * @throws IOException on parsing error
      */
     RDN(String name, String format, Map<String, String> keywordMap)
-        throws IOException {
+            throws IOException {
         if (format.equalsIgnoreCase("RFC2253") == false) {
             throw new IOException("Unsupported format " + format);
         }
@@ -192,7 +196,7 @@ public class RDN {
              * is part of the AVA. Otherwise, it is used as a separator, to
              * delimit the AVA under consideration from any subsequent AVAs.
              */
-            if (nextPlus > 0 && name.charAt(nextPlus - 1) != '\\' ) {
+            if (nextPlus > 0 && name.charAt(nextPlus - 1) != '\\') {
                 /*
                  * Plus sign is a separator
                  */
@@ -203,7 +207,7 @@ public class RDN {
 
                 // Parse AVA, and store it in vector
                 android.sun.security.x509.AVA ava = new android.sun.security.x509.AVA
-                    (new StringReader(avaString), android.sun.security.x509.AVA.RFC2253, keywordMap);
+                        (new StringReader(avaString), android.sun.security.x509.AVA.RFC2253, keywordMap);
                 avaVec.add(ava);
 
                 // Increase the offset
@@ -250,13 +254,15 @@ public class RDN {
      *
      * @param i number of AVAs to be in RDN
      */
-    RDN(int i) { assertion = new android.sun.security.x509.AVA[i]; }
+    RDN(int i) {
+        assertion = new android.sun.security.x509.AVA[i];
+    }
 
     public RDN(android.sun.security.x509.AVA ava) {
         if (ava == null) {
             throw new NullPointerException();
         }
-        assertion = new android.sun.security.x509.AVA[] { ava };
+        assertion = new android.sun.security.x509.AVA[]{ava};
     }
 
     public RDN(android.sun.security.x509.AVA[] avas) {
@@ -294,7 +300,7 @@ public class RDN {
         if (obj instanceof RDN == false) {
             return false;
         }
-        RDN other = (RDN)obj;
+        RDN other = (RDN) obj;
         if (this.assertion.length != other.assertion.length) {
             return false;
         }
@@ -392,7 +398,7 @@ public class RDN {
      */
     public String toRFC2253String() {
         return toRFC2253StringInternal
-            (false, Collections.<String, String>emptyMap());
+                (false, Collections.<String, String>emptyMap());
     }
 
     /*
@@ -413,19 +419,19 @@ public class RDN {
     public String toRFC2253String(boolean canonical) {
         if (canonical == false) {
             return toRFC2253StringInternal
-                (false, Collections.<String, String>emptyMap());
+                    (false, Collections.<String, String>emptyMap());
         }
         String c = canonicalString;
         if (c == null) {
             c = toRFC2253StringInternal
-                (true, Collections.<String, String>emptyMap());
+                    (true, Collections.<String, String>emptyMap());
             canonicalString = c;
         }
         return c;
     }
 
     private String toRFC2253StringInternal
-        (boolean canonical, Map<String, String> oidMap) {
+            (boolean canonical, Map<String, String> oidMap) {
         /*
          * Section 2.2: When converting from an ASN.1 RelativeDistinguishedName
          * to a string, the output consists of the string encodings of each
@@ -439,7 +445,7 @@ public class RDN {
         // normally, an RDN only contains one AVA
         if (assertion.length == 1) {
             return canonical ? assertion[0].toRFC2253CanonicalString() :
-                               assertion[0].toRFC2253String(oidMap);
+                    assertion[0].toRFC2253String(oidMap);
         }
 
         StringBuilder relname = new StringBuilder();
@@ -493,7 +499,7 @@ class AVAComparator implements Comparator<android.sun.security.x509.AVA> {
 
         if (a1Has2253 == a2Has2253) {
             return a1.toRFC2253CanonicalString().compareTo
-                        (a2.toRFC2253CanonicalString());
+                    (a2.toRFC2253CanonicalString());
         } else {
             if (a1Has2253) {
                 return -1;

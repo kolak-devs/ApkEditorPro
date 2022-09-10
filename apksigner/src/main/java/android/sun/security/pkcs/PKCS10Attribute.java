@@ -25,10 +25,12 @@
 
 package android.sun.security.pkcs;
 
-import java.io.OutputStream;
-import java.io.IOException;
+import android.sun.security.util.DerEncoder;
+import android.sun.security.util.DerValue;
+import android.sun.security.util.ObjectIdentifier;
 
-import android.sun.security.util.*;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Represent a PKCS#10 Attribute.
@@ -39,7 +41,7 @@ import android.sun.security.util.*;
  *
  * <p>Attributes are represented as a sequence of the attribute identifier
  * (Object Identifier) and a set of DER encoded attribute values.
- *
+ * <p>
  * ASN.1 definition of Attribute:
  * <pre>
  * Attribute :: SEQUENCE {
@@ -55,8 +57,8 @@ import android.sun.security.util.*;
  */
 public class PKCS10Attribute implements DerEncoder {
 
-    protected ObjectIdentifier  attributeId = null;
-    protected Object            attributeValue = null;
+    protected ObjectIdentifier attributeId = null;
+    protected Object attributeValue = null;
 
     /**
      * Constructs an attribute from a DER encoding.
@@ -66,7 +68,7 @@ public class PKCS10Attribute implements DerEncoder {
      * currently.
      *
      * @param derVal the der encoded attribute.
-     * @exception IOException on parsing errors.
+     * @throws IOException on parsing errors.
      */
     public PKCS10Attribute(DerValue derVal) throws IOException {
         PKCS9Attribute attr = new PKCS9Attribute(derVal);
@@ -78,9 +80,9 @@ public class PKCS10Attribute implements DerEncoder {
      * Constructs an attribute from individual components of
      * ObjectIdentifier and the value (any java object).
      *
-     * @param attributeId the ObjectIdentifier of the attribute.
+     * @param attributeId    the ObjectIdentifier of the attribute.
      * @param attributeValue an instance of a class that implements
-     * the attribute identified by the ObjectIdentifier.
+     *                       the attribute identified by the ObjectIdentifier.
      */
     public PKCS10Attribute(ObjectIdentifier attributeId,
                            Object attributeValue) {
@@ -102,10 +104,8 @@ public class PKCS10Attribute implements DerEncoder {
      * DER encode this object onto an output stream.
      * Implements the <code>DerEncoder</code> interface.
      *
-     * @param out
-     * the OutputStream on which to write the DER encoding.
-     *
-     * @exception IOException on encoding errors.
+     * @param out the OutputStream on which to write the DER encoding.
+     * @throws IOException on encoding errors.
      */
     public void derEncode(OutputStream out) throws IOException {
         PKCS9Attribute attr = new PKCS9Attribute(attributeId, attributeValue);

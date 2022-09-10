@@ -27,8 +27,10 @@ package android.sun.security.x509;
 
 import android.sun.security.util.DerValue;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Represent the GeneralSubtrees ASN.1 object.
@@ -39,14 +41,11 @@ import java.util.*;
  * </pre>
  * </p>
  *
- *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
  * @author Andreas Sterbenz
  */
 public class GeneralSubtrees implements Cloneable {
-
-    private final List<android.sun.security.x509.GeneralSubtree> trees;
 
     // Private variables
     private static final int NAME_DIFF_TYPE = android.sun.security.x509.GeneralNameInterface.NAME_DIFF_TYPE;
@@ -54,6 +53,7 @@ public class GeneralSubtrees implements Cloneable {
     private static final int NAME_NARROWS = android.sun.security.x509.GeneralNameInterface.NAME_NARROWS;
     private static final int NAME_WIDENS = android.sun.security.x509.GeneralNameInterface.NAME_WIDENS;
     private static final int NAME_SAME_TYPE = android.sun.security.x509.GeneralNameInterface.NAME_SAME_TYPE;
+    private final List<android.sun.security.x509.GeneralSubtree> trees;
 
     /**
      * The default constructor for the class.
@@ -81,6 +81,12 @@ public class GeneralSubtrees implements Cloneable {
             android.sun.security.x509.GeneralSubtree tree = new android.sun.security.x509.GeneralSubtree(opt);
             add(tree);
         }
+    }
+
+    private static android.sun.security.x509.GeneralNameInterface getGeneralNameInterface(android.sun.security.x509.GeneralSubtree gs) {
+        android.sun.security.x509.GeneralName gn = gs.getName();
+        android.sun.security.x509.GeneralNameInterface gni = gn.getName();
+        return gni;
     }
 
     public android.sun.security.x509.GeneralSubtree get(int index) {
@@ -157,7 +163,7 @@ public class GeneralSubtrees implements Cloneable {
         if (obj instanceof GeneralSubtrees == false) {
             return false;
         }
-        GeneralSubtrees other = (GeneralSubtrees)obj;
+        GeneralSubtrees other = (GeneralSubtrees) obj;
         return this.trees.equals(other.trees);
     }
 
@@ -173,12 +179,6 @@ public class GeneralSubtrees implements Cloneable {
      */
     private android.sun.security.x509.GeneralNameInterface getGeneralNameInterface(int ndx) {
         return getGeneralNameInterface(get(ndx));
-    }
-
-    private static android.sun.security.x509.GeneralNameInterface getGeneralNameInterface(android.sun.security.x509.GeneralSubtree gs) {
-        android.sun.security.x509.GeneralName gn = gs.getName();
-        android.sun.security.x509.GeneralNameInterface gni = gn.getName();
-        return gni;
     }
 
     /**
@@ -236,48 +236,48 @@ public class GeneralSubtrees implements Cloneable {
      * create a subtree containing an instance of the input
      * name type that widens all other names of that type.
      *
+     * @throws RuntimeException on error (should not occur)
      * @params name GeneralNameInterface name
      * @returns GeneralSubtree containing widest name of that type
-     * @throws RuntimeException on error (should not occur)
      */
     private android.sun.security.x509.GeneralSubtree createWidestSubtree(android.sun.security.x509.GeneralNameInterface name) {
         try {
             android.sun.security.x509.GeneralName newName;
             switch (name.getType()) {
-            case android.sun.security.x509.GeneralNameInterface.NAME_ANY:
-                // Create new OtherName with same OID as baseName, but
-                // empty value
-                android.sun.security.util.ObjectIdentifier otherOID = ((android.sun.security.x509.OtherName)name).getOID();
-                newName = new android.sun.security.x509.GeneralName(new OtherName(otherOID, null));
-                break;
-            case android.sun.security.x509.GeneralNameInterface.NAME_RFC822:
-                newName = new android.sun.security.x509.GeneralName(new RFC822Name(""));
-                break;
-            case android.sun.security.x509.GeneralNameInterface.NAME_DNS:
-                newName = new android.sun.security.x509.GeneralName(new DNSName(""));
-                break;
-            case android.sun.security.x509.GeneralNameInterface.NAME_X400:
-                newName = new android.sun.security.x509.GeneralName(new X400Address((byte[])null));
-                break;
-            case android.sun.security.x509.GeneralNameInterface.NAME_DIRECTORY:
-                newName = new android.sun.security.x509.GeneralName(new X500Name(""));
-                break;
-            case android.sun.security.x509.GeneralNameInterface.NAME_EDI:
-                newName = new android.sun.security.x509.GeneralName(new EDIPartyName(""));
-                break;
-            case android.sun.security.x509.GeneralNameInterface.NAME_URI:
-                newName = new android.sun.security.x509.GeneralName(new URIName(""));
-                break;
-            case android.sun.security.x509.GeneralNameInterface.NAME_IP:
-                newName = new android.sun.security.x509.GeneralName(new IPAddressName((byte[])null));
-                break;
-            case android.sun.security.x509.GeneralNameInterface.NAME_OID:
-                newName = new GeneralName
-                    (new OIDName(new android.sun.security.util.ObjectIdentifier((int[])null)));
-                break;
-            default:
-                throw new IOException
-                    ("Unsupported GeneralNameInterface type: " + name.getType());
+                case android.sun.security.x509.GeneralNameInterface.NAME_ANY:
+                    // Create new OtherName with same OID as baseName, but
+                    // empty value
+                    android.sun.security.util.ObjectIdentifier otherOID = ((android.sun.security.x509.OtherName) name).getOID();
+                    newName = new android.sun.security.x509.GeneralName(new OtherName(otherOID, null));
+                    break;
+                case android.sun.security.x509.GeneralNameInterface.NAME_RFC822:
+                    newName = new android.sun.security.x509.GeneralName(new RFC822Name(""));
+                    break;
+                case android.sun.security.x509.GeneralNameInterface.NAME_DNS:
+                    newName = new android.sun.security.x509.GeneralName(new DNSName(""));
+                    break;
+                case android.sun.security.x509.GeneralNameInterface.NAME_X400:
+                    newName = new android.sun.security.x509.GeneralName(new X400Address((byte[]) null));
+                    break;
+                case android.sun.security.x509.GeneralNameInterface.NAME_DIRECTORY:
+                    newName = new android.sun.security.x509.GeneralName(new X500Name(""));
+                    break;
+                case android.sun.security.x509.GeneralNameInterface.NAME_EDI:
+                    newName = new android.sun.security.x509.GeneralName(new EDIPartyName(""));
+                    break;
+                case android.sun.security.x509.GeneralNameInterface.NAME_URI:
+                    newName = new android.sun.security.x509.GeneralName(new URIName(""));
+                    break;
+                case android.sun.security.x509.GeneralNameInterface.NAME_IP:
+                    newName = new android.sun.security.x509.GeneralName(new IPAddressName((byte[]) null));
+                    break;
+                case android.sun.security.x509.GeneralNameInterface.NAME_OID:
+                    newName = new GeneralName
+                            (new OIDName(new android.sun.security.util.ObjectIdentifier((int[]) null)));
+                    break;
+                default:
+                    throw new IOException
+                            ("Unsupported GeneralNameInterface type: " + name.getType());
             }
             return new android.sun.security.x509.GeneralSubtree(newName, 0, -1);
         } catch (IOException e) {
@@ -313,9 +313,9 @@ public class GeneralSubtrees implements Cloneable {
      *
      * @param other GeneralSubtrees to be intersected with this
      * @returns GeneralSubtrees to be merged with excluded; these are
-     *          empty-valued name types corresponding to entries that were
-     *          of the same type but did not share the same subtree between
-     *          this and other. Returns null if no such.
+     * empty-valued name types corresponding to entries that were
+     * of the same type but did not share the same subtree between
+     * this and other. Returns null if no such.
      */
     public GeneralSubtrees intersect(GeneralSubtrees other) {
 
@@ -360,7 +360,7 @@ public class GeneralSubtrees implements Cloneable {
             for (int j = 0; j < other.size(); j++) {
                 android.sun.security.x509.GeneralSubtree otherEntryGS = other.get(j);
                 android.sun.security.x509.GeneralNameInterface otherEntry =
-                    getGeneralNameInterface(otherEntryGS);
+                        getGeneralNameInterface(otherEntryGS);
                 switch (thisEntry.constrains(otherEntry)) {
                     case NAME_NARROWS:
                         remove(i);
@@ -399,13 +399,13 @@ public class GeneralSubtrees implements Cloneable {
                     if (thisAltEntry.getType() == thisEntry.getType()) {
                         for (int k = 0; k < other.size(); k++) {
                             android.sun.security.x509.GeneralNameInterface othAltEntry =
-                                other.getGeneralNameInterface(k);
+                                    other.getGeneralNameInterface(k);
 
                             int constraintType =
-                                thisAltEntry.constrains(othAltEntry);
+                                    thisAltEntry.constrains(othAltEntry);
                             if (constraintType == NAME_MATCH ||
-                                constraintType == NAME_WIDENS ||
-                                constraintType == NAME_NARROWS) {
+                                    constraintType == NAME_WIDENS ||
+                                    constraintType == NAME_NARROWS) {
                                 intersection = true;
                                 break;
                             }
@@ -417,7 +417,7 @@ public class GeneralSubtrees implements Cloneable {
                         newExcluded = new GeneralSubtrees();
                     }
                     android.sun.security.x509.GeneralSubtree widestSubtree =
-                         createWidestSubtree(thisEntry);
+                            createWidestSubtree(thisEntry);
                     if (!newExcluded.contains(widestSubtree)) {
                         newExcluded.add(widestSubtree);
                     }
@@ -502,22 +502,22 @@ public class GeneralSubtrees implements Cloneable {
             for (int j = 0; j < size(); j++) {
                 android.sun.security.x509.GeneralNameInterface permitted = getGeneralNameInterface(j);
                 switch (excludedName.constrains(permitted)) {
-                case android.sun.security.x509.GeneralNameInterface.NAME_DIFF_TYPE:
-                    break;
-                case android.sun.security.x509.GeneralNameInterface.NAME_MATCH:
-                    remove(j);
-                    j--;
-                    break;
-                case android.sun.security.x509.GeneralNameInterface.NAME_NARROWS:
-                    /* permitted narrows excluded */
-                    remove(j);
-                    j--;
-                    break;
-                case android.sun.security.x509.GeneralNameInterface.NAME_WIDENS:
-                    /* permitted widens excluded */
-                    break;
-                case GeneralNameInterface.NAME_SAME_TYPE:
-                    break;
+                    case android.sun.security.x509.GeneralNameInterface.NAME_DIFF_TYPE:
+                        break;
+                    case android.sun.security.x509.GeneralNameInterface.NAME_MATCH:
+                        remove(j);
+                        j--;
+                        break;
+                    case android.sun.security.x509.GeneralNameInterface.NAME_NARROWS:
+                        /* permitted narrows excluded */
+                        remove(j);
+                        j--;
+                        break;
+                    case android.sun.security.x509.GeneralNameInterface.NAME_WIDENS:
+                        /* permitted widens excluded */
+                        break;
+                    case GeneralNameInterface.NAME_SAME_TYPE:
+                        break;
                 }
             } /* end of this pass of permitted */
         } /* end of pass of excluded */

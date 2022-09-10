@@ -33,7 +33,7 @@ import java.util.Enumeration;
 
 /**
  * Represent the Subject Key Identifier Extension.
- *
+ * <p>
  * This extension, if present, provides a means of identifying the particular
  * public key used in an application.  This extension by default is marked
  * non-critical.
@@ -53,13 +53,13 @@ import java.util.Enumeration;
  * @see android.sun.security.x509.CertAttrSet
  */
 public class SubjectKeyIdentifierExtension extends Extension
-implements CertAttrSet<String> {
+        implements CertAttrSet<String> {
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
      */
     public static final String IDENT =
-                         "x509.info.extensions.SubjectKeyIdentifier";
+            "x509.info.extensions.SubjectKeyIdentifier";
     /**
      * Attribute names.
      */
@@ -69,24 +69,14 @@ implements CertAttrSet<String> {
     // Private data member
     private android.sun.security.x509.KeyIdentifier id = null;
 
-    // Encode this extension value
-    private void encodeThis() throws IOException {
-        if (id == null) {
-            this.extensionValue = null;
-            return;
-        }
-        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
-        id.encode(os);
-        this.extensionValue = os.toByteArray();
-    }
-
     /**
      * Create a SubjectKeyIdentifierExtension with the passed octet string.
      * The criticality is set to False.
+     *
      * @param octetString the octet string identifying the key identifier.
      */
     public SubjectKeyIdentifierExtension(byte[] octetString)
-    throws IOException {
+            throws IOException {
         id = new android.sun.security.x509.KeyIdentifier(octetString);
 
         this.extensionId = android.sun.security.x509.PKIXExtensions.SubjectKey_Id;
@@ -98,17 +88,28 @@ implements CertAttrSet<String> {
      * Create the extension from the passed DER encoded value.
      *
      * @param critical true if the extension is to be treated as critical.
-     * @param value an array of DER encoded bytes of the actual value.
-     * @exception ClassCastException if value is not an array of bytes
-     * @exception IOException on error.
+     * @param value    an array of DER encoded bytes of the actual value.
+     * @throws ClassCastException if value is not an array of bytes
+     * @throws IOException        on error.
      */
     public SubjectKeyIdentifierExtension(Boolean critical, Object value)
-    throws IOException {
+            throws IOException {
         this.extensionId = android.sun.security.x509.PKIXExtensions.SubjectKey_Id;
         this.critical = critical.booleanValue();
         this.extensionValue = (byte[]) value;
         android.sun.security.util.DerValue val = new DerValue(this.extensionValue);
         this.id = new android.sun.security.x509.KeyIdentifier(val);
+    }
+
+    // Encode this extension value
+    private void encodeThis() throws IOException {
+        if (id == null) {
+            this.extensionValue = null;
+            return;
+        }
+        android.sun.security.util.DerOutputStream os = new android.sun.security.util.DerOutputStream();
+        id.encode(os);
+        this.extensionValue = os.toByteArray();
     }
 
     /**
@@ -123,7 +124,7 @@ implements CertAttrSet<String> {
      * Write the extension to the OutputStream.
      *
      * @param out the OutputStream to write the extension to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
@@ -142,13 +143,13 @@ implements CertAttrSet<String> {
     public void set(String name, Object obj) throws IOException {
         if (name.equalsIgnoreCase(KEY_ID)) {
             if (!(obj instanceof android.sun.security.x509.KeyIdentifier)) {
-              throw new IOException("Attribute value should be of" +
-                                    " type KeyIdentifier.");
+                throw new IOException("Attribute value should be of" +
+                        " type KeyIdentifier.");
             }
-            id = (KeyIdentifier)obj;
+            id = (KeyIdentifier) obj;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                "CertAttrSet:SubjectKeyIdentifierExtension.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:SubjectKeyIdentifierExtension.");
         }
         encodeThis();
     }
@@ -160,8 +161,8 @@ implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(KEY_ID)) {
             return (id);
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                "CertAttrSet:SubjectKeyIdentifierExtension.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:SubjectKeyIdentifierExtension.");
         }
     }
 
@@ -172,8 +173,8 @@ implements CertAttrSet<String> {
         if (name.equalsIgnoreCase(KEY_ID)) {
             id = null;
         } else {
-          throw new IOException("Attribute name not recognized by " +
-                "CertAttrSet:SubjectKeyIdentifierExtension.");
+            throw new IOException("Attribute name not recognized by " +
+                    "CertAttrSet:SubjectKeyIdentifierExtension.");
         }
         encodeThis();
     }

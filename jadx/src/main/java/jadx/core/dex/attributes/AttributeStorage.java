@@ -23,148 +23,148 @@ import jadx.core.utils.exceptions.JadxRuntimeException;
  */
 public class AttributeStorage {
 
-	static {
-		int flagsCount = AFlag.values().length;
-		if (flagsCount >= 64) {
-			throw new JadxRuntimeException("Try to reduce flags count to 64 for use one long in EnumSet, now " + flagsCount);
-		}
-	}
+    static {
+        int flagsCount = AFlag.values().length;
+        if (flagsCount >= 64) {
+            throw new JadxRuntimeException("Try to reduce flags count to 64 for use one long in EnumSet, now " + flagsCount);
+        }
+    }
 
-	private final Set<AFlag> flags;
-	private Map<IJadxAttrType<?>, IJadxAttribute> attributes;
+    private final Set<AFlag> flags;
+    private Map<IJadxAttrType<?>, IJadxAttribute> attributes;
 
-	public AttributeStorage() {
-		flags = EnumSet.noneOf(AFlag.class);
-		attributes = Collections.emptyMap();
-	}
+    public AttributeStorage() {
+        flags = EnumSet.noneOf(AFlag.class);
+        attributes = Collections.emptyMap();
+    }
 
-	public AttributeStorage(List<IJadxAttribute> attributesList) {
-		this();
-		add(attributesList);
-	}
+    public AttributeStorage(List<IJadxAttribute> attributesList) {
+        this();
+        add(attributesList);
+    }
 
-	public void add(AFlag flag) {
-		flags.add(flag);
-	}
+    public void add(AFlag flag) {
+        flags.add(flag);
+    }
 
-	public void add(IJadxAttribute attr) {
-		writeAttributes().put(attr.getAttrType(), attr);
-	}
+    public void add(IJadxAttribute attr) {
+        writeAttributes().put(attr.getAttrType(), attr);
+    }
 
-	public void add(List<IJadxAttribute> list) {
-		Map<IJadxAttrType<?>, IJadxAttribute> map = writeAttributes();
-		for (IJadxAttribute attr : list) {
-			map.put(attr.getAttrType(), attr);
-		}
-	}
+    public void add(List<IJadxAttribute> list) {
+        Map<IJadxAttrType<?>, IJadxAttribute> map = writeAttributes();
+        for (IJadxAttribute attr : list) {
+            map.put(attr.getAttrType(), attr);
+        }
+    }
 
-	public <T> void add(IJadxAttrType<AttrList<T>> type, T obj) {
-		AttrList<T> list = get(type);
-		if (list == null) {
-			list = new AttrList<>(type);
-			add(list);
-		}
-		list.getList().add(obj);
-	}
+    public <T> void add(IJadxAttrType<AttrList<T>> type, T obj) {
+        AttrList<T> list = get(type);
+        if (list == null) {
+            list = new AttrList<>(type);
+            add(list);
+        }
+        list.getList().add(obj);
+    }
 
-	public void addAll(AttributeStorage otherList) {
-		flags.addAll(otherList.flags);
-		writeAttributes().putAll(otherList.attributes);
-	}
+    public void addAll(AttributeStorage otherList) {
+        flags.addAll(otherList.flags);
+        writeAttributes().putAll(otherList.attributes);
+    }
 
-	public boolean contains(AFlag flag) {
-		return flags.contains(flag);
-	}
+    public boolean contains(AFlag flag) {
+        return flags.contains(flag);
+    }
 
-	public <T extends IJadxAttribute> boolean contains(IJadxAttrType<T> type) {
-		return attributes.containsKey(type);
-	}
+    public <T extends IJadxAttribute> boolean contains(IJadxAttrType<T> type) {
+        return attributes.containsKey(type);
+    }
 
-	@SuppressWarnings("unchecked")
-	public <T extends IJadxAttribute> T get(IJadxAttrType<T> type) {
-		return (T) attributes.get(type);
-	}
+    @SuppressWarnings("unchecked")
+    public <T extends IJadxAttribute> T get(IJadxAttrType<T> type) {
+        return (T) attributes.get(type);
+    }
 
-	public IAnnotation getAnnotation(String cls) {
-		AnnotationsAttr aList = get(JadxAttrType.ANNOTATION_LIST);
-		return aList == null ? null : aList.get(cls);
-	}
+    public IAnnotation getAnnotation(String cls) {
+        AnnotationsAttr aList = get(JadxAttrType.ANNOTATION_LIST);
+        return aList == null ? null : aList.get(cls);
+    }
 
-	public <T> List<T> getAll(IJadxAttrType<AttrList<T>> type) {
-		AttrList<T> attrList = get(type);
-		if (attrList == null) {
-			return Collections.emptyList();
-		}
-		return Collections.unmodifiableList(attrList.getList());
-	}
+    public <T> List<T> getAll(IJadxAttrType<AttrList<T>> type) {
+        AttrList<T> attrList = get(type);
+        if (attrList == null) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(attrList.getList());
+    }
 
-	public void remove(AFlag flag) {
-		flags.remove(flag);
-	}
+    public void remove(AFlag flag) {
+        flags.remove(flag);
+    }
 
-	public <T extends IJadxAttribute> void remove(IJadxAttrType<T> type) {
-		if (!attributes.isEmpty()) {
-			attributes.remove(type);
-		}
-	}
+    public <T extends IJadxAttribute> void remove(IJadxAttrType<T> type) {
+        if (!attributes.isEmpty()) {
+            attributes.remove(type);
+        }
+    }
 
-	public void remove(IJadxAttribute attr) {
-		if (!attributes.isEmpty()) {
-			IJadxAttrType<? extends IJadxAttribute> type = attr.getAttrType();
-			IJadxAttribute a = attributes.get(type);
-			if (a == attr) {
-				attributes.remove(type);
-			}
-		}
-	}
+    public void remove(IJadxAttribute attr) {
+        if (!attributes.isEmpty()) {
+            IJadxAttrType<? extends IJadxAttribute> type = attr.getAttrType();
+            IJadxAttribute a = attributes.get(type);
+            if (a == attr) {
+                attributes.remove(type);
+            }
+        }
+    }
 
-	private Map<IJadxAttrType<?>, IJadxAttribute> writeAttributes() {
-		if (attributes.isEmpty()) {
-			attributes = new IdentityHashMap<>(5);
-		}
-		return attributes;
-	}
+    private Map<IJadxAttrType<?>, IJadxAttribute> writeAttributes() {
+        if (attributes.isEmpty()) {
+            attributes = new IdentityHashMap<>(5);
+        }
+        return attributes;
+    }
 
-	public void clear() {
-		flags.clear();
-		if (!attributes.isEmpty()) {
-			attributes.clear();
-		}
-	}
+    public void clear() {
+        flags.clear();
+        if (!attributes.isEmpty()) {
+            attributes.clear();
+        }
+    }
 
-	public synchronized void unloadAttributes() {
-		if (attributes.isEmpty()) {
-			return;
-		}
-		attributes.entrySet().removeIf(entry -> !entry.getValue().keepLoaded());
-	}
+    public synchronized void unloadAttributes() {
+        if (attributes.isEmpty()) {
+            return;
+        }
+        attributes.entrySet().removeIf(entry -> !entry.getValue().keepLoaded());
+    }
 
-	public List<String> getAttributeStrings() {
-		int size = flags.size() + attributes.size() + attributes.size();
-		if (size == 0) {
-			return Collections.emptyList();
-		}
-		List<String> list = new ArrayList<>(size);
-		for (AFlag a : flags) {
-			list.add(a.toString());
-		}
-		for (IJadxAttribute a : attributes.values()) {
-			list.add(a.toAttrString());
-		}
-		return list;
-	}
+    public List<String> getAttributeStrings() {
+        int size = flags.size() + attributes.size() + attributes.size();
+        if (size == 0) {
+            return Collections.emptyList();
+        }
+        List<String> list = new ArrayList<>(size);
+        for (AFlag a : flags) {
+            list.add(a.toString());
+        }
+        for (IJadxAttribute a : attributes.values()) {
+            list.add(a.toAttrString());
+        }
+        return list;
+    }
 
-	public boolean isEmpty() {
-		return flags.isEmpty() && attributes.isEmpty();
-	}
+    public boolean isEmpty() {
+        return flags.isEmpty() && attributes.isEmpty();
+    }
 
-	@Override
-	public String toString() {
-		List<String> list = getAttributeStrings();
-		if (list.isEmpty()) {
-			return "";
-		}
-		list.sort(String::compareTo);
-		return "A[" + Utils.listToString(list) + ']';
-	}
+    @Override
+    public String toString() {
+        List<String> list = getAttributeStrings();
+        if (list.isEmpty()) {
+            return "";
+        }
+        list.sort(String::compareTo);
+        return "A[" + Utils.listToString(list) + ']';
+    }
 }

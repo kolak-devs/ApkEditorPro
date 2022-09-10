@@ -8,10 +8,10 @@ import jadx.core.utils.exceptions.CodegenException;
 
 public interface IBlock extends IContainer {
 
-	List<InsnNode> getInstructions();
+    List<InsnNode> getInstructions();
 
-	@Override
-	default void generate(RegionGen regionGen, ICodeWriter code) throws CodegenException {
-		regionGen.makeSimpleBlock(this, code);
-	}
+    @Override
+    default void generate(RegionGen regionGen, ICodeWriter code) throws CodegenException {
+        regionGen.makeSimpleBlock(this, code);
+    }
 }

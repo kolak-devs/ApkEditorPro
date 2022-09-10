@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ICodeData {
 
-	List<ICodeComment> getComments();
+    List<ICodeComment> getComments();
 
-	List<ICodeRename> getRenames();
+    List<ICodeRename> getRenames();
 }

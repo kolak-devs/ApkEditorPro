@@ -10,10 +10,10 @@ import jadx.core.dex.instructions.args.RegisterArg;
  */
 public interface ITypeBound {
 
-	BoundEnum getBound();
+    BoundEnum getBound();
 
-	ArgType getType();
+    ArgType getType();
 
-	@Nullable
-	RegisterArg getArg();
+    @Nullable
+    RegisterArg getArg();
 }

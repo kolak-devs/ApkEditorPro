@@ -39,8 +39,6 @@ import java.util.Enumeration;
  * @author Hemma Prafullchandra
  */
 public class CertificateAlgorithmId implements CertAttrSet<String> {
-    private android.sun.security.x509.AlgorithmId algId;
-
     /**
      * Identifier for this attribute, to be used with the
      * get, set, delete methods of Certificate, x509 type.
@@ -50,14 +48,15 @@ public class CertificateAlgorithmId implements CertAttrSet<String> {
      * Sub attributes name for this CertAttrSet.
      */
     public static final String NAME = "algorithmID";
-
     /**
      * Identifier to be used with get, set, and delete methods. When
      * using this identifier the associated object being passed in or
      * returned is an instance of AlgorithmId.
+     *
      * @see android.sun.security.x509.AlgorithmId
      */
     public static final String ALGORITHM = "algorithm";
+    private android.sun.security.x509.AlgorithmId algId;
 
     /**
      * Default constructor for the certificate attribute.
@@ -72,7 +71,7 @@ public class CertificateAlgorithmId implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed DER stream.
      *
      * @param in the DerInputStream to read the serial number from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateAlgorithmId(android.sun.security.util.DerInputStream in) throws IOException {
         DerValue val = in.getDerValue();
@@ -83,7 +82,7 @@ public class CertificateAlgorithmId implements CertAttrSet<String> {
      * Create the object, decoding the values from the passed stream.
      *
      * @param in the InputStream to read the serial number from.
-     * @exception IOException on decoding errors.
+     * @throws IOException on decoding errors.
      */
     public CertificateAlgorithmId(InputStream in) throws IOException {
         android.sun.security.util.DerValue val = new android.sun.security.util.DerValue(in);
@@ -103,7 +102,7 @@ public class CertificateAlgorithmId implements CertAttrSet<String> {
      * Encode the algorithm identifier in DER form to the stream.
      *
      * @param out the DerOutputStream to marshal the contents to.
-     * @exception IOException on errors.
+     * @throws IOException on errors.
      */
     public void encode(OutputStream out) throws IOException {
         android.sun.security.util.DerOutputStream tmp = new android.sun.security.util.DerOutputStream();
@@ -120,10 +119,10 @@ public class CertificateAlgorithmId implements CertAttrSet<String> {
             throw new IOException("Attribute must be of type AlgorithmId.");
         }
         if (name.equalsIgnoreCase(ALGORITHM)) {
-            algId = (AlgorithmId)obj;
+            algId = (AlgorithmId) obj;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                              "CertAttrSet:CertificateAlgorithmId.");
+                    "CertAttrSet:CertificateAlgorithmId.");
         }
     }
 
@@ -135,7 +134,7 @@ public class CertificateAlgorithmId implements CertAttrSet<String> {
             return (algId);
         } else {
             throw new IOException("Attribute name not recognized by " +
-                               "CertAttrSet:CertificateAlgorithmId.");
+                    "CertAttrSet:CertificateAlgorithmId.");
         }
     }
 
@@ -147,7 +146,7 @@ public class CertificateAlgorithmId implements CertAttrSet<String> {
             algId = null;
         } else {
             throw new IOException("Attribute name not recognized by " +
-                               "CertAttrSet:CertificateAlgorithmId.");
+                    "CertAttrSet:CertificateAlgorithmId.");
         }
     }
 
@@ -161,10 +160,10 @@ public class CertificateAlgorithmId implements CertAttrSet<String> {
         return (elements.elements());
     }
 
-   /**
-    * Return the name of this attribute.
-    */
-   public String getName() {
-      return (NAME);
-   }
+    /**
+     * Return the name of this attribute.
+     */
+    public String getName() {
+        return (NAME);
+    }
 }

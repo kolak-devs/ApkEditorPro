@@ -25,9 +25,10 @@
 
 package android.sun.security.x509;
 
-import java.io.IOException;
-import android.sun.security.util.DerValue;
 import android.sun.security.util.DerOutputStream;
+import android.sun.security.util.DerValue;
+
+import java.io.IOException;
 
 /**
  * This class defines the X400Address of the GeneralName choice.
@@ -327,10 +328,10 @@ import android.sun.security.util.DerOutputStream;
  * </pre>
  *
  * @author Anne Anderson
- * @since       1.4
  * @see GeneralName
  * @see GeneralNames
  * @see android.sun.security.x509.GeneralNameInterface
+ * @since 1.4
  */
 public class X400Address implements android.sun.security.x509.GeneralNameInterface {
 
@@ -350,7 +351,7 @@ public class X400Address implements android.sun.security.x509.GeneralNameInterfa
      * Create the X400Address object from the passed encoded Der value.
      *
      * @param derValue the encoded DER X400Address.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public X400Address(DerValue derValue) throws IOException {
         nameValue = derValue.toByteArray();
@@ -367,7 +368,7 @@ public class X400Address implements android.sun.security.x509.GeneralNameInterfa
      * Encode the X400 name into the DerOutputStream.
      *
      * @param out the DER stream to encode the X400Address to.
-     * @exception IOException on encoding errors.
+     * @throws IOException on encoding errors.
      */
     public void encode(DerOutputStream out) throws IOException {
         DerValue derValue = new DerValue(nameValue);
@@ -383,18 +384,18 @@ public class X400Address implements android.sun.security.x509.GeneralNameInterfa
 
     /**
      * Return type of constraint inputName places on this name:<ul>
-     *   <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain).
-     *   <li>NAME_MATCH = 0: input name matches name.
-     *   <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming subtree)
-     *   <li>NAME_WIDENS = 2: input name widens name (is higher in the naming subtree)
-     *   <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type.
+     * <li>NAME_DIFF_TYPE = -1: input name is different type from name (i.e. does not constrain).
+     * <li>NAME_MATCH = 0: input name matches name.
+     * <li>NAME_NARROWS = 1: input name narrows name (is lower in the naming subtree)
+     * <li>NAME_WIDENS = 2: input name widens name (is higher in the naming subtree)
+     * <li>NAME_SAME_TYPE = 3: input name does not match or narrow name, but is same type.
      * </ul>.  These results are used in checking NameConstraints during
      * certification path verification.
      *
      * @param inputName to be checked for being constrained
-     * @returns constraint type above
      * @throws UnsupportedOperationException if name is same type, but comparison operations are
-     *          not supported for this name type.
+     *                                       not supported for this name type.
+     * @returns constraint type above
      */
     public int constrains(GeneralNameInterface inputName) throws UnsupportedOperationException {
         int constraintType;
@@ -413,8 +414,8 @@ public class X400Address implements android.sun.security.x509.GeneralNameInterfa
      * NameConstraints minimum and maximum bounds and for calculating
      * path lengths in name subtrees.
      *
-     * @returns distance of name from root
      * @throws UnsupportedOperationException if not supported for this name type
+     * @returns distance of name from root
      */
     public int subtreeDepth() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("subtreeDepth not supported for X400Address");

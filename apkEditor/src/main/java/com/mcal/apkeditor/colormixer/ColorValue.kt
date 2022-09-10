@@ -8,7 +8,8 @@ class ColorValue(
     @JvmField
     var name: String,
     @JvmField
-    var strColorValue: String) {
+    var strColorValue: String
+) {
     @JvmField
     var intColorValue = 0
 

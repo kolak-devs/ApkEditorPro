@@ -14,54 +14,54 @@ import jadx.core.dex.nodes.IMethodDetails;
  */
 public class SimpleMethodDetails implements IMethodDetails {
 
-	private final MethodInfo methodInfo;
+    private final MethodInfo methodInfo;
 
-	public SimpleMethodDetails(MethodInfo methodInfo) {
-		this.methodInfo = methodInfo;
-	}
+    public SimpleMethodDetails(MethodInfo methodInfo) {
+        this.methodInfo = methodInfo;
+    }
 
-	@Override
-	public MethodInfo getMethodInfo() {
-		return methodInfo;
-	}
+    @Override
+    public MethodInfo getMethodInfo() {
+        return methodInfo;
+    }
 
-	@Override
-	public ArgType getReturnType() {
-		return methodInfo.getReturnType();
-	}
+    @Override
+    public ArgType getReturnType() {
+        return methodInfo.getReturnType();
+    }
 
-	@Override
-	public List<ArgType> getArgTypes() {
-		return methodInfo.getArgumentsTypes();
-	}
+    @Override
+    public List<ArgType> getArgTypes() {
+        return methodInfo.getArgumentsTypes();
+    }
 
-	@Override
-	public List<ArgType> getTypeParameters() {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<ArgType> getTypeParameters() {
+        return Collections.emptyList();
+    }
 
-	@Override
-	public List<ArgType> getThrows() {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<ArgType> getThrows() {
+        return Collections.emptyList();
+    }
 
-	@Override
-	public boolean isVarArg() {
-		return false;
-	}
+    @Override
+    public boolean isVarArg() {
+        return false;
+    }
 
-	@Override
-	public int getRawAccessFlags() {
-		return AccessFlags.PUBLIC;
-	}
+    @Override
+    public int getRawAccessFlags() {
+        return AccessFlags.PUBLIC;
+    }
 
-	@Override
-	public String toAttrString() {
-		return IMethodDetails.super.toAttrString() + " (s)";
-	}
+    @Override
+    public String toAttrString() {
+        return IMethodDetails.super.toAttrString() + " (s)";
+    }
 
-	@Override
-	public String toString() {
-		return "SimpleMethodDetails{" + methodInfo + '}';
-	}
+    @Override
+    public String toString() {
+        return "SimpleMethodDetails{" + methodInfo + '}';
+    }
 }

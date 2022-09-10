@@ -27,8 +27,10 @@ package android.sun.security.x509;
 
 import android.sun.security.util.DerOutputStream;
 
-import java.util.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * This object class represents the GeneralNames type required in
@@ -40,7 +42,6 @@ import java.io.IOException;
  *
  * @author Amit Kapoor
  * @author Hemma Prafullchandra
- *
  */
 public class GeneralNames {
 
@@ -50,7 +51,7 @@ public class GeneralNames {
      * Create the GeneralNames, decoding from the passed DerValue.
      *
      * @param derVal the DerValue to construct the GeneralNames from.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public GeneralNames(android.sun.security.util.DerValue derVal) throws IOException {
         this();
@@ -59,7 +60,7 @@ public class GeneralNames {
         }
         if (derVal.data.available() == 0) {
             throw new IOException("No data available in "
-                                      + "passed DER encoded value.");
+                    + "passed DER encoded value.");
         }
         // Decode all the GeneralName's
         while (derVal.data.available() != 0) {
@@ -109,7 +110,7 @@ public class GeneralNames {
      * Write the extension to the DerOutputStream.
      *
      * @param out the DerOutputStream to write the extension to.
-     * @exception IOException on error.
+     * @throws IOException on error.
      */
     public void encode(android.sun.security.util.DerOutputStream out) throws IOException {
         if (isEmpty()) {
@@ -135,7 +136,7 @@ public class GeneralNames {
         if (obj instanceof GeneralNames == false) {
             return false;
         }
-        GeneralNames other = (GeneralNames)obj;
+        GeneralNames other = (GeneralNames) obj;
         return this.names.equals(other.names);
     }
 
