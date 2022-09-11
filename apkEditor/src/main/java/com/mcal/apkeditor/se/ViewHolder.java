@@ -1,6 +1,5 @@
 package com.mcal.apkeditor.se;
 
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -9,6 +8,6 @@ public class ViewHolder {
     TextView filename;
     TextView desc1;
 
-    ImageButton editMenu;
-    ImageButton saveMenu;
+    ImageView editMenu;
+    ImageView saveMenu;
 }

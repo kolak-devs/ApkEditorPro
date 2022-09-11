@@ -46,14 +46,14 @@
 
     </LinearLayout>
 
-    <ImageButton
+    <ImageView
         android:id="@+id/menu_edit"
         style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="@dimen/image_button_width"
         android:layout_height="@dimen/image_button_height"
         android:src="@drawable/round_brush_24" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/menu_save"
         style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="@dimen/image_button_width"

@@ -11,7 +11,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -23,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.mcal.apkeditor.R;
@@ -35,6 +33,8 @@ import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.DynamicExpandListView;
 
+import org.jetbrains.annotations.Contract;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,15 +42,9 @@ import java.util.Map;
 
 public class SimpleEditActivity extends CustomizedLangActivity implements OnClickListener,
         IReferenceDecode, IDirChanged {
-
-    // 3 pages support
-    private static final int BLACK_COLOR = 0xff333333;
-    private static final int WHITE_COLOR = 0xffffffff;
-    private static final int SKY_BLUE = 0xff04aeda;
     List<View> views;
     private String apkPath;
     private AppInfo apkInfo;
-    private int themeId;
     private ZipFileListAdapter filesAdapter;
     private ImageListAdapter imagesAdapter;
     private AudioListAdapter audiosAdapter;
@@ -78,13 +72,13 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
     private Button closeSaveBtn;
     // Summary text (to show tip)
     private TextView summaryTv;
-    // Working directory to store temporary files
-    private String workingDir;
     // Modified or not
     private boolean isModified = false;
     // To parse all the information inside the APK
     private ZipHelper zipHelper;
 
+    @NonNull
+    @Contract(pure = true)
     private static String getPackage(int id) {
         if (id >>> 24 == 1) {
             return "android:";
@@ -146,9 +140,6 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Log.d("DEBUG", "onActivityResult, request=" + requestCode +
-        // ", result="
-        // + resultCode);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0) {
             // APK successfully modified and installed
@@ -160,10 +151,7 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         // Save APK path
-        {
-            outState.putString("apkPath", this.apkPath);
-        }
-
+        outState.putString("apkPath", this.apkPath);
         super.onSaveInstanceState(outState);
     }
 
@@ -180,15 +168,14 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         views.add(fileLayout);
         views.add(imageLayout);
         views.add(audioLayout);
-        viewPager.setAdapter(new MyViewPagerAdapter(views));
+        viewPager.setAdapter(new SimpleEditAdapter(views));
         viewPager.setCurrentItem(0);
         viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
     }
 
     private void InitCursorImage() {
         this.cursorImage = (ImageView) findViewById(R.id.cursor);
-        int bmpW = BitmapFactory.decodeResource(getResources(),
-                R.drawable.pager_focus).getWidth();
+        int bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.pager_focus).getWidth();
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         this.screenWidth = dm.widthPixels;
@@ -206,9 +193,8 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
             centerLayout.setVisibility(View.VISIBLE);
             initCenterView();
         } else {
-            Toast.makeText(this, thread.getErrorMessage(), Toast.LENGTH_SHORT)
-                    .show();
-            this.finish();
+            Toast.makeText(this, thread.getErrorMessage(), Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
@@ -268,27 +254,13 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
     }
 
     private void centerViewChanged() {
-        // Reset title menu
-        if (themeId == 2) {
-            this.fileTitle.setTextColor(WHITE_COLOR);
-            this.imageTitle.setTextColor(WHITE_COLOR);
-            this.audioTitle.setTextColor(WHITE_COLOR);
-        } else {
-            this.fileTitle.setTextColor(BLACK_COLOR);
-            this.imageTitle.setTextColor(BLACK_COLOR);
-            this.audioTitle.setTextColor(BLACK_COLOR);
-        }
-
         switch (this.currIndex) {
-            case 0:
-                fileTitle.setTextColor(SKY_BLUE);
-            {
+            case 0: {
                 String strDir = filesAdapter.getCurrentDir();
                 summaryTv.setText(strDir);
             }
             break;
             case 1:
-                imageTitle.setTextColor(SKY_BLUE);
                 if (zipHelper != null) {
                     int num = zipHelper.getImageNum();
                     String str = (String) getResources().getText(
@@ -298,7 +270,6 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
                 }
                 break;
             case 2:
-                audioTitle.setTextColor(SKY_BLUE);
                 if (zipHelper != null) {
                     int num = zipHelper.getAudioNum();
                     String str = (String) getResources().getText(
@@ -311,8 +282,7 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
     }
 
     private void initData() throws Exception {
-
-        this.workingDir = SDCard.makeWorkingDir(this);
+        SDCard.makeWorkingDir(this);
 
         this.zipHelper = new ZipHelper(this.apkPath);
         zipHelper.parse();
@@ -375,15 +345,11 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         }
     }
 
-    static enum CenterView {
-        FILE, IMAGE, AUDIO
-    }
-
     private static class MyHandler extends Handler {
         WeakReference<SimpleEditActivity> activityRef;
 
         public MyHandler(SimpleEditActivity activity) {
-            activityRef = new WeakReference<SimpleEditActivity>(activity);
+            activityRef = new WeakReference<>(activity);
         }
 
         @Override
@@ -408,7 +374,7 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         WeakReference<SimpleEditActivity> activityRef;
 
         public MyThread(SimpleEditActivity activity) {
-            activityRef = new WeakReference<SimpleEditActivity>(activity);
+            activityRef = new WeakReference<>(activity);
         }
 
         @Override
@@ -428,35 +394,6 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
 
         public String getErrorMessage() {
             return err;
-        }
-    }
-
-    public static class MyViewPagerAdapter extends PagerAdapter {
-        private final List<View> mListViews;
-
-        public MyViewPagerAdapter(List<View> mListViews) {
-            this.mListViews = mListViews;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, Object object) {
-            container.removeView(mListViews.get(position));
-        }
-
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            container.addView(mListViews.get(position), 0);
-            return mListViews.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mListViews.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0 == arg1;
         }
     }
 

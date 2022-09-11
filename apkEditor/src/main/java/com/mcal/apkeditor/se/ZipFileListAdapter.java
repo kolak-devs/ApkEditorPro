@@ -29,8 +29,8 @@ import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.ImageZoomer;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.ProgressDialog;
-import com.mcal.imageviewlib.ViewZipImageActivity;
 import com.mcal.editor.TextEditor;
+import com.mcal.imageviewlib.ViewZipImageActivity;
 
 import org.jetbrains.annotations.Contract;
 
@@ -50,7 +50,6 @@ import java.util.zip.ZipFile;
 public class ZipFileListAdapter extends BaseAdapter implements
         OnItemClickListener, OnItemLongClickListener, OnClickListener,
         IFileSelection, ProgressDialog.ProcessingInterface {
-
     private final Activity ctx;
     private final IDirChanged dirChangeIf;
     private final Map<String, List<FileInfo>> dir2Files;
@@ -143,8 +142,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
         extractFromZip(ctx, zipFilePath, sources);
     }
 
-    private static void extractFromZip(@NonNull final Activity ctx, final String zipFilePath,
-                                       final List<FileCopyDialog.CopySource> sources) {
+    private static void extractFromZip(@NonNull final Activity ctx, final String zipFilePath, final List<FileCopyDialog.CopySource> sources) {
         // Select a target folder to extract
         String dlgTitle = ctx.getString(R.string.select_folder);
         IFileSelection callback = new IFileSelection() {
@@ -172,8 +170,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
             }
         };
 
-        new FileSelectDialog(ctx, callback, null, null,
-                dlgTitle, true, false, false, null);
+        new FileSelectDialog(ctx, callback, null, null, dlgTitle, true, false, false, null);
     }
 
     @Override

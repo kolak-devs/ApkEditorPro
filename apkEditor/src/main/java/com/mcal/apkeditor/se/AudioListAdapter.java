@@ -123,8 +123,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
     @NonNull
     private String getNameByPath(@NonNull String path) {
         int pos = path.lastIndexOf('/');
-        String name = path.substring(pos + 1);
-        return name;
+        return path.substring(pos + 1);
     }
 
     protected void playPauseAudio(int position) throws Exception {
@@ -168,7 +167,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@NonNull View v) {
         int id = v.getId();
 
         // Click on the play button
@@ -220,7 +219,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View arg1,
+    public boolean onItemLongClick(@NonNull AdapterView<?> parent, View arg1,
                                    final int position, long arg3) {
 
         parent.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
@@ -261,8 +260,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
 
     // Add an image file replace
     @Override
-    public void fileSelectedInDialog(String filePath, String extraStr, boolean openFile) {
-        String entryPath = extraStr;
+    public void fileSelectedInDialog(String filePath, String entryPath, boolean openFile) {
         this.replaces.put(entryPath, filePath);
 
         // Notify that something modified

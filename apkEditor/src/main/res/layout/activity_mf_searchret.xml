@@ -34,7 +34,7 @@
 
         <Button
             android:id="@+id/btn_close"
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="4dip"
@@ -43,7 +43,7 @@
 
         <Button
             android:id="@+id/btn_save"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="4dip"
