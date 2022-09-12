@@ -313,4 +313,10 @@
     <string name="title_clear_history">Очистить историю</string>
     <string name="message_clear_history">Вы действительно хотите очистить историю поиска?</string>
     <string name="pref_summary_clear_history">Очистить историю поиска</string>
+
+    <string name="full_screen">Full Screen</string>
+    <string name="full_screen_desc">Select to enable full screen</string>
+    <string name="odex_patcher">Пропатчить ODEX</string>
+    <string name="tools_manager">Управление инструментарием</string>
+    <string name="sure_to_exit">Вы действительно хотите выйти?</string>
 </resources>

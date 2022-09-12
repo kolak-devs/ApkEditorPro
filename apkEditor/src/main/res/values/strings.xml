@@ -393,7 +393,7 @@
     <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
-    <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
+    <string name="about_gnu_license">Copyright © 2021–2022 Ivan Timashkov</string>
     <string name="pref_title_aapt2">Aapt2</string>
     <string name="pref_summary_aapt2">Use aapt2 to compile resources</string>
     <string name="pref_title_multi_package">Multi Package</string>
@@ -414,5 +414,6 @@
     <string name="sure_to_exit_tip">Are you sure to exit?\nSorry, edit is not supported any more as some of the policy reason. You could save it as project which will be located at %s.</string>
     -->
     <string name="odex_patcher">Odex patcher</string>
-    <string name="tools_manager">Инструментарий</string>
+    <string name="tools_manager">Tools Manager</string>
+    <string name="find">Find</string>
 </resources>
