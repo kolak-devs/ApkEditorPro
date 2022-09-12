@@ -35,7 +35,6 @@
     <string name="copied_to_clipboard">"%s skopírované do schránky."</string>
     <string name="copy_error_msg">Kopírovať chybovú správu</string>
     <string name="current_patch">&lt;u&gt;Aktuálna záplata:&lt;/u&gt;</string>
-    <string name="custom_key_setting">Nastavenie vlastných klávesov</string>
     <string name="decode_dex_file">Dekódovať súbor DEX...</string>
     <string name="delete">Odstrániť</string>
     <string name="delete_this_line">Odstrániť tento riadok</string>
@@ -48,8 +47,6 @@
     <string name="encode_dex_file">Zakódovať súbor DEX...</string>
     <string name="entry_in_apk">Vstupný bod APK</string>
     <string name="errmsg_copied">Chybová správa skopírovaná do schránky.</string>
-    <string name="error_filepath_empty">Cesta nemôže byť prázdna.</string>
-    <string name="error_filepath_notexist">Súbor neexistuje.</string>
     <string name="exit">Ukončiť</string>
     <string name="extract">Rozbaliť</string>
     <string name="failed">Zlyhalo</string>
@@ -66,7 +63,6 @@
     <string name="general_error">Chyba: %s</string>
     <string name="help">Nápoveda</string>
     <string name="hide_smali_tip">Dlhé podržanie na DEX -> Smali ho skryje.</string>
-    <string name="icon_changed_tip">Ikona sa zmenila, ale zmeny sa prejavia až po reštartovaní prístroja.</string>
     <string name="image_summary">%d obrázky</string>
     <string name="images_capital">OBRÁZKY</string>
     <string name="in_progress">Pracujem …</string>
@@ -125,8 +121,6 @@
     <string name="pls_input_filename">Zadajte názov súboru:</string>
     <string name="pls_input_foldername">Zadajte názov priečinka, prosím:</string>
     <string name="pls_input_keyword">Zadajte kľúčové slovo pre vyhľadávanie</string>
-    <string name="private_key_label">\"Súkromný kľúč\n(.pk8)\"</string>
-    <string name="public_key_label">\"Verejný kľúč\n(.x509.pem)\"</string>
     <string name="rebuild_confirm_d_summary">Zakázané. APK bude priamo znova zostavené a podpísané klepnutím na tlačidlo uložiť.</string>
     <string name="rebuild_confirm_e_summary">Povolené. Klepnutím na tlačidlo uložiť sa zobrazí potvrdzovaní dialóg. V dialógovom okne bude na výber nepodpísanie APK.</string>
     <string name="rebuild_confirmation">Potvrdenie nového zostavenia</string>
@@ -156,7 +150,6 @@
     <string name="select_folder_err1">Nevyberajte cestu vo vnútri pracovného priečinka APK Editora.</string>
     <string name="select_folder_err2">Nevyberajte cestu,ktorá je súčasťou pracovného priečinka APK Editora.</string>
     <string name="select_folder_replace">Vyberte priečinok, ktorý chcete nahradiť</string>
-    <string name="select_key_file">Vyberte súbor kľúča</string>
     <string name="select_patch">Výber záplaty</string>
     <string name="settings">Nastavenia</string>
     <string name="show_a_toast">Zobraziť toast</string>

@@ -37,7 +37,6 @@
     <string name="sure_to_exit_editing">Weet je zeker dat je de bewerk-modus wilt afsluiten?</string>
     <string name="yes">Ja</string>
     <string name="no">Nee</string>
-    <string name="dummy" />
     <string name="rename">Hernoem</string>
     <string name="pls_input_filename">Voer bestandsnaam in:</string>
     <string name="file_already_exist">"'%s' bestaat al!"</string>
@@ -50,7 +49,6 @@
     <string name="failed_1">Mislukt: %s</string>
     <string name="user_apps">Gebruiker apps</string>
     <string name="system_apps">Systeem apps</string>
-    <string name="icon_changed_tip">Icoon veranderd. Herstart systeem om wijzigingen zichtbaar te maken.</string>
     <string name="empty_key_tip">datacode kan niet leeg zijn!</string>
     <string name="apk_savedas_1">APK opgeslagen als %s</string>
     <string name="invalid_lang_code">Foute taal code!</string>

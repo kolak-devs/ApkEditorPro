@@ -54,6 +54,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.androlib.KXmlSerializer;
 import com.mcal.androlib.LanguageMapping;
@@ -182,9 +183,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     HashMap<String, ArrayList<StringItem>> allStringValues;
     Map<String, Map<String, String>> changedStringValues;
     ResListAdapter resListAdapter;
-    private RadioButton stringRadio;
-    private RadioButton resRadio;
-    private RadioButton manifestRadio;
+
     private Drawable textIcon;
     //HashMap<ResConfigFlags, ArrayList<StringItem>> allStringValues;
     //Map<ResConfigFlags, Map<String, String>> changedStringValues;
@@ -268,6 +267,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private String filePathForExternal;
     private String entryNameForExternal;
     private long modifiedTimeBeforeOpen;
+    private BottomNavigationView buttonBar;
 
     // prjDirectory not ends with '/'
     @Nullable
@@ -1100,6 +1100,38 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     private void initView() {
+        buttonBar = findViewById(R.id.main_radio);
+        buttonBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
+
+            /**
+             * Called when an item in the navigation menu is selected.
+             *
+             * @param item The selected item
+             * @return true to display the item as the selected item and false if the item should not be
+             * selected. Consider setting non-selectable items as disabled preemptively to make them
+             * appear non-interactive.
+             */
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.tab_string:{
+                        stringRadioClicked();
+                        return true;
+                    }
+                    case R.id.tab_resource:{
+                        resRadioClicked();
+                        return true;
+                    }
+                    case R.id.tab_manifest:{
+                        manifestRadioClicked();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+
         this.textIcon = ContextCompat.getDrawable(this, R.drawable.round_g_translate_accent_24);
         this.textIconGrey = ContextCompat.getDrawable(this, R.drawable.round_g_translate_24);
         this.resIcon = ContextCompat.getDrawable(this, R.drawable.round_folder_blue_24);
@@ -1110,17 +1142,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         ImageView apkIcon = this.findViewById(R.id.app_icon);
         TextView apkLabel = this.findViewById(R.id.app_name);
         TextView apkPkgPath = this.findViewById(R.id.app_pkgpath);
-        this.stringRadio = this.findViewById(R.id.tab_string);
-        this.resRadio = this.findViewById(R.id.tab_resource);
-        this.manifestRadio = this.findViewById(R.id.tab_manifest);
-        //  For APK parser, manifest view is not visiblie, and for project, it does not contain string information
-        if (BuildConfig.PARSER_ONLY) {
-            manifestRadio.setVisibility(View.GONE);
-            if (projectName != null) {
-                stringRadio.setVisibility(View.GONE);
-                resRadio.setVisibility(View.GONE);
-            }
-        }
+
 
         // Show not support
         if (BuildConfig.IS_PRO) {
@@ -1376,9 +1398,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     protected void setupClickListener() {
-        stringRadio.setOnClickListener(v -> stringRadioClicked());
-        resRadio.setOnClickListener(v -> resRadioClicked());
-        manifestRadio.setOnClickListener(v -> manifestRadioClicked());
 
         this.saveBtn = this.findViewById(R.id.btn_build_apk);
         if (BuildConfig.PARSER_ONLY) {
@@ -1724,23 +1743,14 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // Update the view in the center of the screen
     private void updateCenterView() {
-
-        manifestRadio.setCompoundDrawablesWithIntrinsicBounds(null,
-                manifestIconGrey, null, null);
-        resRadio.setCompoundDrawablesWithIntrinsicBounds(null, resIconGrey,
-                null, null);
-        stringRadio.setCompoundDrawablesWithIntrinsicBounds(null, textIconGrey,
-                null, null);
-
         loadingLayout.setVisibility(View.INVISIBLE);
         manifestLayout.setVisibility(View.INVISIBLE);
         stringLayout.setVisibility(View.INVISIBLE);
         resourceLayout.setVisibility(View.INVISIBLE);
+        //FIXME
 
         switch (curSelectedRadio) {
             case 0:
-                stringRadio.setCompoundDrawablesWithIntrinsicBounds(null, textIcon,
-                        null, null);
                 if (this.stringParsed) {
                     stringLayout.setVisibility(View.VISIBLE);
                 } else {
@@ -1748,8 +1758,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 }
                 break;
             case 1:
-                resRadio.setCompoundDrawablesWithIntrinsicBounds(null, resIcon,
-                        null, null);
                 if (this.resourceParsed) {
                     resourceLayout.setVisibility(View.VISIBLE);
                 } else {
@@ -1757,8 +1765,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 }
                 break;
             case 2:
-                manifestRadio.setCompoundDrawablesWithIntrinsicBounds(null,
-                        manifestIcon, null, null);
                 if (this.resourceParsed) {
                     manifestLayout.setVisibility(View.VISIBLE);
                 } else {

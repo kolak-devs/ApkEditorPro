@@ -43,7 +43,6 @@
     <string name="sure_to_exit_editing">Sind Sie sicher, dass Sie die Bearbeitung der App jetzt abbrechen m&#246;chten?</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
-    <string name="dummy" />
     <string name="rename">Umbenennen</string>
     <string name="pls_input_filename">Bitte Dateiname eingeben:</string>
     <string name="file_already_exist">"Die Datei \"%s\" existiert bereits!"</string>
@@ -54,7 +53,6 @@
     <string name="failed_1">Fehlgeschlagen: %s</string>
     <string name="user_apps">Benutzer-Apps</string>
     <string name="system_apps">System-Apps</string>
-    <string name="icon_changed_tip">Das Programmstartsymbol wurde ge&#228;ndert, aber um die &#196;nderungen zu &#252;bernehmen, m&#252;ssen Sie den APK Editor neu starten.</string>
     <string name="empty_key_tip">Das Eingabefeld darf nicht leer sein!</string>
     <string name="apk_savedas_1">Die APK-Datei wurde gespeichert unter:\n%s</string>
     <string name="invalid_lang_code">Unzul&#228;ssiger Sprachcode!</string>
@@ -126,14 +124,6 @@
     <string name="select_folder_replace">Bitte Ordner ausw&#228;hlen</string>
     <string name="folder_replace_tip" formatted="false">Sind Sie sicher, dass sie den Ordner %s durch den Ordner %s ersetzen m&#246;chten?</string>
     <string name="folder_replaced">Der Ordner wurde ersetzt.</string>
-    <string name="custom_key_setting">Eigene Schl&#252;ssel</string>
-    <string name="public_key_label">"&#214;ffentlicher
-(.x509.pem) "</string>
-    <string name="private_key_label">"Privater
-(.pk8) "</string>
-    <string name="select_key_file">Schl&#252;sseldatei ausw&#228;hlen</string>
-    <string name="error_filepath_empty">Es muss ein Dateipfad angegeben werden!</string>
-    <string name="error_filepath_notexist">Die Datei existiert nicht.</string>
     <string name="select_folder">Bitte Ordner ausw&#228;hlen</string>
     <string name="select_folder_err1">Bitte w&#228;hlen Sie keinen Pfad innerhalb des Arbeitsverzeichnisses von APK Editor aus.</string>
     <string name="select_folder_err2">Bitte w&#228;hlen Sie als Pfad nicht das Arbeitsverzeichnis von APK Editor aus.</string>

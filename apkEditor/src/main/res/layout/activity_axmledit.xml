@@ -8,7 +8,6 @@
         android:id="@+id/overview_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:orientation="horizontal">
 
@@ -48,8 +47,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1"
-        android:background="@color/colorPrimary">
+        android:layout_weight="1">
 
         <ListView
             android:id="@+id/files_list"
@@ -72,7 +70,7 @@
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="?colorSurface"
         android:orientation="horizontal">
 
         <Button

@@ -36,22 +36,18 @@
     <string name="copy_error_msg">Copiar Mensaje de Error</string>
     <string name="copy_file_path">Copiar Ruta del Archivo</string>
     <string name="current_patch"><u>Parche Actual:&#160;</u></string>
-    <string name="custom_key_setting">Configuración de la Clave Personalizada</string>
     <string name="decode_dex_file">Descodificando Archivo DEX…</string>
     <string name="delete">Eliminar</string>
     <string name="delete_this_line">Eliminar Línea</string>
     <string name="description">DESCRIPCIÓN:&#160;</string>
     <string name="detail">Detalles</string>
     <string name="donot_show_again">No mostrar más</string>
-    <string name="dummy" />
     <string name="edit_data_root">EDITAR DATOS [ROOT]</string>
     <string name="empty_input_tip">¡El campo de búsqueda no puede estar vacío!</string>
     <string name="empty_key_tip">¡El campo \"Clave\" NO puede estar vacío!</string>
     <string name="encode_dex_file">Codificando Archivo DEX…</string>
     <string name="entry_in_apk">Entrada en APK</string>
     <string name="errmsg_copied">El Mensaje de Error se ha copiado al Portapapeles</string>
-    <string name="error_filepath_empty">¡El campo \"Ruta del Archivo\" no puede estar vacío!</string>
-    <string name="error_filepath_notexist">¡El Archivo No Existe!</string>
     <string name="exit">Salir</string>
     <string name="extract">Exportar</string>
     <string name="failed">¡Ha Fallado!</string>
@@ -68,7 +64,6 @@
     <string name="general_error">¡ERROR!: %s</string>
     <string name="help">Ayuda</string>
     <string name="hide_smali_tip">Por favor; PULSE PROLONGADAMENTE sobre el icono DEX -> Smali para ocultarlo.</string>
-    <string name="icon_changed_tip">El icono se ha cambiado satisfactoriamente. Para que el cambio surta efecto, salga de APK Editor y reinícielo de nuevo.</string>
     <string name="image_summary">%d Imágenes</string>
     <string name="images_capital">IMÁGENES</string>
     <string name="in_progress">Procesando…</string>
@@ -127,10 +122,6 @@
     <string name="pls_input_filename">Ingresar Nombre del Archivo:&#160;</string>
     <string name="pls_input_foldername">Ingresar Nombre de Carpeta:&#160;</string>
     <string name="pls_input_keyword">Ingresar Palabra Clave</string>
-    <string name="private_key_label">"Clave Privada
-(.pk8)"</string>
-    <string name="public_key_label">"Clave Pública
-(.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">DESHABILITADO: Inmediatamente después de pulsar el botón \"Compilar\", se iniciará el proceso de recompilado y firma del APK.</string>
     <string name="rebuild_confirm_e_summary">HABILITADO: Al pulsar el botón \"Compilar\", se mostrará un Cuadro de Diálogo de Confirmación para proceder con el recompilado. También se podrá seleccionar la opción de NO firmar el APK.</string>
     <string name="rebuild_confirmation">Confirmar Recompilado</string>
@@ -160,7 +151,6 @@
     <string name="select_folder_err1">Por favor; no escoja la Ruta dentro del mismo Directorio de Trabajo de APK Editor.</string>
     <string name="select_folder_err2">Por favor; no escoja la Ruta que contenga el Directorio de Trabajo de APK Editor.</string>
     <string name="select_folder_replace">Seleccionar la Carpeta a Reemplazar</string>
-    <string name="select_key_file">Seleccionar un Archivo de Claves</string>
     <string name="select_patch">Seleccionar Parche</string>
     <string name="settings">Ajustes</string>
     <string name="show_a_toast">Mostrar un Mensaje Emergente</string>

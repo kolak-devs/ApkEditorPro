@@ -36,22 +36,18 @@
     <string name="copy_error_msg">Messaggio di errore di copia</string>
     <string name="copy_file_path">Percorso di copia del file</string>
     <string name="current_patch"><u>Patch attuale:</u></string>
-    <string name="custom_key_setting">Personalizza impostazioni chiave</string>
     <string name="decode_dex_file">Decodifica file DEX …</string>
     <string name="delete">Elimina</string>
     <string name="delete_this_line">Elimina questa riga</string>
     <string name="description">DESCRIZIONE:</string>
     <string name="detail">Dettagli</string>
     <string name="donot_show_again">Non mostrare più</string>
-    <string name="dummy" />
     <string name="edit_data_root">Modifica i dati [ROOT]</string>
     <string name="empty_input_tip">Il valore non può essere vuoto.</string>
     <string name="empty_key_tip">La chiave non può essere vuota!</string>
     <string name="encode_dex_file">Codifica file DEX …</string>
     <string name="entry_in_apk">Elemento APK</string>
     <string name="errmsg_copied">Messaggio di errore copiato negli Appunti.</string>
-    <string name="error_filepath_empty">Il percorso del file non può essere vuoto.</string>
-    <string name="error_filepath_notexist">Il file non esiste.</string>
     <string name="exit">Esci</string>
     <string name="extract">Estrai</string>
     <string name="failed">Fallito</string>
@@ -68,7 +64,6 @@
     <string name="general_error">Errore: %s</string>
     <string name="help">Aiuto</string>
     <string name="hide_smali_tip">Fai clic a lungo su DEX -> Smali per nasconderlo.</string>
-    <string name="icon_changed_tip">L´icona è cambiata, ma potrebbe non avere effetto fino a quando non si riavvia il dispositivo.</string>
     <string name="image_summary">%d immagini</string>
     <string name="images_capital">IMMAGINI</string>
     <string name="in_progress">In elaborazione…</string>
@@ -127,10 +122,6 @@
     <string name="pls_input_filename">Nome del file:</string>
     <string name="pls_input_foldername">Nome cartella:</string>
     <string name="pls_input_keyword">Parola chiave di ricerca</string>
-    <string name="private_key_label">Chiave privata
-	(.pk8)</string>
-    <string name="public_key_label">"Chaive pubblica
-(.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">"Disabilitato. Quando si seleziona Salva verrà ricostruita e firmata l'apk."</string>
     <string name="rebuild_confirm_e_summary">"Abilitato. Quando si seleziona Salva verrà visualizzata la finestra di conferma della ricostruzione. Si può scegliere nella finestra di dialogo di non firmare l'APK."</string>
     <string name="rebuild_confirmation">Conferma ricostruzione</string>
@@ -160,7 +151,6 @@
     <string name="select_folder_err1">"Non selezionare il percorso all'interno della cartella di lavoro di APK Editor."</string>
     <string name="select_folder_err2">Non selezionare il percorso che contiene la cartella di lavoro di APK Editor.</string>
     <string name="select_folder_replace">Seleziona la cartella da sostituire</string>
-    <string name="select_key_file">Seleziona un file di chiave</string>
     <string name="select_patch">Seleziona una patch</string>
     <string name="settings">Impostazioni</string>
     <string name="show_a_toast">Visualizza toast</string>

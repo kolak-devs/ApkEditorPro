@@ -66,11 +66,6 @@
         <item>Name der App</item>
         <item>Installationsdatum</item>
     </string-array>
-    <string-array name="signer_key">
-        <item>Testschl&#252;ssel</item>
-        <item>Schl&#252;ssel erstellt durch APK Editor</item>
-        <item>Eigene Schl&#252;ssel</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Automatisch (mit fortlaufender Nummer am Ende)</item>
         <item>&#220;berschreiben</item>
@@ -130,43 +125,5 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
-    </string-array>
-    <string-array name="appicon_key">
-        <item>Standardsymbol</item>
-        <item>Das 2. neue Symbol</item>
-        <item>Das 3. neue Symbol</item>
-        <item>Das 4. neue Symbol</item>
-        <item>Das 5. neue Symbol</item>
-        <item>Das 6. neue Symbol</item>
-        <item>Das 7. neue Symbol</item>
-        <item>Das 8. neue Symbol</item>
-        <item>Das 9. neue Symbol</item>
-        <item>Das 10. neue Symbol</item>
-        <item>Das 11. neue Symbol</item>
-        <item>Das 12. neue Symbol</item>
-        <item>Das 13. neue Symbol</item>
-        <item>Das 14. neue Symbol</item>
-        <item>Das 15. neue Symbol</item>
-        <item>Das 16. neue Symbol</item>
-        <item>Das 17. neue Symbol</item>
-    </string-array>
-    <string-array name="appicon_value">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
     </string-array>
 </resources>

@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string-array name="appicon_key">
-        <item>Nová ikona 1</item>
-        <item>Nová ikona 2</item>
-        <item>Nová ikona 3</item>
-        <item>Nová ikona 4</item>
-        <item>Nová ikona 5</item>
-        <item>Stará ikona</item>
-    </string-array>
     <string-array name="fileTypeAudio">
         <item>.mp3</item>
         <item>.wav</item>
@@ -73,11 +65,6 @@
     <string-array name="order_value">
         <item>Mena</item>
         <item>Času inštalácie</item>
-    </string-array>
-    <string-array name="signer_key">
-        <item>testovací kľúč</item>
-        <item>kľúč vytvoril APK Editor</item>
-        <item>vlastný kľúč</item>
     </string-array>
     <string-array name="file_extract_rename_key">
         <item>Auto (pridá číselnú príponu)</item>

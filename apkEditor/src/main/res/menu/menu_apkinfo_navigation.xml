@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_string"
+        android:icon="@drawable/round_g_translate_accent_24"
+        android:title="@string/string" />
+
+    <item
+        android:id="@+id/tab_resource"
+        android:icon="@drawable/round_folder_24"
+        android:title="@string/resource" />
+
+    <item
+        android:id="@+id/tab_manifest"
+        android:icon="@drawable/round_article_24"
+        android:title="@string/manifest" />
+</menu>

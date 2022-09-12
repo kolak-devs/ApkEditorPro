@@ -43,7 +43,6 @@
     <string name="sure_to_exit_editing">Opravdu chcete ukončit úpravu?</string>
     <string name="yes">ANO</string>
     <string name="no">NE</string>
-    <string name="dummy" />
     <string name="rename">Přejmenovat</string>
     <string name="pls_input_filename">Zadejte název souboru:</string>
     <string name="file_already_exist">"'%s'  již existuje! "</string>
@@ -54,7 +53,6 @@
     <string name="failed_1">Selhalo: %s</string>
     <string name="user_apps">Uživatelská aplikace</string>
     <string name="system_apps">Systémová aplikace</string>
-    <string name="icon_changed_tip">Změna ikony, se projeví až po restartování zařízení.</string>
     <string name="empty_key_tip">Klíč nemůže být prázdný!</string>
     <string name="apk_savedas_1">APK uložen jako %s</string>
     <string name="invalid_lang_code">Neplatný kód jazyka!</string>
@@ -126,12 +124,6 @@
     <string name="select_folder_replace">Vyberte složku, do které ji nahradit</string>
     <string name="folder_replace_tip" formatted="false">Opravdu chcete nahradit %s složkou %s?</string>
     <string name="folder_replaced">Složka Nahrazena</string>
-    <string name="custom_key_setting">Vlastní Klíč</string>
-    <string name="public_key_label">"Veřejný klíč\n(.x509.pem)"</string>
-    <string name="private_key_label">"Soukromý klíč\n(.pk8)"</string>
-    <string name="select_key_file">Vyberte soubor s klíčem</string>
-    <string name="error_filepath_empty">Cesta k souboru nemůže být prázdná.</string>
-    <string name="error_filepath_notexist">Soubor neexistuje.</string>
     <string name="select_folder">Prosím, vyberte složku</string>
     <string name="select_folder_err1">Prosím, vyberte cestu uvnitř pracovního adresáře APK Editoru.</string>
     <string name="select_folder_err2">Prosím, vyberte cestu pro uložení pracovního adresáře APK Editoru.</string>

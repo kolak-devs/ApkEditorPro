@@ -40,7 +40,6 @@
     <string name="no">取消</string>
 
     <!-- For Folder List -->
-    <string name="dummy"></string>
     <string name="rename">重命名</string>
     <string name="pls_input_filename">请输入文件名:</string>
     <string name="file_already_exist">\'%s\' 已存在!</string>
@@ -58,7 +57,6 @@
     <string name="failed_1">失败: %s</string>
     <string name="user_apps">用户应用</string>
     <string name="system_apps">系统应用</string>
-    <string name="icon_changed_tip">图标已更改 (不过部分手机需要重启才能生效)</string>
     <string name="empty_key_tip">Key不能为空!</string>
     <string name="apk_savedas_1">APK 已保存至 %s</string>
     <string name="invalid_lang_code">无效语言代码!</string>
@@ -162,12 +160,6 @@
     <string name="select_folder_replace">选择一个目录进行替换</string>
     <string name="folder_replace_tip" formatted="false">确定替换掉 %s 吗？(使用 %s)</string>
     <string name="folder_replaced">目录已替换</string>
-    <string name="custom_key_setting">自定义密钥设置</string>
-    <string name="public_key_label">公钥\n(.x509.pem)</string>
-    <string name="private_key_label">私钥\n(.pk8)</string>
-    <string name="select_key_file">选择一个密钥文件</string>
-    <string name="error_filepath_empty">文件路径不能为空.</string>
-    <string name="error_filepath_notexist">文件不存在.</string>
 
     <!-- version 1.4.8 -->
     <string name="select_folder">请选择一个目录 (提示：可以长按列表，在弹出菜单中新建一个目录)</string>

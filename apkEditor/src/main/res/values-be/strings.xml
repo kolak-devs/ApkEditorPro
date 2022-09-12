@@ -37,7 +37,6 @@
     <string name="copy_error_msg">"Капіраваць паведамленне "</string>
     <string name="copy_file_path">Скапіраваць шлях да файла</string>
     <string name="current_patch">Бягучы шлях:</string>
-    <string name="custom_key_setting">Адвольныя налады ключа</string>
     <string name="decode_dex_file">Дэкадаванне файла DEX…</string>
     <string name="delete">"Выдаліць "</string>
     <string name="delete_this_line">"Выдаліць гэты радок "</string>
@@ -50,8 +49,6 @@
     <string name="encode_dex_file">Кадаванне файла DEX…</string>
     <string name="entry_in_apk">Размяшчэнне ў APK</string>
     <string name="errmsg_copied">Паведамленне памылкі скапіравана ў буфер абмену.</string>
-    <string name="error_filepath_empty">Шлях да файла не можа быць пустым.</string>
-    <string name="error_filepath_notexist">"Файл не існуе. "</string>
     <string name="exit">"Выхад "</string>
     <string name="extract">"Выняць "</string>
     <string name="failed">"Памылка "</string>
@@ -68,7 +65,6 @@
     <string name="general_error">Памылка: %s</string>
     <string name="help">"Дапамога "</string>
     <string name="hide_smali_tip">Працяжна націсніце DEX -> Smali каб схаваць.</string>
-    <string name="icon_changed_tip">Значок зменены, але гэта ўжывецца пасля перазапуску.</string>
     <string name="image_summary">%d выяў</string>
     <string name="images_capital">ВЫЯВЫ</string>
     <string name="in_progress">Апрацоўка …</string>
@@ -127,10 +123,6 @@
     <string name="pls_input_filename">Калі ласка, увядзіце назву файла:</string>
     <string name="pls_input_foldername">Калі ласка, увядзіце назву каталога:</string>
     <string name="pls_input_keyword">"Увядзіце ключавыя словы для пошуку "</string>
-    <string name="private_key_label">"Асабісты ключ
-(.pk8)"</string>
-    <string name="public_key_label">"Публічны ключ
-(.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">Выключана. APK будзе перасабраны і падпісаны пасля націску на кнопку захавання.</string>
     <string name="rebuild_confirm_e_summary">Уключана. Будзе паказвацца акно пацверджання пры націсканні на кнопку \"захаваць\". Вы можаце адмовіцца падпісваць APK.</string>
     <string name="rebuild_confirmation">Пацверджанне перазборкі</string>
@@ -160,7 +152,6 @@
     <string name="select_folder_err1">Шлях не можа весці ў працоўны каталог APK Editor.</string>
     <string name="select_folder_err2">Шлях не можа весці ў працоўны каталог APK Editor.</string>
     <string name="select_folder_replace">"Абярыце каталог для замены "</string>
-    <string name="select_key_file">"Абярыце ключ "</string>
     <string name="select_patch">Абярыце патч</string>
     <string name="settings">"Налады "</string>
     <string name="show_a_toast">Паказаць тост</string>

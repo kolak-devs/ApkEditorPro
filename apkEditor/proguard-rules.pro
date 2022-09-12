@@ -38,9 +38,9 @@
 -keep class jadx.** { *; }
 -keep class com.google.common.collect.** { *; }
 
-#-obfuscationdictionary proguard-bin.txt
-#-packageobfuscationdictionary proguard-bin.txt
-#-classobfuscationdictionary proguard-bin.txt
+-obfuscationdictionary proguard-dictionary.txt
+-packageobfuscationdictionary proguard-dictionary.txt
+-classobfuscationdictionary proguard-dictionary.txt
 
 #-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
 #    public static void checkExpressionValueIsNotNull(java.lang.Object, java.lang.String);

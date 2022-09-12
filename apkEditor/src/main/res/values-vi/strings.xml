@@ -36,22 +36,18 @@
     <string name="copy_error_msg">Sao chép thông báo lỗi</string>
     <string name="copy_file_path">Sao chép đường dẫn tập tin</string>
     <string name="current_patch"><u>Patch hiện tại:</u></string>
-    <string name="custom_key_setting">Tùy chỉnh thiết lập key</string>
     <string name="decode_dex_file">Giải mã tập tin DEX …</string>
     <string name="delete">Xóa bỏ</string>
     <string name="delete_this_line">Xóa dòng này</string>
     <string name="description">MIÊU TẢ:</string>
     <string name="detail">Chi tiết</string>
     <string name="donot_show_again">Không hiển thị lại</string>
-    <string name="dummy" />
     <string name="edit_data_root">Chỉnh sửa Data [ROOT]</string>
     <string name="empty_input_tip">Đầu vào không thể để trống.</string>
     <string name="empty_key_tip">Key không được để trống!</string>
     <string name="encode_dex_file">Mã hóa tập tin DEX …</string>
     <string name="entry_in_apk">Mục nhập APK</string>
     <string name="errmsg_copied">Đã sao chép thông báo lỗi vào bộ nhớ tạm.</string>
-    <string name="error_filepath_empty">Đường dẫn tập tin không thể để trống.</string>
-    <string name="error_filepath_notexist">Tập tin không tồn tại.</string>
     <string name="exit">Thoát ra</string>
     <string name="extract">Xuất ra</string>
     <string name="failed">Thất bại</string>
@@ -68,7 +64,6 @@
     <string name="general_error">Lỗi: %s</string>
     <string name="help">Trợ giúp</string>
     <string name="hide_smali_tip">Hãy nhấp và giữ vào DEX - Smali để ẩn nó.</string>
-    <string name="icon_changed_tip">Biểu tượng thay đổi, nhưng nó có thể không có hiệu lực cho đến khi bạn khởi động lại điện thoại của bạn.</string>
     <string name="image_summary">%d hình ảnh</string>
     <string name="images_capital">HÌNH ẢNH</string>
     <string name="in_progress">Làm việc</string>
@@ -127,10 +122,6 @@
     <string name="pls_input_filename">Hãy nhập tên tập tin:</string>
     <string name="pls_input_foldername">Hãy nhập tên thư mục:</string>
     <string name="pls_input_keyword">Đầu vào từ khóa tìm kiếm</string>
-    <string name="private_key_label">"Key Riêng tư
-(.pk8)"</string>
-    <string name="public_key_label">"Key Công cộng
-(.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">Vô hiệu hoá. Sẽ trực tiếp xây dựng lại và ký APK khi nhấp nút lưu lại.</string>
     <string name="rebuild_confirm_e_summary">Cho phép. Sẽ hiển thị hộp thoại xác nhận xây dựng lại khi nhấn nút lưu. Cũng có thể lựa chọn không đăng ký APK trong hộp thoại.</string>
     <string name="rebuild_confirmation">Xác nhận xây dựng lại</string>
@@ -160,7 +151,6 @@
     <string name="select_folder_err1">Vui lòng không chọn đường dẫn bên trong thư mục làm việc của APK Editor.</string>
     <string name="select_folder_err2">Vui lòng không chọn đường dẫn có chứa các thư mục làm việc của APK Editor.</string>
     <string name="select_folder_replace">Chọn một thư mục để thay thế nó</string>
-    <string name="select_key_file">Chọn một tập tin key</string>
     <string name="select_patch">Chọn một Patch</string>
     <string name="settings">Cài đặt</string>
     <string name="show_a_toast">Hiện một Toast</string>

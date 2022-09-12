@@ -41,7 +41,6 @@
     <string name="no">לא</string>
 
     <!-- For Folder List -->
-    <string name="dummy"></string>
     <string name="rename">שנה שם</string>
     <string name="pls_input_filename">אנא הכנס שם קובץ:</string>
     <string name="file_already_exist">\'%s\' כבר קיים!</string>
@@ -58,7 +57,6 @@
     <string name="failed_1">נכשל: %s</string>
     <string name="user_apps">מאפליקציות משתמש</string>
     <string name="system_apps">אפליקציות מערכת</string>
-    <string name="icon_changed_tip">הסמל שונה, אך יתכן והשינוי יתרחש רק אחרי כיבוי המכשיר.</string>
     <string name="empty_key_tip">מפתח לא יכול להיות ריק!</string>
     <string name="apk_savedas_1">APK נשמר כ %s</string>
     <string name="invalid_lang_code">קוד שפה שגוי!</string>

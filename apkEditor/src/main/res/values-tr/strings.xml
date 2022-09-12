@@ -36,22 +36,18 @@
     <string name="copy_error_msg">Hata mesajını kopyala</string>
     <string name="copy_file_path">Dosya yolunu kopyala</string>
     <string name="current_patch">"&lt;u&gt;Mevcut yama: "</string>
-    <string name="custom_key_setting">Özel imzalama ayarı</string>
     <string name="decode_dex_file">Dex dosyası ayrıştırılıyor...</string>
     <string name="delete">Sil</string>
     <string name="delete_this_line">Bu satırı sil</string>
     <string name="description">Açıklama:</string>
     <string name="detail">Detaylar</string>
     <string name="donot_show_again">Tekrar gösterme</string>
-    <string name="dummy" />
     <string name="edit_data_root">Veri düzenle [ROOT]</string>
     <string name="empty_input_tip">Giriş boş olamaz!</string>
     <string name="empty_key_tip">Bu bölüm boş olamaz!</string>
     <string name="encode_dex_file">Dex dosyası kodlanıyor...</string>
     <string name="entry_in_apk">Apk girin</string>
     <string name="errmsg_copied">Hata mesajı panoya kopyalandı</string>
-    <string name="error_filepath_empty">Dosya yolu boş olamaz.</string>
-    <string name="error_filepath_notexist">Dosya bulunamıyor.</string>
     <string name="exit">Çıkış</string>
     <string name="extract">Kopyala</string>
     <string name="failed">Hata</string>
@@ -68,7 +64,6 @@
     <string name="general_error">Hata: %s</string>
     <string name="help">Yardım</string>
     <string name="hide_smali_tip">DEX Gizlemek için basılı tutun</string>
-    <string name="icon_changed_tip">Simge değiştirildi. Yeniden başlattığınızda uygulanacak.</string>
     <string name="image_summary">%d Resim</string>
     <string name="images_capital">Resimler</string>
     <string name="in_progress">Çalışıyor...</string>
@@ -129,10 +124,6 @@ Başarısız sonuç alınabilir bilginize."</string>
     <string name="pls_input_filename">Dosya adını girin:</string>
     <string name="pls_input_foldername">Klasör adını girin:</string>
     <string name="pls_input_keyword">Aranacak kelime</string>
-    <string name="private_key_label">"Özel imza
-(.pk8)"</string>
-    <string name="public_key_label">"Açık imza
-(.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">"Kapalı. 'Kaydet' düğmesine tıkladığınızda apk dosyası seçmiş olduğunuz imzalama türüne göre hemen kaydedilecektir."</string>
     <string name="rebuild_confirm_e_summary">"Etkin. 'Kaydet' düğmesine tıkladığınızda karşınıza imzalama seçenekleri çıkacaktır."</string>
     <string name="rebuild_confirmation">İmzalama seçenekleri</string>
@@ -163,7 +154,6 @@ Eskisini kaldırıp daha sonra yenisini yükle"</string>
     <string name="select_folder_err1">APK Editör çalışma dizini yolunu seçme</string>
     <string name="select_folder_err2">APK Editör çalışma dizini yolunu seç</string>
     <string name="select_folder_replace">Değiştirmek için bir klasör seçin</string>
-    <string name="select_key_file">Bir imzalama dosyası seçin</string>
     <string name="select_patch">Yama seç</string>
     <string name="settings">Ayarlar</string>
     <string name="show_a_toast">Tekrar göster</string>

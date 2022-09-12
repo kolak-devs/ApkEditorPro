@@ -41,7 +41,6 @@
     <string name="no">NO</string>
 
     <!-- For Folder List -->
-    <string name="dummy"></string>
     <string name="rename">Rename</string>
     <string name="pls_input_filename">Please Input the File Name:</string>
     <string name="file_already_exist">\'%s\' already exists!</string>
@@ -58,7 +57,6 @@
     <string name="failed_1">Failed: %s</string>
     <string name="user_apps">User Apps</string>
     <string name="system_apps">System Apps</string>
-    <string name="icon_changed_tip">Icon changed, but it may not take effect until you reboot your device.</string>
     <string name="empty_key_tip">Key can not be empty!</string>
     <string name="apk_savedas_1">APK saved as %s</string>
     <string name="invalid_lang_code">Invalid language code!</string>
@@ -162,12 +160,6 @@
     <string name="select_folder_replace">Select a folder to replace it</string>
     <string name="folder_replace_tip" formatted="false">Are you sure to replace %s with %s?</string>
     <string name="folder_replaced">Folder Replaced</string>
-    <string name="custom_key_setting">Custom Key Setting</string>
-    <string name="public_key_label">Public Key(.x509.pem)</string>
-    <string name="private_key_label">Private Key(.pk8)</string>
-    <string name="select_key_file">Select a key file</string>
-    <string name="error_filepath_empty">File path cannot be empty.</string>
-    <string name="error_filepath_notexist">File does not exist.</string>
 
     <!-- version 1.4.8 -->
     <string name="select_folder">Please select a folder (Or long click at any item to create a new one)</string>
@@ -415,5 +407,4 @@
     -->
     <string name="odex_patcher">Odex patcher</string>
     <string name="tools_manager">Tools Manager</string>
-    <string name="find">Find</string>
 </resources>

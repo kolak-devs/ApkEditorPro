@@ -21,7 +21,6 @@
             android:id="@+id/tv_not_support"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="@string/manifest_edit_not_support"
             tools:visibility="gone" />

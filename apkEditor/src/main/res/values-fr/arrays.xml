@@ -9,11 +9,6 @@
         <item>"Par heure d'installation"</item>
     </string-array>
 
-    <string-array name="signer_key">
-        <item>testkey</item>
-        <item>cl&#233; cr&#233;&#233;e par APK Editor</item>
-        <item>cl&#233; personnelle</item>
-    </string-array>
     <string-array name="fileTypeImage">
         <item>.png</item>
         <item>.gif</item>

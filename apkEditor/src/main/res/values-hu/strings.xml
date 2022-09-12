@@ -36,22 +36,18 @@
     <string name="copy_error_msg">Hibaüzenet másolása</string>
     <string name="copy_file_path">Fájl elérési útvonalának másolása</string>
     <string name="current_patch"><u>Aktuális patch:</u></string>
-    <string name="custom_key_setting">Egyéni kulcs beállítás</string>
     <string name="decode_dex_file">DEX-fájl visszafejtése …</string>
     <string name="delete">Törlés</string>
     <string name="delete_this_line">Jelenlegi sor törlése</string>
     <string name="description">LEÍRÁS:</string>
     <string name="detail">Részletek</string>
     <string name="donot_show_again">Ne jelenjen meg többé</string>
-    <string name="dummy" />
     <string name="edit_data_root">Adatok szerkesztése [ROOT]</string>
     <string name="empty_input_tip">A beviteli mező nem lehet üres.</string>
     <string name="empty_key_tip">A kulcs mező nem lehet üres!</string>
     <string name="encode_dex_file">DEX-fájl kódolása …</string>
     <string name="entry_in_apk">Helye az APK-ban</string>
     <string name="errmsg_copied">A hibaüzenet a vágólapra lett másolva.</string>
-    <string name="error_filepath_empty">A fájl elérési útvonala nem lehet üres.</string>
-    <string name="error_filepath_notexist">A fájl nem létezik.</string>
     <string name="exit">Kilépés</string>
     <string name="extract">Kibontás</string>
     <string name="failed">Sikertelen</string>
@@ -68,7 +64,6 @@
     <string name="general_error">Hiba: %s</string>
     <string name="help">Súgó megnyitása</string>
     <string name="hide_smali_tip">Nyomja meg hosszan a DEX -> Smali-t az elrejtéshez.</string>
-    <string name="icon_changed_tip">Az ikon megváltozott, de az a készülék újraindításáig nem kerül alkalmazásra.</string>
     <string name="image_summary">%d kép</string>
     <string name="images_capital">KÉPEK</string>
     <string name="in_progress">Folyamatban …</string>
@@ -127,10 +122,6 @@
     <string name="pls_input_filename">Kérjük, adja meg a fájl nevét:</string>
     <string name="pls_input_foldername">Kérjük, adja meg a mappa nevét:</string>
     <string name="pls_input_keyword">Keresendő kulcsszó</string>
-    <string name="private_key_label">"Privát kulcs
-(.pk8)"</string>
-    <string name="public_key_label">"Nyilvános kulcs
-(.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">Letiltva. Közvetlenül újraépíti és aláírja az APK fájlt, amikor a mentés gombra kattint.</string>
     <string name="rebuild_confirm_e_summary">Engedélyezve. Megjeleníti az újraépítés megerősítési párbeszédablakot, amikor a mentés gombra kattint. Ebben az ablakban választhatja azt is, hogy az APK ne kerüljön aláírásra.</string>
     <string name="rebuild_confirmation">Újraépítés megerősítése</string>
@@ -160,7 +151,6 @@
     <string name="select_folder_err1">Kérjük, ne válasszon helyet az APK Editor munkakönyvtárán belül.</string>
     <string name="select_folder_err2">Kérjük, ne válasszon olyan helyet, amely tartalmazza az APK Editor munkakönyvtárát.</string>
     <string name="select_folder_replace">Válasszon ki egy mappát a cseréhez</string>
-    <string name="select_key_file">Válasszon egy kulcsfájlt</string>
     <string name="select_patch">Patch fájl</string>
     <string name="settings">Beállítások</string>
     <string name="show_a_toast">Értesítés megjelenítése</string>

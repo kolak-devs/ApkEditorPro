@@ -9,12 +9,6 @@
         <item>Podle času instalace</item>
     </string-array>
 
-    <string-array name="signer_key">
-        <item>Testovací klíč</item>
-        <item>Klíč vytvořit APK Editorem</item>
-        <item>Vlastní klíč</item>
-    </string-array>
-
     <string-array name="fileTypeImage">
         <item>.png</item>
         <item>.gif</item>

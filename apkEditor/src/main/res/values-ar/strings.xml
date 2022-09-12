@@ -45,7 +45,6 @@
     <string name="sure_to_exit_editing">هل أنت متأكد من الخروج من التحرير؟</string>
     <string name="yes">نعم</string>
     <string name="no">لا</string>
-    <string name="dummy" />
     <string name="rename">إعادة تسمية</string>
     <string name="pls_input_filename">الرجاء إدخال اسم الملف:</string>
     <string name="file_already_exist">"'%s' موجود بالفعل!"</string>
@@ -56,7 +55,6 @@
     <string name="failed_1">فشل: %s</string>
     <string name="user_apps">تطبيقات المستخدم</string>
     <string name="system_apps">تطبيقات نظام</string>
-    <string name="icon_changed_tip">تغيير الرمز، ولكن قد لا تصبح نافذة المفعول حتى يتم إعادة تشغيل الجهاز.</string>
     <string name="empty_key_tip">لا يمكن أن يكون مفتاح فارغ!</string>
     <string name="apk_savedas_1">أية بي كيه حفظ باسم %s</string>
     <string name="invalid_lang_code">رمز اللغة غير صالح!</string>
@@ -131,14 +129,6 @@
     <string name="select_folder_replace">حدد مجلد الذي تريد استبداله</string>
     <string name="folder_replace_tip" formatted="false">هل أنت متأكد من استبدال %s مع %s?</string>
     <string name="folder_replaced">استبدال المجلد</string>
-    <string name="custom_key_setting">إعداد مفتاح مخصص</string>
-    <string name="public_key_label">"المفتاح العمومي
-(.x509.pem)"</string>
-    <string name="private_key_label">"المفتاح الخاص
-(.pk8)"</string>
-    <string name="select_key_file">حدد ملف مفتاح</string>
-    <string name="error_filepath_empty">لا يمكن أن يكون مسار الملف فارغ.</string>
-    <string name="error_filepath_notexist">الملف غير موجود.</string>
     <string name="select_folder">الرجاء تحديد مجلد</string>
     <string name="select_folder_err1">
 	الرجاء لا تقم بتحديد المسار داخل دليل العمل لمحرر أية بي كيه.</string>

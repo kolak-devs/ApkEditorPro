@@ -1,24 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="appicon_key">
-        <item>Alapértelmezett ikon (1)</item>
-        <item>(2)</item>
-        <item>(3)</item>
-        <item>(4)</item>
-        <item>(5)</item>
-        <item>(6)</item>
-        <item>(7)</item>
-        <item>(8)</item>
-        <item>(9)</item>
-        <item>(10)</item>
-        <item>(11)</item>
-        <item>(12)</item>
-        <item>(13)</item>
-        <item>(14)</item>
-        <item>(15)</item>
-        <item>(16)</item>
-        <item>(17)</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Automatikus (egy szám utótag hozzáadásával)</item>
         <item>Felülírás</item>
@@ -47,12 +28,6 @@
     <string-array name="order_key">
         <item>Alkalmazás neve szerint</item>
         <item>Telepítési idő szerint</item>
-    </string-array>
-
-    <string-array name="signer_key">
-        <item>Tesztkulcs</item>
-        <item>APK Editor-ral létrehozott kulcs</item>
-        <item>Egyéni kulcs</item>
     </string-array>
 
     <string-array name="fileTypeAudio">
@@ -112,25 +87,6 @@
     <string-array name="fileTypeWord">
         <item>.doc</item>
         <item>.docx</item>
-    </string-array>
-    <string-array name="appicon_value">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
     </string-array>
     <string-array name="file_extract_rename_value">
         <item>0</item>

@@ -66,11 +66,6 @@
         <item>Per nome app</item>
         <item>Per data installazione</item>
     </string-array>
-    <string-array name="signer_key">
-        <item>chiave di prova</item>
-        <item>chiave creata da APK Editor</item>
-        <item>chiave personalizzata</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Auto (aggiunta suffisso nuemrico)</item>
         <item>Sovrascrivi</item>

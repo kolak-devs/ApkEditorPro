@@ -36,7 +36,6 @@
     <string name="copy_error_msg">Копировать сообщение</string>
     <string name="copy_file_path">Копировать путь к файлу</string>
     <string name="current_patch">Текущий патч:</string>
-    <string name="custom_key_setting">Выбор пользовательского ключа</string>
     <string name="decode_dex_file">Декодирование DEX-файла</string>
     <string name="delete">Удалить</string>
     <string name="delete_this_line">Удалить эту строку</string>
@@ -49,8 +48,6 @@
     <string name="encode_dex_file">Кодирование DEX-файла</string>
     <string name="entry_in_apk">Расположение в APK</string>
     <string name="errmsg_copied">Сообщение об ошибке скопировано в буфер обмена.</string>
-    <string name="error_filepath_empty">Путь к файлу не может быть пустым.</string>
-    <string name="error_filepath_notexist">Файл не существует.</string>
     <string name="exit">Выход</string>
     <string name="extract">Извлечь</string>
     <string name="failed">Ошибка</string>
@@ -67,7 +64,6 @@
     <string name="general_error">Ошибка: %s</string>
     <string name="help">Помощь</string>
     <string name="hide_smali_tip">Длительное нажатие на \"DEX -> Smali\" скроет эту надпись.</string>
-    <string name="icon_changed_tip">Иконка изменена, но она не может вступить в силу до перезагрузки.</string>
     <string name="image_summary">%d изображений</string>
     <string name="images_capital">ИЗОБРАЖЕНИЯ</string>
     <string name="in_progress">Выполнение…</string>
@@ -126,8 +122,6 @@
     <string name="pls_input_filename">Введите имя файла:</string>
     <string name="pls_input_foldername">Пожалуйста, введите имя папки:</string>
     <string name="pls_input_keyword">Введите ключевые слова для поиска</string>
-    <string name="private_key_label">"Личный ключ(.pk8)"</string>
-    <string name="public_key_label">"Общий ключ(.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">Отключено. Пересборка и подписывание APK будут выполнены непосредственно при нажатии кнопки сохранения.</string>
     <string name="rebuild_confirm_e_summary">Включено. Будет показан диалог подтверждения при нажатии кнопки сохранения. Вы можете отказаться от подписывания APK в диалоговом окне.</string>
     <string name="rebuild_confirmation">Подтверждение пересборки</string>
@@ -157,7 +151,6 @@
     <string name="select_folder_err1">Пожалуйста, не выбирайте путь внутри рабочей папки APK Editor.</string>
     <string name="select_folder_err2">Пожалуйста, не выбирайте путь, включающий в себя рабочую папку APK Editor.</string>
     <string name="select_folder_replace">Выберите папку для замены</string>
-    <string name="select_key_file">Выберите файл ключа</string>
     <string name="select_patch">Выбрать патч</string>
     <string name="settings">Настройки</string>
     <string name="show_a_toast">Показать уведомление</string>
@@ -314,8 +307,6 @@
     <string name="message_clear_history">Вы действительно хотите очистить историю поиска?</string>
     <string name="pref_summary_clear_history">Очистить историю поиска</string>
 
-    <string name="full_screen">Full Screen</string>
-    <string name="full_screen_desc">Select to enable full screen</string>
     <string name="odex_patcher">Пропатчить ODEX</string>
     <string name="tools_manager">Управление инструментарием</string>
     <string name="sure_to_exit">Вы действительно хотите выйти?</string>

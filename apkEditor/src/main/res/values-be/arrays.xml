@@ -8,30 +8,6 @@
         <item>"Па назве дадатка "</item>
         <item>Па часе ўсталёўкі</item>
     </string-array>
-    <string-array name="signer_key">
-        <item>testkey</item>
-        <item>Ключ створаны ў APK Editor</item>
-        <item>custom key</item>
-    </string-array>
-    <string-array name="appicon_key">
-        <item>Прадвызначаны значок (1)</item>
-        <item>(2)</item>
-        <item>(3)</item>
-        <item>(4)</item>
-        <item>(5)</item>
-        <item>(6)</item>
-        <item>(7)</item>
-        <item>(8)</item>
-        <item>(9)</item>
-        <item>(10)</item>
-        <item>(11)</item>
-        <item>(12)</item>
-        <item>(13)</item>
-        <item>(14)</item>
-        <item>(15)</item>
-        <item>(16)</item>
-        <item>(17)</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Аўтаматычна (дадаваць суфікс ліку)</item>
         <item>Перазапісаць</item>

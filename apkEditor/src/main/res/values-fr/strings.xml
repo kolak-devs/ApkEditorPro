@@ -41,7 +41,6 @@
     <string name="sure_to_exit_editing">&#202;tes-vous sur de vouloir quitter le mode &#233;dition?</string>
     <string name="yes">OUI</string>
     <string name="no">NON</string>
-    <string name="dummy" />
     <string name="rename">Renommer</string>
     <string name="pls_input_filename">Merci de nommer le fichier:</string>
     <string name="file_already_exist">"%s' existe d&#233;j&#224;!"</string>
@@ -52,7 +51,6 @@
     <string name="failed_1">Echec: %s</string>
     <string name="user_apps">Applications utilisateur</string>
     <string name="system_apps">Applications syst&#232;me</string>
-    <string name="icon_changed_tip">Ic&#244;ne chang&#233;, mais pour que le changement soit effectif, vous devez red&#233;marrer votre p&#233;riph&#233;rique.</string>
     <string name="empty_key_tip">Le champ de recherche ne peut pas &#234;tre vide!</string>
     <string name="apk_savedas_1">APK enregistr&#233; sous %s</string>
     <string name="invalid_lang_code">Code language invalide!</string>

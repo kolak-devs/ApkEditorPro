@@ -43,7 +43,6 @@
     <string name="sure_to_exit_editing">Tem certeza que quer sair da edição?</string>
     <string name="yes">SIM</string>
     <string name="no">NÃO</string>
-    <string name="dummy" />
     <string name="rename">Renomear</string>
     <string name="pls_input_filename">Por favor insira o nome do arquivo:</string>
     <string name="file_already_exist">"'%s' já existe!"</string>
@@ -54,7 +53,6 @@
     <string name="failed_1">Falhou: %s</string>
     <string name="user_apps">Apps do usuário</string>
     <string name="system_apps">Apps do sistema</string>
-    <string name="icon_changed_tip">Ícone mudado, reinicie a aplicação para que a edição seja aplicada.</string>
     <string name="empty_key_tip">A chave não pode ser vazia!</string>
     <string name="apk_savedas_1">APK salvo como %s</string>
     <string name="invalid_lang_code">Código de idioma inválido!</string>

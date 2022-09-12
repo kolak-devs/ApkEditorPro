@@ -19,7 +19,6 @@ import com.mcal.apkeditor.data.Constants
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.common.utilsOld.ITaskCallback
 import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo
-import com.mcal.seticon.SetIcon
 import kotlinx.coroutines.isActive
 import java.io.BufferedReader
 import java.io.FileInputStream
@@ -106,8 +105,7 @@ class ApkComposeService : Service(), ITaskCallback {
         composeIntent.action = Constants.ACTION.MAIN_ACTION
         composeIntent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
         val pendingIntent = PendingIntent.getActivity(this, 0, composeIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val iconId = SetIcon.iconId
-        val icon = BitmapFactory.decodeResource(resources, iconId)
+        val iconId = R.mipmap.ic_launcher_round
         val appName = getString(R.string.app_name)
         mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         mNotifyBuilder = NotificationCompat.Builder(this, ApkComposeActivity.PRIMARY_NOTIF_CHANNEL)
@@ -116,7 +114,6 @@ class ApkComposeService : Service(), ITaskCallback {
                 .setTicker(appName)
                 .setContentText(getString(R.string.build_ongoing))
                 .setSmallIcon(iconId)
-                .setLargeIcon(Bitmap.createScaledBitmap(icon, 128, 128, false))
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
             startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, builder.build())

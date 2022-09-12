@@ -53,7 +53,6 @@
     <string name="failed_1">Falhou: %s</string>
     <string name="user_apps">Apps do usuário</string>
     <string name="system_apps">Apps do sistema</string>
-    <string name="icon_changed_tip">Ícone alterado, reinicie o aplicativo para concluir.</string>
     <string name="empty_key_tip">A chave não pode ser vazia!</string>
     <string name="apk_savedas_1">APK salvo em: %s</string>
     <string name="invalid_lang_code">Código de idioma inválido!</string>
@@ -122,14 +121,6 @@
     <string name="select_folder_replace">Selecione uma pasta para substituí-la</string>
     <string name="folder_replace_tip" formatted="false">Tem certeza de que deseja substituir %s por %s?</string>
     <string name="folder_replaced">Pasta substituída.</string>
-    <string name="custom_key_setting">Configuração de Chaves Personalizadas</string>
-    <string name="public_key_label">"Chave pública
-(.x509.pem)"</string>
-    <string name="private_key_label">"Chave privada
-(.pk8)"</string>
-    <string name="select_key_file">Selecione um arquivo de chave</string>
-    <string name="error_filepath_empty">O caminho do arquivo não pode estar vazio.</string>
-    <string name="error_filepath_notexist">O arquivo não existe.</string>
     <string name="select_folder">Por favor, selecione uma pasta</string>
     <string name="select_folder_err1">Por favor, não selecione o caminho dentro do diretório de trabalho do APK Editor.</string>
     <string name="select_folder_err2">Por favor, não selecione o caminho que contém o diretório de trabalho do APK Editor.</string>

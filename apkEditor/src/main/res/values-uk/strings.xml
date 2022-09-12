@@ -43,7 +43,6 @@
     <string name="sure_to_exit_editing">Вийти з редагування?</string>
     <string name="yes">Так</string>
     <string name="no">Ні</string>
-    <string name="dummy" />
     <string name="rename">Перейменувати</string>
     <string name="pls_input_filename">Введіть назву файлу:</string>
     <string name="file_already_exist">"'%s' вже існує!"</string>
@@ -54,7 +53,6 @@
     <string name="failed_1">Помилка: %s</string>
     <string name="user_apps">Користувацькі</string>
     <string name="system_apps">Системні</string>
-    <string name="icon_changed_tip">Піктограма змінена та буде задіяна після перезавантаження</string>
     <string name="empty_key_tip">Ключ не може бути порожнім!</string>
     <string name="apk_savedas_1">APK збережено як %s</string>
     <string name="invalid_lang_code">Невірний код мови!</string>
@@ -127,14 +125,6 @@
     <string name="select_folder_replace">Оберіть теку для заміни</string>
     <string name="folder_replace_tip" formatted="false">Впевнені у заміні %s на %s?</string>
     <string name="folder_replaced">Теку замінено</string>
-    <string name="custom_key_setting">Вибрати ключ</string>
-    <string name="public_key_label">"Загальний ключ
-(.x509.pem)"</string>
-    <string name="private_key_label">"Особистий ключ
-(.pk8)"</string>
-    <string name="select_key_file">Оберіть файл ключа</string>
-    <string name="error_filepath_empty">Шлях до файлу не може бути пустим.</string>
-    <string name="error_filepath_notexist">Файл не знайдено.</string>
     <string name="select_folder">Оберіть теку</string>
     <string name="select_folder_err1">Будь ласка, не обирайте шлях в середині робочої теки APK Editor.</string>
     <string name="select_folder_err2">Будь ласка, не обирайте шлях, що містить робочу теку APK Editor.</string>

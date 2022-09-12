@@ -11,52 +11,6 @@
         <item>By Install Time</item>
     </string-array>
 
-    <string-array name="appicon_key">
-        <item>Default Icon (1)</item>
-        <item>(2)</item>
-        <item>(3)</item>
-        <item>(4)</item>
-        <item>(5)</item>
-        <item>(6)</item>
-        <item>(7)</item>
-        <item>(8)</item>
-        <item>(9)</item>
-        <item>(10)</item>
-        <item>(11)</item>
-        <item>(12)</item>
-        <item>(13)</item>
-        <item>(14)</item>
-        <item>(15)</item>
-        <item>(16)</item>
-        <item>(17)</item>
-    </string-array>
-
-    <string-array name="appicon_value">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-    </string-array>
-
-    <string-array name="signer_key">
-        <item>testkey</item>
-        <item>key created by APK Editor</item>
-        <item>custom key</item>
-    </string-array>
-
     <string-array name="language_key">
         <item>Default</item>
         <item>Arabic</item>

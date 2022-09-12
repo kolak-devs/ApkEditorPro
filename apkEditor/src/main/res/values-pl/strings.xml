@@ -36,22 +36,18 @@
     <string name="copy_error_msg">Skopiuj wiadomość błędu</string>
     <string name="copy_file_path">Skopiuj ścieżkę pliku</string>
     <string name="current_patch"><u>Aktualny Patch:</u></string>
-    <string name="custom_key_setting">Ustawienie zwykłego klucza</string>
     <string name="decode_dex_file">Odkoduj plik DEX …</string>
     <string name="delete">Usuń</string>
     <string name="delete_this_line">Usuń tą linijkę</string>
     <string name="description">OPIS:</string>
     <string name="detail">Szczegół</string>
     <string name="donot_show_again">Nie pokazuj ponownie</string>
-    <string name="dummy" />
     <string name="edit_data_root">Edytuj dane [ROOT]</string>
     <string name="empty_input_tip">Wejście nie może być puste.</string>
     <string name="empty_key_tip">Klucz nie może być pusty!</string>
     <string name="encode_dex_file">Zakoduj plik DEX …</string>
     <string name="entry_in_apk">Pozycja w APK</string>
     <string name="errmsg_copied">Wiadomość błędu skopwiowana do schowka.</string>
-    <string name="error_filepath_empty">Ścieżka pliku nie może być pusta.</string>
-    <string name="error_filepath_notexist">Plik nie istnieje.</string>
     <string name="exit">Wyjdź</string>
     <string name="extract">Wypakuj</string>
     <string name="failed">Nie powiodło się</string>
@@ -68,7 +64,6 @@
     <string name="general_error">Błąd: %s</string>
     <string name="help">Pomoc</string>
     <string name="hide_smali_tip">Przytrzymaj na DEX -> Smali aby ukryć.</string>
-    <string name="icon_changed_tip">Ikona zmieniona, ale może nie być efektu dopóki nie zrestartujesz urządzenia.</string>
     <string name="image_summary">%d obrazki</string>
     <string name="images_capital">OBRAZKI</string>
     <string name="in_progress">Pracuję …</string>
@@ -127,10 +122,6 @@
     <string name="pls_input_filename">Wprowadź nazwę pliku:</string>
     <string name="pls_input_foldername">Wprowadź nazwę folderu:</string>
     <string name="pls_input_keyword">Wprowadź słowo klucz aby wyszukać</string>
-    <string name="private_key_label">"Private Key
-(.pk8)"</string>
-    <string name="public_key_label">"Public Key
-(.x509.pem)"</string>
     <string name="rebuild_confirm_d_summary">Zablokowane. Bezpośrednio przebuduje i podpisze APK gdy klikniesz przycisk "zapisz".</string>
     <string name="rebuild_confirm_e_summary">Odblokowane. Pokaże okno potwierdzenia przebudowy gdy klikniesz przycisk "zapisz". Możesz dokonać wyboru nie podpisywania APK w okienku.</string>
     <string name="rebuild_confirmation">Potwierdzenie przebudowy</string>
@@ -160,7 +151,6 @@
     <string name="select_folder_err1">Nie wybieraj ścieżki wewnątrz katalogu roboczego APK Editor.</string>
     <string name="select_folder_err2">Nie wybieraj ścieżki która zawiera katalog roboczy APK Editor.</string>
     <string name="select_folder_replace">Wybierz folder aby go zamienić</string>
-    <string name="select_key_file">Wybierz plik klucza</string>
     <string name="select_patch">Wybierz Patch</string>
     <string name="settings">Ustawienia</string>
     <string name="show_a_toast">Pokaż Toast</string>

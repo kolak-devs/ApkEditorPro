@@ -1,24 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="appicon_key">
-        <item>Predeterminado (1)</item>
-        <item>Icono (2)</item>
-        <item>Icono (3)</item>
-        <item>Icono (4)</item>
-        <item>Icono (5)</item>
-        <item>Icono (6)</item>
-        <item>Icono (7)</item>
-        <item>Icono (8)</item>
-        <item>Icono (9)</item>
-        <item>Icono (10)</item>
-        <item>Icono (11)</item>
-        <item>Icono (12)</item>
-        <item>Icono (13)</item>
-        <item>Icono (14)</item>
-        <item>Icono (15)</item>
-        <item>Icono (16)</item>
-        <item>Icono (17)</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Automático (Con sufijo numérico)</item>
         <item>Sobreescribir</item>
@@ -51,11 +32,6 @@
     <string-array name="order_value">
         <item>Por Nombre de Aplicación</item>
         <item>Por Fecha de Instalación</item>
-    </string-array>
-    <string-array name="signer_key">
-        <item>Clave de Prueba</item>
-        <item>Clave de APK Editor Pro</item>
-        <item>Clave Personalizada</item>
     </string-array>
     <string-array name="fileTypeAudio">
         <item>.mp3</item>
@@ -114,25 +90,6 @@
     <string-array name="fileTypeWord">
         <item>.doc</item>
         <item>.docx</item>
-    </string-array>
-    <string-array name="appicon_value">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
     </string-array>
     <string-array name="file_extract_rename_value">
         <item>0</item>
