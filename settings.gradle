@@ -29,7 +29,6 @@ include ':androlib'
 include ':smali'
 include ':jadx'
 include ':raung'
-include ':color-picker'
 include ':manifestparser'
 include ':net-manager'
 

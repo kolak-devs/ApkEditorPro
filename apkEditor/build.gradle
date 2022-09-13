@@ -139,7 +139,6 @@ dependencies {
     implementation project(':dataeditor')
     implementation project(':crashreporter')
     implementation project(':patchview')
-    implementation project(':color-picker')
     implementation project(':melissa')
     implementation project(':manifestparser')
     implementation project(':net-manager')
