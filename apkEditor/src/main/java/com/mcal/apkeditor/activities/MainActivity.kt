@@ -16,7 +16,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.app.downloader.DownloaderActivity
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
@@ -31,6 +30,7 @@ import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.deleteAll
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
+import com.mcal.downloader.DownloaderActivity
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
