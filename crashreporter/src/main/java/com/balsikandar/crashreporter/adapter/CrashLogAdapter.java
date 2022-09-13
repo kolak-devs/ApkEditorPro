@@ -35,7 +35,7 @@ public class CrashLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.custom_item, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_log, null);
         return new CrashLogViewHolder(view);
     }
 
@@ -71,14 +71,10 @@ public class CrashLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final String filePath = file.getAbsolutePath();
             messageLogTime.setText(file.getName().replaceAll("[a-zA-Z_.]", ""));
             textViewMsg.setText(FileUtils.readFirstLineFromFile(new File(filePath)));
-
-            textViewMsg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, LogMessageActivity.class);
-                    intent.putExtra("LogMessage", filePath);
-                    context.startActivity(intent);
-                }
+            textViewMsg.setOnClickListener(v -> {
+                final Intent intent = new Intent(context, LogMessageActivity.class);
+                intent.putExtra("LogMessage", filePath);
+                context.startActivity(intent);
             });
         }
     }

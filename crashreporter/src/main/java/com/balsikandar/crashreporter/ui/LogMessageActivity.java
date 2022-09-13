@@ -8,12 +8,12 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
 import com.balsikandar.crashreporter.R;
 import com.balsikandar.crashreporter.utils.AppUtils;
 import com.balsikandar.crashreporter.utils.FileUtils;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.io.File;
 import java.net.URLConnection;
@@ -28,20 +28,20 @@ public class LogMessageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_message);
         appInfo = findViewById(R.id.appInfo);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         if (intent != null) {
-            String dirPath = intent.getStringExtra("LogMessage");
-            File file = new File(dirPath);
-            String crashLog = FileUtils.readFromFile(file);
-            TextView textView = findViewById(R.id.logMessage);
+            final String dirPath = intent.getStringExtra("LogMessage");
+            final File file = new File(dirPath);
+            final String crashLog = FileUtils.readFromFile(file);
+            final TextView textView = findViewById(R.id.logMessage);
             textView.setText(crashLog);
         }
 
-        Toolbar myToolbar = findViewById(R.id.toolbar);
-        myToolbar.setTitle(getString(R.string.crash_reporter));
-        setSupportActionBar(myToolbar);
-
+        final MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.crash_reporter));
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         getAppInfo();
     }
@@ -58,18 +58,22 @@ public class LogMessageActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String filePath = null;
         if (intent != null) {
             filePath = intent.getStringExtra("LogMessage");
         }
 
-        if (item.getItemId() == R.id.delete_log) {
+        final int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.delete_log) {
             if (FileUtils.delete(filePath)) {
                 finish();
             }
             return true;
-        } else if (item.getItemId() == R.id.share_crash_log) {
+        } else if (itemId == R.id.share_crash_log) {
             shareCrashReport(filePath);
             return true;
         } else {
@@ -78,12 +82,12 @@ public class LogMessageActivity extends AppCompatActivity {
     }
 
     private void shareCrashReport(String filePath) {
-        Uri logUri = FileProvider.getUriForFile(
+        final Uri logUri = FileProvider.getUriForFile(
                 this,
                 "com.mcal.apkeditor.pro",
                 new File(filePath));
 
-        Intent shareIntent = new Intent();
+        final Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT, appInfo.getText().toString());
         shareIntent.putExtra(Intent.EXTRA_STREAM, logUri);

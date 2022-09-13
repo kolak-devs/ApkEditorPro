@@ -64,5 +64,4 @@ public class CrashReporterInitProvider extends ContentProvider {
         }
         super.attachInfo(context, providerInfo);
     }
-
 }

@@ -32,7 +32,6 @@ import java.util.Iterator;
 public class ExceptionLogFragment extends Fragment {
 
     private CrashLogAdapter logAdapter;
-
     private RecyclerView exceptionRecyclerView;
 
     @Override
@@ -43,9 +42,8 @@ public class ExceptionLogFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.exception_log, container, false);
+        final View view = inflater.inflate(R.layout.exception_log, container, false);
         exceptionRecyclerView = view.findViewById(R.id.exceptionRecyclerView);
-
         return view;
     }
 
@@ -56,7 +54,6 @@ public class ExceptionLogFragment extends Fragment {
     }
 
     private void loadAdapter(Context context, @NonNull RecyclerView exceptionRecyclerView) {
-
         logAdapter = new CrashLogAdapter(context, getAllExceptions());
         exceptionRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         exceptionRecyclerView.setAdapter(logAdapter);
@@ -69,8 +66,8 @@ public class ExceptionLogFragment extends Fragment {
     }
 
     public ArrayList<File> getAllExceptions() {
-        String directoryPath;
-        String crashReportPath = CrashReporter.getCrashReportPath();
+        final String directoryPath;
+        final String crashReportPath = CrashReporter.getCrashReportPath();
 
         if (TextUtils.isEmpty(crashReportPath)) {
             directoryPath = CrashUtil.getDefaultPath();
@@ -78,12 +75,12 @@ public class ExceptionLogFragment extends Fragment {
             directoryPath = crashReportPath;
         }
 
-        File directory = new File(directoryPath);
+        final File directory = new File(directoryPath);
         if (!directory.exists() || !directory.isDirectory()) {
             throw new RuntimeException("The path provided doesn't exists : " + directoryPath);
         }
 
-        ArrayList<File> listOfFiles = new ArrayList<>(Arrays.asList(directory.listFiles()));
+        final ArrayList<File> listOfFiles = new ArrayList<>(Arrays.asList(directory.listFiles()));
         for (Iterator<File> iterator = listOfFiles.iterator(); iterator.hasNext(); ) {
             if (iterator.next().getName().contains(Constants.CRASH_SUFFIX)) {
                 iterator.remove();

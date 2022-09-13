@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-permission
         android:name="android.permission.GET_ACCOUNTS"
         android:maxSdkVersion="22" />
+
     <application android:supportsRtl="true">
 
         <provider
@@ -18,13 +18,14 @@
             android:name=".ui.CrashReporterActivity"
             android:launchMode="singleTask"
             android:taskAffinity="com.balsikandar.android.task"
-            android:theme="@style/CrashReporter.Theme" />
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".ui.LogMessageActivity"
             android:parentActivityName=".ui.CrashReporterActivity"
-            android:theme="@style/CrashReporter.Theme"
+            android:theme="@style/AppTheme"
             tools:targetApi="jelly_bean" />
+
     </application>
 
 </manifest>

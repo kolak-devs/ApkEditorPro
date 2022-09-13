@@ -107,9 +107,9 @@ public class FileUtils {
 
     @NonNull
     public static String readFromFile(File file) {
-        StringBuilder crash = new StringBuilder();
+        final StringBuilder crash = new StringBuilder();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            final BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
                 crash.append(line);

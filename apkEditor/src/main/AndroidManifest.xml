@@ -87,7 +87,6 @@
         <activity android:name="com.mcal.pngeditor.HelpActivity" />
 
         <service android:name="com.mcal.apkeditor.ApkComposeService" />
-        <service android:name="com.mcal.httpserver.HttpService" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

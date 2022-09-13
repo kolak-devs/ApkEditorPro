@@ -37,7 +37,11 @@ public class CrashReporterActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.delete_crash_logs) {
+        final int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.delete_crash_logs) {
             clearCrashLog();
             return true;
         } else {
@@ -48,19 +52,21 @@ public class CrashReporterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.crash_reporter_activity);
+        setContentView(R.layout.activity_crash_reporter);
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.crash_reporter));
         toolbar.setSubtitle(getApplicationName());
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        ViewPager viewPager = findViewById(R.id.viewpager);
+        final ViewPager viewPager = findViewById(R.id.viewpager);
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        final TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
     //endregion
@@ -70,7 +76,7 @@ public class CrashReporterActivity extends AppCompatActivity {
             String crashReportPath = TextUtils.isEmpty(CrashReporter.getCrashReportPath()) ?
                     CrashUtil.getDefaultPath() : CrashReporter.getCrashReportPath();
 
-            File[] logs = new File(crashReportPath).listFiles();
+            final File[] logs = new File(crashReportPath).listFiles();
             for (File file : logs) {
                 FileUtils.delete(file);
             }
@@ -79,7 +85,7 @@ public class CrashReporterActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(@NonNull ViewPager viewPager) {
-        String[] titles = {getString(R.string.crashes), getString(R.string.exceptions)};
+        final String[] titles = {getString(R.string.crashes), getString(R.string.exceptions)};
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), titles);
         viewPager.setAdapter(mainPagerAdapter);
 
@@ -90,16 +96,16 @@ public class CrashReporterActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         if (intent != null && !intent.getBooleanExtra(Constants.LANDING, false)) {
-            selectedTabPosition = 1;
+            selectedTabPosition = 0;
         }
         viewPager.setCurrentItem(selectedTabPosition);
     }
 
     private String getApplicationName() {
-        ApplicationInfo applicationInfo = getApplicationInfo();
-        int stringId = applicationInfo.labelRes;
+        final ApplicationInfo applicationInfo = getApplicationInfo();
+        final int stringId = applicationInfo.labelRes;
         return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : getString(stringId);
     }
 }

@@ -6,12 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.balsikandar.crashreporter.ui.CrashReporterActivity">
 
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    <include layout="@layout/toolbar" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
@@ -19,12 +14,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@color/colorAccent"
+        app:tabIndicatorColor="@color/colorSecondary"
         app:tabIndicatorFullWidth="false"
         app:tabMaxWidth="0dp"
-        app:tabSelectedTextColor="@color/colorAccent"
-        app:tabTextColor="@color/colorAccent" />
-
+        app:tabSelectedTextColor="@color/colorSecondary"
+        app:tabTextColor="@color/colorSecondary" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"

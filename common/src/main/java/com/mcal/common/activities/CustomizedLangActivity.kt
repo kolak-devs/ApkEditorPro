@@ -31,12 +31,14 @@ open class CustomizedLangActivity : SwipeBackActivity() {
         }
     }
 
-    fun setupToolbar(id: Int, title: String?, back: Boolean) {
+    fun setupToolbar(id: Int, text: String?, back: Boolean) {
         val toolbar = findViewById<MaterialToolbar>(id)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = title
-        supportActionBar?.setDisplayHomeAsUpEnabled(back)
-        supportActionBar?.setDisplayShowHomeEnabled(back)
+        supportActionBar?.apply {
+            title = text
+            setDisplayHomeAsUpEnabled(back)
+            setDisplayShowHomeEnabled(back)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

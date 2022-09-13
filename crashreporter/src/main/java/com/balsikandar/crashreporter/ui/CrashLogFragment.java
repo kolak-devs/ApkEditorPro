@@ -32,7 +32,6 @@ import java.util.Iterator;
 public class CrashLogFragment extends Fragment {
 
     private CrashLogAdapter logAdapter;
-
     private RecyclerView crashRecyclerView;
 
     @Override
@@ -43,9 +42,8 @@ public class CrashLogFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.crash_log, container, false);
+        final View view = inflater.inflate(R.layout.crash_log, container, false);
         crashRecyclerView = view.findViewById(R.id.crashRecyclerView);
-
         return view;
     }
 

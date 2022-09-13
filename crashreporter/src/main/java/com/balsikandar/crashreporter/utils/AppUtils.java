@@ -26,11 +26,11 @@ import java.util.UUID;
 public class AppUtils {
     private static String getCurrentLauncherApp(@NonNull Context context) {
         String str = "";
-        PackageManager localPackageManager = context.getPackageManager();
-        Intent intent = new Intent("android.intent.action.MAIN");
+        final PackageManager localPackageManager = context.getPackageManager();
+        final Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
         try {
-            ResolveInfo resolveInfo = localPackageManager.resolveActivity(intent,
+            final ResolveInfo resolveInfo = localPackageManager.resolveActivity(intent,
                     PackageManager.MATCH_DEFAULT_ONLY);
             if (resolveInfo != null && resolveInfo.activityInfo != null) {
                 str = resolveInfo.activityInfo.packageName;
@@ -45,8 +45,8 @@ public class AppUtils {
     private static String getUserIdentity(Context context) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS) ==
                 PackageManager.PERMISSION_GRANTED) {
-            AccountManager manager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
-            Account[] list = manager.getAccounts();
+            final AccountManager manager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
+            final Account[] list = manager.getAccounts();
             String emailId = null;
             for (Account account : list) {
                 if (account.type.equalsIgnoreCase("com.google")) {
