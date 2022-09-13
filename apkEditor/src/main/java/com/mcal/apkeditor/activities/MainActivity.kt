@@ -203,7 +203,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
         val msg = findViewById<TextView>(R.id.pirated_version_detected)
         if (BuildConfig.DEBUG || Native.getSignature(this).startsWith("kQpOVghQhe8XLbkzKM4PynXi8R0=")) {
-            msg.visibility = View.VISIBLE
+            msg.visibility = View.INVISIBLE
         } else {
             msg.visibility = View.INVISIBLE
         }

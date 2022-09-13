@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1131,
-      "versionName": "1.13.1-alpha",
-      "outputFile": "release-1.13.1-alpha.apk"
+      "versionCode": 1158,
+      "versionName": "2.0.0 (1158)",
+      "outputFile": "Apk Editor v.2.0.0 (1158)-MinAPI26.apk"
     }
   ],
   "elementType": "File"

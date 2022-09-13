@@ -57,14 +57,6 @@
 
 
         <ImageButton
-            android:id="@+id/menu_rotate"
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="@dimen/image_button_width"
-            android:layout_height="@dimen/image_button_height"
-            android:src="@drawable/round_rotate_right_24"
-            android:visibility="invisible" />
-
-        <ImageButton
             android:id="@+id/menu_apply_patch"
             style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="@dimen/image_button_width"
@@ -74,7 +66,7 @@
 
         <Button
             android:id="@+id/btn_build_apk"
-            style="@style/Widget.Material3.Button.TonalButton"
+            style="@style/Widget.Material3.Button.TonalButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -83,7 +75,8 @@
             android:text="@string/build"
             android:textColor="@color/colorGray"
             android:visibility="invisible"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            android:drawableLeft="@drawable/ic_build" />
 
     </LinearLayout>
 
