@@ -126,11 +126,17 @@ public class ApkComposeActivity extends CustomizedLangActivity
             binder.setObserver(ApkComposeActivity.this);
 
             Map<String, Object> keyValues = binder.getValues();
+
             srcApkPath = (String) keyValues.get("srcApkPath");
+            Log.wtf("SVolf", "get value srcApkPath = " + srcApkPath);
             targetApkPath = (String) keyValues.get("targetApkPath");
+            Log.wtf("SVolf", "get value srcApkPath = " + targetApkPath);
             decodeRootPath = (String) keyValues.get("decodeRootPath");
+            Log.wtf("SVolf", "get value srcApkPath = " + decodeRootPath);
             codeModified = (Boolean) keyValues.get("codeModified");
+            Log.wtf("SVolf", "get value srcApkPath = " + codeModified);
             signAPK = (Boolean) keyValues.get("signAPK");
+            Log.wtf("SVolf", "get value srcApkPath = " + signAPK);
             errFixer = new ErrorFixManager(decodeRootPath);
         }
 

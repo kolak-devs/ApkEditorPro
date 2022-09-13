@@ -5,12 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Binder
-import android.os.Handler
-import android.os.IBinder
-import android.os.Message
+import android.os.*
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.mcal.apkeditor.activities.ApkComposeActivity
@@ -267,7 +262,7 @@ class ApkComposeService : Service(), ITaskCallback {
     }
 
     @SuppressLint("HandlerLeak")
-    private inner class MyHandler : Handler() {
+    private inner class MyHandler : Handler(Looper.myLooper() ?: Looper.getMainLooper()) {
         private var title: String? = null
         private var desc: String? = null
         fun setInfo(title: String?, desc: String?) {
@@ -360,7 +355,7 @@ class ApkComposeService : Service(), ITaskCallback {
             mNotificationManager?.let { manager ->
                 manager.cancel(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE)
                 if (foregroundStarted) {
-                    stopForeground(true)
+                    stopForeground(STOP_FOREGROUND_REMOVE)
                     foregroundStarted = false
                 }
                 composeThread?.let { thread ->
@@ -372,7 +367,6 @@ class ApkComposeService : Service(), ITaskCallback {
                 Log.e("DEBUG", "notification hidden.")
             }
         }
-
         fun showNotification() {
             this@ApkComposeService.showNotification()
         }

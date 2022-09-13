@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
+    android:layout_height="100dp"
+    android:layout_marginStart="12dp"
     android:layout_marginTop="4dp"
-    android:layout_marginEnd="8dp"
-    android:backgroundTint="#40DCDCDC"
+    android:layout_marginEnd="12dp"
     app:strokeColor="@android:color/transparent"
-    app:strokeWidth="1dp">
+    app:strokeWidth="1dp"
+    style="@style/Widget.Material3.CardView.Filled">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_menu_container"
@@ -18,32 +18,49 @@
 
         <ImageView
             android:id="@+id/menu_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="-42dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?colorPrimary"
-            tools:src="@drawable/settings" />
+            tools:src="@drawable/settings"
+            android:alpha="0.2" />
 
         <TextView
             android:id="@+id/menu_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
             android:includeFontPadding="false"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textStyle="bold"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:paddingStart="8dp"
+            android:layout_marginTop="25dp"
+            app:layout_constraintStart_toEndOf="@id/menu_icon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5"
             tools:text="Menu Item" />
+
+        <TextView
+            android:id="@+id/menu_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/menu_title"
+            app:layout_constraintStart_toEndOf="@id/menu_icon"
+            android:paddingStart="8dp"
+            tools:text="Subtitle"/>
+
+        <Button
+            android:id="@+id/menu_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            tools:text="Button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

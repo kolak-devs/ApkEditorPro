@@ -7,12 +7,14 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Process
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.app.downloader.DownloaderActivity
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
@@ -29,7 +31,6 @@ import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.deleteAll
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
-import com.mcal.httpserver.HttpServiceManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
@@ -61,6 +62,48 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupToolbar(R.id.toolbar, getString(R.string.app_name), false)
+        addMenuProvider(object: MenuProvider {
+            /**
+             * Called by the [MenuHost] to allow the [MenuProvider]
+             * to inflate [MenuItem]s into the menu.
+             *
+             * @param menu         the menu to inflate the new menu items into
+             * @param menuInflater the inflater to be used to inflate the updated menu
+             */
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_main, menu)
+            }
+
+            /**
+             * Called by the [MenuHost] when a [MenuItem] is selected from the menu.
+             *
+             * @param menuItem the menu item that was selected
+             * @return `true` if the given menu item is handled by this menu provider,
+             * `false` otherwise
+             */
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.action_settings -> {
+                        val i = Intent(this@MainActivity, SettingsActivity::class.java)
+                        startActivity(i)
+                        return true
+                    }
+                    R.id.action_night_mode -> {
+                        if (Preferences.isNightModeEnabled()) {
+                            Preferences.setNightModeEnabled(false)
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                            delegate.applyDayNight()
+                        } else {
+                            Preferences.setNightModeEnabled(true)
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                            delegate.applyDayNight()
+                        }
+                        return true
+                    }
+                }
+                return false
+            }
+        })
         initUI()
 
         // As pro has no network access, cannot get online message
@@ -166,35 +209,8 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> {
-                val i = Intent(this, SettingsActivity::class.java)
-                startActivity(i)
-                return true
-            }
-            R.id.action_night_mode -> {
-                if (Preferences.isNightModeEnabled()) {
-                    Preferences.setNightModeEnabled(false)
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    delegate.applyDayNight()
-                } else {
-                    Preferences.setNightModeEnabled(true)
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    delegate.applyDayNight()
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onBackPressed() {
-        finish()
+        finishAfterTransition()
     }
 
     override fun onRequestPermissionsResult(
@@ -236,7 +252,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         try {
             val intent = Intent(this, ApkComposeService::class.java)
             stopService(intent)
-            HttpServiceManager.instance().stopWebService(this)
             val fileDir = filesDir
             val rootDirectory = fileDir.absolutePath
             val decodeRootPath = "$rootDirectory/decoded"

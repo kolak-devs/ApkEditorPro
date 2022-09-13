@@ -105,7 +105,6 @@ import com.mcal.common.utilsOld.UriUtils;
 import com.mcal.common.utilsOld.ZipUtils;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.folderlist.util.OpenFiles;
-import com.mcal.httpserver.HttpServiceManager;
 import com.mcal.editor.TextEditor;
 import com.mcal.pngeditor.PngEditActivity;
 
@@ -209,8 +208,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private ListView manifestList;
     private ManifestListAdapter mfListAdapter;
     private LinearLayout loadingLayout;
-    private ImageButton webserverMenu;
-    private ImageButton rotateMenu;
     private ImageButton patchMenu;
     private Button saveBtn;
     // APK parser
@@ -243,9 +240,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // It may fail when first time to prepare the string, so record it
     // This is because the string may refer to the value of Android system
     private boolean bStringPrepared = false;
-    // How many times the rotate button is clicked
-    // Used to determine landscape or portrait
-    private int rotateClickedTimes = 0;
+
     // ONLY used for data recovering (the state in resource list adapter)
     private String resCurrentDir; // when rotate the screen, will save and recover from it
     private Map<String, String> res_addedFiles;
@@ -607,7 +602,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         state.putBoolean("searchTextContent", searchTextContent);
         state.putBoolean("searchResSensitive", searchResSensitive);
         state.putInt("curSelectedRadio", curSelectedRadio);
-        state.putInt("rotateClickedTimes", rotateClickedTimes);
 
         state.putBoolean("dex2smaliClicked", dexDecoded);
 
@@ -687,7 +681,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         this.resourceParsed = true;
         this.bStringPrepared = true;
         this.curSelectedRadio = 1;
-        this.rotateClickedTimes = 0;
 
         this.dexDecoded = false;
         this.isFullDecoding = true;
@@ -723,8 +716,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         searchResSensitive = savedInstanceState
                 .getBoolean("searchResSensitive");
         curSelectedRadio = savedInstanceState.getInt("curSelectedRadio");
-        rotateClickedTimes = savedInstanceState
-                .getInt("rotateClickedTimes");
 
         // Recover state of ResListAdapter
         resCurrentDir = savedInstanceState.getString("res_current_dir");
@@ -784,8 +775,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // Search text or not
         updateSearchOption();
 
-        webserverMenu.setVisibility(View.VISIBLE);
-        rotateMenu.setVisibility(View.VISIBLE);
         if (isPro()) {
             patchMenu.setVisibility(View.VISIBLE);
         } else {
@@ -794,22 +783,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         if (!BuildConfig.PARSER_ONLY) {
             saveBtn.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        HttpServiceManager.instance().unbindService(this);
-        super.onDestroy();
     }
 
     @Override
@@ -1328,21 +1301,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
             this.dexDecodeLayout.setVisibility(View.GONE);
         }
 
-        // Rotate the view
-        else if (id == R.id.menu_rotate) {
-            rotateClickedTimes += 1;
-            if ((rotateClickedTimes % 2) == 1) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-            } else {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-            }
-        }
-
-        // Start web server
-        else if (id == R.id.menu_webserver) {
-            HttpServiceManager.instance().startWebService(this, decodeRootPath);
-        }
-
         // Apply a patch
         else if (id == R.id.menu_apply_patch) {
             new PatchDialog(this, this);
@@ -1406,10 +1364,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
             saveBtn.setOnClickListener(v -> composeApkFile());
         }
 
-        this.webserverMenu = this.findViewById(R.id.menu_webserver);
-        this.rotateMenu = this.findViewById(R.id.menu_rotate);
-        webserverMenu.setOnClickListener(this);
-        rotateMenu.setOnClickListener(this);
         this.patchMenu = this.findViewById(R.id.menu_apply_patch);
         if (this.isPro()) {
             patchMenu.setOnClickListener(this);
@@ -1861,8 +1815,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 setupClickListener();
             }
             showDecodedFileList();
-            webserverMenu.setVisibility(View.VISIBLE);
-            rotateMenu.setVisibility(View.VISIBLE);
             if (isPro()) {
                 patchMenu.setVisibility(View.VISIBLE);
             } else {
