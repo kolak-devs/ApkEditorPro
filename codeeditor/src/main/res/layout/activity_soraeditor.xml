@@ -14,7 +14,14 @@
         app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Body2"
         app:titleTextAppearance="@style/AppTheme.ToolbarStyle"
         tools:title="Toolbar title" />
-
+    <TextView
+        android:id="@+id/toolbar_filename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        tools:text="FileName"/>
     <io.github.rosemoe.sora.widget.CodeEditor
         android:id="@+id/editor"
         android:layout_width="match_parent"

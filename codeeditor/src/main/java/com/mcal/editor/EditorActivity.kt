@@ -267,7 +267,7 @@ class EditorActivity : CustomizedLangActivity(),
                 getTextMateLanguageForSmali()
             } else if (fileName.endsWith(".java")) {
                 getTextMateLanguageForJava()
-            } else if (fileName.endsWith(".kotlin")) {
+            } else if (fileName.endsWith(".kt")) {
                 getTextMateLanguageForKotlin()
             } else if (fileName.endsWith(".groovy") || fileName.endsWith(".gradle")) {
                 getTextMateLanguageForGroovy()
@@ -439,6 +439,7 @@ class EditorActivity : CustomizedLangActivity(),
                 try {
                     val text = FileUtils.readFileAsTextUsingInputStream(path.path)
                     runOnUiThread {
+                        binding.toolbarFilename.text = path.name
                         supportActionBar?.apply { title = path.name }
                         binding.editor.apply {
                             setText(text, null)

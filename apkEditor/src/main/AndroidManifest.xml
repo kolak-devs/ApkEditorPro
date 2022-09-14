@@ -81,7 +81,6 @@
         <activity android:name="com.mcal.apkeditor.prj.ProjectListActivity" />
         <activity android:name="com.mcal.apkeditor.activities.AxmlEditActivity" />
         <activity android:name="com.mcal.apkeditor.activities.EditorHelpActivity" />
-        <activity android:name="com.mcal.apkeditor.activities.ImageDownloadActivity" />
 
         <activity android:name="com.mcal.pngeditor.PngEditActivity" />
         <activity android:name="com.mcal.pngeditor.HelpActivity" />
