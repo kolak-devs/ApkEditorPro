@@ -151,7 +151,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(1, R.drawable.ic_android, R.string.select_apk_from_app),
             MainMenuItem(2, R.drawable.round_inventory_2_24, R.string.projects),
             MainMenuItem(3, R.drawable.puzzle, R.string.odex_patcher),
-            MainMenuItem(4, R.drawable.application_braces, R.string.tools_manager),
+            MainMenuItem(4, R.drawable.settings, R.string.tools_manager),
             MainMenuItem(5, R.drawable.round_logo_dev_24, R.string.view_logs),
             MainMenuItem(6, R.drawable.ic_help, R.string.help),
             MainMenuItem(7, R.drawable.ic_exit_to_app, R.string.exit)

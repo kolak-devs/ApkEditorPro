@@ -276,12 +276,12 @@ public class ZipFileListAdapter extends BaseAdapter implements
             boolean replaceable;
             // Directory
             if (fi.isDir) {
-                viewHolder.icon.setImageResource(R.drawable.round_folder_blue_24);
+                viewHolder.icon.setImageResource(R.drawable.ic_folder);
                 replaceable = false;
             }
             // For the binary, not allow to replace (also allow replace now)
             else if (isBinaryFile(fi.filename)) {
-                viewHolder.icon.setImageResource(R.drawable.round_insert_drive_file_24);
+                viewHolder.icon.setImageResource(R.drawable.ic_file);
                 replaceable = true;
             }
             // For the image, show icon
@@ -292,7 +292,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
             }
             // Other files
             else {
-                viewHolder.icon.setImageResource(R.drawable.round_insert_drive_file_24);
+                viewHolder.icon.setImageResource(R.drawable.ic_file);
                 replaceable = true;
             }
 
@@ -312,7 +312,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
         // Show parent item
         else {
             viewHolder.filename.setText("..");
-            viewHolder.icon.setImageResource(R.drawable.round_reply_blue_24);
+            viewHolder.icon.setImageResource(R.drawable.ic_file_up);
             viewHolder.editMenu.setVisibility(View.GONE);
             viewHolder.saveMenu.setVisibility(View.GONE);
         }

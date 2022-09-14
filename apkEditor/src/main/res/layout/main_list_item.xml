@@ -21,13 +21,13 @@
             android:layout_width="84dp"
             android:layout_height="84dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginStart="-42dp"
+            android:layout_marginStart="-36dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?colorPrimary"
             tools:src="@drawable/settings"
-            android:alpha="0.2" />
+            android:alpha="0.3" />
 
         <TextView
             android:id="@+id/menu_title"

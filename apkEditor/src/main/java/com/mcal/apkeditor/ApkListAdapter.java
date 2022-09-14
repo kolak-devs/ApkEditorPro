@@ -79,7 +79,7 @@ public class ApkListAdapter extends BaseAdapter {
             // Cannot parse it
             if (apkInfo == null) {
                 apkInfo = new ApkInfoParser.AppInfo();
-                apkInfo.icon = ctx.getResources().getDrawable(R.drawable.round_android_24);
+                apkInfo.icon = ctx.getResources().getDrawable(R.drawable.round_android_24, ctx.getTheme());
             }
         }
         apkInfoCache.put(apkFilePath, apkInfo);

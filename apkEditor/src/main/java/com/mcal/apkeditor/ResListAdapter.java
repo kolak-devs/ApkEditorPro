@@ -393,9 +393,9 @@ public class ResListAdapter extends BaseAdapter implements
         String detailInfo = null;
         viewHolder.filename.setText(rec.fileName);
         if (rec.fileName.equals("..")) {
-            viewHolder.icon.setImageResource(R.drawable.round_reply_blue_24);
+            viewHolder.icon.setImageResource(R.drawable.ic_file_up);
         } else if (rec.isDir) {
-            viewHolder.icon.setImageResource(R.drawable.round_folder_blue_24);
+            viewHolder.icon.setImageResource(R.drawable.ic_folder);
         } else {
             if (rec.fileName.endsWith(".xml")) {
                 viewHolder.icon.setImageResource(R.drawable.round_insert_drive_file_yellow_24);
@@ -413,7 +413,7 @@ public class ResListAdapter extends BaseAdapter implements
             } else if (rec.fileName.endsWith(".dex")) {
                 viewHolder.icon.setImageResource(R.drawable.round_insert_drive_file_green_24);
             } else {
-                viewHolder.icon.setImageResource(R.drawable.round_insert_drive_file_24);
+                viewHolder.icon.setImageResource(R.drawable.ic_file);
             }
         }
 

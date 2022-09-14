@@ -168,9 +168,9 @@ public class FileListAdapter extends BaseAdapter {
         String detailInfo = null;
         viewHolder.filename.setText(rec.fileName);
         if (rec.fileName.equals("..")) {
-            viewHolder.icon.setImageResource(R.drawable.round_reply_blue_24);
+            viewHolder.icon.setImageResource(R.drawable.ic_file_up);
         } else if (rec.isDir) {
-            viewHolder.icon.setImageResource(R.drawable.round_folder_blue_24);
+            viewHolder.icon.setImageResource(R.drawable.ic_folder);
         } else {
             if (isImageFile(rec.fileName)) {
                 // Get thumbnail for the image
@@ -181,7 +181,7 @@ public class FileListAdapter extends BaseAdapter {
                 detailInfo = strResolution + ": " + zoomer.getOriginWidth()
                         + " X " + zoomer.getOriginHeight();
             } else {
-                viewHolder.icon.setImageResource(R.drawable.round_insert_drive_file_24);
+                viewHolder.icon.setImageResource(R.drawable.ic_file);
             }
         }
 

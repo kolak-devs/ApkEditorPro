@@ -122,7 +122,7 @@ public class MatchedFilenameAdapter extends BaseAdapter implements
 
     private void showDetail(ViewHolder viewHolder, @NonNull String filePath) {
         // Most general file icon
-        int resId = R.drawable.round_insert_drive_file_24;
+        int resId = R.drawable.ic_file;
 
         Bitmap thumbnail = null;
         String detailInfo = null;

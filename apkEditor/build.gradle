@@ -55,9 +55,11 @@ android {
         preDexLibraries = true
     }
 
-
     buildTypes {
         release {
+            ndk {
+                abiFilters "arm64-v8a", "x86_64"
+            }
             minifyEnabled true
             shrinkResources true
             buildConfigField "boolean", "IS_PRO", "true"
@@ -74,6 +76,9 @@ android {
         }
 
         debug {
+            ndk {
+                abiFilters "arm64-v8a", "x86_64"
+            }
             buildConfigField "boolean", "IS_PRO", "true"
             buildConfigField "boolean", "WITH_SIGN", "true"
             buildConfigField "boolean", "DISPLAY_APP", "true"
@@ -87,12 +92,21 @@ android {
         }
     }
 
+//    splits {
+//        abi {
+//            enable true
+//            reset()
+//            include 'x86_64', 'arm64-v8a'
+//            universalApk false
+//        }
+//    }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             if (variant.name == "release"){
                 outputFileName = "Apk Editor v.${variant.versionName}-MinAPI${defaultConfig.minSdk}.apk"
             } else {
-                outputFileName = "${variant.name}-${variant.versionName}-MinAPI${defaultConfig.versionCode}.apk"
+                outputFileName = "${variant.name}-${variant.versionName}-(${defaultConfig.versionCode}).apk"
             }
         }
     }

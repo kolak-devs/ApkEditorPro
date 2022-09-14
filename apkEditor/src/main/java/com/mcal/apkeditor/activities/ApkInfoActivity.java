@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
@@ -44,7 +43,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -1107,7 +1105,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         this.textIcon = ContextCompat.getDrawable(this, R.drawable.round_g_translate_accent_24);
         this.textIconGrey = ContextCompat.getDrawable(this, R.drawable.round_g_translate_24);
-        this.resIcon = ContextCompat.getDrawable(this, R.drawable.round_folder_blue_24);
+        this.resIcon = ContextCompat.getDrawable(this, R.drawable.ic_folder);
         this.resIconGrey = ContextCompat.getDrawable(this, R.drawable.round_folder_24);
         this.manifestIcon = ContextCompat.getDrawable(this, R.drawable.round_article_blue_24);
         this.manifestIconGrey = ContextCompat.getDrawable(this, R.drawable.round_article_24);
