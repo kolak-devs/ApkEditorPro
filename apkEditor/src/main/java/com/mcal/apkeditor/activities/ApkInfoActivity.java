@@ -2941,7 +2941,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         IFileSelection callback = new IFileSelection() {
             @Override
             public void fileSelectedInDialog(String filePath, String decodedPath, boolean openFile) {
-                String workingDir = ScopedStorage.getApkEditorDirectory() + "/tmp";
+                String workingDir = ScopedStorage.getApkEditorDir() + "/tmp";
                 // Selected path contains working dir
                 if (workingDir.startsWith(filePath)) {
                     Toast.makeText(ApkInfoActivity.this,

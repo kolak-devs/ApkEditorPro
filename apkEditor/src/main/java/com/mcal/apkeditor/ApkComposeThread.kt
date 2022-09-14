@@ -10,7 +10,7 @@ import com.mcal.apkeditor.utils.AssetsInstaller
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.data.Preferences
 import com.mcal.common.fastzip.FastZip
-import com.mcal.common.utils.ScopedStorage.apkEditorDirectory
+import com.mcal.common.utils.ScopedStorage.getApkEditorDir
 import com.mcal.common.utils.createNewFile
 import com.mcal.common.utilsOld.CommandRunner
 import com.mcal.common.utilsOld.ITaskCallback
@@ -451,7 +451,7 @@ class ApkComposeThread(
 
         try {
             srcApkPath?.let { apkPath ->
-                FastZip.repack(apkPath, apkEditorDirectory.toString() + File.separator + "gen_unsigned.apk", replacedFiles, addedFiles, deletedFiles)
+                FastZip.repack(apkPath, getApkEditorDir().toString() + File.separator + "gen_unsigned.apk", replacedFiles, addedFiles, deletedFiles)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -466,8 +466,8 @@ class ApkComposeThread(
         replacedFiles?.putAll(dexReplaces)
         try {
             ApkSigner().signApk(
-                apkEditorDirectory.toString() + File.separator + "gen_unsigned.apk",
-                apkEditorDirectory.toString() + File.separator + "gen_signed.apk"
+                getApkEditorDir().toString() + File.separator + "gen_unsigned.apk",
+                getApkEditorDir().toString() + File.separator + "gen_signed.apk"
             )
             return true
         } catch (e: Exception) {

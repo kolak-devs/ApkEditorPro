@@ -550,7 +550,7 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
                 sb1.toString(), mappingLen
         );*/
         try {
-            FastZip.repack(srcApkPath, ScopedStorage.getApkEditorDirectory() + File.separator + "gen_unsigned.apk", replacedFiles, addedFiles, deletedFiles);
+            FastZip.repack(srcApkPath, ScopedStorage.getApkEditorDir() + File.separator + "gen_unsigned.apk", replacedFiles, addedFiles, deletedFiles);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -567,7 +567,7 @@ public class ApkComposeThread extends ComposeThread implements ISmaliAssembleCal
         replacedFiles.putAll(this.dexReplaces);
 
         try {
-            new ApkSigner().signApk(ScopedStorage.getApkEditorDirectory() + File.separator + "gen_unsigned.apk", ScopedStorage.getApkEditorDirectory() + File.separator + "gen_signed.apk");
+            new ApkSigner().signApk(ScopedStorage.getApkEditorDir() + File.separator + "gen_unsigned.apk", ScopedStorage.getApkEditorDir() + File.separator + "gen_signed.apk");
             return true;
         } catch (Exception e) {
             String strHeader = ctx.getResources()

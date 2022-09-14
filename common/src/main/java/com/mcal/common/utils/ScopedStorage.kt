@@ -3,26 +3,37 @@ package com.mcal.common.utils
 import android.os.Environment
 import com.mcal.common.App
 import com.mcal.common.utilsOld.StorageUtils
-import org.jetbrains.annotations.Contract
 import java.io.File
 
 object ScopedStorage {
-    @JvmStatic
-    @get:Contract(" -> new")
-    val apkEditorDirectory: File
-        get() = File("$storageDirectory/ApkEditor")
-
     @JvmStatic
     val filesDir: File
         get() = App.getContext().filesDir
 
     @JvmStatic
-    val binDir: File
-        get() = File(App.getContext().filesDir.path + File.separator + "bin")
+    val storageDirectory: File
+        get() = Environment.getExternalStorageDirectory()
 
     @JvmStatic
-    val dataDir: File
-        get() = File(App.getContext().filesDir.path + File.separator + "data")
+    fun getApkEditorDir(): File {
+        val path = File("$storageDirectory/ApkEditor")
+        if (!path.exists()) path.mkdirs()
+        return path
+    }
+
+    @JvmStatic
+    fun getBinDir(): File {
+        val path = File(App.getContext().filesDir.path + File.separator + "bin")
+        if (!path.exists()) path.mkdirs()
+        return path
+    }
+
+    @JvmStatic
+    fun getDataDir(): File {
+        val path = File(App.getContext().filesDir.path + File.separator + "data")
+        if (!path.exists()) path.mkdirs()
+        return path
+    }
 
     // Find the pattern
     @JvmStatic
@@ -59,8 +70,4 @@ object ScopedStorage {
             }
             return path
         }
-
-    @JvmStatic
-    val storageDirectory: File
-        get() = Environment.getExternalStorageDirectory()
 }

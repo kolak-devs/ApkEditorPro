@@ -1,9 +1,7 @@
 package com.mcal.apkeditor.utils
 
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import com.mcal.common.data.Preferences
+import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyAssetsFile
 import java.io.File
 import java.io.IOException
@@ -11,46 +9,13 @@ import java.io.IOException
 class AssetsInstaller(private val context: Context) {
     @Throws(Exception::class)
     fun install() {
-        val path = File(context.filesDir.toString() + "/bin")
+        val path = ScopedStorage.getBinDir()
         if (!path.exists()) {
             path.mkdir()
         }
-        prepare(path)
-    }
-
-    // This method will extract the necessary files
-    @Throws(Exception::class)
-    fun prepare(path: File) {
-        var curVersion: String? = null
-        try {
-            val pInfo = context.packageManager
-                .getPackageInfo(context.packageName, 0)
-            curVersion = pInfo.versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-
-        // Prepare file
-        val inited = Preferences.getInitialized()
-        val lastVersion = Preferences.getVersionString()
-        if (!inited || lastVersion != curVersion) {
-            context.copyAssetsFile("key/testkey.pk8", File(path, "testkey.pk8"))
-            context.copyAssetsFile("key/testkey.x509.pem", File(path, "testkey.x509.pem"))
-            context.copyAssetsFile(Build.CPU_ABI + "/aapt", File(path, "aapt"))
-            context.copyAssetsFile(Build.CPU_ABI + "/aapt2", File(path, "aapt2"))
-            context.copyAssetsFile(Build.CPU_ABI + "/zipalign", File(path, "zipalign"))
-            context.copyAssetsFile("aaptz", File(path, "aaptz"))
-            context.copyAssetsFile("android-framework.jar", File(path, "android-framework.jar"))
-            context.copyAssetsFile("android-framework.jar", File(path, "1.apk"))
-            val bin = File(context.filesDir, "mycp")
-            if (!bin.exists()) {
-                context.copyAssetsFile(Build.CPU_ABI + "/mycp", bin)
-                bin.setExecutable(true)
-            }
-            createWorkFiles()
-            Preferences.setInitialized(true)
-            Preferences.setVersionString(curVersion)
-        }
+        context.copyAssetsFile("key/testkey.pk8", File(path, "testkey.pk8"))
+        context.copyAssetsFile("key/testkey.x509.pem", File(path, "testkey.x509.pem"))
+        createWorkFiles()
     }
 
     private fun createWorkFiles() {

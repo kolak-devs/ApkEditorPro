@@ -116,7 +116,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     // Clean the ApkEditor folder except backups
     protected void cleanSdcard() {
-        File f = new File(ScopedStorage.getApkEditorDirectory().getPath());
+        File f = new File(ScopedStorage.getApkEditorDir().getPath());
         if (!f.exists() || !f.isDirectory()) {
             return;
         }

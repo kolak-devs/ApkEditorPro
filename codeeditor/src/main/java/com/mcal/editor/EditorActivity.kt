@@ -611,7 +611,7 @@ class EditorActivity : CustomizedLangActivity(),
                     decompiler.addCustomLoad(SmaliInputPlugin().loadFiles(listOf<Path>(Paths.get(smaliPath.path))))
                     decompiler.load()
                     for (cls in decompiler.classes) {
-                        val packageNamePath = File(ScopedStorage.apkEditorDirectory.path + File.separator + cls.getPackage().replace(".", "/"))
+                        val packageNamePath = File(ScopedStorage.getApkEditorDir().path + File.separator + cls.getPackage().replace(".", "/"))
                         if (!packageNamePath.exists()) {
                             packageNamePath.mkdirs()
                         }
