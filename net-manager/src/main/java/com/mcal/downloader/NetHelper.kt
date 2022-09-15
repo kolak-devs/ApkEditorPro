@@ -72,7 +72,7 @@ object NetHelper {
                             val context = btn.context
                             val icon = ResourcesCompat.getDrawable(
                                 context.resources,
-                                R.drawable.round_file_download_done,
+                                R.drawable.ic_download_done,
                                 context.theme
                             )
                             btn.setImageDrawable(icon)

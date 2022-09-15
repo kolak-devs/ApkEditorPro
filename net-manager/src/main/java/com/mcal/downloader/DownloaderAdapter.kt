@@ -1,5 +1,6 @@
 package com.mcal.downloader
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,8 +36,36 @@ class DownloaderAdapter(
         val container = holder.container
         val path = File(ScopedStorage.getBinDir().path + "/" + name)
         val buttonDownload = holder.download
-        if (!path.exists()) {
-            buttonDownload.setOnClickListener {
+        val context = buttonDownload.context
+        var icon: Drawable?
+        val isFileExists = path.exists()
+        if (isFileExists) {
+            icon = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.ic_delete,
+                context.theme
+            )
+            buttonDownload.setImageDrawable(icon)
+        } else {
+            icon = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.ic_download,
+                context.theme
+            )
+            buttonDownload.setImageDrawable(icon)
+        }
+        buttonDownload.setOnClickListener {
+            if (isFileExists) {
+                if (path.delete()) {
+                    icon = ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.ic_download,
+                        context.theme
+                    )
+                    buttonDownload.setImageDrawable(icon)
+                    buttonDownload.isEnabled = true
+                }
+            } else {
                 buttonDownload.isEnabled = false
                 NetHelper.download(
                     url,
@@ -44,15 +73,6 @@ class DownloaderAdapter(
                     container
                 )
             }
-        } else {
-            val context = buttonDownload.context
-            val icon = ResourcesCompat.getDrawable(
-                context.resources,
-                R.drawable.round_file_download_done,
-                context.theme
-            )
-            buttonDownload.setImageDrawable(icon)
-            buttonDownload.isEnabled = false
         }
     }
 

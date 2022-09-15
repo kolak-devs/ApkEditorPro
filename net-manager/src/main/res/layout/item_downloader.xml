@@ -52,6 +52,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:contentDescription="Download"
-        android:src="@drawable/round_file_download" />
+        android:src="@drawable/ic_download" />
 
 </LinearLayout>
