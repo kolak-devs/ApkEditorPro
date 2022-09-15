@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 32
     ndkVersion '24.0.8215888'
 
     def versionPropsFile = file('version.properties')
