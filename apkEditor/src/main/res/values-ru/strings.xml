@@ -56,7 +56,6 @@
     <string name="file_added">Добавлен файл: %s</string>
     <string name="file_already_exist">"'%s' уже существует!"</string>
     <string name="file_replaced">Файл заменён.</string>
-    <string name="files">Файлы</string>
     <string name="files_capital">ФАЙЛЫ</string>
     <string name="folder_replace_tip" formatted="false">"Вы уверены, что хотите заменить '%s' на '%s'?"</string>
     <string name="folder_replaced">Заменить папку</string>
@@ -253,16 +252,11 @@
     <string name="build_still_running_tip">Примечание: сборка может выполняться после закрытия этой страницы, проверять ход выполнение можно в строке состояния.</string>
     <string name="cannot_launch">Не удаётся запустить %s</string>
     <string name="cannot_open_xxx">Не удаётся открыть %s</string>
-    <string name="download">Загрузка</string>
-    <string name="download_image_tip1">Для загрузки изображений введите несколько ключевых слов вроде \"target png\", чтобы выполнить поиск. Обратите внимание: поиск изображений обеспечивается Google, а изображения могут быть защищены авторским правом.</string>
-    <string name="download_image_tip2">Используйте длительное нажатие на изображении и \"Сохранить изображение\" для его загрузки.</string>
     <string name="entry_modified">"'%s' изменено."</string>
     <string name="error">Ошибка</string>
     <string name="ext_sd_card">Внешняя SD-карта</string>
     <string name="failed_create_file">Не удалось создать файл.</string>
     <string name="failed_to_parse_xml">Не удалось проанализировать элемент XML: %s.</string>
-    <string name="image_downloader">Загрузка изображений</string>
-    <string name="image_saved_to">Изображение сохранено в %s</string>
     <string name="input_agree_tip">Пожалуйста, введите \"accept\" для принятия вышеуказанных условий.</string>
     <string name="input_agree_toast">Пожалуйста, введите \"accept\" для продолжения.</string>
     <string name="more">Ещё</string>
@@ -273,7 +267,6 @@
     <string name="patch_error_no_script_name">Не указано имя скрипта.</string>
     <string name="please_note">Обратите внимание</string>
     <string name="put_to_background">Выполнять в фоне</string>
-    <string name="save_image">Сохранить изображение</string>
     <string name="sd_card">SD-карта</string>
     <string name="sure_to_stop_build">Идёт сборка, вы точно хотите её остановить? (Может быть, вы могли бы подождать какое-то время или перенести процесс работать в фоне.)</string>
     <string name="tip">Совет</string>
@@ -285,8 +278,6 @@
     <string name="summary_decide_at_decoding">Непосредственный выбор режима декодирования. Будет появляться диалоговое окно при нажатии \"Полное редактирование\".</string>
     <string name="summary_decode_all_files">Декодируются все файлы. Все файлы, включая изображения и неизвестные, будут декодированы в соответствующую папку. В этом режиме декодированные файлы могут быть изменены с помощью сторонних инструментов. Большая гибкость, но более низкая скорость выполнения.</string>
     <string name="summary_decode_partial_files">Декодируются некоторые файлы. В соответствующую папку будут декодированы только важные файлы (изображения будут заменены фиктивными файлами, а неизвестные файлы не будут декодироваться). Более высокая скорость выполнения, но меньшая гибкость.</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Подписать APK</string>
     <string name="view_logs">Мененджер логов</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

@@ -56,7 +56,6 @@
     <string name="file_added">Tập tin thêm: %s</string>
     <string name="file_already_exist">"'%s' đã tồn tại!"</string>
     <string name="file_replaced">Đã thay thế tập tin.</string>
-    <string name="files">Tập tin</string>
     <string name="files_capital">TẬP TIN</string>
     <string name="folder_replace_tip" formatted="false">Bạn có chắc chắn để thay thế %s với %s?</string>
     <string name="folder_replaced">Đã thay thế thư mục</string>
@@ -253,16 +252,11 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="build_still_running_tip">Xin lưu ý: việc xây dựng có thể vẫn chạy sau khi thoát khỏi trang này, bạn có thể kiểm tra công việc xây dựng trên thanh trạng thái.</string>
     <string name="cannot_launch">Không thể khởi động %s</string>
     <string name="cannot_open_xxx">Không thể mở %s</string>
-    <string name="download">Tải về</string>
-    <string name="download_image_tip1">Để tải về hình ảnh, xin vui lòng nhập một số từ khóa như Mục tiêu PNG \" để tìm kiếm. Xin lưu ý: tìm kiếm hình ảnh được cung cấp bởi Google, và những hình ảnh có thể phải chịu bản quyền.</string>
-    <string name="download_image_tip2">Vui lòng nhấn và giữ hình ảnh và nhấp vào Lưu hình ảnh \" để tải xuống.</string>
     <string name="entry_modified">"'%s' đã sửa đổi."</string>
     <string name="error">Lỗi</string>
     <string name="ext_sd_card">Mở thẻ SD</string>
     <string name="failed_create_file">Không thể tạo tập tin.</string>
     <string name="failed_to_parse_xml">Không thể phân tích cú pháp mục nhập xml: %s.</string>
-    <string name="image_downloader">Tải xuống hình ảnh</string>
-    <string name="image_saved_to">Đã lưu hình ảnh vào %s</string>
     <string name="input_agree_tip">Xin vui lòng nhập \"Chấp nhận \"để chấp nhận các điều khoản trên.</string>
     <string name="input_agree_toast">Xin vui lòng nhập \"Chấp nhận \" để tiếp tục.</string>
     <string name="more">Nhiều hơn</string>
@@ -273,7 +267,6 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="patch_error_no_script_name">Tên tập lệnh không được chỉ định.</string>
     <string name="please_note">Xin lưu ý</string>
     <string name="put_to_background">Chạy ẩn trong nền</string>
-    <string name="save_image">Lưu hình ảnh</string>
     <string name="sd_card">Thẻ nhớ SD</string>
     <string name="sure_to_stop_build">Xây dựng đang chạy, bạn có chắc chắn dừng nó không? (Có thể bạn có thể chờ một thời gian hoặc cho nó chạy nền)</string>
     <string name="tip">Mẹo</string>
@@ -285,8 +278,6 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="summary_decide_at_decoding">Để chọn chế độ giải mã khi đang di chuyển. Một hộp thoại sẽ được nhắc khi \"Chỉnh sửa đầy đủ\" đã được nhấp.</string>
     <string name="summary_decode_all_files">Giải mã tất cả các tập tin. Tất cả các tập tin bao gồm hình ảnh và tập tin không xác định, sẽ được giải mã thành thư mục giải mã. Trong chế độ này, các tập tin giải mã có thể được xây dựng lại với các công cụ khác. Nó linh hoạt hơn, nhưng với tốc độ chậm hơn.</string>
     <string name="summary_decode_partial_files">Giải mã một phần tập tin. Chỉ các tập tin quan trọng mới được giải mã thành thư mục giải mã (hình ảnh sẽ được thay thế bằng tập tin giả và các tập tin không xác định sẽ không được giải mã). Tốc độ nhanh hơn, nhưng ít linh hoạt hơn.</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

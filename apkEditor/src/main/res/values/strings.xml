@@ -131,7 +131,6 @@
     <string name="str_files_found" formatted="false">%d File(s) Found - \'%s\'</string>
 
     <!-- version 1.4 -->
-    <string name="files">Files</string>
     <string name="smali_editing">Smali Editing</string>
     <string name="smali_edit_summary">Enabled. Will show DEX to smali image in Full Edit.</string>
     <string name="smali_edit_disabled_summary">Disabled. Will not show DEX to smali image in Full Edit.</string>
@@ -356,12 +355,6 @@
     <string name="app_files">App Files</string>
     <string name="new_file">New File</string>
     <string name="failed_create_file">Failed to create the file.</string>
-    <string name="image_downloader">Image Downloader</string>
-    <string name="download">Download</string>
-    <string name="save_image">Save Image</string>
-    <string name="image_saved_to">Image saved to %s</string>
-    <string name="download_image_tip1">To download images, please input some keywords like \"folder\" to do the search. Please note: Image search is provided by other website, and images may be subject to copyright.</string>
-    <string name="download_image_tip2">Please long press on the image and click at \"Save Image\" to download it.</string>
 
     <!-- 1.9.2 -->
     <string name="app_info">App Info</string>
@@ -381,8 +374,6 @@
 
     <!-- 20180916, for apk parser -->
     <string name="sure_to_exit">Are you sure to exit?</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright © 2021–2022 Ivan Timashkov</string>

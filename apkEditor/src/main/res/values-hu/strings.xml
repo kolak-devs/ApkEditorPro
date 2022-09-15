@@ -56,7 +56,6 @@
     <string name="file_added">Fájl hozzáadva: %s</string>
     <string name="file_already_exist">"'%s' már létezik!"</string>
     <string name="file_replaced">Fájl lecserélve.</string>
-    <string name="files">Fájlok</string>
     <string name="files_capital">FÁJLOK</string>
     <string name="folder_replace_tip" formatted="false">Valóban lecseréli ezt: %s erre: %s?</string>
     <string name="folder_replaced">Mappa lecserélve</string>
@@ -261,22 +260,14 @@
     <string name="app_files">Alkalmazás fájlok</string>
     <string name="build_not_support_tip">"Sajnáljuk, az alverzió már nem támogatott.
 Ha korábban vásárolta az APK Editor Pro programot, és ez nem az, amit szeretne, küldjön egy e-mailt a heagoo@gmail.com címre a megoldásokért. (Az \"1.9 VERZIÓ PROBLÉMÁK\" címmel)"</string>
-    <string name="download">Letöltés</string>
-    <string name="download_image_tip1">A képek letöltéséhez, adjon meg néhány kulcsszót, például \"target png\" a kereséshez. Kérjük, vegye figyelembe: a képek keresését a Google biztosítja, így a képek szerzői jogi védelem alatt állhatnak.</string>
-    <string name="download_image_tip2">Kérjük, nyomja meg hosszan a képet, majd kattintson a \"Kép mentése\" gombra a letöltéshez.</string>
     <string name="ext_sd_card">Külső SD-kártya</string>
     <string name="failed_create_file">Nem sikerült létrehozni a fájlt.</string>
-    <string name="image_downloader">Képletöltő</string>
-    <string name="image_saved_to">Kép mentési helye: %s</string>
     <string name="input_agree_tip">Kérjük, kattintson az \"elfogad\" gombra a fenti feltételek elfogadásához.</string>
     <string name="input_agree_toast">Kérjük, kattintson az \"elfogad\" gombra a folytatáshoz.</string>
     <string name="more">Több</string>
     <string name="new_file">Új fájl</string>
     <string name="not_signed_tip">Kérjük, vegye figyelembe: az apk nincs aláírva, és nem telepíthető.</string>
-    <string name="save_image">Kép mentése</string>
     <string name="sd_card">SD-kártya</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

@@ -138,10 +138,10 @@ class FolderListAdapter(
         }
         val detailInfo = producer.getDetail1(currentDirectory, rec)
         if (detailInfo != null) {
-            holder.desc1.text = detailInfo
-            holder.desc1.visibility = View.VISIBLE
+            holder.decription.text = detailInfo
+            holder.decription.visibility = View.VISIBLE
         } else {
-            holder.desc1.visibility = View.GONE
+            holder.decription.visibility = View.GONE
         }
         holder.itemView.setOnClickListener {
             listener.onClick(position)
@@ -197,7 +197,7 @@ class FolderListAdapter(
     class FileListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var icon: ImageView = view.findViewById(R.id.file_icon)
         var filename: TextView = view.findViewById(R.id.filename)
-        var desc1: TextView = view.findViewById(R.id.detail1)
+        var decription: TextView = view.findViewById(R.id.detail1)
     }
 
     init {

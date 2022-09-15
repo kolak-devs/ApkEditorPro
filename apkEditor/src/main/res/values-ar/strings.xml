@@ -108,7 +108,6 @@
     <string name="cannot_find_ext_sdcard">لا يمكن العثور على بطاقة sd الخارجية.</string>
     <string name="rename_in_resources">إعادة تسمية اسم الحزمة في resources.arsc</string>
     <string name="str_files_found" formatted="false">"%d الملف(s) العثور على - '%s'"</string>
-    <string name="files">الملفات</string>
     <string name="smali_editing">تحرير سمالي</string>
     <string name="smali_edit_summary">تمكين. سيتم إظهار التنفيذ المباشر للصورة سمالي في "تحرير كامل".</string>
     <string name="smali_edit_disabled_summary">معطل. لن يتم إظهار التنفيذ المباشر للصورة سمالي في "تحرير كامل".</string>
@@ -206,8 +205,6 @@
     <string name="str_num_modified_file">%d الملف(s) تعديل</string>
     <string name="copy_file_path">نسخ اسم الملف</string>
     <string name="copied_to_clipboard">"'%s' نسخ إلى الحافظة."</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

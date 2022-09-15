@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
@@ -84,7 +85,7 @@ public class ResNavigationMgr implements OnClickListener {
     private View createTab(String path) {
         View view = LayoutInflater.from(activityRef.get()).inflate(R.layout.item_navigation_dir, null);
 
-        AppCompatButton tab = view.findViewById(R.id.menu_dirtab);
+        TextView tab = view.findViewById(R.id.menu_dirtab);
         tab.setTag(path);
         tab.setOnClickListener(this);
         tab.setText(getNameByPath(path));

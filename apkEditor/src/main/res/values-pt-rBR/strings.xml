@@ -104,7 +104,6 @@
     <string name="cannot_find_ext_sdcard">Não é possível encontrar o Cartão SD externo.</string>
     <string name="rename_in_resources">Renomear o nome do pacote em resources.arsc</string>
     <string name="str_files_found" formatted="false">%d arquivo(s) encontrado(s) - \"%s\"</string>
-    <string name="files">Arquivos</string>
     <string name="smali_editing">Edição Smali</string>
     <string name="smali_edit_summary">Ativado. Mostrará DEX na imagem Smali em Edição Completa.</string>
     <string name="smali_edit_disabled_summary">Desativado. Não mostrará DEX na imagem Smali em Edição Completa.</string>
@@ -199,8 +198,6 @@
     <string name="fix">Corrigir</string>
     <string name="str_num_renamed_file">%d arquivo(s) renomeado(s)</string>
     <string name="str_fix_failed">Desculpe, não foi possível corrigir este problema.</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

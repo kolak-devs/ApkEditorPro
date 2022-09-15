@@ -104,7 +104,6 @@
     <string name="cannot_find_ext_sdcard">Die externe SD-Karte konnte nicht gefunden werden.</string>
     <string name="rename_in_resources">Paketname in resources.arsc Datei umbenennen</string>
     <string name="str_files_found" formatted="false">"%d Datei(en) gefunden - \"%s\""</string>
-    <string name="files">Dateien</string>
     <string name="smali_editing">Smali-Bearbeitung</string>
     <string name="smali_edit_summary">[Aktiviert] \"DEX -&gt; Smali\" Funktion bei vollst&#228;ndiger Bearbeitung einer App einblenden</string>
     <string name="smali_edit_disabled_summary">[Deaktiviert] \"DEX -&gt; Smali\" Funktion bei vollst&#228;ndiger Bearbeitung einer App ausblenden</string>
@@ -278,15 +277,9 @@ Wenn sie APK Editor Pro bereits gekauft haben, und dies nicht erw&#252;nscht ist
     <string name="input_agree_toast">Bitte geben Sie \"accept\" (Akzeptieren) ein, um fortzufahren.</string>
     <string name="more">Mehr</string>
     <string name="not_signed_tip">Bitte beachten Sie: Die APK-Datei ist nicht signiert und kann nicht installiert werden.</string>
-    <string name="download">Herunterladen von:\n</string>
-    <string name="download_image_tip1">Um Bilder herunterzuladen, geben Sie bitte einige Schl&#252;sselw&#246;rter wie z. B. \"target.png\" ein, um die Suche durchzuf&#252;hren. Bitte beachten Sie: Die Bildersuche wird von Google bereitgestellt und Bilder unterliegen m&#246;glicherweise dem Urheberrecht.</string>
-    <string name="download_image_tip2">Bitte klicken Sie lange auf das Bild und klicken  dann auf \"Bild speichern\", um es herunterzuladen.</string>
     <string name="ext_sd_card">SD-Karte</string>
     <string name="failed_create_file">Die Datei konnte nicht erstellt werden.</string>
-    <string name="image_downloader">Bild-Downloader</string>
-    <string name="image_saved_to">Das Bild wurde gespeichert unter:\n%s</string>
     <string name="new_file">Neue Datei</string>
-    <string name="save_image">Bild speichern</string>
     <string name="sd_card">Speicher</string>
     <string name="app_info">App-Info</string>
     <string name="cannot_launch">Die App \"%s\" konnte nicht gestartet werden.</string>
@@ -299,8 +292,6 @@ Wenn sie APK Editor Pro bereits gekauft haben, und dies nicht erw&#252;nscht ist
     <string name="summary_decode_all_files">Alle Dateien werden entschl&#252;sselt, also alle Dateien inklusive Bilder und unbekannte Dateien werden im Entschl&#252;sselungspfad abgelegt. In diesem Modus k&#246;nnen die entschl&#252;sselten Dateien mit anderen Werkzeugen neu erstellt werden. Der Modus bietet Ihnen mehr Flexibilit&#228;t aber mit geringerer Geschwindigkeit.</string>
     <string name="summary_decode_partial_files">Teildateien werden entschl&#252;sselt. Es werden nur wichtige Dateien im Entschl&#252;sselungspfad abgelegt (Bilder werden durch Dummy-Dateien ersetzt, und unbekannte Dateien werden nicht entschl&#252;sselt). Der Modus bietet Ihnen mehr Geschwindigkeit aber weniger Flexibilit&#228;t.</string>
     <string name="sure_to_exit">M&#246;chten Sie die App beenden?</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

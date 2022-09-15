@@ -96,7 +96,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         View menuItem_save = createMenuItem(R.drawable.round_save_24, R.string.extract);
         this.menuItem_replace = createMenuItem(R.drawable.round_content_copy_24, R.string.replace);
         View menuItem_search = createMenuItem(R.drawable.round_search_24, R.string.search);
-        View menuItem_delete = createMenuItem(R.drawable.round_delete_24, R.string.delete);
+        View menuItem_delete = createMenuItem(R.drawable.ic_delete, R.string.delete);
         this.menuItem_details = createMenuItem(R.drawable.round_menu_24, R.string.detail);
 
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
@@ -227,7 +227,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             }
 
             // Delete
-            else if (id == R.drawable.round_delete_24) {
+            else if (id == R.drawable.ic_delete) {
                 deleteSelectedResources();
             }
             // Details/information

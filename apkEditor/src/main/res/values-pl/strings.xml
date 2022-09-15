@@ -56,7 +56,6 @@
     <string name="file_added">Dodany plik: %s</string>
     <string name="file_already_exist">"'%s' już istnieje!"</string>
     <string name="file_replaced">Plik zastąpiony.</string>
-    <string name="files">Pliki</string>
     <string name="files_capital">PLIKI</string>
     <string name="folder_replace_tip" formatted="false">Chcesz zastąpić %s z %s?</string>
     <string name="folder_replaced">Folder zastąpiony</string>
@@ -212,8 +211,6 @@
     <string name="str_replace_with">"Zamień '%s' z"</string>
     <string name="str_replaced">"'%s' zamieniono"</string>
     <string name="sure_to_replace_all" formatted="false">"Chcesz zamienić wszystkie '%s' z '%s'?"</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

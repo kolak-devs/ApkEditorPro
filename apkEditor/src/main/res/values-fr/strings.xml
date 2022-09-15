@@ -98,13 +98,10 @@
     <string name="temp_file_cleaned">Fichiers temporaires nettoy&#233;s</string>
     <string name="general_error">Erreur: %s</string>
     <string name="save_succeed_tip">%d chaine (s) enregistr&#233;e (s).</string>
-    <string name="files">Fichiers</string>
     <string name="smali_editing">Edition Smali</string>
     <string name="smali_edit_summary">Activ&#233;. Vous pouvez afficher image DEX vers smali dans &#233;dition complete.</string>
     <string name="colormixer_set">Regler</string>
     <string name="new_folder">"Nouveau dossier "</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

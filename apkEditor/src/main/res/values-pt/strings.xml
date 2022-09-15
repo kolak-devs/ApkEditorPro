@@ -98,8 +98,6 @@
     <string name="clean_garbage">Limpeza de lixo</string>
     <string name="clean_garbage_summary">Clique aqui para limpar os arquivos temporários.</string>
     <string name="temp_file_cleaned">Arquivos temporários limpados.</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

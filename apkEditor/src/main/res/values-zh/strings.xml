@@ -131,7 +131,6 @@
     <string name="str_files_found" formatted="false">找到 %d 个文件 - \'%s\'</string>
 
     <!-- version 1.4 -->
-    <string name="files">文件</string>
     <string name="smali_editing">Smali 编辑</string>
     <string name="smali_edit_summary">已启用. 在高级编辑中会显示 DEX -> smali 按钮.</string>
     <string name="smali_edit_disabled_summary">已禁用. 在高级编辑中不会显示 DEX -> smali 按钮.</string>
@@ -356,12 +355,6 @@
     <string name="app_files">App 文件</string>
     <string name="new_file">新建文件</string>
     <string name="failed_create_file">创建文件失败.</string>
-    <string name="image_downloader">图片下载器</string>
-    <string name="download">下载</string>
-    <string name="save_image">保存图片</string>
-    <string name="image_saved_to">图片已保存至 %s</string>
-    <string name="download_image_tip1">请输入关键字进行搜索 (例如\"target png\"). 注意: 图片搜索系Google提供, 请注意版权问题.</string>
-    <string name="download_image_tip2">请长按图片并点击\"保存图片\"进行下载.</string>
 
     <!-- 1.9.2 -->
     <string name="app_info">应用信息</string>
@@ -369,8 +362,6 @@
     <string name="cannot_launch">不能启动 %s</string>
 
     <!-- 1.9.3 -->
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

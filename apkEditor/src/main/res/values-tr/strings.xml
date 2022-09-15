@@ -56,7 +56,6 @@
     <string name="file_added">Dosya eklendi: %s</string>
     <string name="file_already_exist">"'%s' Zaten var!"</string>
     <string name="file_replaced">Dosya değiştirildi.</string>
-    <string name="files">Dosyalar</string>
     <string name="files_capital">Dosyalar</string>
     <string name="folder_replace_tip" formatted="false">Dosya değiştirilecek emin misiniz %s ile %s?</string>
     <string name="folder_replaced">Klasör değiştirildi</string>
@@ -244,8 +243,6 @@ Tekrar dene?"</string>
     <string name="prj_error_decode_dir_notfound">Kod çözme dizini bulunamadı: %s</string>
     <string name="rename_in_dex">"DEX Dosyasında paket adını yeniden adlandırın.
 Başarı oranını yükseltmek için lütfen mümkün olduğunca küçük değişiklikler yapın, (örneğin com.android'i com.androie'ye değiştirin)"</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

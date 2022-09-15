@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -7,15 +8,16 @@
 
     <ImageView
         android:layout_width="24dp"
-        android:layout_height="@dimen/image_button_height"
+        android:layout_height="48dp"
         android:scaleType="centerInside"
         android:src="@drawable/round_navigate_next_24" />
 
-    <Button
+    <TextView
         android:id="@+id/menu_dirtab"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        tools:text="folder"/>
 
 </LinearLayout>

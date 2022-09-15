@@ -4,7 +4,7 @@
     tools:context=".activities.MainActivity">
     <item
         android:id="@+id/action_night_mode"
-        android:icon="@drawable/dark_mode"
+        android:icon="@drawable/ic_dark_mode"
         android:orderInCategory="100"
         android:title="Night Mode"
         app:showAsAction="always" />

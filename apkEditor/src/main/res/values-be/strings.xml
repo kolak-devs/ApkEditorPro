@@ -57,7 +57,6 @@
     <string name="file_added">Файл дададзены: %s</string>
     <string name="file_already_exist">"'%s' ужо існуе!"</string>
     <string name="file_replaced">Файл заменены .</string>
-    <string name="files">Файлы</string>
     <string name="files_capital">ФАЙЛЫ</string>
     <string name="folder_replace_tip" formatted="false">Сапраўды хочаце замяніць %s на %s?</string>
     <string name="folder_replaced">Каталог заменены</string>
@@ -243,8 +242,6 @@
     <string name="target_sdk_version">"Мэтавая версія SDK "</string>
     <string name="fix_error_equivalent">Паспрабаваць выправіць памылку паводле рэгістранезалежнага эквівалента?</string>
     <string name="hide_warnings">Хаваць папярэджанні</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

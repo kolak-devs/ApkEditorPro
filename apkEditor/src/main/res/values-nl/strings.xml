@@ -94,8 +94,6 @@
     <string name="clean_garbage">Prullenbak leeg maken</string>
     <string name="clean_garbage_summary">Klik hier om de cache (tijdelijke bestanden) te verwijderen.</string>
     <string name="temp_file_cleaned">Cache (tijdelijke bestanden) verwijderd.</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

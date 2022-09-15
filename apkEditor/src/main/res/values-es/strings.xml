@@ -56,7 +56,6 @@
     <string name="file_added">Archivo Añadido: %s</string>
     <string name="file_already_exist">"¡\"%s\" ya existe!"</string>
     <string name="file_replaced">Archivo Reemplazado</string>
-    <string name="files">Recursos</string>
     <string name="files_capital">ARCHIVOS</string>
     <string name="folder_replace_tip" formatted="false">¿Está seguro que desea reemplazar \"%s\" por \"%s\"?</string>
     <string name="folder_replaced">Carpeta Reemplazada</string>
@@ -258,8 +257,6 @@
     <string name="patch_error_no_script_name">Nombre del Script No Especificado.</string>
     <string name="put_to_background">Poner en 2º Plano</string>
     <string name="sure_to_stop_build">El Recompilado aún no ha finalizado; ¿Está seguro que desea detenerlo? (Tal vez deba esperar un poco para ponerlo en 2º plano)</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

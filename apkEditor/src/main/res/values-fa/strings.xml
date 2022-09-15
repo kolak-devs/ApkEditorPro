@@ -90,8 +90,6 @@
     <string name="mf_search_ret">&#1582;&#1591; &#1607;&#1575;&#1740; &#1662;&#1740;&#1583;&#1575;&#8204;&#1588;&#1583;&#1607;: %d</string>
     <string name="add_a_file">اضافه کردن یک فایل</string>
     <string name="file_added">فایل اضافه شده: %s</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

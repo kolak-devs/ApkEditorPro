@@ -104,7 +104,6 @@
     <string name="cannot_find_ext_sdcard">Зовнішню SD-карту не знайдено.</string>
     <string name="rename_in_resources">Змінити назву пакету в resources.arsc</string>
     <string name="str_files_found" formatted="false">"%d файл(-ів) знайдено - '%s'"</string>
-    <string name="files">Файли</string>
     <string name="smali_editing">Редактор smali</string>
     <string name="smali_edit_summary">Увімкнено. DEX буде перетворений в smali при повному редагуванні.</string>
     <string name="smali_edit_disabled_summary">Вимкнено. DEX не буде перетворено в smali при повному редагуванні.</string>
@@ -194,8 +193,6 @@
     <string name="sure_to_replace_all" formatted="false">"Бажаєте замінити всі '%s' на '%s'?"</string>
     <string name="label_replace_with_same_setting">Замінити з такими ж налаштуваннями наступного разу, не показуючи цей діалог.</string>
     <string name="dump_a_value">Скинути значення</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

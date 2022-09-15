@@ -55,7 +55,6 @@
     <string name="file_added">Pridaný súbor: %s</string>
     <string name="file_already_exist">"'%s' už existuje!"</string>
     <string name="file_replaced">Súbor bol nahradený.</string>
-    <string name="files">Súbory</string>
     <string name="files_capital">SÚBORY</string>
     <string name="folder_replace_tip" formatted="false">Ste si istý, že chcete priečinok %s nahradiť týmto %s?</string>
     <string name="folder_replaced">Priečinok bol nahradený</string>
@@ -199,8 +198,6 @@
     <string name="str_replaced">"'%s' nahradené"</string>
     <string name="sure_to_replace_all" formatted="false">"Naozaj chcete nahradiť všetky '%s' s '%s'?"</string>
     <string name="target_sdk_version">Verzia cieľového SDK</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

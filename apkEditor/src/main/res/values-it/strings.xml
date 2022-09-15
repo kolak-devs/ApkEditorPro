@@ -56,7 +56,6 @@
     <string name="file_added">File aggiunto: %s</string>
     <string name="file_already_exist">"'%s' esiste già!"</string>
     <string name="file_replaced">File sostituito.</string>
-    <string name="files">File</string>
     <string name="files_capital">FILE</string>
     <string name="folder_replace_tip" formatted="false">Sei sicuro di voler sostituire %s con %s?</string>
     <string name="folder_replaced">Cartella sostituita</string>
@@ -234,8 +233,6 @@
     <string name="str_replaced">"'%s' sostituito"</string>
     <string name="sure_to_replace_all" formatted="false">"Sei sicuro di voler sostituire tutti '%s' con '%s'?"</string>
     <string name="target_sdk_version">Versione SDK destinazione</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>

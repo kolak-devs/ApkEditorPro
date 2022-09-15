@@ -104,7 +104,6 @@
     <string name="cannot_find_ext_sdcard">Nelze najít externí SD kartu.</string>
     <string name="rename_in_resources">Přejmenovat název balíčku v resources.arsc</string>
     <string name="str_files_found" formatted="false">"%d souborů nalezeno - '%s'"</string>
-    <string name="files">Soubory</string>
     <string name="smali_editing">Úprava Smali</string>
     <string name="smali_edit_summary">Povoleno. Zobrazí DEX smali obrazu v Plné úpravě.</string>
     <string name="smali_edit_disabled_summary">Zakázáno. Nezobrazí DEX smali obrazu v Plné úpravě.</string>
@@ -129,8 +128,6 @@
     <string name="select_folder_err2">Prosím, vyberte cestu pro uložení pracovního adresáře APK Editoru.</string>
     <string name="file_replaced">Soubor byl nahrazen.</string>
     <string name="hide_smali_tip">Prosím dlouze stiskněte DEX -> Skrýt Smali.</string>
-    <string name="link_forum">Forum</string>
-    <string name="link_telegram">Telegram</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
