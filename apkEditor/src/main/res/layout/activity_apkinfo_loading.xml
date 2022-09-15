@@ -1,26 +1,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_loading"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?android:colorBackground"
+    android:layout_height="wrap_content"
     android:focusable="false"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:background="@drawable/item_loading_chip"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="72dp"
+    android:layout_marginBottom="16dp">
 
     <ProgressBar
         android:id="@+id/progress_bar"
-        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_margin="8dp"/>
 
     <TextView
         android:id="@+id/tv_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="16.0dip"
         android:text="@string/loading"
-        android:textColor="?colorPrimary" />
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
 </LinearLayout>
