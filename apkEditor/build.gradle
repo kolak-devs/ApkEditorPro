@@ -10,21 +10,31 @@ android {
     def versionPropsFile = file('version.properties')
     if (versionPropsFile.canRead()) {
         def Properties versionProps = new Properties()
-
         versionProps.load(new FileInputStream(versionPropsFile))
 
-        def value = 0
-
         def runTasks = gradle.startParameter.taskNames
-        if ('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
-            value = 1;
-        }
 
         def versionMajor = versionProps['VERSION_MAJOR'].toInteger()
         def versionMinor = versionProps['VERSION_MINOR'].toInteger()
-        def versionPatch = versionProps['VERSION_PATCH'].toInteger() + value
+        def versionPatch = versionProps['VERSION_PATCH'].toInteger()
+        // increment build number on every gradle sync
         def versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
 
+        // only in release build
+        if (':apkEditor:assembleRelease' in runTasks || 'aR' in runTasks) {
+            versionPatch++;
+            if (versionPatch >= 9) {
+                versionPatch = 0;
+                versionMinor++;
+            }
+            if (versionMinor >= 9) {
+                versionMinor = 0;
+                versionMajor++;
+            }
+        }
+
+        versionProps['VERSION_MAJOR'] = versionMajor.toString()
+        versionProps['VERSION_MINOR'] = versionMinor.toString()
         versionProps['VERSION_PATCH'] = versionPatch.toString()
         versionProps['VERSION_BUILD'] = versionBuild.toString()
 
@@ -36,7 +46,7 @@ android {
             //noinspection ExpiredTargetSdkVersion
             targetSdk 26
             versionCode versionBuild
-            versionName "${versionMajor}.${versionMinor}.${versionPatch} (${versionBuild})"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}"
             multiDexEnabled true
         }
     } else {
@@ -48,11 +58,6 @@ android {
             version '3.18.1'
             path 'src/main/cpp/CMakeLists.txt'
         }
-    }
-
-    dexOptions {
-        dexInProcess = true
-        preDexLibraries = true
     }
 
     buildTypes {
