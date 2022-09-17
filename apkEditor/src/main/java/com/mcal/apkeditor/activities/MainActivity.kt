@@ -207,6 +207,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         } else {
             msg.visibility = View.INVISIBLE
         }
+        //TODO: Tool manager dialog
     }
 
     override fun onBackPressed() {

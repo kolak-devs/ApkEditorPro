@@ -151,7 +151,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
         NotificationChannel chan1 = new NotificationChannel(
                 PRIMARY_NOTIF_CHANNEL,
                 "default",
-                NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationManager.IMPORTANCE_LOW);
 
         chan1.setLightColor(Color.TRANSPARENT);
         chan1.enableVibration(false);
@@ -374,7 +374,6 @@ public class ApkComposeActivity extends CustomizedLangActivity
             this.findViewById(R.id.succeeded_view).setVisibility(View.GONE);
             this.findViewById(R.id.failed_view).setVisibility(View.VISIBLE);
 
-            this.failedLv.setDivider(null);
             if (errMessage != null) {
                 this.failedLv.setAdapter(new ApkComposeFailAdapter(this, errMessage));
                 Log.d("error", errMessage);
