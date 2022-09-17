@@ -1251,7 +1251,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     Toast.makeText(this, R.string.notfound_in_manifest,
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(this, MfSearchRetActivity.class);
+                    Intent intent = new Intent(this, ManifestSearchResultActivity.class);
                     Bundle bundle = new Bundle();
                     String xmlPath = decodeRootPath + "/AndroidManifest.xml";
                     bundle.putString("filePath", xmlPath);

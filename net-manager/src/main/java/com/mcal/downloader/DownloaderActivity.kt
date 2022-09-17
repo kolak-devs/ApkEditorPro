@@ -8,11 +8,11 @@ import com.mcal.common.activities.CustomizedLangActivity
 
 class DownloaderActivity : CustomizedLangActivity() {
     val tools = listOf(
-        "android-framework.jar" to "https://www.timscriptov.ru/apkeditor/framework/$SDK/android.jar",
-        "aapt" to "https://www.timscriptov.ru/apkeditor/bin/$ABI/aapt",
-        "aapt2" to "https://www.timscriptov.ru/apkeditor/bin/$ABI/aapt2",
-        "mycp" to "https://www.timscriptov.ru/apkeditor/bin/$ABI/mycp",
-        "zipalign" to "https://www.timscriptov.ru/apkeditor/bin/$ABI/zipalign",
+        "android-framework.jar" to "https://timscriptov.ru/apkeditor/framework/$SDK/android.jar",
+        "aapt" to "https://timscriptov.ru/apkeditor/bin/$ABI/aapt",
+        "aapt2" to "https://timscriptov.ru/apkeditor/bin/$ABI/aapt2",
+        "mycp" to "https://timscriptov.ru/apkeditor/bin/$ABI/mycp",
+        "zipalign" to "https://timscriptov.ru/apkeditor/bin/$ABI/zipalign",
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

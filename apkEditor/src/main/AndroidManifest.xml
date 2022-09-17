@@ -73,7 +73,7 @@
         <activity android:name="com.mcal.apkeditor.activities.HelpActivity" />
         <activity android:name="com.mcal.apkeditor.activities.SettingsActivity" />
         <activity
-            android:name="com.mcal.apkeditor.activities.MfSearchRetActivity"
+            android:name="com.mcal.apkeditor.activities.ManifestSearchResultActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name="com.mcal.apkeditor.activities.ApkSearchActivity" />
         <activity android:name="com.mcal.apkeditor.activities.OdexPatchActivity" />
