@@ -20,4 +20,24 @@ object I18n {
             context.resources.displayMetrics
         )
     }
+
+    fun getDocLanguage(): String {
+        return when (Preferences.getAppLanguage()) {
+            "de" -> {
+                "de"
+            }
+            "es" -> {
+                "es"
+            }
+            "hu" -> {
+                "hu"
+            }
+            "ru" -> {
+                "ru"
+            }
+            else -> {
+                "en"
+            }
+        }
+    }
 }

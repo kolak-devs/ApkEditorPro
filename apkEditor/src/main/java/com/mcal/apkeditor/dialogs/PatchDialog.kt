@@ -20,6 +20,7 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection
 import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener
 import com.mcal.apkeditor.patch.interfaces.IPatchContext
+import com.mcal.common.utils.I18n
 import com.mcal.common.utilsOld.IOUtils
 import com.mcal.common.utilsOld.SDCard
 import com.mcal.patchview.ui.CodeText
@@ -56,7 +57,7 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
         val saveExamplesTv = view.findViewById<TextView>(R.id.tv_save_patches)
         saveExamplesTv.setOnClickListener(this)
         webView = view.findViewById(R.id.web_instructions)
-        webView?.loadUrl("file:///android_res/raw/about_patch.html")
+        webView?.loadUrl("file:///android_asset/doc/" + I18n.getDocLanguage() + "/patch.html")
         logLayout = view.findViewById(R.id.log_layout)
         logTv = view.findViewById(R.id.tv_patchlog)
         materialDialog = MaterialAlertDialogBuilder(activity)
@@ -103,7 +104,8 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
             ret = ret or extractExamples("patch_Ultima_SignHook.zip")
             ret = ret or extractExamples("patch_Ultima_VipSignHook.zip")
             if (ret) {
-                val message = String.format(mActivity.getString(R.string.patch_examples_copied), exampleDir)
+                val message =
+                    String.format(mActivity.getString(R.string.patch_examples_copied), exampleDir)
                 Toast.makeText(mActivity, message, Toast.LENGTH_SHORT)
                     .show()
             }
@@ -233,7 +235,8 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
         }
         patchPath = filePath
         patchPathTv?.text = patchPath
-        materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.setText(R.string.apply_the_patch)
+        materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)
+            ?.setText(R.string.apply_the_patch)
         materialDialog?.show()
     }
 
@@ -332,8 +335,10 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
 
     override fun patchFinished() {
         mActivity.runOnUiThread {
-            materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.setText(R.string.patch_applied)
-            materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)?.setBackgroundColor(-0x9f9fa0)
+            materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)
+                ?.setText(R.string.patch_applied)
+            materialDialog?.getButton(DialogInterface.BUTTON_POSITIVE)
+                ?.setBackgroundColor(-0x9f9fa0)
             materialDialog?.show()
         }
     }
