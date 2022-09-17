@@ -8,7 +8,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MfSearchRetActivity extends CustomizedLangActivity implements OnClickListener {
-
     private final ArrayList<EditText> editViews = new ArrayList<>();
     private String xmlPath;
     private ArrayList<Integer> lineIndexs;
@@ -37,31 +35,29 @@ public class MfSearchRetActivity extends CustomizedLangActivity implements OnCli
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_mf_searchret);
 
-        Bundle bundle = getIntent().getExtras();
+        final Bundle bundle = getIntent().getExtras();
         this.xmlPath = bundle.getString("filePath");
         this.lineIndexs = bundle.getIntegerArrayList("lineIndexs");
         this.lineContents = bundle.getStringArrayList("lineContents");
-
 
         initView();
     }
 
     private void initView() {
-        TextView titleTv = (TextView) this.findViewById(R.id.title);
-        String format = getResources().getString(R.string.mf_search_ret);
-        String title = String.format(format, lineIndexs.size());
-        titleTv.setText(title);
+        final String format = getResources().getString(R.string.mf_search_ret);
+        final String title = String.format(format, lineIndexs.size());
+        setupToolbar(R.id.toolbar, title, true);
 
-        Button saveBtn = (Button) findViewById(R.id.btn_save);
+        final Button saveBtn = (Button) findViewById(R.id.btn_save);
         saveBtn.setOnClickListener(this);
-        Button closeBtn = (Button) findViewById(R.id.btn_close);
+        final Button closeBtn = (Button) findViewById(R.id.btn_close);
         closeBtn.setOnClickListener(this);
 
-        LinearLayout layout = (LinearLayout) this
-                .findViewById(R.id.result_layout);
-        for (int i = 0; i < lineContents.size(); i++) {
-            EditText et = new EditText(this);
-            et.setText(lineContents.get(i));
+        final LinearLayout layout = (LinearLayout) findViewById(R.id.result_layout);
+        final ArrayList<String> contents = lineContents;
+        for (int i = 0; i < contents.size(); i++) {
+            final EditText et = new EditText(this);
+            et.setText(contents.get(i));
             et.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             layout.addView(et);
 
@@ -71,9 +67,9 @@ public class MfSearchRetActivity extends CustomizedLangActivity implements OnCli
 
     @Override
     public void onClick(@NonNull View v) {
-        int id = v.getId();
+        final int id = v.getId();
         if (id == R.id.btn_close) {
-            this.finish();
+            finish();
         } else if (id == R.id.btn_save) {
             saveModification();
         }
@@ -81,54 +77,55 @@ public class MfSearchRetActivity extends CustomizedLangActivity implements OnCli
 
     private void saveModification() {
         boolean modified = false;
-
+        final ArrayList<EditText> views = editViews;
+        final ArrayList<String> contents = lineContents;
         // Collect the modification
-        for (int i = 0; i < editViews.size(); i++) {
-            EditText et = editViews.get(i);
-            String newStr = et.getText().toString();
-            String oldStr = lineContents.get(i);
+        for (int i = 0; i < views.size(); i++) {
+            final EditText et = views.get(i);
+            final String newStr = et.getText().toString();
+            final String oldStr = contents.get(i);
             if (!oldStr.equals(newStr)) {
-                lineContents.set(i, newStr);
+                contents.set(i, newStr);
                 modified = true;
             }
         }
 
         if (modified) {
             if (saveManifest()) {
-                Toast.makeText(this, R.string.succeed, Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(this, R.string.succeed, Toast.LENGTH_SHORT).show();
                 // To indicate the manifest is modified
-                this.setResult(1);
-                this.finish();
+                setResult(1);
+                finish();
             }
         } else {
-            Toast.makeText(this, R.string.no_change_detected,
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_change_detected, Toast.LENGTH_SHORT).show();
         }
     }
 
     // The value is already collected before calling
     private boolean saveManifest() {
         boolean succeed = false;
+        final String path = xmlPath;
         try {
-            FileOutputStream fos = new FileOutputStream(xmlPath + ".tmp");
-            FileInputStream fis = new FileInputStream(xmlPath);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+            final FileOutputStream fos = new FileOutputStream(path + ".tmp");
+            final FileInputStream fis = new FileInputStream(path);
+            final BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 
             // Read all the contents
-            List<String> allContents = new ArrayList<String>();
+            final List<String> allContents = new ArrayList<>();
             String line = br.readLine();
             while (line != null) {
                 allContents.add(line);
                 line = br.readLine();
             }
 
+            final ArrayList<Integer> indexes = lineIndexs;
             // Revise the content
-            for (int i = 0; i < lineIndexs.size(); i++) {
-                int lineIndex = lineIndexs.get(i) - 1;
-                String newStr = lineContents.get(i);
-                String oldStr = allContents.get(lineIndex);
-                String head = getHeadPadding(oldStr);
+            for (int i = 0; i < indexes.size(); i++) {
+                int lineIndex = indexes.get(i) - 1;
+                final String newStr = lineContents.get(i);
+                final String oldStr = allContents.get(lineIndex);
+                final String head = getHeadPadding(oldStr);
                 allContents.set(lineIndex, head + newStr.trim());
             }
 
@@ -143,7 +140,7 @@ public class MfSearchRetActivity extends CustomizedLangActivity implements OnCli
             fos.close();
 
             // Move temp file to overwrite the origin file
-            new File(xmlPath + ".tmp").renameTo(new File(xmlPath));
+            new File(path + ".tmp").renameTo(new File(path));
 
             succeed = true;
         } catch (Exception e) {
