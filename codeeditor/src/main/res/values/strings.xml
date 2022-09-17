@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="replace">Replace</string>
-
-    <!-- Editor -->
     <string name="layout_tv_last">Last</string>
     <string name="layout_tv_next">Next</string>
     <string name="layout_tv_replace">Replace</string>
@@ -21,8 +18,6 @@
     <string name="undo">Undo</string>
     <string name="redo">Redo</string>
     <string name="search_text">Search Text</string>
-    <string name="action_mode">Action Mode</string>
-    <string name="search_panel">Search Panel</string>
     <string name="switch_language">Switch Language</string>
     <string name="format">Format</string>
     <string name="color_scheme">Color Scheme</string>

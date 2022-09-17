@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_tv_last">Пред.</string>
+    <string name="layout_tv_next">След.</string>
+    <string name="layout_tv_replace">Замен.</string>
+    <string name="layout_tv_replaceAll">Всё</string>
+    <string name="text_to_search">Найти</string>
+    <string name="replacement">Заменить</string>
+    <string name="cursor_actions">Действия курсора</string>
+    <string name="go_to_end">Перейти в конец</string>
+    <string name="move_up">Вверх</string>
+    <string name="move_down">Вниз</string>
+    <string name="move_left">Влево</string>
+    <string name="move_right">Вправо</string>
+    <string name="home">Начало строки</string>
+    <string name="end">Конец строки</string>
+    <string name="switch_color_scheme">Тема</string>
+    <string name="undo">Отменить</string>
+    <string name="redo">Вернуть</string>
+    <string name="search_text">Поиск</string>
+    <string name="switch_language">Синтаксис</string>
+    <string name="format">Форматировать</string>
+    <string name="color_scheme">Тема редактора</string>
+    <string name="wordwrap">Перенос строк</string>
+    <string name="line_number_visibility">Номера строк</string>
+    <string name="pin_line_number">Закреп. номера строк</string>
+    <string name="feature_switches">Настройки</string>
+    <string name="magnifier">Лупа</string>
+    <string name="use_icu_library">Use ICU library</string>
+</resources>
