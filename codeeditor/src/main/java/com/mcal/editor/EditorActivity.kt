@@ -19,11 +19,11 @@ import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utilsOld.FileCopyUtils
 import com.mcal.common.utilsOld.SDCard
 import com.mcal.common.view.ProgressDialog
-import com.mcal.neweditor.R
-import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
 import com.mcal.editor.smali.SmaliMethodsDialogs
 import com.mcal.editor.utils.FileUtils
 import com.mcal.editor.utils.JavaExtractor
+import com.mcal.neweditor.R
+import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
 import io.github.rosemoe.sora.event.*
 import io.github.rosemoe.sora.lang.EmptyLanguage
 import io.github.rosemoe.sora.lang.diagnostic.DiagnosticRegion
@@ -205,7 +205,10 @@ class EditorActivity : CustomizedLangActivity(),
             override fun afterTextChanged(editable: Editable) {
                 if (editable.isNotEmpty()) {
                     try {
-                        binding.editor.searcher.search(editable.toString(), EditorSearcher.SearchOptions(true, true))
+                        binding.editor.searcher.search(
+                            editable.toString(),
+                            EditorSearcher.SearchOptions(true, true)
+                        )
                     } catch (e: PatternSyntaxException) {
                         e.printStackTrace()
                         // Regex error
@@ -609,10 +612,21 @@ class EditorActivity : CustomizedLangActivity(),
         CoroutineScope(Dispatchers.IO).launch {
             filePath?.let { smaliPath ->
                 JadxDecompiler().use { decompiler ->
-                    decompiler.addCustomLoad(SmaliInputPlugin().loadFiles(listOf<Path>(Paths.get(smaliPath.path))))
+                    decompiler.addCustomLoad(
+                        SmaliInputPlugin().loadFiles(
+                            listOf<Path>(
+                                Paths.get(
+                                    smaliPath.path
+                                )
+                            )
+                        )
+                    )
                     decompiler.load()
                     for (cls in decompiler.classes) {
-                        val packageNamePath = File(ScopedStorage.getApkEditorDir().path + File.separator + cls.getPackage().replace(".", "/"))
+                        val packageNamePath = File(
+                            ScopedStorage.getApkEditorDir().path + File.separator + cls.getPackage()
+                                .replace(".", "/")
+                        )
                         if (!packageNamePath.exists()) {
                             packageNamePath.mkdirs()
                         }
@@ -841,11 +855,6 @@ class EditorActivity : CustomizedLangActivity(),
                 editor.searcher.stopSearch()
                 item.isChecked = false
             }
-        } else if (id == R.id.search_am) {
-            binding.replaceEditor.setText("")
-            binding.searchEditor.setText("")
-            editor.searcher.stopSearch()
-            editor.beginSearchMode()
         } else if (id == R.id.switch_colors) {
             val themes = arrayOf(
                 "Light",
@@ -915,7 +924,11 @@ class EditorActivity : CustomizedLangActivity(),
 
     private fun showNavigationMethods() {
         filePath?.let { path ->
-            SmaliMethodsDialogs(this).asyncShowPopup(this, path.path, binding.editor.text.toString())
+            SmaliMethodsDialogs(this).asyncShowPopup(
+                this,
+                path.path,
+                binding.editor.text.toString()
+            )
         }
     }
 
