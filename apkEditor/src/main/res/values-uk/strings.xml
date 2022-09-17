@@ -212,4 +212,6 @@
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
+    <string name="ui_monet_sum_on">App theme has been changed according to your current selected wallpaper</string>
+    <string name="ui_monet_sum_off">Enable Material You dynamic theming support. Needs restart</string>
 </resources>

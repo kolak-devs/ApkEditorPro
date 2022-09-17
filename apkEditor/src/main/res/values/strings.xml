@@ -398,4 +398,6 @@
     -->
     <string name="odex_patcher">Odex patcher</string>
     <string name="tools_manager">Tools Manager</string>
+    <string name="ui_monet_sum_on">App theme has been changed according to your current selected wallpaper</string>
+    <string name="ui_monet_sum_off">Enable Material You dynamic theming support. Needs restart</string>
 </resources>

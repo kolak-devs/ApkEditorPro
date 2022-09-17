@@ -4,6 +4,7 @@ import static com.mcal.common.utils.StringHelperKt.getRandomString;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -112,6 +113,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         cleanData();
 
         cleanHistory();
+
+        // Monet engine is unsupported before A12
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S){
+            getPreferenceScreen().removePreference(findPreference("ui_monet"));
+        }
     }
 
     // Clean the ApkEditor folder except backups

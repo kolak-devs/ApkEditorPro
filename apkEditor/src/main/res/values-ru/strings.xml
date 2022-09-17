@@ -301,4 +301,6 @@
     <string name="odex_patcher">Пропатчить ODEX</string>
     <string name="tools_manager">Управление инструментарием</string>
     <string name="sure_to_exit">Вы действительно хотите выйти?</string>
+    <string name="ui_monet_sum_on">Тема будет изменена на основе системных обоев</string>
+    <string name="ui_monet_sum_off">Включение динамической темы Material You на основе обоев. Требуется перезапуск</string>
 </resources>

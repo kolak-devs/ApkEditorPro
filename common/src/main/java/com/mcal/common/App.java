@@ -42,6 +42,8 @@ public class App extends Application {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         // Support android 12 Monet Engine
-        DynamicColors.applyToActivitiesIfAvailable(this);
+        if (Preferences.isMonetEnabled()) {
+            DynamicColors.applyToActivitiesIfAvailable(this);
+        }
     }
 }

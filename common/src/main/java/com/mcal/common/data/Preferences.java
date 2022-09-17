@@ -1,11 +1,14 @@
 package com.mcal.common.data;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import androidx.preference.PreferenceManager;
 
 import com.mcal.common.App;
+import com.mcal.common.BuildConfig;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.CommandRunner;
 
@@ -125,14 +128,6 @@ public class Preferences {
         App.getPreferences().edit().putString("apkDirectory", directory).apply();
     }
 
-    public static boolean isFullScreen() {
-        return App.getPreferences().getBoolean("FullScreen", false);
-    }
-
-    public static void setFullScreen(boolean mode) {
-        App.getPreferences().edit().putBoolean("FullScreen", mode).apply();
-    }
-
     public static String getListOrder() {
         return App.getPreferences().getString("AppListOrder", "0");
     }
@@ -175,5 +170,13 @@ public class Preferences {
 
     public static void setStringKeywordHistory(String directory) {
         App.getPreferences().edit().putString("string_keywords", directory).apply();
+    }
+
+    /*
+    * Monet Engine (API 31+)
+    */
+    @TargetApi(Build.VERSION_CODES.S)
+    public static boolean isMonetEnabled(){
+        return App.getPreferences().getBoolean("ui_monet",true);
     }
 }
