@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="save_as_projects">
+        <item>Выход</item>
+        <item>Отмена</item>
+        <item>@string/save_as_project</item>
+    </string-array>
     <string-array name="order_key">
         <item>За назвою</item>
         <item>За часом встановлення</item>

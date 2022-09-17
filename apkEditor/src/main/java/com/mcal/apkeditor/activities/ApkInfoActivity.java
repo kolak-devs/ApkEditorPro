@@ -10,6 +10,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -818,26 +819,26 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }
 
         MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(this)
-                .setMessage(R.string.sure_to_exit_editing)
-                .setPositiveButton(R.string.yes, (dialog, which) -> {
-                    if (parseThread != null && parseThread.isAlive()) {
-                        parseThread.stopParse();
-                        parseThread = null;
-                    }
-                    ApkInfoActivity.this.finish();
-                })
-                .setNegativeButton(R.string.no, null);
-        // Not to exit the editor, when for APK Parser
-        if (BuildConfig.PARSER_ONLY) {
-            dlg.setMessage(R.string.sure_to_exit);
-        }
-
-        // Opened from a project
-        // Do not show save button for project, any more
+                .setTitle(R.string.sure_to_exit);
         if (parseThread == null || !parseThread.isAlive()) {
-            dlg.setMessage(R.string.sure_to_exit);
-
-            dlg.setNeutralButton(R.string.save_as_project, (dialog, which) -> saveAsProject());
+                    dlg.setItems(R.array.save_as_projects, (dialog, which) -> {
+                        switch (which) {
+                            case 0: {
+                                finish();
+                                break;
+                            }
+                            case 1: {
+                                break;
+                            }
+                            case 2: {
+                                saveAsProject();
+                                break;
+                            }
+                        }
+                    });
+        } else {
+            dlg.setPositiveButton(android.R.string.ok, (d, i) -> finish());
+            dlg.setNegativeButton(android.R.string.cancel, null);
         }
         dlg.show();
     }
