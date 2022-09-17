@@ -828,6 +828,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                                 break;
                             }
                             case 1: {
+                                dialog.cancel();
                                 break;
                             }
                             case 2: {
