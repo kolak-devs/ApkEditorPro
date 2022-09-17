@@ -10,7 +10,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -90,7 +89,9 @@ import com.mcal.apkeditor.smali.AsyncDecodeTask.IDecodeTaskCallback;
 import com.mcal.apkeditor.translate.PossibleLanguages;
 import com.mcal.apkeditor.translate.TranslateItem;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ApkInfoParser;
+import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
@@ -103,8 +104,8 @@ import com.mcal.common.utilsOld.TextFileReader;
 import com.mcal.common.utilsOld.UriUtils;
 import com.mcal.common.utilsOld.ZipUtils;
 import com.mcal.common.view.ProgressDialog;
-import com.mcal.folderlist.util.OpenFiles;
 import com.mcal.editor.TextEditor;
+import com.mcal.folderlist.util.OpenFiles;
 import com.mcal.pngeditor.PngEditActivity;
 
 import org.jetbrains.annotations.Contract;
@@ -449,7 +450,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             }
             decodeRootPath = ActivityUtils.getParam(getIntent(), "decodeRootPath");
             if (decodeRootPath == null) {
-                String decodeDir = SettingActivity.getDecodeDirectory(this);
+                String decodeDir = FileHelperKt.getDecodeDirectory();
                 if (decodeDir != null) {
                     decodeRootPath = decodeDir + "/decoded";
                 } else {
@@ -821,22 +822,22 @@ public class ApkInfoActivity extends CustomizedLangActivity
         MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.sure_to_exit);
         if (parseThread == null || !parseThread.isAlive()) {
-                    dlg.setItems(R.array.save_as_projects, (dialog, which) -> {
-                        switch (which) {
-                            case 0: {
-                                finish();
-                                break;
-                            }
-                            case 1: {
-                                dialog.cancel();
-                                break;
-                            }
-                            case 2: {
-                                saveAsProject();
-                                break;
-                            }
-                        }
-                    });
+            dlg.setItems(R.array.save_as_projects, (dialog, which) -> {
+                switch (which) {
+                    case 0: {
+                        finish();
+                        break;
+                    }
+                    case 1: {
+                        dialog.cancel();
+                        break;
+                    }
+                    case 2: {
+                        saveAsProject();
+                        break;
+                    }
+                }
+            });
         } else {
             dlg.setPositiveButton(android.R.string.ok, (d, i) -> finish());
             dlg.setNegativeButton(android.R.string.cancel, null);
@@ -1074,7 +1075,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     private void initView() {
         buttonBar = findViewById(R.id.main_radio);
-        buttonBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
+        buttonBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             /**
              * Called when an item in the navigation menu is selected.
@@ -1086,16 +1087,16 @@ public class ApkInfoActivity extends CustomizedLangActivity
              */
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.tab_string:{
+                switch (item.getItemId()) {
+                    case R.id.tab_string: {
                         stringRadioClicked();
                         return true;
                     }
-                    case R.id.tab_resource:{
+                    case R.id.tab_resource: {
                         resRadioClicked();
                         return true;
                     }
-                    case R.id.tab_manifest:{
+                    case R.id.tab_manifest: {
                         manifestRadioClicked();
                         return true;
                     }
@@ -1164,7 +1165,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // DEX/Smali decoding
         this.dexDecodeLayout = findViewById(R.id.dex_decode_layout);
-        if (SettingActivity.isDex2smaliEnabled(this)) {
+        if (Preferences.isDex2smaliEnabled()) {
             this.dex2smaliImage = findViewById(R.id.imageview_dex2smali);
             this.dex2smaliImage.setOnClickListener(this);
             this.dex2smaliImage.setOnLongClickListener(this);
@@ -1401,7 +1402,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         collectAndSaveChangedString();
 
-        if (SettingActivity.isRebuildConfirmEnabled(this)) {
+        if (Preferences.isRebuildConfirmEnabled()) {
             Map<String, String> added = resListAdapter.getAddedFiles();
             Map<String, String> replaced = resListAdapter.getReplacedFiles();
             Set<String> deleted = resListAdapter.getDeletedFiles();
@@ -1621,14 +1622,14 @@ public class ApkInfoActivity extends CustomizedLangActivity
             outputDirFile.mkdir();
         }
 
-        int outputApkRule = SettingActivity.getOutputApkRule(this);
+        final String outputApkRule = Preferences.getOutputApkName();
         String filename;
         switch (outputApkRule) {
-            case 0:
+            case "0":
                 filename = (bSign && BuildConfig.WITH_SIGN) ? apkInfo.pkgName + "_signed" :
                         apkInfo.pkgName + "_unsigned";
                 break;
-            case 2:
+            case "2":
                 filename = (bSign && BuildConfig.WITH_SIGN) ? apkInfo.label + "_signed" :
                         apkInfo.label + "_unsigned";
                 break;
@@ -1750,7 +1751,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     .getDefaultSharedPreferences(this);
             int showTimes = sp.getInt(key, 0);
             if (showTimes < 1) {
-                if (SettingActivity.isDex2smaliEnabled(this)) {
+                if (Preferences.isDex2smaliEnabled()) {
                     Toast.makeText(this, R.string.hide_smali_tip,
                             Toast.LENGTH_LONG).show();
                     Editor editor = sp.edit();

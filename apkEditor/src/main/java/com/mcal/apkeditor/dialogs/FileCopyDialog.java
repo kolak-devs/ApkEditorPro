@@ -12,7 +12,8 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.SettingActivity;
+import com.mcal.common.data.Constants;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ZipUtils;
 
@@ -124,7 +125,7 @@ public class FileCopyDialog {
     }
 
     private void init(Context context) {
-        fileRenameOption = SettingActivity.getFileRenameOption(context);
+        fileRenameOption = Integer.parseInt(Preferences.getFileRenameOption());
 
         materialDialog = new MaterialAlertDialogBuilder(context).create();
         materialDialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getString(android.R.string.ok), (dialog, which) -> {
@@ -172,7 +173,7 @@ public class FileCopyDialog {
     protected void extractFiles(@NonNull CopySource source) throws Exception {
         String targetPath = mTargetFolder + "/" + getName(source.path);
         boolean bExist = new File(targetPath).exists();
-        if (bExist && fileRenameOption == SettingActivity.EXTRACT_AUTORENAME) {
+        if (bExist && fileRenameOption == Constants.EXTRACT_AUTORENAME) {
             targetPath = getTargetNonExistPath(targetPath, source.isDir);
         }
 
@@ -193,7 +194,7 @@ public class FileCopyDialog {
         if (srcFile.isDirectory()) {
             File outputDirFile = new File(targetPath);
             if (outputDirFile.exists()) {
-                if (fileRenameOption == SettingActivity.EXTRACT_AUTORENAME) {
+                if (fileRenameOption == Constants.EXTRACT_AUTORENAME) {
                     outputDirFile = createDirByAddSuffix(targetPath);
                 }
             } else {
@@ -206,7 +207,7 @@ public class FileCopyDialog {
         else {
             File dst = new File(targetPath);
             if (dst.exists()) {
-                if (fileRenameOption == SettingActivity.EXTRACT_AUTORENAME) {
+                if (fileRenameOption == Constants.EXTRACT_AUTORENAME) {
                     dst = getTargetNonExistFile(targetPath, false);
                 }
             }

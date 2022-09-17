@@ -179,4 +179,30 @@ public class Preferences {
     public static boolean isMonetEnabled(){
         return App.getPreferences().getBoolean("ui_monet",true);
     }
+
+    public static String getDecodeDirectory() {
+        return App.getPreferences().getString("DecodeDirectory", null);
+    }
+
+    public static String getOutputApkName() {
+        return App.getPreferences().getString("OutputApkName", "1");
+    }
+
+    public static boolean isDex2smaliEnabled() {
+        return App.getPreferences().getBoolean("SmaliEditingEnabled", true);
+    }
+
+    public static boolean isRebuildConfirmEnabled() {
+        return App.getPreferences().getBoolean("RebuildConfirmation", false);
+    }
+
+    // 0: Auto (by add a number suffix)
+    // 1: overwrite
+    public static String getFileRenameOption() {
+        return App.getPreferences().getString("FileRenameOption", "1");
+    }
+
+    public static String getAppLanguage() {
+        return App.getPreferences().getString("Language", "");
+    }
 }

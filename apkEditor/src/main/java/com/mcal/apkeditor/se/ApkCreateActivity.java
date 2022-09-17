@@ -29,7 +29,6 @@ import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.activities.MainActivity;
-import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.ce.e.ResourceEditor;
@@ -37,6 +36,7 @@ import com.mcal.apkeditor.dex.DexStringEditor;
 import com.mcal.apkeditor.utils.SignHelper;
 import com.mcal.apklib.sign.ImageTools;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utils.ApkInstaller;
@@ -450,13 +450,13 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
 
 
                 String outApkName;
-                String strTail = (BuildConfig.WITH_SIGN ? "_signed" : "_unsigned");
-                int nameRule = SettingActivity.getOutputApkRule(activity);
+                final String strTail = (BuildConfig.WITH_SIGN ? "_signed" : "_unsigned");
+                final String nameRule = Preferences.getOutputApkName();
                 switch (nameRule) {
-                    case 0:
+                    case "0":
                         outApkName = activity.packageName + strTail;
                         break;
-                    case 2:
+                    case "2":
                         outApkName = activity.apkInfo.label + strTail;
                         break;
                     default:
@@ -470,8 +470,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 Map<String, String> replaces = activity.allReplaces;
 
                 // Sign the new APK (or merge it if does not need sign)
-                Map<String, String> jarPath2FilePath = new HashMap<>();
-                jarPath2FilePath.putAll(replaces);
+                Map<String, String> jarPath2FilePath = new HashMap<>(replaces);
 
                 if (BuildConfig.WITH_SIGN) {
                     SignHelper.sign(activity, apkPath, outputApkPath,

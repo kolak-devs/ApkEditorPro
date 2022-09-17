@@ -177,6 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dip"
                     android:layout_weight="1"
+                    android:singleLine="true"
                     android:text="@string/remove"
                     android:visibility="gone" />
 
@@ -188,6 +189,7 @@
                     android:layout_margin="2dp"
                     android:layout_marginEnd="4dip"
                     android:layout_weight="2"
+                    android:singleLine="true"
                     android:text="@string/copy_error_msg"
                     android:visibility="gone" />
 
@@ -198,6 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
                     android:layout_weight="1"
+                    android:singleLine="true"
                     android:text="@string/close" />
 
                 <Button
@@ -208,6 +211,7 @@
                     android:layout_margin="2dp"
                     android:layout_marginEnd="4dip"
                     android:layout_weight="1"
+                    android:singleLine="true"
                     android:text="@string/install" />
 
             </LinearLayout>

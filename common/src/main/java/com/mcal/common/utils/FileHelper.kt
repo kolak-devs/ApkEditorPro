@@ -2,6 +2,7 @@ package com.mcal.common.utils
 
 import android.content.Context
 import android.os.Environment
+import com.mcal.common.data.Preferences
 import com.mcal.common.utilsOld.CommandRunner
 import java.io.*
 import java.nio.charset.Charset
@@ -228,4 +229,33 @@ fun File.cleanup() {
 
 fun InputStream.readText(charset: Charset = Charsets.UTF_8): String {
     return this.bufferedReader(charset).use { it.readText() }
+}
+
+fun getDecodeDirectory(): String?
+{
+    var str = Preferences.getDecodeDirectory()
+    if (str != null) {
+        if (str.endsWith("/")) {
+            str = str.substring(0, str.length - 1)
+        }
+        if (dirCanWrite(str)) {
+            return str
+        }
+    }
+    return null
+}
+
+// Can write to the directory or not
+private fun dirCanWrite(dir: String): Boolean {
+    val f = File(dir)
+    if (f.exists() && f.isDirectory) {
+        val rand = getRandomString(8)
+        val tryF = File(f, rand)
+        val ret = tryF.mkdir()
+        if (ret) {
+            tryF.delete()
+        }
+        return ret
+    }
+    return false
 }

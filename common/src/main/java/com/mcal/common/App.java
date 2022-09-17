@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
@@ -11,6 +12,7 @@ import androidx.preference.PreferenceManager;
 import com.balsikandar.crashreporter.CrashReporter;
 import com.google.android.material.color.DynamicColors;
 import com.mcal.common.data.Preferences;
+import com.mcal.common.utils.I18n;
 
 public class App extends Application {
     @SuppressLint("StaticFieldLeak")
@@ -45,5 +47,12 @@ public class App extends Application {
         if (Preferences.isMonetEnabled()) {
             DynamicColors.applyToActivitiesIfAvailable(this);
         }
+        I18n.setLanguage(this);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        I18n.setLanguage(this);
     }
 }

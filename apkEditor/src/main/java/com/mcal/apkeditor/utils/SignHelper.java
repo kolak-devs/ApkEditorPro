@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.activities.SettingActivity;
 import com.mcal.apklib.sign.SignApk;
 
 import java.io.FileInputStream;
@@ -22,23 +21,21 @@ public class SignHelper {
                             Map<String, String> addedFiles, Set<String> deletedFiles)
             throws IOException {
         AssetManager am = ctx.getAssets();
-        int level = SettingActivity.getCompressionLevel(ctx);
-        // String keyFile = "testkey";
-        String keyName = SettingActivity.getSignKeyName(ctx);
+        String keyName = "testkey";
 
         // Custom Key (keys are from file)
         if (keyName.charAt(0) == 'c' && keyName.charAt(1) == 'u') {
             SharedPreferences sp = PreferenceManager
                     .getDefaultSharedPreferences(ctx);
             String privKeyPath = sp.getString(
-                    SettingActivity.STR_PRIVATEKEYPATH, "");
-            String pubKeyPath = sp.getString(SettingActivity.STR_PUBLICKEYPATH,
+                    "PrivateKeyPath", "");
+            String pubKeyPath = sp.getString("PublicKeyPath",
                     "");
             InputStream publicKeyInput = new FileInputStream(pubKeyPath);
             InputStream privateKeyInput = new FileInputStream(privKeyPath);
             SignApk.signAPK(publicKeyInput, privateKeyInput, sourceApkPath,
                     targetApkPath, addedFiles, deletedFiles, replacedFiles,
-                    level);
+                    9);
         }
         // Keys are in assets
         else {
@@ -46,7 +43,7 @@ public class SignHelper {
             InputStream privateKeyInput = am.open("key/testkey.pk8");
             SignApk.signAPK(publicKeyInput, privateKeyInput, sourceApkPath,
                     targetApkPath, addedFiles, deletedFiles, replacedFiles,
-                    level);
+                    9);
         }
     }
 }
