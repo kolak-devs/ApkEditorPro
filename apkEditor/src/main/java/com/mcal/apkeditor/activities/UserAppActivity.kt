@@ -125,10 +125,23 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                         recyclerView.layoutManager = LinearLayoutManager(context)
                         recyclerView.adapter = adapter
                         searchTextWatcher?.addTextChangedListener(object : TextWatcher {
-                            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
-                            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
+                            override fun onTextChanged(
+                                s: CharSequence,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) = Unit
+
+                            override fun beforeTextChanged(
+                                s: CharSequence,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) = Unit
+
                             override fun afterTextChanged(s: Editable) {
-                                clearSearchText?.visibility = if (s.isEmpty()) View.GONE else View.VISIBLE
+                                clearSearchText?.visibility =
+                                    if (s.isEmpty()) View.GONE else View.VISIBLE
                                 if (adapter.canStartFilterProcess) {
                                     if (!TextUtils.equals(s, lastValue)) {
                                         val constraint = s.toString()
