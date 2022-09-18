@@ -99,23 +99,23 @@ public class ApkComposeActivity extends CustomizedLangActivity
     private String decodeRootPath;
     private boolean codeModified;
     private boolean signAPK;
-    private ApkComposeService.ComposeServiceBinder binder;
+    private ApkComposeService.ComposeServiceBinder mBinder;
     // Use to automatically fix the error
     private ErrorFixManager errFixer;
     // Activity visible or not
     private boolean isActivityVisible;
     // To different the invoke from service
     private String intentAction;
-    private ServiceConnection connection = new ServiceConnection() {
+    private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            binder = (ApkComposeService.ComposeServiceBinder) service;
-
+            final ApkComposeService.ComposeServiceBinder binder = (ApkComposeService.ComposeServiceBinder) service;
+            mBinder = binder;
             // Cancel the notification if invoked from service
             // When activity is created by clicking at the notification, will into following code
             if (Constants.ACTION.MAIN_ACTION.equals(intentAction)) {
-                ApkComposeActivity.this.createdFromNotification = true;
+                createdFromNotification = true;
                 if (!binder.isRunning()) {
                     binder.hideNotification();
                 }
@@ -169,22 +169,22 @@ public class ApkComposeActivity extends CustomizedLangActivity
         createChannel();
 
         Intent intent = getIntent();
-        this.intentAction = intent.getAction();
+        intentAction = intent.getAction();
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_apkcompose);
         initView();
-
         bind2Service();
     }
 
     @Override
     public void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
-        intentAction = intent.getAction();
+        final String action = intent.getAction();
+        intentAction = action;
         // Cancel the notification if invoked from service
-        if (Constants.ACTION.MAIN_ACTION.equals(intentAction)) {
+        final ApkComposeService.ComposeServiceBinder binder = mBinder;
+        if (Constants.ACTION.MAIN_ACTION.equals(action)) {
             if (binder != null && !binder.isRunning()) {
                 binder.hideNotification();
             }
@@ -193,7 +193,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
     private void bind2Service() {
         Intent intent = new Intent(this, ApkComposeService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -204,9 +204,10 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
     @Override
     protected void onDestroy() {
+        final ServiceConnection connection = mConnection;
         if (connection != null) {
             unbindService(connection);
-            connection = null;
+            mConnection = null;
         }
         super.onDestroy();
     }
@@ -299,8 +300,8 @@ public class ApkComposeActivity extends CustomizedLangActivity
         this.composedLayout.setVisibility(View.VISIBLE);
 
         // Clear notification in status bar when activity not finished
-        if (binder != null && isActivityVisible) {
-            binder.hideNotification();
+        if (mBinder != null && isActivityVisible) {
+            mBinder.hideNotification();
         }
 
         AppCompatButton installBtn = this.findViewById(R.id.btn_install);
@@ -509,8 +510,8 @@ public class ApkComposeActivity extends CustomizedLangActivity
             }
             // For free version,
             else {
-                if (binder != null) {
-                    binder.showNotification();
+                if (mBinder != null) {
+                    mBinder.showNotification();
                 }
                 this.finish();
             }
@@ -528,18 +529,18 @@ public class ApkComposeActivity extends CustomizedLangActivity
             return;
         }
 
-        int position = filepath.lastIndexOf("/");
+        final int position = filepath.lastIndexOf("/");
         if (position == -1) {
             return;
         }
 
-        String path = filepath.substring(0, position + 1);
+        final String path = filepath.substring(0, position + 1);
 
-        File file = new File(path);
+        final File file = new File(path);
         if (!file.exists()) {
             return;
         }
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         //intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -553,9 +554,9 @@ public class ApkComposeActivity extends CustomizedLangActivity
     }
 
     private void launchApp() {
-        PackageManager pm = this.getPackageManager();
+        final PackageManager pm = this.getPackageManager();
         try {
-            Intent it = pm.getLaunchIntentForPackage(packageName);
+            final Intent it = pm.getLaunchIntentForPackage(packageName);
             if (null != it) {
                 this.startActivity(it);
             }
@@ -573,7 +574,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
                     @Override
                     public void process() throws Exception {
-                        OdexPatcher patcher = new OdexPatcher(packageName);
+                        final OdexPatcher patcher = new OdexPatcher(packageName);
                         patcher.applyPatch(ApkComposeActivity.this, targetApkPath);
                         this.targetOdex = patcher.targetOdex;
                         if (patcher.errMessage != null) {
@@ -586,8 +587,8 @@ public class ApkComposeActivity extends CustomizedLangActivity
                     public void afterProcess() {
                         if (errMessage == null) {
                             patchSucceed = true;
-                            String fmt = ApkComposeActivity.this.getString(R.string.patch_code_cache_done);
-                            String msg = String.format(fmt, targetOdex);
+                            final String fmt = ApkComposeActivity.this.getString(R.string.patch_code_cache_done);
+                            final String msg = String.format(fmt, targetOdex);
                             patchTip.setText(msg);
                             patchBtn.setText(R.string.launch);
                         } else {
@@ -598,18 +599,18 @@ public class ApkComposeActivity extends CustomizedLangActivity
     }
 
     public void buildAgain() {
-        if (binder != null) {
+        if (mBinder != null) {
             // Set extra AXML Modifier
-            Map<String, Map<String, String>> m = errFixer.getModifications();
-            if (this.binder != null && !m.isEmpty()) {
-                binder.setBuildHooker(createBuildHooker(m));
+            final Map<String, Map<String, String>> m = errFixer.getModifications();
+            if (this.mBinder != null && !m.isEmpty()) {
+                mBinder.setBuildHooker(createBuildHooker(m));
             }
 
             // Switch the layout and build again
             progressTv.setText("");
             composingLayout.setVisibility(View.VISIBLE);
             composedLayout.setVisibility(View.GONE);
-            binder.buildAgain();
+            mBinder.buildAgain();
         }
     }
 
@@ -621,38 +622,36 @@ public class ApkComposeActivity extends CustomizedLangActivity
     }
 
     private void showTipDialog() {
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_tip, null);
-        AppCompatTextView msgTv = view.findViewById(R.id.tv_message);
+        final View view = LayoutInflater.from(this).inflate(R.layout.dialog_tip, null);
+        final AppCompatTextView msgTv = view.findViewById(R.id.tv_message);
         msgTv.setText(R.string.build_still_running_tip);
         final AppCompatCheckBox cb = view.findViewById(R.id.cb_show_once);
 
-        MaterialAlertDialogBuilder tipDlg = new MaterialAlertDialogBuilder(this)
+        final MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.tip)
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                .setPositiveButton(android.R.string.ok, (d, which) -> {
                     // Still running means task is still in status bar
-                    if (binder != null && binder.isRunning()) {
-                        ApkComposeActivity.this.finish();
+                    if (mBinder != null && mBinder.isRunning()) {
+                        finish();
                     }
                     // Remember the option and save to preference
                     if (cb.isChecked()) {
-                        PreferenceUtils.setBoolean(
-                                ApkComposeActivity.this, "donot_show_compose_tip", true);
+                        PreferenceUtils.setBoolean(ApkComposeActivity.this, "donot_show_compose_tip", true);
                     }
                 });
 
-        tipDlg.setView(view);
-
-        tipDlg.show();
+        dialog.setView(view);
+        dialog.show();
     }
 
     private void stopBuildAndGoBack() {
         try {
-            if (binder != null) {
-                binder.stopBuilding();
+            if (mBinder != null) {
+                mBinder.stopBuilding();
             }
 
-            unbindService(connection);
-            connection = null;
+            unbindService(mConnection);
+            mConnection = null;
 
             Intent intent = new Intent(this, ApkComposeService.class);
             stopService(intent);
@@ -673,18 +672,11 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
     @Override
     public void onBackPressed() {
-        if (binder != null && binder.isRunning()) {
-            // For pro version, show tip if needed
-            if (BuildConfig.IS_PRO) {
-                if (!PreferenceUtils.getBoolean(this, "donot_show_compose_tip", false)) {
-                    showTipDialog();
-                } else {
-                    this.finish();
-                }
-            }
-            // For free version, stop the service
-            else {
-                showStopBuildDialog();
+        if (mBinder != null && mBinder.isRunning()) {
+            if (!PreferenceUtils.getBoolean(this, "donot_show_compose_tip", false)) {
+                showTipDialog();
+            } else {
+                this.finish();
             }
         }
         // Build service is not running, just finish this activity
