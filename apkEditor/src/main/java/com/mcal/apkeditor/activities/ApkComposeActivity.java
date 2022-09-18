@@ -229,7 +229,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
         this.fixTipTv = this.findViewById(R.id.tv_fix_tip);
 
         resultTv.setOnClickListener(this);
-        composedLayout.setVisibility(View.INVISIBLE);
+        switchView(true);
 
         // Close button
         AppCompatButton closeBtn = this.findViewById(R.id.btn_close);
@@ -295,8 +295,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
     }
 
     public void composeFinished(boolean ret) {
-        this.composingLayout.setVisibility(View.INVISIBLE);
-        this.composedLayout.setVisibility(View.VISIBLE);
+        switchView(false);
 
         // Clear notification in status bar when activity not finished
         if (binder != null && isActivityVisible) {
@@ -669,6 +668,16 @@ public class ApkComposeActivity extends CustomizedLangActivity
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> stopBuildAndGoBack())
                 .setNegativeButton(android.R.string.no, null);
         confirmDlg.show();
+    }
+
+    private void switchView(boolean loading){
+      if (loading){
+          composingLayout.setVisibility(View.VISIBLE);
+          composedLayout.setVisibility(View.GONE);
+      } else {
+          composingLayout.setVisibility(View.GONE);
+          composedLayout.setVisibility(View.VISIBLE);
+      }
     }
 
     @Override
