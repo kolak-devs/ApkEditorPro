@@ -7,12 +7,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.LruCache
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
@@ -32,10 +29,10 @@ import com.mcal.common.utils.ScopedStorage.externalStoragePath
 import com.mcal.common.utils.ScopedStorage.storageDirectory
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.common.view.ProgressDialog
+import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.folderlist.FolderListWrapper
 import com.mcal.folderlist.IListEventListener
 import com.mcal.folderlist.IListItemProducer
-import com.mcal.editor.TextEditor.getSoraEditor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -67,7 +64,11 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         super.onDestroy()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
         ) {
@@ -76,8 +77,16 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
     }
 
     private fun initWithPermChecking() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                WRITE_EXTERNAL_STORAGE_REQUEST_CODE
+            )
         } else {
             init()
         }
@@ -90,30 +99,22 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         setupToolbar(R.id.toolbar, pathTV, true)
         val listView = findViewById<RecyclerView>(R.id.file_list)
         folderWrapper = FolderListWrapper(this, listView, curDir, rootPath, this, this)
-        val searchApkView = findViewById<EditText>(R.id.search_find)
-        val clearSearchText = findViewById<ImageButton>(R.id.clear_text)
-        clearSearchText?.setOnClickListener {
-            searchApkView?.setText("")
-        }
-        searchApkView.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
-            override fun afterTextChanged(s: Editable) {
-                clearSearchText?.visibility = if (s.isEmpty()) View.GONE else View.VISIBLE
-                val constraint = s.toString()
-                if (constraint.isNotEmpty()) {
-                    val wrapper = folderWrapper
-                    if (wrapper != null) {
-                        wrapper.mAdapter?.getData(null)?.let { currentFolder ->
-                            val intent = Intent(this@FileListActivity, ApkSearchActivity::class.java)
-                            ActivityUtils.attachParam(intent, "Keyword", constraint)
-                            ActivityUtils.attachParam(intent, "Path", currentFolder)
-                            this@FileListActivity.startActivity(intent)
-                        }
+        val search = findViewById<EditText>(R.id.search_find)
+        val searchBtn = findViewById<ImageButton>(R.id.search_text)
+        searchBtn?.setOnClickListener {
+            val constraint = search.text.toString()
+            if (constraint.isNotEmpty()) {
+                val wrapper = folderWrapper
+                if (wrapper != null) {
+                    wrapper.mAdapter?.getData(null)?.let { currentFolder ->
+                        val intent = Intent(this@FileListActivity, ApkSearchActivity::class.java)
+                        ActivityUtils.attachParam(intent, "Keyword", constraint)
+                        ActivityUtils.attachParam(intent, "Path", currentFolder)
+                        this@FileListActivity.startActivity(intent)
                     }
                 }
             }
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -223,7 +224,9 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
             return true
         } else if (filePath.endsWith(".java") || filePath.endsWith(".kt") || filePath.endsWith(".xml") ||
             filePath.endsWith(".smali") || filePath.endsWith(".json") || filePath.endsWith(".cpp") ||
-            filePath.endsWith(".c") || filePath.endsWith(".h") || filePath.endsWith(".hpp") || filePath.endsWith(".txt")
+            filePath.endsWith(".c") || filePath.endsWith(".h") || filePath.endsWith(".hpp") || filePath.endsWith(
+                ".txt"
+            )
         ) {
             val intent = getSoraEditor(this, filePath, null, 0, null)
             startActivity(intent)
@@ -302,7 +305,8 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                     folderWrapper?.let { wrapper ->
                         wrapper.mAdapter?.openDirectory(wrapper.mAdapter?.getData(null))
                     }
-                    Toast.makeText(this@FileListActivity, "Apk signed success", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@FileListActivity, "Apk signed success", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }, -1
         ).show()
