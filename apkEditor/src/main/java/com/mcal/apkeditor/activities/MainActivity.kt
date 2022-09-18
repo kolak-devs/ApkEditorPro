@@ -2,16 +2,13 @@ package com.mcal.apkeditor.activities
 
 import android.Manifest
 import android.content.Context
-import android.content.DialogInterface
-import android.content.DialogInterface.OnClickListener
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Process
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
+import android.widget.CheckBox
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
@@ -29,6 +26,7 @@ import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepte
 import com.mcal.apkeditor.prj.ProjectListActivity
 import com.mcal.apkeditor.utils.Native
 import com.mcal.apkeditor.utils.OnlineMessage
+import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.deleteAll
@@ -38,6 +36,7 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import java.io.File
+import kotlin.system.exitProcess
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     companion object {
@@ -65,7 +64,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupToolbar(R.id.toolbar, getString(R.string.app_name), false)
-        addMenuProvider(object: MenuProvider {
+        addMenuProvider(object : MenuProvider {
             /**
              * Called by the [MenuHost] to allow the [MenuProvider]
              * to inflate [MenuItem]s into the menu.
@@ -159,73 +158,96 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(6, R.drawable.ic_help, R.string.help),
             MainMenuItem(7, R.drawable.ic_exit_to_app, R.string.exit)
         )
-        fastAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
-            when (mainMenuItem.id) {
-                0 -> {
-                    val intent = Intent(this, FileListActivity::class.java)
-                    startActivity(intent)
-                    true
+        fastAdapter.onClickListener =
+            { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
+                when (mainMenuItem.id) {
+                    0 -> {
+                        val intent = Intent(this, FileListActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    1 -> {
+                        val intent = Intent(this, UserAppActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    2 -> {
+                        val intent = Intent(this, ProjectListActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    3 -> {
+                        val intent = Intent(this, OdexPatchActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    4 -> {
+                        val intent = Intent(this, DownloaderActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    5 -> {
+                        val intent = Intent(this, CrashReporterActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    6 -> {
+                        val intent = Intent(this, HelpActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    7 -> {
+                        Process.killProcess(Process.myPid())
+                        exitProcess(0)
+                    }
+                    else -> false
                 }
-                1 -> {
-                    val intent = Intent(this, UserAppActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                2 -> {
-                    val intent = Intent(this, ProjectListActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                3 -> {
-                    val intent = Intent(this, OdexPatchActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                4 -> {
-                    val intent = Intent(this, DownloaderActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                5 -> {
-                    val intent = Intent(this, CrashReporterActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                6 -> {
-                    val intent = Intent(this, HelpActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                7 -> {
-                    Process.killProcess(Process.myPid())
-                    System.exit(0)
-                    true
-                }
-                else -> false
             }
-        }
 
         val msg = findViewById<TextView>(R.id.pirated_version_detected)
-        if (BuildConfig.DEBUG || Native.getSignature(this).startsWith("kQpOVghQhe8XLbkzKM4PynXi8R0=")) {
+        if (BuildConfig.DEBUG || Native.getSignature(this)
+                .startsWith("kQpOVghQhe8XLbkzKM4PynXi8R0=")
+        ) {
             msg.visibility = View.INVISIBLE
         } else {
             msg.visibility = View.INVISIBLE
         }
 
-        //TODO: Tool manager dialog
-        if (Preferences.isFrameworksInstalled()){
+        if (!Preferences.isFrameworksInstalled()) {
             showToolManagerDialog()
         }
     }
 
     private fun showToolManagerDialog() {
-        MaterialAlertDialogBuilder(this)
+        val context = this@MainActivity
+        val params = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        val isNotShowAgain = CheckBox(context).apply {
+            text = getString(R.string.donot_show_again)
+        }
+        isNotShowAgain.setOnCheckedChangeListener { _, p2 ->
+            Preferences.setFrameworksInstalled(p2)
+        }
+
+        val padding = App.dp2px(16f, context).toInt()
+        val container = LinearLayout(context).apply {
+            layoutParams = params
+            orientation = LinearLayout.VERTICAL
+            setPadding(padding, padding, padding, 0)
+            addView(isNotShowAgain)
+        }
+
+        MaterialAlertDialogBuilder(context)
             .setTitle(getString(R.string.dialog_install_frameworks))
             .setMessage(getString(R.string.dialog_install_frameworks_sum))
+            .setView(container)
             .setCancelable(false)
-            .setPositiveButton(android.R.string.ok) { dialog, which ->
-                val intent = Intent(this@MainActivity, DownloaderActivity::class.java)
+            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                val intent = Intent(context, DownloaderActivity::class.java)
                 startActivity(intent)
+                dialog.dismiss()
             }.show()
     }
 

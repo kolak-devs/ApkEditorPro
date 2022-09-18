@@ -207,6 +207,10 @@ public class Preferences {
     }
 
     public static boolean isFrameworksInstalled(){
-        return true;
+        return App.getPreferences().getBoolean("FrameworksInstalled", false);
+    }
+
+    public static void setFrameworksInstalled(boolean mode){
+        App.getPreferences().edit().putBoolean("FrameworksInstalled", mode).apply();
     }
 }
