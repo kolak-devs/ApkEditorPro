@@ -213,4 +213,12 @@ public class Preferences {
     public static void setFrameworksInstalled(boolean mode){
         App.getPreferences().edit().putBoolean("FrameworksInstalled", mode).apply();
     }
+
+    public static void setHideSmaliMsgShown(int mode) {
+        App.getPreferences().edit().putInt("HideSmaliMsgShown", mode).apply();
+    }
+
+    public static int getHideSmaliMsgShown() {
+        return App.getPreferences().getInt("HideSmaliMsgShown", 0);
+    }
 }

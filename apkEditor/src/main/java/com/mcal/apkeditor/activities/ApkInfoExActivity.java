@@ -349,8 +349,8 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             String entryName = null;
             if (filepath.startsWith(decodeRootPath + "/")) {
                 String fileEntry = filepath.substring(decodeRootPath.length() + 1);
-                if (fileEntry2ZipEntry != null) {
-                    entryName = fileEntry2ZipEntry.get(fileEntry);
+                if (mFileEntry2ZipEntry != null) {
+                    entryName = mFileEntry2ZipEntry.get(fileEntry);
                 }
                 if (entryName == null) {
                     entryName = fileEntry;
