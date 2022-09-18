@@ -101,7 +101,7 @@ public class CrashUtil {
                     getSystemService(NOTIFICATION_SERVICE);
             createNotificationChannel(notificationManager, context);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_NOTIFICATION_ID);
-            builder.setSmallIcon(R.drawable.round_warning_24);
+            builder.setSmallIcon(R.drawable.ic_bug_report);
 
             Intent intent = CrashReporter.getLaunchIntent();
             intent.putExtra(Constants.LANDING, isCrash);
