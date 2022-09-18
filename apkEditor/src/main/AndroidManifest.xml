@@ -38,7 +38,7 @@
             android:name="com.mcal.apkeditor.activities.MainActivity"
             android:exported="true">
             <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
@@ -81,6 +81,9 @@
         <activity android:name="com.mcal.apkeditor.prj.ProjectListActivity" />
         <activity android:name="com.mcal.apkeditor.activities.AxmlEditActivity" />
         <activity android:name="com.mcal.apkeditor.activities.EditorHelpActivity" />
+        <activity
+            android:name="com.mcal.apkeditor.ui.fulleditor.FullEditorActivity"
+            android:theme="@style/Theme.Material3.DayNight" />
 
         <activity android:name="com.mcal.pngeditor.PngEditActivity" />
         <activity android:name="com.mcal.pngeditor.HelpActivity" />

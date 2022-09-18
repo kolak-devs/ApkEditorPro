@@ -119,26 +119,4 @@
         style="@style/Widget.Material3.BottomNavigationView"
         app:menu="@menu/menu_apkinfo_navigation"/>
 
-<!--        <RadioButton-->
-<!--            android:id="@+id/tab_string"-->
-<!--            style="@style/main_tab_bottom"-->
-<!--            android:checked="true"-->
-<!--            android:drawableTop="@drawable/round_g_translate_accent_24"-->
-<!--            android:text="@string/string" />-->
-
-<!--        <RadioButton-->
-<!--            android:id="@+id/tab_resource"-->
-<!--            style="@style/main_tab_bottom"-->
-<!--            android:checked="false"-->
-<!--            android:drawableTop="@drawable/round_folder_24"-->
-<!--            android:text="@string/files" />-->
-
-<!--        <RadioButton-->
-<!--            android:id="@+id/tab_manifest"-->
-<!--            style="@style/main_tab_bottom"-->
-<!--            android:checked="false"-->
-<!--            android:drawableTop="@drawable/round_article_24"-->
-<!--            android:text="@string/manifest" />-->
-<!--    </RadioGroup>-->
-
 </LinearLayout>

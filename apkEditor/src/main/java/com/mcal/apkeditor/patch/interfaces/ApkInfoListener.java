@@ -18,4 +18,8 @@ public interface ApkInfoListener {
     boolean isDexDecoded();
 
     void decodeDex(IGeneralCallback patchExecutor);
+
+    // Strings
+    String addLanguageRetError(String strCode);
+    void translateLanguage(String lang);
 }

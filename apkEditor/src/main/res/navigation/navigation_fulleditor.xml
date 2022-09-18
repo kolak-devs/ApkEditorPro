@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_strings">
+
+    <fragment
+        android:id="@+id/navigation_strings"
+        android:name="com.mcal.apkeditor.ui.fulleditor.StringsFragment"
+        android:label="@string/string"
+        tools:layout="@layout/fragment_strings" />
+
+    <fragment
+        android:id="@+id/navigation_resources"
+        android:name="com.mcal.apkeditor.ui.fulleditor.ResourcesFragment"
+        android:label="@string/resource"
+        tools:layout="@layout/fragment_resources" />
+
+    <fragment
+        android:id="@+id/navigation_manifest"
+        android:name="com.mcal.apkeditor.ui.fulleditor.ManifestFragment"
+        android:label="@string/manifest"
+        tools:layout="@layout/fragment_manifest" />
+</navigation>

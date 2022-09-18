@@ -20,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.UserAppActivity.Companion.startFullEditActivity
 import com.mcal.apkeditor.se.SimpleEditActivity
+import com.mcal.apkeditor.ui.fulleditor.FullEditorActivity
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
@@ -244,7 +245,8 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 getString(R.string.simple_edit),
                 getString(R.string.common_edit),
                 getString(R.string.xml_file_edit),
-                getString(R.string.sign_apk)
+                getString(R.string.sign_apk),
+                "TEST"
             )
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
@@ -283,6 +285,15 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 }
                 SIGN_APK -> {
                     sign(filePath, filePath.replace(".apk", "_sign.apk"))
+                    p112.dismiss()
+                }
+                5 -> {
+                    intent = Intent(this, FullEditorActivity::class.java)
+                    intent?.let { i ->
+                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        startActivity(i)
+                        finish()
+                    }
                     p112.dismiss()
                 }
             }

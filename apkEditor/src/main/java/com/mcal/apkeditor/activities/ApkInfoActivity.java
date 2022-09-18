@@ -1784,7 +1784,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     private void initAddLanguageBtn() {
         ImageButton iv = findViewById(R.id.add_language);
-        iv.setOnClickListener(v -> new LanguageSelectDialog(ApkInfoActivity.this, null, null));
+        iv.setOnClickListener(v -> new LanguageSelectDialog(this,this, null, null));
     }
 
     // Set the click listener for translate button
@@ -1812,8 +1812,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // Start a new translation, it may be called by the translation dialog
     // Show the language selection dialog
     public void startNewTranslation() {
-        new LanguageSelectDialog(
-                ApkInfoActivity.this, PossibleLanguages.languages,
+        new LanguageSelectDialog(this, ApkInfoActivity.this, PossibleLanguages.languages,
                 PossibleLanguages.codes);
     }
 

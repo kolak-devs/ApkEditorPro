@@ -135,6 +135,9 @@ android {
         abortOnError false
         checkReleaseBuilds false
     }
+    buildFeatures {
+        viewBinding true
+    }
     namespace 'com.mcal.apkeditor'
 }
 
@@ -169,6 +172,10 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-fragment:2.4.1'
+    implementation 'androidx.navigation:navigation-ui:2.4.1'
+
     implementation 'com.google.android.material:material:1.6.1'
 
     implementation 'org.jetbrains:annotations:23.0.0'

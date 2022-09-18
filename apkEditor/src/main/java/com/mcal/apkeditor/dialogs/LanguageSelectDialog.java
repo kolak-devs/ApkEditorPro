@@ -1,6 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,13 +15,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mcal.androlib.LanguageMapping;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 
-import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 public class LanguageSelectDialog {
-    private final WeakReference<ApkInfoActivity> activityRef;
+    private final Activity mActivity;
+    private final ApkInfoListener mListener;
     private final View contentView;
     private final TextInputEditText codeEt;
     private final boolean isAutoTranslate;
@@ -29,12 +30,13 @@ public class LanguageSelectDialog {
     private String[] languages;
 
     @SuppressLint("InflateParams")
-    public LanguageSelectDialog(ApkInfoActivity activity, String[] _lang, String[] _codes) {
+    public LanguageSelectDialog(ApkInfoListener listener, Activity activity, String[] _lang, String[] _codes) {
+        mListener = listener;
         languages = _lang;
         codes = _codes;
         isAutoTranslate = (languages != null);
 
-        this.activityRef = new WeakReference<>(activity);
+        this.mActivity = activity;
         this.contentView = activity.getLayoutInflater().inflate(R.layout.dialog_selectlanguage, null, false);
         codeEt = contentView.findViewById(R.id.language_code);
         if (isAutoTranslate) { // Do not allow to modify
@@ -73,7 +75,7 @@ public class LanguageSelectDialog {
         // Initialize spinner by setting adapter
         Spinner spinner = contentView.findViewById(R.id.language_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                activityRef.get(), android.R.layout.simple_spinner_item,
+                mActivity, android.R.layout.simple_spinner_item,
                 languages);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -119,19 +121,17 @@ public class LanguageSelectDialog {
 
     // Add a language
     private boolean addLanguage(String strCode) {
-        ApkInfoActivity activity = activityRef.get();
-        String error = activity.addLanguageRetError(strCode);
+        String error = mListener.addLanguageRetError(strCode);
         if (error == null) {
             return true;
         } else {
-            Toast.makeText(activity, error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, error, Toast.LENGTH_SHORT).show();
             return false;
         }
     }
 
     // Translate to target language
     private void translateLanguage(String strCode) {
-        ApkInfoActivity activity = activityRef.get();
-        activity.translateLanguage(strCode);
+        mListener.translateLanguage(strCode);
     }
 }
