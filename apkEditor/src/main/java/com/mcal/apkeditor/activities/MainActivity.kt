@@ -2,6 +2,8 @@ package com.mcal.apkeditor.activities
 
 import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
+import android.content.DialogInterface.OnClickListener
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -17,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
@@ -208,7 +211,22 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         } else {
             msg.visibility = View.INVISIBLE
         }
+
         //TODO: Tool manager dialog
+        if (Preferences.isFrameworksInstalled()){
+            showToolManagerDialog()
+        }
+    }
+
+    private fun showToolManagerDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.dialog_install_frameworks))
+            .setMessage(getString(R.string.dialog_install_frameworks_sum))
+            .setCancelable(false)
+            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                val intent = Intent(this@MainActivity, DownloaderActivity::class.java)
+                startActivity(intent)
+            }.show()
     }
 
     override fun onBackPressed() {

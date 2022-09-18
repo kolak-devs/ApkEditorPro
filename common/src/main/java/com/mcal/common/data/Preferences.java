@@ -205,4 +205,8 @@ public class Preferences {
     public static String getAppLanguage() {
         return App.getPreferences().getString("Language", "");
     }
+
+    public static boolean isFrameworksInstalled(){
+        return true;
+    }
 }
