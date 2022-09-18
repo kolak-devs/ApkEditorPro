@@ -7,7 +7,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -29,7 +28,6 @@ public class ApkSearchActivity extends CustomizedLangActivity implements OnItemC
     private final List<String> apkFileList = new ArrayList<>();
     private String keyword;
     private String searchPath;
-    private TextView titleTV;
     private View searchingLayout;
     private ApkListAdapter apkListAdapter;
 
@@ -65,7 +63,6 @@ public class ApkSearchActivity extends CustomizedLangActivity implements OnItemC
     }
 
     private void initView() {
-        this.titleTV = this.findViewById(R.id.title);
         this.searchingLayout = this.findViewById(R.id.searching_layout);
         ListView apkListView = this.findViewById(R.id.listview_apkfiles);
         this.apkListAdapter = new ApkListAdapter(this);
@@ -89,7 +86,7 @@ public class ApkSearchActivity extends CustomizedLangActivity implements OnItemC
         if ("".equals(keyword)) { // Not show the last "- ''"
             title = title.substring(0, title.length() - 4);
         }
-        titleTV.setText(title);
+        setupToolbar(R.id.toolbar, title, true);
     }
 
     // To notify the searching is done
