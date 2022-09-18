@@ -194,7 +194,8 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     true
                 }
                 7 -> {
-                    finishAndRemoveTask()
+                    Process.killProcess(Process.myPid())
+                    System.exit(0)
                     true
                 }
                 else -> false
