@@ -5,6 +5,7 @@ import brut.androlib.ApkDecoder
 import brut.androlib.options.BuildOptions
 import com.mcal.androlib.util.Logger
 import com.mcal.apkeditor.ApkParseConsumer
+import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ScopedStorage
 import java.io.File
 import java.util.logging.Level
@@ -28,11 +29,11 @@ class TaskDecoder : Logger {
             decoder.setApkFile(apkPath)
             decoder.setBaksmaliDebugMode(false)
             decoder.setFrameworkDir(binFolder)
-            //decoder.setDecodeAssets(ApkDecoder.DECODE_ASSETS_FULL);
-            decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_FULL)
-            //decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_NONE);
-            //decoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_SMALI);
-            decoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_NONE)
+            if (Preferences.isNeedDecodeAssets()) {
+                decoder.setDecodeAssets(ApkDecoder.DECODE_ASSETS_FULL)
+            }
+            decoder.setDecodeResources(if (Preferences.isNeedDecodeResources()) ApkDecoder.DECODE_RESOURCES_FULL else ApkDecoder.DECODE_RESOURCES_NONE)
+            decoder.setDecodeSources(if (Preferences.isNeedDecodeClasses()) ApkDecoder.DECODE_SOURCES_SMALI else ApkDecoder.DECODE_SOURCES_NONE)
             decoder.setOutDir(decodeRootPath)
             decoder.setApiLevel(14)
             decoder.setForceDelete(true)

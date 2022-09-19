@@ -8,7 +8,6 @@ import android.os.Build;
 import androidx.preference.PreferenceManager;
 
 import com.mcal.common.App;
-import com.mcal.common.BuildConfig;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.CommandRunner;
 
@@ -173,11 +172,11 @@ public class Preferences {
     }
 
     /*
-    * Monet Engine (API 31+)
-    */
+     * Monet Engine (API 31+)
+     */
     @TargetApi(Build.VERSION_CODES.S)
-    public static boolean isMonetEnabled(){
-        return App.getPreferences().getBoolean("ui_monet",true);
+    public static boolean isMonetEnabled() {
+        return App.getPreferences().getBoolean("ui_monet", true);
     }
 
     public static String getDecodeDirectory() {
@@ -206,11 +205,11 @@ public class Preferences {
         return App.getPreferences().getString("Language", "");
     }
 
-    public static boolean isFrameworksInstalled(){
+    public static boolean isFrameworksInstalled() {
         return App.getPreferences().getBoolean("FrameworksInstalled", false);
     }
 
-    public static void setFrameworksInstalled(boolean mode){
+    public static void setFrameworksInstalled(boolean mode) {
         App.getPreferences().edit().putBoolean("FrameworksInstalled", mode).apply();
     }
 
@@ -220,5 +219,30 @@ public class Preferences {
 
     public static int getHideSmaliMsgShown() {
         return App.getPreferences().getInt("HideSmaliMsgShown", 0);
+    }
+
+    // Режим декомпиляции
+    public static boolean isNeedDecodeAssets() {
+        return App.getPreferences().getBoolean("isNeedDecodeAssets", false);
+    }
+
+    public static void setDecodeAssets(boolean mode) {
+        App.getPreferences().edit().putBoolean("isNeedDecodeAssets", mode).apply();
+    }
+
+    public static boolean isNeedDecodeResources() {
+        return App.getPreferences().getBoolean("isNeedDecodeResources", true);
+    }
+
+    public static void setDecodeResources(boolean mode) {
+        App.getPreferences().edit().putBoolean("isNeedDecodeResources", mode).apply();
+    }
+
+    public static boolean isNeedDecodeClasses() {
+        return App.getPreferences().getBoolean("isNeedDecodeClasses", false);
+    }
+
+    public static void setDecodeClasses(boolean mode) {
+        App.getPreferences().edit().putBoolean("isNeedDecodeClasses", mode).apply();
     }
 }

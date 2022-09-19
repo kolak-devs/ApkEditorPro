@@ -111,9 +111,7 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
                     p112.dismiss()
                 }
                 FileListActivity.FULL_EDIT -> {
-                    if (startFullEditActivity(this, filePath)) {
-                        finish()
-                    }
+                    startFullEditActivity(this, filePath)
                     p112.dismiss()
                 }
                 FileListActivity.COMMON_EDIT -> {

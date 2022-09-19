@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.activities
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -13,10 +14,7 @@ import android.provider.Settings
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.Window
+import android.view.*
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,12 +25,14 @@ import com.mcal.apkeditor.adapters.AppListAdapter
 import com.mcal.apkeditor.se.SimpleEditActivity
 import com.mcal.appdm.PrefOverallActivity
 import com.mcal.common.activities.CustomizedLangActivity
+import com.mcal.common.data.Preferences
 import com.mcal.common.utils.copyFile
 import com.mcal.common.utils.makeBackupDir
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
+
 
 class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
     var mAdapter: AppListAdapter? = null
@@ -195,9 +195,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                     p112.dismiss()
                 }
                 FULL_EDIT -> {
-                    if (startFullEditActivity(this, filePath)) {
-                        finish()
-                    }
+                    startFullEditActivity(this, filePath)
                     p112.dismiss()
                 }
                 COMMON_EDIT -> {
@@ -352,11 +350,29 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
 
         @JvmStatic
         fun startFullEditActivity(activity: Activity, filePath: String?): Boolean {
-            val intent = Intent(activity, ApkInfoExActivity::class.java)
-            ActivityUtils.attachParam(intent, "apkPath", filePath)
-            val fullDecoding = true
-            ActivityUtils.attachBoolParam(intent, "isFullDecoding", fullDecoding)
-            activity.startActivity(intent)
+            val inflater = activity.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            @SuppressLint("InflateParams") val view: View = inflater.inflate(R.layout.dialog_decode_mode, null)
+            val assets: CheckBox = view.findViewById(R.id.decode_assets)
+            assets.isChecked = Preferences.isNeedDecodeAssets()
+            val resources: CheckBox = view.findViewById(R.id.decode_resources)
+            resources.isChecked = Preferences.isNeedDecodeResources()
+            val classes: CheckBox = view.findViewById(R.id.decode_classes)
+            classes.isChecked = Preferences.isNeedDecodeClasses()
+            val dialog = MaterialAlertDialogBuilder(activity)
+            dialog.setTitle("Режим декодирования")
+            dialog.setView(view)
+            dialog.setPositiveButton(android.R.string.ok) { _, _ ->
+                Preferences.setDecodeAssets(assets.isChecked)
+                Preferences.setDecodeResources(resources.isChecked)
+                Preferences.setDecodeClasses(classes.isChecked)
+                val intent = Intent(activity, ApkInfoExActivity::class.java)
+                ActivityUtils.attachParam(intent, "apkPath", filePath)
+                val fullDecoding = true
+                ActivityUtils.attachBoolParam(intent, "isFullDecoding", fullDecoding)
+                activity.startActivity(intent)
+                activity.finish()
+            }
+            dialog.create().show()
             return true
         }
     }

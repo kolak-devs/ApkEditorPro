@@ -260,9 +260,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                     p112.dismiss()
                 }
                 FULL_EDIT -> {
-                    if (startFullEditActivity(this, filePath)) {
-                        finish()
-                    }
+                    startFullEditActivity(this, filePath)
                     p112.dismiss()
                 }
                 COMMON_EDIT -> {
