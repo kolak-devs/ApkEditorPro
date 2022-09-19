@@ -6,6 +6,7 @@ import brut.androlib.res.data.ResPackage
 import brut.androlib.res.data.ResTable
 import brut.androlib.res.decoder.ARSCDecoder
 import brut.androlib.res.util.ExtFile
+import com.mcal.apkeditor.ui.fulleditor.utils.TaskDecoder
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.deleteAll
 import com.mcal.common.utilsOld.IOUtils
@@ -17,7 +18,7 @@ import java.lang.ref.WeakReference
 import java.util.zip.ZipFile
 
 class ApkParseThread(
-    activity: Activity, consumer: ApkParseConsumer?,
+    activity: Activity, private val consumer: ApkParseConsumer?,
     apkPath: String?, decodeRootPath: String?,
     isFullDecoding: Boolean
 ) : Thread() {
@@ -36,7 +37,7 @@ class ApkParseThread(
         private set
     var errMessage: String? = null
         private set
-    private var decoder: ApkDecoderMine? = null
+
     override fun run() {
         val ret = parse()
         if (!ret) {
@@ -46,23 +47,19 @@ class ApkParseThread(
 
     private fun parse(): Boolean {
         try {
-            val apkFile = ExtFile(File(mApkPath))
-            // After decoding resource table, show string list
-            resTable = getResTable(apkFile)
-            consumerRef.get()?.resTableDecoded(true)
-            resTable?.let { table ->
-                decoder = ApkDecoderMine(table)
-            }
-            deleteAll(File(mDecodeRootPath))
-            val outDir = File(mDecodeRootPath)
-            if (!outDir.exists()) {
-                outDir.mkdirs()
-            }
-
-            // File outDir = new File("/storage/emulated/0/decoded/");
-            decoder?.let { apkDecoder ->
-                apkDecoder.decode(apkFile, outDir)
-                consumerRef.get()?.resourceDecoded(apkDecoder.fileEntry2ZipEntry)
+            val apkPath = mApkPath
+            val decodePath = mDecodeRootPath
+            if (apkPath != null && decodePath != null) {
+                val apkFile = ExtFile(File(apkPath))
+                // After decoding resource table, show string list
+                resTable = getResTable(apkFile)
+                consumerRef.get()?.resTableDecoded(true)
+                deleteAll(File(decodePath))
+                val outDir = File(decodePath)
+                if (!outDir.exists()) {
+                    outDir.mkdirs()
+                }
+                TaskDecoder().decode(consumer, File(apkPath), File(decodePath))
             }
             return true
         } catch (e: Exception) {
