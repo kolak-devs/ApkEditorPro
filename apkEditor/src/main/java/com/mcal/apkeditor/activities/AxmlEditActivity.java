@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.apkeditor.ApkComposeThread;
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.se.ApkCreateActivity;
@@ -29,6 +28,7 @@ import com.mcal.apkeditor.se.ZipFileListAdapter;
 import com.mcal.apkeditor.se.ZipHelper;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ApkInfoParser;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.view.ProgressDialog;
@@ -129,23 +129,13 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
 
     @NonNull
     private String getBinaryPath() {
-        // Play tricks to extract files: borrow ApkComposeThread to extract files
-        ApkComposeThread tmp = new ApkComposeThread(this, null, null, null);
-        tmp.prepare();
-
-        File fileDir = this.getFilesDir();
-        String rootDirectory = fileDir.getAbsolutePath();
-
-        return rootDirectory + "/bin/";
+        return ScopedStorage.getBinDir().getPath();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         // Save APK path
-        {
-            outState.putString("apkPath", this.apkPath);
-        }
-
+        outState.putString("apkPath", apkPath);
         super.onSaveInstanceState(outState);
     }
 

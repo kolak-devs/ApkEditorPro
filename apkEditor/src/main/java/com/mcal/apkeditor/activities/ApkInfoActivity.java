@@ -153,7 +153,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // Define the request code
     private static final int RC_FILE_EDITOR = 0;
     private static final int RC_COMPOSE = 1;
-    private static final int RC_SEARCH_MF = 2; // search manifest
+    public static final int RC_SEARCH_MF = 2; // search manifest
     private static final int RC_COLOR_EDITOR = 3;
     private static final int RC_TRANSLATE = 1000;
     private static final String TMP_EDITOR_FILE = "APKEDITOR.xcrhfvke";
@@ -1784,7 +1784,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     private void initAddLanguageBtn() {
         ImageButton iv = findViewById(R.id.add_language);
-        iv.setOnClickListener(v -> new LanguageSelectDialog(this,this, null, null));
+        iv.setOnClickListener(v -> new LanguageSelectDialog(this, this, null, null));
     }
 
     // Set the click listener for translate button
