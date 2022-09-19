@@ -18,8 +18,7 @@
         <ImageView
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@drawable/round_done_green_24"
-            />
+            android:src="@drawable/round_done_green_24" />
 
         <ProgressBar
             tools:visibility="gone"

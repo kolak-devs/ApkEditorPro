@@ -606,8 +606,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
             // Switch the layout and build again
             progressTv.setText("");
-            composingLayout.setVisibility(View.VISIBLE);
-            composedLayout.setVisibility(View.GONE);
+            switchView(true);
             binder.buildAgain();
         }
     }
