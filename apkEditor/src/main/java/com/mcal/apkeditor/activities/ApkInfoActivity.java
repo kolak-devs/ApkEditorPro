@@ -47,6 +47,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -195,7 +197,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private View resSelectHeader;
     private TextView resSelectTip;
     private LinearLayout manifestLayout;
-    private ListView manifestList;
+    private RecyclerView manifestList;
     private ManifestListAdapter mfListAdapter;
     private LinearLayout loadingLayout;
     private ImageButton patchMenu;
@@ -2286,9 +2288,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         mfListAdapter = new ManifestListAdapter(this,
                 decodeRootPath + "/AndroidManifest.xml", this);
+        manifestList.setLayoutManager(new LinearLayoutManager(this));
         manifestList.setAdapter(mfListAdapter);
-        manifestList.setOnItemClickListener(mfListAdapter);
-        manifestList.setOnItemLongClickListener(mfListAdapter);
 
         // Recover the navigation bar
         if (navigationMgr != null && resCurrentDir != null) {

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.ApkInfoActivity
 import com.mcal.apkeditor.activities.ManifestSearchResultActivity
@@ -17,29 +18,27 @@ import com.mcal.apkeditor.adapters.ManifestListAdapter
 import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter
 import com.mcal.apkeditor.databinding.FragmentManifestBinding
 import com.mcal.apkeditor.ui.fulleditor.FullEditorViewModel
-import java.io.*
+import com.mcal.common.utils.writeToFile
+import java.io.BufferedReader
+import java.io.FileInputStream
+import java.io.InputStreamReader
 
 // TODO TEST
 class ManifestFragment : Fragment(), IManifestChangeCallback {
     private lateinit var binding: FragmentManifestBinding
     private val model: FullEditorViewModel by activityViewModels()
 
-    private var mfKeywordAdapter: AutoCompleteAdapter? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentManifestBinding.inflate(inflater, container, false)
 
         val manifestPath = model.decodedPath + "/AndroidManifest.xml"
-
-        val mfListAdapter = ManifestListAdapter(requireActivity(), manifestPath, this)
-
+        val adapter = ManifestListAdapter(requireActivity(), manifestPath, this)
         val manifestList = binding.manifestList
-        manifestList.adapter = mfListAdapter
-        manifestList.onItemClickListener = mfListAdapter
-        manifestList.onItemLongClickListener = mfListAdapter
+        manifestList.layoutManager = LinearLayoutManager(context)
+        manifestList.adapter = adapter
 
-        mfKeywordAdapter = AutoCompleteAdapter(requireContext(), "mf_keywords")
-        binding.mfKeyword.setAdapter(mfKeywordAdapter)
+        val keywordAdapter = AutoCompleteAdapter(requireContext(), "mf_keywords")
+        binding.mfKeyword.setAdapter(keywordAdapter)
 
         binding.btnSearchMf.setOnClickListener {
             var keyword = binding.mfKeyword.text.toString()
@@ -49,7 +48,7 @@ class ManifestFragment : Fragment(), IManifestChangeCallback {
                     requireContext(), R.string.empty_input_tip, Toast.LENGTH_SHORT
                 ).show()
             } else {
-                mfKeywordAdapter?.addInputHistory(keyword)
+                keywordAdapter.addInputHistory(keyword)
                 val lines = ArrayList<Int>()
                 val lineContents = ArrayList<String>()
                 searchManifest(keyword, lines, lineContents)
@@ -79,27 +78,13 @@ class ManifestFragment : Fragment(), IManifestChangeCallback {
     }
 
     override fun manifestChanged(newContent: String) {
-        var fos: FileOutputStream? = null
-        try {
-            fos = FileOutputStream(model.decodedFailed + "/AndroidManifest.xml")
-            fos.write(newContent.toByteArray())
-            model.manifestModified = true
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-        }
+        writeToFile(model.decodedFailed + "/AndroidManifest.xml", newContent.toByteArray())
+        model.manifestModified = true
     }
 
     // Return line NO and line content
     private fun searchManifest(
-        keyword: String, lineIndexs: MutableList<Int>,
+        keyword: String, lineIndexes: MutableList<Int>,
         lineContents: MutableList<String>
     ) {
         val filePath: String = model.decodedPath + "/AndroidManifest.xml"
@@ -110,7 +95,7 @@ class ManifestFragment : Fragment(), IManifestChangeCallback {
             var index = 1
             while (line != null) {
                 if (line.contains(keyword)) {
-                    lineIndexs.add(index)
+                    lineIndexes.add(index)
                     lineContents.add(line)
                 }
                 line = br.readLine()
