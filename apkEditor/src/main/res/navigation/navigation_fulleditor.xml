@@ -5,21 +5,38 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_strings">
 
+    <!-- fragment
+        android:id="@+id/navigation_host"
+        android:name="com.bogdanova.pies.ui.home.login.LoginFragment"
+        android:label="Авторизация"
+        tools:layout="@layout/fragment_fullscreen">
+
+        <action
+            android:id="@+id/action_HostFragment_to_StringsFragment"
+            app:destination="@id/navigation_strings" />
+        <action
+            android:id="@+id/action_HostFragment_to_ResourcesFragment"
+            app:destination="@id/navigation_resources" />
+        <action
+            android:id="@+id/action_HostFragment_to_ManifestFragment"
+            app:destination="@id/navigation_manifest" />
+    </fragment -->
+
     <fragment
         android:id="@+id/navigation_strings"
-        android:name="com.mcal.apkeditor.ui.fulleditor.StringsFragment"
+        android:name="com.mcal.apkeditor.ui.fulleditor.strings.StringsFragment"
         android:label="@string/string"
         tools:layout="@layout/fragment_strings" />
 
     <fragment
         android:id="@+id/navigation_resources"
-        android:name="com.mcal.apkeditor.ui.fulleditor.ResourcesFragment"
+        android:name="com.mcal.apkeditor.ui.fulleditor.resources.ResourcesFragment"
         android:label="@string/resource"
         tools:layout="@layout/fragment_resources" />
 
     <fragment
         android:id="@+id/navigation_manifest"
-        android:name="com.mcal.apkeditor.ui.fulleditor.ManifestFragment"
+        android:name="com.mcal.apkeditor.ui.fulleditor.manifest.ManifestFragment"
         android:label="@string/manifest"
         tools:layout="@layout/fragment_manifest" />
 </navigation>

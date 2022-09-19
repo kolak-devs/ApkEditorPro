@@ -81,9 +81,7 @@
         <activity android:name="com.mcal.apkeditor.prj.ProjectListActivity" />
         <activity android:name="com.mcal.apkeditor.activities.AxmlEditActivity" />
         <activity android:name="com.mcal.apkeditor.activities.EditorHelpActivity" />
-        <activity
-            android:name="com.mcal.apkeditor.ui.fulleditor.FullEditorActivity"
-            android:theme="@style/Theme.Material3.DayNight" />
+        <activity android:name="com.mcal.apkeditor.ui.fulleditor.FullEditorActivity" />
 
         <activity android:name="com.mcal.pngeditor.PngEditActivity" />
         <activity android:name="com.mcal.pngeditor.HelpActivity" />
