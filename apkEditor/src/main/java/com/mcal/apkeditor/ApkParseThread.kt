@@ -18,13 +18,13 @@ import java.util.zip.ZipFile
 
 class ApkParseThread(
     activity: Activity, consumer: ApkParseConsumer?,
-    apkPath: String, decodeRootPath: String,
+    apkPath: String?, decodeRootPath: String?,
     isFullDecoding: Boolean
 ) : Thread() {
     private val mActivity: Activity
     private val consumerRef: WeakReference<ApkParseConsumer?>
-    private val mApkPath: String
-    private val mDecodeRootPath: String
+    private val mApkPath: String?
+    private val mDecodeRootPath: String?
 
     // Full decoding means to decode all the files include images, assets, libs, and unknown files
     private var isFullDecoding = false
@@ -38,14 +38,7 @@ class ApkParseThread(
         private set
     private var decoder: ApkDecoderMine? = null
     override fun run() {
-        // Play tricks to extract files: borrow ApkComposeThread to extract files
-        val tmp = ApkComposeThread(mActivity, null, null, null)
-        var ret = tmp.prepare()
-        if (!ret) {
-            consumerRef.get()?.decodeFailed(tmp.errMessage)
-            return
-        }
-        ret = parse()
+        val ret = parse()
         if (!ret) {
             consumerRef.get()?.decodeFailed(errMessage)
         }
@@ -53,7 +46,6 @@ class ApkParseThread(
 
     private fun parse(): Boolean {
         try {
-            val activity: Activity = mActivity
             val apkFile = ExtFile(File(mApkPath))
             // After decoding resource table, show string list
             resTable = getResTable(apkFile)
@@ -69,7 +61,7 @@ class ApkParseThread(
 
             // File outDir = new File("/storage/emulated/0/decoded/");
             decoder?.let { apkDecoder ->
-                apkDecoder.decode(activity, apkFile, outDir)
+                apkDecoder.decode(apkFile, outDir)
                 consumerRef.get()?.resourceDecoded(apkDecoder.fileEntry2ZipEntry)
             }
             return true
@@ -81,7 +73,7 @@ class ApkParseThread(
     }
 
     @Throws(AndrolibException::class)
-    private fun getResTable(apkFile: ExtFile, loadMainPkg: Boolean = true): ResTable {
+    private fun getResTable(apkFile: File, loadMainPkg: Boolean = true): ResTable {
         val resTable = ResTable()
         if (loadMainPkg) {
             if (Preferences.isFixMultiRes()) {
@@ -94,7 +86,7 @@ class ApkParseThread(
     }
 
     @Throws(AndrolibException::class)
-    private fun loadOneMainPkg(resTable: ResTable, apkFile: ExtFile): ResPackage? {
+    private fun loadOneMainPkg(resTable: ResTable, apkFile: File): ResPackage? {
         LOGGER.info("Loading resource table of apk file...")
         val pkgs = getOneResPackagesFromApk(
             apkFile, resTable,
@@ -112,7 +104,7 @@ class ApkParseThread(
     }
 
     @Throws(AndrolibException::class)
-    private fun loadMainPkg(resTable: ResTable, apkFile: ExtFile): ResPackage? {
+    private fun loadMainPkg(resTable: ResTable, apkFile: File): ResPackage? {
         LOGGER.info("Loading resource table of apk file...")
         val pkgs = getResPackagesFromApk(
             apkFile, resTable,
@@ -140,7 +132,7 @@ class ApkParseThread(
 
     @Throws(AndrolibException::class)
     private fun getOneResPackagesFromApk(
-        apkFile: ExtFile,
+        apkFile: File,
         resTable: ResTable, keepBroken: Boolean
     ): ResPackage? {
         var zipFile: ZipFile? = null
@@ -178,7 +170,7 @@ class ApkParseThread(
 
     @Throws(AndrolibException::class)
     private fun getResPackagesFromApk(
-        apkFile: ExtFile,
+        apkFile: File,
         resTable: ResTable, keepBroken: Boolean
     ): Array<ResPackage>? {
         var zipFile: ZipFile? = null

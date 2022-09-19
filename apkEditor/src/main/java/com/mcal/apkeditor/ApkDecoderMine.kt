@@ -1,40 +1,30 @@
 package com.mcal.apkeditor
 
-import android.app.Activity
 import brut.androlib.Androlib
 import brut.androlib.AndrolibException
 import brut.androlib.ApkDecoder
 import brut.androlib.options.BuildOptions
 import brut.androlib.res.data.ResTable
 import com.mcal.androlib.util.Logger
-import com.mcal.apkeditor.utils.AssetsInstaller
 import com.mcal.apklib.AXMLParser.IReferenceDecode
+import com.mcal.common.utils.ScopedStorage
 import org.jetbrains.annotations.Contract
 import java.io.File
 import java.util.logging.Level
 
 class ApkDecoderMine(val resTable: ResTable) : IReferenceDecode, Logger {
 
-    // Record all the file entry to zip entry
-    // like res/drawable-hdpi-v4/a.png -> res/drawable-hdpi/a.png
     val fileEntry2ZipEntry: Map<String, String> = HashMap()
-    fun decode(activity: Activity, apkPath: File, decodeRootPath: File) {
-        val binFolder = File(activity.filesDir.toString() + "/bin")
-
-        // Preparing
-        try {
-            AssetsInstaller(activity).install()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    fun decode(apkPath: File, decodeRootPath: File) {
+        val binFolder = ScopedStorage.getBinDir().path
         try {
             val options = BuildOptions()
-            options.frameworkFolderLocation = binFolder.path
+            options.frameworkFolderLocation = binFolder
             val lib = Androlib(options, this)
             val decoder = ApkDecoder(apkPath, lib)
             decoder.setApkFile(apkPath)
             decoder.setBaksmaliDebugMode(false)
-            decoder.setFrameworkDir(binFolder.path) //android-framework.jar
+            decoder.setFrameworkDir(binFolder)
             //decoder.setDecodeAssets(ApkDecoder.DECODE_ASSETS_FULL);
             decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_FULL)
             //decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_NONE);
