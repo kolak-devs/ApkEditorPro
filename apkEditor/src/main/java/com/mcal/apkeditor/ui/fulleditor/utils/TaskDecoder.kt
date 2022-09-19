@@ -1,75 +1,30 @@
-package com.mcal.apkeditor
+package com.mcal.apkeditor.ui.fulleditor.utils
 
-import android.app.Activity
 import brut.androlib.AndrolibException
 import brut.androlib.res.data.ResPackage
 import brut.androlib.res.data.ResTable
 import brut.androlib.res.decoder.ARSCDecoder
-import brut.androlib.res.util.ExtFile
+import com.mcal.apkeditor.ApkDecoderMine
+import com.mcal.apkeditor.ApkParseConsumer
+import com.mcal.apkeditor.ApkParseThread
 import com.mcal.common.data.Preferences
-import com.mcal.common.utils.deleteAll
 import com.mcal.common.utilsOld.IOUtils
 import com.mcal.common.utilsOld.LOGGER
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
-import java.lang.ref.WeakReference
 import java.util.zip.ZipFile
 
-class ApkParseThread(
-    activity: Activity, consumer: ApkParseConsumer?,
-    apkPath: String?, decodeRootPath: String?,
-    isFullDecoding: Boolean
-) : Thread() {
-    private val mActivity: Activity
-    private val consumerRef: WeakReference<ApkParseConsumer?>
-    private val mApkPath: String?
-    private val mDecodeRootPath: String?
-
-    // Full decoding means to decode all the files include images, assets, libs, and unknown files
-    private var isFullDecoding = false
-
-    // Record resource information
+class TaskDecoder {
     var apkPackage: ResPackage? = null
         private set
-    var resTable: ResTable? = null
-        private set
-    var errMessage: String? = null
-        private set
-    private var decoder: ApkDecoderMine? = null
-    override fun run() {
-        val ret = parse()
-        if (!ret) {
-            consumerRef.get()?.decodeFailed(errMessage)
-        }
-    }
 
-    private fun parse(): Boolean {
-        try {
-            val apkFile = ExtFile(File(mApkPath))
-            // After decoding resource table, show string list
-            resTable = getResTable(apkFile)
-            consumerRef.get()?.resTableDecoded(true)
-            resTable?.let { table ->
-                decoder = ApkDecoderMine(table)
-            }
-            deleteAll(File(mDecodeRootPath))
-            val outDir = File(mDecodeRootPath)
-            if (!outDir.exists()) {
-                outDir.mkdirs()
-            }
-
-            // File outDir = new File("/storage/emulated/0/decoded/");
-            decoder?.let { apkDecoder ->
-                apkDecoder.decode(apkFile, outDir)
-                consumerRef.get()?.resourceDecoded(apkDecoder.fileEntry2ZipEntry)
-            }
-            return true
-        } catch (e: Exception) {
-            errMessage = e.message
-            e.printStackTrace()
-        }
-        return false
+    fun decode(consumer: ApkParseConsumer, apkFile: File, decodePath: File) {
+        val table = getResTable(apkFile)
+        consumer.resTableDecoded(true)
+        val decoder = ApkDecoderMine(table)
+        decoder.decode(apkFile, decodePath)
+        consumer.resourceDecoded(decoder.fileEntry2ZipEntry)
     }
 
     @Throws(AndrolibException::class)
@@ -90,7 +45,7 @@ class ApkParseThread(
         LOGGER.info("Loading resource table of apk file...")
         val pkgs = getOneResPackagesFromApk(
             apkFile, resTable,
-            sKeepBroken
+            ApkParseThread.sKeepBroken
         ) ?: return null
         apkPackage = pkgs
         if (apkPackage == null) {
@@ -108,7 +63,7 @@ class ApkParseThread(
         LOGGER.info("Loading resource table of apk file...")
         val pkgs = getResPackagesFromApk(
             apkFile, resTable,
-            sKeepBroken
+            ApkParseThread.sKeepBroken
         ) ?: return null
         when (pkgs.size) {
             1 -> apkPackage = pkgs[0]
@@ -204,18 +159,5 @@ class ApkParseThread(
             }
         }
         return null
-    }
-
-    companion object {
-        // ??
-        var sKeepBroken = false
-    }
-
-    init {
-        mActivity = activity
-        consumerRef = WeakReference(consumer)
-        mApkPath = apkPath
-        mDecodeRootPath = decodeRootPath
-        this.isFullDecoding = isFullDecoding;
     }
 }

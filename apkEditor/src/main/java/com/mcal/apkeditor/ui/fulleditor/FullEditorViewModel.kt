@@ -9,4 +9,6 @@ class FullEditorViewModel : ViewModel() {
     var fileEntry2ZipEntry: MutableMap<String, String>? = null
     var decodedFailed: String? = null
     var isResTableDecoded = false
+
+    var manifestModified = false
 }

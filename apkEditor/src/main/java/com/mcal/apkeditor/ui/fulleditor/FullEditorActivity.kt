@@ -8,14 +8,15 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.mcal.apkeditor.ApkParseConsumer
-import com.mcal.apkeditor.ApkParseThread
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.databinding.ActivityFulleditorBinding
+import com.mcal.apkeditor.ui.fulleditor.utils.TaskDecoder
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.getDecodeDirectory
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.common.view.ProgressDialog
+import java.io.File
 
 class FullEditorActivity : CustomizedLangActivity(), ApkParseConsumer {
     private lateinit var binding: ActivityFulleditorBinding
@@ -56,8 +57,7 @@ class FullEditorActivity : CustomizedLangActivity(), ApkParseConsumer {
                     val decodedPath = viewModel.decodedPath
 
                     if (apkPath != null && decodedPath != null) {
-                        val parseThread = ApkParseThread(this@FullEditorActivity, this@FullEditorActivity, apkPath, decodedPath, viewModel.isFullDecoding)
-                        parseThread.start()
+                        TaskDecoder().decode(this@FullEditorActivity, File(apkPath), File(decodedPath))
                     }
                 }
 
