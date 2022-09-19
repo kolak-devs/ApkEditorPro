@@ -119,8 +119,7 @@ public class ManifestLongClickDlg {
         dialog.setItems(new String[]{activity.getString(R.string.delete_this_line),
                 activity.getString(R.string.extract),
                 activity.getString(R.string.replace),
-                activity.getString(R.string.open_in_new_window),
-                activity.getString(R.string.close)}, (p112, p2) -> {
+                activity.getString(R.string.open_in_new_window)}, (p112, p2) -> {
             switch (p2) {
                 case 0:
                     String errMsg = callback.tryToDeleteSection(lineRec);
@@ -197,9 +196,6 @@ public class ManifestLongClickDlg {
                 case 3:
                     Intent intent = TextEditor.getSoraEditor(activity.getApplicationContext(), xmlPath, null, 0, null);
                     activity.startActivityForResult(intent, 2);
-                    p112.dismiss();
-                    break;
-                case 4:
                     p112.dismiss();
                     break;
             }

@@ -2,18 +2,18 @@ package com.mcal.apkeditor.adapters;
 
 public class LineRecord {
     public String lineData;
-    int lineIndex;
-    int indent;
+    public int lineIndex;
+    public int indent;
     // Section start and end line index
-    int sectionStart;
-    int sectionEnd;
+    public int sectionStart;
+    public int sectionEnd;
 
-    boolean collapsed = false;
-    boolean deleted = false;
+    public boolean collapsed = false;
+    public boolean deleted = false;
     // Section Tag
     private String tag;
 
-    LineRecord(int index, String content, String hanging) {
+    public LineRecord(int index, String content, String hanging) {
         this.lineIndex = index;
         this.lineData = content;
 

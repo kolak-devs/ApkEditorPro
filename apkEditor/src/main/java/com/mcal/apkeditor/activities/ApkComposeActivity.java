@@ -669,14 +669,14 @@ public class ApkComposeActivity extends CustomizedLangActivity
         confirmDlg.show();
     }
 
-    private void switchView(boolean loading){
-      if (loading){
-          composingLayout.setVisibility(View.VISIBLE);
-          composedLayout.setVisibility(View.GONE);
-      } else {
-          composingLayout.setVisibility(View.GONE);
-          composedLayout.setVisibility(View.VISIBLE);
-      }
+    private void switchView(boolean loading) {
+        if (loading) {
+            composingLayout.setVisibility(View.VISIBLE);
+            composedLayout.setVisibility(View.GONE);
+        } else {
+            composingLayout.setVisibility(View.GONE);
+            composedLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

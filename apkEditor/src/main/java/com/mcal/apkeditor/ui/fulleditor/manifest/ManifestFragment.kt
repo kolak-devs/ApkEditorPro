@@ -23,20 +23,25 @@ import java.io.BufferedReader
 import java.io.FileInputStream
 import java.io.InputStreamReader
 
-// TODO TEST
 class ManifestFragment : Fragment(), IManifestChangeCallback {
     private lateinit var binding: FragmentManifestBinding
     private val model: FullEditorViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentManifestBinding.inflate(inflater, container, false)
+        initAdapter()
+        initSearchAdapter()
+        return binding.root
+    }
 
-        val manifestPath = model.decodedPath + "/AndroidManifest.xml"
-        val adapter = ManifestListAdapter(requireActivity(), manifestPath, this)
+    private fun initAdapter() {
+        val adapter = ManifestListAdapter(requireActivity(), model.decodedPath + "/AndroidManifest.xml", this)
         val manifestList = binding.manifestList
         manifestList.layoutManager = LinearLayoutManager(context)
         manifestList.adapter = adapter
+    }
 
+    private fun initSearchAdapter() {
         val keywordAdapter = AutoCompleteAdapter(requireContext(), "mf_keywords")
         binding.mfKeyword.setAdapter(keywordAdapter)
 
@@ -60,8 +65,7 @@ class ManifestFragment : Fragment(), IManifestChangeCallback {
                 } else {
                     val intent = Intent(requireContext(), ManifestSearchResultActivity::class.java)
                     val bundle = Bundle()
-                    val xmlPath: String = manifestPath
-                    bundle.putString("filePath", xmlPath)
+                    bundle.putString("filePath", model.decodedPath + "/AndroidManifest.xml")
                     bundle.putIntegerArrayList("lineIndexs", lines)
                     bundle.putStringArrayList("lineContents", lineContents)
                     intent.putExtras(bundle)
@@ -69,8 +73,6 @@ class ManifestFragment : Fragment(), IManifestChangeCallback {
                 }
             }
         }
-
-        return binding.root
     }
 
     override fun tryToDeleteSection(lineRec: LineRecord?): String? {
@@ -78,7 +80,7 @@ class ManifestFragment : Fragment(), IManifestChangeCallback {
     }
 
     override fun manifestChanged(newContent: String) {
-        writeToFile(model.decodedFailed + "/AndroidManifest.xml", newContent.toByteArray())
+        writeToFile(model.decodedPath + "/AndroidManifest.xml", newContent.toByteArray())
         model.manifestModified = true
     }
 

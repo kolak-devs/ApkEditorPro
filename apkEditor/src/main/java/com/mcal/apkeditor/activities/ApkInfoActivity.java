@@ -197,8 +197,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private View resSelectHeader;
     private TextView resSelectTip;
     private LinearLayout manifestLayout;
-    private RecyclerView manifestList;
-    private ManifestListAdapter mfListAdapter;
+    private RecyclerView manifestRecyclerView;
+    private ManifestListAdapter manifestListAdapter;
     private LinearLayout loadingLayout;
     private ImageButton patchMenu;
     private Button saveBtn;
@@ -1036,9 +1036,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
     public void setManifestModified(boolean bInUiThread) {
         manifestModified = true;
         if (bInUiThread) {
-            mfListAdapter.reload();
+            manifestListAdapter.reload();
         } else {
-            runOnUiThread(() -> mfListAdapter.reload());
+            runOnUiThread(() -> manifestListAdapter.reload());
         }
     }
 
@@ -1097,7 +1097,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         resSelectTip = findViewById(R.id.selection_tip);
 
         manifestLayout = findViewById(R.id.manifest_layout);
-        manifestList = findViewById(R.id.manifest_list);
+        manifestRecyclerView = findViewById(R.id.manifest_list);
         loadingLayout = findViewById(R.id.layout_loading);
 
         if (apkInfo != null) {
@@ -2286,10 +2286,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
         resourceList.setOnItemClickListener(this);
         resourceList.setOnItemLongClickListener(this);
 
-        mfListAdapter = new ManifestListAdapter(this,
-                decodeRootPath + "/AndroidManifest.xml", this);
-        manifestList.setLayoutManager(new LinearLayoutManager(this));
-        manifestList.setAdapter(mfListAdapter);
+        manifestListAdapter = new ManifestListAdapter(this, decodeRootPath + "/AndroidManifest.xml", this);
+        manifestRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        manifestRecyclerView.setAdapter(manifestListAdapter);
 
         // Recover the navigation bar
         if (navigationMgr != null && resCurrentDir != null) {

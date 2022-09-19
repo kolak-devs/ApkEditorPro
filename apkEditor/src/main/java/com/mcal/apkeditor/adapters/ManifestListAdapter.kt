@@ -20,7 +20,8 @@ import java.io.FileReader
 import java.util.*
 
 class ManifestListAdapter(
-    activity: Activity, manifestPath: String,
+    activity: Activity,
+    manifestPath: String,
     callback: IManifestChangeCallback?
 ) : RecyclerView.Adapter<ManifestListAdapter.ManifestViewHolder>(), IManifestChangeCallback, IXmlLineChanged {
     private val mManifestLines: MutableList<LineRecord>
@@ -38,6 +39,53 @@ class ManifestListAdapter(
         initData()
     }
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ManifestViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_manifestline, parent, false)
+        return ManifestViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: ManifestViewHolder, position: Int) {
+        val item = mManifestLines[position]
+        holder.lineData.apply {
+            text = item.lineData
+            setShowLineNumber(false)
+        }
+        holder.collapseImage.apply {
+            if (item.indent > 0) {
+                visibility = View.VISIBLE
+                setImageBitmap(getImage(item))
+                setOnClickListener {
+                    synchronized(mManifestLines) {
+                        item.collapsed = !item.collapsed
+                        updateDisplayLineData()
+                    }
+                    notifyDataSetChanged()
+                }
+            } else {
+                visibility = View.GONE
+            }
+        }
+        val activity = mActivity
+        holder.itemView.setOnClickListener {
+            XmlLineDialog(activity, this@ManifestListAdapter, item.lineIndex, item.lineData)
+        }
+        holder.itemView.setOnLongClickListener {
+            ManifestLongClickDlg(activity, mManifestPath, item, this@ManifestListAdapter)
+            return@setOnLongClickListener true
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return mManifestLines.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    /**
+     * Инициализация данных
+     */
     private fun initData() {
         try {
             val br = BufferedReader(FileReader(mManifestPath))
@@ -52,8 +100,6 @@ class ManifestListAdapter(
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        // Scan to initialize the line record
         initXmlLines()
     }
 
@@ -65,7 +111,7 @@ class ManifestListAdapter(
                 if (lines.indent <= 0) {
                     continue
                 }
-                // Self ended
+                // Конец блока
                 if (lines.lineData.endsWith("/>")) {
                     lines.sectionStart = lines.lineIndex
                     lines.sectionEnd = lines.lineIndex
@@ -89,52 +135,10 @@ class ManifestListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ManifestViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_manifestline, parent, false)
-        return ManifestViewHolder(itemView)
-    }
-
-    override fun onBindViewHolder(holder: ManifestViewHolder, position: Int) {
-        val rec = mManifestLines[position]
-        holder.lineData.text = rec.lineData
-        holder.lineData.setShowLineNumber(false)
-        if (rec.indent > 0) {
-            holder.collapseImage.visibility = View.VISIBLE
-            holder.collapseImage.setImageBitmap(getImage(rec))
-            holder.collapseImage.setOnClickListener {
-                synchronized(mManifestLines) {
-                    rec.collapsed = !rec.collapsed
-                    updateDisplayLineData()
-                }
-                notifyDataSetChanged()
-            }
-        } else {
-            holder.collapseImage.visibility = View.GONE
-        }
-        holder.itemView.setOnClickListener {
-            val lineRec = mManifestLines[position]
-            XmlLineDialog(
-                mActivity,
-                this@ManifestListAdapter, lineRec.lineIndex, lineRec.lineData
-            )
-        }
-        holder.itemView.setOnLongClickListener {
-            val lineRec = mManifestLines[position]
-            ManifestLongClickDlg(mActivity, mManifestPath, lineRec, this@ManifestListAdapter)
-            return@setOnLongClickListener true
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return mManifestLines.size
-    }
-
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    // Update xmlLinew from allXmlLines according to collapse and deleted
-    // attribute
+    /**
+     * Обновляет данные для свернутого отображения
+     * Пропуск строк и удаление элементов
+     */
     private fun updateDisplayLineData() {
         mManifestLines.clear()
         var i = 0
@@ -146,7 +150,7 @@ class ManifestListAdapter(
             }
             mManifestLines.add(rec)
 
-            // For the collapsed section, skip some lines
+            // Пропускаем несколько строк
             if (rec.collapsed) {
                 if (rec.sectionEnd > i) {
                     i = rec.sectionEnd
