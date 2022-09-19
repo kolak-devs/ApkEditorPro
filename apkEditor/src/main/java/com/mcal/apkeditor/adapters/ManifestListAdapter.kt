@@ -120,7 +120,6 @@ class ManifestListAdapter(
         }
         holder.itemView.setOnLongClickListener {
             val lineRec = mManifestLines[position]
-            // Create and show the dialog.
             ManifestLongClickDlg(mActivity, mManifestPath, lineRec, this@ManifestListAdapter)
             return@setOnLongClickListener true
         }
@@ -172,7 +171,6 @@ class ManifestListAdapter(
             // Draw the arrow
             val canvas = Canvas(bitmap)
             val paint = Paint()
-            //paint.setColor(ContextCompat.getColor(activityRef.get(),R.color.colorGray));
             canvas.drawBitmap(arrow, (width - 48).toFloat(), 0f, paint)
         }
         return bitmap
@@ -207,7 +205,9 @@ class ManifestListAdapter(
         return null
     }
 
-    // Check whether the section can be deleted
+    /**
+     * Проверяет какие блоки можно удалить
+     */
     private fun isSectionDeletable(lineRec: LineRecord): Boolean {
         when (lineRec.sectionTag) {
             "manifest", "application" -> {
@@ -220,16 +220,16 @@ class ManifestListAdapter(
                 return !lineRec.lineData.contains("android.intent.action.MAIN")
             }
             "category" -> {
-                val bContain = lineRec.lineData
-                    .contains("android.intent.category.LAUNCHER")
+                val bContain = lineRec.lineData.contains("android.intent.category.LAUNCHER")
                 return !bContain
             }
             else -> return true
         }
     }
 
-    // Check whether contain main action inside the section represented by
-    // lineRec
+    /**
+     * Если это главная Activity, запретить возможность удаления
+     */
     private fun containMainAction(lineRec: LineRecord): Boolean {
         for (i in lineRec.sectionStart until lineRec.sectionEnd) {
             val rec = mAllXmlLines[i]
@@ -262,10 +262,13 @@ class ManifestListAdapter(
         }
         notifyDataSetChanged()
 
-        // Further callback to save
-        mCallback?.manifestChanged(contentBuffer.toString())
+        manifestChanged(contentBuffer.toString())
     }
 
+    /**
+     * Сообщаем слушателю, что манифест был изменён.
+     * Нужно обновить файл
+     */
     override fun manifestChanged(newContent: String) {
         mCallback?.manifestChanged(newContent)
     }
