@@ -104,7 +104,7 @@ import com.mcal.common.utilsOld.ZipUtils;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 import com.mcal.folderlist.util.OpenFiles;
-import com.mcal.pngeditor.PngEditActivity;
+import com.mcal.pngeditor.PhotoViewerActivity;
 
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlSerializer;
@@ -2452,7 +2452,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 File f = new File(filePath);
                 modifiedTimeBeforeOpen = f.lastModified();
                 if (fileName.endsWith(".png")) {
-                    Intent intent = new Intent(this, PngEditActivity.class);
+                    Intent intent = new Intent(this, PhotoViewerActivity.class);
                     ActivityUtils.attachParam(intent, "filePath", filePath);
                     startActivityForResult(intent, RC_OPEN_EXTERNAL);
                 } else {

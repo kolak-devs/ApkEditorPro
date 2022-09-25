@@ -25,7 +25,7 @@ import com.mcal.common.utils.ZipImageZoomer;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.ImageZoomer;
 import com.mcal.common.view.DynamicExpandListView;
-import com.mcal.imageviewlib.ViewZipImageActivity;
+import com.mcal.pngeditor.ViewZipImageActivity;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;

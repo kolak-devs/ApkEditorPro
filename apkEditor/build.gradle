@@ -155,7 +155,6 @@ dependencies {
     implementation project(':apklib')
     implementation project(':common')
     implementation project(':codeeditor')
-    implementation project(':pngeditor')
     implementation project(':imageview')
     implementation project(':apksigner')
     implementation project(':dataeditor')

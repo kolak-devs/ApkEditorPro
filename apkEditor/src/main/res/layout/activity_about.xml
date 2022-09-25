@@ -64,7 +64,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="Мощный инструмент для редактирования Android приложений" />
+                                android:text="Мощный инструмент для тестирования и выявления уязвимостей в Android приложениях" />
 
                         </LinearLayout>
 
@@ -99,7 +99,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="1.12.6" />
+                                android:text="2.0.1" />
 
                         </LinearLayout>
 
@@ -218,190 +218,8 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:cardCornerRadius="6dp"
-                app:cardElevation="2dp"
-                app:strokeColor="?colorPrimaryContainer"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/about_donate"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:gravity="center|top"
-                        android:onClick="donateTon"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="54dp"
-                            android:layout_height="54dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_ton_coin" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:text="TON Coin"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:text="EQBw0AcMsqJ7slxDD8u8bo2frsqWizASHLHmlNkte6giZWBE" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:gravity="center|top"
-                        android:onClick="donatePayPal"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="54dp"
-                            android:layout_height="54dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_paypal" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:text="PayPal"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:text="https://www.paypal.me/timscriptov" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:gravity="center|top"
-                        android:onClick="donateQiwi"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="54dp"
-                            android:layout_height="54dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_qiwi" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:text="Qiwi"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:text="https://qiwi.com/p/79025916451" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:gravity="center|top"
-                        android:onClick="donateYandexMoney"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="54dp"
-                            android:layout_height="54dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_yandex_money" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:text="Yandex Money"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:text="4100117726163824" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="2dp"
