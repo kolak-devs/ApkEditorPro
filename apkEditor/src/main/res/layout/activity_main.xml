@@ -14,11 +14,11 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:titleEnabled="false">
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
                 android:layout_height="wrap_content"
                 app:titleTextAppearance="@style/AppTheme.ToolbarStyle"
                 app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Body1"
