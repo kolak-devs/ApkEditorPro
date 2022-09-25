@@ -63,7 +63,7 @@
         <activity android:name="com.mcal.apkeditor.activities.CommonEditActivity" />
 
         <activity android:name="com.mcal.apkeditor.se.ApkCreateActivity" />
-        <activity android:name="com.mcal.imageviewlib.ViewZipImageActivity" />
+        <activity android:name="com.mcal.pngeditor.ViewZipImageActivity" />
         <activity
             android:name="com.mcal.apkeditor.activities.ApkComposeActivity"
             android:launchMode="singleTask"
@@ -83,8 +83,7 @@
         <activity android:name="com.mcal.apkeditor.activities.EditorHelpActivity" />
         <activity android:name="com.mcal.apkeditor.ui.fulleditor.FullEditorActivity" />
 
-        <activity android:name="com.mcal.pngeditor.PngEditActivity" />
-        <activity android:name="com.mcal.pngeditor.HelpActivity" />
+        <activity android:name="com.mcal.pngeditor.PhotoViewerActivity" />
 
         <service android:name="com.mcal.apkeditor.ApkComposeService" />
 

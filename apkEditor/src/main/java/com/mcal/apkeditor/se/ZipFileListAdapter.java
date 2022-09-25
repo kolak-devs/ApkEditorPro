@@ -30,7 +30,7 @@ import com.mcal.common.utilsOld.ImageZoomer;
 import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
-import com.mcal.imageviewlib.ViewZipImageActivity;
+import com.mcal.pngeditor.ViewZipImageActivity;
 
 import org.jetbrains.annotations.Contract;
 

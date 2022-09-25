@@ -14,11 +14,28 @@ open class CustomizedLangActivity : SwipeBackActivity() {
         setEdgeLevel(SwipeBackLayout.EdgeLevel.MIN)
     }
 
-    fun setupToolbar(id: Int, text: String?, back: Boolean) {
+    fun setupToolbar(
+        id: Int, text: String?, back: Boolean = false,
+    ) {
         val toolbar = findViewById<MaterialToolbar>(id)
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             title = text
+            setDisplayHomeAsUpEnabled(back)
+            setDisplayShowHomeEnabled(back)
+        }
+    }
+
+    fun setupToolbar(
+        id: Int, text: String?, message: String = "",  back: Boolean = false,
+    ) {
+        val toolbar = findViewById<MaterialToolbar>(id)
+        setSupportActionBar(toolbar)
+        supportActionBar?.apply {
+            title = text
+            if (message.isNotEmpty()) {
+                subtitle = message
+            }
             setDisplayHomeAsUpEnabled(back)
             setDisplayShowHomeEnabled(back)
         }
