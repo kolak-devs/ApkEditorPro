@@ -14,7 +14,7 @@ import androidx.preference.PreferenceManager;
 import com.balsikandar.crashreporter.CrashReporter;
 import com.google.android.material.color.DynamicColors;
 import com.mcal.common.data.Preferences;
-import com.mcal.common.utils.I18n;
+import com.mcal.common.utils.LocaleManager;
 
 public class App extends Application {
     @SuppressLint("StaticFieldLeak")
@@ -49,13 +49,13 @@ public class App extends Application {
         if (Preferences.isMonetEnabled()) {
             DynamicColors.applyToActivitiesIfAvailable(this);
         }
-        I18n.setLanguage(this);
+        LocaleManager.apply();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        I18n.setLanguage(this);
+        LocaleManager.apply();
     }
 
     /**

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdk 26
-        targetSdk 32
+        targetSdk 33
     }
 
     buildTypes {
@@ -27,7 +27,7 @@ dependencies {
     implementation project(':crashreporter')
     implementation project(":melissa")
 
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'com.google.android.material:material:1.6.1'
 

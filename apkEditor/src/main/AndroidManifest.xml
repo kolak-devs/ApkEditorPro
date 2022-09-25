@@ -23,6 +23,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="r">
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
         <meta-data
             android:name="com.mcal.publish_channel"
             android:value="gplay" />
@@ -32,8 +40,7 @@
             android:value="ApkEditor" />
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.1" />
-
+            android:value="2.3" />
         <activity
             android:name="com.mcal.apkeditor.activities.MainActivity"
             android:exported="true">

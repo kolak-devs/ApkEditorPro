@@ -1,24 +1,19 @@
 package com.mcal.common.utils
 
-import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import com.mcal.common.data.Preferences
-import java.util.*
 
-object I18n {
+object LocaleManager {
     @JvmStatic
-    fun setLanguage(context: Context) {
-        val defaultLocale = context.resources.configuration.locale
-        val config = context.resources.configuration
+    fun apply() {
         val language = Preferences.getAppLanguage()
+        val locales = LocaleListCompat.forLanguageTags(language)
         if (language.isNullOrEmpty()) {
-            config.setLocale(Locale.getDefault())
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.getDefault())
         } else {
-            config.setLocale(Locale(language))
+            AppCompatDelegate.setApplicationLocales(locales)
         }
-        if (defaultLocale != config.locale) context.resources.updateConfiguration(
-            config,
-            context.resources.displayMetrics
-        )
     }
 
     fun getDocLanguage(): String {

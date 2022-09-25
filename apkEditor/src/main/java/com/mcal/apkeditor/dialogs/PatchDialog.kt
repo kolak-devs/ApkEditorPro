@@ -20,7 +20,7 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection
 import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener
 import com.mcal.apkeditor.patch.interfaces.IPatchContext
-import com.mcal.common.utils.I18n
+import com.mcal.common.utils.LocaleManager
 import com.mcal.common.utilsOld.IOUtils
 import com.mcal.common.utilsOld.SDCard
 import com.mcal.patchview.ui.CodeText
@@ -57,7 +57,7 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
         val saveExamplesTv = view.findViewById<TextView>(R.id.tv_save_patches)
         saveExamplesTv.setOnClickListener(this)
         webView = view.findViewById(R.id.web_instructions)
-        webView?.loadUrl("file:///android_asset/doc/" + I18n.getDocLanguage() + "/patch.html")
+        webView?.loadUrl("file:///android_asset/doc/" + LocaleManager.getDocLanguage() + "/patch.html")
         logLayout = view.findViewById(R.id.log_layout)
         logTv = view.findViewById(R.id.tv_patchlog)
         materialDialog = MaterialAlertDialogBuilder(activity)

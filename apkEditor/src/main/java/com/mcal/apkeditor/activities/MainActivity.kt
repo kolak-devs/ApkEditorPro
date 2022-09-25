@@ -216,6 +216,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         if (!Preferences.isFrameworksInstalled()) {
             showToolManagerDialog()
         }
+
     }
 
     private fun showToolManagerDialog() {

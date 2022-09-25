@@ -3,14 +3,14 @@ package com.mcal.common.activities
 import android.os.Bundle
 import android.view.MenuItem
 import com.google.android.material.appbar.MaterialToolbar
-import com.mcal.common.utils.I18n
+import com.mcal.common.utils.LocaleManager
 import ru.svolf.melissa.swipeback.SwipeBackActivity
 import ru.svolf.melissa.swipeback.SwipeBackLayout
 
 open class CustomizedLangActivity : SwipeBackActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        I18n.setLanguage(this)
+        LocaleManager.apply()
         setEdgeLevel(SwipeBackLayout.EdgeLevel.MIN)
     }
 
