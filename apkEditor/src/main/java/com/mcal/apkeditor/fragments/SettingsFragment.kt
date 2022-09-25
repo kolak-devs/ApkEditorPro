@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
 import com.mcal.common.data.Preferences
@@ -36,7 +37,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
         // Monet engine is unsupported before A12
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            preferenceScreen.removePreference(findPreference("ui_monet")!!)
+            findPreference<SwitchPreference>("ui_monet")?.isEnabled = false
         }
     }
 
