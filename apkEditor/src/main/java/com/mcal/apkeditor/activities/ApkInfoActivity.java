@@ -2451,7 +2451,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 entryNameForExternal = entryName;
                 File f = new File(filePath);
                 modifiedTimeBeforeOpen = f.lastModified();
-                if (fileName.endsWith(".png")) {
+                if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
                     Intent intent = new Intent(this, PhotoViewerActivity.class);
                     ActivityUtils.attachParam(intent, "filePath", filePath);
                     startActivityForResult(intent, RC_OPEN_EXTERNAL);

@@ -34,6 +34,8 @@ import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.folderlist.FolderListWrapper
 import com.mcal.folderlist.IListEventListener
 import com.mcal.folderlist.IListItemProducer
+import com.mcal.folderlist.util.OpenFiles.openFile
+import com.mcal.pngeditor.PhotoViewerActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -232,6 +234,12 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
             val intent = getSoraEditor(this, filePath, null, 0, null)
             startActivity(intent)
             return true
+        } else if (filePath.endsWith(".png") || filePath.endsWith(".jpg")) {
+            val intent = Intent(this, PhotoViewerActivity::class.java)
+            ActivityUtils.attachParam(intent, "filePath", filePath)
+            startActivityForResult(intent, ApkInfoActivity.RC_OPEN_EXTERNAL)
+        } else {
+            openFile(this, filePath, ApkInfoActivity.RC_OPEN_EXTERNAL)
         }
         return false
     }
