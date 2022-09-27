@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
+def Properties versionProps = new Properties()
 
 android {
     compileSdk 33
@@ -9,7 +10,7 @@ android {
 
     def versionPropsFile = file('version.properties')
     if (versionPropsFile.canRead()) {
-        def Properties versionProps = new Properties()
+
         versionProps.load(new FileInputStream(versionPropsFile))
 
         def runTasks = gradle.startParameter.taskNames
@@ -19,6 +20,12 @@ android {
         def versionPatch = versionProps['VERSION_PATCH'].toInteger()
         // increment build number on every gradle sync
         def versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
+        // versionProps['CACHED_VERSION']
+        // Используется для поддержки Instant Run в дебаг режиме. Потому что при инкрементальном обновлении постоянно меняется versionCode
+        // в AndroidManifest.xml из-за чего применение изменений становится невозможным без полной установки приложения.
+        // Этот костыль берет для дебаг версии versionCode с последней релизной сборки и не меняет его на протяжении всего процесса debug сборок,
+        // обновляется на новое, в тот момент, когда происходит релизная сборка проекта
+
 
         // only in release build
         if (':apkEditor:assembleRelease' in runTasks || 'aR' in runTasks) {
@@ -31,6 +38,8 @@ android {
                 versionMinor = 0;
                 versionMajor++;
             }
+            // sync if release
+            versionProps['CACHED_VERSION'] = versionBuild.toString()
         }
 
         versionProps['VERSION_MAJOR'] = versionMajor.toString()
@@ -62,9 +71,12 @@ android {
 
     buildTypes {
         release {
+            defaultConfig.versionCode = versionProps['VERSION_BUILD'].toInteger()
+
             ndk {
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
             }
+
             minifyEnabled true
             shrinkResources true
             buildConfigField "boolean", "IS_PRO", "true"
@@ -81,6 +93,8 @@ android {
         }
 
         debug {
+            defaultConfig.versionCode = versionProps['CACHED_VERSION'].toInteger()
+
             ndk {
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
             }
@@ -111,7 +125,7 @@ android {
             if (variant.name == "release") {
                 outputFileName = "Apk Editor v.${variant.versionName}-MinAPI${defaultConfig.minSdk}.apk"
             } else {
-                outputFileName = "${variant.name}-${variant.versionName}-(${defaultConfig.versionCode}).apk"
+                outputFileName = "${variant.name}-${variant.versionName}-milestone-(${versionCode}).apk"
             }
         }
     }
