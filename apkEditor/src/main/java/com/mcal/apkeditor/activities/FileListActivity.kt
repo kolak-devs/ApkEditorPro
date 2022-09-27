@@ -34,7 +34,6 @@ import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.folderlist.FolderListWrapper
 import com.mcal.folderlist.IListEventListener
 import com.mcal.folderlist.IListItemProducer
-import com.mcal.folderlist.util.OpenFiles.openFile
 import com.mcal.pngeditor.PhotoViewerActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -238,8 +237,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
             val intent = Intent(this, PhotoViewerActivity::class.java)
             ActivityUtils.attachParam(intent, "filePath", filePath)
             startActivityForResult(intent, ApkInfoActivity.RC_OPEN_EXTERNAL)
-        } else {
-            openFile(this, filePath, ApkInfoActivity.RC_OPEN_EXTERNAL)
+            return true
         }
         return false
     }
