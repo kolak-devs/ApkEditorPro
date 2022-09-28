@@ -2451,7 +2451,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 entryNameForExternal = entryName;
                 File f = new File(filePath);
                 modifiedTimeBeforeOpen = f.lastModified();
-                if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+                if (fileName.substring(fileName.lastIndexOf('.')).matches("jpg|jpeg|png|gif")) {
                     Intent intent = new Intent(this, PhotoViewerActivity.class);
                     ActivityUtils.attachParam(intent, "filePath", filePath);
                     startActivityForResult(intent, RC_OPEN_EXTERNAL);
@@ -2508,11 +2508,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
             } catch (IOException ignored) {
             }
         }
-    }
-
-    private boolean isImageFile(@NonNull String fileName) {
-        return fileName.endsWith(".png") || fileName.endsWith(".jpg")
-                || fileName.endsWith(".bmp");
     }
 
     // filePath: file to be edited

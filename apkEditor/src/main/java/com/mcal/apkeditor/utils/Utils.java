@@ -1,8 +1,11 @@
 package com.mcal.apkeditor.utils;
 
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.mcal.apkeditor.BuildConfig;
 
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -123,10 +126,7 @@ public class Utils {
             return true;
         } else if (param instanceof Boolean[]) {
             return true;
-        } else if (param instanceof Date[]) {
-            return true;
-        }
-        return false;
+        } else return param instanceof Date[];
     }
 
     public static void printCallStack() {
@@ -146,5 +146,9 @@ public class Utils {
                 log("\t" + stackElements[i].toString());
             }
         }
+    }
+
+    public static String getVersionString(){
+        return "v. " + BuildConfig.VERSION_NAME + " [" + Build.SUPPORTED_ABIS[0] + "]";
     }
 }

@@ -10,12 +10,14 @@ import android.view.*
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
@@ -26,6 +28,7 @@ import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepte
 import com.mcal.apkeditor.prj.ProjectListActivity
 import com.mcal.apkeditor.utils.Native
 import com.mcal.apkeditor.utils.OnlineMessage
+import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
@@ -140,6 +143,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     }
 
     private fun initUI() {
+        findViewById<MaterialToolbar>(R.id.toolbar).setSubtitle(Utils.getVersionString())
         val itemAdapter = ItemAdapter<MainMenuItem>()
         val fastAdapter = FastAdapter.with(itemAdapter)
 

@@ -21,8 +21,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:titleTextAppearance="@style/AppTheme.ToolbarStyle"
-                app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:subtitleTextAppearance="@style/AppTheme.ToolbarStyle.Subtitle"
                 tools:menu="@menu/menu_main"
+                app:title="TEST"
                 app:subtitle="AAA"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

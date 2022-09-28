@@ -5,5 +5,5 @@
     <padding
         android:paddingLeft="24dp"
         android:paddingRight="24dp" />
-    <solid android:color="#4DBABABA"/>
+    <solid android:color="#7FBABABA"/>
 </shape>
