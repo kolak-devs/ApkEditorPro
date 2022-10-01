@@ -66,7 +66,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                             override fun process() {
                                 File(getApkEditorDir().path + "/backups").deleteRecursively()
                                 File(getApkEditorDir().path + "/.projects").deleteRecursively()
-                                File(ScopedStorage.filesDir.path + "/decoded").deleteRecursively()
+                                ScopedStorage.getDecodedDir().deleteRecursively()
                             }
 
                             override fun afterProcess() {}

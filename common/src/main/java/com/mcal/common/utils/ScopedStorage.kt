@@ -14,6 +14,13 @@ object ScopedStorage {
         get() = Environment.getExternalStorageDirectory()
 
     @JvmStatic
+    fun getDecodedDir(): File {
+        val path = File(filesDir.path + File.separator + "decoded")
+        if (!path.exists()) path.mkdirs()
+        return path
+    }
+
+    @JvmStatic
     fun getApkEditorDir(): File {
         val path = File("$storageDirectory/ApkEditor")
         if (!path.exists()) path.mkdirs()

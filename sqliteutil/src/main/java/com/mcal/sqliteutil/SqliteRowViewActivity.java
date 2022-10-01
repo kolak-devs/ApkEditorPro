@@ -29,6 +29,7 @@ import com.mcal.common.utils.RootCommand;
 
 import org.jetbrains.annotations.Contract;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,11 +117,7 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
             return;
         }
 
-        String sdDir = ScopedStorage.getStorageDirectory().getPath();
-        if (!sdDir.endsWith("/")) {
-            sdDir += "/";
-        }
-        String workingDir = sdDir + "HackAppData/tmp/";
+        String workingDir = ScopedStorage.getStorageDirectory().getPath() + File.separator + "HackAppData/tmp/";
         this.dbFilePath = workingDir + "tmp.db";
 
         RootCommand rc = new RootCommand();

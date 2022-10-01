@@ -75,10 +75,6 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
         if (!FileHelperKt.exist()) {
             throw new Exception("Can not find SD Card!");
         }
-        String sdDir = ScopedStorage.getStorageDirectory().getPath();
-        if (!sdDir.endsWith("/")) {
-            sdDir += "/";
-        }
 
         File f = new File(getFilesDir(), "work.db");
         this.dbFilePath = f.getPath();

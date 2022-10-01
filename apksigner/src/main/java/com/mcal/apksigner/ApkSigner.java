@@ -3,6 +3,7 @@ package com.mcal.apksigner;
 import com.android.apksigner.ApkSignerTool;
 import com.mcal.common.utils.ScopedStorage;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,9 +16,9 @@ public class ApkSigner {
                 "--out",
                 outputPath,
                 "--key",
-                ScopedStorage.getFilesDir() + "/bin/testkey.pk8",
+                ScopedStorage.getFilesDir() + File.separator + "bin/testkey.pk8",
                 "--cert",
-                ScopedStorage.getFilesDir() + "/bin/testkey.x509.pem"
+                ScopedStorage.getFilesDir() + File.separator + "bin/testkey.x509.pem"
         );
 
         try {

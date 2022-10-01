@@ -99,8 +99,8 @@ import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.StringHelperKt;
 import com.mcal.common.utils.ServiceUtil;
+import com.mcal.common.utils.StringHelperKt;
 import com.mcal.common.utils.TextFileReader;
 import com.mcal.common.utils.UriUtils;
 import com.mcal.common.utils.ZipHelper;
@@ -374,10 +374,10 @@ public class ApkInfoActivity extends CustomizedLangActivity
         ProjectInfo prjInfo = null;
         if (projectName != null) {
             try {
-                 String prjRoot = makeDir(".projects").getPath();
-                 prjInfo = loadProject(prjRoot + projectName);
-                 apkPath = prjInfo.apkPath;
-                 decodeRootPath = prjInfo.decodeRootPath;
+                String prjRoot = makeDir(".projects").getPath();
+                prjInfo = loadProject(prjRoot + File.separator + projectName);
+                apkPath = prjInfo.apkPath;
+                decodeRootPath = prjInfo.decodeRootPath;
             } catch (Exception e) {
                 Toast.makeText(this, R.string.cannot_load_project_info, Toast.LENGTH_LONG).show();
                 this.finish();
@@ -500,7 +500,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 changedValues = stringListAdapter.getChangedValues();
         if (changedValues != null && !changedValues.isEmpty()) {
             this.stringModified = true;
-            String path = workingPath + "changedStringValues";
+            String path = workingPath + File.separator + "changedStringValues";
             writeObjectToFile(path, changedValues);
             state.putString("changedStringValues_file", path);
         }
@@ -516,30 +516,30 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 moveTempFile2ProjectDir(added, replaced, projectDir);
             }
             if (added != null && !added.isEmpty()) {
-                String path = workingPath + "res_added";
+                String path = workingPath + File.separator + "res_added";
                 writeObjectToFile(path, added);
                 state.putString("res_added_file", path);
             }
             if (replaced != null && !replaced.isEmpty()) {
-                String path = workingPath + "res_replaced";
+                String path = workingPath + File.separator + "res_replaced";
                 writeObjectToFile(path, replaced);
                 state.putString("res_replaced_file", path);
             }
             if (deleted != null && !deleted.isEmpty()) {
-                String path = workingPath + "res_deleted";
+                String path = workingPath + File.separator + "res_deleted";
                 writeObjectToFile(path, deleted);
                 state.putString("res_deleted_file", path);
             }
         }
 
         // Do not do it any more as consumes too much time (in case of rotation)
-        String path = workingPath + "allStringValues";
+        String path = workingPath + File.separator + "allStringValues";
         if (saveAll) {
             writeObjectToFile(path, allStringValues);
         }
         state.putString("allStringValues_file", path);
 
-        path = workingPath + "fileEntry2ZipEntry";
+        path = workingPath + File.separator + "fileEntry2ZipEntry";
         if (saveAll && !isFullDecoding) { // when all files decoded, do not need to save the mapping
             writeObjectToFile(path, mFileEntry2ZipEntry);
         }
@@ -602,7 +602,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             String workingPath;
             if (projectName != null) {
                 String prjRoot = makeDir(".projects").getPath();
-                workingPath = prjRoot + projectName + "/";
+                workingPath = prjRoot + File.separator + projectName;
             } else {
                 workingPath = ScopedStorage.getTmpDir().getPath();
             }
@@ -789,7 +789,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                         }
 
                         // Locate the project folder
-                        String projectFolder = parentFolder + projectName;
+                        String projectFolder = parentFolder + File.separator + projectName;
                         projectDir = new File(projectFolder);
                         if (projectDir.exists()) {
                             projectDir = FileCopyDialog.getTargetNonExistFile(projectFolder, true);
@@ -814,9 +814,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
                         // For APK Parser, do not save the state
                         // Rename the file path as "decoded" changed to project name
-                        resListAdapter.renamePathAsFolderRename(decodeRootPath + "/", targetDir.getPath() + "/");
+                        resListAdapter.renamePathAsFolderRename(decodeRootPath, targetDir.getPath() + "/");
 
-                        state = saveCurrentState(projectDir.getPath() + "/", true, projectDir);
+                        state = saveCurrentState(projectDir.getPath(), true, projectDir);
                         if (state == null) {
                             errorMessage = "Cannot save project state.";
                         }
@@ -1586,9 +1586,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
         new Thread(() -> {
             try {
                 String workingPath = ScopedStorage.getTmpDir().getPath();
-                String path = workingPath + "allStringValues";
+                String path = workingPath + File.separator + "allStringValues";
                 writeObjectToFile(path, allStringValues);
-                path = workingPath + "fileEntry2ZipEntry";
+                path = workingPath + File.separator + "fileEntry2ZipEntry";
                 writeObjectToFile(path, fileEntry2ZipEntry);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -2645,7 +2645,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         IFileSelection callback = new IFileSelection() {
             @Override
             public void fileSelectedInDialog(String filePath, String decodedPath, boolean openFile) {
-                String workingDir = ScopedStorage.getApkEditorDir() + "/tmp";
+                String workingDir = ScopedStorage.getTmpDir().getPath();
                 // Selected path contains working dir
                 if (workingDir.startsWith(filePath)) {
                     Toast.makeText(ApkInfoActivity.this,

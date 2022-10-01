@@ -14,6 +14,7 @@ import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 import com.mcal.common.utils.ScopedStorage;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,7 +92,7 @@ public class PatchRuleAddFiles extends PatchRule {
             // Source is a zip file
             else {
                 String tmpDir = ScopedStorage.getTmpDir().getPath();
-                String path = tmpDir + getRandomString(6);
+                String path = tmpDir  + File.separator + getRandomString(6);
                 fos = new FileOutputStream(path);
                 copyFile(input, fos);
                 fos.close();

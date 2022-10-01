@@ -62,7 +62,7 @@ public class FileCopyDialog {
         mDecodeRootPath = decodeRootPath;
         mEntryMapping = entryMapping;
 
-        mTargetFolder = Objects.requireNonNullElseGet(targetFolder, () -> ScopedStorage.getStorageDirectory() + "/ApkEditor");
+        mTargetFolder = Objects.requireNonNullElseGet(targetFolder, () -> ScopedStorage.getApkEditorDir().getPath());
 
         handler = new MyHandler(context, this);
 

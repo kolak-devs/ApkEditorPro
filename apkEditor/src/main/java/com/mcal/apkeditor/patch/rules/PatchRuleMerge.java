@@ -87,7 +87,7 @@ public class PatchRuleMerge extends PatchRule {
 
             // Extract the zip file inside patch
             String tmpDir = ScopedStorage.getTmpDir().getPath();
-            String path = tmpDir + getRandomString(6);
+            String path = tmpDir + File.separator + getRandomString(6);
             fos = new FileOutputStream(path);
             copyFile(input, fos);
             fos.close();

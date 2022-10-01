@@ -117,8 +117,9 @@ class ApkComposeThreadNew(
                 break
             }
             setNextStep(ctx.getString(R.string.cleanup))
-            File(ScopedStorage.storageDirectory.path + "/ApkEditor/tmp").cleanup()
-            File(ScopedStorage.filesDir.path + "/decoded").cleanup()
+            ScopedStorage.getTempDir().cleanup()
+            ScopedStorage.getTmpDir().cleanup()
+            ScopedStorage.getDecodedDir().cleanup()
             tmp.delete()
             succeed = true
         } while (false)

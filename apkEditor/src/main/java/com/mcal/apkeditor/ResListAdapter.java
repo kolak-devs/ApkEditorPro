@@ -1145,14 +1145,14 @@ public class ResListAdapter extends BaseAdapter implements
         if (this.allFileAdded != null) {
             for (Map.Entry<String, String> entry : this.allFileAdded.entrySet()) {
                 if (entry.getValue().startsWith(fromPath)) {
-                    entry.setValue(toDir + entry.getValue().substring(fromPath.length()));
+                    entry.setValue(toDir + File.separator + entry.getValue().substring(fromPath.length()));
                 }
             }
         }
         if (this.allFileReplaced != null) {
             for (Map.Entry<String, String> entry : this.allFileReplaced.entrySet()) {
                 if (entry.getValue().startsWith(fromPath)) {
-                    entry.setValue(toDir + entry.getValue().substring(fromPath.length()));
+                    entry.setValue(toDir + File.separator + entry.getValue().substring(fromPath.length()));
                 }
             }
         }

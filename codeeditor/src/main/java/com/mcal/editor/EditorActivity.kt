@@ -16,7 +16,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utils.ScopedStorage.getTmpDir
 import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
 import com.mcal.editor.smali.SmaliMethodsDialogs
@@ -631,7 +630,7 @@ class EditorActivity : CustomizedLangActivity(),
         }
 
         val workingDirectory: String = try {
-            getTmpDir().path
+            ScopedStorage.getTmpDir().path
         } catch (e: java.lang.Exception) {
             Toast.makeText(this, "Cannot make working directory.", Toast.LENGTH_SHORT).show()
             e.printStackTrace()
@@ -662,7 +661,7 @@ class EditorActivity : CustomizedLangActivity(),
                 withContext(Dispatchers.Main) {
                     if (succeed) {
                         var relativePath = className.substring(1)
-                        var filePath = "$workingDirectory$relativePath.java"
+                        var filePath = "$workingDirectory/$relativePath.java"
                         var fileExist = File(filePath).exists()
                         if (!fileExist) {
                             do {
@@ -670,7 +669,7 @@ class EditorActivity : CustomizedLangActivity(),
                                 val position = relativePath.lastIndexOf('$')
                                 if (position != -1) {
                                     relativePath = relativePath.substring(0, position)
-                                    filePath = "$workingDirectory$relativePath.java"
+                                    filePath = "$workingDirectory/$relativePath.java"
                                     fileExist = File(filePath).exists()
                                     if (fileExist) {
                                         break
@@ -678,7 +677,7 @@ class EditorActivity : CustomizedLangActivity(),
                                 }
 
                                 // Try to get the file in defpackage folder
-                                filePath = workingDirectory + "defpackage/" + relativePath + ".java"
+                                filePath = workingDirectory + File.separator + "defpackage/" + relativePath + ".java"
                                 fileExist = File(filePath).exists()
                                 if (fileExist) {
                                     break

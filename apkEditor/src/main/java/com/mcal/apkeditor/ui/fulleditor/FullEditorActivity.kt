@@ -40,7 +40,7 @@ class FullEditorActivity : CustomizedLangActivity(), ApkParseConsumer {
             if (decodeDir != null) {
                 viewModel.decodedPath = "$decodeDir/decoded"
             } else {
-                viewModel.decodedPath = ScopedStorage.filesDir.path + "/decoded"
+                viewModel.decodedPath = ScopedStorage.getDecodedDir().path
             }
         }
         viewModel.apkPath = ActivityHelper.getParam(intent, "apkPath")

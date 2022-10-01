@@ -2,6 +2,10 @@ package com.mcal.apkeditor.ce.e;
 
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.Contract;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,8 +14,8 @@ import java.io.RandomAccessFile;
 // Designed to edit string inside AXML
 public class AxmlStringEditor {
 
-    private MyInputStream is;
-    private String outputFolder;
+    private final MyInputStream is;
+    private final String outputFolder;
     private String outputFile;
     private MyFileOutput out;
 
@@ -37,14 +41,15 @@ public class AxmlStringEditor {
         }
     }
 
-    protected static int getInt(byte[] buf, int offset) {
+    @Contract(pure = true)
+    protected static int getInt(@NonNull byte[] buf, int offset) {
         return ((int) buf[offset] & 0xff)
                 | (((int) buf[offset + 1] & 0xff) << 8)
                 | (((int) buf[offset + 2] & 0xff) << 16)
                 | (((int) buf[offset + 3] & 0xff) << 24);
     }
 
-    protected static void setInt(byte[] buf, int offset, int value) {
+    protected static void setInt(@NonNull byte[] buf, int offset, int value) {
         buf[offset] = (byte) (value & 0xff);
         buf[offset + 1] = (byte) ((value >> 8) & 0xff);
         buf[offset + 2] = (byte) ((value >> 16) & 0xff);
@@ -133,6 +138,7 @@ public class AxmlStringEditor {
             try {
                 out.close();
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

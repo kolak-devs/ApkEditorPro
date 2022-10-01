@@ -46,6 +46,7 @@ import com.mcal.common.utils.ActivityHelper;
 import org.jetbrains.annotations.Contract;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -273,8 +274,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                         height);
 
                 // Save resized image
-                String outFilePath = workingDir
-                        + entryName.replaceAll("/", "_");
+                String outFilePath = workingDir + File.separator + entryName.replaceAll("/", "_");
                 FileOutputStream os = new FileOutputStream(outFilePath);
 
                 if (outFilePath.endsWith(".png")) {
@@ -427,7 +427,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
 
                 // To modify the class name in DEX file
                 if (activity.clsNameReplaces != null) {
-                    String targetPath = activity.workingDir + ".dex";
+                    String targetPath = activity.workingDir  + File.separator + ".dex";
                     DexStringEditor dexEditor = new DexStringEditor(activity.apkPath);
                     dexEditor.replaceDexString(activity.clsNameReplaces, targetPath);
                     activity.allReplaces.put("classes.dex", targetPath);
@@ -520,7 +520,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 ZipEntry entry = zipFile.getEntry("resources.arsc");
                 is = zipFile.getInputStream(entry);
 
-                String targetPath = activity.workingDir + ".arsc";
+                String targetPath = activity.workingDir  + File.separator + ".arsc";
                 ResourceEditor resEditor = new ResourceEditor(is, targetPath);
 
                 // Modify package name in resources.arsc

@@ -29,6 +29,7 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ZipHelper;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -140,7 +141,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
         // Upzip
         if (!extractedAudios.contains(entryName)) {
             String name = getNameByPath(entryName);
-            ZipHelper.unzipFileTo(zipHelper.getFilePath(), entryName, workingDir + name);
+            ZipHelper.unzipFileTo(zipHelper.getFilePath(), entryName, workingDir + File.separator + name);
             extractedAudios.add(entryName);
         }
 
@@ -151,7 +152,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
                 mediaPlayer.setDataSource(replacing);
             } else {
                 String name = getNameByPath(entryName);
-                mediaPlayer.setDataSource(workingDir + name);
+                mediaPlayer.setDataSource(workingDir + File.separator + name);
             }
             mediaPlayer.prepare();
             mediaPlayer.start();

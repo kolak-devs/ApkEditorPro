@@ -131,7 +131,7 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
 
     private fun extractExamples(filename: String): Boolean {
         initExampleDir()
-        val path = exampleDir + filename
+        val path = exampleDir + File.separator + filename
         val am = mActivity.assets
         var input: InputStream? = null
         var output: FileOutputStream? = null
