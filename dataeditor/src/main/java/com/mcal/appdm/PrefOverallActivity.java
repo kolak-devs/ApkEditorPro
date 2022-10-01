@@ -34,11 +34,11 @@ import com.mcal.appdm.utils.StringPair;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.CommandInterface;
 import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.utilsOld.RootCommand;
-import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 
@@ -225,7 +225,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         {
             // Map<String, String> values = new HashMap<String, String>();
             // values.put("NAME", "App Size");
-            String strSize = SDCard.getSizeDescription(f.length());
+            String strSize = ScopedStorage.getSizeDescription(f.length());
             data.add(new BasicInfoItem(res.getString(R.string.appdm_app_size),
                     strSize));
         }
@@ -649,7 +649,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
                 postfix = null;
             }
         }
-        String tempDir = SDCard.getTempDir(this);
+        String tempDir = ScopedStorage.getTempDir().getPath();
         String tmpFilePath = tempDir + "/_work"
                 + (postfix != null ? postfix : "");
 
@@ -781,7 +781,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
                 return false;
             }
 
-            if (!SDCard.exist()) {
+            if (!ScopedStorage.exist()) {
                 this.errMsg = "Can not find SD card!";
                 return false;
             }

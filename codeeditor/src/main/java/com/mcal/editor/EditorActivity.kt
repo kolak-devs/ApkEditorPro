@@ -16,8 +16,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.ScopedStorage.getTmpDir
 import com.mcal.common.utilsOld.FileCopyUtils
-import com.mcal.common.utilsOld.SDCard
 import com.mcal.common.view.ProgressDialog
 import com.mcal.editor.smali.SmaliMethodsDialogs
 import com.mcal.editor.utils.FileUtils
@@ -659,7 +659,7 @@ class EditorActivity : CustomizedLangActivity(),
         }
 
         val workingDirectory: String = try {
-            SDCard.makeWorkingDir(this)
+            getTmpDir().path
         } catch (e: java.lang.Exception) {
             Toast.makeText(this, "Cannot make working directory.", Toast.LENGTH_SHORT).show()
             e.printStackTrace()

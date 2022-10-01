@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.R;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.RootCommand;
-import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.utilsOld.TextFileReader;
 
 import java.io.BufferedReader;
@@ -239,7 +239,7 @@ public class OdexPatcher {
     private void dex2oat(Activity activity, String apkPath) {
         try {
             // Prepare the source apk
-            String tmpDir = SDCard.makeWorkingDir(activity);
+            String tmpDir = ScopedStorage.getTmpDir().getPath();
             String tmpApkPath = tmpDir + apkName;
             copyFile(apkPath, tmpApkPath);
             String tmpOdexPath = tmpDir + "odex";

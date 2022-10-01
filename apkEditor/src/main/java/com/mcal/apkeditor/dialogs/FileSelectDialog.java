@@ -30,7 +30,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.InputHelper;
-import com.mcal.common.utilsOld.SDCard;
+import com.mcal.common.utils.ScopedStorage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -102,7 +102,7 @@ public class FileSelectDialog implements OnItemClickListener, AdapterView.OnItem
         String lastDir = sp.getString(key, "");
         if (!new File(lastDir).exists()) {
             if (defaultDir == null) {
-                lastDir = SDCard.getRootDirectory();
+                lastDir = ScopedStorage.getStorageDirectory().getPath();
             } else {
                 lastDir = defaultDir;
             }

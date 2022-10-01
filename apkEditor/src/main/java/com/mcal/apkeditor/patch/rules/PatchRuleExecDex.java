@@ -10,8 +10,8 @@ import com.mcal.apkeditor.patch.LinedReader;
 import com.mcal.apkeditor.patch.PatchRule;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.SDCard;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -128,7 +128,7 @@ public class PatchRuleExecDex extends PatchRule {
         OutputStream os = null;
         String dexPath = null;
         try {
-            dexPath = SDCard.makeWorkingDir(activity) + "script.dex";
+            dexPath = ScopedStorage.getTmpDir() + "script.dex";
             os = new BufferedOutputStream(new FileOutputStream(dexPath));
             is = new BufferedInputStream(patchZip.getInputStream(ze));
             IOUtils.copy(is, os);

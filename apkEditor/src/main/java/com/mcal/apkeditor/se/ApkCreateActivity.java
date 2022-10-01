@@ -40,9 +40,9 @@ import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utils.ApkInstaller;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.CheckUtils;
-import com.mcal.common.utilsOld.SDCard;
 
 import org.jetbrains.annotations.Contract;
 
@@ -132,7 +132,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 allReplaces.putAll(otherReplaces);
             }
             try {
-                this.workingDir = SDCard.makeWorkingDir(this);
+                this.workingDir = ScopedStorage.getTmpDir().getPath();
             } catch (Exception ignored) {
             }
 

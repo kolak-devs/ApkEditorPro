@@ -7,11 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
-import com.mcal.common.utils.FileRecord
-import com.mcal.common.utils.FilenameComparator
-import com.mcal.common.utils.getSubFolder
-import com.mcal.common.utils.isParentFolderOf
-import com.mcal.common.utilsOld.SDCard
+import com.mcal.common.utils.*
 import org.jetbrains.annotations.Contract
 import java.io.File
 
@@ -86,10 +82,10 @@ class FolderListAdapter(
                     fileList.add(0, fr)
                 }
                 currentDirectory = path
-            } else if (isParentFolderOf(path, SDCard.getRootDirectory())) {
+            } else if (isParentFolderOf(path, ScopedStorage.storageDirectory.path)) {
                 fileList.clear()
                 var fr = FileRecord()
-                fr.fileName = getSubFolder(path, SDCard.getRootDirectory())
+                fr.fileName = getSubFolder(path, ScopedStorage.storageDirectory.path)
                 fr.isDir = true
                 fr.totalSize = -1
                 fileList.add(fr)

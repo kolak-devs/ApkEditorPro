@@ -21,8 +21,8 @@ import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener
 import com.mcal.apkeditor.patch.interfaces.IPatchContext
 import com.mcal.common.utils.LocaleManager
+import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utilsOld.IOUtils
-import com.mcal.common.utilsOld.SDCard
 import com.mcal.patchview.ui.CodeText
 import org.xml.sax.SAXException
 import ru.mcal.manifestparser.xml.AndroidManifestParser
@@ -121,7 +121,7 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
         // Check the directory exist or not
         if (exampleDir == null) {
             try {
-                exampleDir = SDCard.makeDir(mActivity, "patches")
+                exampleDir = ScopedStorage.makeDir("patches").path
             } catch (e1: Exception) {
                 e1.printStackTrace()
             }

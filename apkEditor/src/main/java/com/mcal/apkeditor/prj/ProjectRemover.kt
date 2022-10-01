@@ -2,8 +2,8 @@ package com.mcal.apkeditor.prj
 
 import android.widget.Toast
 import com.mcal.apkeditor.R
+import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.deleteAll
-import com.mcal.common.utilsOld.SDCard
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
 import java.io.IOException
@@ -36,7 +36,7 @@ internal class ProjectRemover(
 
         // Remove the project index files
         try {
-            val projectFolder = SDCard.makeDir(weakReference.get(), ".projects")
+            val projectFolder = ScopedStorage.makeDir(".projects").path
             deleteAll(File(projectFolder + mItemInfo.name))
             result = true
         } catch (e: Exception) {

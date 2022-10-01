@@ -28,8 +28,8 @@ import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
+import com.mcal.common.utils.StringHelperKt;
 import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.utilsOld.ZipUtils;
 
 import java.io.Closeable;
@@ -485,7 +485,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             boolean useFileSource = true;
             if (record.isInZip) {
                 useFileSource = false;
-            } else if (ApkInfoExActivity.isCommonImage(record.fileName)) {
+            } else if (record.fileName != null && StringHelperKt.findExt(record.fileName, "jpg|png")) {
                 useFileSource = false;
             }
 
@@ -501,7 +501,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                     input = zipFile.getInputStream(entry);
                 }
 
-                tmpFilePath = SDCard.makeWorkingDir(ApkInfoExActivity.this) + getRandomString(6);
+                tmpFilePath = ScopedStorage.getTmpDir() + getRandomString(6);
                 out = new FileOutputStream(tmpFilePath);
                 IOUtils.copy(input, out);
             } catch (Exception e) {

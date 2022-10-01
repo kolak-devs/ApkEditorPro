@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
+import com.mcal.common.utils.StringHelperKt;
 import com.mcal.common.utilsOld.Display;
 
 import java.util.ArrayList;
@@ -223,10 +225,10 @@ public class RebuildConfirmDialog {
                           Map<String, String> replaced, Set<String> deleted) {
         this.resFileModified = false;
 
-        this.smaliFolders = new HashSet<String>();
-        this.smaliAddedFiles = new HashMap<String, Integer>();
-        this.smaliRemovedFiles = new HashMap<String, Integer>();
-        this.smaliModifiedFiles = new HashMap<String, Integer>();
+        this.smaliFolders = new HashSet<>();
+        this.smaliAddedFiles = new HashMap<>();
+        this.smaliRemovedFiles = new HashMap<>();
+        this.smaliModifiedFiles = new HashMap<>();
 
         // Enumerate added files
         String smaliFoder;
@@ -234,15 +236,13 @@ public class RebuildConfirmDialog {
             String entryName = entry.getKey();
             // Resource file
             if (entryName.startsWith("res/")) {
-                if (!resFileModified
-                        && !ApkInfoActivity.isCommonImage(entryName)) {
+                if (!resFileModified && !StringHelperKt.findExt(entryName, "jpg|png")) {
                     resFileModified = true;
                 }
                 resAddedFiles += 1;
             }
             // Smali or other files
-            else if ((smaliFoder = ApkInfoActivity.dealWithSmaliFile(entryName,
-                    smaliFolders)) != null) {
+            else if ((smaliFoder = SmaliUtilsKt.dealWithSmaliFile(entryName, smaliFolders)) != null) {
                 Integer v = smaliAddedFiles.get(smaliFoder);
                 if (v == null) {
                     smaliAddedFiles.put(smaliFoder, 1);
@@ -259,14 +259,13 @@ public class RebuildConfirmDialog {
             String entryName = entry.getKey();
             // Resource file
             if (entryName.startsWith("res/")) {
-                if (!resFileModified
-                        && !ApkInfoActivity.isCommonImage(entryName)) {
+                if (!resFileModified && !StringHelperKt.findExt(entryName, "jpg|png")) {
                     resFileModified = true;
                 }
                 resModifiedFiles += 1;
             }
             // Smali or other files
-            else if ((smaliFoder = ApkInfoActivity.dealWithSmaliFile(entryName,
+            else if ((smaliFoder = SmaliUtilsKt.dealWithSmaliFile(entryName,
                     smaliFolders)) != null) {
                 Integer v = smaliModifiedFiles.get(smaliFoder);
                 if (v == null) {
@@ -283,15 +282,13 @@ public class RebuildConfirmDialog {
         for (String entryName : deleted) {
             // Resource file
             if (entryName.startsWith("res/")) {
-                if (!resFileModified
-                        && !ApkInfoActivity.isCommonImage(entryName)) {
+                if (!resFileModified && !StringHelperKt.findExt(entryName, "jpg|png")) {
                     resFileModified = true;
                 }
                 resRemovedFiles += 1;
             }
             // Smali or other files
-            else if ((smaliFoder = ApkInfoActivity.dealWithSmaliFile(entryName,
-                    smaliFolders)) != null) {
+            else if ((smaliFoder = SmaliUtilsKt.dealWithSmaliFile(entryName, smaliFolders)) != null) {
                 Integer v = smaliRemovedFiles.get(smaliFoder);
                 if (v == null) {
                     smaliRemovedFiles.put(smaliFoder, 1);

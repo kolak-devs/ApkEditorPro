@@ -23,9 +23,9 @@ import androidx.annotation.NonNull;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.adapters.MySimpleAdapter;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.RootCommand;
-import com.mcal.common.utilsOld.SDCard;
 
 import org.jetbrains.annotations.Contract;
 
@@ -116,7 +116,7 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
             return;
         }
 
-        String sdDir = SDCard.getRootDirectory();
+        String sdDir = ScopedStorage.getStorageDirectory().getPath();
         if (!sdDir.endsWith("/")) {
             sdDir += "/";
         }

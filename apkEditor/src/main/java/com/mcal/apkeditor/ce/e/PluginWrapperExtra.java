@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
-import com.mcal.common.utilsOld.SDCard;
+import com.mcal.common.utils.ScopedStorage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +49,7 @@ public class PluginWrapperExtra implements IApkMaking, Serializable {
         }
     }
 
-    public static void calcChecksum(byte bytes[], int totalLen) {
+    public static void calcChecksum(byte[] bytes, int totalLen) {
         Adler32 a32 = new Adler32();
         a32.update(bytes, 12, totalLen - 12);
         int sum = (int) a32.getValue();
@@ -61,10 +61,8 @@ public class PluginWrapperExtra implements IApkMaking, Serializable {
 
     // apkFilePath: the path of the plugin wrapper
     @Override
-    public void prepareReplaces(Context ctx, String apkFilePath,
-                                Map<String, String> allReplaces, IDescriptionUpdate updater)
-            throws Exception {
-        String dexPath = SDCard.makeWorkingDir(ctx) + "_dex";
+    public void prepareReplaces(Context ctx, String apkFilePath, Map<String, String> allReplaces, IDescriptionUpdate updater) throws Exception {
+        String dexPath = ScopedStorage.getTmpDir() + "_dex";
 
         RandomAccessFile outFile = new RandomAccessFile(dexPath, "rw");
         outFile.setLength(0);

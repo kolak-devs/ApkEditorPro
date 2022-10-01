@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ImageTool;
-import com.mcal.common.utilsOld.SDCard;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,8 +61,7 @@ public class ReplaceLauncherIcon implements IApkMaking, Serializable {
                         int index = 0;
                         Bitmap newIconBitmap = BitmapFactory.decodeFile(newIconPath);
                         for (ResResource res : all.values()) {
-                            String filePath = SDCard.makeWorkingDir(ctx)
-                                    + ".launcher" + index + ".png";
+                            String filePath = ScopedStorage.getTmpDir() + ".launcher" + index + ".png";
                             // Get image size
                             // First try to get real entry path
                             String entryPath = null;

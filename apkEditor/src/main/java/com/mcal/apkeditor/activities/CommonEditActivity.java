@@ -54,9 +54,9 @@ import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utils.FileHelperKt;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.FileEncrypter;
-import com.mcal.common.utilsOld.SDCard;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -313,7 +313,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         String authString = getRandomString(4);
 
         try {
-            this.newManifestFile = SDCard.makeWorkingDir(this) + ".xml";
+            this.newManifestFile = ScopedStorage.getTmpDir() + ".xml";
             extractWrapperIfNeeded(tmplApkPath);
 
             ZipFile zipFile = new ZipFile(tmplApkPath);
@@ -406,7 +406,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
     private String saveLauncher() {
         try {
             if (this.apkInfo.icon != null) {
-                String file = SDCard.makeWorkingDir(this) + "_launcher";
+                String file = ScopedStorage.getTmpDir() + "_launcher";
                 Bitmap bm = drawableToBitmap(this.apkInfo.icon);
                 FileOutputStream outStream = new FileOutputStream(file);
                 bm.compress(Bitmap.CompressFormat.PNG, 100, outStream);
@@ -494,7 +494,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
                 !this.manifestInfo.packageName.equals(this.newPackageName));
 
         try {
-            this.newManifestFile = SDCard.makeWorkingDir(this) + ".xml";
+            this.newManifestFile = ScopedStorage.getTmpDir() + ".xml";
             ZipFile zipFile = new ZipFile(apkPath);
             ZipEntry entry = zipFile.getEntry("AndroidManifest.xml");
             InputStream is = zipFile.getInputStream(entry);

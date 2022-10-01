@@ -15,8 +15,8 @@ import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IBeforeAddFile;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 import com.mcal.apkeditor.patch.resource.ResourceItem;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.SDCard;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -86,7 +86,7 @@ public class PatchRuleMerge extends PatchRule {
             input = patchZip.getInputStream(entry);
 
             // Extract the zip file inside patch
-            String tmpDir = SDCard.makeDir(activity, "tmp");
+            String tmpDir = ScopedStorage.getTmpDir().getPath();
             String path = tmpDir + getRandomString(6);
             fos = new FileOutputStream(path);
             IOUtils.copy(input, fos);

@@ -10,13 +10,13 @@ import com.mcal.apkeditor.utils.AssetsInstaller
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.data.Preferences
 import com.mcal.common.fastzip.FastZip
+import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.ScopedStorage.getApkEditorDir
 import com.mcal.common.utils.createNewFile
 import com.mcal.common.utilsOld.CommandRunner
 import com.mcal.common.utilsOld.ITaskCallback
 import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo
 import com.mcal.common.utilsOld.LOGGER
-import com.mcal.common.utilsOld.SDCard
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.IOException
@@ -373,7 +373,7 @@ class ApkComposeThread(
         // Do not delete the res directory any more, as the project must keep it
         val cr = CommandRunner()
         try {
-            val tmpDir = SDCard.getRootDirectory() + "/ApkEditor/tmp"
+            val tmpDir = ScopedStorage.getTmpDir()
             cr.runCommand("rm -rf $tmpDir", null, 10000)
         } catch (e: Exception) {
             e.printStackTrace()

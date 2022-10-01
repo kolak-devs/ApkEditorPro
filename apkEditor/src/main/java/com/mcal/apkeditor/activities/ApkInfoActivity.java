@@ -86,6 +86,7 @@ import com.mcal.apkeditor.smali.AsyncDecodeTask;
 import com.mcal.apkeditor.smali.AsyncDecodeTask.IDecodeTaskCallback;
 import com.mcal.apkeditor.translate.PossibleLanguages;
 import com.mcal.apkeditor.translate.TranslateItem;
+import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
 import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
@@ -98,7 +99,6 @@ import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.LOGGER;
 import com.mcal.common.utilsOld.PreferenceUtils;
-import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.utilsOld.ServiceUtil;
 import com.mcal.common.utilsOld.TextFileReader;
 import com.mcal.common.utilsOld.UriUtils;
@@ -274,37 +274,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         return null;
     }
 
-    // Return the smali root directory by smali entry
-    // Return like "smali" "smali_class2"
-    private static String getSmaliRootDir(@NonNull String fileEntry) {
-        int pos = fileEntry.indexOf('/');
-        String folderName = null;
-        if (pos != -1) {
-            folderName = fileEntry.substring(0, pos);
-        }
-        return folderName;
-    }
-
-    // entryName is like: smali
-    @Nullable
-    public static String dealWithSmaliFile(@NonNull String entryName,
-                                           Set<String> modifiedDexNames) {
-        if ((entryName.startsWith("smali/") || entryName.startsWith("smali_"))
-                && entryName.endsWith(".smali")) {
-            String smaliDir = getSmaliRootDir(entryName);
-            modifiedDexNames.add(smaliDir);
-            return smaliDir;
-        }
-        return null;
-    }
-
-    // Check is the common image or not
-    // For the common image, we donot need to rebuild the res
-    public static boolean isCommonImage(@NonNull String entryName) {
-        return entryName.endsWith(".jpg") || ((entryName.endsWith(".png")
-                && !entryName.endsWith(".9.png")));
-    }
-
     // filename does not contain ".apk"
     public static String createOutputPath(String inputPath, @NonNull String outputDir, String filename) {
         if (outputDir.endsWith("/")) {
@@ -410,7 +379,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     apkPath = "";
                     decodeRootPath = ScopedStorage.getStorageDirectory() + "/ApkParser" + "/" + projectName;
                 } else {
-                    String prjRoot = SDCard.makeDir(this, ".projects");
+                    String prjRoot = ScopedStorage.makeDir(".projects").getPath();
                     prjInfo = loadProject(prjRoot + projectName);
                     apkPath = prjInfo.apkPath;
                     decodeRootPath = prjInfo.decodeRootPath;
@@ -606,13 +575,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // Move temporary files to project folder, so that it will always there even with cleanup
     private void moveTempFile2ProjectDir(Map<String, String> added,
                                          Map<String, String> replaced, File projectDir) {
-        String tmpFolder;
-        try {
-            tmpFolder = SDCard.makeWorkingDir(this);
-        } catch (Exception e) {
-            return;
-        }
-
+        String tmpFolder = ScopedStorage.getTmpDir().getPath();
         if (added != null && !added.isEmpty()) {
             for (Map.Entry<String, String> entry : added.entrySet()) {
                 String path = entry.getValue();
@@ -644,10 +607,10 @@ public class ApkInfoActivity extends CustomizedLangActivity
         try {
             String workingPath;
             if (projectName != null) {
-                String prjRoot = SDCard.makeDir(this, ".projects");
+                String prjRoot = ScopedStorage.makeDir(".projects").getPath();
                 workingPath = prjRoot + projectName + "/";
             } else {
-                workingPath = SDCard.makeWorkingDir(this);
+                workingPath = ScopedStorage.getTmpDir().getPath();
             }
 
             ActivityState state = saveCurrentState(workingPath);
@@ -1362,19 +1325,18 @@ public class ApkInfoActivity extends CustomizedLangActivity
         addedFiles = new HashMap<>();
         replacedFiles = new HashMap<>();
         deletedFiles = new ArrayList<>();
-
         // Enumerate added files
         for (Entry<String, String> entry : added.entrySet()) {
             String entryName = entry.getKey();
             // Resource file
             if (entryName.startsWith("res/")) {
-                if (!resFileModified && !isCommonImage(entryName)) {
+                if (!resFileModified && !StringHelperKt.findExt(entryName, "jpg|png")) {
                     resFileModified = true;
                 }
                 addedFiles.put(entry.getKey(), entry.getValue());
             }
             // General other files
-            else if (dealWithSmaliFile(entryName, modifiedDex) == null) {
+            else if (SmaliUtilsKt.dealWithSmaliFile(entryName, modifiedDex) == null) {
                 addedFiles.put(entry.getKey(), entry.getValue());
             }
         }
@@ -1384,13 +1346,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
             String entryName = entry.getKey();
             // Resource file
             if (entryName.startsWith("res/")) {
-                if (!resFileModified && !isCommonImage(entryName)) {
+                if (!resFileModified && !StringHelperKt.findExt(entryName, "jpg|png")) {
                     resFileModified = true;
                 }
                 replacedFiles.put(entry.getKey(), entry.getValue());
             }
             // General other files
-            else if (dealWithSmaliFile(entryName, modifiedDex) == null) {
+            else if (SmaliUtilsKt.dealWithSmaliFile(entryName, modifiedDex) == null) {
                 replacedFiles.put(entry.getKey(), entry.getValue());
             }
         }
@@ -1399,13 +1361,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
         for (String entryName : deleted) {
             // Resource file
             if (entryName.startsWith("res/")) {
-                if (!resFileModified && !isCommonImage(entryName)) {
+                if (!resFileModified && !StringHelperKt.findExt(entryName, "jpg|png")) {
                     resFileModified = true;
                 }
                 deletedFiles.add(entryName);
             }
             // General other files
-            else if (dealWithSmaliFile(entryName, modifiedDex) == null) {
+            else if (SmaliUtilsKt.dealWithSmaliFile(entryName, modifiedDex) == null) {
                 deletedFiles.add(entryName);
             }
         }
@@ -1415,14 +1377,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         smaliFolders.addAll(modifiedDex);
 
         launchBuildActivityAndService(bSign);
-    }
-
-    private void showCannotStartBuildDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
-                .setMessage(R.string.build_in_progress_tip)
-                .setTitle(R.string.please_note)
-                .setPositiveButton(android.R.string.ok, null);
-        builder.show();
     }
 
     @Override
@@ -1502,12 +1456,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
             ActivityUtils.attachParam(intent, "srcApkPath", apkPath);
         }
         ActivityUtils.attachParam(intent, "targetApkPath", targetApkPath);
-        ActivityUtils.attachParam(intent, "stringModified",
-                stringModified ? "true" : "false");
-        ActivityUtils.attachParam(intent, "manifestModified",
-                manifestModified ? "true" : "false");
-        ActivityUtils.attachParam(intent, "resFileModified",
-                resFileModified ? "true" : "false");
+        ActivityUtils.attachParam(intent, "stringModified", stringModified ? "true" : "false");
+        ActivityUtils.attachParam(intent, "manifestModified", manifestModified ? "true" : "false");
+        ActivityUtils.attachParam(intent, "resFileModified", resFileModified ? "true" : "false");
         ActivityUtils.attachParam(intent, "modifiedSmaliFolders", smaliFolders);
         ActivityUtils.attachParam(intent, "addedFiles", addedFiles);
         ActivityUtils.attachParam(intent, "deletedFiles", deletedFiles);
@@ -1531,11 +1482,10 @@ public class ApkInfoActivity extends CustomizedLangActivity
     @Nullable
     private String serialize2File(Map<String, String> fileEntry2ZipEntry2) {
         try {
-            String filepath = SDCard.makeWorkingDir(this) + getRandomString(8);
-            BufferedOutputStream bos = new BufferedOutputStream(
-                    new FileOutputStream(filepath));
-            for (Entry<String, String> entry : fileEntry2ZipEntry2
-                    .entrySet()) {
+            String filepath = ScopedStorage.getTmpDir() + getRandomString(8);
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filepath));
+            final Set<Entry<String, String>> entries = fileEntry2ZipEntry2.entrySet();
+            for (Entry<String, String> entry : entries) {
                 bos.write(entry.getKey().getBytes());
                 bos.write('\n');
                 bos.write(entry.getValue().getBytes());
@@ -1543,7 +1493,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
             }
             bos.close();
             return filepath;
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -1637,8 +1588,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // So that we do not need to save it every time in onSaveInstanceState
         new Thread(() -> {
             try {
-                String workingPath = SDCard
-                        .makeWorkingDir(ApkInfoActivity.this);
+                String workingPath = ScopedStorage.getTmpDir().getPath();
                 String path = workingPath + "allStringValues";
                 IOUtils.writeObjectToFile(path, allStringValues);
                 path = workingPath + "fileEntry2ZipEntry";
@@ -1844,14 +1794,12 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
             Bundle bundle = new Bundle();
             {
-                String translatedFile = SDCard.makeWorkingDir(this)
-                        + "translated";
+                String translatedFile = ScopedStorage.getTmpDir() + "translated";
                 IOUtils.writeObjectToFile(translatedFile, translatedList);
                 bundle.putString("translatedList_file", translatedFile);
             }
             {
-                String untranslatedFile = SDCard.makeWorkingDir(this)
-                        + "untranslatedList";
+                String untranslatedFile = ScopedStorage.getTmpDir() + "untranslatedList";
                 IOUtils.writeObjectToFile(untranslatedFile, untranslatedList);
                 bundle.putString("untranslatedList_file", untranslatedFile);
             }
@@ -2623,10 +2571,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
             fileType = filename.substring(pos);
         }
 
-        String dstPath;
         try {
             String zipEntry = mFileEntry2ZipEntry.get(entryName);
-            dstPath = SDCard.makeWorkingDir(this) + TMP_EDITOR_FILE + fileType;
+            String dstPath = ScopedStorage.getTmpDir() + TMP_EDITOR_FILE + fileType;
             if (zipEntry != null) {
                 entryName = zipEntry;
             }
@@ -2913,7 +2860,11 @@ public class ApkInfoActivity extends CustomizedLangActivity
         public void onServiceConnected(ComponentName name, IBinder service) {
             ApkComposeService.ComposeServiceBinder binder = (ApkComposeService.ComposeServiceBinder) service;
             if (binder.isRunning()) {
-                showCannotStartBuildDialog();
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(ApkInfoActivity.this)
+                        .setMessage(R.string.build_in_progress_tip)
+                        .setTitle(R.string.please_note)
+                        .setPositiveButton(android.R.string.ok, null);
+                builder.show();
             } else {
                 launchWithoutCheck(mSign);
             }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
-import com.mcal.common.utilsOld.SDCard;
+import com.mcal.common.utils.ScopedStorage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +36,7 @@ public class RefactorLayout implements IApkMaking, Serializable {
     @Override
     public void prepareReplaces(Context ctx, String apkFilePath, Map<String, String> allReplaces, IDescriptionUpdate updater) throws Exception {
         ZipFile zfile = null;
-        String outFolder = SDCard.makeWorkingDir(ctx);
+        String outFolder = ScopedStorage.getTmpDir().getPath();
 
         try {
             zfile = new ZipFile(apkFilePath);

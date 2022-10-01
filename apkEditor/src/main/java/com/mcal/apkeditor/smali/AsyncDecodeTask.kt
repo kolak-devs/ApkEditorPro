@@ -3,8 +3,8 @@ package com.mcal.apkeditor.smali
 import android.content.Context
 import android.util.Log
 import com.mcal.apkeditor.pro.DexDecoder
+import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utilsOld.IOUtils
-import com.mcal.common.utilsOld.SDCard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -75,7 +75,7 @@ class AsyncDecodeTask(
 
     @Throws(Exception::class)
     private fun prepareDexFiles() {
-        val tmpDirectory = SDCard.makeDir(context, "tmp")
+        val tmpDirectory = ScopedStorage.getTmpDir().path
         var zipFile: ZipFile? = null
         try {
             zipFile = ZipFile(mApkPath)
@@ -102,13 +102,12 @@ class AsyncDecodeTask(
 
     @Throws(Exception::class)
     private fun prepareMainDex() {
-        val tmpDirectory = SDCard.makeDir(context, "tmp")
         var zipFile: ZipFile? = null
         try {
             val name = "classes.dex"
             zipFile = ZipFile(mApkPath)
             val entry = zipFile.getEntry(name)
-            unzipDex2File(zipFile, entry, tmpDirectory + name)
+            unzipDex2File(zipFile, entry, ScopedStorage.getTmpDir().path + name)
         } catch (e1: IOException) {
             e1.printStackTrace()
         } finally {

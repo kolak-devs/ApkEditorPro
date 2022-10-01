@@ -28,10 +28,10 @@ import androidx.annotation.Nullable;
 
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ZipImageZoomer;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.ImageZoomer;
-import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.ProgressDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -269,12 +269,10 @@ public class ResListAdapter extends BaseAdapter implements
         }
         // Special case: in the parent path of SD card (like /storage/emulated/0)
         // As on some phones, we cannot access the directory like /storage/emulated
-        else if (isParentFolderOf(path, SDCard.getRootDirectory())) {
+        else if (isParentFolderOf(path, ScopedStorage.getStorageDirectory().getPath())) {
             fileList.clear();
-
-            SDCard.getRootDirectory();
             FileRecord fr = new FileRecord();
-            fr.fileName = getSubFolder(path, SDCard.getRootDirectory());
+            fr.fileName = getSubFolder(path, ScopedStorage.getStorageDirectory().getPath());
             fr.isDir = true;
             fileList.add(fr);
 
@@ -618,7 +616,7 @@ public class ResListAdapter extends BaseAdapter implements
                 throwExistException(entryName);
             } else {
                 // Copy to the working path
-                targetPath = SDCard.makeWorkingDir(ctxRef.get()) + getRandomString(8);
+                targetPath = ScopedStorage.getTmpDir() + getRandomString(8);
                 FileOutputStream out = new FileOutputStream(targetPath);
                 IOUtils.copy(input, out);
                 out.close();
@@ -763,7 +761,7 @@ public class ResListAdapter extends BaseAdapter implements
         else {
             try {
                 // Copy file to working directory
-                String targetPath = SDCard.makeWorkingDir(ctxRef.get()) + getRandomString(8);
+                String targetPath = ScopedStorage.getTmpDir() + getRandomString(8);
                 copyFile(newPath, targetPath);
 
                 // Record replacement and show toast
@@ -812,7 +810,7 @@ public class ResListAdapter extends BaseAdapter implements
                         }
                     }
                     // Copy to the working directory (not decoded path)
-                    String targetFolder = SDCard.makeWorkingDir(ctxRef.get()) + getRandomString(6);
+                    String targetFolder = ScopedStorage.getTmpDir() + getRandomString(6);
                     Map<String, String> added = copyAllFiles(new File(newPath),
                             new File(targetFolder), entry);
                     // Record and update the zip nodes

@@ -30,7 +30,6 @@ import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.SDCard;
 import com.mcal.common.view.DynamicExpandListView;
 
 import org.jetbrains.annotations.Contract;
@@ -282,9 +281,7 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
     }
 
     private void initData() throws Exception {
-        SDCard.makeWorkingDir(this);
-
-        this.zipHelper = new ZipHelper(this.apkPath);
+        zipHelper = new ZipHelper(this.apkPath);
         zipHelper.parse();
     }
 

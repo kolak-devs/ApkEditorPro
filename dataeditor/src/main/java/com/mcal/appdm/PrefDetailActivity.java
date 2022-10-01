@@ -21,12 +21,12 @@ import androidx.annotation.NonNull;
 import com.mcal.appdm.base.R;
 import com.mcal.appdm.utils.XmlUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.CommandInterface;
 import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.utilsOld.FileCopyUtils;
 import com.mcal.common.utilsOld.RootCommand;
-import com.mcal.common.utilsOld.SDCard;
 import com.mcal.editor.TextEditor;
 import com.mcal.sqliteutil.util.PaddingTable;
 import com.mcal.sqliteutil.util.PaddingTable.ITableRowClicked;
@@ -425,10 +425,10 @@ public class PrefDetailActivity extends CustomizedLangActivity implements ITable
             PrefDetailActivity activity = activityRef.get();
             if (activity != null) {
                 try {
-                    if (!SDCard.exist()) {
+                    if (!ScopedStorage.exist()) {
                         throw new Exception("Can not find SD Card!");
                     }
-                    String workingDir = SDCard.getTempDir(activity);
+                    String workingDir = ScopedStorage.getTempDir().getPath();
 
                     File dir = new File(workingDir);
                     if (!dir.exists()) {

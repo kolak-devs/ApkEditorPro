@@ -9,8 +9,8 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.mcal.appdm.base.R;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.SDCard;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -43,13 +43,12 @@ public class ApkSaveDialog extends Dialog {
     public void start() {
         this.show();
 
-        if (!SDCard.exist()) {
+        if (!ScopedStorage.exist()) {
             showToast("Cannot find SD card to save the APK.");
             return;
         }
 
-        String dstDir = SDCard.getBackupDir(activityRef.get());
-        this.dstPath = dstDir + "/" + appName + ".apk";
+        this.dstPath = ScopedStorage.getBackupDir() + "/" + appName + ".apk";
 
         startCopyThread(apkPath, dstPath);
     }

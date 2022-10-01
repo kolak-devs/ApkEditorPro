@@ -26,7 +26,7 @@ import androidx.annotation.NonNull;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
-import com.mcal.common.utilsOld.SDCard;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.ZipUtils;
 
 import java.util.HashMap;
@@ -130,7 +130,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
         String entryName = audioPathList.get(position);
 
         if (this.mediaPlayer == null) {
-            this.workingDir = SDCard.makeWorkingDir(ctx);
+            this.workingDir = ScopedStorage.getTmpDir().getPath();
             this.mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
         } else {
