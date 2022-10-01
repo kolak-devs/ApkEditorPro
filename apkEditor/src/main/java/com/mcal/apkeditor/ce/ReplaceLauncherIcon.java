@@ -7,8 +7,8 @@ import android.graphics.BitmapFactory;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mcal.common.utils.ImageHelper;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.ImageTool;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,7 +72,7 @@ public class ReplaceLauncherIcon implements IApkMaking, Serializable {
                             }
                             ImageBounds bounds = getImageBounds(zipFile, entryPath);
                             if (bounds != null) {
-                                ImageTool tool = new ImageTool();
+                                ImageHelper tool = new ImageHelper();
                                 tool.zoomImage(newIconBitmap, bounds.width, bounds.height, filePath);
                                 allReplaces.put(entryPath, filePath);
                             } else {

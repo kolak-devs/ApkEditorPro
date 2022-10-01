@@ -28,9 +28,9 @@ import androidx.annotation.Nullable;
 
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
+import com.mcal.common.utils.ImageHelper;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.ZipImageZoomer;
-import com.mcal.common.utils.ImageZoomer;
+import com.mcal.common.utils.ZipImageHelper;
 import com.mcal.common.view.ProgressDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -82,7 +82,7 @@ public class ResListAdapter extends BaseAdapter implements
     private final ZipNode rootNode = new ZipNode();
     private WeakReference<ResSelectionChangeListener> listenerRef;
     private String curPath;
-    private ZipImageZoomer zipImageZoomer;
+    private ZipImageHelper zipImageZoomer;
     private Map<String, String> allFileReplaced = new HashMap<>();
     private Map<String, String> allFileAdded = new HashMap<>();
     // All the deleted entries
@@ -125,7 +125,7 @@ public class ResListAdapter extends BaseAdapter implements
     private void initZipData(String apkFilePath) {
         try {
             ZipFile zipFile = new ZipFile(apkFilePath);
-            this.zipImageZoomer = new ZipImageZoomer(zipFile);
+            this.zipImageZoomer = new ZipImageHelper(zipFile);
 
             Enumeration<? extends ZipEntry> entryEnum = zipFile.entries();
 
@@ -324,22 +324,18 @@ public class ResListAdapter extends BaseAdapter implements
                     + bmpInfo.height;
         }
         // The file is not replaced and no apk provided
-        else if (this.apkPath == null) {
-            ImageZoomer zoomer = new ImageZoomer();
-            bitmap = zoomer.getImageThumbnail(rootPath + "/" + entryName, 32,
-                    32);
-            detailInfo = strResolution + ": " + zoomer.getOriginWidth() + " X "
-                    + zoomer.getOriginHeight();
+        else if (apkPath == null) {
+            ImageHelper zoomer = new ImageHelper();
+            bitmap = zoomer.getImageThumbnail(rootPath + "/" + entryName, 32, 32);
+            detailInfo = strResolution + ": " + zoomer.getOriginWidth() + " X " + zoomer.getOriginHeight();
         }
         // The file is not replaced (look into file system and apk file)
         else {
             // image (.9.png) is in file
             if (!bInZip && entryName.endsWith(".9.png")) {
-                ImageZoomer zoomer = new ImageZoomer();
-                bitmap = zoomer.getImageThumbnail(rootPath + "/" + entryName,
-                        32, 32);
-                detailInfo = strResolution + ": " + zoomer.getOriginWidth()
-                        + " X " + zoomer.getOriginHeight();
+                ImageHelper zoomer = new ImageHelper();
+                bitmap = zoomer.getImageThumbnail(rootPath + "/" + entryName, 32, 32);
+                detailInfo = strResolution + ": " + zoomer.getOriginWidth() + " X " + zoomer.getOriginHeight();
             }
             // Get image from zip
             // Note: image on file system is dummy
@@ -359,7 +355,6 @@ public class ResListAdapter extends BaseAdapter implements
                 }
             }
         }
-
         return new ImageThumbnailInfo(bitmap, detailInfo);
     }
 
@@ -458,14 +453,12 @@ public class ResListAdapter extends BaseAdapter implements
         }
 
         if (path != null) {
-            ImageZoomer zoomer = new ImageZoomer();
+            ImageHelper zoomer = new ImageHelper();
             Bitmap bitmap = zoomer.getImageThumbnail(path, 32, 32);
             if (bitmap != null) {
-                return new BitmapInfo(bitmap, zoomer.getOriginWidth(),
-                        zoomer.getOriginHeight());
+                return new BitmapInfo(bitmap, zoomer.getOriginWidth(), zoomer.getOriginHeight());
             }
         }
-
         return null;
     }
 

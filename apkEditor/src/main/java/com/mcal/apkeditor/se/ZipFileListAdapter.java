@@ -26,9 +26,9 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apklib.AXMLPrinter;
 import com.mcal.common.utils.ActivityHelper;
+import com.mcal.common.utils.ImageHelper;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.ZipImageZoomer;
-import com.mcal.common.utils.ImageZoomer;
+import com.mcal.common.utils.ZipImageHelper;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 import com.mcal.pngeditor.ViewZipImageActivity;
@@ -87,7 +87,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
     // For AXML editing
     private boolean xmlEditMode = false;
     private ZipFile zfile;
-    private ZipImageZoomer zipImageZoomer;
+    private ZipImageHelper zipImageZoomer;
 
     /* interface implementation for ProcessingDialog */
     private boolean convertSucceed;
@@ -116,7 +116,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
 
         try {
             this.zfile = new ZipFile(zipHelper.getFilePath());
-            this.zipImageZoomer = new ZipImageZoomer(zfile);
+            this.zipImageZoomer = new ZipImageHelper(zfile);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -345,7 +345,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
             }
             // Get from replace file
             else {
-                ImageZoomer zoomer = new ImageZoomer();
+                ImageHelper zoomer = new ImageHelper();
                 bitmap = zoomer.getImageThumbnail(replaceFile, 32, 32);
             }
             // Save to cache

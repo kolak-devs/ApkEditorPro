@@ -21,9 +21,9 @@ import androidx.annotation.NonNull;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
-import com.mcal.common.utils.ZipImageZoomer;
 import com.mcal.common.utils.ActivityHelper;
-import com.mcal.common.utils.ImageZoomer;
+import com.mcal.common.utils.ImageHelper;
+import com.mcal.common.utils.ZipImageHelper;
 import com.mcal.common.view.DynamicExpandListView;
 import com.mcal.pngeditor.ViewZipImageActivity;
 
@@ -34,9 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
-public class ImageListAdapter extends BaseAdapter implements
-        OnItemClickListener, OnItemLongClickListener, IFileSelection,
-        OnClickListener {
+public class ImageListAdapter extends BaseAdapter implements OnItemClickListener, OnItemLongClickListener, IFileSelection, OnClickListener {
 
     private final WeakReference<DynamicExpandListView> viewRef;
     private final Activity ctx;
@@ -55,7 +53,7 @@ public class ImageListAdapter extends BaseAdapter implements
             }
         }
     };
-    private ZipImageZoomer zipImageZoomer;
+    private ZipImageHelper zipImageZoomer;
     private ZipFile zfile;
 
     public ImageListAdapter(DynamicExpandListView listView, Activity ctx,
@@ -70,7 +68,7 @@ public class ImageListAdapter extends BaseAdapter implements
 
         try {
             this.zfile = new ZipFile(zipHelper.getFilePath());
-            this.zipImageZoomer = new ZipImageZoomer(zfile);
+            this.zipImageZoomer = new ZipImageHelper(zfile);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -152,7 +150,7 @@ public class ImageListAdapter extends BaseAdapter implements
                 bitmap = zipImageZoomer.getImageThumbnail(
                         entry.bestQualifier + "/" + entryName, 32, 32);
             } else {
-                ImageZoomer zoomer = new ImageZoomer();
+                ImageHelper zoomer = new ImageHelper();
                 bitmap = zoomer.getImageThumbnail(entry.replaceFile, 32, 32);
             }
             // Save to cache

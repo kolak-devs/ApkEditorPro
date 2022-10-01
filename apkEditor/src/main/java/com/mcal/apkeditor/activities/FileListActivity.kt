@@ -342,7 +342,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 parseThread?.addApk(path)
                 return ContextCompat.getDrawable(this, R.drawable.round_android_24)
             } else if (!record.isDir && name.findExt("jpg|jpeg|png|gif")) {
-                return BitmapDrawable(resources, ImageZoomer().getImageThumbnail(path, 200, 200))
+                return BitmapDrawable(resources, ImageHelper().getImageThumbnail(path, 200, 200))
             }
         }
         return null

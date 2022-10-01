@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.common.utils.ZipImageZoomer;
+import com.mcal.common.utils.ZipImageHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -100,7 +100,7 @@ public class ApkParser {
             Map<ResConfigFlags, ResResource> all = spec.getAllResources();
 
             int maxWidth = 0;
-            ZipImageZoomer zipImageTool = new ZipImageZoomer(zipFile);
+            ZipImageHelper zipImageTool = new ZipImageHelper(zipFile);
             for (ResResource res : all.values()) {
                 ResValue resValue = res.getValue();
                 if (resValue instanceof ResFileValue) {
