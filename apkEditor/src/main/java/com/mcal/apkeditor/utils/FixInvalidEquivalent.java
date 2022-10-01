@@ -7,7 +7,7 @@ import android.content.Context;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.patch.resource.ResourceItem;
-import com.mcal.common.utilsOld.TextFileReader;
+import com.mcal.common.utils.TextFileReader;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

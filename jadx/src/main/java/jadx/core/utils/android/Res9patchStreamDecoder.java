@@ -16,12 +16,12 @@
 
 package jadx.core.utils.android;
 
+import static com.mcal.common.utils.FileHelperKt.toByteArray;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
-
-import com.mcal.common.utilsOld.IOUtils;
 
 import org.jetbrains.annotations.Contract;
 
@@ -40,10 +40,9 @@ public class Res9patchStreamDecoder {
     private static final int NP_COLOR = 0xff000000;
     private static final int OI_COLOR = 0xffff0000;
 
-    public boolean decode(InputStream in, OutputStream out)
-            throws IOException {
+    public boolean decode(InputStream in, OutputStream out) throws IOException {
         try {
-            byte[] data = IOUtils.toByteArray(in);
+            byte[] data = toByteArray(in);
 
             Bitmap im = BitmapFactory.decodeByteArray(data, 0, data.length);
             int w = im.getWidth(), h = im.getHeight();
@@ -127,8 +126,7 @@ public class Res9patchStreamDecoder {
         return OpticalInset.decode(di);
     }
 
-    private boolean find9patchChunk(@NonNull DataInput di, int magic) throws IOException,
-            IOException {
+    private boolean find9patchChunk(@NonNull DataInput di, int magic) throws IOException {
         di.skipBytes(8);
         while (true) {
             int size;

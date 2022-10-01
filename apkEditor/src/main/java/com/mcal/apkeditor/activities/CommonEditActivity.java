@@ -56,7 +56,7 @@ import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ActivityHelper;
-import com.mcal.common.utilsOld.FileEncrypter;
+import com.mcal.common.utils.FileEncrypter;
 
 import java.io.File;
 import java.io.FileOutputStream;

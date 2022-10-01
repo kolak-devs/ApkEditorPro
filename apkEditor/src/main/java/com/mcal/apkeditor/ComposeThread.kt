@@ -1,7 +1,7 @@
 package com.mcal.apkeditor
 
 import com.mcal.apkeditor.ce.IApkMaking
-import com.mcal.common.utilsOld.ITaskCallback
+import com.mcal.common.utils.ITaskCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 

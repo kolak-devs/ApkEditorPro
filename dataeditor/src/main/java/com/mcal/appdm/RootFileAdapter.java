@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import com.mcal.appdm.base.R;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
-import com.mcal.common.utilsOld.CommandInterface;
+import com.mcal.common.utils.CommandInterface;
 
 import java.io.BufferedReader;
 import java.io.File;

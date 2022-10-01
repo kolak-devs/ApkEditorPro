@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
-import com.mcal.common.utilsOld.ImageZoomer;
+import com.mcal.common.utils.ImageZoomer;
 
 import java.io.File;
 import java.io.FilenameFilter;

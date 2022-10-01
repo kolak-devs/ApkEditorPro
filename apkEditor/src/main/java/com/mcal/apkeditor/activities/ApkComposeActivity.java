@@ -53,7 +53,7 @@ import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInstaller;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.PackageHelper;
-import com.mcal.common.utilsOld.ITaskCallback;
+import com.mcal.common.utils.ITaskCallback;
 import com.mcal.common.view.ProgressDialog;
 
 import org.jetbrains.annotations.Contract;

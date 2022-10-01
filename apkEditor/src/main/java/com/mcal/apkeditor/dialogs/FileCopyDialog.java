@@ -15,7 +15,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.common.data.Constants;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ZipUtils;
+import com.mcal.common.utils.ZipUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;

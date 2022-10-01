@@ -1,4 +1,4 @@
-package com.mcal.common.utilsOld;
+package com.mcal.common.utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

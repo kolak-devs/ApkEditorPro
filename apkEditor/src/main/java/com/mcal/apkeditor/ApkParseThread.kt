@@ -9,7 +9,7 @@ import brut.androlib.res.util.ExtFile
 import com.mcal.apkeditor.ui.fulleditor.utils.TaskDecoder
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.deleteAll
-import com.mcal.common.utilsOld.IOUtils
+import com.mcal.common.utils.readFully
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
@@ -133,7 +133,7 @@ class ApkParseThread(
             if (entry != null) {
                 val size = entry.size.toInt()
                 val data = ByteArray(size)
-                IOUtils.readFully(zipFile.getInputStream(entry), data)
+                readFully(zipFile.getInputStream(entry), data)
                 ais = ByteArrayInputStream(data)
                 return ARSCDecoder
                     .decode(ais, false, keepBroken, resTable)
@@ -171,7 +171,7 @@ class ApkParseThread(
             if (entry != null) {
                 val size = entry.size.toInt()
                 val data = ByteArray(size)
-                IOUtils.readFully(zipFile.getInputStream(entry), data)
+                readFully(zipFile.getInputStream(entry), data)
                 ais = ByteArrayInputStream(data)
                 return ARSCDecoder
                     .decode(ais, false, keepBroken, resTable)

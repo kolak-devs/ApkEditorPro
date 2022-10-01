@@ -1,6 +1,8 @@
 package com.mcal.common.utils;
 
 import static com.mcal.common.data.Constants.PACKAGE_NAME;
+import static com.mcal.common.utils.FileHelperKt.closeQuietly;
+import static com.mcal.common.utils.FileHelperKt.copyFile;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
-
-import com.mcal.common.utilsOld.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,17 +34,18 @@ public class ApkInstaller {
         try {
             inputStream = new FileInputStream(targetApkPath);
             outputStream = new FileOutputStream(apk);
-            IOUtils.copy(inputStream, outputStream);
+            copyFile(inputStream, outputStream);
         } catch (Exception e) {
             Toast.makeText(ctx, "Internal error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             return;
         } finally {
-            IOUtils.closeQuietly(inputStream);
-            IOUtils.closeQuietly(outputStream);
+            closeQuietly(inputStream);
+            closeQuietly(outputStream);
         }
         try {
             fileUri = FileProvider.getUriForFile(ctx, PACKAGE_NAME, apk);
-        } catch (Throwable ignored) {
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
         if (fileUri != null) {
             try {

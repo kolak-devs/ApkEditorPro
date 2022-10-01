@@ -8,7 +8,7 @@ import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.dex.DexStringEditor;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ZipUtils;
+import com.mcal.common.utils.ZipUtils;
 
 import java.io.Serializable;
 import java.util.List;

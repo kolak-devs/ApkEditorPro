@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.smali.AsyncDecodeTask;
-import com.mcal.common.utilsOld.CommandRunner;
+import com.mcal.common.utils.CommandRunner;
 
 import java.io.File;
 import java.io.Serializable;
@@ -32,8 +32,7 @@ public class DexDecode implements IApkMaking, Serializable {
         cr.runCommand("rm -rf " + decodeRootPath + "/smali", null, 10000);
 
         // Borrow the code from AsyncDecodeTask to do the decoding
-        AsyncDecodeTask decoder = new AsyncDecodeTask(ctx, apkFilePath,
-                decodeRootPath, null);
+        AsyncDecodeTask decoder = new AsyncDecodeTask(apkFilePath, decodeRootPath, null);
         //decoder.doAllJobs();
         // As we only modify the classes.dex
         decoder.decodeMainDex();

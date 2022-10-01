@@ -38,8 +38,8 @@ import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
 import com.mcal.common.utils.RootCommand;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.CommandInterface;
-import com.mcal.common.utilsOld.CommandRunner;
+import com.mcal.common.utils.CommandInterface;
+import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 

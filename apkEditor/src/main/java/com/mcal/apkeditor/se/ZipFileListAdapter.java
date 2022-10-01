@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.se;
 
+import static com.mcal.common.utils.FileHelperKt.closeQuietly;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -23,11 +25,10 @@ import com.mcal.apkeditor.dialogs.FileCopyDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apklib.AXMLPrinter;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ZipImageZoomer;
-import com.mcal.common.utils.ActivityHelper;
-import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.ImageZoomer;
+import com.mcal.common.utils.ImageZoomer;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 import com.mcal.pngeditor.ViewZipImageActivity;
@@ -199,8 +200,8 @@ public class ZipFileListAdapter extends BaseAdapter implements
             }
 
             // Clean up
-            IOUtils.closeQuietly(input);
-            IOUtils.closeQuietly(output);
+            closeQuietly(input);
+            closeQuietly(output);
         }
     }
 

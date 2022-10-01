@@ -13,9 +13,9 @@ import com.mcal.common.fastzip.FastZip
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.ScopedStorage.getApkEditorDir
 import com.mcal.common.utils.createNewFile
-import com.mcal.common.utilsOld.CommandRunner
-import com.mcal.common.utilsOld.ITaskCallback
-import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo
+import com.mcal.common.utils.CommandRunner
+import com.mcal.common.utils.ITaskCallback
+import com.mcal.common.utils.ITaskCallback.TaskStepInfo
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.IOException

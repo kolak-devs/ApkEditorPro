@@ -9,7 +9,7 @@ import androidx.preference.PreferenceManager;
 
 import com.mcal.common.App;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.CommandRunner;
+import com.mcal.common.utils.CommandRunner;
 
 public class Preferences {
     // Some aapt must pass "--no-version-vectors" option to get the correct result

@@ -21,9 +21,9 @@ import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener
 import com.mcal.apkeditor.patch.interfaces.IPatchContext
 import com.mcal.common.utils.LocaleManager
-import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.copyFile
 import com.mcal.common.utils.makeDir
-import com.mcal.common.utilsOld.IOUtils
+import com.mcal.common.utils.readText
 import com.mcal.patchview.ui.CodeText
 import org.xml.sax.SAXException
 import ru.mcal.manifestparser.xml.AndroidManifestParser
@@ -138,7 +138,7 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
         try {
             input = am.open("patches" + File.separator + filename)
             output = FileOutputStream(path)
-            IOUtils.copy(input, output)
+            copyFile(input, output)
             return true
         } catch (e: IOException) {
             Toast.makeText(
@@ -251,7 +251,7 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
                 this.error(R.string.patch_error_no_entry, "patch.txt")
             }
             input = zfile.getInputStream(entry)
-            return IOUtils.readString(input)
+            return input.readText()
         } catch (e: Exception) {
             e.message?.let { message ->
                 error(R.string.general_error, message)

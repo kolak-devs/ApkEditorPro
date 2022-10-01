@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.patch.rules;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
 
 import android.app.Activity;
@@ -12,7 +13,6 @@ import com.mcal.apkeditor.patch.PatchRule;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.IOUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -93,7 +93,7 @@ public class PatchRuleAddFiles extends PatchRule {
                 String tmpDir = ScopedStorage.getTmpDir().getPath();
                 String path = tmpDir + getRandomString(6);
                 fos = new FileOutputStream(path);
-                IOUtils.copy(input, fos);
+                copyFile(input, fos);
                 fos.close();
                 fos = null;
 

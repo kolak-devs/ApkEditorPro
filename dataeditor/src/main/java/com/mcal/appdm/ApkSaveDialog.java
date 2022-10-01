@@ -1,5 +1,7 @@
 package com.mcal.appdm;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,19 +13,15 @@ import android.widget.Toast;
 import com.mcal.appdm.base.R;
 import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.IOUtils;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 public class ApkSaveDialog extends Dialog {
-
-    private View view;
-    private WeakReference<Activity> activityRef;
-    private String apkPath;
-    private String appName;
+    private final Activity mActivity;
+    private final String mApkPath;
+    private final String mAppName;
     private String dstPath;
 
     @SuppressLint("InflateParams")
@@ -31,27 +29,21 @@ public class ApkSaveDialog extends Dialog {
         super(activity);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setCancelable(false);
-
-        this.activityRef = new WeakReference<Activity>(activity);
-        this.apkPath = apkPath;
-        this.appName = appName;
-
-        this.view = LayoutInflater.from(activity).inflate(
-                R.layout.appdm_dlg_saveapk, null);
+        mActivity = activity;
+        mApkPath = apkPath;
+        mAppName = appName;
+        View view = LayoutInflater.from(activity).inflate(R.layout.appdm_dlg_saveapk, null);
         setContentView(view);
     }
 
     public void start() {
-        this.show();
-
+        show();
         if (!FileHelperKt.exist()) {
             showToast("Cannot find SD card to save the APK.");
             return;
         }
-
-        this.dstPath = ScopedStorage.getBackupsDir() + "/" + appName + ".apk";
-
-        startCopyThread(apkPath, dstPath);
+        dstPath = ScopedStorage.getBackupsDir() + "/" + mAppName + ".apk";
+        startCopyThread(mApkPath, dstPath);
     }
 
     private void startCopyThread(final String srcPath, final String dstPath) {
@@ -61,7 +53,7 @@ public class ApkSaveDialog extends Dialog {
                 try {
                     FileInputStream in = new FileInputStream(srcPath);
                     FileOutputStream out = new FileOutputStream(dstPath);
-                    IOUtils.copy(in, out);
+                    copyFile(in, out);
                     onSucceed();
                 } catch (IOException e) {
                     onFailed(e.getMessage());
@@ -71,8 +63,7 @@ public class ApkSaveDialog extends Dialog {
     }
 
     protected void onSucceed() {
-        String str = activityRef.get().getResources()
-                .getString(R.string.apk_saved_tip);
+        String str = mActivity.getResources().getString(R.string.apk_saved_tip);
         showToastOnUiThread(String.format(str, dstPath));
         cancelDialog();
     }
@@ -83,34 +74,23 @@ public class ApkSaveDialog extends Dialog {
     }
 
     private void cancelDialog() {
-        final Activity activity = activityRef.get();
+        final Activity activity = mActivity;
         if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ApkSaveDialog.this.cancel();
-                }
-            });
+            activity.runOnUiThread(this::cancel);
         }
     }
 
     private void showToast(String msg) {
-        Activity activity = activityRef.get();
+        Activity activity = mActivity;
         if (activity != null) {
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showToastOnUiThread(final String msg) {
-        final Activity activity = activityRef.get();
+        final Activity activity = mActivity;
         if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-                }
-            });
+            activity.runOnUiThread(() -> Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show());
         }
     }
-
 }

@@ -2,7 +2,7 @@ package com.mcal.apkeditor.colormixer
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.mcal.common.utilsOld.RefInvoke
+import com.mcal.common.utils.ReflectionHelper
 
 class ColorValue(
     @JvmField
@@ -52,7 +52,7 @@ class ColorValue(
             } else if (strColorValue.startsWith("@android:color/")) {
                 try {
                     val refStr = strColorValue.substring(15)
-                    RefInvoke.getStaticFieldOjbect("android.R\$color", refStr)?.let { obj ->
+                    ReflectionHelper.getStaticFieldObject("android.R\$color", refStr)?.let { obj ->
                         intColorValue = ctx.getColor((obj as Int))
                         parsed = true
                     }

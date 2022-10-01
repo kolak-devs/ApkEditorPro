@@ -30,7 +30,7 @@ import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ActivityHelper;
-import com.mcal.common.utilsOld.CommandRunner;
+import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.view.ProgressDialog;
 
 import java.io.File;

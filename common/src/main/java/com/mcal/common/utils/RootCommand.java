@@ -2,8 +2,6 @@ package com.mcal.common.utils;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.common.utilsOld.CommandInterface;
-
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;

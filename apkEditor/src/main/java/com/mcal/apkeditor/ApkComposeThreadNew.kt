@@ -12,8 +12,8 @@ import com.mcal.apksigner.ApkSigner
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.cleanup
-import com.mcal.common.utilsOld.ITaskCallback
-import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo
+import com.mcal.common.utils.ITaskCallback
+import com.mcal.common.utils.ITaskCallback.TaskStepInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

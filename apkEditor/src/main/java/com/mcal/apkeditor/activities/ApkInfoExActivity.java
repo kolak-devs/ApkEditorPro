@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
 
 import android.annotation.SuppressLint;
@@ -29,8 +30,7 @@ import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.StringHelperKt;
-import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.ZipUtils;
+import com.mcal.common.utils.ZipUtils;
 
 import java.io.Closeable;
 import java.io.File;
@@ -503,7 +503,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
 
                 tmpFilePath = ScopedStorage.getTmpDir() + getRandomString(6);
                 out = new FileOutputStream(tmpFilePath);
-                IOUtils.copy(input, out);
+                copyFile(input, out);
             } catch (Exception e) {
                 Toast.makeText(ApkInfoExActivity.this,
                         R.string.str_rename_failed, Toast.LENGTH_SHORT).show();

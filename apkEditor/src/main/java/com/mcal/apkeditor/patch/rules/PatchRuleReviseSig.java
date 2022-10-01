@@ -1,5 +1,8 @@
 package com.mcal.apkeditor.patch.rules;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
+import static com.mcal.common.utils.FileHelperKt.writeToFile;
+
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
@@ -11,7 +14,6 @@ import com.mcal.apkeditor.patch.PatchRule;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 import com.mcal.common.utils.HexHelper;
-import com.mcal.common.utilsOld.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -66,7 +68,7 @@ public class PatchRuleReviseSig extends PatchRule {
             String content = readFileContent(targetFile);
             content = content.replace("%PACKAGE_NAME%", packageName);
             content = content.replace("%RSA_DATA%", hexRSA);
-            IOUtils.writeToFile(targetFile, content);
+            writeToFile(targetFile, content);
         } catch (Exception e) {
             logger.error(R.string.patch_error_write_to, targetFile);
         }
@@ -100,7 +102,7 @@ public class PatchRuleReviseSig extends PatchRule {
                 // Found the RSA entry
                 input = new BufferedInputStream(zfile.getInputStream(ze));
                 output = new ByteArrayOutputStream();
-                IOUtils.copy(input, output);
+                copyFile(input, output);
                 break;
             }
         } catch (IOException e) {

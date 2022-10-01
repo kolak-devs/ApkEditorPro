@@ -4,14 +4,13 @@ import android.content.Context
 import android.os.Environment
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ScopedStorage.getBinDir
-import com.mcal.common.utilsOld.CommandInterface
-import com.mcal.common.utilsOld.CommandRunner
 import org.jetbrains.annotations.Contract
 import java.io.*
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.util.zip.ZipFile
 
 // Support root mode and non-root mode
 @Contract("_ -> new")
@@ -20,26 +19,6 @@ private fun createCommandRunner(isRootMode: Boolean): CommandInterface {
         RootCommand()
     } else {
         CommandRunner()
-    }
-}
-
-/**
- * @param path временный файл
- * @param realPath реальный путь к файлу
- */
-@Throws(java.lang.Exception::class)
-fun copyBack(path: String, realPath: String, isRootMode: Boolean) {
-    val rc = createCommandRunner(isRootMode)
-    var strCmd = "cp"
-    val bin = File(getBinDir(), "mycp")
-    if (bin.exists()) {
-        strCmd = bin.path
-    }
-    val copyRet = rc.runCommand(String.format("$strCmd %s \"%s\"", path, realPath), null, 3000)
-
-    // Copy file failed, use the original file
-    if (!copyRet) {
-        throw java.lang.Exception("Can not write file to $realPath")
     }
 }
 
@@ -145,6 +124,17 @@ fun writeToFile(fileName: String, data: ByteArray) {
     }
 }
 
+@Throws(IOException::class)
+fun writeToFile(targetFile: String?, content: String) {
+    var fos: FileOutputStream? = null
+    try {
+        fos = FileOutputStream(targetFile)
+        fos.write(content.toByteArray())
+    } finally {
+        closeQuietly(fos)
+    }
+}
+
 private val notAllowedChars = charArrayOf('\"', '/', '\\', ':', '*', '?', '<', '>', '|')
 
 private fun isNotAllowed(c: Char): Boolean {
@@ -178,8 +168,35 @@ fun reviseFileName(filename: String?): String {
 }
 
 @Throws(IOException::class)
+fun toByteArray(input: InputStream): ByteArray {
+    val output = ByteArrayOutputStream()
+    copyFile(input, output)
+    return output.toByteArray()
+}
+
+/**
+ * @param path временный файл
+ * @param realPath реальный путь к файлу
+ */
+@Throws(java.lang.Exception::class)
+fun copyBack(path: String, realPath: String, isRootMode: Boolean) {
+    val rc = createCommandRunner(isRootMode)
+    var strCmd = "cp"
+    val bin = File(getBinDir(), "mycp")
+    if (bin.exists()) {
+        strCmd = bin.path
+    }
+    val copyRet = rc.runCommand(String.format("$strCmd %s \"%s\"", path, realPath), null, 3000)
+
+    // Copy file failed, use the original file
+    if (!copyRet) {
+        throw java.lang.Exception("Can not write file to $realPath")
+    }
+}
+
+@Throws(IOException::class)
 fun Context.copyAssetsFile(filename: String, output: File) {
-    copyFileStream(this.assets.open(filename), FileOutputStream(output))
+    copyFile(assets.open(filename), FileOutputStream(output))
 }
 
 @Throws(IOException::class)
@@ -189,11 +206,11 @@ fun copyFile(srcFilePath: String, dstFilePath: String) {
 
 @Throws(IOException::class)
 fun copyFile(filename: File, output: File) {
-    copyFileStream(FileInputStream(filename), FileOutputStream(output))
+    copyFile(FileInputStream(filename), FileOutputStream(output))
 }
 
 @Throws(IOException::class)
-fun copyFileStream(input: InputStream, output: OutputStream) {
+fun copyFile(input: InputStream, output: OutputStream) {
     val buffer = ByteArray(1024)
     var length: Int = input.read(buffer)
     while ((length) > 0) {
@@ -243,6 +260,19 @@ fun File.cleanup() {
     }
 }
 
+@Throws(IOException::class)
+fun readFully(input: InputStream, buf: ByteArray) {
+    var read = 0
+    while (read < buf.size) {
+        val ret = input.read(buf, read, buf.size - read)
+        read += if (ret != -1) {
+            ret
+        } else {
+            break
+        }
+    }
+}
+
 fun InputStream.readText(charset: Charset = Charsets.UTF_8): String {
     return this.bufferedReader(charset).use { it.readText() }
 }
@@ -273,4 +303,69 @@ private fun dirCanWrite(dir: String): Boolean {
         return ret
     }
     return false
+}
+
+fun writeObjectToFile(filePath: String, obj: Any): Boolean {
+    val file = File(filePath)
+    var objOut: ObjectOutputStream? = null
+    try {
+        objOut = ObjectOutputStream(FileOutputStream(file))
+        objOut.writeObject(obj)
+        objOut.flush()
+        return true
+    } catch (e: IOException) {
+        e.printStackTrace()
+    } finally {
+        if (objOut != null) {
+            try {
+                objOut.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+    return false
+}
+
+fun readObjectFromFile(filePath: String?): Any? {
+    if (filePath == null) {
+        return null
+    }
+    var result: Any? = null
+    val file = File(filePath)
+    var objIn: ObjectInputStream? = null
+    try {
+        objIn = ObjectInputStream(FileInputStream(file))
+        result = objIn.readObject()
+    } catch (e: java.lang.Exception) {
+        e.printStackTrace()
+    } finally {
+        if (objIn != null) {
+            try {
+                objIn.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+    return result
+}
+
+fun closeQuietly(c: Closeable?) {
+    if (c != null) {
+        try {
+            c.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+}
+
+fun closeQuietly(zfile: ZipFile?) {
+    if (zfile != null) {
+        try {
+            zfile.close()
+        } catch (ignored: IOException) {
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.patch.rules;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
+
 import android.app.Activity;
 import android.content.Context;
 
@@ -11,7 +13,6 @@ import com.mcal.apkeditor.patch.PatchRule;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -131,7 +132,7 @@ public class PatchRuleExecDex extends PatchRule {
             dexPath = ScopedStorage.getTmpDir() + "script.dex";
             os = new BufferedOutputStream(new FileOutputStream(dexPath));
             is = new BufferedInputStream(patchZip.getInputStream(ze));
-            IOUtils.copy(is, os);
+            copyFile(is, os);
         } catch (Exception e) {
             logger.error(R.string.general_error, "Cannot extract '" + scriptName + "' to SD card.");
             return null;

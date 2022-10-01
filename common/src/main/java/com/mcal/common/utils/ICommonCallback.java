@@ -1,4 +1,4 @@
-package com.mcal.common.utilsOld;
+package com.mcal.common.utils;
 
 public interface ICommonCallback {
     public void doCallback();

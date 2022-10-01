@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.mcal.apkeditor.pro.DexDecoder
 import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utilsOld.IOUtils
+import com.mcal.common.utils.copyFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +18,6 @@ import java.util.zip.ZipFile
 import kotlin.coroutines.CoroutineContext
 
 class AsyncDecodeTask(
-    private val context: Context,
     private val mApkPath: String,
     private val mDecodeRootPath: String,
     private val mCallback: IDecodeTaskCallback?
@@ -128,7 +127,7 @@ class AsyncDecodeTask(
         try {
             input = zipFile.getInputStream(entry)
             output = FileOutputStream(filePath)
-            IOUtils.copy(input, output)
+            copyFile(input, output)
             dexFileList.add(filePath)
         } finally {
             input?.let {

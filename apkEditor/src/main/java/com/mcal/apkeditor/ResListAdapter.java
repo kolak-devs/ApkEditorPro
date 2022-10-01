@@ -30,8 +30,7 @@ import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ZipImageZoomer;
-import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.ImageZoomer;
+import com.mcal.common.utils.ImageZoomer;
 import com.mcal.common.view.ProgressDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -605,7 +604,7 @@ public class ResListAdapter extends BaseAdapter implements
                 throwExistException(entryName);
             } else {
                 FileOutputStream out = new FileOutputStream(targetPath);
-                IOUtils.copy(input, out);
+                copyFile(input, out);
                 out.close();
             }
         } else { // copy to a folder inside apk (like assets)
@@ -618,7 +617,7 @@ public class ResListAdapter extends BaseAdapter implements
                 // Copy to the working path
                 targetPath = ScopedStorage.getTmpDir() + getRandomString(8);
                 FileOutputStream out = new FileOutputStream(targetPath);
-                IOUtils.copy(input, out);
+                copyFile(input, out);
                 out.close();
 
                 rootNode.addChildByPath(paths, true);
@@ -744,7 +743,7 @@ public class ResListAdapter extends BaseAdapter implements
                 // Copy files
                 in = new FileInputStream(newPath);
                 out = new FileOutputStream(decodedPath);
-                IOUtils.copy(in, out);
+                copyFile(in, out);
 
                 // Record replace information and show
                 recordFileReplace(entryPath, decodedPath);

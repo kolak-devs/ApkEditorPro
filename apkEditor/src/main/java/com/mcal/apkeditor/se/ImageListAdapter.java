@@ -23,7 +23,7 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.common.utils.ZipImageZoomer;
 import com.mcal.common.utils.ActivityHelper;
-import com.mcal.common.utilsOld.ImageZoomer;
+import com.mcal.common.utils.ImageZoomer;
 import com.mcal.common.view.DynamicExpandListView;
 import com.mcal.pngeditor.ViewZipImageActivity;
 

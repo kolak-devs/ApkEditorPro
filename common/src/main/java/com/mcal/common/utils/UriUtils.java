@@ -1,4 +1,4 @@
-package com.mcal.common.utilsOld;
+package com.mcal.common.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

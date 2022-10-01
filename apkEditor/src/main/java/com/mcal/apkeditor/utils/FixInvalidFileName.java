@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.common.utilsOld.TextFileReader;
+import com.mcal.common.utils.TextFileReader;
 
 import java.io.BufferedReader;
 import java.io.File;

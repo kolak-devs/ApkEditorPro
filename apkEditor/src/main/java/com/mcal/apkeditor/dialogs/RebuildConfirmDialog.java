@@ -19,7 +19,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
 import com.mcal.common.utils.StringHelperKt;
-import com.mcal.common.utilsOld.Display;
+import com.mcal.common.utils.Display;
 
 import java.util.ArrayList;
 import java.util.HashMap;

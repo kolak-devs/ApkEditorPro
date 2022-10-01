@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,7 +22,6 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
-import com.mcal.common.utilsOld.IOUtils;
 
 import java.io.Closeable;
 import java.io.File;
@@ -51,8 +52,6 @@ public class SmaliCodeDialog extends Dialog
     };
     private final WeakReference<Activity> activityRef;
     private final String smaliRootFolder;
-    boolean isPro;
-    private Spinner spinner;
     private EditText codeEt;
 
     // filePath: The path for current editing file
@@ -60,40 +59,36 @@ public class SmaliCodeDialog extends Dialog
         super(activity);
 
         this.activityRef = new WeakReference<>(activity);
-        this.isPro = BuildConfig.IS_PRO;
         this.smaliRootFolder = getSmaliRootFolder(filePath);
 
         init(activity);
     }
 
+    @NonNull
     private String getSmaliRootFolder(@NonNull String filePath) {
         String[] dirs = filePath.split("/");
-        String smaliPath = "";
+        StringBuilder smaliPath = new StringBuilder();
         for (String dir : dirs) {
-            smaliPath += dir + "/";
+            smaliPath.append(dir).append("/");
             if ("smali".equals(dir) || dir.startsWith("smali_")) {
                 break;
             }
         }
-        return smaliPath;
+        return smaliPath.toString();
     }
 
     @SuppressLint("InflateParams")
     private void init(final Activity activity) {
-
-        View view = LayoutInflater.from(activity)
-                .inflate(R.layout.dialog_smalicode, null);
+        View view = LayoutInflater.from(activity).inflate(R.layout.dialog_smalicode, null);
 
         // Spinner
-        this.spinner = view.findViewById(R.id.spinner_codename);
+        Spinner spinner = view.findViewById(R.id.spinner_codename);
         String[] names = new String[smaliNameIds.length];
         for (int i = 0; i < smaliNameIds.length; ++i) {
             names[i] = activity.getString(smaliNameIds[i]);
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
-                android.R.layout.simple_spinner_item, names);
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, names);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
         // Event listener
@@ -110,7 +105,7 @@ public class SmaliCodeDialog extends Dialog
         });
 
         // Code Content
-        this.codeEt = view.findViewById(R.id.et_samplecode);
+        codeEt = view.findViewById(R.id.et_samplecode);
 
         // Copy button
         Button copyBtn = view.findViewById(R.id.btn_copy);
@@ -138,18 +133,15 @@ public class SmaliCodeDialog extends Dialog
         } else if (id == R.id.btn_copy) {
             // Copy to clipboard
             Activity activity = activityRef.get();
-            ClipboardManager clipboard = (ClipboardManager) activity
-                    .getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("code",
-                    codeEt.getText().toString());
+            ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("code", codeEt.getText().toString());
             clipboard.setPrimaryClip(clip);
 
             // Copy Utils.smali to some folder
             copyUtilSmali();
 
             // Toast
-            Toast.makeText(activity, R.string.smali_copied, Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(activity, R.string.smali_copied, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -170,7 +162,7 @@ public class SmaliCodeDialog extends Dialog
                 fos = new FileOutputStream(file);
                 AssetManager am = activityRef.get().getAssets();
                 is = am.open("smali_patch/Utils.smali");
-                IOUtils.copy(is, fos);
+                copyFile(is, fos);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

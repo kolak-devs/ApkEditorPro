@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ImageTool;
+import com.mcal.common.utils.ImageTool;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,11 +29,9 @@ import brut.androlib.res.decoder.ARSCDecoder;
 import brut.androlib.res.decoder.ARSCDecoder.ARSCData;
 
 public class ReplaceLauncherIcon implements IApkMaking, Serializable {
-
     private static final long serialVersionUID = 1975576048832764645L;
-
-    private int launcherId;
-    private String newIconPath;
+    private final int launcherId;
+    private final String newIconPath;
 
     public ReplaceLauncherIcon(int launcherId, String newIconPath) {
         this.launcherId = launcherId;
@@ -38,26 +39,22 @@ public class ReplaceLauncherIcon implements IApkMaking, Serializable {
     }
 
     @Override
-    public void prepareReplaces(Context ctx, String apkFilePath,
-                                Map<String, String> allReplaces, IDescriptionUpdate updater) {
+    public void prepareReplaces(Context ctx, String apkFilePath, Map<String, String> allReplaces, IDescriptionUpdate updater) {
         ZipFile zipFile = null;
         InputStream arscStream = null;
-
         try {
             zipFile = new ZipFile(apkFilePath);
             ZipEntry entry = zipFile.getEntry("resources.arsc");
             arscStream = zipFile.getInputStream(entry);
 
             ResTable resTable = new ResTable();
-            ARSCData arscData = ARSCDecoder.decode(arscStream, false, false,
-                    resTable);
+            ARSCData arscData = ARSCDecoder.decode(arscStream, false, false, resTable);
             ResPackage[] packages = arscData.getPackages();
 
             for (ResPackage pkg : packages) {
                 for (ResResSpec spec : pkg.listResSpecs()) {
                     if (launcherId == spec.getId().id) {
-                        Map<ResConfigFlags, ResResource> all = spec
-                                .getAllResources();
+                        Map<ResConfigFlags, ResResource> all = spec.getAllResources();
                         int index = 0;
                         Bitmap newIconBitmap = BitmapFactory.decodeFile(newIconPath);
                         for (ResResource res : all.values()) {
@@ -73,14 +70,10 @@ public class ReplaceLauncherIcon implements IApkMaking, Serializable {
                             } else {
                                 entryPath = "res/" + res.getFilePath() + ".png";
                             }
-                            // Log.d("DEBUG", "entry name = " + entryPath);
                             ImageBounds bounds = getImageBounds(zipFile, entryPath);
                             if (bounds != null) {
                                 ImageTool tool = new ImageTool();
-                                // Log.d("DEBUG", filePath + ": " + bounds.width
-                                // + ", " + bounds.height);
-                                tool.zoomImage(newIconBitmap, bounds.width,
-                                        bounds.height, filePath);
+                                tool.zoomImage(newIconBitmap, bounds.width, bounds.height, filePath);
                                 allReplaces.put(entryPath, filePath);
                             } else {
                                 allReplaces.put(entryPath, newIconPath);
@@ -89,30 +82,31 @@ public class ReplaceLauncherIcon implements IApkMaking, Serializable {
                         }
                         break;
                     }
-
                 }
             }
-
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
             if (arscStream != null) {
                 try {
                     arscStream.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
             if (zipFile != null) {
                 try {
                     zipFile.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
 
     // Get the iamge bounds in zip file
-    private ImageBounds getImageBounds(ZipFile zipFile, String entryPath) {
+    @Nullable
+    private ImageBounds getImageBounds(@NonNull ZipFile zipFile, String entryPath) {
         ZipEntry entry = zipFile.getEntry(entryPath);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -126,27 +120,21 @@ public class ReplaceLauncherIcon implements IApkMaking, Serializable {
             bounds.width = options.outWidth;
             return bounds;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
-
         return null;
     }
 
-    class ImageBounds {
+    private static class ImageBounds {
         int width;
         int height;
     }
-
-//	@Override
-//	public String getDescription() {
-//		return "";
-//	}
 }

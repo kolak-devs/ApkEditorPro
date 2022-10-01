@@ -1,4 +1,6 @@
-package com.mcal.common.utilsOld;
+package com.mcal.common.utils;
+
+import androidx.annotation.NonNull;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -16,64 +18,11 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class ZipUtils {
-
-    public static void unzip(String zipFile, String zipDir) throws IOException {
-
-        ZipFile zfile = null;
-        InputStream is = null;
-        OutputStream os = null;
-
-        try {
-            zfile = new ZipFile(zipFile);
-            Enumeration<?> zList = zfile.entries();
-            ZipEntry ze = null;
-            byte[] buf = new byte[4096];
-            while (zList.hasMoreElements()) {
-                ze = (ZipEntry) zList.nextElement();
-                if (ze.isDirectory()) {
-                    String absPath = zipDir;
-                    if (!zipDir.endsWith("/")) {
-                        absPath += "/";
-                        absPath += ze.getName();
-                    }
-                    File f = new File(absPath);
-                    f.mkdirs();
-                    // Log.d("DEBUG", "dir=" + zipDir + ze.getName() + ", ret="
-                    // + ret);
-                    continue;
-                }
-                // Log.d("DEBUG", "file=" + ze.getName());
-                os = new BufferedOutputStream(new FileOutputStream(getFile(
-                        zipDir, ze.getName())));
-                is = new BufferedInputStream(zfile.getInputStream(ze));
-                int readLen = 0;
-                while ((readLen = is.read(buf, 0, 4096)) != -1) {
-                    os.write(buf, 0, readLen);
-                }
-                closeQuietly(is);
-                closeQuietly(os);
-            }
-            zfile.close();
-        } finally {
-            closeQuietly(is);
-            closeQuietly(os);
-            try {
-                if (null != zfile) {
-                    zfile.close();
-                }
-            } catch (IOException ex) {
-                // ignore
-            }
-        }
-    }
-
     // Extract entryPath to destination path
     // entryPath looks like "assets"
     // If 2 files under "assets" -- "assets/a", "assets/b", then a and b will be
     // copied to dstPath -- dstPath + "/a", dstPath + "/b"
-    public static void unzipDirectory(String zipFilePath, String entryPath,
-                                      String dstPath) throws IOException {
-
+    public static void unzipDirectory(String zipFilePath, @NonNull String entryPath, String dstPath) throws IOException {
         ZipFile zfile = null;
         InputStream is = null;
         OutputStream os = null;
@@ -85,7 +34,7 @@ public class ZipUtils {
         try {
             zfile = new ZipFile(zipFilePath);
             Enumeration<?> zList = zfile.entries();
-            ZipEntry ze = null;
+            ZipEntry ze;
             byte[] buf = new byte[4096];
             while (zList.hasMoreElements()) {
                 ze = (ZipEntry) zList.nextElement();
@@ -93,16 +42,14 @@ public class ZipUtils {
                     continue;
                 }
 
-                String relativePath = ze.getName()
-                        .substring(entryPath.length());
+                String relativePath = ze.getName().substring(entryPath.length());
                 if (ze.isDirectory()) {
                     File f = new File(dstPath + "/" + relativePath);
                     f.mkdirs();
                     continue;
                 }
 
-                os = new BufferedOutputStream(new FileOutputStream(getFile(
-                        dstPath, relativePath)));
+                os = new BufferedOutputStream(new FileOutputStream(getFile(dstPath, relativePath)));
                 is = new BufferedInputStream(zfile.getInputStream(ze));
                 int readLen = 0;
                 while ((readLen = is.read(buf, 0, 4096)) != -1) {
@@ -120,61 +67,8 @@ public class ZipUtils {
         }
     }
 
-    public static void unzipNoThrow(String zipFile, String zipDir) {
-
-        ZipFile zfile = null;
-        InputStream is = null;
-        OutputStream os = null;
-
-        try {
-            zfile = new ZipFile(zipFile);
-            Enumeration<?> zList = zfile.entries();
-            ZipEntry ze = null;
-            byte[] buf = new byte[4096];
-            while (zList.hasMoreElements()) {
-                ze = (ZipEntry) zList.nextElement();
-                if (ze.isDirectory()) {
-                    String absPath = zipDir;
-                    if (!zipDir.endsWith("/")) {
-                        absPath += "/";
-                        absPath += ze.getName();
-                    }
-                    File f = new File(absPath);
-                    f.mkdirs();
-                    // Log.d("DEBUG", "dir=" + zipDir + ze.getName() + ", ret="
-                    // + ret);
-                    continue;
-                }
-                // Log.d("DEBUG", "file=" + ze.getName());
-                os = new BufferedOutputStream(new FileOutputStream(getFile(
-                        zipDir, ze.getName())));
-                is = new BufferedInputStream(zfile.getInputStream(ze));
-                int readLen = 0;
-                while ((readLen = is.read(buf, 0, 4096)) != -1) {
-                    os.write(buf, 0, readLen);
-                }
-                closeQuietly(is);
-                closeQuietly(os);
-            }
-            zfile.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeQuietly(is);
-            closeQuietly(os);
-            try {
-                if (null != zfile) {
-                    zfile.close();
-                }
-            } catch (IOException ex) {
-                // ignore
-            }
-        }
-    }
-
     // Just unzip one file to the target directory
-    public static void unzipFileTo(String zipFilePath, String entryName,
-                                   String targetPath) throws Exception {
+    public static void unzipFileTo(String zipFilePath, String entryName, String targetPath) throws Exception {
         ZipFile zfile = null;
         InputStream is = null;
         OutputStream os = null;
@@ -186,7 +80,7 @@ public class ZipUtils {
 
             os = new BufferedOutputStream(new FileOutputStream(targetPath));
             is = new BufferedInputStream(zfile.getInputStream(ze));
-            int readLen = 0;
+            int readLen;
             while ((readLen = is.read(buf, 0, 4096)) != -1) {
                 os.write(buf, 0, readLen);
             }
@@ -197,19 +91,7 @@ public class ZipUtils {
         }
     }
 
-    public static void zipDir(String dirName, String nameZipFile)
-            throws IOException {
-        ZipOutputStream zip = null;
-        FileOutputStream fW = null;
-        fW = new FileOutputStream(nameZipFile);
-        zip = new ZipOutputStream(fW);
-        addFolderToZip("", dirName, zip);
-        zip.close();
-        fW.close();
-    }
-
-    private static void addFolderToZip(String path, String srcFolder,
-                                       ZipOutputStream zip) throws IOException {
+    private static void addFolderToZip(String path, String srcFolder, ZipOutputStream zip) throws IOException {
         File folder = new File(srcFolder);
         String[] subFiles = folder.list();
         if (subFiles == null || subFiles.length == 0) {
@@ -217,18 +99,15 @@ public class ZipUtils {
         } else {
             for (String fileName : subFiles) {
                 if (path.equals("")) {
-                    addFileToZip(folder.getName(), srcFolder + "/" + fileName,
-                            zip, false);
+                    addFileToZip(folder.getName(), srcFolder + "/" + fileName, zip, false);
                 } else {
-                    addFileToZip(path + "/" + folder.getName(), srcFolder + "/"
-                            + fileName, zip, false);
+                    addFileToZip(path + "/" + folder.getName(), srcFolder + "/" + fileName, zip, false);
                 }
             }
         }
     }
 
-    private static void addFileToZip(String path, String srcFile,
-                                     ZipOutputStream zip, boolean flag) throws IOException {
+    private static void addFileToZip(String path, String srcFile, ZipOutputStream zip, boolean flag) throws IOException {
         File folder = new File(srcFile);
         if (flag) {
             zip.putNextEntry(new ZipEntry(path + "/" + folder.getName() + "/"));
@@ -253,7 +132,7 @@ public class ZipUtils {
             try {
                 input.close();
             } catch (Throwable e) {
-                // Ignore
+                e.printStackTrace();
             }
         }
     }
@@ -263,7 +142,7 @@ public class ZipUtils {
             try {
                 output.close();
             } catch (Throwable e) {
-                // Ignore
+                e.printStackTrace();
             }
         }
     }
@@ -272,13 +151,14 @@ public class ZipUtils {
         if (zfile != null) {
             try {
                 zfile.close();
-            } catch (Throwable ignored) {
-                // Ignore
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         }
     }
 
-    private static File getFile(String baseDir, String relativePath) {
+    @NonNull
+    private static File getFile(String baseDir, @NonNull String relativePath) {
         String[] dirs = relativePath.split("/");
         File ret = new File(baseDir);
         if (!ret.exists()) {
@@ -297,7 +177,7 @@ public class ZipUtils {
         return ret;
     }
 
-    private static int getSlashNum(String str) {
+    private static int getSlashNum(@NonNull String str) {
         int slashNum = 0;
         int startOff = 0;
         while ((startOff = str.indexOf('/', startOff)) != -1) {
@@ -309,8 +189,9 @@ public class ZipUtils {
 
     // prefix like "res/", means to list all the entries under res directory
     // prefix like "res/" will return "res/a.png", but will not return "res/raw/a.png"
+    @NonNull
     public static List<String> listFiles(String zipPath, String prefix) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         int slashNum = getSlashNum(prefix);
 
         ZipFile zfile = null;
@@ -332,7 +213,6 @@ public class ZipUtils {
         } finally {
             closeQuietly(zfile);
         }
-
         return result;
     }
 }

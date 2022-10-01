@@ -1,8 +1,11 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
 import static com.mcal.common.utils.FileHelperKt.makeDir;
+import static com.mcal.common.utils.FileHelperKt.readObjectFromFile;
 import static com.mcal.common.utils.FileHelperKt.recursiveModifiedTime;
 import static com.mcal.common.utils.FileHelperKt.reviseFileName;
+import static com.mcal.common.utils.FileHelperKt.writeObjectToFile;
 import static com.mcal.common.utils.FileHelperKt.writeToFile;
 import static com.mcal.common.utils.PathHelperKt.replaceNameWith;
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
@@ -97,11 +100,10 @@ import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.StringHelperKt;
-import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.ServiceUtil;
-import com.mcal.common.utilsOld.TextFileReader;
-import com.mcal.common.utilsOld.UriUtils;
-import com.mcal.common.utilsOld.ZipUtils;
+import com.mcal.common.utils.ServiceUtil;
+import com.mcal.common.utils.TextFileReader;
+import com.mcal.common.utils.UriUtils;
+import com.mcal.common.utils.ZipUtils;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 import com.mcal.folderlist.util.OpenFiles;
@@ -264,7 +266,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 TextFileReader reader = new TextFileReader(versionPath);
                 int version = Integer.parseInt(reader.getContents());
                 if (version == 1) {
-                    return (ProjectInfo) IOUtils.readObjectFromFile(infoPath);
+                    return (ProjectInfo) readObjectFromFile(infoPath);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -454,8 +456,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
         String versionPath = prjDirectory + "/.prj_version";
         String infoPath = prjDirectory + "/ae.prj";
         try {
-            IOUtils.writeToFile(versionPath, "1");
-            return IOUtils.writeObjectToFile(infoPath, prjInfo);
+            writeToFile(versionPath, "1");
+            return writeObjectToFile(infoPath, prjInfo);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -504,7 +506,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         if (changedValues != null && !changedValues.isEmpty()) {
             this.stringModified = true;
             String path = workingPath + "changedStringValues";
-            IOUtils.writeObjectToFile(path, changedValues);
+            writeObjectToFile(path, changedValues);
             state.putString("changedStringValues_file", path);
         }
 
@@ -520,17 +522,17 @@ public class ApkInfoActivity extends CustomizedLangActivity
             }
             if (added != null && !added.isEmpty()) {
                 String path = workingPath + "res_added";
-                IOUtils.writeObjectToFile(path, added);
+                writeObjectToFile(path, added);
                 state.putString("res_added_file", path);
             }
             if (replaced != null && !replaced.isEmpty()) {
                 String path = workingPath + "res_replaced";
-                IOUtils.writeObjectToFile(path, replaced);
+                writeObjectToFile(path, replaced);
                 state.putString("res_replaced_file", path);
             }
             if (deleted != null && !deleted.isEmpty()) {
                 String path = workingPath + "res_deleted";
-                IOUtils.writeObjectToFile(path, deleted);
+                writeObjectToFile(path, deleted);
                 state.putString("res_deleted_file", path);
             }
         }
@@ -538,13 +540,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // Do not do it any more as consumes too much time (in case of rotation)
         String path = workingPath + "allStringValues";
         if (saveAll) {
-            IOUtils.writeObjectToFile(path, allStringValues);
+            writeObjectToFile(path, allStringValues);
         }
         state.putString("allStringValues_file", path);
 
         path = workingPath + "fileEntry2ZipEntry";
         if (saveAll && !isFullDecoding) { // when all files decoded, do not need to save the mapping
-            IOUtils.writeObjectToFile(path, mFileEntry2ZipEntry);
+            writeObjectToFile(path, mFileEntry2ZipEntry);
         }
         state.putString("fileEntry2ZipEntry_file", path);
 
@@ -641,16 +643,16 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private void recoverData(@NonNull Bundle savedInstanceState) {
 
         String path = savedInstanceState.getString("allStringValues_file");
-        allStringValues = (HashMap) IOUtils.readObjectFromFile(path);
+        allStringValues = (HashMap) readObjectFromFile(path);
 
         path = savedInstanceState.getString("changedStringValues_file");
         if (path != null) {
-            changedStringValues = (HashMap) IOUtils.readObjectFromFile(path);
+            changedStringValues = (HashMap) readObjectFromFile(path);
             StringsUtils.mergeStrings(allStringValues, changedStringValues);
         }
 
         path = savedInstanceState.getString("fileEntry2ZipEntry_file");
-        mFileEntry2ZipEntry = (HashMap) IOUtils.readObjectFromFile(path);
+        mFileEntry2ZipEntry = (HashMap) readObjectFromFile(path);
 
         curConfig = savedInstanceState.getString("curConfig");
         langConfigList = (ArrayList) savedInstanceState.getSerializable("langConfigList");
@@ -667,15 +669,15 @@ public class ApkInfoActivity extends CustomizedLangActivity
         resCurrentDir = savedInstanceState.getString("res_current_dir");
         String filePath = savedInstanceState.getString("res_added_file");
         if (filePath != null) {
-            res_addedFiles = (Map) IOUtils.readObjectFromFile(filePath);
+            res_addedFiles = (Map) readObjectFromFile(filePath);
         }
         filePath = savedInstanceState.getString("res_replaced_file");
         if (filePath != null) {
-            res_replacedFiles = (Map) IOUtils.readObjectFromFile(filePath);
+            res_replacedFiles = (Map) readObjectFromFile(filePath);
         }
         filePath = savedInstanceState.getString("res_deleted_file");
         if (filePath != null) {
-            res_deletedFiles = (Set) IOUtils.readObjectFromFile(filePath);
+            res_deletedFiles = (Set) readObjectFromFile(filePath);
         }
 
         dexDecoded = savedInstanceState.getBoolean("dex2smaliClicked");
@@ -890,7 +892,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     String strQualifier = bundle.getString("targetLanguageCode");
                     String path = bundle.getString("translatedList_file");
                     @SuppressWarnings({"unchecked", "rawtypes"})
-                    List<TranslateItem> items = (List) IOUtils.readObjectFromFile(path);
+                    List<TranslateItem> items = (List) readObjectFromFile(path);
                     if (items != null && !items.isEmpty()) {
                         List<StringItem> valueList = new ArrayList<>();
                         for (TranslateItem item : items) {
@@ -1399,7 +1401,11 @@ public class ApkInfoActivity extends CustomizedLangActivity
                             errorMessage = String.format(fmt, folderName);
                         } else {
                             targetDir.mkdir();
-                            IOUtils.copy(targetDir, srcDir);
+                            try {
+                                copyFile(targetDir, srcDir);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 
@@ -1586,9 +1592,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
             try {
                 String workingPath = ScopedStorage.getTmpDir().getPath();
                 String path = workingPath + "allStringValues";
-                IOUtils.writeObjectToFile(path, allStringValues);
+                writeObjectToFile(path, allStringValues);
                 path = workingPath + "fileEntry2ZipEntry";
-                IOUtils.writeObjectToFile(path, fileEntry2ZipEntry);
+                writeObjectToFile(path, fileEntry2ZipEntry);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1616,7 +1622,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     @Override
     public void decodeDex(IGeneralCallback dexDecodedCallback) {
         mDexDecodedCallback = dexDecodedCallback;
-        new AsyncDecodeTask(this, apkPath, decodeRootPath, this).execute();
+        new AsyncDecodeTask(apkPath, decodeRootPath, this).execute();
         dexDecoded = true;
     }
 
@@ -1791,12 +1797,12 @@ public class ApkInfoActivity extends CustomizedLangActivity
             Bundle bundle = new Bundle();
             {
                 String translatedFile = ScopedStorage.getTmpDir() + "translated";
-                IOUtils.writeObjectToFile(translatedFile, translatedList);
+                writeObjectToFile(translatedFile, translatedList);
                 bundle.putString("translatedList_file", translatedFile);
             }
             {
                 String untranslatedFile = ScopedStorage.getTmpDir() + "untranslatedList";
-                IOUtils.writeObjectToFile(untranslatedFile, untranslatedList);
+                writeObjectToFile(untranslatedFile, untranslatedList);
                 bundle.putString("untranslatedList_file", untranslatedFile);
             }
             bundle.putString("targetLanguageCode", strQualifier);
@@ -2349,7 +2355,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             // Copy files
             in = new FileInputStream(replacingPath);
             out = new FileOutputStream(replacedPath);
-            IOUtils.copy(in, out);
+            copyFile(in, out);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

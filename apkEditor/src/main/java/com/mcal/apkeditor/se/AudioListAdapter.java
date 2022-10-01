@@ -27,7 +27,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ZipUtils;
+import com.mcal.common.utils.ZipUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;

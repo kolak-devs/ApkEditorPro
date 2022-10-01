@@ -12,8 +12,8 @@ import com.mcal.apkeditor.activities.ApkComposeActivity
 import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.data.Constants
 import com.mcal.common.utils.ActivityHelper
-import com.mcal.common.utilsOld.ITaskCallback
-import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo
+import com.mcal.common.utils.ITaskCallback
+import com.mcal.common.utils.ITaskCallback.TaskStepInfo
 import kotlinx.coroutines.isActive
 import java.io.BufferedReader
 import java.io.FileInputStream
