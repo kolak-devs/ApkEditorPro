@@ -28,6 +28,7 @@ import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.utils.FileRecord
 import com.mcal.common.utils.ScopedStorage.externalStoragePath
 import com.mcal.common.utils.ScopedStorage.storageDirectory
+import com.mcal.common.utils.findExt
 import com.mcal.common.utilsOld.ActivityUtils
 import com.mcal.common.view.ProgressDialog
 import com.mcal.editor.TextEditor.getSoraEditor
@@ -224,16 +225,11 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
             dialog.setNegativeButton(android.R.string.cancel, null)
             dialog.show()
             return true
-        } else if (filePath.endsWith(".java") || filePath.endsWith(".kt") || filePath.endsWith(".xml") ||
-            filePath.endsWith(".smali") || filePath.endsWith(".json") || filePath.endsWith(".cpp") ||
-            filePath.endsWith(".c") || filePath.endsWith(".h") || filePath.endsWith(".hpp") || filePath.endsWith(
-                ".txt"
-            )
-        ) {
+        } else  if(filePath.findExt("java|kt|xml|smali|json|cpp|c|h|hpp|txt|lua|htm|html|js|css|php|gradle|properties")) {
             val intent = getSoraEditor(this, filePath, null, 0, null)
             startActivity(intent)
             return true
-        } else if (filePath.endsWith(".png") || filePath.endsWith(".jpg")) {
+        } else if(filePath.findExt("jpg|jpeg|png|gif")) {
             val intent = Intent(this, PhotoViewerActivity::class.java)
             ActivityUtils.attachParam(intent, "filePath", filePath)
             startActivityForResult(intent, ApkInfoActivity.RC_OPEN_EXTERNAL)

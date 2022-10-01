@@ -11,4 +11,9 @@ class FullEditorViewModel : ViewModel() {
     var isResTableDecoded = false
 
     var manifestModified = false
+
+    // Strings
+    var curConfig: String? = null
+    var allStringValuesFile: String? = null
+    var changedStringValuesFile: String? = null
 }

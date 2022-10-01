@@ -2,6 +2,12 @@ package com.mcal.common.utils
 
 import kotlin.random.Random
 
+/**
+ * Если расширение файла есть в списке, то вернёт TRUE
+ */
+fun String.findExt(pattern: String): Boolean {
+    return this.substring(this.lastIndexOf('.') + 1).matches(Regex(pattern))
+}
 
 private val letters = charArrayOf(
     'a', 'b', 'c', 'd', 'e',

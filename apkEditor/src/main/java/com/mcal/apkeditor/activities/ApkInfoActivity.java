@@ -52,7 +52,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.androlib.KXmlSerializer;
 import com.mcal.androlib.LanguageMapping;
 import com.mcal.apkeditor.ApkComposeService;
 import com.mcal.apkeditor.ApkParseConsumer;
@@ -70,6 +69,7 @@ import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.adapters.ManifestListAdapter;
 import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
+import com.mcal.apkeditor.databinding.ActivityApkinfoBinding;
 import com.mcal.apkeditor.dialogs.AboutPluginDialog;
 import com.mcal.apkeditor.dialogs.AddFolderDialog;
 import com.mcal.apkeditor.dialogs.FileCopyDialog;
@@ -86,12 +86,14 @@ import com.mcal.apkeditor.smali.AsyncDecodeTask;
 import com.mcal.apkeditor.smali.AsyncDecodeTask.IDecodeTaskCallback;
 import com.mcal.apkeditor.translate.PossibleLanguages;
 import com.mcal.apkeditor.translate.TranslateItem;
+import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
+import com.mcal.common.utils.StringHelperKt;
 import com.mcal.common.utilsOld.ActivityUtils;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.LOGGER;
@@ -107,7 +109,6 @@ import com.mcal.folderlist.util.OpenFiles;
 import com.mcal.pngeditor.PhotoViewerActivity;
 
 import org.jetbrains.annotations.Contract;
-import org.xmlpull.v1.XmlSerializer;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -118,7 +119,6 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -137,7 +137,6 @@ import brut.androlib.res.data.ResResource;
 import brut.androlib.res.data.value.ResReferenceValue;
 import brut.androlib.res.data.value.ResScalarValue;
 import brut.androlib.res.data.value.ResValue;
-import brut.androlib.res.xml.ResXmlEncoders;
 import brut.util.Duo;
 import common.types.ActivityState;
 import common.types.ProjectInfo;
@@ -152,10 +151,10 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // To edit/view a file in external app
     public static final int RC_OPEN_EXTERNAL = 1002;
     public static final int RC_REQUEST_PERMISSION = 1003;
+    public static final int RC_SEARCH_MF = 2; // search manifest
     // Define the request code
     private static final int RC_FILE_EDITOR = 0;
     private static final int RC_COMPOSE = 1;
-    public static final int RC_SEARCH_MF = 2; // search manifest
     private static final int RC_COLOR_EDITOR = 3;
     private static final int RC_TRANSLATE = 1000;
     private static final String TMP_EDITOR_FILE = "APKEDITOR.xcrhfvke";
@@ -180,7 +179,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     HashMap<String, ArrayList<StringItem>> allStringValues;
     Map<String, Map<String, String>> changedStringValues;
     ResListAdapter resListAdapter;
-
+    ActivityApkinfoBinding binding;
     //HashMap<ResConfigFlags, ArrayList<StringItem>> allStringValues;
     //Map<ResConfigFlags, Map<String, String>> changedStringValues;
     //private ResConfigFlags curConfig = null; // config flag for string resource
@@ -206,7 +205,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private ApkParseThread parseThread;
     // Modified String/Manifest or not
     private boolean stringModified = false;
-
     // For auto translating support
     // private static final String TRANSLATE_DLG_CLASS =
     // "com.mcal.apkeditor.translate.TranslateDialog";
@@ -232,7 +230,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // It may fail when first time to prepare the string, so record it
     // This is because the string may refer to the value of Android system
     private boolean bStringPrepared = false;
-
     // ONLY used for data recovering (the state in resource list adapter)
     private String resCurrentDir; // when rotate the screen, will save and recover from it
     private Map<String, String> res_addedFiles;
@@ -400,7 +397,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_apkinfo);
+        binding = ActivityApkinfoBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         // If projectName is not null, means recover from a project
         projectName = ActivityUtils.getParam(getIntent(), "projectName");
@@ -688,7 +686,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         path = savedInstanceState.getString("changedStringValues_file");
         if (path != null) {
             changedStringValues = (HashMap) IOUtils.readObjectFromFile(path);
-            mergeStrings(allStringValues, changedStringValues);
+            StringsUtils.mergeStrings(allStringValues, changedStringValues);
         }
 
         path = savedInstanceState.getString("fileEntry2ZipEntry_file");
@@ -726,28 +724,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         savedParam_filePath = savedInstanceState.getString("savedParam_filePath");
 
         isFullDecoding = savedInstanceState.getBoolean("isFullDecoding");
-    }
-
-    // Merge changed string values to allStringValues
-    private void mergeStrings(Map<String, ArrayList<StringItem>> allStringValues,
-                              @NonNull Map<String, Map<String, String>> changedStringValues) {
-        Set<Entry<String, Map<String, String>>> entries = changedStringValues.entrySet();
-        for (Entry<String, Map<String, String>> entry : entries) {
-            String cfgFlags = entry.getKey();
-            Map<String, String> values = entry.getValue();
-            for (Entry<String, String> keyValue : values.entrySet()) {
-                ArrayList<StringItem> merged = allStringValues.get(cfgFlags);
-                // find the key in merged record
-                if (merged != null) {
-                    for (StringItem rec : merged) {
-                        if (keyValue.getKey().equals(rec.name)) {
-                            rec.value = keyValue.getValue();
-                            break;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private void recoverView() {
@@ -1043,8 +1019,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     private void initView() {
-        buttonBar = findViewById(R.id.main_radio);
-        buttonBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        binding.mainRadio.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             /**
              * Called when an item in the navigation menu is selected.
@@ -1074,12 +1049,11 @@ public class ApkInfoActivity extends CustomizedLangActivity
             }
         });
 
-        ImageView apkIcon = findViewById(R.id.app_icon);
-        TextView apkLabel = findViewById(R.id.app_name);
-        TextView apkPkgPath = findViewById(R.id.app_pkgpath);
+        ImageView apkIcon = binding.appIcon;
+        TextView apkLabel = binding.appName;
+        TextView apkPkgPath = binding.appPkgpath;
 
 
-        findViewById(R.id.tv_not_support).setVisibility(View.GONE);
         findViewById(R.id.layout_search_mf).setVisibility(View.VISIBLE);
         setupMfSearch();
 
@@ -1309,7 +1283,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     protected void setupClickListener() {
-
         saveBtn = findViewById(R.id.btn_build_apk);
         if (BuildConfig.PARSER_ONLY) {
             saveBtn.setVisibility(View.GONE);
@@ -1806,7 +1779,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
         try {
             getPackageManager().getApplicationInfo("apkeditor.translate", 0);
             return true;
-        } catch (NameNotFoundException ignored) {
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -1814,14 +1788,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // Start a new translation, it may be called by the translation dialog
     // Show the language selection dialog
     public void startNewTranslation() {
-        new LanguageSelectDialog(this, ApkInfoActivity.this, PossibleLanguages.languages,
-                PossibleLanguages.codes);
+        new LanguageSelectDialog(this, ApkInfoActivity.this, PossibleLanguages.languages, PossibleLanguages.codes);
     }
 
     // Save Translated strings
     public void saveTranslatedLanguage(String qualifier,
                                        List<StringItem> stringValues) throws Exception {
-        saveStringResource(qualifier, stringValues);
+        StringsUtils.saveStringResource(decodeRootPath, qualifier, stringValues);
         stringModified = true;
 
         // add to the map structure so that the UI can see it
@@ -2007,7 +1980,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // Save added language to resource file
         try {
             if (!bExisting) { // Just need to save the untranslated list
-                saveStringResource(qualifier, untranslatedList);
+                StringsUtils.saveStringResource(decodeRootPath, qualifier, untranslatedList);
             } else {
                 // Need to save both translated and untranslated
                 List<StringItem> valueList = new ArrayList<>();
@@ -2015,7 +1988,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     valueList.add(new StringItem(item.name, item.translatedValue));
                 }
                 valueList.addAll(untranslatedList);
-                saveStringResource(qualifier, valueList);
+                StringsUtils.saveStringResource(decodeRootPath, qualifier, valueList);
             }
             stringModified = true;
         } catch (Exception e) {
@@ -2030,65 +2003,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // spinner
 
         return null;
-    }
-
-    // Save strings to file like values-zh-rCN/strings.xml
-    private void saveStringResource(String qualifier,
-                                    List<StringItem> valueList) throws Exception {
-        String fileName = "strings.xml";
-
-        // XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        // XmlSerializer xmlSerializer = factory.newSerializer();
-        XmlSerializer xmlSerializer = new KXmlSerializer();
-
-        String dirPath = decodeRootPath + "/res/values" + qualifier;
-        File dirFile = new File(dirPath);
-        if (!dirFile.exists()) {
-            dirFile.mkdirs();
-        }
-
-        File file = new File(dirPath + "/" + fileName);
-        FileOutputStream fos = new FileOutputStream(file);
-        OutputStreamWriter writer = new OutputStreamWriter(fos);
-        xmlSerializer.setOutput(writer);
-        // xmlSerializer.startDocument("utf-8", false);
-        writer.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-        writer.write("<resources>\n");
-
-        // LOGGER.info(path);
-        for (StringItem v : valueList) {
-            // Log.d("DEBUG", "dirPath="+ dirPath + ", name=" + v.m1 +
-            // ", value=" + v.m2);
-            xmlSerializer.startTag(null, "string");
-            xmlSerializer.attribute(null, "name", v.name);
-
-            if (ResXmlEncoders.hasMultipleNonPositionalSubstitutions(v.value)) {
-                xmlSerializer.attribute(null, "formatted", "false");
-            }
-
-            String txt;
-            // Special case: reference, no encode needed
-            if (v.value.startsWith("@string/")
-                    || v.value.startsWith("@android:string/")) {
-                txt = v.value;
-            } else {
-                if (v.styledValue == null) {
-                    String escaped = ResXmlEncoders.escapeXmlChars(v.value);
-                    txt = ResXmlEncoders.encodeAsXmlValue(escaped);
-                } else {
-                    txt = ResXmlEncoders.encodeAsXmlValue(v.styledValue);
-                }
-            }
-            xmlSerializer.ignorableWhitespace(txt);
-            // xmlSerializer.text(txt);
-            xmlSerializer.endTag(null, "string");
-            xmlSerializer.flush();
-            writer.write("\n");
-        }
-
-        writer.write("</resources>\n");
-        writer.close();
-        fos.close();
     }
 
     // Modify the string resource
@@ -2451,7 +2365,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 entryNameForExternal = entryName;
                 File f = new File(filePath);
                 modifiedTimeBeforeOpen = f.lastModified();
-                if (fileName.substring(fileName.lastIndexOf('.')).matches("jpg|jpeg|png|gif")) {
+                if (StringHelperKt.findExt(filePath, "jpg|jpeg|png|gif")) {
                     Intent intent = new Intent(this, PhotoViewerActivity.class);
                     ActivityUtils.attachParam(intent, "filePath", filePath);
                     startActivityForResult(intent, RC_OPEN_EXTERNAL);
