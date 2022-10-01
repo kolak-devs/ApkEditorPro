@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.R;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.RootCommand;
+import com.mcal.common.utils.RootCommand;
 import com.mcal.common.utilsOld.TextFileReader;
 
 import java.io.BufferedReader;

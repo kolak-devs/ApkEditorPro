@@ -245,4 +245,20 @@ public class Preferences {
     public static void setDecodeClasses(boolean mode) {
         App.getPreferences().edit().putBoolean("isNeedDecodeClasses", mode).apply();
     }
+
+    public static boolean isDoNotShowComposeTip() {
+        return App.getPreferences().getBoolean("donot_show_compose_tip", false);
+    }
+
+    public static void setDoNotShowComposeTip(boolean mode) {
+        App.getPreferences().edit().putBoolean("donot_show_compose_tip", mode).apply();
+    }
+
+    public static boolean isSmaliLicenseShowed() {
+        return App.getPreferences().getBoolean("smali_license_showed", false);
+    }
+
+    public static void setSmaliLicenseShowed(boolean mode) {
+        App.getPreferences().edit().putBoolean("smali_license_showed", mode).apply();
+    }
 }

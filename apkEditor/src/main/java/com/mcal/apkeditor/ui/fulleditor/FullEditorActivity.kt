@@ -14,7 +14,7 @@ import com.mcal.apkeditor.ui.fulleditor.utils.TaskDecoder
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.getDecodeDirectory
-import com.mcal.common.utilsOld.ActivityUtils
+import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.view.ProgressDialog
 import java.io.File
 
@@ -34,7 +34,7 @@ class FullEditorActivity : CustomizedLangActivity(), ApkParseConsumer {
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this)[FullEditorViewModel::class.java]
-        viewModel.decodedPath = ActivityUtils.getParam(intent, "decodeRootPath")
+        viewModel.decodedPath = ActivityHelper.getParam(intent, "decodeRootPath")
         if (viewModel.decodedPath == null) {
             val decodeDir = getDecodeDirectory()
             if (decodeDir != null) {
@@ -43,11 +43,11 @@ class FullEditorActivity : CustomizedLangActivity(), ApkParseConsumer {
                 viewModel.decodedPath = ScopedStorage.filesDir.path + "/decoded"
             }
         }
-        viewModel.apkPath = ActivityUtils.getParam(intent, "apkPath")
-        viewModel.isFullDecoding = ActivityUtils.getBoolParam(intent, "isFullDecoding")
-        viewModel.curConfig = ActivityUtils.getParam(intent, "curConfig")
-        viewModel.allStringValuesFile = ActivityUtils.getParam(intent, "allStringValues_file")
-        viewModel.changedStringValuesFile = ActivityUtils.getParam(intent, "changedStringValues_file")
+        viewModel.apkPath = ActivityHelper.getParam(intent, "apkPath")
+        viewModel.isFullDecoding = ActivityHelper.getBoolParam(intent, "isFullDecoding")
+        viewModel.curConfig = ActivityHelper.getParam(intent, "curConfig")
+        viewModel.allStringValuesFile = ActivityHelper.getParam(intent, "allStringValues_file")
+        viewModel.changedStringValuesFile = ActivityHelper.getParam(intent, "changedStringValues_file")
     }
 
     private fun startDecodeApk() {

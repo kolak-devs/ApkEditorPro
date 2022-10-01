@@ -41,8 +41,7 @@ import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utils.ApkInstaller;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.CheckUtils;
+import com.mcal.common.utils.ActivityHelper;
 
 import org.jetbrains.annotations.Contract;
 
@@ -120,10 +119,10 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
             this.errorMessage = savedInstanceState.getString("errorMessage");
         } else {
             Intent intent = getIntent();
-            this.apkPath = ActivityUtils.getParam(intent, "apkPath");
-            this.packageName = ActivityUtils.getParam(intent, "packageName");
-            this.imgReplaces = ActivityUtils.getMapParam(intent, "imageReplaces");
-            Map<String, String> otherReplaces = ActivityUtils.getMapParam(intent, "otherReplaces");
+            this.apkPath = ActivityHelper.getParam(intent, "apkPath");
+            this.packageName = ActivityHelper.getParam(intent, "packageName");
+            this.imgReplaces = ActivityHelper.getMapParam(intent, "imageReplaces");
+            Map<String, String> otherReplaces = ActivityHelper.getMapParam(intent, "otherReplaces");
             // Extra preparing interface
             Bundle bundle = intent.getExtras();
             this.makeInterfaces = (ArrayList<IApkMaking>) bundle.getSerializable("interfaces");
@@ -136,10 +135,10 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
             } catch (Exception ignored) {
             }
 
-            this.oldAppNameInArsc = ActivityUtils.getParam(intent, "oldAppNameInArsc");
-            this.newAppNameInArsc = ActivityUtils.getParam(intent, "newAppNameInArsc");
-            this.newPackageNameInArsc = ActivityUtils.getParam(intent, "newPackageNameInArsc");
-            this.clsNameReplaces = ActivityUtils.getMapParam(intent, "classRenames");
+            this.oldAppNameInArsc = ActivityHelper.getParam(intent, "oldAppNameInArsc");
+            this.newAppNameInArsc = ActivityHelper.getParam(intent, "newAppNameInArsc");
+            this.newPackageNameInArsc = ActivityHelper.getParam(intent, "newPackageNameInArsc");
+            this.clsNameReplaces = ActivityHelper.getMapParam(intent, "classRenames");
         }
 
         try {
@@ -365,11 +364,6 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
         installLayout.setVisibility(View.VISIBLE);
 
         this.modifyFinished = true;
-    }
-
-    private boolean isSameSignature() {
-        String signature = CheckUtils.getSign(this, apkInfo.pkgName);
-        return CheckUtils.isRevisedSignature(signature);
     }
 
     @Override

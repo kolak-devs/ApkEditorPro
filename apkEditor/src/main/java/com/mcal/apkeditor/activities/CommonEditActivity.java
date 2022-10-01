@@ -55,7 +55,7 @@ import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utilsOld.FileEncrypter;
 
 import java.io.File;
@@ -137,7 +137,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         setContentView(R.layout.activity_commonedit);
         setupToolbar(R.id.toolbar, "Common Editor", true);
 
-        apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
+        apkPath = ActivityHelper.getParam(getIntent(), "apkPath");
 
         // Create a thread to parse APK Information
         new Thread(() -> {
@@ -366,9 +366,9 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         }
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
-        ActivityUtils.attachParam(intent, "apkPath", tmplApkPath);
-        ActivityUtils.attachParam(intent, "packageName", manifestInfo.packageName);
-        ActivityUtils.attachParam(intent, "otherReplaces", fileReplaces);
+        ActivityHelper.attachParam(intent, "apkPath", tmplApkPath);
+        ActivityHelper.attachParam(intent, "packageName", manifestInfo.packageName);
+        ActivityHelper.attachParam(intent, "otherReplaces", fileReplaces);
         ArrayList<IApkMaking> extraTasks = new ArrayList<>();
         extraTasks.add(new PluginWrapperExtra(authString));
         intent.putExtra("interfaces", extraTasks);
@@ -552,23 +552,23 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         fileReplaces.put("AndroidManifest.xml", this.newManifestFile);
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
-        ActivityUtils.attachParam(intent, "apkPath", this.apkPath);
-        ActivityUtils.attachParam(intent, "packageName", manifestInfo.packageName);
-        ActivityUtils.attachParam(intent, "otherReplaces", fileReplaces);
+        ActivityHelper.attachParam(intent, "apkPath", this.apkPath);
+        ActivityHelper.attachParam(intent, "packageName", manifestInfo.packageName);
+        ActivityHelper.attachParam(intent, "otherReplaces", fileReplaces);
 
         // Need to modify resources.arsc when package name is changed
         if (!this.manifestInfo.packageName.equals(this.newPackageName)) {
             if (renameResCb.isChecked()) {
-                ActivityUtils.attachParam(intent, "newPackageNameInArsc", this.newPackageName);
+                ActivityHelper.attachParam(intent, "newPackageNameInArsc", this.newPackageName);
             }
         }
 
         // When app name is changed and it is saved in resource, will modify it
         if (manifestInfo.appNameIdx < 0
                 && !this.newAppName.equals(this.manifestInfo.appName)) {
-            ActivityUtils.attachParam(intent, "oldAppNameInArsc",
+            ActivityHelper.attachParam(intent, "oldAppNameInArsc",
                     this.manifestInfo.appName);
-            ActivityUtils.attachParam(intent, "newAppNameInArsc", newAppName);
+            ActivityHelper.attachParam(intent, "newAppNameInArsc", newAppName);
         }
 
         // Need to modify dex file
@@ -583,7 +583,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
                 value = "L" + value;
                 replaces.put(key, value);
             }
-            ActivityUtils.attachParam(intent, "classRenames", replaces);
+            ActivityHelper.attachParam(intent, "classRenames", replaces);
         }
 
         // Collect extra tasks

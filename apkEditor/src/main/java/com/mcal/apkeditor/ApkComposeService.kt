@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.mcal.apkeditor.activities.ApkComposeActivity
 import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.data.Constants
-import com.mcal.common.utilsOld.ActivityUtils
+import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.utilsOld.ITaskCallback
 import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo
 import kotlinx.coroutines.isActive
@@ -62,25 +62,25 @@ class ApkComposeService : Service(), ITaskCallback {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         // When the service is restarted, intent = null
-        decodeRootPath = ActivityUtils.getParam(intent, "decodeRootPath")
-        srcApkPath = ActivityUtils.getParam(intent, "srcApkPath")
-        targetApkPath = ActivityUtils.getParam(intent, "targetApkPath")
-        var str = ActivityUtils.getParam(intent, "stringModified")
+        decodeRootPath = ActivityHelper.getParam(intent, "decodeRootPath")
+        srcApkPath = ActivityHelper.getParam(intent, "srcApkPath")
+        targetApkPath = ActivityHelper.getParam(intent, "targetApkPath")
+        var str = ActivityHelper.getParam(intent, "stringModified")
         stringModified = str.toBoolean()
-        str = ActivityUtils.getParam(intent, "manifestModified")
+        str = ActivityHelper.getParam(intent, "manifestModified")
         manifestModified = str.toBoolean()
-        str = ActivityUtils.getParam(intent, "resFileModified")
+        str = ActivityHelper.getParam(intent, "resFileModified")
         resFileModified = str.toBoolean()
-        modifiedSmaliFolders = ActivityUtils.getStringArray(intent, "modifiedSmaliFolders")
-        signAPK = ActivityUtils.getBoolParam(intent, "signAPK")
-        addedFiles = ActivityUtils.getMapParam(intent, "addedFiles")
-        replacedFiles = ActivityUtils.getMapParam(intent, "replacedFiles")
+        modifiedSmaliFolders = ActivityHelper.getStringArray(intent, "modifiedSmaliFolders")
+        signAPK = ActivityHelper.getBoolParam(intent, "signAPK")
+        addedFiles = ActivityHelper.getMapParam(intent, "addedFiles")
+        replacedFiles = ActivityHelper.getMapParam(intent, "replacedFiles")
         deletedFiles = HashSet()
-        val delEntries: List<String>? = ActivityUtils.getStringArray(intent, "deletedFiles")
+        val delEntries: List<String>? = ActivityHelper.getStringArray(intent, "deletedFiles")
         delEntries?.let { entries ->
             deletedFiles?.addAll(entries)
         }
-        val passedFile = ActivityUtils.getParam(intent, "fileEntry2ZipEntry")
+        val passedFile = ActivityHelper.getParam(intent, "fileEntry2ZipEntry")
         if (passedFile != null) {
             fileEntry2ZipEntry = getMapFromFile(passedFile)
         }

@@ -8,21 +8,14 @@ import java.util.List;
 
 public class TextFileReader {
 
-    private List<String> lines = new ArrayList<>();
+    private final List<String> lines = new ArrayList<>();
 
     public TextFileReader(String filepath) throws IOException {
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(filepath));
-
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line = br.readLine();
             while (line != null) {
                 lines.add(line);
                 line = br.readLine();
-            }
-        } finally {
-            if (br != null) {
-                br.close();
             }
         }
     }

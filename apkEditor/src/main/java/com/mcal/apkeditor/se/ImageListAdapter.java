@@ -22,7 +22,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.common.utils.ZipImageZoomer;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utilsOld.ImageZoomer;
 import com.mcal.common.view.DynamicExpandListView;
 import com.mcal.pngeditor.ViewZipImageActivity;
@@ -208,10 +208,10 @@ public class ImageListAdapter extends BaseAdapter implements
         Intent intent = new Intent(ctx, ViewZipImageActivity.class);
         if (entry != null) {
             if (entry.replaceFile == null) {
-                ActivityUtils.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
-                ActivityUtils.attachParam(intent, "entryName", entry.bestQualifier + "/" + filename);
+                ActivityHelper.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
+                ActivityHelper.attachParam(intent, "entryName", entry.bestQualifier + "/" + filename);
             } else {
-                ActivityUtils.attachParam(intent, "imageFilePath", entry.replaceFile);
+                ActivityHelper.attachParam(intent, "imageFilePath", entry.replaceFile);
             }
         }
         ctx.startActivity(intent);

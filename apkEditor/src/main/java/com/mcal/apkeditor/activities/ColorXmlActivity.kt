@@ -17,7 +17,7 @@ import com.mcal.apkeditor.colormixer.ColorMixerDialog
 import com.mcal.apkeditor.colormixer.ColorValue
 import com.mcal.apkeditor.colormixer.ColorValueAdapter
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.utilsOld.ActivityUtils
+import com.mcal.common.utils.ActivityHelper
 import com.mcal.editor.TextEditor.getSoraEditor
 import java.io.*
 
@@ -32,7 +32,7 @@ class ColorXmlActivity : CustomizedLangActivity(), View.OnClickListener, OnItemC
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_colors_xml)
-        xmlPath = ActivityUtils.getParam(intent, "filePath")
+        xmlPath = ActivityHelper.getParam(intent, "filePath")
         initData()
         initView()
         setupToolbar(fileName)
@@ -165,7 +165,7 @@ class ColorXmlActivity : CustomizedLangActivity(), View.OnClickListener, OnItemC
     private fun openInEditor() {
         xmlPath?.let { path ->
             val intent = getSoraEditor(this, path, null, 0, null)
-            ActivityUtils.attachParam(intent, "extraString", ENTRY_NAME)
+            ActivityHelper.attachParam(intent, "extraString", ENTRY_NAME)
             @Suppress("DEPRECATION")
             startActivityForResult(intent, 0)
         }

@@ -17,8 +17,8 @@ import androidx.annotation.NonNull;
 
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.RootCommand;
+import com.mcal.common.utils.ActivityHelper;
+import com.mcal.common.utils.RootCommand;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,9 +47,9 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
         setContentView(R.layout.sql_activity_tablelist);
 
         Intent intent = getIntent();
-        this.originDbFilePath = ActivityUtils
+        this.originDbFilePath = ActivityHelper
                 .getParam(intent, "dbFilePath");
-        String strRootMode = ActivityUtils.getParam(intent, "isRootMode");
+        String strRootMode = ActivityHelper.getParam(intent, "isRootMode");
         // This is the default value
         isRootMode = !"false".equalsIgnoreCase(strRootMode);
 
@@ -117,10 +117,10 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
             String tableName = tableList.get(position);
             Intent intent = new Intent(SqliteTableListActivity.this,
                     SqliteTableViewActivity.class);
-            ActivityUtils.attachParam(intent, "originDbFilePath",
+            ActivityHelper.attachParam(intent, "originDbFilePath",
                     originDbFilePath);
-            ActivityUtils.attachParam(intent, "dbFilePath", dbFilePath);
-            ActivityUtils.attachParam(intent, "tableName", tableName);
+            ActivityHelper.attachParam(intent, "dbFilePath", dbFilePath);
+            ActivityHelper.attachParam(intent, "tableName", tableName);
             startActivity(intent);
         });
     }

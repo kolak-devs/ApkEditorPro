@@ -16,7 +16,6 @@ import com.mcal.common.utils.createNewFile
 import com.mcal.common.utilsOld.CommandRunner
 import com.mcal.common.utilsOld.ITaskCallback
 import com.mcal.common.utilsOld.ITaskCallback.TaskStepInfo
-import com.mcal.common.utilsOld.LOGGER
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.IOException
@@ -511,9 +510,7 @@ class ApkComposeThread(
         val cr = CommandRunner()
         val ret = cr.runCommand(paramList.toTypedArray(), null, null, 300 * 1000, true)
         Log.e("DEBUG", "aapt Time: " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds")
-        LOGGER.info("stdout: " + cr.stdOut + ", ret=" + ret)
         if (!ret) {
-            LOGGER.info("stderr: " + cr.stdError)
             errMessage = cr.stdError
             return false
         }
@@ -537,9 +534,7 @@ class ApkComposeThread(
         val startTime = System.currentTimeMillis()
         val cr = CommandRunner()
         val ret = cr.runCommand(args.toTypedArray(), null, null, 300 * 1000, true)
-        LOGGER.info("stdout: " + cr.stdOut + ", ret=" + ret)
         if (!ret) {
-            LOGGER.info("stderr: " + cr.stdError)
             errMessage = cr.stdError
             return false
         }
@@ -585,9 +580,7 @@ class ApkComposeThread(
             null, null, 300 * 1000, true
         )
         Log.e("DEBUG", "aapt Time: " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds")
-        LOGGER.info("stdout: " + cr2.stdOut + ", ret=" + ret2)
         if (!ret2) {
-            LOGGER.info("stderr: " + cr2.stdError)
             errMessage = cr.stdError
             return false
         }
@@ -680,10 +673,8 @@ class ApkComposeThread(
         aaptPath = "$binRootPath/aapt"
         aaptPath2 = "$binRootPath/aapt2"
         androidJarPath = "$binRootPath/android-framework.jar"
-        // this.androidJarPath = SDCard.getRootDirectory() + "/android-framework.jar";
         if (decodedFilePath != null) {
             this.decodedFilePath = decodedFilePath
-            LOGGER.info("decodedFilePath: " + this.decodedFilePath)
         }
         if (srcApkPath != null) {
             this.srcApkPath = srcApkPath
@@ -694,8 +685,6 @@ class ApkComposeThread(
         if (srcApkPath != null) {
             tempApkPath = srcApkPath
         }
-        LOGGER.info("aaptPath: $aaptPath")
-        LOGGER.info("androidJarPath: $androidJarPath")
         stepInfo = TaskStepInfo()
     }
 }

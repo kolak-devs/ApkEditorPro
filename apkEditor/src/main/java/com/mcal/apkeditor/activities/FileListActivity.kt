@@ -26,10 +26,9 @@ import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.utils.FileRecord
-import com.mcal.common.utils.ScopedStorage.externalStoragePath
 import com.mcal.common.utils.ScopedStorage.storageDirectory
 import com.mcal.common.utils.findExt
-import com.mcal.common.utilsOld.ActivityUtils
+import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.view.ProgressDialog
 import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.folderlist.FolderListWrapper
@@ -111,8 +110,8 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 if (wrapper != null) {
                     wrapper.mAdapter?.getData(null)?.let { currentFolder ->
                         val intent = Intent(this@FileListActivity, ApkSearchActivity::class.java)
-                        ActivityUtils.attachParam(intent, "Keyword", constraint)
-                        ActivityUtils.attachParam(intent, "Path", currentFolder)
+                        ActivityHelper.attachParam(intent, "Keyword", constraint)
+                        ActivityHelper.attachParam(intent, "Path", currentFolder)
                         this@FileListActivity.startActivity(intent)
                     }
                 }
@@ -151,15 +150,15 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
 
     private val isExistExtSdCard: Boolean
         get() {
-            val path = externalStoragePath
-            return if (path != null && path != "") {
+            val path = storageDirectory.path
+            return if (path != "") {
                 folderWrapper != null
             } else false
         }
 
     private fun openExtSdCard(): Boolean {
-        val path = externalStoragePath
-        return if (path != null && path != "") {
+        val path = storageDirectory.path
+        return if (path != "") {
             val wrapper = folderWrapper
             if (wrapper != null) {
                 wrapper.openDirectory(path)
@@ -231,7 +230,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
             return true
         } else if(filePath.findExt("jpg|jpeg|png|gif")) {
             val intent = Intent(this, PhotoViewerActivity::class.java)
-            ActivityUtils.attachParam(intent, "filePath", filePath)
+            ActivityHelper.attachParam(intent, "filePath", filePath)
             startActivityForResult(intent, ApkInfoActivity.RC_OPEN_EXTERNAL)
             return true
         }
@@ -255,7 +254,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 SIMPLE_EDIT -> {
                     intent = Intent(this, SimpleEditActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }
@@ -268,7 +267,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 COMMON_EDIT -> {
                     intent = Intent(this, CommonEditActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }
@@ -277,7 +276,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 XML_FILE_EDIT -> {
                     intent = Intent(this, AxmlEditActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }
@@ -290,7 +289,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 5 -> {
                     intent = Intent(this, FullEditorActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }

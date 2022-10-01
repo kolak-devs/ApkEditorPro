@@ -95,10 +95,8 @@ import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.StringHelperKt;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utilsOld.IOUtils;
-import com.mcal.common.utilsOld.LOGGER;
-import com.mcal.common.utilsOld.PreferenceUtils;
 import com.mcal.common.utilsOld.ServiceUtil;
 import com.mcal.common.utilsOld.TextFileReader;
 import com.mcal.common.utilsOld.UriUtils;
@@ -340,8 +338,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         String realCountry = locale.getCountry();
         String realQualifier = realLang + "-r" + realCountry;
 
-        LOGGER.info("*****realQualifier=" + realQualifier);
-
         for (String quaifier : configs) {
             if (realQualifier.equals(quaifier)) {
                 bestConfig = quaifier;
@@ -370,7 +366,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         setContentView(binding.getRoot());
 
         // If projectName is not null, means recover from a project
-        projectName = ActivityUtils.getParam(getIntent(), "projectName");
+        projectName = ActivityHelper.getParam(getIntent(), "projectName");
 
         ProjectInfo prjInfo = null;
         if (projectName != null) {
@@ -405,9 +401,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
             }
             // Get it from Intent
             if (apkPath == null) {
-                apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
+                apkPath = ActivityHelper.getParam(getIntent(), "apkPath");
             }
-            decodeRootPath = ActivityUtils.getParam(getIntent(), "decodeRootPath");
+            decodeRootPath = ActivityHelper.getParam(getIntent(), "decodeRootPath");
             if (decodeRootPath == null) {
                 String decodeDir = FileHelperKt.getDecodeDirectory();
                 if (decodeDir != null) {
@@ -446,7 +442,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 finish();
             }
         } else {
-            this.isFullDecoding = ActivityUtils.getBoolParam(getIntent(), "isFullDecoding");
+            this.isFullDecoding = ActivityHelper.getBoolParam(getIntent(), "isFullDecoding");
             this.parseThread = new ApkParseThread(this, this, apkPath, decodeRootPath, isFullDecoding);
             parseThread.start();
         }
@@ -1179,8 +1175,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // Image of dex2smali
         else if (id == R.id.imageview_dex2smali) {
-            boolean showed = PreferenceUtils.getBoolean(this, "smali_license_showed", false);
-            if (!showed) {
+            if (!Preferences.isSmaliLicenseShowed()) {
                 new SmaliNoticeDialog(this);
             }
             decodeDex(null);
@@ -1450,25 +1445,25 @@ public class ApkInfoActivity extends CustomizedLangActivity
         String targetApkPath = createOutputPath(apkPath, outputDir, filename);
 
         Intent intent = new Intent(this, ApkComposeService.class);
-        ActivityUtils.attachParam(intent, "decodeRootPath", decodeRootPath);
+        ActivityHelper.attachParam(intent, "decodeRootPath", decodeRootPath);
         // For full decoding, do NOT pass apkPath, so the builder will know that situation
         if (!isFullDecoding) {
-            ActivityUtils.attachParam(intent, "srcApkPath", apkPath);
+            ActivityHelper.attachParam(intent, "srcApkPath", apkPath);
         }
-        ActivityUtils.attachParam(intent, "targetApkPath", targetApkPath);
-        ActivityUtils.attachParam(intent, "stringModified", stringModified ? "true" : "false");
-        ActivityUtils.attachParam(intent, "manifestModified", manifestModified ? "true" : "false");
-        ActivityUtils.attachParam(intent, "resFileModified", resFileModified ? "true" : "false");
-        ActivityUtils.attachParam(intent, "modifiedSmaliFolders", smaliFolders);
-        ActivityUtils.attachParam(intent, "addedFiles", addedFiles);
-        ActivityUtils.attachParam(intent, "deletedFiles", deletedFiles);
-        ActivityUtils.attachParam(intent, "replacedFiles", replacedFiles);
-        ActivityUtils.attachBoolParam(intent, "signAPK", bSign);
+        ActivityHelper.attachParam(intent, "targetApkPath", targetApkPath);
+        ActivityHelper.attachParam(intent, "stringModified", stringModified ? "true" : "false");
+        ActivityHelper.attachParam(intent, "manifestModified", manifestModified ? "true" : "false");
+        ActivityHelper.attachParam(intent, "resFileModified", resFileModified ? "true" : "false");
+        ActivityHelper.attachParam(intent, "modifiedSmaliFolders", smaliFolders);
+        ActivityHelper.attachParam(intent, "addedFiles", addedFiles);
+        ActivityHelper.attachParam(intent, "deletedFiles", deletedFiles);
+        ActivityHelper.attachParam(intent, "replacedFiles", replacedFiles);
+        ActivityHelper.attachBoolParam(intent, "signAPK", bSign);
 
         // It is too big to pass it to another activity
         // So we save it to file
         String mapFileName = serialize2File(mFileEntry2ZipEntry);
-        ActivityUtils.attachParam(intent, "fileEntry2ZipEntry", mapFileName);
+        ActivityHelper.attachParam(intent, "fileEntry2ZipEntry", mapFileName);
 
         startService(intent);
 
@@ -2039,7 +2034,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         if (curConfig == null) {
             curConfig = getBestConfig(allStringValues.keySet());
         }
-        LOGGER.info("********BEST*********" + curConfig);
         ArrayList<StringItem> values = allStringValues.get(curConfig);
         updateStringList(values);
     }
@@ -2315,7 +2309,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 modifiedTimeBeforeOpen = f.lastModified();
                 if (StringHelperKt.findExt(filePath, "jpg|jpeg|png|gif")) {
                     Intent intent = new Intent(this, PhotoViewerActivity.class);
-                    ActivityUtils.attachParam(intent, "filePath", filePath);
+                    ActivityHelper.attachParam(intent, "filePath", filePath);
                     startActivityForResult(intent, RC_OPEN_EXTERNAL);
                 } else {
                     OpenFiles.openFile(this, filePath, RC_OPEN_EXTERNAL);
@@ -2382,7 +2376,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // Open the color editor
         if ("res/values/colors.xml".equals(entryName)) {
             Intent intent = new Intent(this, ColorXmlActivity.class);
-            ActivityUtils.attachParam(intent, "filePath", filePath);
+            ActivityHelper.attachParam(intent, "filePath", filePath);
             startActivityForResult(intent, RC_COLOR_EDITOR);
             return;
         }

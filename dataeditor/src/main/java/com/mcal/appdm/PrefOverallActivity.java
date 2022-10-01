@@ -35,10 +35,10 @@ import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utilsOld.CommandInterface;
 import com.mcal.common.utilsOld.CommandRunner;
-import com.mcal.common.utilsOld.RootCommand;
+import com.mcal.common.utils.RootCommand;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 
@@ -114,8 +114,8 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         Intent intent = getIntent();
         setContentView(R.layout.appdm_activity_dataoverview);
 
-        this.packagePath = ActivityUtils.getParam(intent, "packagePath");
-        this.bShowBackup = ActivityUtils.getBoolParam(intent, "backup");
+        this.packagePath = ActivityHelper.getParam(intent, "packagePath");
+        this.bShowBackup = ActivityHelper.getBoolParam(intent, "backup");
         try {
             this.pm = this.getPackageManager();
             this.applicationInfo = pm.getApplicationInfo(packagePath, 0);
@@ -521,13 +521,13 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
 
             Intent intent = new Intent(PrefOverallActivity.this,
                     PrefDetailActivity.class);
-            ActivityUtils.attachParam(intent, "appName",
+            ActivityHelper.attachParam(intent, "appName",
                     (String) applicationInfo.loadLabel(pm));
-            ActivityUtils.attachParam(intent, "xmlFilePath",
+            ActivityHelper.attachParam(intent, "xmlFilePath",
                     xmlFilePairs.get(position).second);
-            ActivityUtils.attachParam(intent, "packagePath",
+            ActivityHelper.attachParam(intent, "packagePath",
                     PrefOverallActivity.this.packagePath);
-            ActivityUtils.attachBoolParam(intent, "isRootMode",
+            ActivityHelper.attachBoolParam(intent, "isRootMode",
                     PrefOverallActivity.this.isRootMode);
             startActivityForResult(intent, DETAIL_ACTIVITY_REQUEST_CODE);
         });
@@ -539,9 +539,9 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         dbListView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
             Intent intent = new Intent(PrefOverallActivity.this,
                     com.mcal.sqliteutil.SqliteTableListActivity.class);
-            ActivityUtils.attachParam(intent, "dbFilePath",
+            ActivityHelper.attachParam(intent, "dbFilePath",
                     dbFilePairs.get(position).second);
-            ActivityUtils.attachParam(intent, "isRootMode",
+            ActivityHelper.attachParam(intent, "isRootMode",
                     (isRootMode ? "true" : "false"));
             startActivity(intent);
         });

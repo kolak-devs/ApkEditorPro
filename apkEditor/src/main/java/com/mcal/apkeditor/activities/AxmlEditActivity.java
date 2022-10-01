@@ -29,7 +29,7 @@ import com.mcal.apkeditor.se.ZipHelper;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.view.ProgressDialog;
 
@@ -60,7 +60,7 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_axmledit);
 
-        this.apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
+        this.apkPath = ActivityHelper.getParam(getIntent(), "apkPath");
 
         try {
             this.apkInfo = new ApkInfoParser().parse(this, apkPath);
@@ -204,10 +204,10 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
         Map<String, String> fileReplaces = filesAdapter.getReplaces();
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
-        ActivityUtils.attachParam(intent, "apkPath", this.apkPath);
-        ActivityUtils.attachParam(intent, "packageName", apkInfo.pkgName);
+        ActivityHelper.attachParam(intent, "apkPath", this.apkPath);
+        ActivityHelper.attachParam(intent, "packageName", apkInfo.pkgName);
         if (!fileReplaces.isEmpty()) {
-            ActivityUtils.attachParam(intent, "otherReplaces", fileReplaces);
+            ActivityHelper.attachParam(intent, "otherReplaces", fileReplaces);
         }
 
         startActivity(intent);

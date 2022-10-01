@@ -2,7 +2,7 @@ package com.mcal.editor
 
 import android.content.Context
 import android.content.Intent
-import com.mcal.common.utilsOld.ActivityUtils
+import com.mcal.common.utils.ActivityHelper
 
 object TextEditor {
     @JvmStatic
@@ -13,10 +13,10 @@ object TextEditor {
                       searchString: String?
     ): Intent {
         val intent = Intent(context, EditorActivity::class.java)
-        ActivityUtils.attachParam(intent, "filePath", filepath)
-        apkPath?.let { ActivityUtils.attachParam(intent, "apkPath", apkPath) }
-        ActivityUtils.attachParam(intent, "startLine", startLine)
-        searchString?.let { ActivityUtils.attachParam(intent, "searchString", searchString) } // todo
+        ActivityHelper.attachParam(intent, "filePath", filepath)
+        apkPath?.let { ActivityHelper.attachParam(intent, "apkPath", apkPath) }
+        ActivityHelper.attachParam(intent, "startLine", startLine)
+        searchString?.let { ActivityHelper.attachParam(intent, "searchString", searchString) } // todo
         // extraString?.let { ActivityUtils.attachParam(intent, "extraString", extraString) } // todo delete
         return intent
     }
@@ -49,10 +49,10 @@ object TextEditor {
         ints: IntArray?
     ): Intent {
         val intent = Intent(context, EditorActivity::class.java)
-        ActivityUtils.attachParam(intent, "filePath", tmpFilePath)
-        ActivityUtils.attachParam(intent, "realFilePath", filePath)
-        ActivityUtils.attachParam(intent, "isRootMode", isRootMode)
-        ints?.let { ActivityUtils.attachParam(intent, "resourceIds", ints) }
+        ActivityHelper.attachParam(intent, "filePath", tmpFilePath)
+        ActivityHelper.attachParam(intent, "realFilePath", filePath)
+        ActivityHelper.attachParam(intent, "isRootMode", isRootMode)
+        ints?.let { ActivityHelper.attachParam(intent, "resourceIds", ints) }
         return intent
     }
 }

@@ -48,12 +48,12 @@ import com.mcal.apkeditor.utils.AxmlStringModifier;
 import com.mcal.apkeditor.utils.ErrorFixManager;
 import com.mcal.apkeditor.utils.OdexPatcher;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInstaller;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.PackageHelper;
 import com.mcal.common.utilsOld.ITaskCallback;
-import com.mcal.common.utilsOld.PreferenceUtils;
 import com.mcal.common.view.ProgressDialog;
 
 import org.jetbrains.annotations.Contract;
@@ -633,8 +633,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
                     }
                     // Remember the option and save to preference
                     if (cb.isChecked()) {
-                        PreferenceUtils.setBoolean(
-                                ApkComposeActivity.this, "donot_show_compose_tip", true);
+                        Preferences.setDoNotShowComposeTip(true);
                     }
                 });
 
@@ -684,7 +683,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
         if (binder != null && binder.isRunning()) {
             // For pro version, show tip if needed
             if (BuildConfig.IS_PRO) {
-                if (!PreferenceUtils.getBoolean(this, "donot_show_compose_tip", false)) {
+                if (!Preferences.isDoNotShowComposeTip()) {
                     showTipDialog();
                 } else {
                     this.finish();

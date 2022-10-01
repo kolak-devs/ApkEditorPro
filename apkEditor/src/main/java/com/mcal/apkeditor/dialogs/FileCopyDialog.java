@@ -22,6 +22,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 // Used for extract function
 // It can copy from srcPath to dstPath
@@ -61,11 +62,7 @@ public class FileCopyDialog {
         mDecodeRootPath = decodeRootPath;
         mEntryMapping = entryMapping;
 
-        if (targetFolder != null) {
-            mTargetFolder = targetFolder;
-        } else {
-            mTargetFolder = ScopedStorage.getExternalStoragePath() + "/ApkEditor";
-        }
+        mTargetFolder = Objects.requireNonNullElseGet(targetFolder, () -> ScopedStorage.getStorageDirectory() + "/ApkEditor");
 
         handler = new MyHandler(context, this);
 

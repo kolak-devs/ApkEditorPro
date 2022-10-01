@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.mcal.apkeditor.R;
-import com.mcal.common.utilsOld.BitmapUtils;
+import com.mcal.common.utils.BitmapHelper;
 import com.mcal.patchview.ui.CodeText;
 
 import java.io.BufferedReader;
@@ -307,9 +307,9 @@ public class SimpleManifestAdapter extends BaseAdapter implements
         if (lineRec.sectionEnd != lineRec.lineIndex) {
             Bitmap arrow;
             if (!lineRec.collapsed) {
-                arrow = BitmapUtils.getBitmapFromVectorDrawable(ctx, R.drawable.manifest_chevron_down);
+                arrow = BitmapHelper.getBitmapFromVectorDrawable(ctx, R.drawable.manifest_chevron_down);
             } else {
-                arrow = BitmapUtils.getBitmapFromVectorDrawable(ctx, R.drawable.manifest_chevron_right);
+                arrow = BitmapHelper.getBitmapFromVectorDrawable(ctx, R.drawable.manifest_chevron_right);
             }
 
             // Draw the arrow

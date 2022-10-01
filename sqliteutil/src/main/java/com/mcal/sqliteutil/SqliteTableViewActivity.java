@@ -11,7 +11,7 @@ import android.widget.TableLayout;
 
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.HexHelper;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.sqliteutil.util.PaddingTable;
 
 import java.util.ArrayList;
@@ -109,10 +109,10 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
 //				break;
 //		}
 
-        this.originDbFilePath = ActivityUtils.getParam(getIntent(),
+        this.originDbFilePath = ActivityHelper.getParam(getIntent(),
                 "originDbFilePath");
-        this.dbFilePath = ActivityUtils.getParam(getIntent(), "dbFilePath");
-        this.tableName = ActivityUtils.getParam(getIntent(), "tableName");
+        this.dbFilePath = ActivityHelper.getParam(getIntent(), "dbFilePath");
+        this.tableName = ActivityHelper.getParam(getIntent(), "tableName");
 
         initTableData();
     }
@@ -238,14 +238,14 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
     @Override
     public void tableRowClicked(int index, boolean bWholeTable) {
         Intent intent = new Intent(this, SqliteRowViewActivity.class);
-        ActivityUtils.attachParam(intent, "originDbFilePath", originDbFilePath);
-        ActivityUtils.attachParam(intent, "dbFilePath", dbFilePath);
-        ActivityUtils.attachParam(intent, "tableName", tableName);
-        ActivityUtils.attachParam(intent, "columnNames", columnNames);
-        ActivityUtils.attachParam(intent, "columnTypes", columnTypes);
-        ActivityUtils.attachParam(intent, "columnIsPKs", columnIsPKs);
-        ActivityUtils.attachParam(intent, "rowData", tableData.get(index));
-        ActivityUtils.attachParam(intent, "themeId", this.themeId);
+        ActivityHelper.attachParam(intent, "originDbFilePath", originDbFilePath);
+        ActivityHelper.attachParam(intent, "dbFilePath", dbFilePath);
+        ActivityHelper.attachParam(intent, "tableName", tableName);
+        ActivityHelper.attachParam(intent, "columnNames", columnNames);
+        ActivityHelper.attachParam(intent, "columnTypes", columnTypes);
+        ActivityHelper.attachParam(intent, "columnIsPKs", columnIsPKs);
+        ActivityHelper.attachParam(intent, "rowData", tableData.get(index));
+        ActivityHelper.attachParam(intent, "themeId", this.themeId);
         this.startActivityForResult(intent, 0);
     }
 

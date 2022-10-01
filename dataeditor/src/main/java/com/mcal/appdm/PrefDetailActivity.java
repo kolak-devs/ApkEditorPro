@@ -22,11 +22,11 @@ import com.mcal.appdm.base.R;
 import com.mcal.appdm.utils.XmlUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utilsOld.CommandInterface;
 import com.mcal.common.utilsOld.CommandRunner;
 import com.mcal.common.utilsOld.FileCopyUtils;
-import com.mcal.common.utilsOld.RootCommand;
+import com.mcal.common.utils.RootCommand;
 import com.mcal.editor.TextEditor;
 import com.mcal.sqliteutil.util.PaddingTable;
 import com.mcal.sqliteutil.util.PaddingTable.ITableRowClicked;
@@ -91,10 +91,10 @@ public class PrefDetailActivity extends CustomizedLangActivity implements ITable
 
         setContentView(R.layout.appdm_activity_prefdetail);
 
-        this.isRootMode = ActivityUtils.getBoolParam(this.getIntent(),
+        this.isRootMode = ActivityHelper.getBoolParam(this.getIntent(),
                 "isRootMode");
-        this.appName = ActivityUtils.getParam(this.getIntent(), "appName");
-        this.filePath = ActivityUtils.getParam(this.getIntent(), "xmlFilePath");
+        this.appName = ActivityHelper.getParam(this.getIntent(), "appName");
+        this.filePath = ActivityHelper.getParam(this.getIntent(), "xmlFilePath");
 
         initUI();
 

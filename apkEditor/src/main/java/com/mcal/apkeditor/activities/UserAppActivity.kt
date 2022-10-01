@@ -28,7 +28,7 @@ import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.copyFile
 import com.mcal.common.utils.makeBackupDir
-import com.mcal.common.utilsOld.ActivityUtils
+import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
@@ -188,7 +188,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                 SIMPLE_EDIT -> {
                     intent = Intent(this, SimpleEditActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }
@@ -201,7 +201,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                 COMMON_EDIT -> {
                     intent = Intent(this, CommonEditActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }
@@ -210,7 +210,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                 XML_FILE_EDIT -> {
                     intent = Intent(this, AxmlEditActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }
@@ -366,9 +366,9 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                 Preferences.setDecodeResources(resources.isChecked)
                 Preferences.setDecodeClasses(classes.isChecked)
                 val intent = Intent(activity, ApkInfoExActivity::class.java)
-                ActivityUtils.attachParam(intent, "apkPath", filePath)
+                ActivityHelper.attachParam(intent, "apkPath", filePath)
                 val fullDecoding = true
-                ActivityUtils.attachBoolParam(intent, "isFullDecoding", fullDecoding)
+                ActivityHelper.attachBoolParam(intent, "isFullDecoding", fullDecoding)
                 activity.startActivity(intent)
                 activity.finish()
             }

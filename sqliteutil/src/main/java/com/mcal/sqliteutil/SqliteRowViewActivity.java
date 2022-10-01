@@ -24,8 +24,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.adapters.MySimpleAdapter;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utilsOld.ActivityUtils;
-import com.mcal.common.utilsOld.RootCommand;
+import com.mcal.common.utils.ActivityHelper;
+import com.mcal.common.utils.RootCommand;
 
 import org.jetbrains.annotations.Contract;
 
@@ -62,14 +62,14 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
 
         setContentView(R.layout.sql_activity_rowview);
 
-        this.originDbFilePath = ActivityUtils.getParam(intent,
+        this.originDbFilePath = ActivityHelper.getParam(intent,
                 "originDbFilePath");
-        this.dbFilePath = ActivityUtils.getParam(intent, "dbFilePath");
-        this.tableName = ActivityUtils.getParam(intent, "tableName");
-        this.columnNames = ActivityUtils.getStringArray(intent, "columnNames");
-        this.columnTypes = ActivityUtils.getStringArray(intent, "columnTypes");
-        this.columnIsPKs = ActivityUtils.getStringArray(intent, "columnIsPKs");
-        this.rowData = ActivityUtils.getStringArray(intent, "rowData");
+        this.dbFilePath = ActivityHelper.getParam(intent, "dbFilePath");
+        this.tableName = ActivityHelper.getParam(intent, "tableName");
+        this.columnNames = ActivityHelper.getStringArray(intent, "columnNames");
+        this.columnTypes = ActivityHelper.getStringArray(intent, "columnTypes");
+        this.columnIsPKs = ActivityHelper.getStringArray(intent, "columnIsPKs");
+        this.rowData = ActivityHelper.getStringArray(intent, "rowData");
 
         initListView();
         initButton();

@@ -29,7 +29,7 @@ import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
 import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
 import com.mcal.apkeditor.dialogs.MatchedLineItem;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.editor.TextEditor;
 
 import java.io.Closeable;
@@ -286,7 +286,7 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter implements
                     intent = TextEditor.getSoraEditor(activity, filePath, activity.getApkPath(), 0, keyword);
                 }
 
-                ActivityUtils.attachParam(intent, "searchString", keyword);
+                ActivityHelper.attachParam(intent, "searchString", keyword);
 
                 activity.startActivityForResult(intent, 0);
             }

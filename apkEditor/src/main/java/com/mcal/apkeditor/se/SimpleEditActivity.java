@@ -29,7 +29,7 @@ import com.mcal.apklib.AXMLParser.IReferenceDecode;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.view.DynamicExpandListView;
 
 import org.jetbrains.annotations.Contract;
@@ -91,7 +91,7 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_simpleedit);
 
-        this.apkPath = ActivityUtils.getParam(getIntent(), "apkPath");
+        this.apkPath = ActivityHelper.getParam(getIntent(), "apkPath");
 
         try {
             this.apkInfo = new ApkInfoParser().parse(this, apkPath);
@@ -314,12 +314,12 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         Map<String, String> audioReplaces = audiosAdapter.getReplaces();
 
         Intent intent = new Intent(this, ApkCreateActivity.class);
-        ActivityUtils.attachParam(intent, "apkPath", this.apkPath);
-        ActivityUtils.attachParam(intent, "packageName", apkInfo.pkgName);
-        ActivityUtils.attachParam(intent, "imageReplaces", imgReplaces);
+        ActivityHelper.attachParam(intent, "apkPath", this.apkPath);
+        ActivityHelper.attachParam(intent, "packageName", apkInfo.pkgName);
+        ActivityHelper.attachParam(intent, "imageReplaces", imgReplaces);
         if (!fileReplaces.isEmpty() || !audioReplaces.isEmpty()) {
             fileReplaces.putAll(audioReplaces);
-            ActivityUtils.attachParam(intent, "otherReplaces", fileReplaces);
+            ActivityHelper.attachParam(intent, "otherReplaces", fileReplaces);
         }
 
         startActivity(intent);

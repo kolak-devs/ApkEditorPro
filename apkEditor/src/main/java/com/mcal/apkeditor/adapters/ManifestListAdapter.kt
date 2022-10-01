@@ -13,7 +13,7 @@ import com.mcal.apkeditor.R
 import com.mcal.apkeditor.dialogs.ManifestLongClickDlg
 import com.mcal.apkeditor.dialogs.XmlLineDialog
 import com.mcal.apkeditor.dialogs.XmlLineDialog.IXmlLineChanged
-import com.mcal.common.utilsOld.BitmapUtils
+import com.mcal.common.utils.BitmapHelper
 import com.mcal.patchview.ui.CodeText
 import java.io.BufferedReader
 import java.io.FileReader
@@ -167,9 +167,9 @@ class ManifestListAdapter(
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ALPHA_8)
         if (lineRec.sectionEnd != lineRec.lineIndex) {
             val arrow: Bitmap = if (!lineRec.collapsed) {
-                BitmapUtils.getBitmapFromVectorDrawable(mActivity, R.drawable.manifest_chevron_down)
+                BitmapHelper.getBitmapFromVectorDrawable(mActivity, R.drawable.manifest_chevron_down)
             } else {
-                BitmapUtils.getBitmapFromVectorDrawable(mActivity, R.drawable.manifest_chevron_right)
+                BitmapHelper.getBitmapFromVectorDrawable(mActivity, R.drawable.manifest_chevron_right)
             }
 
             // Draw the arrow

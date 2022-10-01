@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
-import com.mcal.common.utilsOld.PreferenceUtils;
+import com.mcal.common.data.Preferences;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,7 +61,7 @@ public class SmaliNoticeDialog {
         materialDialog.setButton(DialogInterface.BUTTON_POSITIVE, mContext.getString(android.R.string.ok), (dialog, which) -> {
             CheckBox cb = view.findViewById(R.id.cb_show_once);
             if (cb.isChecked()) {
-                PreferenceUtils.setBoolean(mContext, "smali_license_showed", true);
+                Preferences.setSmaliLicenseShowed(true);
             }
             dialog.dismiss();
         });

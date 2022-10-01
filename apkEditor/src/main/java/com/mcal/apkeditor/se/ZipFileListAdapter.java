@@ -25,7 +25,7 @@ import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apklib.AXMLPrinter;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ZipImageZoomer;
-import com.mcal.common.utilsOld.ActivityUtils;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.ImageZoomer;
 import com.mcal.common.view.ProgressDialog;
@@ -409,10 +409,10 @@ public class ZipFileListAdapter extends BaseAdapter implements
         String replaceFile = fileReplaces.get(entryPath);
         Intent intent = new Intent(ctx, ViewZipImageActivity.class);
         if (replaceFile == null) {
-            ActivityUtils.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
-            ActivityUtils.attachParam(intent, "entryName", entryPath);
+            ActivityHelper.attachParam(intent, "zipFilePath", zipHelper.getFilePath());
+            ActivityHelper.attachParam(intent, "entryName", entryPath);
         } else {
-            ActivityUtils.attachParam(intent, "imageFilePath", replaceFile);
+            ActivityHelper.attachParam(intent, "imageFilePath", replaceFile);
         }
         ctx.startActivity(intent);
     }

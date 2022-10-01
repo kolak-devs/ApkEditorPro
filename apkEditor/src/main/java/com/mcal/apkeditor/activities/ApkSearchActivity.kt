@@ -12,7 +12,7 @@ import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.UserAppActivity.Companion.startFullEditActivity
 import com.mcal.apkeditor.se.SimpleEditActivity
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.utilsOld.ActivityUtils
+import com.mcal.common.utils.ActivityHelper
 import java.io.File
 import java.util.*
 
@@ -27,8 +27,8 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_apksearch)
         val intent = intent
-        keyword = ActivityUtils.getParam(intent, "Keyword")
-        searchPath = ActivityUtils.getParam(intent, "Path")
+        keyword = ActivityHelper.getParam(intent, "Keyword")
+        searchPath = ActivityHelper.getParam(intent, "Path")
         initView()
 
         // Start the searching thread
@@ -104,7 +104,7 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
                 FileListActivity.SIMPLE_EDIT -> {
                     intent = Intent(this, SimpleEditActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }
@@ -117,7 +117,7 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
                 FileListActivity.COMMON_EDIT -> {
                     intent = Intent(this, CommonEditActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }
@@ -126,7 +126,7 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
                 FileListActivity.XML_FILE_EDIT -> {
                     intent = Intent(this, AxmlEditActivity::class.java)
                     intent?.let { i ->
-                        ActivityUtils.attachParam(i, "apkPath", filePath)
+                        ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)
                         finish()
                     }

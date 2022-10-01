@@ -10,7 +10,6 @@ import com.mcal.apkeditor.ui.fulleditor.utils.TaskDecoder
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.deleteAll
 import com.mcal.common.utilsOld.IOUtils
-import com.mcal.common.utilsOld.LOGGER
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
@@ -84,7 +83,6 @@ class ApkParseThread(
 
     @Throws(AndrolibException::class)
     private fun loadOneMainPkg(resTable: ResTable, apkFile: File): ResPackage? {
-        LOGGER.info("Loading resource table of apk file...")
         val pkgs = getOneResPackagesFromApk(
             apkFile, resTable,
             sKeepBroken
@@ -96,13 +94,11 @@ class ApkParseThread(
             )
         }
         resTable.addPackage(apkPackage, true)
-        LOGGER.info("Loaded.")
         return apkPackage
     }
 
     @Throws(AndrolibException::class)
     private fun loadMainPkg(resTable: ResTable, apkFile: File): ResPackage? {
-        LOGGER.info("Loading resource table of apk file...")
         val pkgs = getResPackagesFromApk(
             apkFile, resTable,
             sKeepBroken
@@ -110,10 +106,8 @@ class ApkParseThread(
         when (pkgs.size) {
             1 -> apkPackage = pkgs[0]
             2 -> if (pkgs[0].name == "android") {
-                LOGGER.warning("Skipping \"android\" package group")
                 apkPackage = pkgs[1]
             } else if (pkgs[0].name == "com.htc") {
-                LOGGER.warning("Skipping \"htc\" package group")
                 apkPackage = pkgs[1]
             }
         }
@@ -123,7 +117,6 @@ class ApkParseThread(
             )
         }
         resTable.addPackage(apkPackage, true)
-        LOGGER.info("Loaded.")
         return apkPackage
     }
 
@@ -204,7 +197,6 @@ class ApkParseThread(
     }
 
     companion object {
-        // ??
         var sKeepBroken = false
     }
 
