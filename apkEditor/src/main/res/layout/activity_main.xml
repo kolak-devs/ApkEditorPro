@@ -6,35 +6,16 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
-    <com.google.android.material.appbar.AppBarLayout
-        android:paddingTop="64dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:titleEnabled="false">
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:titleTextAppearance="@style/AppTheme.ToolbarStyle"
-                app:subtitleTextAppearance="@style/AppTheme.ToolbarStyle.Subtitle"
-                tools:menu="@menu/menu_main"
-                app:title="TEST"
-                app:subtitle="AAA"/>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
+
+    <include layout="@layout/toolbar_collapsing"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/menu_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         tools:itemCount="8"
         tools:listitem="@layout/main_list_item" />
 

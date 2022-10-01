@@ -1,0 +1,27 @@
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    android:paddingTop="64dp">
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways|snap"
+        app:titleEnabled="false">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:subtitleTextAppearance="@style/AppTheme.ToolbarStyle.Subtitle"
+            app:titleTextAppearance="@style/AppTheme.ToolbarStyle"
+            tools:menu="@menu/menu_main"
+            tools:subtitle="v1.0 [arm64-v8a]"
+            tools:title="ApkEditor Pro" />
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+</com.google.android.material.appbar.AppBarLayout>
