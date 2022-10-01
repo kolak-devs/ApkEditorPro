@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.mcal.appdm.base.R;
+import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.IOUtils;
 
@@ -43,12 +44,12 @@ public class ApkSaveDialog extends Dialog {
     public void start() {
         this.show();
 
-        if (!ScopedStorage.exist()) {
+        if (!FileHelperKt.exist()) {
             showToast("Cannot find SD card to save the APK.");
             return;
         }
 
-        this.dstPath = ScopedStorage.getBackupDir() + "/" + appName + ".apk";
+        this.dstPath = ScopedStorage.getBackupsDir() + "/" + appName + ".apk";
 
         startCopyThread(apkPath, dstPath);
     }

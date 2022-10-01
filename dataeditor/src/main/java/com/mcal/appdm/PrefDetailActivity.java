@@ -1,5 +1,7 @@
 package com.mcal.appdm;
 
+import static com.mcal.common.utils.FileHelperKt.copyBack;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,12 +23,12 @@ import androidx.annotation.NonNull;
 import com.mcal.appdm.base.R;
 import com.mcal.appdm.utils.XmlUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ActivityHelper;
+import com.mcal.common.utils.FileHelperKt;
+import com.mcal.common.utils.RootCommand;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utilsOld.CommandInterface;
 import com.mcal.common.utilsOld.CommandRunner;
-import com.mcal.common.utilsOld.FileCopyUtils;
-import com.mcal.common.utils.RootCommand;
 import com.mcal.editor.TextEditor;
 import com.mcal.sqliteutil.util.PaddingTable;
 import com.mcal.sqliteutil.util.PaddingTable.ITableRowClicked;
@@ -283,7 +285,7 @@ public class PrefDetailActivity extends CustomizedLangActivity implements ITable
         XmlUtils.writeMapXml(keyValues, out);
         out.close();
 
-        FileCopyUtils.copyBack(this, tmpFilePath, filePath, isRootMode);
+        copyBack(tmpFilePath, filePath, isRootMode);
     }
 
     // For this mode, directly write to the file
@@ -425,7 +427,7 @@ public class PrefDetailActivity extends CustomizedLangActivity implements ITable
             PrefDetailActivity activity = activityRef.get();
             if (activity != null) {
                 try {
-                    if (!ScopedStorage.exist()) {
+                    if (!FileHelperKt.exist()) {
                         throw new Exception("Can not find SD Card!");
                     }
                     String workingDir = ScopedStorage.getTempDir().getPath();

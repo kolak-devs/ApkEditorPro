@@ -96,12 +96,7 @@ public class ProjectListActivity extends SwipeBackActivity implements View.OnCli
         ListView projectList = findViewById(R.id.project_list);
 
         try {
-            // For APK Parser, no extra project information
-            if (BuildConfig.PARSER_ONLY) {
-                this.projectFolder = ScopedStorage.getStorageDirectory() + "/ApkParser";
-            } else {
-                this.projectFolder = makeDir(this, ".projects");
-            }
+            this.projectFolder = makeDir(".projects").getPath();
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             return;

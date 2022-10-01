@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.utils.FileHelperKt.makeDir;
 import static com.mcal.common.utils.FileHelperKt.recursiveModifiedTime;
 import static com.mcal.common.utils.FileHelperKt.reviseFileName;
 import static com.mcal.common.utils.FileHelperKt.writeToFile;
@@ -90,12 +91,12 @@ import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
 import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.StringHelperKt;
-import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utilsOld.IOUtils;
 import com.mcal.common.utilsOld.ServiceUtil;
 import com.mcal.common.utilsOld.TextFileReader;
@@ -375,7 +376,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     apkPath = "";
                     decodeRootPath = ScopedStorage.getStorageDirectory() + "/ApkParser" + "/" + projectName;
                 } else {
-                    String prjRoot = ScopedStorage.makeDir(".projects").getPath();
+                    String prjRoot = makeDir(".projects").getPath();
                     prjInfo = loadProject(prjRoot + projectName);
                     apkPath = prjInfo.apkPath;
                     decodeRootPath = prjInfo.decodeRootPath;
@@ -603,7 +604,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         try {
             String workingPath;
             if (projectName != null) {
-                String prjRoot = ScopedStorage.makeDir(".projects").getPath();
+                String prjRoot = makeDir(".projects").getPath();
                 workingPath = prjRoot + projectName + "/";
             } else {
                 workingPath = ScopedStorage.getTmpDir().getPath();
@@ -784,7 +785,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
                         String parentFolder;
                         try {
-                            parentFolder = FileHelperKt.makeDir(ApkInfoActivity.this, ".projects");
+                            parentFolder = makeDir(".projects").getPath();
                         } catch (Exception e) {
                             errorMessage = String.format(getString(R.string.general_error), e.getMessage());
                             return;

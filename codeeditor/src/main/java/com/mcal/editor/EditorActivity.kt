@@ -17,7 +17,7 @@ import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.ScopedStorage.getTmpDir
-import com.mcal.common.utilsOld.FileCopyUtils
+import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
 import com.mcal.editor.smali.SmaliMethodsDialogs
 import com.mcal.editor.utils.FileUtils
@@ -429,7 +429,7 @@ class EditorActivity : CustomizedLangActivity(),
     private fun copyBack2RealPath(realPath: String) {
         try {
             filePath?.let { path ->
-                FileCopyUtils.copyBack(this, path.path, realPath, isRootMode)
+                copyBack(path.path, realPath, isRootMode)
             }
         } catch (e: java.lang.Exception) {
             e.printStackTrace()

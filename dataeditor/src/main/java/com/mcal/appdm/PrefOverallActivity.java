@@ -32,13 +32,14 @@ import com.mcal.appdm.base.R;
 import com.mcal.appdm.utils.SignatureInfoReader;
 import com.mcal.appdm.utils.StringPair;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityHelper;
+import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
+import com.mcal.common.utils.RootCommand;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utilsOld.CommandInterface;
 import com.mcal.common.utilsOld.CommandRunner;
-import com.mcal.common.utils.RootCommand;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 
@@ -225,7 +226,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         {
             // Map<String, String> values = new HashMap<String, String>();
             // values.put("NAME", "App Size");
-            String strSize = ScopedStorage.getSizeDescription(f.length());
+            String strSize = FileHelperKt.getSizeDescription(f.length());
             data.add(new BasicInfoItem(res.getString(R.string.appdm_app_size),
                     strSize));
         }
@@ -781,7 +782,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
                 return false;
             }
 
-            if (!ScopedStorage.exist()) {
+            if (!FileHelperKt.exist()) {
                 this.errMsg = "Can not find SD card!";
                 return false;
             }

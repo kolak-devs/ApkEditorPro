@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.RootCommand;
@@ -71,7 +72,7 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
         }
 
         // Following code is for root mode
-        if (!ScopedStorage.exist()) {
+        if (!FileHelperKt.exist()) {
             throw new Exception("Can not find SD Card!");
         }
         String sdDir = ScopedStorage.getStorageDirectory().getPath();

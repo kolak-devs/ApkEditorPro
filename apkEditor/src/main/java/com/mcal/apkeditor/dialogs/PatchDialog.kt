@@ -22,6 +22,7 @@ import com.mcal.apkeditor.patch.interfaces.ApkInfoListener
 import com.mcal.apkeditor.patch.interfaces.IPatchContext
 import com.mcal.common.utils.LocaleManager
 import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.makeDir
 import com.mcal.common.utilsOld.IOUtils
 import com.mcal.patchview.ui.CodeText
 import org.xml.sax.SAXException
@@ -121,7 +122,7 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
         // Check the directory exist or not
         if (exampleDir == null) {
             try {
-                exampleDir = ScopedStorage.makeDir("patches").path
+                exampleDir = makeDir("patches").path
             } catch (e1: Exception) {
                 e1.printStackTrace()
             }

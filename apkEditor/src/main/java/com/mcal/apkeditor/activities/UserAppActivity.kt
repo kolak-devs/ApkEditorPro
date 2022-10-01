@@ -27,8 +27,8 @@ import com.mcal.appdm.PrefOverallActivity
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.copyFile
-import com.mcal.common.utils.makeBackupDir
 import com.mcal.common.utils.ActivityHelper
+import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
@@ -290,7 +290,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
 
                     @Throws(Exception::class)
                     override fun process() {
-                        outPath = makeBackupDir(this@UserAppActivity) + appName + ".apk"
+                        outPath = ScopedStorage.getBackupsDir().path + appName + ".apk"
                         outPath?.let { path ->
                             copyFile(File(apkPath), File(path))
                         }

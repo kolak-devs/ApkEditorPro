@@ -3,16 +3,47 @@ package com.mcal.common.utils
 import android.content.Context
 import android.os.Environment
 import com.mcal.common.data.Preferences
+import com.mcal.common.utils.ScopedStorage.getBinDir
+import com.mcal.common.utilsOld.CommandInterface
 import com.mcal.common.utilsOld.CommandRunner
+import org.jetbrains.annotations.Contract
 import java.io.*
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 
-fun Path.exists(): Boolean = Files.exists(this)
+// Support root mode and non-root mode
+@Contract("_ -> new")
+private fun createCommandRunner(isRootMode: Boolean): CommandInterface {
+    return if (isRootMode) {
+        RootCommand()
+    } else {
+        CommandRunner()
+    }
+}
 
-fun exist(): Boolean = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+/**
+ * @param path временный файл
+ * @param realPath реальный путь к файлу
+ */
+@Throws(java.lang.Exception::class)
+fun copyBack(path: String, realPath: String, isRootMode: Boolean) {
+    val rc = createCommandRunner(isRootMode)
+    var strCmd = "cp"
+    val bin = File(getBinDir(), "mycp")
+    if (bin.exists()) {
+        strCmd = bin.path
+    }
+    val copyRet = rc.runCommand(String.format("$strCmd %s \"%s\"", path, realPath), null, 3000)
+
+    // Copy file failed, use the original file
+    if (!copyRet) {
+        throw java.lang.Exception("Can not write file to $realPath")
+    }
+}
+
+fun Path.exists(): Boolean = Files.exists(this)
 
 fun Path.isFile(): Boolean = !Files.isDirectory(this)
 
@@ -182,40 +213,25 @@ fun createNewFile(parent: File, name: String): File {
     return createdFile
 }
 
-@Throws(Exception::class)
-fun makeBackupDir(ctx: Context): String {
-    return makeDir(ctx, "backup")
+fun exist(): Boolean = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+
+fun getSizeDescription(fileSize: Long): String {
+    if (fileSize >= 1024 * 1024) {
+        val mb = 1.0f * fileSize / 1024 / 1024
+        return String.format("%.2f M", mb)
+    } else if (fileSize >= 1024) {
+        val kb = 1.0f * fileSize / 1024
+        return String.format("%.2f K", kb)
+    }
+    return "$fileSize B"
 }
 
-@Throws(Exception::class)
-fun makeDir(ctx: Context, dirName: String): String {
-    if (!exist()) {
-        throw Exception("Can not find sd card.")
+fun makeDir(path: String): File {
+    val folder = File(ScopedStorage.getApkEditorDir().path + path)
+    if (!folder.exists()) {
+        folder.mkdirs()
     }
-    var subDir = ""
-    val packagePath = ctx.packageName
-    if (packagePath.startsWith("com.mcal.apkeditor.apkpermremover")) {
-        subDir = "/.ApkPermRemover/$dirName/"
-    } else if (packagePath.startsWith("com.mcal.apkeditor.pmaster")) {
-        subDir = "/PermMaster/$dirName/"
-    } else if (packagePath == "com.mcal.apkeditor.permissionmanager") {
-        subDir = "/PermMaster/$dirName/"
-    } else if (packagePath.startsWith("com.mcal.apkeditor")) {
-        subDir = "/ApkEditor/$dirName/"
-    } else if (packagePath.startsWith("com.mcal.apkeditor.appdm")) {
-        subDir = "/HackAppData/$dirName/"
-    } else if (packagePath.startsWith("com.mcal.apkeditor.pro")) {
-        subDir = "/ApkEditor/$dirName/"
-    } else if (packagePath.startsWith("com.mcal.apkeditor.legacy")) {
-        subDir = "/ApkEditor/$dirName/"
-    }
-    val rootDir = ScopedStorage.storageDirectory.path
-    val targetDir = rootDir + subDir
-    val f = File(targetDir)
-    if (!f.exists()) {
-        f.mkdirs()
-    }
-    return targetDir
+    return folder
 }
 
 fun File.cleanup() {
@@ -231,8 +247,7 @@ fun InputStream.readText(charset: Charset = Charsets.UTF_8): String {
     return this.bufferedReader(charset).use { it.readText() }
 }
 
-fun getDecodeDirectory(): String?
-{
+fun getDecodeDirectory(): String? {
     var str = Preferences.getDecodeDirectory()
     if (str != null) {
         if (str.endsWith("/")) {
