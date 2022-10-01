@@ -34,7 +34,7 @@ class DownloaderAdapter(
         holder.url.text = url
 
         val container = holder.container
-        val path = File(ScopedStorage.getBinDir().path + "/" + name)
+        val path = File(ScopedStorage.getBinDir().path + File.separator + name)
         val buttonDownload = holder.download
         val context = buttonDownload.context
         var icon: Drawable?

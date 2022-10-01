@@ -285,34 +285,6 @@ class EditorActivity : CustomizedLangActivity(),
         return null
     }
 
-    private val mmmmmmmmmm = registerForActivityResult(GetContent()) { result: Uri? ->
-        try {
-            if (result == null) return@registerForActivityResult
-            //TextMateLanguage only support TextMateColorScheme
-            var editorColorScheme = binding.editor.colorScheme
-            if (editorColorScheme !is TextMateColorScheme) {
-                val themeSource = IThemeSource.fromInputStream(
-                    assets.open("textmate/xml/syntaxes/xml.tmLanguage.json"),
-                    "xml.tmLanguage.json",
-                    null
-                )
-                editorColorScheme = TextMateColorScheme.create(themeSource)
-                binding.editor.colorScheme = editorColorScheme
-            }
-            val language = TextMateLanguage.create(
-                IGrammarSource.fromInputStream(
-                    contentResolver.openInputStream(result),
-                    result.path, null
-                ),
-                null,
-                (editorColorScheme as TextMateColorScheme).themeSource
-            )
-            binding.editor.setEditorLanguage(language)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
     private fun getTextMateLanguageForXml(): TextMateLanguage? {
         return try {
             TextMateLanguage.create(

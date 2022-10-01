@@ -313,7 +313,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
         String authString = getRandomString(4);
 
         try {
-            this.newManifestFile = ScopedStorage.getTmpDir() + ".xml";
+            this.newManifestFile = ScopedStorage.getTmpDir() + File.separator + ".xml";
             extractWrapperIfNeeded(tmplApkPath);
 
             ZipFile zipFile = new ZipFile(tmplApkPath);
@@ -406,7 +406,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
     private String saveLauncher() {
         try {
             if (this.apkInfo.icon != null) {
-                String file = ScopedStorage.getTmpDir() + "_launcher";
+                String file = ScopedStorage.getTmpDir() + File.separator + "_launcher";
                 Bitmap bm = drawableToBitmap(this.apkInfo.icon);
                 FileOutputStream outStream = new FileOutputStream(file);
                 bm.compress(Bitmap.CompressFormat.PNG, 100, outStream);
@@ -494,7 +494,7 @@ public class CommonEditActivity extends CustomizedLangActivity implements OnClic
                 !this.manifestInfo.packageName.equals(this.newPackageName));
 
         try {
-            this.newManifestFile = ScopedStorage.getTmpDir() + ".xml";
+            this.newManifestFile = ScopedStorage.getTmpDir() + File.separator + ".xml";
             ZipFile zipFile = new ZipFile(apkPath);
             ZipEntry entry = zipFile.getEntry("AndroidManifest.xml");
             InputStream is = zipFile.getInputStream(entry);

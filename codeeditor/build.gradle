@@ -36,7 +36,9 @@ android {
 
 dependencies {
     implementation project(':common')
-    implementation project(':jadx')
+    implementation project(':jadx:jadx-core')
+    implementation project(':jadx:jadx-plugins:jadx-dex-input')
+    implementation project(':jadx:jadx-plugins:jadx-smali-input')
     implementation project(':melissa')
     api project(':smali')
     implementation 'com.google.guava:guava:31.1-android'

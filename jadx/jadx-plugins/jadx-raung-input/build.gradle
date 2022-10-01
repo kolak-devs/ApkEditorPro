@@ -1,0 +1,28 @@
+plugins {
+	id 'com.android.library'
+}
+
+android {
+	compileSdk 32
+
+	defaultConfig {
+		minSdk 14
+		targetSdk 32
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+		}
+	}
+	namespace 'com.mcal.jadx.jadx_plugin_raung_input'
+}
+
+dependencies {
+	api(project(":jadx:jadx-plugins:jadx-plugins-api"))
+
+	implementation(project(":jadx:jadx-plugins:jadx-java-input"))
+
+	implementation('io.github.skylot:raung-asm:0.0.2')
+}

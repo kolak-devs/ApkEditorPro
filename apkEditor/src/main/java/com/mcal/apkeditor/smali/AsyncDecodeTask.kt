@@ -1,6 +1,5 @@
 package com.mcal.apkeditor.smali
 
-import android.content.Context
 import android.util.Log
 import com.mcal.apkeditor.pro.DexDecoder
 import com.mcal.common.utils.ScopedStorage
@@ -83,7 +82,7 @@ class AsyncDecodeTask(
                 val entry = entries.nextElement()
                 val name = entry.name
                 if (name.endsWith(".dex") && !name.contains("/")) {
-                    unzipDex2File(zipFile, entry, tmpDirectory + name)
+                    unzipDex2File(zipFile, entry, tmpDirectory  + File.separator + name)
                 }
             }
         } catch (e1: IOException) {
@@ -106,7 +105,7 @@ class AsyncDecodeTask(
             val name = "classes.dex"
             zipFile = ZipFile(mApkPath)
             val entry = zipFile.getEntry(name)
-            unzipDex2File(zipFile, entry, ScopedStorage.getTmpDir().path + name)
+            unzipDex2File(zipFile, entry, ScopedStorage.getTmpDir().path + File.separator + name)
         } catch (e1: IOException) {
             e1.printStackTrace()
         } finally {

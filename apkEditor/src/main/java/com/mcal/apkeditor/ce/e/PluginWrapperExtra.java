@@ -6,6 +6,7 @@ import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.common.utils.ScopedStorage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -62,7 +63,7 @@ public class PluginWrapperExtra implements IApkMaking, Serializable {
     // apkFilePath: the path of the plugin wrapper
     @Override
     public void prepareReplaces(Context ctx, String apkFilePath, Map<String, String> allReplaces, IDescriptionUpdate updater) throws Exception {
-        String dexPath = ScopedStorage.getTmpDir() + "_dex";
+        String dexPath = ScopedStorage.getTmpDir() + File.separator + "_dex";
 
         RandomAccessFile outFile = new RandomAccessFile(dexPath, "rw");
         outFile.setLength(0);

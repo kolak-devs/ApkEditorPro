@@ -35,6 +35,7 @@ import com.mcal.pngeditor.ViewZipImageActivity;
 
 import org.jetbrains.annotations.Contract;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -191,7 +192,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
                 input = zfile.getInputStream(entry);
             }
 
-            decodedXmlPath = ScopedStorage.getTmpDir() + clickedEntryPath.replace('/', '_');
+            decodedXmlPath = ScopedStorage.getTmpDir() + File.separator + clickedEntryPath.replace('/', '_');
             output = new FileOutputStream(decodedXmlPath);
 
             AXMLPrinter printer = new AXMLPrinter();

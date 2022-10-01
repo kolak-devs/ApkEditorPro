@@ -14,6 +14,7 @@ import com.mcal.appdm.base.R;
 import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.ScopedStorage;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class ApkSaveDialog extends Dialog {
             showToast("Cannot find SD card to save the APK.");
             return;
         }
-        dstPath = ScopedStorage.getBackupsDir() + "/" + mAppName + ".apk";
+        dstPath = ScopedStorage.getBackupsDir() + File.separator + mAppName + ".apk";
         startCopyThread(mApkPath, dstPath);
     }
 

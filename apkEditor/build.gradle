@@ -164,7 +164,7 @@ dependencies {
     def latestFastAdapterRelease = "5.6.0"
 
     implementation project(':androlib')
-    implementation project(':jadx')
+    implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':smali')
     implementation project(':apklib')
     implementation project(':common')

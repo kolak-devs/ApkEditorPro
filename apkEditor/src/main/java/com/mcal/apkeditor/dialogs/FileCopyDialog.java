@@ -15,7 +15,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.common.data.Constants;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.ZipUtils;
+import com.mcal.common.utils.ZipHelper;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -175,9 +175,9 @@ public class FileCopyDialog {
         }
 
         if (source.isDir) {
-            ZipUtils.unzipDirectory(mApkPath, source.path, targetPath);
+            ZipHelper.unzipDirectory(mApkPath, source.path, targetPath);
         } else {
-            ZipUtils.unzipFileTo(mApkPath, source.path, targetPath);
+            ZipHelper.unzipFileTo(mApkPath, source.path, targetPath);
         }
 
         savedFilePath = targetPath;
@@ -258,7 +258,7 @@ public class FileCopyDialog {
             if (realEntry != null) {
                 entryName = realEntry;
             }
-            ZipUtils.unzipFileTo(this.mApkPath, entryName, to.getPath());
+            ZipHelper.unzipFileTo(this.mApkPath, entryName, to.getPath());
         } else {
             copyFile(from, to);
         }

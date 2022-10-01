@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import com.mcal.common.utils.ImageHelper;
 import com.mcal.common.utils.ScopedStorage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -58,7 +59,7 @@ public class ReplaceLauncherIcon implements IApkMaking, Serializable {
                         int index = 0;
                         Bitmap newIconBitmap = BitmapFactory.decodeFile(newIconPath);
                         for (ResResource res : all.values()) {
-                            String filePath = ScopedStorage.getTmpDir() + ".launcher" + index + ".png";
+                            String filePath = ScopedStorage.getTmpDir() + File.separator + ".launcher" + index + ".png";
                             // Get image size
                             // First try to get real entry path
                             String entryPath = null;

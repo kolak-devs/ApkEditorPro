@@ -129,7 +129,7 @@ public class PatchRuleExecDex extends PatchRule {
         OutputStream os = null;
         String dexPath = null;
         try {
-            dexPath = ScopedStorage.getTmpDir() + "script.dex";
+            dexPath = ScopedStorage.getTmpDir() + File.separator + "script.dex";
             os = new BufferedOutputStream(new FileOutputStream(dexPath));
             is = new BufferedInputStream(patchZip.getInputStream(ze));
             copyFile(is, os);

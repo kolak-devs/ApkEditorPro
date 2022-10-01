@@ -1,0 +1,45 @@
+plugins {
+	id 'com.android.library'
+}
+
+android {
+	compileSdk 32
+
+	defaultConfig {
+		minSdk 14
+		targetSdk 32
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+		}
+	}
+	namespace 'com.mcal.jadx.jadx_core'
+}
+
+dependencies {
+	implementation project(':common')
+	api(project(':jadx:jadx-plugins:jadx-plugins-api'))
+
+	implementation 'com.google.code.gson:gson:2.9.1'
+
+	// TODO: move resources decoding to separate plugin module
+	implementation 'com.android.tools.build:aapt2-proto:7.2.2-7984345'
+	implementation 'com.google.protobuf:protobuf-java:3.21.5' // forcing latest version
+
+	testImplementation 'org.apache.commons:commons-lang3:3.12.0'
+
+	testImplementation(project(':jadx:jadx-plugins:jadx-dex-input'))
+	testRuntimeOnly(project(':jadx:jadx-plugins:jadx-smali-input'))
+	testRuntimeOnly(project(':jadx:jadx-plugins:jadx-java-convert'))
+	testRuntimeOnly(project(':jadx:jadx-plugins:jadx-java-input'))
+	testRuntimeOnly(project(':jadx:jadx-plugins:jadx-raung-input'))
+
+	testImplementation 'org.eclipse.jdt:ecj:3.30.0'
+	testImplementation 'tools.profiler:async-profiler:1.8.3'
+
+	implementation 'org.jetbrains:annotations:23.0.0'
+	implementation 'org.slf4j:slf4j-api:2.0.3'
+}

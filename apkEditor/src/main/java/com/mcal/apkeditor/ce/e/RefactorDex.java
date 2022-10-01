@@ -10,6 +10,7 @@ import com.mcal.apkeditor.dex.DexStringEditor;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ZipHelper;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class RefactorDex implements IApkMaking, Serializable {
         List<String> entryList = ZipHelper.listFiles(apkFilePath, "");
         for (String entry : entryList) {
             if (entry.endsWith(".dex")) {
-                String savePath = ScopedStorage.getTmpDir() + getRandomString(6) + ".dex";
+                String savePath = ScopedStorage.getTmpDir() + File.separator + getRandomString(6) + ".dex";
                 DexStringEditor editor = new DexStringEditor(apkFilePath, entry);
                 if (editor.refactorPackageName(oldPath, newPath, savePath)) {
                     allReplaces.put(entry, savePath);

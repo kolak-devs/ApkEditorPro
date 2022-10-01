@@ -290,7 +290,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
 
                     @Throws(Exception::class)
                     override fun process() {
-                        outPath = ScopedStorage.getBackupsDir().path + appName + ".apk"
+                        outPath = ScopedStorage.getBackupsDir().path + File.separator + appName + ".apk"
                         outPath?.let { path ->
                             copyFile(File(apkPath), File(path))
                         }

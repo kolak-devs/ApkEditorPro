@@ -501,7 +501,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                     input = zipFile.getInputStream(entry);
                 }
 
-                tmpFilePath = ScopedStorage.getTmpDir() + getRandomString(6);
+                tmpFilePath = ScopedStorage.getTmpDir() + File.separator + getRandomString(6);
                 out = new FileOutputStream(tmpFilePath);
                 copyFile(input, out);
             } catch (Exception e) {

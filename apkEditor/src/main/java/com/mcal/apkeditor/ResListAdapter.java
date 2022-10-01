@@ -608,7 +608,7 @@ public class ResListAdapter extends BaseAdapter implements
                 throwExistException(entryName);
             } else {
                 // Copy to the working path
-                targetPath = ScopedStorage.getTmpDir() + getRandomString(8);
+                targetPath = ScopedStorage.getTmpDir() + File.separator + getRandomString(8);
                 FileOutputStream out = new FileOutputStream(targetPath);
                 copyFile(input, out);
                 out.close();
@@ -753,7 +753,7 @@ public class ResListAdapter extends BaseAdapter implements
         else {
             try {
                 // Copy file to working directory
-                String targetPath = ScopedStorage.getTmpDir() + getRandomString(8);
+                String targetPath = ScopedStorage.getTmpDir() + File.separator + getRandomString(8);
                 copyFile(newPath, targetPath);
 
                 // Record replacement and show toast
@@ -802,7 +802,7 @@ public class ResListAdapter extends BaseAdapter implements
                         }
                     }
                     // Copy to the working directory (not decoded path)
-                    String targetFolder = ScopedStorage.getTmpDir() + getRandomString(6);
+                    String targetFolder = ScopedStorage.getTmpDir() + File.separator + getRandomString(6);
                     Map<String, String> added = copyAllFiles(new File(newPath),
                             new File(targetFolder), entry);
                     // Record and update the zip nodes

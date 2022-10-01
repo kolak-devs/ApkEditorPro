@@ -374,15 +374,10 @@ public class ApkInfoActivity extends CustomizedLangActivity
         ProjectInfo prjInfo = null;
         if (projectName != null) {
             try {
-                if (BuildConfig.PARSER_ONLY) {
-                    apkPath = "";
-                    decodeRootPath = ScopedStorage.getStorageDirectory() + "/ApkParser" + "/" + projectName;
-                } else {
-                    String prjRoot = makeDir(".projects").getPath();
-                    prjInfo = loadProject(prjRoot + projectName);
-                    apkPath = prjInfo.apkPath;
-                    decodeRootPath = prjInfo.decodeRootPath;
-                }
+                 String prjRoot = makeDir(".projects").getPath();
+                 prjInfo = loadProject(prjRoot + projectName);
+                 apkPath = prjInfo.apkPath;
+                 decodeRootPath = prjInfo.decodeRootPath;
             } catch (Exception e) {
                 Toast.makeText(this, R.string.cannot_load_project_info, Toast.LENGTH_LONG).show();
                 this.finish();
@@ -1484,7 +1479,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     @Nullable
     private String serialize2File(Map<String, String> fileEntry2ZipEntry2) {
         try {
-            String filepath = ScopedStorage.getTmpDir() + getRandomString(8);
+            String filepath = ScopedStorage.getTmpDir() + File.separator + getRandomString(8);
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filepath));
             final Set<Entry<String, String>> entries = fileEntry2ZipEntry2.entrySet();
             for (Entry<String, String> entry : entries) {
@@ -1796,12 +1791,12 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
             Bundle bundle = new Bundle();
             {
-                String translatedFile = ScopedStorage.getTmpDir() + "translated";
+                String translatedFile = ScopedStorage.getTmpDir() + File.separator + "translated";
                 writeObjectToFile(translatedFile, translatedList);
                 bundle.putString("translatedList_file", translatedFile);
             }
             {
-                String untranslatedFile = ScopedStorage.getTmpDir() + "untranslatedList";
+                String untranslatedFile = ScopedStorage.getTmpDir() + File.separator + "untranslatedList";
                 writeObjectToFile(untranslatedFile, untranslatedList);
                 bundle.putString("untranslatedList_file", untranslatedFile);
             }
@@ -2574,7 +2569,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         try {
             String zipEntry = mFileEntry2ZipEntry.get(entryName);
-            String dstPath = ScopedStorage.getTmpDir() + TMP_EDITOR_FILE + fileType;
+            String dstPath = ScopedStorage.getTmpDir() + File.separator + TMP_EDITOR_FILE + fileType;
             if (zipEntry != null) {
                 entryName = zipEntry;
             }
