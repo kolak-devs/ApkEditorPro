@@ -103,7 +103,7 @@ import com.mcal.common.utils.StringHelperKt;
 import com.mcal.common.utils.ServiceUtil;
 import com.mcal.common.utils.TextFileReader;
 import com.mcal.common.utils.UriUtils;
-import com.mcal.common.utils.ZipUtils;
+import com.mcal.common.utils.ZipHelper;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 import com.mcal.folderlist.util.OpenFiles;
@@ -2578,7 +2578,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             if (zipEntry != null) {
                 entryName = zipEntry;
             }
-            ZipUtils.unzipFileTo(apkPath, entryName, dstPath);
+            ZipHelper.unzipFileTo(apkPath, entryName, dstPath);
             return dstPath;
         } catch (Exception e1) {
             return null;

@@ -17,7 +17,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-public class ZipUtils {
+public class ZipHelper {
     // Extract entryPath to destination path
     // entryPath looks like "assets"
     // If 2 files under "assets" -- "assets/a", "assets/b", then a and b will be

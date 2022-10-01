@@ -27,7 +27,7 @@ import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.ZipUtils;
+import com.mcal.common.utils.ZipHelper;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,7 +40,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
         IFileSelection {
 
     private final Activity ctx;
-    private final ZipHelper zipHelper;
+    private final com.mcal.apkeditor.se.ZipHelper zipHelper;
     private final List<String> audioPathList;
 
     // Record all the extracted audios
@@ -55,7 +55,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
     private int playingPosition = -1;
     private String playingEntry;
 
-    public AudioListAdapter(Activity ctx, @NonNull ZipHelper zipHelper) {
+    public AudioListAdapter(Activity ctx, @NonNull com.mcal.apkeditor.se.ZipHelper zipHelper) {
         this.ctx = ctx;
         this.zipHelper = zipHelper;
         this.audioPathList = zipHelper.audioPathList;
@@ -140,7 +140,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
         // Upzip
         if (!extractedAudios.contains(entryName)) {
             String name = getNameByPath(entryName);
-            ZipUtils.unzipFileTo(zipHelper.getFilePath(), entryName, workingDir + name);
+            ZipHelper.unzipFileTo(zipHelper.getFilePath(), entryName, workingDir + name);
             extractedAudios.add(entryName);
         }
 
@@ -274,7 +274,7 @@ public class AudioListAdapter extends BaseAdapter implements OnClickListener,
 
     @Override
     public boolean isInterestedFile(String filename, String extraStr) {
-        return ZipHelper.isAudio(filename);
+        return com.mcal.apkeditor.se.ZipHelper.isAudio(filename);
     }
 
     // Extract audio file to SD card

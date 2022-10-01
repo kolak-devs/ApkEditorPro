@@ -30,7 +30,7 @@ import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.StringHelperKt;
-import com.mcal.common.utils.ZipUtils;
+import com.mcal.common.utils.ZipHelper;
 
 import java.io.Closeable;
 import java.io.File;
@@ -387,7 +387,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             } else {
                 extractBtn.setOnClickListener(v -> {
                     try {
-                        ZipUtils.unzipFileTo(apkPath, _entry, ScopedStorage.getStorageDirectory() + File.separator + "axml");
+                        ZipHelper.unzipFileTo(apkPath, _entry, ScopedStorage.getStorageDirectory() + File.separator + "axml");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
