@@ -113,7 +113,7 @@ class FolderListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileListViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_file, parent, false)
-        return FolderListAdapter.FileListViewHolder(itemView)
+        return FileListViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: FileListViewHolder, position: Int) {

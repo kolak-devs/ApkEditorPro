@@ -63,17 +63,18 @@ open class FolderListWrapper(
     }
 
     override fun onLongClick(position: Int): Boolean {
+        val context = mContext
         // The first item is always the parent folder
         if (position == 0) {
             return true
         }
-        val dialog = MaterialAlertDialogBuilder(mContext)
+        val dialog = MaterialAlertDialogBuilder(context)
         dialog.setItems(
             arrayOf(
-                "Open as...",
-                mContext.getString(R.string.delete),
-                mContext.getString(R.string.rename),
-                mContext.getString(R.string.new_file)
+                context.getString(R.string.file_open_as),
+                context.getString(R.string.delete),
+                context.getString(R.string.rename),
+                context.getString(R.string.new_file)
             )
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
@@ -83,7 +84,7 @@ open class FolderListWrapper(
                     val rec = fileList[position]
                     if (rec != null) {
                         val filePath = oldDir + "/" + rec.fileName
-                        OpenFiles.openFile(mContext, filePath)
+                        OpenFiles.openFile(context, filePath)
                     }
                     p112.dismiss()
                 }
@@ -137,29 +138,31 @@ open class FolderListWrapper(
     }
 
     private fun doRename(dirPath: String, fileName: String, newName: String): Boolean {
+        val context = mContext
         var ret = false
         val newFile = File("$dirPath/$newName")
         if (newFile.exists()) {
-            val tip = mContext.resources.getString(R.string.file_already_exist)
+            val tip = context.resources.getString(R.string.file_already_exist)
             val msg = String.format(tip, newName)
-            Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         } else {
             ret = File("$dirPath/$fileName").renameTo(newFile)
-            val strRename = mContext.resources.getString(R.string.rename)
-            val strResult = mContext.resources.getString(if (ret) R.string.succeed else R.string.failed)
-            Toast.makeText(mContext, "$strRename $strResult", Toast.LENGTH_SHORT).show()
+            val strRename = context.resources.getString(R.string.rename)
+            val strResult = context.resources.getString(if (ret) R.string.succeed else R.string.failed)
+            Toast.makeText(context, "$strRename $strResult", Toast.LENGTH_SHORT).show()
         }
         return ret
     }
 
     private fun createFile() {
+        val context = mContext
         val dirPath = mAdapter?.getData(null)
-        val inputDlg = MaterialAlertDialogBuilder(mContext)
+        val inputDlg = MaterialAlertDialogBuilder(context)
         inputDlg.setTitle(R.string.new_file)
         inputDlg.setMessage(R.string.pls_input_filename)
 
         // Set an EditText view to get user input
-        val input = EditText(mContext)
+        val input = EditText(context)
         val filter = InputHelper.getFileNameFilter()
         input.filters = arrayOf(filter)
         inputDlg.setView(input)
@@ -167,7 +170,7 @@ open class FolderListWrapper(
             var name = input.text.toString()
             name = name.trim { it <= ' ' }
             if ("" == name) {
-                Toast.makeText(mContext, R.string.empty_input_tip, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.empty_input_tip, Toast.LENGTH_LONG).show()
             } else {
                 var succeed = false
                 var errMessage: String? = null
@@ -181,14 +184,14 @@ open class FolderListWrapper(
                         // Update list view
                         mAdapter?.openDirectory(dirPath)
                     } else {
-                        errMessage = mContext.getString(R.string.failed_create_file)
+                        errMessage = context.getString(R.string.failed_create_file)
                     }
                 } catch (e: IOException) {
-                    val fmt = mContext.getString(R.string.general_error)
+                    val fmt = context.getString(R.string.general_error)
                     errMessage = String.format(fmt, e.message)
                 }
                 if (!succeed) {
-                    Toast.makeText(mContext, errMessage, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, errMessage, Toast.LENGTH_LONG).show()
                 }
             }
         }

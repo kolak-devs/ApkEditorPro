@@ -230,4 +230,5 @@
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
+    <string name="file_open_as">Open as...</string>
 </resources>

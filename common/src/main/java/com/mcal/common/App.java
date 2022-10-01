@@ -76,7 +76,7 @@ public class App extends Application {
      * @param context Context to get resources and device specific display metrics
      * @return A float value to represent dp equivalent to px value
      */
-    public static float px2dp(float px, @NonNull Context context) {
+    public static float px2dp(@NonNull Context context, float px) {
         return px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 }

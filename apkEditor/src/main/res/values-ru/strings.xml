@@ -305,4 +305,5 @@
     <string name="ui_monet_sum_off">Включение динамической темы Material You на основе обоев. Требуется перезапуск</string>
     <string name="dialog_install_frameworks">Установить фреймворки</string>
     <string name="dialog_install_frameworks_sum">Apk Editor требуется загрузить дополнительные файлы для декодирования apk (aapt/framework.jar/myсp). Без их загрузки приложение не будет работать</string>
+    <string name="file_open_as">Open as...</string>
 </resources>

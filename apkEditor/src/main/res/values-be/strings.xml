@@ -10,7 +10,6 @@
     <string name="apk_savedas_1">APK захаваны як %s</string>
     <string name="app_display">Адлюстраванне дадаткаў</string>
     <string name="app_list_order">Упарадкаванне дадаткаў</string>
-    <string name="app_name">APK Editor Pro</string>
     <string name="appearance">"Выгляд "</string>
     <string name="apply_the_patch">Ужыць патч</string>
     <string name="assemble_dex_detail" formatted="false">%d/%d файлаў скампілявана</string>
@@ -261,4 +260,5 @@
     <string name="title_clear_history">Clear history</string>
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
+    <string name="file_open_as">Open as...</string>
 </resources>

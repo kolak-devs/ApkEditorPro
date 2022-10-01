@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.LruCache
@@ -17,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.UserAppActivity.Companion.startFullEditActivity
 import com.mcal.apkeditor.se.SimpleEditActivity
@@ -24,11 +26,8 @@ import com.mcal.apkeditor.ui.fulleditor.FullEditorActivity
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
-import com.mcal.common.utils.ApkInfoParser
-import com.mcal.common.utils.FileRecord
+import com.mcal.common.utils.*
 import com.mcal.common.utils.ScopedStorage.storageDirectory
-import com.mcal.common.utils.findExt
-import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.view.ProgressDialog
 import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.folderlist.FolderListWrapper
@@ -224,11 +223,11 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
             dialog.setNegativeButton(android.R.string.cancel, null)
             dialog.show()
             return true
-        } else  if(filePath.findExt("java|kt|xml|smali|json|cpp|c|h|hpp|txt|lua|htm|html|js|css|php|gradle|properties")) {
+        } else if (filePath.findExt("java|kt|xml|smali|json|cpp|c|h|hpp|txt|lua|htm|html|js|css|php|gradle|properties")) {
             val intent = getSoraEditor(this, filePath, null, 0, null)
             startActivity(intent)
             return true
-        } else if(filePath.findExt("jpg|jpeg|png|gif")) {
+        } else if (filePath.findExt("jpg|jpeg|png|gif")) {
             val intent = Intent(this, PhotoViewerActivity::class.java)
             ActivityHelper.attachParam(intent, "filePath", filePath)
             startActivityForResult(intent, ApkInfoActivity.RC_OPEN_EXTERNAL)
@@ -240,16 +239,17 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
     private fun editModeDialog(filePath: String) {
         val dialog = MaterialAlertDialogBuilder(this)
         var intent: Intent?
-        dialog.setItems(
-            arrayOf(
-                getString(R.string.full_edit),
-                getString(R.string.simple_edit),
-                getString(R.string.common_edit),
-                getString(R.string.xml_file_edit),
-                getString(R.string.sign_apk),
-                "TEST"
-            )
-        ) { p112: DialogInterface, p2: Int ->
+        val items = arrayOf(
+            getString(R.string.full_edit),
+            getString(R.string.simple_edit),
+            getString(R.string.common_edit),
+            getString(R.string.xml_file_edit),
+            getString(R.string.sign_apk),
+        )
+        if (BuildConfig.DEBUG) {
+            items.plus("Test Full Decompiler")
+        }
+        dialog.setItems(items) { p112: DialogInterface, p2: Int ->
             when (p2) {
                 SIMPLE_EDIT -> {
                     intent = Intent(this, SimpleEditActivity::class.java)
@@ -333,14 +333,16 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         // APK file
         val name = record.fileName
         if (name != null) {
+            val path = "$dirPath/$name"
             if (!record.isDir && name.endsWith(".apk")) {
-                val path = "$dirPath/$name"
                 val info = apkIconCache[path]
                 if (info != null) {
                     return info.icon
                 }
                 parseThread?.addApk(path)
                 return ContextCompat.getDrawable(this, R.drawable.round_android_24)
+            } else if (!record.isDir && name.findExt("jpg|jpeg|png|gif")) {
+                return BitmapDrawable(resources, ImageZoomer().getImageThumbnail(path, 200, 200))
             }
         }
         return null
