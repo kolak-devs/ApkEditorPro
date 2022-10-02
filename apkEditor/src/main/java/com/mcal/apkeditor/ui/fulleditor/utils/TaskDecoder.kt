@@ -2,7 +2,7 @@ package com.mcal.apkeditor.ui.fulleditor.utils
 
 import brut.androlib.Androlib
 import brut.androlib.ApkDecoder
-import brut.androlib.options.BuildOptions
+import com.mcal.androlib.options.BuildOptions
 import com.mcal.androlib.util.Logger
 import com.mcal.apkeditor.ApkParseConsumer
 import com.mcal.common.data.Preferences

@@ -3,7 +3,7 @@ package com.mcal.apkeditor
 import android.content.Context
 import android.util.Log
 import brut.androlib.Androlib
-import brut.androlib.options.BuildOptions
+import com.mcal.androlib.options.BuildOptions
 import com.mcal.androlib.util.Logger
 import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.smali.ISmaliAssembleCallback

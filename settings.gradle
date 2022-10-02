@@ -27,15 +27,22 @@ include ':xpp3'
 include ':androlib'
 include ':smali'
 
-include ':jadx:jadx-core'
-include ':jadx:jadx-cli'
-include ':jadx:jadx-plugins'
-include ':jadx:jadx-plugins:jadx-plugins-api'
-include ':jadx:jadx-plugins:jadx-dex-input'
-include ':jadx:jadx-plugins:jadx-java-input'
-include ':jadx:jadx-plugins:jadx-raung-input'
-include ':jadx:jadx-plugins:jadx-smali-input'
-include ':jadx:jadx-plugins:jadx-java-convert'
+include ':jadx:jadx-core',
+        ':jadx:jadx-cli',
+        ':jadx:jadx-plugins',
+        ':jadx:jadx-plugins:jadx-plugins-api',
+        ':jadx:jadx-plugins:jadx-dex-input',
+        ':jadx:jadx-plugins:jadx-java-input',
+        ':jadx:jadx-plugins:jadx-raung-input',
+        ':jadx:jadx-plugins:jadx-smali-input',
+        ':jadx:jadx-plugins:jadx-java-convert'
+
+
+include ':androlib:brut.j.common',
+        ':androlib:brut.j.util',
+        ':androlib:brut.j.dir',
+        ':androlib:brut.apktool:apktool-lib',
+        ':androlib:brut.apktool:apktool-cli'
 
 include ':manifestparser'
 include ':net-manager'

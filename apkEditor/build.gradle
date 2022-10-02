@@ -163,7 +163,7 @@ configurations {
 dependencies {
     def latestFastAdapterRelease = "5.6.0"
 
-    implementation project(':androlib')
+    implementation project(':androlib:brut.apktool:apktool-lib')
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':smali')
     implementation project(':apklib')
