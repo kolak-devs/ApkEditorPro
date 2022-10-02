@@ -16,6 +16,8 @@
  */
 package brut.apktool;
 
+import com.mcal.androlib.options.BuildOptions;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -42,7 +44,6 @@ import brut.androlib.ApktoolProperties;
 import brut.androlib.err.CantFindFrameworkResException;
 import brut.androlib.err.InFileNotFoundException;
 import brut.androlib.err.OutDirExistsException;
-import brut.androlib.options.BuildOptions;
 import brut.common.BrutException;
 import brut.directory.DirectoryException;
 import brut.util.AaptManager;
@@ -311,7 +312,7 @@ public class Main {
         int paraCount = cli.getArgList().size();
         String apkName = cli.getArgList().get(paraCount - 1);
 
-        brut.androlib.options.BuildOptions buildOptions = new BuildOptions();
+        BuildOptions buildOptions = new BuildOptions();
         if (cli.hasOption("p") || cli.hasOption("frame-path")) {
             buildOptions.frameworkFolderLocation = cli.getOptionValue("p");
         }
@@ -322,7 +323,7 @@ public class Main {
     }
 
     private static void cmdListFrameworks(CommandLine cli) throws AndrolibException {
-        brut.androlib.options.BuildOptions buildOptions = new BuildOptions();
+        BuildOptions buildOptions = new BuildOptions();
         if (cli.hasOption("p") || cli.hasOption("frame-path")) {
             buildOptions.frameworkFolderLocation = cli.getOptionValue("p");
         }
@@ -338,7 +339,7 @@ public class Main {
     }
 
     private static void cmdEmptyFrameworkDirectory(CommandLine cli) throws AndrolibException {
-        brut.androlib.options.BuildOptions buildOptions = new BuildOptions();
+        BuildOptions buildOptions = new BuildOptions();
 
         if (cli.hasOption("f") || cli.hasOption("force")) {
             buildOptions.forceDeleteFramework = true;

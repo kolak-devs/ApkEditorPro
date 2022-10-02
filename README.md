@@ -1,7 +1,8 @@
 # apk_editor_pro
 
 # Update JaDX
-jadx.core.utils.android.Res9patchStreamDecoder
+REPLACE:
+    jadx.core.utils.android.Res9patchStreamDecoder
 
 
 # Update ApkTool
@@ -18,6 +19,8 @@ UPDATE:
     brut.androlib.res.decoder.StringBlock.getUtf8() - private to public
     brut.androlib.res.decoder.StringBlock.getUtf16() - private to public
     brut.util.AaptManager.getAapt()
+    brut.androlib.Androlib.writeMetaFile()
+    brut.androlib.Androlib.readMetaFile()
 
 ADD:
     brut.androlib.res.data.ResResSpec.getAllResources()

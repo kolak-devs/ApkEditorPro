@@ -20,6 +20,10 @@ android {
 }
 
 dependencies {
-    implementation 'commons-cli:commons-cli:1.5.0'
+    implementation project(':common')
+
     implementation project(':androlib:brut.apktool:apktool-lib')
+
+    implementation 'commons-cli:commons-cli:1.5.0'
+    implementation 'org.jetbrains:annotations:23.0.0'
 }

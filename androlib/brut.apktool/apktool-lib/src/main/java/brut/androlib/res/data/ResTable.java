@@ -16,6 +16,8 @@
  */
 package brut.androlib.res.data;
 
+import com.mcal.androlib.meta.VersionInfo;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -24,7 +26,6 @@ import java.util.Set;
 
 import brut.androlib.AndrolibException;
 import brut.androlib.err.UndefinedResObjectException;
-import brut.androlib.meta.VersionInfo;
 import brut.androlib.res.AndrolibResources;
 import brut.androlib.res.data.value.ResValue;
 

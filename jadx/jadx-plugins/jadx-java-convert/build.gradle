@@ -27,4 +27,5 @@ dependencies {
 	implementation('com.android.tools:r8:3.3.75')
 
 	implementation 'org.ow2.asm:asm:9.3'
+	implementation 'org.slf4j:slf4j-api:2.0.3'
 }

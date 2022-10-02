@@ -16,6 +16,9 @@
  */
 package brut.androlib.res;
 
+import com.mcal.androlib.meta.MetaInfo;
+import com.mcal.androlib.meta.PackageInfo;
+import com.mcal.androlib.meta.VersionInfo;
 import com.mcal.androlib.options.BuildOptions;
 
 import org.apache.commons.io.IOUtils;
@@ -47,9 +50,6 @@ import java.util.zip.ZipOutputStream;
 
 import brut.androlib.AndrolibException;
 import brut.androlib.err.CantFindFrameworkResException;
-import brut.androlib.meta.MetaInfo;
-import brut.androlib.meta.PackageInfo;
-import brut.androlib.meta.VersionInfo;
 import brut.androlib.res.data.ResConfigFlags;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResResSpec;

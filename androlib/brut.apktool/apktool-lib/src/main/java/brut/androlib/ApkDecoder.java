@@ -17,6 +17,10 @@
 package brut.androlib;
 
 import com.google.common.base.Strings;
+import com.mcal.androlib.meta.MetaInfo;
+import com.mcal.androlib.meta.PackageInfo;
+import com.mcal.androlib.meta.UsesFramework;
+import com.mcal.androlib.meta.VersionInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,10 +35,6 @@ import java.util.logging.Logger;
 import brut.androlib.err.InFileNotFoundException;
 import brut.androlib.err.OutDirExistsException;
 import brut.androlib.err.UndefinedResObjectException;
-import brut.androlib.meta.MetaInfo;
-import brut.androlib.meta.PackageInfo;
-import brut.androlib.meta.UsesFramework;
-import brut.androlib.meta.VersionInfo;
 import brut.androlib.res.AndrolibResources;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResTable;
