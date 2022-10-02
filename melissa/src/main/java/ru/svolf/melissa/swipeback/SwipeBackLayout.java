@@ -181,7 +181,7 @@ public class SwipeBackLayout extends FrameLayout {
                     mEdgeSize.setInt(mHelper, metrics.widthPixels / 2);
                     // first 100 dp of screen
                 } else if (edgeLevel == EdgeLevel.MIN) {
-                    mEdgeSize.setInt(mHelper, ((int) (100 * metrics.density + 0.5f)));
+                    mEdgeSize.setInt(mHelper, ((int) (64 * metrics.density + 0.5f)));
                 }
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {

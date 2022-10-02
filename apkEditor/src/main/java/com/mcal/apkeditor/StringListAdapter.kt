@@ -39,7 +39,7 @@ class StringListAdapter(activity: Activity) : BaseAdapter(), OnItemClickListener
         var value: StringItem
         synchronized(valueList) {
             value = valueList[position]
-            view = LayoutInflater.from(mActivity).inflate(R.layout.item_stringvaluestatic, null)
+            view = LayoutInflater.from(mActivity).inflate(R.layout.item_stringvalue_static, null)
             val viewHolder = ViewHolder()
             viewHolder.name = view.findViewById(R.id.string_name)
             viewHolder.value = view.findViewById(R.id.string_value)

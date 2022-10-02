@@ -4,7 +4,7 @@
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_primaryContainer">#D8E2FF</color>
     <color name="md_theme_light_onPrimaryContainer">#001A42</color>
-    <color name="md_theme_light_secondary">#7E5700</color>
+    <color name="md_theme_light_secondary">#E19B00</color>
     <color name="md_theme_light_onSecondary">#FFFFFF</color>
     <color name="md_theme_light_secondaryContainer">#cfe3fb</color>
     <color name="md_theme_light_onSecondaryContainer">#281900</color>

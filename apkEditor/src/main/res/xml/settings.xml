@@ -107,6 +107,17 @@
             android:icon="@drawable/ic_delete"
             android:title="@string/clean_garbage" />
 
+        <SeekBarPreference
+            app:icon="@drawable/ic_settings_cache_limit"
+            android:key="garbage_limit"
+            app:title="Лимит кеша в мегабайтах"
+            app:summary="При превышении лимита автоматически будет выполнена очитска"
+            app:seekBarIncrement="128"
+            app:min="256"
+            android:max="1536"
+            app:defaultValue="256"
+            app:showSeekBarValue="true"/>
+
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/file_extract_rename_key"
