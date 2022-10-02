@@ -20,6 +20,7 @@ import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.UsesFramework;
 import com.mcal.androlib.options.BuildOptions;
 import com.mcal.androlib.util.Logger;
+import com.mcal.common.data.Preferences;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -305,25 +306,39 @@ public class Androlib {
     }
 
     // TODO: For ApkEditor
-    public void writeMetaFile(File mOutDir, MetaInfo meta)
-            throws AndrolibException {
-        try {
-            meta.save(new File(mOutDir, "apktool.json"));
-        } catch (IOException | JSONException ex) {
-            throw new AndrolibException(ex);
+    public void writeMetaFile(File mOutDir, MetaInfo meta) throws AndrolibException {
+        if(Preferences.isApkToolJson()) {
+            try {
+                meta.save(new File(mOutDir, "apktool.json"));
+            } catch (IOException | JSONException ex) {
+                throw new AndrolibException(ex);
+            }
+        } else {
+            try {
+                meta.saveYaml(new File(mOutDir, "apktool.yml"));
+            } catch (IOException ex) {
+                throw new AndrolibException(ex);
+            }
         }
     }
 
     // TODO: For ApkEditor
-    public MetaInfo readMetaFile(ExtFile appDir)
-            throws AndrolibException {
-        try {
-            InputStream in = appDir.getDirectory().getFileInput("apktool.json");
-            MetaInfo meta = MetaInfo.load(in);
-            in.close();
-            return meta;
-        } catch (DirectoryException | IOException | JSONException ex) {
-            throw new AndrolibException(ex);
+    public MetaInfo readMetaFile(ExtFile appDir) throws AndrolibException {
+        if(Preferences.isApkToolJson()) {
+            try {
+                InputStream in = appDir.getDirectory().getFileInput("apktool.json");
+                MetaInfo meta = MetaInfo.load(in);
+                in.close();
+                return meta;
+            } catch (DirectoryException | IOException | JSONException ex) {
+                throw new AndrolibException(ex);
+            }
+        } else {
+            try(InputStream in = appDir.getDirectory().getFileInput("apktool.yml")) {
+                return MetaInfo.loadYaml(in);
+            } catch (DirectoryException | IOException ex) {
+                throw new AndrolibException(ex);
+            }
         }
     }
 

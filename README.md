@@ -19,8 +19,8 @@ UPDATE:
     brut.androlib.res.decoder.StringBlock.getUtf8() - private to public
     brut.androlib.res.decoder.StringBlock.getUtf16() - private to public
     brut.util.AaptManager.getAapt()
-    brut.androlib.Androlib.writeMetaFile()
-    brut.androlib.Androlib.readMetaFile()
+    brut.androlib.Androlib.writeMetaFile() - yaml to json
+    brut.androlib.Androlib.readMetaFile() - yaml to json
 
 ADD:
     brut.androlib.res.data.ResResSpec.getAllResources()

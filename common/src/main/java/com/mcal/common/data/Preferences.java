@@ -261,4 +261,12 @@ public class Preferences {
     public static void setSmaliLicenseShowed(boolean mode) {
         App.getPreferences().edit().putBoolean("smali_license_showed", mode).apply();
     }
+
+    public static boolean isApkToolJson() {
+        return App.getPreferences().getBoolean("apktool_use_json", false);
+    }
+
+    public static void setApkToolJson(boolean mode) {
+        App.getPreferences().edit().putBoolean("apktool_use_json", mode).apply();
+    }
 }

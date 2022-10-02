@@ -8,6 +8,9 @@ import com.mcal.common.utils.FileHelperKt;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -100,6 +103,21 @@ public class MetaInfo {
         }
     }
 
+    public static MetaInfo loadYaml(InputStream in) {
+        return getYaml().loadAs(in, MetaInfo.class);
+    }
+
+    private static Yaml getYaml() {
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        EscapedStringRepresenter representer = new EscapedStringRepresenter();
+        PropertyUtils propertyUtils = representer.getPropertyUtils();
+        propertyUtils.setSkipMissingProperties(true);
+
+        return new Yaml(new ClassSafeConstructor(), representer, options);
+    }
+
     public void save(Writer output) throws JSONException, IOException {
         JSONObject json = new JSONObject();
         putString(json, "version", version);
@@ -156,5 +174,17 @@ public class MetaInfo {
         writer.close();
         outputStreamWriter.close();
         fos.close();
+    }
+
+    public void saveYaml(File file) throws IOException {
+        try (
+                FileOutputStream fos = new FileOutputStream(file);
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+                Writer writer = new BufferedWriter(outputStreamWriter)
+        ) {
+            DumperOptions options = new DumperOptions();
+            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+            getYaml().dump(this, writer);
+        }
     }
 }

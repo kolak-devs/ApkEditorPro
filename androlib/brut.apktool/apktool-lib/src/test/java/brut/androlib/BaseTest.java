@@ -16,7 +16,6 @@
  */
 package brut.androlib;
 
-import brut.androlib.meta.MetaInfo;
 import brut.common.BrutException;
 import brut.directory.ExtFile;
 import brut.directory.FileDirectory;
@@ -33,6 +32,8 @@ import java.util.logging.Logger;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.*;
+
+import com.mcal.androlib.meta.MetaInfo;
 
 public class BaseTest {
 
