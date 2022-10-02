@@ -8,6 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
 import com.mcal.common.utils.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.jetbrains.annotations.Contract
 import java.io.File
 
@@ -124,13 +127,16 @@ class FolderListAdapter(
         } else if (rec.isDir) {
             holder.icon.imageLoader(R.drawable.ic_folder)
         } else {
-            val icon = producer.getFileIcon(currentDirectory, rec)
-            if (icon == null) {
-                // Use the default icon
-                holder.icon.imageLoader(R.drawable.ic_file)
-            } else {
-                holder.icon.imageLoader(icon)
-            }
+//            TODO
+//            CoroutineScope(Dispatchers.IO).launch {
+                val icon = producer.getFileIcon(currentDirectory, rec)
+                if (icon == null) {
+                    // Use the default icon
+                    holder.icon.imageLoader(R.drawable.ic_file)
+                } else {
+                    holder.icon.imageLoader(icon)
+                }
+//            }
         }
         val detailInfo = producer.getDetail1(currentDirectory, rec)
         if (detailInfo != null) {
