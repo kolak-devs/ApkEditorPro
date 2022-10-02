@@ -346,8 +346,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
             }
             // Get from replace file
             else {
-                ImageHelper zoomer = new ImageHelper();
-                bitmap = zoomer.getImageThumbnail(replaceFile, 32, 32);
+                bitmap = new ImageHelper().getImageThumbnail(replaceFile, 32, 32);
             }
             // Save to cache
             if (bitmap != null) {

@@ -120,16 +120,16 @@ class FolderListAdapter(
         val rec = mFileList[position]
         holder.filename.text = rec.fileName
         if (rec.fileName == "..") {
-            holder.icon.setImageResource(R.drawable.ic_file_up)
+            holder.icon.imageLoader(R.drawable.ic_file_up)
         } else if (rec.isDir) {
-            holder.icon.setImageResource(R.drawable.ic_folder)
+            holder.icon.imageLoader(R.drawable.ic_folder)
         } else {
             val icon = producer.getFileIcon(currentDirectory, rec)
             if (icon == null) {
                 // Use the default icon
-                holder.icon.setImageResource(R.drawable.ic_file)
+                holder.icon.imageLoader(R.drawable.ic_file)
             } else {
-                holder.icon.setImageDrawable(icon)
+                holder.icon.imageLoader(icon)
             }
         }
         val detailInfo = producer.getDetail1(currentDirectory, rec)

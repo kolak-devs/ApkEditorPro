@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.AppInfo
 import com.mcal.apkeditor.R
+import com.mcal.common.utils.imageLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,9 +61,7 @@ class AppListAdapter(
         if (icon == null) {
             icon = appInfo.applicationInfo.loadIcon(pm)
         }
-        CoroutineScope(Dispatchers.Main).launch {
-            this@loadImage.setImageDrawable(icon)
-        }
+        this@loadImage.imageLoader(icon)
     }
 
     override fun getItemCount(): Int {

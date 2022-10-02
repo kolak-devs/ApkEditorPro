@@ -4,9 +4,11 @@ import android.graphics.drawable.Drawable;
 
 import com.mcal.common.utils.FileRecord;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface IListItemProducer {
-
-    public Drawable getFileIcon(String dirPath, FileRecord record);
-
-    public String getDetail1(String dirPath, FileRecord record);
+    @Nullable
+    Drawable getFileIcon(String dirPath, FileRecord record);
+    @Nullable
+    String getDetail1(String dirPath, FileRecord record);
 }

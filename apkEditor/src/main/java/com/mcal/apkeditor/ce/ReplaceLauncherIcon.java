@@ -73,8 +73,7 @@ public class ReplaceLauncherIcon implements IApkMaking, Serializable {
                             }
                             ImageBounds bounds = getImageBounds(zipFile, entryPath);
                             if (bounds != null) {
-                                ImageHelper tool = new ImageHelper();
-                                tool.zoomImage(newIconBitmap, bounds.width, bounds.height, filePath);
+                                new ImageHelper().zoomImage(newIconBitmap, bounds.width, bounds.height, filePath);
                                 allReplaces.put(entryPath, filePath);
                             } else {
                                 allReplaces.put(entryPath, newIconPath);

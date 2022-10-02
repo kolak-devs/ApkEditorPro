@@ -2,8 +2,13 @@ package com.mcal.common.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Matrix
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.media.ThumbnailUtils
+import android.widget.ImageView
+import kotlinx.coroutines.*
 import java.io.FileOutputStream
 import java.io.IOException
 import kotlin.math.min
@@ -30,6 +35,10 @@ class ImageHelper {
         bitmap = BitmapFactory.decodeFile(imagePath, options)
         bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height, ThumbnailUtils.OPTIONS_RECYCLE_INPUT)
         return bitmap
+    }
+
+    fun getImagePreview(drawable: Drawable, width: Int, height: Int): Bitmap? {
+        return ThumbnailUtils.extractThumbnail(drawable.toBitmap(), width, height, ThumbnailUtils.OPTIONS_RECYCLE_INPUT)
     }
 
     fun getOriginWidth(): Int {
@@ -71,6 +80,41 @@ class ImageHelper {
                     e.printStackTrace()
                 }
             }
+        }
+    }
+}
+
+fun Drawable.toBitmap(): Bitmap? {
+    if (this is BitmapDrawable) {
+        if (this.bitmap != null) {
+            return this.bitmap
+        }
+    }
+    val bitmap: Bitmap = if (this.intrinsicWidth <= 0 || this.intrinsicHeight <= 0) {
+        Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888) // Single color bitmap will be created of 1x1 pixel
+    } else {
+        Bitmap.createBitmap(this.intrinsicWidth, this.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    }
+    val canvas = Canvas(bitmap)
+    this.setBounds(0, 0, canvas.width, canvas.height)
+    this.draw(canvas)
+    return bitmap
+}
+
+fun ImageView.imageLoader(icon: Int) {
+    CoroutineScope(Dispatchers.Main).launch {
+        this@imageLoader.setImageResource(icon)
+    }
+}
+
+fun ImageView.imageLoader(icon: Drawable) {
+    CoroutineScope(Dispatchers.IO).launch {
+        val async = async {
+            BitmapDrawable(resources, ImageHelper().getImagePreview(icon, 200, 200))
+        }
+        val result = async.await()
+        withContext(Dispatchers.Main) {
+            this@imageLoader.setImageDrawable(result)
         }
     }
 }

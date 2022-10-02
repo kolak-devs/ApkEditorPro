@@ -150,8 +150,7 @@ public class ImageListAdapter extends BaseAdapter implements OnItemClickListener
                 bitmap = zipImageZoomer.getImageThumbnail(
                         entry.bestQualifier + "/" + entryName, 32, 32);
             } else {
-                ImageHelper zoomer = new ImageHelper();
-                bitmap = zoomer.getImageThumbnail(entry.replaceFile, 32, 32);
+                bitmap = new ImageHelper().getImageThumbnail(entry.replaceFile, 32, 32);
             }
             // Save to cache
             buf = new BitmapRec();

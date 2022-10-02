@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.LruCache
@@ -26,8 +25,11 @@ import com.mcal.apkeditor.ui.fulleditor.FullEditorActivity
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
-import com.mcal.common.utils.*
+import com.mcal.common.utils.ActivityHelper
+import com.mcal.common.utils.ApkInfoParser
+import com.mcal.common.utils.FileRecord
 import com.mcal.common.utils.ScopedStorage.storageDirectory
+import com.mcal.common.utils.findExt
 import com.mcal.common.view.ProgressDialog
 import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.folderlist.FolderListWrapper
@@ -342,7 +344,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 parseThread?.addApk(path)
                 return ContextCompat.getDrawable(this, R.drawable.round_android_24)
             } else if (!record.isDir && name.findExt("jpg|jpeg|png|gif")) {
-                return BitmapDrawable(resources, ImageHelper().getImageThumbnail(path, 200, 200))
+                return Drawable.createFromPath(path)
             }
         }
         return null
