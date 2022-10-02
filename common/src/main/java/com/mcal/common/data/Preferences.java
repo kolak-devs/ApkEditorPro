@@ -263,7 +263,7 @@ public class Preferences {
     }
 
     public static boolean isApkToolJson() {
-        return App.getPreferences().getBoolean("apktool_use_json", false);
+        return App.getPreferences().getBoolean("apktool_use_json", true);
     }
 
     public static void setApkToolJson(boolean mode) {
