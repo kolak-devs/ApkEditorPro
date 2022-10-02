@@ -2,14 +2,17 @@ package com.mcal.folderlist
 
 import android.content.Context
 import android.content.DialogInterface
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.mcal.apkeditor.R
 import com.mcal.common.utils.FileRecord
-import com.mcal.common.utils.InputHelper
 import com.mcal.common.utils.deleteAll
 import com.mcal.folderlist.util.OpenFiles
 import java.io.File
@@ -74,11 +77,11 @@ open class FolderListWrapper(
                 context.getString(R.string.file_open_as),
                 context.getString(R.string.delete),
                 context.getString(R.string.rename),
-                context.getString(R.string.new_file)
+                "Add..."
             )
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
-                0 -> {
+                MENU_OPEN_AS -> {
                     val fileList: MutableList<FileRecord> = ArrayList()
                     val oldDir = mAdapter?.getData(fileList)
                     val rec = fileList[position]
@@ -88,15 +91,15 @@ open class FolderListWrapper(
                     }
                     p112.dismiss()
                 }
-                1 -> {
+                MENU_DELETE -> {
                     deleteFile(position)
                     p112.dismiss()
                 }
-                2 -> {
+                MENU_RENAME -> {
                     showRenameDlg(position)
                     p112.dismiss()
                 }
-                3 -> {
+                MENU_ADD -> {
                     createFile()
                     p112.dismiss()
                 }
@@ -157,29 +160,23 @@ open class FolderListWrapper(
     private fun createFile() {
         val context = mContext
         val dirPath = mAdapter?.getData(null)
-        val inputDlg = MaterialAlertDialogBuilder(context)
-        inputDlg.setTitle(R.string.new_file)
-        inputDlg.setMessage(R.string.pls_input_filename)
-
-        // Set an EditText view to get user input
-        val input = EditText(context)
-        val filter = InputHelper.getFileNameFilter()
-        input.filters = arrayOf(filter)
-        inputDlg.setView(input)
-        inputDlg.setPositiveButton(android.R.string.ok) { _, _ ->
-            var name = input.text.toString()
-            name = name.trim { it <= ' ' }
-            if ("" == name) {
+        val dialog = MaterialAlertDialogBuilder(context)
+        dialog.setTitle("Add")
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val layout: View = inflater.inflate(R.layout.widget_edit_text, null)
+        val inputLayout = layout.findViewById<TextInputLayout>(R.id.text_input_layout)
+        inputLayout.hint = "Enter file name"
+        val input = layout.findViewById<TextInputEditText>(R.id.text_input_edit_text)
+        dialog.setView(layout)
+        dialog.setPositiveButton("File") { _, _ ->
+            val name = input.text.toString().trim()
+            if (name.isEmpty()) {
                 Toast.makeText(context, R.string.empty_input_tip, Toast.LENGTH_LONG).show()
             } else {
                 var succeed = false
                 var errMessage: String? = null
-
-                // Try to create a new file in current directory
-                val dir = File(dirPath)
-                val newFile = File(dir, name)
                 try {
-                    succeed = newFile.createNewFile()
+                    succeed = File(dirPath, name).createNewFile()
                     if (succeed) {
                         // Update list view
                         mAdapter?.openDirectory(dirPath)
@@ -187,16 +184,38 @@ open class FolderListWrapper(
                         errMessage = context.getString(R.string.failed_create_file)
                     }
                 } catch (e: IOException) {
-                    val fmt = context.getString(R.string.general_error)
-                    errMessage = String.format(fmt, e.message)
+                    errMessage = String.format(context.getString(R.string.general_error), e.message)
                 }
                 if (!succeed) {
                     Toast.makeText(context, errMessage, Toast.LENGTH_LONG).show()
                 }
             }
         }
-        inputDlg.setNegativeButton(android.R.string.cancel, null)
-        inputDlg.show()
+        dialog.setNegativeButton("Folder") { _, _ ->
+            val name = input.text.toString().trim()
+            if (name.isEmpty()) {
+                Toast.makeText(context, R.string.empty_input_tip, Toast.LENGTH_LONG).show()
+            } else {
+                var succeed = false
+                var errMessage: String? = null
+                try {
+                    succeed = File(dirPath, name).mkdir()
+                    if (succeed) {
+                        // Update list view
+                        mAdapter?.openDirectory(dirPath)
+                    } else {
+                        errMessage = "Failed create folder"
+                    }
+                } catch (e: IOException) {
+                    errMessage = String.format(context.getString(R.string.general_error), e.message)
+                }
+                if (!succeed) {
+                    Toast.makeText(context, errMessage, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+        dialog.setNeutralButton(android.R.string.cancel, null)
+        dialog.show()
     }
 
     private fun deleteFile(position: Int) {
@@ -247,5 +266,12 @@ open class FolderListWrapper(
 
     init {
         init(producer)
+    }
+
+    companion object {
+        private const val MENU_RENAME = 0
+        private const val MENU_DELETE = 1
+        private const val MENU_OPEN_AS = 2
+        private const val MENU_ADD = 3
     }
 }
