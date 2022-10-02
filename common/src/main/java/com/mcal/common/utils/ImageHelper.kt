@@ -37,10 +37,6 @@ class ImageHelper {
         return bitmap
     }
 
-    fun getImagePreview(drawable: Drawable, width: Int, height: Int): Bitmap? {
-        return ThumbnailUtils.extractThumbnail(drawable.toBitmap(), width, height, ThumbnailUtils.OPTIONS_RECYCLE_INPUT)
-    }
-
     fun getOriginWidth(): Int {
         return originWidth
     }
@@ -90,7 +86,7 @@ fun Drawable.toBitmap(): Bitmap? {
             return this.bitmap
         }
     }
-    val bitmap: Bitmap = if (this.intrinsicWidth <= 0 || this.intrinsicHeight <= 0) {
+    val bitmap = if (this.intrinsicWidth <= 0 || this.intrinsicHeight <= 0) {
         Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888) // Single color bitmap will be created of 1x1 pixel
     } else {
         Bitmap.createBitmap(this.intrinsicWidth, this.intrinsicHeight, Bitmap.Config.ARGB_8888)
@@ -110,11 +106,15 @@ fun ImageView.imageLoader(icon: Int) {
 fun ImageView.imageLoader(icon: Drawable) {
     CoroutineScope(Dispatchers.IO).launch {
         val async = async {
-            BitmapDrawable(resources, ImageHelper().getImagePreview(icon, 200, 200))
+            BitmapDrawable(resources, icon.imagePreview(200, 200))
         }
         val result = async.await()
         withContext(Dispatchers.Main) {
             this@imageLoader.setImageDrawable(result)
         }
     }
+}
+
+fun Drawable.imagePreview(width: Int, height: Int): Bitmap? {
+    return ThumbnailUtils.extractThumbnail(this.toBitmap(), width, height)
 }
