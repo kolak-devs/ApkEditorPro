@@ -26,6 +26,7 @@ android {
 dependencies {
     implementation project(':crashreporter')
     implementation project(":melissa")
+    implementation project(":libraries")
 
     implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
     implementation 'androidx.preference:preference-ktx:1.2.0'
@@ -35,10 +36,5 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
 
     implementation 'com.blankj:utilcodex:1.30.6'
-    implementation "org.yaml:snakeyaml:1.29:android"
     implementation 'org.apache.commons:commons-text:1.9'
-}
-
-configurations.implementation {
-    exclude group: 'org.yaml', module: 'snakeyaml' // 'org.yaml:snakeyaml:1.31'
 }

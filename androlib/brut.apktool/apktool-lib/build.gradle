@@ -24,18 +24,14 @@ dependencies {
     api project(':androlib:brut.j.util')
     api project(':androlib:brut.j.common')
 
+    implementation project(":libraries")
     implementation project(':common')
     api project(':smali')
     api project(':xpp3')
 
-    implementation "org.yaml:snakeyaml:1.29:android"
     implementation 'com.google.guava:guava:31.0.1-android'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.apache.commons:commons-text:1.9'
     implementation 'org.antlr:antlr-runtime:3.5.2'
-}
-
-configurations.implementation {
-    exclude group: 'org.yaml', module: 'snakeyaml' // 'org.yaml:snakeyaml:1.31'
 }
