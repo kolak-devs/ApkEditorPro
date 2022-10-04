@@ -34,6 +34,7 @@ import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.ce.e.ResourceEditor;
 import com.mcal.apkeditor.dex.DexStringEditor;
 import com.mcal.apkeditor.utils.SignHelper;
+import com.mcal.apksigner.ApkSigner;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ActivityHelper;
@@ -444,7 +445,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
 
 
                 String outApkName;
-                final String strTail = (BuildConfig.WITH_SIGN ? "_signed" : "_unsigned");
+                final String strTail = "_signed.apk";
                 final String nameRule = Preferences.getOutputApkName();
                 switch (nameRule) {
                     case "0":
@@ -458,30 +459,18 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                         break;
                 }
                 String apkPath = activity.apkPath;
-                this.outputApkPath = ApkInfoActivity.createOutputPath(
-                        apkPath, activity.workingDir, outApkName);
+                outputApkPath = ScopedStorage.getApkEditorDir() + File.separator + outApkName;
 
                 Map<String, String> replaces = activity.allReplaces;
 
                 // Sign the new APK (or merge it if does not need sign)
                 Map<String, String> jarPath2FilePath = new HashMap<>(replaces);
-
-                if (BuildConfig.WITH_SIGN) {
-                    SignHelper.sign(apkPath, outputApkPath, jarPath2FilePath, null, null);
-                } else {
-                    StringBuilder sb = new StringBuilder();
-                    int replaceLen = 0;
-                    for (Map.Entry<String, String> entry : jarPath2FilePath.entrySet()) {
-                        String key = entry.getKey();
-                        String value = entry.getValue();
-                        sb.append(key);
-                        sb.append('\n');
-                        sb.append(value);
-                        sb.append('\n');
-                        replaceLen += key.getBytes().length + value.getBytes().length + 2;
-                    }
-                    MainActivity.modifyZip(outputApkPath, apkPath, "", 0, "", 0, sb.toString(), replaceLen);
-                }
+                final String unsigned = outputApkPath.replace(outApkName, "gen_unsigned.apk");
+                // Build Apk
+                SignHelper.sign(apkPath, unsigned, jarPath2FilePath, null, null);
+                // Sign Apk
+                new ApkSigner().signApk(unsigned, outputApkPath);
+                new File(unsigned).delete();
 
                 activity.handler.sendEmptyMessage(0);
 

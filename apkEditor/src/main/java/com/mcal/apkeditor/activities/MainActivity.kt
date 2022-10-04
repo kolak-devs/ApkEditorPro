@@ -47,12 +47,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             System.loadLibrary("apkeditorpro")
         }
 
-        @JvmStatic
-        external fun modifyZip(
-            target: String?, source: String?, added: String?,
-            len1: Int, removed: String?, len2: Int, replaced: String?, len3: Int
-        )
-
         fun upgradedFromOldVersion(ctx: Context): Boolean {
             return !File(ctx.filesDir, "work.xml").exists()
         }

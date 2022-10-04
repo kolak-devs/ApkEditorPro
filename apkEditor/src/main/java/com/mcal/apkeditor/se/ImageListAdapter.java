@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.se;
 
+import static com.mcal.common.utils.StringHelperKt.findExt;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -265,7 +267,7 @@ public class ImageListAdapter extends BaseAdapter implements OnItemClickListener
 
     @Override
     public boolean isInterestedFile(String filename, String extraStr) {
-        return ZipFileListAdapter.isImageFile(filename);
+        return findExt(filename, "jpg|jpeg|png|gif");
     }
 
     @Override
