@@ -147,7 +147,18 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:singleLine="true"
+            android:layout_weight="1"
             android:text="@string/close" />
+
+        <Button
+            android:id="@+id/btn_save"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:singleLine="true"
+            android:layout_weight="1"
+            android:text="@string/save" />
 
     </LinearLayout>
 

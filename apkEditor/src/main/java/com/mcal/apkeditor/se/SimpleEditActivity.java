@@ -26,9 +26,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.mcal.apkeditor.R;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
-import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.view.DynamicExpandListView;
 
 import org.jetbrains.annotations.Contract;
@@ -66,7 +66,8 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
     private TextView imageTitle;
     private TextView audioTitle;
     // Save/Close Button
-    private Button closeSaveBtn;
+    private Button closeBtn;
+    private Button saveBtn;
     // Summary text (to show tip)
     private TextView summaryTv;
     // Modified or not
@@ -230,7 +231,8 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         this.fileTitle = (TextView) this.findViewById(R.id.files_label);
         this.imageTitle = (TextView) this.findViewById(R.id.images_label);
         this.audioTitle = (TextView) this.findViewById(R.id.audio_label);
-        this.closeSaveBtn = (Button) this.findViewById(R.id.btn_close);
+        this.closeBtn = (Button) this.findViewById(R.id.btn_close);
+        saveBtn = (Button) this.findViewById(R.id.btn_save);
 
         // Set center content invisible
         centerLayout.setVisibility(View.INVISIBLE);
@@ -238,7 +240,8 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         this.fileTitle.setOnClickListener(this);
         this.imageTitle.setOnClickListener(this);
         this.audioTitle.setOnClickListener(this);
-        this.closeSaveBtn.setOnClickListener(this);
+        this.closeBtn.setOnClickListener(this);
+        saveBtn.setOnClickListener(this);
 
         // Basic info
         if (apkInfo != null) {
@@ -295,13 +298,13 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         } else if (id == R.id.images_label) {
             this.currIndex = 1;
             viewPager.setCurrentItem(currIndex);
+        } else if (id == R.id.btn_save) {
+//            if (this.isModified) {
+            makeAPK();
+            this.finish();
+//            }
         } else if (id == R.id.btn_close) {
-            if (this.isModified) {
-                makeAPK();
-                this.finish();
-            } else {
-                this.finish();
-            }
+            this.finish();
         }
     }
 
@@ -329,10 +332,10 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
     }
 
     public void setModified() {
-        if (!this.isModified) {
-            this.closeSaveBtn.setText(R.string.save);
-            this.isModified = true;
-        }
+//        if (!this.isModified) {
+//            this.closeBtn.setText(R.string.save);
+//            this.isModified = true;
+//        }
     }
 
     private static class MyHandler extends Handler {
