@@ -33,55 +33,53 @@ public final class IntReader {
     private boolean m_bigEndian;
     private int m_position;
 
-    public IntReader() {
-    }
-
     public IntReader(InputStream stream, boolean bigEndian) {
         reset(stream, bigEndian);
     }
 
-    public final void reset(InputStream stream, boolean bigEndian) {
+    public void reset(InputStream stream, boolean bigEndian) {
         m_stream = stream;
         m_bigEndian = bigEndian;
         m_position = 0;
     }
 
-    public final void close() {
+    public void close() {
         if (m_stream == null) {
             return;
         }
         try {
             m_stream.close();
         } catch (IOException e) {
+            e.printStackTrace();
         }
         reset(null, false);
     }
 
-    public final InputStream getStream() {
+    public InputStream getStream() {
         return m_stream;
     }
 
-    public final boolean isBigEndian() {
+    public boolean isBigEndian() {
         return m_bigEndian;
     }
 
-    public final void setBigEndian(boolean bigEndian) {
+    public void setBigEndian(boolean bigEndian) {
         m_bigEndian = bigEndian;
     }
 
-    public final int readByte() throws IOException {
+    public int readByte() throws IOException {
         return readInt(1);
     }
 
-    public final int readShort() throws IOException {
+    public int readShort() throws IOException {
         return readInt(2);
     }
 
-    public final int readInt() throws IOException {
+    public int readInt() throws IOException {
         return readInt(4);
     }
 
-    public final int readInt(int length) throws IOException {
+    public int readInt(int length) throws IOException {
         if (length < 0 || length > 4) {
             throw new IllegalArgumentException();
         }
@@ -109,19 +107,19 @@ public final class IntReader {
         return result;
     }
 
-    public final int[] readIntArray(int length) throws IOException {
+    public int[] readIntArray(int length) throws IOException {
         int[] array = new int[length];
         readIntArray(array, 0, length);
         return array;
     }
 
-    public final void readIntArray(int[] array, int offset, int length) throws IOException {
+    public void readIntArray(int[] array, int offset, int length) throws IOException {
         for (; length > 0; length -= 1) {
             array[offset++] = readInt();
         }
     }
 
-    public final byte[] readByteArray(int length) throws IOException {
+    public byte[] readByteArray(int length) throws IOException {
         byte[] array = new byte[length];
         int read = m_stream.read(array);
         m_position += read;
@@ -131,7 +129,7 @@ public final class IntReader {
         return array;
     }
 
-    public final void skip(int bytes) throws IOException {
+    public void skip(int bytes) throws IOException {
         if (bytes <= 0) {
             return;
         }
@@ -144,15 +142,15 @@ public final class IntReader {
 
     /////////////////////////////////// data
 
-    public final void skipInt() throws IOException {
+    public void skipInt() throws IOException {
         skip(4);
     }
 
-    public final int available() throws IOException {
+    public int available() throws IOException {
         return m_stream.available();
     }
 
-    public final int getPosition() {
+    public int getPosition() {
         return m_position;
     }
 

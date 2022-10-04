@@ -22,15 +22,15 @@ import java.util.zip.ZipEntry;
 
 public class AXMLModifier {
 
-    private static final float RADIX_MULTS[] = {0.00390625F, 3.051758E-005F,
+    private static final float[] RADIX_MULTS = {0.00390625F, 3.051758E-005F,
             1.192093E-007F, 4.656613E-010F};
-    private static final String DIMENSION_UNITS[] = {"px", "dip", "sp", "pt",
+    private static final String[] DIMENSION_UNITS = {"px", "dip", "sp", "pt",
             "in", "mm", "", ""};
-    private static final String FRACTION_UNITS[] = {"%", "%p", "", "", "", "",
+    private static final String[] FRACTION_UNITS = {"%", "%p", "", "", "", "",
             "", ""};
-    private InputStream input;
-    private OutputStream output;
-    private String inputFile;
+    private final InputStream input;
+    private final OutputStream output;
+    private final String inputFile;
 
     public AXMLModifier(String inputFile, String outputFile) throws IOException {
         this.inputFile = inputFile;
@@ -47,7 +47,7 @@ public class AXMLModifier {
         return inputJar.getInputStream(ze);
     }
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         AXMLModifier modifier = new AXMLModifier(
                 "D:\\Android\\apk\\AndroidManifest.xml.bak",
                 "D:\\Android\\apk\\AndroidManifest.xml");
@@ -223,7 +223,8 @@ public class AXMLModifier {
                     break;
                 }
                 switch (type) {
-                    case XmlPullParser.START_DOCUMENT: {
+                    case XmlPullParser.START_DOCUMENT:
+                    case XmlPullParser.TEXT: {
                         break;
                     }
                     case XmlPullParser.START_TAG: {
@@ -259,9 +260,6 @@ public class AXMLModifier {
                         lastEndOffset = curOffset;
                         break;
                     }
-                    case XmlPullParser.TEXT: {
-                        break;
-                    }
                 }
             }
         } catch (Exception e) {
@@ -289,7 +287,8 @@ public class AXMLModifier {
                     break;
                 }
                 switch (type) {
-                    case XmlPullParser.START_DOCUMENT: {
+                    case XmlPullParser.START_DOCUMENT:
+                    case XmlPullParser.TEXT: {
                         break;
                     }
                     case XmlPullParser.START_TAG: {
@@ -324,9 +323,6 @@ public class AXMLModifier {
                         lastEndOffset = curOffset;
                         break;
                     }
-                    case XmlPullParser.TEXT: {
-                        break;
-                    }
                 }
             }
         } catch (Exception e) {
@@ -353,8 +349,8 @@ public class AXMLModifier {
 
         public static Section fromString(String str) {
             String[] words = str.split(",");
-            int startOffset = Integer.valueOf(words[0]);
-            int endOffset = Integer.valueOf(words[1]);
+            int startOffset = Integer.parseInt(words[0]);
+            int endOffset = Integer.parseInt(words[1]);
             return new Section(startOffset, endOffset);
         }
 

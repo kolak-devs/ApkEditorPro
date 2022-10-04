@@ -1,6 +1,7 @@
 package com.mcal.apkeditor.se;
 
 import static com.mcal.common.utils.FileHelperKt.closeQuietly;
+import static com.mcal.common.utils.StringHelperKt.findExt;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -121,11 +122,6 @@ public class ZipFileListAdapter extends BaseAdapter implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static boolean isImageFile(@NonNull String filename) {
-        return filename.endsWith(".png") || filename.endsWith(".jpg")
-                || filename.endsWith(".jpeg") || filename.endsWith(".gif");
     }
 
     @Contract(pure = true)
@@ -286,7 +282,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
                 replaceable = true;
             }
             // For the image, show icon
-            else if (isImageFile(fi.filename)) {
+            else if (findExt(fi.filename, "jpg|jpeg|png|gif")) {
                 String entryPath = curDir.substring(1) + fi.filename;
                 viewHolder.icon.setImageBitmap(getImageIcon(entryPath));
                 replaceable = true;
@@ -388,7 +384,7 @@ public class ZipFileListAdapter extends BaseAdapter implements
             }
 
             // Click on the image file
-            else if (isImageFile(fi.filename)) {
+            else if (findExt(fi.filename, "jpg|jpeg|png|gif")) {
                 viewImageFile(curDir.substring(1) + fi.filename);
             }
             // To edit AXML file

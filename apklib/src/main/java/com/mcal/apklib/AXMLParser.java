@@ -39,13 +39,13 @@ import java.util.Stack;
  */
 public class AXMLParser {
 
-    private static final float RADIX_MULTS[] = {0.00390625F, 3.051758E-005F,
+    private static final float[] RADIX_MULTS = {0.00390625F, 3.051758E-005F,
             1.192093E-007F, 4.656613E-010F};
-    private static final String DIMENSION_UNITS[] = {"px", "dip", "sp", "pt",
+    private static final String[] DIMENSION_UNITS = {"px", "dip", "sp", "pt",
             "in", "mm", "", ""};
-    private static final String FRACTION_UNITS[] = {"%", "%p", "", "", "", "",
+    private static final String[] FRACTION_UNITS = {"%", "%p", "", "", "", "",
             "", ""};
-    private static Map<String, List<AttrReplacement>> replaces = new HashMap<String, List<AttrReplacement>>();
+    private static final Map<String, List<AttrReplacement>> replaces = new HashMap<String, List<AttrReplacement>>();
 
     static {
         List<AttrReplacement> list = new ArrayList<AttrReplacement>();
@@ -366,6 +366,7 @@ public class AXMLParser {
             e.printStackTrace();
         }
     }
+
     public static interface IReferenceDecode {
         public String getResReference(int data);
     }

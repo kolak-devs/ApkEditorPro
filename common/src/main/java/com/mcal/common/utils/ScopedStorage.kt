@@ -35,6 +35,20 @@ object ScopedStorage {
     }
 
     @JvmStatic
+    fun getPublicKey(): File {
+        val path = File(getBinDir(), "testkey.x509.pem")
+        if (!path.exists()) path.mkdirs()
+        return path
+    }
+
+    @JvmStatic
+    fun getPrivateKey(): File {
+        val path = File(getBinDir(), "testkey.pk8")
+        if (!path.exists()) path.mkdirs()
+        return path
+    }
+
+    @JvmStatic
     fun getTmpDir(): File {
         val path = File(getApkEditorDir().path + File.separator + "tmp")
         if (!path.exists()) path.mkdirs()

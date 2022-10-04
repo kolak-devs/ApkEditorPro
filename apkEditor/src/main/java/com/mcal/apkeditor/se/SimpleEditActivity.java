@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apklib.AXMLParser.IReferenceDecode;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
@@ -39,8 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleEditActivity extends CustomizedLangActivity implements OnClickListener,
-        IReferenceDecode, IDirChanged {
+public class SimpleEditActivity extends CustomizedLangActivity implements OnClickListener, IDirChanged {
     List<View> views;
     private String apkPath;
     private AppInfo apkInfo;
@@ -323,11 +321,6 @@ public class SimpleEditActivity extends CustomizedLangActivity implements OnClic
         }
 
         startActivity(intent);
-    }
-
-    @Override
-    public String getResReference(int data) {
-        return String.format("@%s%08X", getPackage(data), data);
     }
 
     @Override

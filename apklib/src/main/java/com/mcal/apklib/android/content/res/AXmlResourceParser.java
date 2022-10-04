@@ -65,7 +65,7 @@ public class AXmlResourceParser implements XmlResourceParser {
     private boolean m_operational = false;
     private StringBlock m_strings;
     private int[] m_resourceIDs;
-    private NamespaceStack m_namespaces = new NamespaceStack();
+    private final NamespaceStack m_namespaces = new NamespaceStack();
     private boolean m_decreaseDepth;
     private int m_event;
     private int m_lineNumber;
@@ -415,42 +415,6 @@ public class AXmlResourceParser implements XmlResourceParser {
         return getAttributeResourceValue(index, defaultValue);
     }
 
-    /////////////////////////////////// package-visible
-
-//	final void fetchAttributes(int[] styleableIDs,TypedArray result) {
-//		result.resetIndices();
-//		if (m_attributes==null || m_resourceIDs==null) {
-//			return;
-//		}
-//		boolean needStrings=false;
-//		for (int i=0,e=styleableIDs.length;i!=e;++i) {
-//			int id=styleableIDs[i];
-//			for (int o=0;o!=m_attributes.length;o+=ATTRIBUTE_LENGHT) {
-//				int name=m_attributes[o+ATTRIBUTE_IX_NAME];
-//				if (name>=m_resourceIDs.length ||
-//					m_resourceIDs[name]!=id)
-//				{
-//					continue;
-//				}
-//				int valueType=m_attributes[o+ATTRIBUTE_IX_VALUE_TYPE];
-//				int valueData;
-//				int assetCookie;
-//				if (valueType==TypedValue.TYPE_STRING) {
-//					valueData=m_attributes[o+ATTRIBUTE_IX_VALUE_STRING];
-//					assetCookie=-1;
-//					needStrings=true;
-//				} else {
-//					valueData=m_attributes[o+ATTRIBUTE_IX_VALUE_DATA];
-//					assetCookie=0;
-//				}
-//				result.addValue(i,valueType,valueData,assetCookie,id,0);
-//			}
-//		}
-//		if (needStrings) {
-//			result.setStrings(m_strings);
-//		}
-//	}
-
     public int getAttributeListValue(int index, String[] options, int defaultValue) {
         // TODO implement
         return 0;
@@ -530,7 +494,7 @@ public class AXmlResourceParser implements XmlResourceParser {
         return m_strings;
     }
 
-    private final int getAttributeOffset(int index) {
+    private int getAttributeOffset(int index) {
         if (m_event != START_TAG) {
             throw new IndexOutOfBoundsException("Current event is not START_TAG.");
         }
@@ -541,7 +505,7 @@ public class AXmlResourceParser implements XmlResourceParser {
         return offset;
     }
 
-    private final int findAttribute(String namespace, String attribute) {
+    private int findAttribute(String namespace, String attribute) {
         if (m_strings == null || attribute == null) {
             return -1;
         }
@@ -561,7 +525,7 @@ public class AXmlResourceParser implements XmlResourceParser {
         return -1;
     }
 
-    private final void resetEventInfo() {
+    private void resetEventInfo() {
         m_event = -1;
         m_lineNumber = -1;
         m_name = -1;
@@ -572,7 +536,7 @@ public class AXmlResourceParser implements XmlResourceParser {
         m_styleAttribute = -1;
     }
 
-    private final void doNext() throws IOException {
+    private void doNext() throws IOException {
         // Delayed initialization.
         if (m_strings == null) {
             ChunkUtil.readCheckType(m_reader, CHUNK_AXML_FILE);

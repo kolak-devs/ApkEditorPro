@@ -34,14 +34,14 @@ import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.ce.e.ResourceEditor;
 import com.mcal.apkeditor.dex.DexStringEditor;
 import com.mcal.apkeditor.utils.SignHelper;
-import com.mcal.apklib.sign.ImageTools;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
+import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
 import com.mcal.common.utils.ApkInstaller;
+import com.mcal.common.utils.ImageHelperKt;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.ActivityHelper;
 
 import org.jetbrains.annotations.Contract;
 
@@ -223,7 +223,8 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 // If the package name is found, return true
                 return true;
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return false;
@@ -270,8 +271,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 // height));
 
                 // Get the resized bitmap
-                Bitmap resizeBitmap = ImageTools.zoomBitmap(bitmap, width,
-                        height);
+                Bitmap resizeBitmap = ImageHelperKt.zoomBitmap(bitmap, width, height);
 
                 // Save resized image
                 String outFilePath = workingDir + File.separator + entryName.replaceAll("/", "_");
@@ -427,7 +427,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
 
                 // To modify the class name in DEX file
                 if (activity.clsNameReplaces != null) {
-                    String targetPath = activity.workingDir  + File.separator + ".dex";
+                    String targetPath = activity.workingDir + File.separator + ".dex";
                     DexStringEditor dexEditor = new DexStringEditor(activity.apkPath);
                     dexEditor.replaceDexString(activity.clsNameReplaces, targetPath);
                     activity.allReplaces.put("classes.dex", targetPath);
@@ -467,8 +467,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 Map<String, String> jarPath2FilePath = new HashMap<>(replaces);
 
                 if (BuildConfig.WITH_SIGN) {
-                    SignHelper.sign(activity, apkPath, outputApkPath,
-                            jarPath2FilePath, null, null);
+                    SignHelper.sign(apkPath, outputApkPath, jarPath2FilePath, null, null);
                 } else {
                     StringBuilder sb = new StringBuilder();
                     int replaceLen = 0;
@@ -520,7 +519,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 ZipEntry entry = zipFile.getEntry("resources.arsc");
                 is = zipFile.getInputStream(entry);
 
-                String targetPath = activity.workingDir  + File.separator + ".arsc";
+                String targetPath = activity.workingDir + File.separator + ".arsc";
                 ResourceEditor resEditor = new ResourceEditor(is, targetPath);
 
                 // Modify package name in resources.arsc

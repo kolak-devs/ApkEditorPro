@@ -118,3 +118,16 @@ fun ImageView.imageLoader(icon: Drawable) {
 fun Drawable.imagePreview(width: Int, height: Int): Bitmap? {
     return ThumbnailUtils.extractThumbnail(this.toBitmap(), width, height)
 }
+
+/**
+ * Resize the bitmap
+ */
+fun Bitmap.zoomBitmap(width: Int, height: Int): Bitmap? {
+    val w = this.width
+    val h = this.height
+    val matrix = Matrix()
+    val scaleWidth = width.toFloat() / w
+    val scaleHeight = height.toFloat() / h
+    matrix.postScale(scaleWidth, scaleHeight)
+    return Bitmap.createBitmap(this, 0, 0, w, h, matrix, true)
+}
