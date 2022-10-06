@@ -20,8 +20,8 @@ import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.PackageInfo;
 import com.mcal.androlib.meta.VersionInfo;
 import com.mcal.androlib.options.BuildOptions;
-import com.mcal.androlib.tasks.build.Aapt;
-import com.mcal.androlib.tasks.build.Aapt2;
+import com.mcal.androlib.tasks.builder.Aapt;
+import com.mcal.androlib.tasks.builder.Aapt2;
 
 import org.apache.commons.io.IOUtils;
 import org.xmlpull.v1.XmlSerializer;
