@@ -20,6 +20,8 @@ import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.PackageInfo;
 import com.mcal.androlib.meta.VersionInfo;
 import com.mcal.androlib.options.BuildOptions;
+import com.mcal.androlib.tasks.build.Aapt;
+import com.mcal.androlib.tasks.build.Aapt2;
 
 import org.apache.commons.io.IOUtils;
 import org.xmlpull.v1.XmlSerializer;
@@ -80,7 +82,6 @@ import brut.directory.ZipUtils;
 import brut.util.AaptManager;
 import brut.util.Duo;
 import brut.util.Jar;
-import brut.util.OS;
 import brut.util.OSDetection;
 
 final public class AndrolibResources {
@@ -394,7 +395,9 @@ final public class AndrolibResources {
                               List<String> cmd, boolean customAapt)
             throws AndrolibException {
 
-        List<String> compileCommand = new ArrayList<>(cmd);
+        Aapt2.build(apkFile, include, manifest, resDir, mMinSdkVersion, mTargetSdkVersion);
+
+        /*List<String> compileCommand = new ArrayList<>(cmd);
         File resourcesZip = null;
 
         if (resDir != null) {
@@ -552,14 +555,15 @@ final public class AndrolibResources {
             LOGGER.fine(cmd.toString());
         } catch (BrutException ex) {
             throw new AndrolibException(ex);
-        }
+        }*/
     }
 
     private void aapt1Package(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include,
                               List<String> cmd, boolean customAapt)
             throws AndrolibException {
 
-        cmd.add("p");
+        Aapt.build(apkFile, include, manifest, resDir, mMinSdkVersion, mTargetSdkVersion);
+        /*cmd.add("p");
 
         if (buildOptions.verbose) { // output aapt verbose
             cmd.add("-v");
@@ -667,7 +671,7 @@ final public class AndrolibResources {
             LOGGER.fine(cmd.toString());
         } catch (BrutException ex) {
             throw new AndrolibException(ex);
-        }
+        }*/
     }
 
     public void aaptPackage(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include)

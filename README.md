@@ -21,6 +21,8 @@ UPDATE:
     brut.util.AaptManager.getAapt()
     brut.androlib.Androlib.writeMetaFile() - yaml to json
     brut.androlib.Androlib.readMetaFile() - yaml to json
+    brut.androlib.res.AndrolibResources.aapt2Package
+    brut.androlib.res.AndrolibResources.aapt1Package
 
 ADD:
     brut.androlib.res.data.ResResSpec.getAllResources()

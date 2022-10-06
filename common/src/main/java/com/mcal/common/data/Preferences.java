@@ -53,9 +53,8 @@ public class Preferences {
         App.getPreferences().edit().putString("version", key).apply();
     }
 
-    public static boolean isAapt2(Context ctx) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getBoolean("aapt2", true);
+    public static boolean isAapt2() {
+        return App.getPreferences().getBoolean("aapt2", true);
     }
 
     /**

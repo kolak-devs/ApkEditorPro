@@ -480,7 +480,7 @@ class ApkComposeThread(
     private fun composeResource(): Boolean {
         tempApkPath = "$targetApkPath.in"
         return try {
-            if (Preferences.isAapt2(ctx)) aapt2() else aapt()
+            if (Preferences.isAapt2()) aapt2() else aapt()
         } catch (e: IOException) {
             e.printStackTrace()
             false

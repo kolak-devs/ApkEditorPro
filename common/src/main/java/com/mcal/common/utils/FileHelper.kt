@@ -244,7 +244,7 @@ fun getSizeDescription(fileSize: Long): String {
 }
 
 fun makeDir(path: String): File {
-    val folder = File(ScopedStorage.getApkEditorDir().path  + File.separator + path)
+    val folder = File(ScopedStorage.getApkEditorDir().path + File.separator + path)
     if (!folder.exists()) {
         folder.mkdirs()
     }
