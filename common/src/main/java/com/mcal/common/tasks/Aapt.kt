@@ -1,7 +1,7 @@
-package com.mcal.androlib.tasks.builder
+package com.mcal.common.tasks
 
-import brut.util.OS
 import com.mcal.common.utils.ScopedStorage.getAapt
+import com.mcal.common.utils.readInputStream
 import java.io.File
 
 object Aapt {
@@ -41,6 +41,10 @@ object Aapt {
         }
         args.add(apkFile.path)
 
-        OS.exec(args.toTypedArray())
+        val aaptProcess = Runtime.getRuntime().exec(args.toTypedArray())
+        val error = aaptProcess.errorStream.readInputStream()
+        if (error.isNotEmpty()) {
+            throw Exception(LogHelper.formatLog(error))
+        }
     }
 }

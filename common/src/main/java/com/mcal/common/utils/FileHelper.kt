@@ -369,3 +369,19 @@ fun closeQuietly(zfile: ZipFile?) {
         }
     }
 }
+
+fun InputStream.readInputStream(): String {
+    val sb = StringBuilder()
+    try {
+        val br = BufferedReader(InputStreamReader(this))
+        var line: String?
+        while (br.readLine().also { line = it } != null) {
+            sb.append(line)
+            sb.append('\n')
+        }
+        br.close()
+    } catch (e: java.lang.Exception) {
+        e.printStackTrace()
+    }
+    return sb.toString().trim()
+}
