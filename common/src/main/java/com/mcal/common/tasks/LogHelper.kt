@@ -32,9 +32,9 @@ object LogHelper {
             } else {
                 val trim = line.trim()
                 level = if (trim.startsWith("error")) {
-                    "Error"
+                    "error"
                 } else {
-                    "Info"
+                    "info"
                 }
                 path = ""
                 lineNumber = "-1"

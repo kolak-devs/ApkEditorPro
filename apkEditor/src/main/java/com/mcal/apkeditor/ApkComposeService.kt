@@ -36,7 +36,7 @@ class ApkComposeService : Service(), ITaskCallback {
 
     private var addedFiles: MutableMap<String, String>? = null
     private var replacedFiles: MutableMap<String, String>? = null
-    private var deletedFiles: MutableSet<String>? = null
+    private var deletedFiles: MutableSet<String> = HashSet()
 
     // Recorded all the relation between file entry to zip entry
     // like res/drawable-hdpi-v4/a.png -> res/drawable-hdpi/a.png
@@ -65,32 +65,24 @@ class ApkComposeService : Service(), ITaskCallback {
         decodeRootPath = ActivityHelper.getParam(intent, "decodeRootPath")
         srcApkPath = ActivityHelper.getParam(intent, "srcApkPath")
         targetApkPath = ActivityHelper.getParam(intent, "targetApkPath")
-        var str = ActivityHelper.getParam(intent, "stringModified")
-        stringModified = str.toBoolean()
-        str = ActivityHelper.getParam(intent, "manifestModified")
-        manifestModified = str.toBoolean()
-        str = ActivityHelper.getParam(intent, "resFileModified")
-        resFileModified = str.toBoolean()
+        stringModified = ActivityHelper.getParam(intent, "stringModified").toBoolean()
+        manifestModified = ActivityHelper.getParam(intent, "manifestModified").toBoolean()
+        resFileModified = ActivityHelper.getParam(intent, "resFileModified").toBoolean()
         modifiedSmaliFolders = ActivityHelper.getStringArray(intent, "modifiedSmaliFolders")
         signAPK = ActivityHelper.getBoolParam(intent, "signAPK")
         addedFiles = ActivityHelper.getMapParam(intent, "addedFiles")
         replacedFiles = ActivityHelper.getMapParam(intent, "replacedFiles")
-        deletedFiles = HashSet()
-        val delEntries: List<String>? = ActivityHelper.getStringArray(intent, "deletedFiles")
-        delEntries?.let { entries ->
-            deletedFiles?.addAll(entries)
+        ActivityHelper.getStringArray(intent, "deletedFiles")?.let { entries ->
+            deletedFiles.addAll(entries)
         }
-        val passedFile = ActivityHelper.getParam(intent, "fileEntry2ZipEntry")
-        if (passedFile != null) {
+        ActivityHelper.getParam(intent, "fileEntry2ZipEntry")?.let { passedFile ->
             fileEntry2ZipEntry = getMapFromFile(passedFile)
         }
         resetStatus()
 
         // Initially show notification in pro version
         // For free version, only show it when ad is ready
-        if (BuildConfig.IS_PRO) {
-            showNotification()
-        }
+        showNotification()
         startComposeThread()
         return START_STICKY
     }
@@ -103,7 +95,7 @@ class ApkComposeService : Service(), ITaskCallback {
         val iconId = R.mipmap.ic_launcher_round
         val appName = getString(R.string.app_name)
         mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        mNotifyBuilder = NotificationCompat.Builder(this, ApkComposeActivity.PRIMARY_NOTIF_CHANNEL)
+        mNotifyBuilder = NotificationCompat.Builder(this, ApkComposeActivity.PRIMARY_NOTIFY_CHANNEL)
         mNotifyBuilder?.let { builder ->
             builder.setContentTitle(appName)
                 .setTicker(appName)
@@ -117,7 +109,7 @@ class ApkComposeService : Service(), ITaskCallback {
     }
 
     private fun updateNotification(forceShow: Boolean, title: String, desc: String) {
-        if (mNotificationManager != null) {
+        mNotificationManager?.let {
             handler.removeMessages(0)
             handler.setInfo(title, desc)
             // If not updated for a long time, then directly update it
@@ -153,8 +145,8 @@ class ApkComposeService : Service(), ITaskCallback {
             }
         }
         composeThread?.let { thread ->
-            if (extraMaker != null) {
-                thread.setExtraMaker(extraMaker)
+            extraMaker?.let { maker ->
+                thread.setExtraMaker(maker)
             }
 
             stringModified?.let { string ->
@@ -177,9 +169,7 @@ class ApkComposeService : Service(), ITaskCallback {
         val result: MutableMap<String, String> = HashMap()
         var br: BufferedReader? = null
         try {
-            br = BufferedReader(
-                InputStreamReader(FileInputStream(filepath))
-            )
+            br = BufferedReader(InputStreamReader(FileInputStream(filepath)))
             var line = br.readLine()
             while (line != null) {
                 val key = line
@@ -194,7 +184,7 @@ class ApkComposeService : Service(), ITaskCallback {
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            if (br != null) {
+            br?.let {
                 try {
                     br.close()
                 } catch (e: IOException) {
@@ -210,7 +200,9 @@ class ApkComposeService : Service(), ITaskCallback {
     }
 
     override fun setTaskStepInfo(stepInfo: TaskStepInfo) {
-        synchronized(composeResult) { composeResult.curStep = stepInfo }
+        synchronized(composeResult) {
+            composeResult.curStep = stepInfo
+        }
         observer?.get()?.setTaskStepInfo(stepInfo)
         val desc = String.format(
             resources.getString(R.string.step) + " %d/%d: %s",
@@ -367,12 +359,18 @@ class ApkComposeService : Service(), ITaskCallback {
                 Log.e("DEBUG", "notification hidden.")
             }
         }
-        fun showNotification() {
+
+        private fun showNotification() {
             this@ApkComposeService.showNotification()
         }
 
         // Build thread is still running
-        val isRunning: Boolean
-            get() = composeThread != null && composeThread!!.isActive
+        fun isRunning(): Boolean {
+            val thread = composeThread
+            if (thread != null) {
+                return thread.isActive
+            }
+            return false
+        }
     }
 }

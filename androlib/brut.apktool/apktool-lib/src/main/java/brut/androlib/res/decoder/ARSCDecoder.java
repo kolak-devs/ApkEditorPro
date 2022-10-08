@@ -584,7 +584,7 @@ public class ARSCDecoder {
         for (int i : mMissingResSpecMap.keySet()) {
             if (mMissingResSpecMap.get(i)) continue;
 
-            ResResSpec spec = new ResResSpec(new ResID(resId | i), "APKTOOL_DUMMY_" + Integer.toHexString(i), mPkg, mTypeSpec);
+            ResResSpec spec = new ResResSpec(new ResID(resId | i), "AE_DUMMY_" + Integer.toHexString(i), mPkg, mTypeSpec);
 
             // If we already have this resID don't add it again.
             if (!mPkg.hasResSpec(new ResID(resId | i))) {

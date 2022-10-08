@@ -39,9 +39,9 @@ public class ResResSpec {
 
         ResResSpec resResSpec = type.getResSpecUnsafe(name);
         if (resResSpec != null) {
-            cleanName = String.format("APKTOOL_DUPLICATE_%s_%s", type, id.toString());
+            cleanName = String.format("AE_DUPLICATE_%s_%s", type, id.toString());
         } else {
-            cleanName = ((name == null || name.isEmpty()) ? ("APKTOOL_DUMMYVAL_" + id.toString()) : name);
+            cleanName = ((name == null || name.isEmpty()) ? ("AE_DUMMYVAL_" + id.toString()) : name);
         }
 
         this.mName = cleanName;
@@ -99,7 +99,7 @@ public class ResResSpec {
     }
 
     public boolean isDummyResSpec() {
-        return getName().startsWith("APKTOOL_DUMMY_");
+        return getName().startsWith("AE_DUMMY_");
     }
 
     public void addResource(ResResource res) throws AndrolibException {
