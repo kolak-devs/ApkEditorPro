@@ -66,6 +66,12 @@
 
         <SwitchPreference
             android:defaultValue="true"
+            android:key="ae_aapt_rules"
+            android:summary="Use the new built-in resource compiler"
+            android:title="AAPT Rules" />
+
+        <SwitchPreference
+            android:defaultValue="true"
             android:key="aapt2"
             android:summary="@string/pref_summary_aapt2"
             android:title="@string/pref_title_aapt2" />

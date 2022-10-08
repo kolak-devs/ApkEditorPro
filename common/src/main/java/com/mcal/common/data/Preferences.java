@@ -268,4 +268,14 @@ public class Preferences {
     public static void setApkToolJson(boolean mode) {
         App.getPreferences().edit().putBoolean("apktool_use_json", mode).apply();
     }
+
+    public static boolean isAEAAPTRules() {
+        return App.getPreferences().getBoolean("ae_aapt_rules", true);
+    }
+
+    public static void setAEAAPTRules(boolean mode) {
+        App.getPreferences().edit().putBoolean("ae_aapt_rules", mode).apply();
+    }
+
+
 }

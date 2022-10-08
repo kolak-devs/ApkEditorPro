@@ -20,6 +20,7 @@ import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.PackageInfo;
 import com.mcal.androlib.meta.VersionInfo;
 import com.mcal.androlib.options.BuildOptions;
+import com.mcal.common.data.Preferences;
 import com.mcal.common.tasks.Aapt;
 import com.mcal.common.tasks.Aapt2;
 
@@ -82,6 +83,7 @@ import brut.directory.ZipUtils;
 import brut.util.AaptManager;
 import brut.util.Duo;
 import brut.util.Jar;
+import brut.util.OS;
 import brut.util.OSDetection;
 
 final public class AndrolibResources {
@@ -391,287 +393,288 @@ final public class AndrolibResources {
         }
     }
 
-    private void aapt2Package(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include,
-                              List<String> cmd, boolean customAapt)
+    private void aapt2Package(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include, List<String> cmd, boolean customAapt)
             throws AndrolibException {
+        if (Preferences.isAEAAPTRules()) {
+            Aapt2.build(apkFile, include, manifest, resDir, mMinSdkVersion, mTargetSdkVersion);
+        } else {
+            List<String> compileCommand = new ArrayList<>(cmd);
+            File resourcesZip = null;
 
-        Aapt2.build(apkFile, include, manifest, resDir, mMinSdkVersion, mTargetSdkVersion);
+            if (resDir != null) {
+                File buildDir = new File(resDir.getParent(), "build");
+                resourcesZip = new File(buildDir, "resources.zip");
+            }
 
-        /*List<String> compileCommand = new ArrayList<>(cmd);
-        File resourcesZip = null;
+            if (resDir != null && !resourcesZip.exists()) {
 
-        if (resDir != null) {
-            File buildDir = new File(resDir.getParent(), "build");
-            resourcesZip = new File(buildDir, "resources.zip");
-        }
+                // Compile the files into flat arsc files
+                cmd.add("compile");
 
-        if (resDir != null && !resourcesZip.exists()) {
+                cmd.add("--dir");
+                cmd.add(resDir.getAbsolutePath());
 
-            // Compile the files into flat arsc files
-            cmd.add("compile");
+                // Treats error that used to be valid in aapt1 as warnings in aapt2
+                cmd.add("--legacy");
 
-            cmd.add("--dir");
-            cmd.add(resDir.getAbsolutePath());
+                File buildDir = new File(resDir.getParent(), "build");
+                resourcesZip = new File(buildDir, "resources.zip");
 
-            // Treats error that used to be valid in aapt1 as warnings in aapt2
-            cmd.add("--legacy");
+                cmd.add("-o");
+                cmd.add(resourcesZip.getAbsolutePath());
 
-            File buildDir = new File(resDir.getParent(), "build");
-            resourcesZip = new File(buildDir, "resources.zip");
+                if (buildOptions.verbose) {
+                    cmd.add("-v");
+                }
+
+                if (buildOptions.noCrunch) {
+                    cmd.add("--no-crunch");
+                }
+
+                try {
+                    OS.exec(cmd.toArray(new String[0]));
+                    LOGGER.fine("aapt2 compile command ran: ");
+                    LOGGER.fine(cmd.toString());
+                } catch (BrutException ex) {
+                    throw new AndrolibException(ex);
+                }
+            }
+
+            if (manifest == null) {
+                return;
+            }
+
+            // Link them into the final apk, reusing our old command after clearing for the aapt2 binary
+            cmd = new ArrayList<>(compileCommand);
+            cmd.add("link");
 
             cmd.add("-o");
-            cmd.add(resourcesZip.getAbsolutePath());
+            cmd.add(apkFile.getAbsolutePath());
+
+            if (mPackageId != null && !mSharedLibrary) {
+                cmd.add("--package-id");
+                cmd.add(mPackageId);
+            }
+
+            if (mSharedLibrary) {
+                cmd.add("--shared-lib");
+            }
+
+            if (mMinSdkVersion != null) {
+                cmd.add("--min-sdk-version");
+                cmd.add(mMinSdkVersion);
+            }
+
+            if (mTargetSdkVersion != null) {
+                cmd.add("--target-sdk-version");
+                cmd.add(checkTargetSdkVersionBounds());
+            }
+
+            if (mPackageRenamed != null) {
+                cmd.add("--rename-manifest-package");
+                cmd.add(mPackageRenamed);
+
+                cmd.add("--rename-instrumentation-target-package");
+                cmd.add(mPackageRenamed);
+            }
+
+            if (mVersionCode != null) {
+                cmd.add("--version-code");
+                cmd.add(mVersionCode);
+            }
+
+            if (mVersionName != null) {
+                cmd.add("--version-name");
+                cmd.add(mVersionName);
+            }
+
+            // Disable automatic changes
+            cmd.add("--no-auto-version");
+            cmd.add("--no-version-vectors");
+            cmd.add("--no-version-transitions");
+            cmd.add("--no-resource-deduping");
+
+            cmd.add("--allow-reserved-package-id");
+
+            if (mSparseResources) {
+                cmd.add("--enable-sparse-encoding");
+            }
+
+            if (buildOptions.isFramework) {
+                cmd.add("-x");
+            }
+
+            if (buildOptions.doNotCompress != null && !customAapt) {
+                // Use custom -e option to avoid limits on commandline length.
+                // Can only be used when custom aapt binary is not used.
+                String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
+                cmd.add("-e");
+                cmd.add(extensionsFilePath);
+            } else if (buildOptions.doNotCompress != null) {
+                for (String file : buildOptions.doNotCompress) {
+                    cmd.add("-0");
+                    cmd.add(file);
+                }
+            }
+
+            if (!buildOptions.resourcesAreCompressed) {
+                cmd.add("-0");
+                cmd.add("arsc");
+            }
+
+            if (include != null) {
+                for (File file : include) {
+                    cmd.add("-I");
+                    cmd.add(file.getPath());
+                }
+            }
+
+            cmd.add("--manifest");
+            cmd.add(manifest.getAbsolutePath());
+
+            if (assetDir != null) {
+                cmd.add("-A");
+                cmd.add(assetDir.getAbsolutePath());
+            }
+
+            if (rawDir != null) {
+                cmd.add("-R");
+                cmd.add(rawDir.getAbsolutePath());
+            }
 
             if (buildOptions.verbose) {
                 cmd.add("-v");
             }
 
-            if (buildOptions.noCrunch) {
-                cmd.add("--no-crunch");
+            if (resourcesZip != null) {
+                cmd.add(resourcesZip.getAbsolutePath());
             }
 
             try {
                 OS.exec(cmd.toArray(new String[0]));
-                LOGGER.fine("aapt2 compile command ran: ");
+                LOGGER.fine("aapt2 link command ran: ");
                 LOGGER.fine(cmd.toString());
             } catch (BrutException ex) {
                 throw new AndrolibException(ex);
             }
         }
-
-        if (manifest == null) {
-            return;
-        }
-
-        // Link them into the final apk, reusing our old command after clearing for the aapt2 binary
-        cmd = new ArrayList<>(compileCommand);
-        cmd.add("link");
-
-        cmd.add("-o");
-        cmd.add(apkFile.getAbsolutePath());
-
-        if (mPackageId != null && !mSharedLibrary) {
-            cmd.add("--package-id");
-            cmd.add(mPackageId);
-        }
-
-        if (mSharedLibrary) {
-            cmd.add("--shared-lib");
-        }
-
-        if (mMinSdkVersion != null) {
-            cmd.add("--min-sdk-version");
-            cmd.add(mMinSdkVersion);
-        }
-
-        if (mTargetSdkVersion != null) {
-            cmd.add("--target-sdk-version");
-            cmd.add(checkTargetSdkVersionBounds());
-        }
-
-        if (mPackageRenamed != null) {
-            cmd.add("--rename-manifest-package");
-            cmd.add(mPackageRenamed);
-
-            cmd.add("--rename-instrumentation-target-package");
-            cmd.add(mPackageRenamed);
-        }
-
-        if (mVersionCode != null) {
-            cmd.add("--version-code");
-            cmd.add(mVersionCode);
-        }
-
-        if (mVersionName != null) {
-            cmd.add("--version-name");
-            cmd.add(mVersionName);
-        }
-
-        // Disable automatic changes
-        cmd.add("--no-auto-version");
-        cmd.add("--no-version-vectors");
-        cmd.add("--no-version-transitions");
-        cmd.add("--no-resource-deduping");
-
-        cmd.add("--allow-reserved-package-id");
-
-        if (mSparseResources) {
-            cmd.add("--enable-sparse-encoding");
-        }
-
-        if (buildOptions.isFramework) {
-            cmd.add("-x");
-        }
-
-        if (buildOptions.doNotCompress != null && !customAapt) {
-            // Use custom -e option to avoid limits on commandline length.
-            // Can only be used when custom aapt binary is not used.
-            String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
-            cmd.add("-e");
-            cmd.add(extensionsFilePath);
-        } else if (buildOptions.doNotCompress != null) {
-            for (String file : buildOptions.doNotCompress) {
-                cmd.add("-0");
-                cmd.add(file);
-            }
-        }
-
-        if (!buildOptions.resourcesAreCompressed) {
-            cmd.add("-0");
-            cmd.add("arsc");
-        }
-
-        if (include != null) {
-            for (File file : include) {
-                cmd.add("-I");
-                cmd.add(file.getPath());
-            }
-        }
-
-        cmd.add("--manifest");
-        cmd.add(manifest.getAbsolutePath());
-
-        if (assetDir != null) {
-            cmd.add("-A");
-            cmd.add(assetDir.getAbsolutePath());
-        }
-
-        if (rawDir != null) {
-            cmd.add("-R");
-            cmd.add(rawDir.getAbsolutePath());
-        }
-
-        if (buildOptions.verbose) {
-            cmd.add("-v");
-        }
-
-        if (resourcesZip != null) {
-            cmd.add(resourcesZip.getAbsolutePath());
-        }
-
-        try {
-            OS.exec(cmd.toArray(new String[0]));
-            LOGGER.fine("aapt2 link command ran: ");
-            LOGGER.fine(cmd.toString());
-        } catch (BrutException ex) {
-            throw new AndrolibException(ex);
-        }*/
     }
 
-    private void aapt1Package(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include,
-                              List<String> cmd, boolean customAapt)
+    private void aapt1Package(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include, List<String> cmd, boolean customAapt)
             throws AndrolibException {
+        if (Preferences.isAEAAPTRules()) {
+            Aapt.build(apkFile, include, manifest, resDir, mMinSdkVersion, mTargetSdkVersion);
+        } else {
+            cmd.add("p");
 
-        Aapt.build(apkFile, include, manifest, resDir, mMinSdkVersion, mTargetSdkVersion);
-        /*cmd.add("p");
+            if (buildOptions.verbose) { // output aapt verbose
+                cmd.add("-v");
+            }
+            if (buildOptions.updateFiles) {
+                cmd.add("-u");
+            }
+            if (buildOptions.debugMode) { // inject debuggable="true" into manifest
+                cmd.add("--debug-mode");
+            }
+            if (buildOptions.noCrunch) {
+                cmd.add("--no-crunch");
+            }
+            // force package id so that some frameworks build with correct id
+            // disable if user adds own aapt (can't know if they have this feature)
+            if (mPackageId != null && !customAapt && !mSharedLibrary) {
+                cmd.add("--forced-package-id");
+                cmd.add(mPackageId);
+            }
+            if (mSharedLibrary) {
+                cmd.add("--shared-lib");
+            }
+            if (mMinSdkVersion != null) {
+                cmd.add("--min-sdk-version");
+                cmd.add(mMinSdkVersion);
+            }
+            if (mTargetSdkVersion != null) {
+                cmd.add("--target-sdk-version");
 
-        if (buildOptions.verbose) { // output aapt verbose
-            cmd.add("-v");
-        }
-        if (buildOptions.updateFiles) {
-            cmd.add("-u");
-        }
-        if (buildOptions.debugMode) { // inject debuggable="true" into manifest
-            cmd.add("--debug-mode");
-        }
-        if (buildOptions.noCrunch) {
-            cmd.add("--no-crunch");
-        }
-        // force package id so that some frameworks build with correct id
-        // disable if user adds own aapt (can't know if they have this feature)
-        if (mPackageId != null && !customAapt && !mSharedLibrary) {
-            cmd.add("--forced-package-id");
-            cmd.add(mPackageId);
-        }
-        if (mSharedLibrary) {
-            cmd.add("--shared-lib");
-        }
-        if (mMinSdkVersion != null) {
-            cmd.add("--min-sdk-version");
-            cmd.add(mMinSdkVersion);
-        }
-        if (mTargetSdkVersion != null) {
-            cmd.add("--target-sdk-version");
+                // Ensure that targetSdkVersion is between minSdkVersion/maxSdkVersion if
+                // they are specified.
+                cmd.add(checkTargetSdkVersionBounds());
+            }
+            if (mMaxSdkVersion != null) {
+                cmd.add("--max-sdk-version");
+                cmd.add(mMaxSdkVersion);
 
-            // Ensure that targetSdkVersion is between minSdkVersion/maxSdkVersion if
-            // they are specified.
-            cmd.add(checkTargetSdkVersionBounds());
-        }
-        if (mMaxSdkVersion != null) {
-            cmd.add("--max-sdk-version");
-            cmd.add(mMaxSdkVersion);
+                // if we have max sdk version, set --max-res-version
+                // so we can ignore anything over that during build.
+                cmd.add("--max-res-version");
+                cmd.add(mMaxSdkVersion);
+            }
+            if (mPackageRenamed != null) {
+                cmd.add("--rename-manifest-package");
+                cmd.add(mPackageRenamed);
+            }
+            if (mVersionCode != null) {
+                cmd.add("--version-code");
+                cmd.add(mVersionCode);
+            }
+            if (mVersionName != null) {
+                cmd.add("--version-name");
+                cmd.add(mVersionName);
+            }
+            cmd.add("--no-version-vectors");
+            cmd.add("-F");
+            cmd.add(apkFile.getAbsolutePath());
 
-            // if we have max sdk version, set --max-res-version
-            // so we can ignore anything over that during build.
-            cmd.add("--max-res-version");
-            cmd.add(mMaxSdkVersion);
-        }
-        if (mPackageRenamed != null) {
-            cmd.add("--rename-manifest-package");
-            cmd.add(mPackageRenamed);
-        }
-        if (mVersionCode != null) {
-            cmd.add("--version-code");
-            cmd.add(mVersionCode);
-        }
-        if (mVersionName != null) {
-            cmd.add("--version-name");
-            cmd.add(mVersionName);
-        }
-        cmd.add("--no-version-vectors");
-        cmd.add("-F");
-        cmd.add(apkFile.getAbsolutePath());
+            if (buildOptions.isFramework) {
+                cmd.add("-x");
+            }
 
-        if (buildOptions.isFramework) {
-            cmd.add("-x");
-        }
+            if (buildOptions.doNotCompress != null && !customAapt) {
+                // Use custom -e option to avoid limits on commandline length.
+                // Can only be used when custom aapt binary is not used.
+                String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
+                cmd.add("-e");
+                cmd.add(extensionsFilePath);
+            } else if (buildOptions.doNotCompress != null) {
+                for (String file : buildOptions.doNotCompress) {
+                    cmd.add("-0");
+                    cmd.add(file);
+                }
+            }
 
-        if (buildOptions.doNotCompress != null && !customAapt) {
-            // Use custom -e option to avoid limits on commandline length.
-            // Can only be used when custom aapt binary is not used.
-            String extensionsFilePath = createDoNotCompressExtensionsFile(buildOptions).getAbsolutePath();
-            cmd.add("-e");
-            cmd.add(extensionsFilePath);
-        } else if (buildOptions.doNotCompress != null) {
-            for (String file : buildOptions.doNotCompress) {
+            if (!buildOptions.resourcesAreCompressed) {
                 cmd.add("-0");
-                cmd.add(file);
+                cmd.add("arsc");
+            }
+
+            if (include != null) {
+                for (File file : include) {
+                    cmd.add("-I");
+                    cmd.add(file.getPath());
+                }
+            }
+            if (resDir != null) {
+                cmd.add("-S");
+                cmd.add(resDir.getAbsolutePath());
+            }
+            if (manifest != null) {
+                cmd.add("-M");
+                cmd.add(manifest.getAbsolutePath());
+            }
+            if (assetDir != null) {
+                cmd.add("-A");
+                cmd.add(assetDir.getAbsolutePath());
+            }
+            if (rawDir != null) {
+                cmd.add(rawDir.getAbsolutePath());
+            }
+            try {
+                OS.exec(cmd.toArray(new String[0]));
+                LOGGER.fine("command ran: ");
+                LOGGER.fine(cmd.toString());
+            } catch (BrutException ex) {
+                throw new AndrolibException(ex);
             }
         }
-
-        if (!buildOptions.resourcesAreCompressed) {
-            cmd.add("-0");
-            cmd.add("arsc");
-        }
-
-        if (include != null) {
-            for (File file : include) {
-                cmd.add("-I");
-                cmd.add(file.getPath());
-            }
-        }
-        if (resDir != null) {
-            cmd.add("-S");
-            cmd.add(resDir.getAbsolutePath());
-        }
-        if (manifest != null) {
-            cmd.add("-M");
-            cmd.add(manifest.getAbsolutePath());
-        }
-        if (assetDir != null) {
-            cmd.add("-A");
-            cmd.add(assetDir.getAbsolutePath());
-        }
-        if (rawDir != null) {
-            cmd.add(rawDir.getAbsolutePath());
-        }
-        try {
-            OS.exec(cmd.toArray(new String[0]));
-            LOGGER.fine("command ran: ");
-            LOGGER.fine(cmd.toString());
-        } catch (BrutException ex) {
-            throw new AndrolibException(ex);
-        }*/
     }
 
     public void aaptPackage(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include)
