@@ -14,9 +14,9 @@ class TaskDecoder : Logger {
     val fileEntry2ZipEntry: Map<String, String> = HashMap()
 
     fun decode(consumer: ApkParseConsumer?, apkFile: File, decodePath: File) {
-        consumer?.resTableDecoded(true)
         decode(apkFile, decodePath)
         consumer?.resourceDecoded(fileEntry2ZipEntry)
+        consumer?.resTableDecoded(true)
     }
 
     private fun decode(apkPath: File, decodeRootPath: File) {
