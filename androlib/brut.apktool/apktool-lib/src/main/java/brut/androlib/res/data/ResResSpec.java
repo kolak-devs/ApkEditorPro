@@ -39,7 +39,7 @@ public class ResResSpec {
 
         ResResSpec resResSpec = type.getResSpecUnsafe(name);
         if (resResSpec != null) {
-            cleanName = String.format("AE_DUPLICATE_%s_%s", type, id.toString());
+            cleanName = String.format("%s_%s_%s", (name == null || name.isEmpty()) ? "AE" : name, type, id.toString());
         } else {
             cleanName = ((name == null || name.isEmpty()) ? ("AE_DUMMYVAL_" + id.toString()) : name);
         }

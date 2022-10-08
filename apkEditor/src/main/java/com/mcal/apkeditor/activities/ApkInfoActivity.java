@@ -442,7 +442,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         } else {
             this.isFullDecoding = ActivityHelper.getBoolParam(getIntent(), "isFullDecoding");
             this.parseThread = new ApkParseThread(this, this, apkPath, decodeRootPath, isFullDecoding);
-            parseThread.execute();
+            parseThread.start();
         }
     }
 
@@ -738,7 +738,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.sure_to_exit);
-        if (parseThread == null || !parseThread.execute().isActive()) {
+        if (parseThread == null || !parseThread.isAlive()) {
             dlg.setItems(R.array.save_as_projects, (dialog, which) -> {
                 switch (which) {
                     case 0: {

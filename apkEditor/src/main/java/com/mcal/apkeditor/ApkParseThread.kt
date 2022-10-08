@@ -10,19 +10,17 @@ import com.mcal.apkeditor.ui.fulleditor.utils.TaskDecoder
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.deleteAll
 import com.mcal.common.utils.readFully
-import kotlinx.coroutines.*
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.util.zip.ZipFile
-import kotlin.coroutines.CoroutineContext
 
 class ApkParseThread(
     activity: Activity, private val consumer: ApkParseConsumer?,
     apkPath: String?, decodeRootPath: String?,
     isFullDecoding: Boolean
-) : CoroutineScope {
+) : Thread() {
     private val mActivity: Activity
     private val consumerRef: WeakReference<ApkParseConsumer?>
     private val mApkPath: String?
@@ -39,23 +37,14 @@ class ApkParseThread(
     var errMessage: String? = null
         private set
 
-    private var runningJob = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + runningJob
-
-    fun execute() = launch {
-        val ret = doInBackground()
+    override fun run() {
+        val ret = parse()
         if (!ret) {
             consumerRef.get()?.decodeFailed(errMessage)
         }
     }
 
-    fun cancel() {
-        runningJob.cancel()
-    }
-
-    private suspend fun doInBackground(): Boolean = withContext(Dispatchers.IO) {
+    private fun parse(): Boolean {
         try {
             val apkPath = mApkPath
             val decodePath = mDecodeRootPath
@@ -71,12 +60,12 @@ class ApkParseThread(
                 }
                 TaskDecoder().decode(consumer, File(apkPath), File(decodePath))
             }
-            return@withContext true
+            return true
         } catch (e: Exception) {
             errMessage = e.message
             e.printStackTrace()
         }
-        return@withContext false
+        return false
     }
 
     @Throws(AndrolibException::class)
