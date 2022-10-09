@@ -103,7 +103,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Редактор">
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="Редактор">
 
         <EditTextPreference
             android:defaultValue="14"
