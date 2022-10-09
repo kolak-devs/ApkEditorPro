@@ -125,20 +125,24 @@ final public class AndrolibResources {
         ResPackage[] pkgs = getResPackagesFromApk(apkFile, resTable, sKeepBroken);
         ResPackage pkg;
 
-        switch (pkgs.length) {
-            case 0:
-                pkg = null;
-                break;
-            case 1:
-                pkg = pkgs[0];
-                break;
-            case 2:
-                LOGGER.warning("Skipping package group: " + pkgs[0].getName());
-                pkg = pkgs[1];
-                break;
-            default:
-                pkg = selectPkgWithMostResSpecs(pkgs);
-                break;
+        if (Preferences.isFixMultiRes()) {
+            pkg = pkgs[0];
+        } else {
+            switch (pkgs.length) {
+                case 0:
+                    pkg = null;
+                    break;
+                case 1:
+                    pkg = pkgs[0];
+                    break;
+                case 2:
+                    LOGGER.warning("Skipping package group: " + pkgs[0].getName());
+                    pkg = pkgs[1];
+                    break;
+                default:
+                    pkg = selectPkgWithMostResSpecs(pkgs);
+                    break;
+            }
         }
 
         if (pkg == null) {
