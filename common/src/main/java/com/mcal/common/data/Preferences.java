@@ -1,11 +1,8 @@
 package com.mcal.common.data;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-
-import androidx.preference.PreferenceManager;
 
 import com.mcal.common.App;
 import com.mcal.common.utils.ScopedStorage;
@@ -277,5 +274,54 @@ public class Preferences {
         App.getPreferences().edit().putBoolean("ae_aapt_rules", mode).apply();
     }
 
+    /**
+     * Sora Editor
+     */
+    public static boolean isWordWrap() {
+        return App.getPreferences().getBoolean("editor_wordwrap", false);
+    }
 
+    public static void setWordWrap(boolean mode) {
+        App.getPreferences().edit().putBoolean("editor_wordwrap", mode).apply();
+    }
+
+    public static boolean isLineNumberEnabled() {
+        return App.getPreferences().getBoolean("editor_line_number", true);
+    }
+
+    public static void setLineNumberEnabled(boolean mode) {
+        App.getPreferences().edit().putBoolean("editor_line_number", mode).apply();
+    }
+
+    public static boolean isLineNumberPinned() {
+        return App.getPreferences().getBoolean("editor_pin_line_number", false);
+    }
+
+    public static void setLineNumberPinned(boolean mode) {
+        App.getPreferences().edit().putBoolean("editor_pin_line_number", mode).apply();
+    }
+
+    public static boolean isMagnifier() {
+        return App.getPreferences().getBoolean("editor_magnifier", true);
+    }
+
+    public static void setMagnifier(boolean mode) {
+        App.getPreferences().edit().putBoolean("editor_magnifier", mode).apply();
+    }
+
+    public static boolean isUseICULibrary() {
+        return App.getPreferences().getBoolean("editor_use_icu_library", true);
+    }
+
+    public static void setUseICULibrary(boolean mode) {
+        App.getPreferences().edit().putBoolean("editor_use_icu_library", mode).apply();
+    }
+
+    public static String getEditorFontSize() {
+        return App.getPreferences().getString("editor_text_size", "");
+    }
+
+    public static void setEditorFontSize(String key) {
+        App.getPreferences().edit().putString("editor_text_size", key).apply();
+    }
 }

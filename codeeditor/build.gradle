@@ -56,4 +56,5 @@ dependencies {
     implementation 'io.github.Rosemoe.sora-editor:language-java:0.17.1'
     implementation 'io.github.Rosemoe.sora-editor:language-textmate:0.17.1'
     implementation 'io.github.Rosemoe.sora-editor:editor-lsp:0.17.1'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 }

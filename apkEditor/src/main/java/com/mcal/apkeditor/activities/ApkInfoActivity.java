@@ -257,8 +257,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // prjDirectory not ends with '/'
     @Nullable
     public static ProjectInfo loadProject(String prjDirectory) {
-        String versionPath = prjDirectory + "/.prj_version";
-        String infoPath = prjDirectory + "/ae.prj";
+        String versionPath = prjDirectory + "/version.txt";
+        String infoPath = prjDirectory + "/info.bin";
         File versionFile = new File(versionPath);
         File prjInfoFile = new File(infoPath);
         if (versionFile.exists() && prjInfoFile.exists()) {
@@ -374,8 +374,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
         ProjectInfo prjInfo = null;
         if (projectName != null) {
             try {
-                String prjRoot = makeDir(".projects").getPath();
-                prjInfo = loadProject(prjRoot + File.separator + projectName);
+                File prjRoot = ScopedStorage.getProjects();
+                prjInfo = loadProject(prjRoot.getPath() + File.separator + projectName);
                 apkPath = prjInfo.apkPath;
                 decodeRootPath = prjInfo.decodeRootPath;
             } catch (Exception e) {
@@ -448,8 +448,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // save to file, also include version file
     private boolean storeProject(String prjDirectory, ProjectInfo prjInfo) {
-        String versionPath = prjDirectory + "/.prj_version";
-        String infoPath = prjDirectory + "/ae.prj";
+        String versionPath = prjDirectory + "/version.txt";
+        String infoPath = prjDirectory + "/info.bin";
         try {
             writeToFile(versionPath, "1");
             return writeObjectToFile(infoPath, prjInfo);
@@ -533,7 +533,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }
 
         // Do not do it any more as consumes too much time (in case of rotation)
-        String path = workingPath + File.separator + "allStringValues";
+        String path = workingPath + File.separator + "strings.bin";
         if (saveAll) {
             writeObjectToFile(path, allStringValues);
         }
@@ -601,8 +601,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
         try {
             String workingPath;
             if (projectName != null) {
-                String prjRoot = makeDir(".projects").getPath();
-                workingPath = prjRoot + File.separator + projectName;
+                File prjRoot = ScopedStorage.getProjects();
+                workingPath = prjRoot.getPath() + File.separator + projectName;
             } else {
                 workingPath = ScopedStorage.getTmpDir().getPath();
             }
@@ -780,16 +780,16 @@ public class ApkInfoActivity extends CustomizedLangActivity
                             projectName = apkInfo.label;
                         }
 
-                        String parentFolder;
+                        File parentFolder;
                         try {
-                            parentFolder = makeDir(".projects").getPath();
+                            parentFolder = ScopedStorage.getProjects();
                         } catch (Exception e) {
                             errorMessage = String.format(getString(R.string.general_error), e.getMessage());
                             return;
                         }
 
                         // Locate the project folder
-                        String projectFolder = parentFolder + File.separator + projectName;
+                        String projectFolder = parentFolder.getPath() + File.separator + projectName;
                         projectDir = new File(projectFolder);
                         if (projectDir.exists()) {
                             projectDir = FileCopyDialog.getTargetNonExistFile(projectFolder, true);
@@ -1586,7 +1586,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         new Thread(() -> {
             try {
                 String workingPath = ScopedStorage.getTmpDir().getPath();
-                String path = workingPath + File.separator + "allStringValues";
+                String path = workingPath + File.separator + "strings.bin";
                 writeObjectToFile(path, allStringValues);
                 path = workingPath + File.separator + "fileEntry2ZipEntry";
                 writeObjectToFile(path, fileEntry2ZipEntry);

@@ -87,6 +87,7 @@ class EditorActivity : CustomizedLangActivity(),
         openFile()
         updatePositionText()
         updateBtnState()
+        setupDiagnostics()
     }
 
     private fun initEditor() {
@@ -121,8 +122,13 @@ class EditorActivity : CustomizedLangActivity(),
             cursorAnimator = ScaleCursorAnimator(editor)
             typefaceText = Typeface.MONOSPACE
             colorScheme = getCodeColorScheme()
+            editor.isWordwrap = Preferences.isWordWrap()
+            editor.isLineNumberEnabled = Preferences.isLineNumberEnabled()
+            editor.setPinLineNumber(Preferences.isLineNumberPinned())
+            editor.getComponent(Magnifier::class.java).isEnabled = Preferences.isMagnifier()
+            editor.props.useICULibToSelectWords = Preferences.isUseICULibrary()
             setEditorLanguage(getLanguage())
-            setTextSize(12f)
+            setTextSize(Preferences.getEditorFontSize().toFloat())
         }
     }
 
@@ -517,6 +523,15 @@ class EditorActivity : CustomizedLangActivity(),
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.text_wordwrap).isChecked = Preferences.isWordWrap()
+        menu.findItem(R.id.editor_line_number).isChecked = Preferences.isLineNumberEnabled()
+        menu.findItem(R.id.pin_line_number).isChecked = Preferences.isLineNumberPinned()
+        menu.findItem(R.id.magnifier).isChecked = Preferences.isMagnifier()
+        menu.findItem(R.id.useIcu).isChecked = Preferences.isUseICULibrary()
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         binding.editor.release()
@@ -777,11 +792,15 @@ class EditorActivity : CustomizedLangActivity(),
         } else if (id == R.id.move_right) {
             editor.moveSelectionRight()
         } else if (id == R.id.magnifier) {
-            item.isChecked = !item.isChecked
-            editor.getComponent(Magnifier::class.java).isEnabled = item.isChecked
+            val result = item.isChecked
+            item.isChecked = !result
+            editor.getComponent(Magnifier::class.java).isEnabled = result
+            Preferences.setMagnifier(result)
         } else if (id == R.id.useIcu) {
-            item.isChecked = !item.isChecked
-            editor.props.useICULibToSelectWords = item.isChecked
+            val result = item.isChecked
+            item.isChecked = !result
+            editor.props.useICULibToSelectWords = result
+            Preferences.setUseICULibrary(result)
         } else if (id == R.id.code_format) {
             editor.formatCodeAsync()
         } else if (id == R.id.switch_language) {
@@ -845,14 +864,18 @@ class EditorActivity : CustomizedLangActivity(),
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
         } else if (id == R.id.text_wordwrap) {
-            item.isChecked = !item.isChecked
-            editor.isWordwrap = item.isChecked
+            val result = item.isChecked
+            item.isChecked = !result
+            editor.isWordwrap = result
+            Preferences.setWordWrap(result)
         } else if (id == R.id.editor_line_number) {
             editor.isLineNumberEnabled = !editor.isLineNumberEnabled
             item.isChecked = editor.isLineNumberEnabled
+            Preferences.setLineNumberEnabled(item.isChecked)
         } else if (id == R.id.pin_line_number) {
             editor.setPinLineNumber(!editor.isLineNumberPinned)
             item.isChecked = editor.isLineNumberPinned
+            Preferences.setLineNumberPinned(item.isChecked)
         }
         return super.onOptionsItemSelected(item)
     }

@@ -27,4 +27,5 @@
     <string name="feature_switches">Настройки</string>
     <string name="magnifier">Лупа</string>
     <string name="use_icu_library">Use ICU library</string>
+    <string name="settings">Settings</string>
 </resources>

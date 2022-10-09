@@ -11,10 +11,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utils.ScopedStorage.getApkEditorDir
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
-import java.io.File
 
 
 class SettingsFragment : PreferenceFragmentCompat(),
@@ -64,9 +62,12 @@ class SettingsFragment : PreferenceFragmentCompat(),
                         requireActivity(), "", "Working…", false,
                         object : ProcessingInterface {
                             override fun process() {
-                                File(getApkEditorDir().path + "/backups").deleteRecursively()
-                                File(getApkEditorDir().path + "/.projects").deleteRecursively()
+                                ScopedStorage.cacheDir.deleteRecursively()
+                                ScopedStorage.getBackupsDir().deleteRecursively()
+                                ScopedStorage.getProjects().deleteRecursively()
                                 ScopedStorage.getDecodedDir().deleteRecursively()
+                                ScopedStorage.getTmpDir().deleteRecursively()
+                                ScopedStorage.getTempDir().deleteRecursively()
                             }
 
                             override fun afterProcess() {}

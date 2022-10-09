@@ -2,6 +2,7 @@ package com.mcal.apkeditor.prj
 
 import android.widget.Toast
 import com.mcal.apkeditor.R
+import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.deleteAll
 import com.mcal.common.utils.makeDir
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
@@ -36,8 +37,8 @@ internal class ProjectRemover(
 
         // Remove the project index files
         try {
-            val projectFolder = makeDir(".projects").path
-            deleteAll(File(projectFolder + File.separator + mItemInfo.name))
+            val projectFolder = ScopedStorage.getProjects()
+            deleteAll(File(projectFolder.path + File.separator + mItemInfo.name))
             result = true
         } catch (e: Exception) {
             errMessage = e.message

@@ -1,7 +1,5 @@
 package com.mcal.apkeditor.prj;
 
-import static com.mcal.common.utils.FileHelperKt.makeDir;
-
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
-import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 import com.mcal.common.utils.ApkInfoParser;
@@ -38,7 +35,7 @@ import ru.svolf.melissa.swipeback.SwipeBackActivity;
 public class ProjectListActivity extends SwipeBackActivity implements View.OnClickListener {
     private final MyHandler handler = new MyHandler(this);
     private ProjectListAdapter adapter;
-    private String projectFolder; // like "/sdcard/ApkEditor/.projects/"
+    private File projectFolder; // like "/sdcard/ApkEditor/.projects/"
     private List<ProjectListAdapter.ItemInfo> projectItems;
     private IconParseThread thread;
 
@@ -79,7 +76,7 @@ public class ProjectListActivity extends SwipeBackActivity implements View.OnCli
     }
 
     void updateProjectList() {
-        projectItems = listProjects(projectFolder);
+        projectItems = listProjects(projectFolder.getPath());
         adapter.updateData(projectItems);
         adapter.notifyDataSetChanged();
     }
@@ -96,14 +93,14 @@ public class ProjectListActivity extends SwipeBackActivity implements View.OnCli
         ListView projectList = findViewById(R.id.project_list);
 
         try {
-            this.projectFolder = makeDir(".projects").getPath();
+            projectFolder = ScopedStorage.getProjects();
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             return;
         }
 
         // Set list adapter
-        projectItems = listProjects(projectFolder);
+        projectItems = listProjects(projectFolder.getPath());
         adapter = new ProjectListAdapter(this, projectItems);
         projectList.setAdapter(adapter);
         projectList.setOnItemClickListener(adapter);
@@ -147,13 +144,13 @@ public class ProjectListActivity extends SwipeBackActivity implements View.OnCli
         return items;
     }
 
-    // Look for ae.prj
+    // Look for info.bin
     private File findProjectFile(File[] files) {
         if (files == null) {
             return null;
         }
         for (File f : files) {
-            if (f.isFile() && f.getName().equals("ae.prj")) {
+            if (f.isFile() && f.getName().equals("info.bin")) {
                 return f;
             }
         }
