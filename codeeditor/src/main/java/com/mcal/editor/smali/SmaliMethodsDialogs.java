@@ -1,15 +1,18 @@
 package com.mcal.editor.smali;
 
+import static com.mcal.common.App.context;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.neweditor.R;
@@ -24,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // Popup window helper
-public class SmaliMethodsDialogs {
+public class SmaliMethodsDialogs implements OnClick {
     private final WeakReference<ISmaliMethodClicked> callbackRef;
 
     private String methodComputedFrom; // Record the method is from which file
@@ -37,34 +40,40 @@ public class SmaliMethodsDialogs {
         return methodComputedFrom;
     }
 
-    private void createPopWindow(@NonNull Activity activity, String smaliFile,
-                                 final List<SmaliMethodInfo> methodList) {
+    private List<SmaliMethodInfo> mMethodList;
+    private AlertDialog mMaterialDialog;
+
+    private void createPopWindow(@NonNull Activity activity, String smaliFile, final List<SmaliMethodInfo> methodList) {
         this.methodComputedFrom = smaliFile;
+        mMethodList = methodList;
 
         final View layout = LayoutInflater.from(activity).inflate(R.layout.dialog_methods_list, null);
-        final ListView methodLv = layout.findViewById(R.id.methods);
+        final RecyclerView recyclerView = layout.findViewById(R.id.methods);
 
-        final SmaliMethodAdapter adapter = new SmaliMethodAdapter(activity.getApplicationContext(), methodList);
-        methodLv.setAdapter(adapter);
+        final SmaliMethodAdapter adapter = new SmaliMethodAdapter(this, methodList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerView.setAdapter(adapter);
 
-        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(activity)
-                .setView(layout)
-                .create();
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(activity).create();
+        mMaterialDialog = materialDialog;
+        materialDialog.setView(layout);
         materialDialog.show();
-
-        methodLv.setOnItemClickListener((adapterView, view, position, id) -> {
-            if (position < methodList.size()) {
-                SmaliMethodInfo info = methodList.get(position);
-                if (callbackRef.get() != null) {
-                    callbackRef.get().gotoLine(info.lineIndex);
-                }
-                materialDialog.dismiss();
-            }
-        });
     }
 
     public void asyncShowPopup(Activity activity, String filePath, String text) {
         new MethodAsyncLoader(activity, filePath, text).execute();
+    }
+
+    @Override
+    public void onClick(int position) {
+        final List<SmaliMethodInfo> methodList = mMethodList;
+        if (position < methodList.size()) {
+            SmaliMethodInfo info = methodList.get(position);
+            if (callbackRef.get() != null) {
+                callbackRef.get().gotoLine(info.lineIndex);
+            }
+            mMaterialDialog.dismiss();
+        }
     }
 
     public interface ISmaliMethodClicked {
