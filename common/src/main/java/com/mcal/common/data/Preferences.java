@@ -318,7 +318,7 @@ public class Preferences {
     }
 
     public static String getEditorFontSize() {
-        return App.getPreferences().getString("editor_text_size", "");
+        return App.getPreferences().getString("editor_text_size", "14");
     }
 
     public static void setEditorFontSize(String key) {
