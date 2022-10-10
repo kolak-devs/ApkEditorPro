@@ -190,7 +190,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             }
             // Exit the selection mode
             else if (id == R.id.menu_done) {
-                ApkInfoExActivity.this.resListAdapter.checkAllItems(false);
+                resListAdapter.checkAllItems(false);
             }
             // Select all or select none
             else if (id == R.id.menu_select) {
@@ -198,17 +198,17 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             }
             // Add a file
             else if (id == R.id.menu_addfile) {
-                ApkInfoExActivity.this.addFile(0);
+                addFile(0);
             }
             // Add a folder
             else if (id == R.id.menu_addfolder) {
-                ApkInfoExActivity.this.createFolder(0);
+                createFolder(0);
             }
             // Search option (text or filename)
             else if (id == R.id.imageview_text_check) {
-                ApkInfoExActivity.this.reverseSearchOption();
+                reverseSearchOption();
             } else if (id == R.id.imageview_insensitive_check) {
-                ApkInfoExActivity.this.reverseSearchCaseSensitive();
+                reverseSearchCaseSensitive();
             }
 
             // Save

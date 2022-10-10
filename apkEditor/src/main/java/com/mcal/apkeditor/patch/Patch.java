@@ -7,6 +7,7 @@ public class Patch {
     public final int engineVersion = 1;
     public int requiredEngine;
     public String author;
+    public String description;
     public String packagename;
     public List<PatchRule> rules = new ArrayList<>();
 
@@ -20,6 +21,14 @@ public class Patch {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getRequiredEngine() {
@@ -47,6 +56,6 @@ public class Patch {
     }
 
     public String getVersion() {
-        return "1.0";
+        return "1.1";
     }
 }

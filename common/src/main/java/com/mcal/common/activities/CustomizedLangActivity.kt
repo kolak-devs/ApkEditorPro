@@ -2,6 +2,7 @@ package com.mcal.common.activities
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import com.google.android.material.appbar.MaterialToolbar
 import com.mcal.common.utils.LocaleManager
 import ru.svolf.melissa.swipeback.SwipeBackActivity
@@ -38,6 +39,12 @@ open class CustomizedLangActivity : SwipeBackActivity() {
             }
             setDisplayHomeAsUpEnabled(back)
             setDisplayShowHomeEnabled(back)
+        }
+    }
+
+    fun setVisibility(view: View, mode: Int) {
+        if(view.visibility!=mode) {
+            view.visibility=mode
         }
     }
 

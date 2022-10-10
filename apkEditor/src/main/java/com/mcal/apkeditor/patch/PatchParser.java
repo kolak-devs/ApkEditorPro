@@ -24,6 +24,7 @@ public class PatchParser {
 
     public static final String MIN_ENGINE_VER = "[MIN_ENGINE_VER]";
     public static final String AUTHOR = "[AUTHOR]";
+    public static final String DESCRIPTION = "[DESCRIPTION]";
     public static final String PACKAGE = "[PACKAGE]";
 
     public static final String ADD_FILES = "[ADD_FILES]";
@@ -57,6 +58,9 @@ public class PatchParser {
                 } else if (AUTHOR.equals(line)) {
                     String next = br.readLine();
                     result.author = next;
+                }else if (DESCRIPTION.equals(line)) {
+                    String next = br.readLine();
+                    result.description = next;
                 } else if (PACKAGE.equals(line)) {
                     String next = br.readLine();
                     result.packagename = next;
