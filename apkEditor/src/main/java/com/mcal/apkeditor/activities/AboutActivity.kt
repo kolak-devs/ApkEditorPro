@@ -54,6 +54,14 @@ class AboutActivity : CustomizedLangActivity() {
         Toast.makeText(this, "Copied TON Coin Address", Toast.LENGTH_SHORT).show()
     }
 
+    fun openTimscriptov(view: View) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/TimScriptov")))
+    }
+
+    fun openSVolf(view: View) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/SnowVolf")))
+    }
+
     fun donateYandexMoney(view: View) {
         val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Copied Yandex Money Address", "4100117726163824")
