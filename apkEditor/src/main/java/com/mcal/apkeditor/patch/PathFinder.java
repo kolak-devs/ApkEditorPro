@@ -55,9 +55,6 @@ public class PathFinder {
         } else if ("LAUNCHER_ACTIVITIES".equals(word)) {
             return new PathFilterComponent(ctx,
                     PathFilterComponent.ComponentType.LAUNCHER_ACTIVITY);
-        }else if ("SIGNATURE".equals(word)) {
-            return new PathFilterComponent(ctx,
-                    PathFilterComponent.ComponentType.SIGNATURE);
         } else {
             ctx.error(R.string.patch_error_invalid_target, lineIdx);
             return null;

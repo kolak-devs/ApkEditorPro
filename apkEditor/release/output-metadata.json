@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1825,
-      "versionName": "2.0.2",
-      "outputFile": "Apk Editor v.2.0.2-MinAPI26.apk"
+      "versionCode": 1885,
+      "versionName": "2.0.3",
+      "outputFile": "Apk Editor v.2.0.3-MinAPI26.apk"
     }
   ],
   "elementType": "File"

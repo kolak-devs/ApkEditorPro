@@ -10,6 +10,8 @@ import com.mcal.apkeditor.patch.PatchRule;
 import com.mcal.apkeditor.patch.PathFinder;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
+import com.mcal.common.utils.ScopedStorage;
+import com.mcal.common.utils.SignatureHelper;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -272,8 +274,10 @@ public class PatchRuleMatchReplace extends PatchRule {
     private String getRealReplace(String replaceStr, @NonNull Section sec) {
         String result = replaceStr;
         List<String> groups = sec.groupStrs;
+        final String signature = SignatureHelper.getApkSignatureData(ScopedStorage.getDecodedDir().getPath());
         for (int i = 0; i < groups.size(); ++i) {
             result = result.replace("${GROUP" + (i + 1) + "}", groups.get(i));
+            result = result.replace("${SIGNATURE}", signature);
         }
         return result;
     }

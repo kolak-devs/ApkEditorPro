@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 
 import com.mcal.apkeditor.patch.PathFilter;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
-import com.mcal.common.utils.SignatureHelper;
 
 import java.io.File;
 import java.util.List;
@@ -16,7 +15,6 @@ public class PathFilterComponent extends PathFilter {
     private final ComponentType compType;
     private final String decodeRootPath;
     private String applicationName;
-    private String signature;
     private List<String> componentList;
     private int cursor = 0;
 
@@ -32,9 +30,6 @@ public class PathFilterComponent extends PathFilter {
                 break;
             case LAUNCHER_ACTIVITY:
                 this.componentList = ctx.getLauncherActivities();
-                break;
-            case SIGNATURE:
-                this.signature = SignatureHelper.getApkSignatureData(decodeRootPath);
                 break;
         }
     }
@@ -54,8 +49,6 @@ public class PathFilterComponent extends PathFilter {
                     return getSmaliPath(componentList.get(cursor++));
                 }
                 break;
-            case SIGNATURE:
-                return signature;
         }
 
         return null;
@@ -121,7 +114,6 @@ public class PathFilterComponent extends PathFilter {
     public enum ComponentType {
         APPLICATION,
         ACTIVITY,
-        LAUNCHER_ACTIVITY,
-        SIGNATURE
+        LAUNCHER_ACTIVITY
     }
 }
