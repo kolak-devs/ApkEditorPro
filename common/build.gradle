@@ -27,6 +27,7 @@ dependencies {
     implementation project(':crashreporter')
     implementation project(":melissa")
     implementation project(":libraries")
+    implementation project(':sun')
 
     implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
     implementation 'androidx.preference:preference-ktx:1.2.0'

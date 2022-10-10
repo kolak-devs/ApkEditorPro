@@ -49,3 +49,5 @@ include ':net-manager'
 
 include ':libraries'
 include ':melissa'
+
+include ':sun'
