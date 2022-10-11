@@ -51,4 +51,4 @@ include ':libraries'
 include ':melissa'
 
 include ':sun'
-include ':feature:selectapk'
+include ':features:selectapk'

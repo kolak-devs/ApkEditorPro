@@ -153,7 +153,6 @@ android {
         viewBinding true
     }
     namespace 'com.mcal.apkeditor'
-    dynamicFeatures = [':feature:filemanager']
 }
 
 configurations {
