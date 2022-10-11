@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    implementation project(':common')
+    implementation project(':core')
 
     implementation project(':androlib:brut.apktool:apktool-lib')
 

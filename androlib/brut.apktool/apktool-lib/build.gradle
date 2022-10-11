@@ -26,7 +26,7 @@ dependencies {
     api project(':androlib:brut.j.common')
 
     implementation project(":libraries")
-    implementation project(':common')
+    implementation project(':core')
     api project(':smali')
     api project(':xpp3')
 

@@ -1,7 +1,6 @@
 package com.mcal.apkeditor.activities;
 
 import static com.mcal.common.utils.FileHelperKt.copyFile;
-import static com.mcal.common.utils.FileHelperKt.makeDir;
 import static com.mcal.common.utils.FileHelperKt.readObjectFromFile;
 import static com.mcal.common.utils.FileHelperKt.recursiveModifiedTime;
 import static com.mcal.common.utils.FileHelperKt.reviseFileName;
@@ -106,7 +105,7 @@ import com.mcal.common.utils.UriUtils;
 import com.mcal.common.utils.ZipHelper;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
-import com.mcal.folderlist.util.OpenFiles;
+import com.mcal.androlib.util.OpenFiles;
 import com.mcal.pngeditor.PhotoViewerActivity;
 
 import org.jetbrains.annotations.Contract;

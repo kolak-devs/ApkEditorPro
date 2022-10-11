@@ -153,6 +153,7 @@ android {
         viewBinding true
     }
     namespace 'com.mcal.apkeditor'
+    dynamicFeatures = [':feature:filemanager']
 }
 
 configurations {
@@ -161,13 +162,14 @@ configurations {
 
 
 dependencies {
+
     def latestFastAdapterRelease = "5.6.0"
 
     implementation project(':androlib:brut.apktool:apktool-lib')
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':smali')
     implementation project(':apklib')
-    implementation project(':common')
+    implementation project(':core')
     implementation project(':codeeditor')
     implementation project(':imageview')
     implementation project(':apksigner')
@@ -207,9 +209,7 @@ dependencies {
     // LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
-    //coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-}
-
-configurations.all {
-    exclude group: "org.yaml", module:"snakeyaml"
+    configurations.all {
+        exclude group: "org.yaml", module: "snakeyaml"
+    }
 }

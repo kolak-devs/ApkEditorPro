@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    implementation project(':common')
+    implementation project(':core')
     implementation project(':jadx:jadx-core')
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':jadx:jadx-plugins:jadx-smali-input')

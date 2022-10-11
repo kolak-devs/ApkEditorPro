@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    implementation project(':common')
+    implementation project(':core')
     implementation project(':androlib:brut.j.common')
     implementation 'commons-io:commons-io:2.11.0'
 }

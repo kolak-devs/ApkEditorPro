@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="SweetSwitch" parent="TextAppearance.AppCompat.Widget.Switch">
-        <item name="android:thumb">@drawable/toggle_switch</item>
-        <item name="android:track">@drawable/ate_track</item>
-    </style>
-
-</resources>

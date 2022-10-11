@@ -26,7 +26,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libraries')
-    implementation project(':common')
+    implementation project(':core')
     implementation project(':sun')
 
     implementation 'androidx.appcompat:appcompat:1.5.0'

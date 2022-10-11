@@ -14,7 +14,7 @@ dependencyResolutionManagement {
 }
 
 include ':apklib'
-include ':common'
+include ':core'
 include ':imageview'
 include ':apkEditor'
 include ':sqliteutil'
@@ -51,3 +51,4 @@ include ':libraries'
 include ':melissa'
 
 include ':sun'
+include ':feature:filemanager'

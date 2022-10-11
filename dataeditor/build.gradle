@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    implementation project(':common')
+    implementation project(':core')
     api project(':sqliteutil')
     api project(':codeeditor')
     implementation project(":melissa")

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mcal.androlib.util.OpenFiles;
 import com.mcal.appdm.base.R;
 import com.mcal.appdm.utils.SignatureInfoReader;
 import com.mcal.appdm.utils.StringPair;
@@ -712,7 +713,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
                     @Override
                     public void afterProcess() {
                         if (tmpFilePath != null) {
-                            com.mcal.appdm.utils.OpenFiles
+                            OpenFiles
                                     .openFile(PrefOverallActivity.this, tmpFilePath);
                         } else {
                             Toast.makeText(PrefOverallActivity.this,

@@ -14,7 +14,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.mcal.apkeditor.R
 import com.mcal.common.utils.FileRecord
 import com.mcal.common.utils.deleteAll
-import com.mcal.folderlist.util.OpenFiles
+import com.mcal.androlib.util.OpenFiles
 import java.io.File
 import java.io.IOException
 

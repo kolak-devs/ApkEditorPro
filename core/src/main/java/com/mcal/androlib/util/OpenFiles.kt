@@ -1,12 +1,11 @@
-package com.mcal.folderlist.util
+package com.mcal.androlib.util
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
-import com.mcal.apkeditor.BuildConfig
-import com.mcal.apkeditor.R
+import com.mcal.common.R
 import org.jetbrains.annotations.Contract
 import java.io.File
 
@@ -97,7 +96,7 @@ object OpenFiles {
         val intent: Intent
         var uri: Uri? = null
         try {
-            uri = FileProvider.getUriForFile(ctx, BuildConfig.APPLICATION_ID, File(filePath))
+            uri = FileProvider.getUriForFile(ctx, "com.mcal.apkeditor.pro", File(filePath))
         } catch (e: Throwable) {
             e.printStackTrace()
         }
@@ -172,6 +171,7 @@ object OpenFiles {
         return intent
     }
 
+    @JvmStatic
     fun openFile(ctx: Context, filePath: String) {
         val intent = getIntent(ctx, filePath)
         if (intent != null) {

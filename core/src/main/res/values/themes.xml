@@ -60,7 +60,12 @@
     </style>
 
     <style name="AppTheme.ToolbarStyle.Subtitle" parent="TextAppearance.Material3.BodySmall">
-        <item name="textSize">12sp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="SweetSwitch" parent="TextAppearance.AppCompat.Widget.Switch">
+        <item name="android:thumb">@drawable/toggle_switch</item>
+        <item name="android:track">@drawable/ate_track</item>
     </style>
 
     <style name="AppTheme.SweetCheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
