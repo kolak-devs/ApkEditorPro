@@ -1,4 +1,4 @@
-package ru.svolf.filemanager
+package ru.svolf.selectapk
 
 import org.junit.Test
 
