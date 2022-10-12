@@ -552,7 +552,7 @@ class EditorActivity : CustomizedLangActivity(),
     }
 
     // Save the document
-    private fun save() {
+    private fun save(exit: Boolean = false) {
         ProgressDialog(
             this, "Saving", "Please wait...", false,
             object : ProgressDialog.ProcessingInterface {
@@ -571,6 +571,9 @@ class EditorActivity : CustomizedLangActivity(),
                             openFile()
                             updatePositionText()
                             updateBtnState()
+                            if (exit) {
+                                finish()
+                            }
                         }
                     }
                     //setResult(1) todo
@@ -591,8 +594,7 @@ class EditorActivity : CustomizedLangActivity(),
             }
             dialog.setMessage("Do you want to save this file?")
             dialog.setPositiveButton("Save") { _, _ ->
-                save()
-                super.onBackPressed()
+                save(true)
             }
             dialog.setNegativeButton("Don't save") { _, _ ->
                 super.onBackPressed()
