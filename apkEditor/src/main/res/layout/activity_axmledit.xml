@@ -93,7 +93,8 @@
             android:layout_weight="1"
             android:singleLine="true"
             android:text="@string/save"
-            android:textSize="14.0dip" />
+            android:textSize="14.0dip"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

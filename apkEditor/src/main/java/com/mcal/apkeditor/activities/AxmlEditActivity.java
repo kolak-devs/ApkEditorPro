@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.data.Constants.PACKAGE_NAME;
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
 
 import android.content.Intent;
@@ -27,10 +28,10 @@ import com.mcal.apkeditor.se.IDirChanged;
 import com.mcal.apkeditor.se.ZipFileListAdapter;
 import com.mcal.apkeditor.se.ZipHelper;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utils.ApkInfoParser;
-import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ActivityHelper;
+import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.CommandRunner;
+import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.view.ProgressDialog;
 
 import java.io.File;
@@ -116,20 +117,14 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
 
     @Nullable
     private String getApkPath() {
-        String packageName = (BuildConfig.IS_PRO ? "com.mcal.apkeditor.pro" : "com.mcal.apkeditor");
         PackageManager pm = this.getPackageManager();
         try {
-            ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
+            ApplicationInfo ai = pm.getApplicationInfo(PACKAGE_NAME, 0);
             return ai.publicSourceDir;
         } catch (Throwable x) {
             x.printStackTrace();
         }
         return null;
-    }
-
-    @NonNull
-    private String getBinaryPath() {
-        return ScopedStorage.getBinDir().getPath();
     }
 
     @Override
@@ -289,9 +284,8 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
 
         @Override
         public void process() throws Exception {
-            String binaryPath = getBinaryPath();
-            String aaptPath = binaryPath + "aaptz";
-            String androidPath = binaryPath + "android-framework.jar";
+            String aaptPath = ScopedStorage.getAaptZ().getPath();
+            String androidPath = ScopedStorage.getFramework().getPath();
             CommandRunner cr = new CommandRunner();
             cr.runCommand(aaptPath + " z -I " + androidPath + " " + xmlPath + " " + tempPath + " " + getApkPath(), null, 5000, false);
             this.outMessage = cr.getStdOut();

@@ -91,8 +91,22 @@ object ScopedStorage {
     }
 
     @JvmStatic
+    fun getAaptZ(): File {
+        val path = File(getBinDir(), "aaptz")
+        path.setExecutable(true)
+        return path
+    }
+
+    @JvmStatic
     fun getAapt2(): File {
         val path = File(getBinDir(), "aapt2")
+        path.setExecutable(true)
+        return path
+    }
+
+    @JvmStatic
+    fun getFramework(): File {
+        val path = File(getBinDir(), "android-framework.jar")
         path.setExecutable(true)
         return path
     }
