@@ -276,8 +276,8 @@ public class PatchRuleMatchReplace extends PatchRule {
         List<String> groups = sec.groupStrs;
         final String signature = SignatureHelper.getApkSignatureData(ScopedStorage.getDecodedDir().getPath());
         for (int i = 0; i < groups.size(); ++i) {
-            result = result.replace("${GROUP" + (i + 1) + "}", groups.get(i));
-            result = result.replace("${SIGNATURE}", signature);
+            result = result.replace("${GROUP" + (i + 1) + "}", groups.get(i))
+                    .replace("${SIGNATURE}", signature);
         }
         return result;
     }

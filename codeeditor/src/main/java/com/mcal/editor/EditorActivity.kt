@@ -49,6 +49,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.regex.PatternSyntaxException
 
+
 class EditorActivity : CustomizedLangActivity(),
     SmaliMethodsDialogs.ISmaliMethodClicked {
     private lateinit var binding: ActivitySoraeditorBinding
@@ -386,7 +387,10 @@ class EditorActivity : CustomizedLangActivity(),
         }
     }
 
+    private var extraString: String? = null
+
     private fun initIntent() {
+        extraString = intent.getStringExtra("extraString")
         filePathList = intent.getStringArrayListExtra("fileList")
         filePath = File(intent.getStringExtra("filePath").toString())
         curFileIndex = intent.getIntExtra("curFileIndex", 0)
@@ -400,6 +404,16 @@ class EditorActivity : CustomizedLangActivity(),
             //resIdTooBig = id[0]
             resIdFileSaved = id[1]
             resIdNotFound = id[2]
+        }
+    }
+
+    private fun setResult() {
+        // Используется в AXML редакторе
+        filePath?.let { path ->
+            val intent = Intent()
+            intent.putExtra("filePath", path.path)
+            intent.putExtra("extraString", path.name)
+            setResult(1, intent)
         }
     }
 
@@ -538,7 +552,7 @@ class EditorActivity : CustomizedLangActivity(),
     }
 
     // Save the document
-    private fun save() {
+    private fun save(exit: Boolean = false) {
         ProgressDialog(
             this, "Saving", "Please wait...", false,
             object : ProgressDialog.ProcessingInterface {
@@ -553,15 +567,21 @@ class EditorActivity : CustomizedLangActivity(),
                             copyBack2RealPath(path)
                         }
                         withContext(Dispatchers.Main) {
+                            setResult()
                             openFile()
                             updatePositionText()
                             updateBtnState()
+                            if (exit) {
+                                finish()
+                            }
                         }
                     }
                     //setResult(1) todo
                 }
 
-                override fun afterProcess() {}
+                override fun afterProcess() {
+                    setResult()
+                }
             }, resIdFileSaved
         ).show()
     }
@@ -574,8 +594,7 @@ class EditorActivity : CustomizedLangActivity(),
             }
             dialog.setMessage("Do you want to save this file?")
             dialog.setPositiveButton("Save") { _, _ ->
-                save()
-                super.onBackPressed()
+                save(true)
             }
             dialog.setNegativeButton("Don't save") { _, _ ->
                 super.onBackPressed()
@@ -792,15 +811,15 @@ class EditorActivity : CustomizedLangActivity(),
         } else if (id == R.id.move_right) {
             editor.moveSelectionRight()
         } else if (id == R.id.magnifier) {
-            val result = item.isChecked
-            item.isChecked = !result
-            editor.getComponent(Magnifier::class.java).isEnabled = result
-            Preferences.setMagnifier(result)
+            val isChecked = !item.isChecked
+            item.isChecked = isChecked
+            editor.getComponent(Magnifier::class.java).isEnabled = isChecked
+            Preferences.setMagnifier(isChecked)
         } else if (id == R.id.useIcu) {
-            val result = item.isChecked
-            item.isChecked = !result
-            editor.props.useICULibToSelectWords = result
-            Preferences.setUseICULibrary(result)
+            val isChecked = !item.isChecked
+            item.isChecked = isChecked
+            editor.props.useICULibToSelectWords = isChecked
+            Preferences.setUseICULibrary(isChecked)
         } else if (id == R.id.code_format) {
             editor.formatCodeAsync()
         } else if (id == R.id.switch_language) {
@@ -864,18 +883,20 @@ class EditorActivity : CustomizedLangActivity(),
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
         } else if (id == R.id.text_wordwrap) {
-            val result = item.isChecked
-            item.isChecked = !result
-            editor.isWordwrap = result
-            Preferences.setWordWrap(result)
+            val isChecked = !item.isChecked
+            item.isChecked = isChecked
+            editor.isWordwrap = isChecked
+            Preferences.setWordWrap(isChecked)
         } else if (id == R.id.editor_line_number) {
-            editor.isLineNumberEnabled = !editor.isLineNumberEnabled
-            item.isChecked = editor.isLineNumberEnabled
-            Preferences.setLineNumberEnabled(item.isChecked)
+            val isChecked = !item.isChecked
+            item.isChecked = isChecked
+            editor.isLineNumberEnabled = isChecked
+            Preferences.setLineNumberEnabled(isChecked)
         } else if (id == R.id.pin_line_number) {
-            editor.setPinLineNumber(!editor.isLineNumberPinned)
-            item.isChecked = editor.isLineNumberPinned
-            Preferences.setLineNumberPinned(item.isChecked)
+            val isChecked = !item.isChecked
+            item.isChecked = isChecked
+            editor.setPinLineNumber(isChecked)
+            Preferences.setLineNumberPinned(isChecked)
         }
         return super.onOptionsItemSelected(item)
     }
