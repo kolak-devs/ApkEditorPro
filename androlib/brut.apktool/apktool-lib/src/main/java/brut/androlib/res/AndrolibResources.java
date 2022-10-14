@@ -110,47 +110,22 @@ final public class AndrolibResources {
         return getResTable(apkFile, true);
     }
 
-    public ResTable getResTable(ExtFile apkFile, boolean loadMainPkg)
+    public ResTable getResTable(ExtFile apkFile, boolean loadPackages)
             throws AndrolibException {
         ResTable resTable = new ResTable(this);
-        if (loadMainPkg) {
-            loadMainPkg(resTable, apkFile);
+        if (loadPackages) {
+            loadPackages(resTable, apkFile);
         }
         return resTable;
     }
 
-    public ResPackage loadMainPkg(ResTable resTable, ExtFile apkFile)
+    public void loadPackages(ResTable resTable, ExtFile apkFile)
             throws AndrolibException {
         LOGGER.info("Loading resource table...");
         ResPackage[] pkgs = getResPackagesFromApk(apkFile, resTable, sKeepBroken);
-        ResPackage pkg;
-
-        if (Preferences.isFixMultiRes()) {
-            pkg = pkgs[0];
-        } else {
-            switch (pkgs.length) {
-                case 0:
-                    pkg = null;
-                    break;
-                case 1:
-                    pkg = pkgs[0];
-                    break;
-                case 2:
-                    LOGGER.warning("Skipping package group: " + pkgs[0].getName());
-                    pkg = pkgs[1];
-                    break;
-                default:
-                    pkg = selectPkgWithMostResSpecs(pkgs);
-                    break;
-            }
+        for (ResPackage _pkg : pkgs) {
+            resTable.addPackage(_pkg, true);
         }
-
-        if (pkg == null) {
-            throw new AndrolibException("arsc files with zero packages or no arsc file found.");
-        }
-
-        resTable.addPackage(pkg, true);
-        return pkg;
     }
 
     public ResPackage selectPkgWithMostResSpecs(ResPackage[] pkgs) {
@@ -286,13 +261,10 @@ final public class AndrolibResources {
         ResAttrDecoder attrDecoder = duo.m2.getAttrDecoder();
 
         attrDecoder.setCurrentPackage(resTable.listMainPackages().iterator().next());
-        Directory inApk, in = null, out;
+        Directory inApk, in = null;
 
         try {
-            out = new FileDirectory(outDir);
-
             inApk = apkFile.getDirectory();
-            out = out.createDir("res");
             if (inApk.containsDir("res")) {
                 in = inApk.getDir("res");
             }
@@ -310,18 +282,23 @@ final public class AndrolibResources {
         for (ResPackage pkg : resTable.listMainPackages()) {
             attrDecoder.setCurrentPackage(pkg);
 
-            LOGGER.info("Decoding file-resources...");
-            for (ResResource res : pkg.listFiles()) {
-                fileDecoder.decode(res, in, out);
-            }
+            try {
+                Directory output = new FileDirectory(outDir).createDir("res" + (pkg.getId() == 127 ? "" : "_" + pkg.getName()));
 
-            LOGGER.info("Decoding values */* XMLs...");
-            for (ResValuesFile valuesFile : pkg.listValuesFiles()) {
-                generateValuesFile(valuesFile, out, xmlSerializer);
+                LOGGER.info("Decoding " + pkg.getName() + " (0x" + Integer.toHexString(pkg.getId()) + ") file-resources...");
+                for (ResResource res : pkg.listFiles()) {
+                    fileDecoder.decode(res, in, output);
+                }
+
+                LOGGER.info("Decoding " + pkg.getName() + " (0x" + Integer.toHexString(pkg.getId()) + ") values- */* XMLs...");
+                for (ResValuesFile valuesFile : pkg.listValuesFiles()) {
+                    generateValuesFile(valuesFile, output, xmlSerializer);
+                }
+                generatePublicXml(pkg, output, xmlSerializer);
+            } catch (DirectoryException ex) {
+                throw new AndrolibException(ex);
             }
-            generatePublicXml(pkg, out, xmlSerializer);
         }
-
         AndrolibException decodeError = duo.m2.getFirstError();
         if (decodeError != null) {
             throw decodeError;
