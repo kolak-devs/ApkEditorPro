@@ -119,38 +119,14 @@ final public class AndrolibResources {
         return resTable;
     }
 
-    public ResPackage loadMainPkg(ResTable resTable, ExtFile apkFile)
+    public void loadMainPkg(ResTable resTable, ExtFile apkFile)
             throws AndrolibException {
         LOGGER.info("Loading resource table...");
         ResPackage[] pkgs = getResPackagesFromApk(apkFile, resTable, sKeepBroken);
-        ResPackage pkg;
 
-        if (Preferences.isFixMultiRes()) {
-            pkg = pkgs[0];
-        } else {
-            switch (pkgs.length) {
-                case 0:
-                    pkg = null;
-                    break;
-                case 1:
-                    pkg = pkgs[0];
-                    break;
-                case 2:
-                    LOGGER.warning("Skipping package group: " + pkgs[0].getName());
-                    pkg = pkgs[1];
-                    break;
-                default:
-                    pkg = selectPkgWithMostResSpecs(pkgs);
-                    break;
-            }
+        for (ResPackage _pkg : pkgs) {
+            resTable.addPackage(_pkg, true);
         }
-
-        if (pkg == null) {
-            throw new AndrolibException("arsc files with zero packages or no arsc file found.");
-        }
-
-        resTable.addPackage(pkg, true);
-        return pkg;
     }
 
     public ResPackage selectPkgWithMostResSpecs(ResPackage[] pkgs) {
@@ -288,27 +264,29 @@ final public class AndrolibResources {
         attrDecoder.setCurrentPackage(resTable.listMainPackages().iterator().next());
         Directory inApk, in = null, out;
 
-        try {
-            out = new FileDirectory(outDir);
-
-            inApk = apkFile.getDirectory();
-            out = out.createDir("res");
-            if (inApk.containsDir("res")) {
-                in = inApk.getDir("res");
-            }
-            if (in == null && inApk.containsDir("r")) {
-                in = inApk.getDir("r");
-            }
-            if (in == null && inApk.containsDir("R")) {
-                in = inApk.getDir("R");
-            }
-        } catch (DirectoryException ex) {
-            throw new AndrolibException(ex);
-        }
-
         ExtMXSerializer xmlSerializer = getResXmlSerializer();
+
+
         for (ResPackage pkg : resTable.listMainPackages()) {
             attrDecoder.setCurrentPackage(pkg);
+
+            try {
+                out = new FileDirectory(outDir);
+
+                inApk = apkFile.getDirectory();
+                out = out.createDir("res" + (pkg.getId() == 127 ? "" : "_" + pkg.getId()));
+                if (inApk.containsDir("res")) {
+                    in = inApk.getDir("res");
+                }
+                if (in == null && inApk.containsDir("r")) {
+                    in = inApk.getDir("r");
+                }
+                if (in == null && inApk.containsDir("R")) {
+                    in = inApk.getDir("R");
+                }
+            } catch (DirectoryException ex) {
+                throw new AndrolibException(ex);
+            }
 
             LOGGER.info("Decoding file-resources...");
             for (ResResource res : pkg.listFiles()) {
