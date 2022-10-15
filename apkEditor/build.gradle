@@ -57,6 +57,9 @@ android {
             versionCode versionBuild
             versionName "${versionMajor}.${versionMinor}.${versionPatch}"
             multiDexEnabled true
+
+            resConfigs 'ar', 'be', 'cs', 'de', 'es', 'fa', 'fr', 'hu', 'it',
+                        'iw', 'nl', 'pl', 'pt', 'ru', 'sk', 'tr', 'uk', 'vi', 'zh'
         }
     } else {
         throw new GradleException("Could not read version.properties!")
