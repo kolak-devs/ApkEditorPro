@@ -33,12 +33,44 @@ object Aapt2 {
         args.add("--dir")
         args.add(resDir.absolutePath)
         args.add("-o")
-        args.add(createNewFile(buildDir, "resources.zip").absolutePath)
+        args.add(createNewFile(buildDir, resDir.name + ".zip").absolutePath)
 
         val aaptProcess = Runtime.getRuntime().exec(args.toTypedArray())
         val error = aaptProcess.errorStream.readInputStream()
         if (error.isNotEmpty()) {
             throw Exception(formatLog(error))
+        }
+
+        resDir.parent?.let { path ->
+            compileLibraries(File(path), buildDir)
+        }
+    }
+
+    private fun compileLibraries(
+        path: File,
+        buildDir: File
+    ) {
+        path.listFiles()?.let { resources ->
+            for (resDir in resources) {
+                if (resDir.name.startsWith("res_")) {
+                    if (!resDir.exists() || !resDir.isDirectory) {
+                        continue
+                    }
+                    val args: MutableList<String> = ArrayList()
+                    args.add(ScopedStorage.getAapt2().path)
+                    args.add("compile")
+                    args.add("--dir")
+                    args.add(resDir.absolutePath)
+                    args.add("-o")
+                    args.add(createNewFile(buildDir, resDir.name + ".zip").absolutePath)
+
+                    val aaptProcess = Runtime.getRuntime().exec(args.toTypedArray())
+                    val error = aaptProcess.errorStream.readInputStream()
+                    if (error.isNotEmpty()) {
+                        throw Exception(formatLog(error))
+                    }
+                }
+            }
         }
     }
 
@@ -53,6 +85,10 @@ object Aapt2 {
         val args: MutableList<String> = ArrayList()
         args.add(getBinDir().toString() + File.separator + "aapt2")
         args.add("link")
+        include?.forEach { framework ->
+            args.add("-I")
+            args.add(framework.path)
+        }
         args.add("--allow-reserved-package-id")
         args.add("--no-version-vectors")
         args.add("--no-version-transitions")
@@ -61,16 +97,17 @@ object Aapt2 {
         args.add(minSdk ?: "21")
         args.add("--target-sdk-version")
         args.add(targetSdk ?: "32")
-
-        include?.forEach { framework ->
-            args.add("-I")
-            args.add(framework.path)
-        }
-
-        val projectZip = File(buildDir, "resources.zip")
-        if (projectZip.exists()) {
-            args.add("-R")
-            args.add(projectZip.absolutePath)
+        buildDir.listFiles()?.let { resources ->
+            for (resource in resources) {
+                if (resource.isDirectory) {
+                    continue
+                }
+                if (!resource.name.endsWith(".zip")) {
+                    continue
+                }
+                args.add("-R")
+                args.add(resource.absolutePath)
+            }
         }
 
         args.add("--manifest")
