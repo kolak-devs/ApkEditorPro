@@ -99,7 +99,7 @@ android {
             defaultConfig.versionCode = versionProps['CACHED_VERSION'].toInteger()
 
             ndk {
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
+                abiFilters "arm64-v8a", "x86_64"
             }
             buildConfigField "boolean", "IS_PRO", "true"
             buildConfigField "boolean", "WITH_SIGN", "true"
@@ -186,9 +186,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
-    implementation 'androidx.appcompat:appcompat-resources:1.6.0-rc01'
     implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.navigation:navigation-fragment:2.5.2'

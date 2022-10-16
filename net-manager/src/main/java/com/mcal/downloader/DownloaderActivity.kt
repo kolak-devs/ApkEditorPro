@@ -29,7 +29,7 @@ class DownloaderActivity : CustomizedLangActivity() {
     }
 
     companion object {
-        private val ABI = Build.CPU_ABI ?: Build.CPU_ABI2 ?: "armeabi-v7a"
+        private val ABI = Build.SUPPORTED_64_BIT_ABIS[0] ?: Build.SUPPORTED_32_BIT_ABIS[0] ?: "armeabi-v7a"
         private const val SDK = 33
     }
 }
