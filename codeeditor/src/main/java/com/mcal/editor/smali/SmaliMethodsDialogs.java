@@ -1,7 +1,5 @@
 package com.mcal.editor.smali;
 
-import static com.mcal.common.App.context;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;

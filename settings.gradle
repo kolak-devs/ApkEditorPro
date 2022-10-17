@@ -26,6 +26,7 @@ include ':patchview'
 include ':xpp3'
 include ':androlib'
 include ':smali'
+include(':bsh-engine')
 
 include ':jadx:jadx-core',
         ':jadx:jadx-cli',

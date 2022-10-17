@@ -181,6 +181,7 @@ dependencies {
     implementation project(':melissa')
     implementation project(':manifestparser')
     implementation project(':net-manager')
+    implementation project(':bsh-engine')
 
     implementation project(':libraries')
 

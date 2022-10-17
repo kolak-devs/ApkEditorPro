@@ -15,26 +15,28 @@ open class CustomizedLangActivity : SwipeBackActivity() {
         setEdgeLevel(SwipeBackLayout.EdgeLevel.MIN)
     }
 
-    fun setupToolbar(
-        id: Int, text: String?, back: Boolean = false,
-    ) {
-        val toolbar = findViewById<MaterialToolbar>(id)
-        setSupportActionBar(toolbar)
-        supportActionBar?.apply {
-            title = text
-            setDisplayHomeAsUpEnabled(back)
-            setDisplayShowHomeEnabled(back)
-        }
+    fun setupToolbar(id: Int, text: Int, back: Boolean = false) {
+        setToolbar(id, getString(text), null, back)
     }
 
-    fun setupToolbar(
-        id: Int, text: String?, message: String = "",  back: Boolean = false,
-    ) {
+    fun setupToolbar(id: Int, text: Int, message: String? = null, back: Boolean = false) {
+        setToolbar(id, getString(text), message, back)
+    }
+
+    fun setupToolbar(id: Int, text: String?, back: Boolean = false) {
+        setToolbar(id, text, null, back)
+    }
+
+    fun setupToolbar(id: Int, text: String?, message: String? = null, back: Boolean = false) {
+        setToolbar(id, text, message, back)
+    }
+
+    private fun setToolbar(id: Int, text: String?, message: String?, back: Boolean = false) {
         val toolbar = findViewById<MaterialToolbar>(id)
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             title = text
-            if (message.isNotEmpty()) {
+            if (!message.isNullOrEmpty()) {
                 subtitle = message
             }
             setDisplayHomeAsUpEnabled(back)
@@ -43,8 +45,8 @@ open class CustomizedLangActivity : SwipeBackActivity() {
     }
 
     fun setVisibility(view: View, mode: Int) {
-        if(view.visibility!=mode) {
-            view.visibility=mode
+        if (view.visibility != mode) {
+            view.visibility = mode
         }
     }
 

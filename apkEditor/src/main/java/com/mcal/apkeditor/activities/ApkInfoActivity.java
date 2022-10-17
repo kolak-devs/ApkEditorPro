@@ -56,6 +56,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.androlib.LanguageMapping;
+import com.mcal.androlib.util.OpenFiles;
 import com.mcal.apkeditor.ApkComposeService;
 import com.mcal.apkeditor.ApkParseConsumer;
 import com.mcal.apkeditor.ApkParseThread;
@@ -91,6 +92,7 @@ import com.mcal.apkeditor.translate.PossibleLanguages;
 import com.mcal.apkeditor.translate.TranslateItem;
 import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
 import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
+import com.mcal.bshengine.BshEngineActivity;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.Preferences;
 import com.mcal.common.utils.ActivityHelper;
@@ -105,7 +107,6 @@ import com.mcal.common.utils.UriUtils;
 import com.mcal.common.utils.ZipHelper;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
-import com.mcal.androlib.util.OpenFiles;
 import com.mcal.pngeditor.PhotoViewerActivity;
 
 import org.jetbrains.annotations.Contract;
@@ -200,6 +201,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private ManifestListAdapter manifestListAdapter;
     private LinearLayout loadingLayout;
     private ImageButton patchMenu;
+    private ImageButton bshEngine;
     private Button saveBtn;
     // APK parser
     private ApkParseThread parseThread;
@@ -696,6 +698,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         updateSearchOption();
 
         patchMenu.setVisibility(View.VISIBLE);
+        bshEngine.setVisibility(View.VISIBLE);
         if (!BuildConfig.PARSER_ONLY) {
             saveBtn.setVisibility(View.VISIBLE);
         }
@@ -1186,6 +1189,10 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // Apply a patch
         else if (id == R.id.menu_apply_patch) {
             new PatchDialog(this, this);
+        } else if (id == R.id.bsh_patcher) {
+            Intent intent = new Intent(this, BshEngineActivity.class);
+            intent.putExtra("filePath", decodeRootPath);
+            startActivity(intent);
         }
 
         // Auto translate
@@ -1247,6 +1254,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         patchMenu = findViewById(R.id.menu_apply_patch);
         patchMenu.setOnClickListener(this);
+        bshEngine = findViewById(R.id.bsh_patcher);
+        bshEngine.setOnClickListener(this);
     }
 
     private void collectAndSaveChangedString() {
@@ -1607,6 +1616,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             }
             showDecodedFileList();
             patchMenu.setVisibility(View.VISIBLE);
+            bshEngine.setVisibility(View.VISIBLE);
             if (!BuildConfig.PARSER_ONLY) {
                 saveBtn.setVisibility(View.VISIBLE);
             }

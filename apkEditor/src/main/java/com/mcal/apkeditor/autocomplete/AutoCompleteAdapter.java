@@ -32,7 +32,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         filter = new ItemFilter();
 
-        String history = App.getPreferences().getString(tag, "");
+        String history = new App().getPreferences().getString(tag, "");
         if (!history.equals("")) {
             historyWords = history.split("\n");
         } else {
