@@ -96,8 +96,7 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
             arrayOf(
                 getString(R.string.full_edit),
                 getString(R.string.simple_edit),
-                getString(R.string.common_edit),
-                getString(R.string.xml_file_edit)
+                getString(R.string.common_edit)
             )
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
@@ -116,15 +115,6 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
                 }
                 FileListActivity.COMMON_EDIT -> {
                     intent = Intent(this, CommonEditActivity::class.java)
-                    intent?.let { i ->
-                        ActivityHelper.attachParam(i, "apkPath", filePath)
-                        startActivity(i)
-                        finish()
-                    }
-                    p112.dismiss()
-                }
-                FileListActivity.XML_FILE_EDIT -> {
-                    intent = Intent(this, AxmlEditActivity::class.java)
                     intent?.let { i ->
                         ActivityHelper.attachParam(i, "apkPath", filePath)
                         startActivity(i)

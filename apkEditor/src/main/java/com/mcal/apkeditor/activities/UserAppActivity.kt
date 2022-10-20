@@ -180,7 +180,6 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                 getString(R.string.full_edit),
                 getString(R.string.simple_edit),
                 getString(R.string.common_edit),
-                getString(R.string.xml_file_edit),
                 getString(R.string.edit_data_root)
             )
         ) { p112: DialogInterface, p2: Int ->
@@ -206,14 +205,6 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                         finish()
                     }
                     p112.dismiss()
-                }
-                XML_FILE_EDIT -> {
-                    intent = Intent(this, AxmlEditActivity::class.java)
-                    intent?.let { i ->
-                        ActivityHelper.attachParam(i, "apkPath", filePath)
-                        startActivity(i)
-                        finish()
-                    }
                 }
                 DATA_EDIT -> {
                     val prefIntent = Intent(this, PrefOverallActivity::class.java)
@@ -342,7 +333,6 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
         const val SIMPLE_EDIT = 1
         const val COMMON_EDIT = 2
         const val DATA_EDIT = 3
-        const val XML_FILE_EDIT = 4
 
         const val DETAILS = 0
         const val BACKUP = 1

@@ -245,7 +245,6 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
             getString(R.string.full_edit),
             getString(R.string.simple_edit),
             getString(R.string.common_edit),
-            getString(R.string.xml_file_edit),
             getString(R.string.sign_apk),
         )
         if (BuildConfig.DEBUG) {
@@ -275,20 +274,11 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                     }
                     p112.dismiss()
                 }
-                XML_FILE_EDIT -> {
-                    intent = Intent(this, AxmlEditActivity::class.java)
-                    intent?.let { i ->
-                        ActivityHelper.attachParam(i, "apkPath", filePath)
-                        startActivity(i)
-                        finish()
-                    }
-                    p112.dismiss()
-                }
                 SIGN_APK -> {
                     sign(filePath, filePath.replace(".apk", "_sign.apk"))
                     p112.dismiss()
                 }
-                5 -> {
+                4 -> {
                     intent = Intent(this, FullEditorActivity::class.java)
                     intent?.let { i ->
                         ActivityHelper.attachParam(i, "apkPath", filePath)
@@ -433,7 +423,6 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         const val FULL_EDIT = 0
         const val SIMPLE_EDIT = 1
         const val COMMON_EDIT = 2
-        const val XML_FILE_EDIT = 3
-        const val SIGN_APK = 4
+        const val SIGN_APK = 3
     }
 }
