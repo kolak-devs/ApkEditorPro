@@ -3,6 +3,7 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
 dependencyResolutionManagement {
@@ -10,6 +11,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -26,7 +28,8 @@ include ':patchview'
 include ':xpp3'
 include ':androlib'
 include ':smali'
-include(':bsh-engine')
+include ':bsh-engine'
+include ':filepicker'
 
 include ':jadx:jadx-core',
         ':jadx:jadx-cli',

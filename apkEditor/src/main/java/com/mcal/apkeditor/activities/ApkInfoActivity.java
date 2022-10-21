@@ -1191,6 +1191,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         } else if (id == R.id.bsh_patcher) {
             Intent intent = new Intent(this, BshEngineActivity.class);
             intent.putExtra("filePath", decodeRootPath);
+            intent.putExtra("apkPath", apkPath);
             startActivity(intent);
         }
 

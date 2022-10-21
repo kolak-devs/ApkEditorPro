@@ -1,12 +1,16 @@
 package com.mcal.bshengine.api
 
-import android.content.Context
 import android.os.Environment
 import java.io.File
 
-class ZScopedStorage(context: Context, private var decodedDir: String) {
+class XStorage(private var decodedDir: String, private var apkFile: String) {
+
     fun getStorageDir(): File {
         return Environment.getExternalStorageDirectory()
+    }
+
+    fun getApk(): File {
+        return File(apkFile)
     }
 
     fun getProject(): File {

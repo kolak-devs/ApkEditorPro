@@ -274,7 +274,7 @@ class EditorActivity : CustomizedLangActivity(),
         filePath?.name?.let { fileName ->
             return if (fileName.endsWith(".smali")) {
                 getTextMateLanguageForSmali()
-            } else if (fileName.endsWith(".java")) {
+            } else if (fileName.endsWith(".java")||fileName.endsWith(".bsh")) {
                 getTextMateLanguageForJava()
             } else if (fileName.endsWith(".kt")) {
                 getTextMateLanguageForKotlin()

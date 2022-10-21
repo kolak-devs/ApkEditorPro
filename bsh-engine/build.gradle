@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         minSdk 26
-        targetSdk 32
+        targetSdk 33
     }
 
     compileOptions {
@@ -26,17 +26,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
     namespace 'com.mcal.bshengine'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':core')
+    implementation project(':codeeditor')
     implementation project(":melissa")
+    implementation project(":filepicker")
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     
     implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.gms:play-services-base:18.1.0'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
 }

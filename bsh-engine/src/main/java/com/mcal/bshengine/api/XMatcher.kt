@@ -1,9 +1,8 @@
 package com.mcal.bshengine.api
 
-import android.content.Context
 import java.util.regex.Pattern
 
-class ZMatcher(context: Context) {
+class XMatcher() {
     /**
      * @param regex - регулярное выражение
      * @param source - текст в котором нужно найти группу и заменить
