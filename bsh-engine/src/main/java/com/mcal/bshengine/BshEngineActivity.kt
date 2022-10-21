@@ -13,6 +13,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.bshengine.api.*
 import com.mcal.bshengine.databinding.BshengineActivityBinding
 import com.mcal.common.activities.CustomizedLangActivity
+import com.mcal.common.activities.WebViewActivity
+import com.mcal.common.utils.ActivityHelper.attachParam
 import com.mcal.editor.TextEditor.getSoraEditor
 import me.rosuh.filepicker.config.FilePickerManager
 import java.io.File
@@ -92,7 +94,10 @@ class BshEngineActivity : CustomizedLangActivity() {
                         return true
                     }
                     R.id.menu_patch_doc -> {
-                        startActivity(Intent(this@BshEngineActivity, WebViewActivity::class.java))
+                        val link = "https://timscriptov.ru/apkeditor/doc/bsh-patcher/index-v1.html"
+                        val intent = Intent(this@BshEngineActivity, WebViewActivity::class.java)
+                        attachParam(intent, "htmlUrl", link)
+                        startActivity(intent)
                         return true
                     }
                 }

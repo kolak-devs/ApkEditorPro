@@ -1,4 +1,4 @@
-package com.mcal.bshengine.utils;
+package com.mcal.common.utils;
 
 import android.util.Log;
 

@@ -4,8 +4,6 @@
 
         <activity android:name=".BshEngineActivity" />
 
-        <activity android:name=".WebViewActivity" />
-
     </application>
 
 </manifest>

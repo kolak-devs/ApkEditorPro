@@ -2,9 +2,11 @@ package com.mcal.downloader
 
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.common.activities.CustomizedLangActivity
+import com.mcal.common.utils.isNetworkAvailable
 
 class DownloaderActivity : CustomizedLangActivity() {
     val tools = listOf(
@@ -26,6 +28,13 @@ class DownloaderActivity : CustomizedLangActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isNetworkAvailable(this)) {
+            Toast.makeText(this, "Отсутствует Интернет подключение", Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {

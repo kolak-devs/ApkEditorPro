@@ -1,4 +1,4 @@
-package com.mcal.bshengine.utils
+package com.mcal.common.utils
 
 import com.mcal.common.data.Preferences
 import org.jetbrains.annotations.Contract
