@@ -10,7 +10,7 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.mcal.apkeditor.dialogs.StringValueDialog
-import common.types.StringItem
+import com.mcal.apkeditor.activities.types.StringItem
 
 class StringListAdapter(activity: Activity) : BaseAdapter(), OnItemClickListener {
     private val valueList: MutableList<StringItem> = ArrayList()

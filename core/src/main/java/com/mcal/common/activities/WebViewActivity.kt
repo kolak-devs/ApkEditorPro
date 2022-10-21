@@ -2,10 +2,10 @@ package com.mcal.common.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import com.mcal.common.R
 import com.mcal.common.databinding.WebviewActivityBinding
 import com.mcal.common.utils.FileReader
@@ -42,14 +42,18 @@ class WebViewActivity : CustomizedLangActivity() {
                 }
             }
         } ?: run {
-            Toast.makeText(this, "Не верная ссылка, попробуйте позже", Toast.LENGTH_SHORT).show()
+            binding.errors.visibility = View.VISIBLE
+            binding.errors.text = "Не верная ссылка, попробуйте позже"
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (!isNetworkAvailable(this)) {
-            Toast.makeText(this, "Отсутствует Интернет подключение", Toast.LENGTH_SHORT).show()
+        binding.errors.visibility = if (!isNetworkAvailable(this)) {
+            binding.errors.text = "Отсутствует Интернет подключение"
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
 

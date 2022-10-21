@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import common.types.ProjectInfo;
+import com.mcal.apkeditor.activities.types.ProjectInfo;
 import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
 public class ProjectListActivity extends SwipeBackActivity implements View.OnClickListener {

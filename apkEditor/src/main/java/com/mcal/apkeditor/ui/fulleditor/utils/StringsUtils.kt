@@ -2,7 +2,7 @@ package com.mcal.apkeditor.ui.fulleditor.utils
 
 import brut.androlib.res.xml.ResXmlEncoders
 import com.mcal.androlib.KXmlSerializer
-import common.types.StringItem
+import com.mcal.apkeditor.activities.types.StringItem
 import org.xmlpull.v1.XmlSerializer
 import java.io.File
 import java.io.FileOutputStream

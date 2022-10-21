@@ -2,13 +2,14 @@ package com.mcal.downloader
 
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.isNetworkAvailable
+import com.mcal.downloader.databinding.DownloaderActivityBinding
 
 class DownloaderActivity : CustomizedLangActivity() {
+    lateinit var binding: DownloaderActivityBinding
     val tools = listOf(
         "android-framework.jar" to "https://timscriptov.ru/apkeditor/framework/$SDK/android.jar",
         "aapt" to "https://timscriptov.ru/apkeditor/bin/$ABI/aapt",
@@ -22,18 +23,22 @@ class DownloaderActivity : CustomizedLangActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_downloader)
+        binding = DownloaderActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupToolbar(R.id.toolbar, "Управление инструментарием", true)
         val adapter = DownloaderAdapter(tools)
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
+        val recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
     }
 
     override fun onResume() {
         super.onResume()
-        if (!isNetworkAvailable(this)) {
-            Toast.makeText(this, "Отсутствует Интернет подключение", Toast.LENGTH_SHORT).show()
+        binding.errors.visibility = if (!isNetworkAvailable(this)) {
+            binding.errors.text = "Отсутствует Интернет подключение"
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
 

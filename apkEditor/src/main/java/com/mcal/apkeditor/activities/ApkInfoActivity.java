@@ -139,9 +139,9 @@ import brut.androlib.res.data.value.ResReferenceValue;
 import brut.androlib.res.data.value.ResScalarValue;
 import brut.androlib.res.data.value.ResValue;
 import brut.util.Duo;
-import common.types.ActivityState;
-import common.types.ProjectInfo;
-import common.types.StringItem;
+import com.mcal.apkeditor.activities.types.ActivityState;
+import com.mcal.apkeditor.activities.types.ProjectInfo;
+import com.mcal.apkeditor.activities.types.StringItem;
 
 public class ApkInfoActivity extends CustomizedLangActivity
         implements OnItemClickListener, OnItemLongClickListener,

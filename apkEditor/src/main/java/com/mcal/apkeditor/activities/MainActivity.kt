@@ -9,14 +9,11 @@ import android.os.Process
 import android.view.*
 import android.widget.CheckBox
 import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,13 +25,13 @@ import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
 import com.mcal.apkeditor.prj.ProjectListActivity
-import com.mcal.apkeditor.utils.Native
 import com.mcal.apkeditor.utils.OnlineMessage
 import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.deleteAll
+import com.mcal.common.utils.isNetworkAvailable
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import com.mcal.downloader.DownloaderActivity
 import com.mikepenz.fastadapter.FastAdapter
@@ -44,9 +41,7 @@ import java.io.File
 import kotlin.system.exitProcess
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {
-    private var _binding: ActivityMainBinding? = null
-
-    private val binding get() = _binding!!
+    private lateinit var binding: ActivityMainBinding
 
     companion object {
         init {
@@ -63,7 +58,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, getString(R.string.app_name), false)
         addMenuProvider(object : MenuProvider {
@@ -135,6 +130,12 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             prompter?.showMessageDialog()
         }
         super.onResume()
+        binding.errors.visibility = if (!isNetworkAvailable(this)) {
+            binding.errors.text = "Отсутствует Интернет подключение"
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 
     public override fun onDestroy() {
@@ -169,9 +170,8 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(6, R.drawable.ic_exit_to_app, R.string.exit)
         )
 
-        fastApkAdapter.onClickListener = {
-                _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
-            when(mainMenuItem.id){
+        fastApkAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
+            when (mainMenuItem.id) {
                 0 -> {
                     val intent = Intent(this, FileListActivity::class.java)
                     startActivity(intent)
@@ -181,7 +181,8 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     val intent = Intent(this, UserAppActivity::class.java)
                     startActivity(intent)
                     true
-                } else -> false
+                }
+                else -> false
             }
         }
         fastAdapter.onClickListener =

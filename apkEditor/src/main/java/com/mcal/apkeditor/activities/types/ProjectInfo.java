@@ -1,4 +1,4 @@
-package common.types;
+package com.mcal.apkeditor.activities.types;
 
 import java.io.Serializable;
 
