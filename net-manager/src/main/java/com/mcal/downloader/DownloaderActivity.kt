@@ -13,7 +13,7 @@ class DownloaderActivity : CustomizedLangActivity() {
         "aapt2" to "https://timscriptov.ru/apkeditor/bin/$ABI/aapt2",
         "mycp" to "https://timscriptov.ru/apkeditor/bin/$ABI/mycp",
         "zipalign" to "https://timscriptov.ru/apkeditor/bin/$ABI/zipalign",
-        "aaptz" to "https://timscriptov.ru/apkeditor/bin/aaptz",
+        //"aaptz" to "https://timscriptov.ru/apkeditor/bin/aaptz",
         "testkey.pk8" to "https://timscriptov.ru/apkeditor/keys/testkey.pk8",
         "testkey.x509.pem" to "https://timscriptov.ru/apkeditor/keys/testkey.x509.pem",
     )

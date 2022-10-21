@@ -791,10 +791,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
                         }
 
                         // Locate the project folder
-                        String projectFolder = parentFolder.getPath() + File.separator + projectName;
-                        projectDir = new File(projectFolder);
+                        projectDir = new File(parentFolder, projectName);
                         if (projectDir.exists()) {
-                            projectDir = FileCopyDialog.getTargetNonExistFile(projectFolder, true);
+                            projectDir = FileCopyDialog.getTargetNonExistFile(projectDir.getPath(), true);
                         }
                         boolean ret = projectDir.mkdirs();
                         if (!ret) {

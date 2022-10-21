@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -23,6 +24,7 @@ import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.MainMenuItem
+import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
 import com.mcal.apkeditor.prj.ProjectListActivity
@@ -42,6 +44,10 @@ import java.io.File
 import kotlin.system.exitProcess
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {
+    private var _binding: ActivityMainBinding? = null
+
+    private val binding get() = _binding!!
+
     companion object {
         init {
             System.loadLibrary("apkeditorpro")
@@ -55,11 +61,10 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     // Used to show a dialog
     private var prompter: OnlineMessage? = null
 
-    private var mRecycler: RecyclerView? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupToolbar(R.id.toolbar, getString(R.string.app_name), false)
         addMenuProvider(object : MenuProvider {
             /**
@@ -138,36 +143,50 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
     private fun initUI() {
         findViewById<MaterialToolbar>(R.id.toolbar).subtitle = Utils.getVersionString()
+        val apkItemAdapter = ItemAdapter<MainMenuItem>()
+        val fastApkAdapter = FastAdapter.with(apkItemAdapter)
+
         val itemAdapter = ItemAdapter<MainMenuItem>()
         val fastAdapter = FastAdapter.with(itemAdapter)
 
-        mRecycler = findViewById(R.id.menu_recycler)
+        binding.apkRecycler.apply {
+            layoutManager = GridLayoutManager(this@MainActivity, 2)
+            adapter = fastApkAdapter
+        }
+        binding.menuRecycler.adapter = fastAdapter
 
-        mRecycler?.adapter = fastAdapter
         // id может быть любым числом, главное, чтобы оно было уникальным. Сделано для того, чтобы не ломалась логика
         // onClick при добавлении новых айтемов
+        apkItemAdapter.add(
+            MainMenuItem(0, R.drawable.ic_android, R.string.select_file),
+            MainMenuItem(1, R.drawable.apps_box, R.string.select_app),
+        )
         itemAdapter.add(
-            MainMenuItem(0, R.drawable.ic_android, R.string.select_apk_file),
-            MainMenuItem(1, R.drawable.ic_android, R.string.select_apk_from_app),
             MainMenuItem(2, R.drawable.round_inventory_2_24, R.string.projects),
             MainMenuItem(3, R.drawable.puzzle, R.string.odex_patcher),
             MainMenuItem(4, R.drawable.settings, R.string.tools_manager),
             MainMenuItem(5, R.drawable.round_logo_dev_24, R.string.view_logs),
             MainMenuItem(6, R.drawable.ic_exit_to_app, R.string.exit)
         )
+
+        fastApkAdapter.onClickListener = {
+                _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
+            when(mainMenuItem.id){
+                0 -> {
+                    val intent = Intent(this, FileListActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                1 -> {
+                    val intent = Intent(this, UserAppActivity::class.java)
+                    startActivity(intent)
+                    true
+                } else -> false
+            }
+        }
         fastAdapter.onClickListener =
             { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
                 when (mainMenuItem.id) {
-                    0 -> {
-                        val intent = Intent(this, FileListActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    1 -> {
-                        val intent = Intent(this, UserAppActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
                     2 -> {
                         val intent = Intent(this, ProjectListActivity::class.java)
                         startActivity(intent)
@@ -196,14 +215,14 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 }
             }
 
-        val msg = findViewById<TextView>(R.id.pirated_version_detected)
-        if (BuildConfig.DEBUG || Native.getSignature(this)
-                .startsWith("kQpOVghQhe8XLbkzKM4PynXi8R0=")
-        ) {
-            msg.visibility = View.INVISIBLE
-        } else {
-            msg.visibility = View.INVISIBLE
-        }
+//        val msg = findViewById<TextView>(R.id.pirated_version_detected)
+//        if (BuildConfig.DEBUG || Native.getSignature(this)
+//                .startsWith("kQpOVghQhe8XLbkzKM4PynXi8R0=")
+//        ) {
+//            msg.visibility = View.INVISIBLE
+//        } else {
+//            msg.visibility = View.INVISIBLE
+//        }
 
         if (!Preferences.isFrameworksInstalled()) {
             showToolManagerDialog()
@@ -265,11 +284,12 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
+                this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.POST_NOTIFICATIONS), 1
             )
         } else {
             initFile()
         }
+
     }
 
     private fun initFile() {

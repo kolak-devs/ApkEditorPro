@@ -19,56 +19,57 @@ object ScopedStorage {
 
     @JvmStatic
     fun getDecodedDir(): File {
-        val path = File(filesDir.path + File.separator + "decoded")
+        val path = File(filesDir, "decoded")
         if (!path.exists()) path.mkdirs()
         return path
     }
 
     @JvmStatic
     fun getApkEditorDir(): File {
-        val path = File("$storageDirectory/ApkEditor")
+        val parent = File(storageDirectory, Environment.DIRECTORY_DOCUMENTS)
+        val path = File(parent, "ApkEditor")
         if (!path.exists()) path.mkdirs()
         return path
     }
 
     @JvmStatic
     fun getBinDir(): File {
-        val path = File(filesDir.path + File.separator + "bin")
+        val path = File(filesDir, "bin")
         if (!path.exists()) path.mkdirs()
         return path
     }
 
     @JvmStatic
     fun getTmpDir(): File {
-        val path = File(getApkEditorDir().path + File.separator + "tmp")
+        val path = File(getApkEditorDir(), "tmp")
         if (!path.exists()) path.mkdirs()
         return path
     }
 
     @JvmStatic
     fun getTempDir(): File {
-        val path = File(getApkEditorDir().path + File.separator + "temp")
+        val path = File(getApkEditorDir(), "temp")
         if (!path.exists()) path.mkdirs()
         return path
     }
 
     @JvmStatic
     fun getBackupsDir(): File {
-        val path = File(getApkEditorDir().path + File.separator + "backups")
+        val path = File(getApkEditorDir(), "backups")
         if (!path.exists()) path.mkdirs()
         return path
     }
 
     @JvmStatic
     fun getDataDir(): File {
-        val path = File(filesDir.path + File.separator + "data")
+        val path = File(filesDir, "data")
         if (!path.exists()) path.mkdirs()
         return path
     }
 
     @JvmStatic
     fun getProjects(): File {
-        val path = File(getApkEditorDir().path + File.separator + "projects")
+        val path = File(getApkEditorDir(), "projects")
         if (!path.exists()) path.mkdirs()
         return path
     }
@@ -91,22 +92,8 @@ object ScopedStorage {
     }
 
     @JvmStatic
-    fun getAaptZ(): File {
-        val path = File(getBinDir(), "aaptz")
-        path.setExecutable(true)
-        return path
-    }
-
-    @JvmStatic
     fun getAapt2(): File {
         val path = File(getBinDir(), "aapt2")
-        path.setExecutable(true)
-        return path
-    }
-
-    @JvmStatic
-    fun getFramework(): File {
-        val path = File(getBinDir(), "android-framework.jar")
         path.setExecutable(true)
         return path
     }

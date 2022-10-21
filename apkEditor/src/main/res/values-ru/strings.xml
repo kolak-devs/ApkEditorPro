@@ -306,4 +306,7 @@
     <string name="dialog_install_frameworks">Установить фреймворки</string>
     <string name="dialog_install_frameworks_sum">Apk Editor требуется загрузить дополнительные файлы для декодирования apk (aapt/framework.jar/myсp). Без их загрузки приложение не будет работать</string>
     <string name="file_open_as">Open as...</string>
+    <string name="select_file">File</string>
+    <string name="select_app">Apps</string>
+    <string name="projects_show_all">Show all</string>
 </resources>
