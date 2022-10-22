@@ -1,12 +1,19 @@
 package com.mcal.common.activities
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.view.MenuProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.common.R
+import com.mcal.common.data.Preferences
 import com.mcal.common.databinding.WebviewActivityBinding
 import com.mcal.common.utils.FileReader
 import com.mcal.common.utils.HtmlRenderer
@@ -30,6 +37,11 @@ class WebViewActivity : CustomizedLangActivity() {
         webView.settings.allowFileAccess = true
         webView.settings.allowFileAccessFromFileURLs = true
         webView.settings.allowUniversalAccessFromFileURLs = true
+        val refresh = binding.refresh
+        refresh.setOnRefreshListener {
+            recreate()
+            refresh.isRefreshing = false
+        }
         intent.extras?.getString(HTML_URL)?.let { link ->
             mHtmlUrl = link
             CoroutineScope(Dispatchers.IO).launch {
@@ -38,13 +50,29 @@ class WebViewActivity : CustomizedLangActivity() {
                 }
                 val result = async.await()
                 withContext(Dispatchers.Main) {
-                    webView.loadDataWithBaseURL(link, result, "text/html", "UTF-8", link)
+                    val finalLink = link + "#googtrans(ru|" + Preferences.getWebViewLanguage() + ")"
+                    webView.loadDataWithBaseURL(finalLink, result, "text/html", "UTF-8", finalLink)
                 }
             }
         } ?: run {
             binding.errors.visibility = View.VISIBLE
             binding.errors.text = "Не верная ссылка, попробуйте позже"
         }
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_webview, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.menu_webview_language -> {
+                        webViewLanguageDialog()
+                        return true
+                    }
+                }
+                return false
+            }
+        })
     }
 
     override fun onResume() {
@@ -55,6 +83,30 @@ class WebViewActivity : CustomizedLangActivity() {
         } else {
             View.GONE
         }
+    }
+
+    private fun webViewLanguageDialog() {
+        val dialog = MaterialAlertDialogBuilder(this)
+        val items = arrayOf(
+            "Русский",
+            "English"
+        )
+        dialog.setItems(items) { p112: DialogInterface, p2: Int ->
+            when (p2) {
+                0 -> {
+                    Preferences.setWebViewLanguage("ru")
+                    p112.dismiss()
+                    recreate()
+                }
+                1 -> {
+                    Preferences.setWebViewLanguage("en")
+                    p112.dismiss()
+                    recreate()
+                }
+            }
+        }
+        dialog.create()
+        dialog.show()
     }
 
     private class ChromeClient(val activity: CustomizedLangActivity) : WebChromeClient() {

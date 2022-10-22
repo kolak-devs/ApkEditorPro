@@ -93,7 +93,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                         return true
                     }
                     R.id.menu_patch_doc -> {
-                        val link = "https://timscriptov.ru/apkeditor/doc/bsh-patcher/index-v1.html"
+                        val link = "$DOMAIN_COM/apkeditor/doc/bsh-patcher/index-v1.html"
                         val intent = Intent(this@BshEngineActivity, WebViewActivity::class.java)
                         attachParam(intent, "htmlUrl", link)
                         startActivity(intent)
@@ -138,6 +138,9 @@ class BshEngineActivity : CustomizedLangActivity() {
     }
 
     companion object {
+        private const val DOMAIN_RU = "https://timscriptov.ru"
+        private const val DOMAIN_COM = "https://timscriptov.com"
+
         private const val FILE_PATH = "filePath"
         private const val APK_PATH = "apkPath"
 
