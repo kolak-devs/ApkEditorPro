@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.core.widget.NestedScrollView
+        <com.mcal.common.view.NestedWebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -40,7 +40,7 @@
 
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </com.mcal.common.view.NestedWebView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

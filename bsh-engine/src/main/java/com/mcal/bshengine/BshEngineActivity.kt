@@ -93,7 +93,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                         return true
                     }
                     R.id.menu_patch_doc -> {
-                        val link = "$DOMAIN_COM/apkeditor/doc/bsh-patcher/index-v1.html"
+                        val link = "$DOMAIN_COM/apkeditor/doc/bsh-patcher/index.html"
                         val intent = Intent(this@BshEngineActivity, WebViewActivity::class.java)
                         attachParam(intent, "htmlUrl", link)
                         startActivity(intent)
