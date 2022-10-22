@@ -37,7 +37,6 @@ dependencies {
     implementation project(':core')
     implementation project(':codeeditor')
     implementation project(":melissa")
-    implementation project(":filepicker")
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     

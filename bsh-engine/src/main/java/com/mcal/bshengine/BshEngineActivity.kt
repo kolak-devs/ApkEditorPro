@@ -16,7 +16,6 @@ import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.activities.WebViewActivity
 import com.mcal.common.utils.ActivityHelper.attachParam
 import com.mcal.editor.TextEditor.getSoraEditor
-import me.rosuh.filepicker.config.FilePickerManager
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
@@ -32,10 +31,10 @@ class BshEngineActivity : CustomizedLangActivity() {
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "BSH Patcher", back = true)
         binding.btnSelectPatch.setOnClickListener {
-            FilePickerManager
-                .from(this)
-                .enableSingleChoice()
-                .forResult(FilePickerManager.REQUEST_CODE)
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "application/bsh"
+            startActivityForResult(intent, OPEN_REQUEST_CODE)
         }
         binding.btnStartPatch.setOnClickListener {
             try {
@@ -107,19 +106,18 @@ class BshEngineActivity : CustomizedLangActivity() {
     }
 
     @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            FilePickerManager.REQUEST_CODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    File(FilePickerManager.obtainData()[0]).takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
-                        binding.textScriptPatch.setText(it.name)
-                        scriptPath = it
-                    } ?: run {
-                        Toast.makeText(this, "Неподдерживаемый файл", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(this, "You didn't choose anything~", Toast.LENGTH_SHORT).show()
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == OPEN_REQUEST_CODE) {
+                resultData?.data?.path?.takeIf { path ->
+                    val file = File(path);file.exists() && file.name.endsWith(".bsh")
+                }?.let { path ->
+                    val file = File(path)
+                    binding.textScriptPatch.setText(file.name)
+                    scriptPath = file
+                } ?: run {
+                    Toast.makeText(this, "Неподдерживаемый файл", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -140,7 +138,9 @@ class BshEngineActivity : CustomizedLangActivity() {
     }
 
     companion object {
-        const val FILE_PATH = "filePath"
-        const val APK_PATH = "apkPath"
+        private const val FILE_PATH = "filePath"
+        private const val APK_PATH = "apkPath"
+
+        private const val OPEN_REQUEST_CODE = 41
     }
 }
