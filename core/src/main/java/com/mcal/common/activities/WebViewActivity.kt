@@ -39,8 +39,7 @@ class WebViewActivity : CustomizedLangActivity() {
         webView.settings.allowUniversalAccessFromFileURLs = true
         val refresh = binding.refresh
         refresh.setOnRefreshListener {
-            recreate()
-            refresh.isRefreshing = false
+            refresh()
         }
         intent.extras?.getString(HTML_URL)?.let { link ->
             mHtmlUrl = link
@@ -67,6 +66,10 @@ class WebViewActivity : CustomizedLangActivity() {
                 when (menuItem.itemId) {
                     R.id.menu_webview_language -> {
                         webViewLanguageDialog()
+                        return true
+                    }
+                    R.id.menu_webview_refresh -> {
+                        refresh()
                         return true
                     }
                 }
@@ -96,17 +99,24 @@ class WebViewActivity : CustomizedLangActivity() {
                 0 -> {
                     Preferences.setWebViewLanguage("ru")
                     p112.dismiss()
-                    recreate()
+                    refresh()
                 }
                 1 -> {
                     Preferences.setWebViewLanguage("en")
                     p112.dismiss()
-                    recreate()
+                    refresh()
                 }
             }
         }
         dialog.create()
         dialog.show()
+    }
+
+    fun refresh() {
+        val refresh = binding.refresh
+        refresh.isRefreshing = true
+        recreate()
+        refresh.isRefreshing = false
     }
 
     private class ChromeClient(val activity: CustomizedLangActivity) : WebChromeClient() {
