@@ -100,20 +100,18 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         pathTV = curDir
         setupToolbar(R.id.toolbar, curDir, true)
         val listView = findViewById<RecyclerView>(R.id.file_list)
-        folderWrapper = FolderListWrapper(this, listView, curDir, "/", this, this)
+        val wrapper = FolderListWrapper(this, listView, curDir, "/", this, this)
+        folderWrapper = wrapper
         val search = findViewById<EditText>(R.id.search_find)
         val searchBtn = findViewById<ImageButton>(R.id.search_text)
         searchBtn?.setOnClickListener {
             val constraint = search.text.toString()
             if (constraint.isNotEmpty()) {
-                val wrapper = folderWrapper
-                if (wrapper != null) {
-                    wrapper.mAdapter?.getData(null)?.let { currentFolder ->
-                        val intent = Intent(this@FileListActivity, ApkSearchActivity::class.java)
-                        ActivityHelper.attachParam(intent, "Keyword", constraint)
-                        ActivityHelper.attachParam(intent, "Path", currentFolder)
-                        this@FileListActivity.startActivity(intent)
-                    }
+                wrapper.mAdapter?.getData(null)?.let { currentFolder ->
+                    val intent = Intent(this@FileListActivity, ApkSearchActivity::class.java)
+                    ActivityHelper.attachParam(intent, "Keyword", constraint)
+                    ActivityHelper.attachParam(intent, "Path", currentFolder)
+                    this@FileListActivity.startActivity(intent)
                 }
             }
         }
