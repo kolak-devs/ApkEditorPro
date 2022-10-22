@@ -60,7 +60,7 @@ class WebViewActivity : CustomizedLangActivity() {
     private class ChromeClient(val activity: CustomizedLangActivity) : WebChromeClient() {
         override fun onReceivedTitle(view: WebView?, title: String?) {
             super.onReceivedTitle(view, title)
-            activity.setupToolbar(R.id.toolbar, title, back = true)
+            title?.let { activity.setupToolbar(R.id.toolbar, it, back = true) }
         }
     }
 

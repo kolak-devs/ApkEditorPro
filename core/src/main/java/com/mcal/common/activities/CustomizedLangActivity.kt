@@ -23,15 +23,15 @@ open class CustomizedLangActivity : SwipeBackActivity() {
         setToolbar(id, getString(text), message, back)
     }
 
-    fun setupToolbar(id: Int, text: String?, back: Boolean = false) {
+    fun setupToolbar(id: Int, text: String, back: Boolean = false) {
         setToolbar(id, text, null, back)
     }
 
-    fun setupToolbar(id: Int, text: String?, message: String? = null, back: Boolean = false) {
+    fun setupToolbar(id: Int, text: String, message: String? = null, back: Boolean = false) {
         setToolbar(id, text, message, back)
     }
 
-    private fun setToolbar(id: Int, text: String?, message: String?, back: Boolean = false) {
+    private fun setToolbar(id: Int, text: String, message: String?, back: Boolean = false) {
         val toolbar = findViewById<MaterialToolbar>(id)
         setSupportActionBar(toolbar)
         supportActionBar?.apply {

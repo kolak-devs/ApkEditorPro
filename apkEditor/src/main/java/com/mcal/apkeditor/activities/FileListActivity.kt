@@ -96,12 +96,11 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
     }
 
     private fun init() {
-        val rootPath = "/"
         val curDir = Preferences.getLastDirectory()
         pathTV = curDir
-        setupToolbar(R.id.toolbar, pathTV, true)
+        setupToolbar(R.id.toolbar, curDir, true)
         val listView = findViewById<RecyclerView>(R.id.file_list)
-        folderWrapper = FolderListWrapper(this, listView, curDir, rootPath, this, this)
+        folderWrapper = FolderListWrapper(this, listView, curDir, "/", this, this)
         val search = findViewById<EditText>(R.id.search_find)
         val searchBtn = findViewById<ImageButton>(R.id.search_text)
         searchBtn?.setOnClickListener {
