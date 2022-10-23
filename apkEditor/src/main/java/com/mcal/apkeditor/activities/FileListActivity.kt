@@ -296,7 +296,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 @Throws(Exception::class)
                 override fun process() {
                     CoroutineScope(Dispatchers.IO).launch {
-                        ApkSigner().signApk(unsignedPath, signedPath)
+                        ApkSigner().signApkCustom(unsignedPath, signedPath)
                     }
                 }
 
@@ -311,7 +311,6 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
         ).show()
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     override fun getFileIcon(
         dirPath: String,
         record: FileRecord?

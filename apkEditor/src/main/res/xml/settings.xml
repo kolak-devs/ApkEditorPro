@@ -11,6 +11,33 @@
             <intent android:action="com.mcal.action.SHOW_ABOUT" />
         </Preference>
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="Signing">
+        <SwitchPreference
+            android:key="signing_on"
+            android:title="Use custom signature file"
+            android:summary="You can place your custom JKS file into /Documents/ApkEditor/keys/"/>
+        <EditTextPreference
+            android:key="signing_pass"
+            android:title="Keystore password"/>
+        <EditTextPreference
+            android:key="signing_key_alias"
+            android:title="Key alias"/>
+        <EditTextPreference
+            android:key="signing_key_password"
+            android:title="Key password"/>
+        <SeekBarPreference
+            android:title="Signature version"
+            android:summary="Specify version of signature used to sign the APK. Must be from v1 to v4"
+            app:defaultValue="1"
+            app:min="1"
+            android:max="4"
+            app:showSeekBarValue="true"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:key="Appearance"
         android:layout="@layout/preferences_category"

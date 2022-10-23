@@ -332,4 +332,16 @@ public class Preferences {
     public static void setWebViewLanguage(String key) {
         App.getPreferences().edit().putString("webview_language", key).apply();
     }
+
+    public static String getKSPass(){
+        return App.getPreferences().getString("signing_pass", "");
+    }
+
+    public static String getKSAlias(){
+        return App.getPreferences().getString("signing_key_alias", "");
+    }
+
+    public static String getKeyPass(){
+        return App.getPreferences().getString("signing_key_password", "");
+    }
 }

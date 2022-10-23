@@ -97,4 +97,17 @@ object ScopedStorage {
         path.setExecutable(true)
         return path
     }
+
+    @JvmStatic
+    fun getKeysDir(): File {
+        val path = File(getApkEditorDir(), "keys")
+        if (!path.exists()) path.mkdirs()
+        return path
+    }
+
+    @JvmStatic
+    fun getKey(): File? {
+        val ks = getKeysDir().listFiles()
+        return ks?.get(0)
+    }
 }
