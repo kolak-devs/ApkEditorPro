@@ -25,8 +25,11 @@ import com.mcal.apkeditor.ui.fulleditor.FullEditorActivity
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
-import com.mcal.common.utils.*
+import com.mcal.common.utils.ActivityHelper
+import com.mcal.common.utils.ApkInfoParser
+import com.mcal.common.utils.FileRecord
 import com.mcal.common.utils.ScopedStorage.storageDirectory
+import com.mcal.common.utils.findExt
 import com.mcal.common.view.ProgressDialog
 import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.folderlist.FolderListWrapper
@@ -293,9 +296,7 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 @Throws(Exception::class)
                 override fun process() {
                     CoroutineScope(Dispatchers.IO).launch {
-                        if (ScopedStorage.getKey() != null) {
-                            ApkSigner().signApkCustom(unsignedPath, signedPath)
-                        } else Toast.makeText(this@FileListActivity, "Please set-up keystore params in settings!", Toast.LENGTH_SHORT).show()
+                        ApkSigner().signApkCustom(unsignedPath, signedPath)
                     }
                 }
 
