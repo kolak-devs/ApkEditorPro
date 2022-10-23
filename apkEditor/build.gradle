@@ -53,7 +53,7 @@ android {
             applicationId "com.mcal.apkeditor.pro"
             minSdk 26
             //noinspection ExpiredTargetSdkVersion
-            targetSdk 33
+            targetSdk 26
             versionCode versionBuild
             versionName "${versionMajor}.${versionMinor}.${versionPatch}"
             multiDexEnabled true
