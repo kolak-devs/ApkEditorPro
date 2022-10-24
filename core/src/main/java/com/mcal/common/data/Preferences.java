@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Build;
 
 import com.mcal.common.App;
-import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.CommandRunner;
+import com.mcal.common.utils.ScopedStorage;
 
 public class Preferences {
     // Some aapt must pass "--no-version-vectors" option to get the correct result
@@ -333,15 +333,23 @@ public class Preferences {
         App.getPreferences().edit().putString("webview_language", key).apply();
     }
 
-    public static String getKSPass(){
+    public static String getKSPass() {
         return App.getPreferences().getString("signing_pass", "");
     }
 
-    public static String getKSAlias(){
+    public static String getKSAlias() {
         return App.getPreferences().getString("signing_key_alias", "");
     }
 
-    public static String getKeyPass(){
+    public static String getKeyPass() {
         return App.getPreferences().getString("signing_key_password", "");
+    }
+
+    public static boolean isDomainCom() {
+        return App.getPreferences().getBoolean("domain_com", true);
+    }
+
+    public static void setDomainCom(boolean mode) {
+        App.getPreferences().edit().putBoolean("domain_com", mode).apply();
     }
 }

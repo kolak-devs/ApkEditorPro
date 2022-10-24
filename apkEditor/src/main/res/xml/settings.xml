@@ -17,24 +17,24 @@
         android:title="Signing">
         <SwitchPreference
             android:key="signing_on"
-            android:title="Use custom signature file"
-            android:summary="You can place your custom JKS file into /Documents/ApkEditor/keys/"/>
+            android:summary="You can place your custom JKS file into /Documents/ApkEditor/keys/"
+            android:title="Use custom signature file" />
         <EditTextPreference
             android:key="signing_pass"
-            android:title="Keystore password"/>
+            android:title="Keystore password" />
         <EditTextPreference
             android:key="signing_key_alias"
-            android:title="Key alias"/>
+            android:title="Key alias" />
         <EditTextPreference
             android:key="signing_key_password"
-            android:title="Key password"/>
+            android:title="Key password" />
         <SeekBarPreference
-            android:title="Signature version"
+            android:max="4"
             android:summary="Specify version of signature used to sign the APK. Must be from v1 to v4"
+            android:title="Signature version"
             app:defaultValue="1"
             app:min="1"
-            android:max="4"
-            app:showSeekBarValue="true"/>
+            app:showSeekBarValue="true" />
 
     </PreferenceCategory>
 
@@ -58,6 +58,13 @@
             android:key="Language"
             android:summary="@string/select_language_desc"
             android:title="@string/preferred_language" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="domain_com"
+            android:summaryOff="Russian"
+            android:summaryOn="Hong Kong"
+            android:title="Server" />
 
     </PreferenceCategory>
 
