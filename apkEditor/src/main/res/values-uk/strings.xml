@@ -215,4 +215,7 @@
     <string name="ui_monet_sum_on">App theme has been changed according to your current selected wallpaper</string>
     <string name="ui_monet_sum_off">Enable Material You dynamic theming support. Needs restart</string>
     <string name="file_open_as">Open as...</string>
+    <string name="tab_general">General</string>
+    <string name="tab_apk_decoding">Apk compiling</string>
+    <string name="tab_text_editor">Text editor</string>
 </resources>

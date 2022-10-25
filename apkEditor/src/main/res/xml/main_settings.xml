@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/about">
+        <Preference
+            android:icon="@drawable/ic_about"
+            android:title="@string/app_name">
+            <intent android:action="com.mcal.action.SHOW_ABOUT" />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="Appearance"
+        android:layout="@layout/preferences_category"
+        android:title="@string/appearance">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="ui_monet"
+            android:summaryOff="@string/ui_monet_sum_off"
+            android:summaryOn="@string/ui_monet_sum_on"
+            android:title="Material You" />
+
+        <ListPreference
+            android:defaultValue=""
+            android:entries="@array/language_key"
+            android:entryValues="@array/language_value"
+            android:icon="@drawable/ic_language"
+            android:key="Language"
+            android:summary="@string/select_language_desc"
+            android:title="@string/preferred_language" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="@string/others">
+
+        <Preference
+            android:icon="@drawable/ic_delete"
+            android:key="pref_clear_history"
+            android:summary="@string/pref_summary_clear_history"
+            android:title="@string/title_clear_history" />
+
+        <Preference
+            android:icon="@drawable/ic_delete"
+            android:key="CleanGarbage"
+            android:summary="@string/clean_garbage_summary"
+            android:title="@string/clean_garbage" />
+
+        <SeekBarPreference
+            android:key="garbage_limit"
+            android:max="1536"
+            app:defaultValue="256"
+            app:icon="@drawable/ic_settings_cache_limit"
+            app:min="256"
+            app:seekBarIncrement="128"
+            app:showSeekBarValue="true"
+            app:updatesContinuously="false"
+            app:summary="При превышении лимита автоматически будет выполнена очитска"
+            app:title="Лимит кеша в мегабайтах" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/file_extract_rename_key"
+            android:entryValues="@array/file_extract_rename_value"
+            android:key="FileRenameOption"
+            android:summary="@string/file_extract_rename_summary"
+            android:title="@string/file_rename" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,22 +1,39 @@
 package com.mcal.apkeditor.activities
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import com.mcal.apkeditor.R
+import com.mcal.apkeditor.adapters.ViewPagerAdapter
+import com.mcal.apkeditor.databinding.ActivitySettingsBinding
+import com.mcal.apkeditor.fragments.ApkSettingsFragment
 import com.mcal.apkeditor.fragments.SettingsFragment
+import com.mcal.apkeditor.fragments.TextSettingsFragment
 import com.mcal.common.activities.CustomizedLangActivity
 
 class SettingsActivity : CustomizedLangActivity() {
+    private var _binding: ActivitySettingsBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        _binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupToolbar(getString(R.string.settings))
-        if (supportFragmentManager.fragments.isEmpty()) {
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.frame_container, SettingsFragment())
-                .commit()
+
+        val pagerAdapter = ViewPagerAdapter(supportFragmentManager)
+        pagerAdapter.addFragment(SettingsFragment(), getString(R.string.tab_general))
+        pagerAdapter.addFragment(ApkSettingsFragment(), getString(R.string.tab_apk_decoding))
+        pagerAdapter.addFragment(TextSettingsFragment(), getString(R.string.tab_text_editor))
+
+        binding.settingsViewpager.adapter = pagerAdapter
+        binding.tabLayout.setupWithViewPager(binding.settingsViewpager)
+
+        if (intent != null) {
+            val index = intent.getIntExtra("startUpTab", 0)
+            binding.settingsViewpager.setCurrentItem(index, false)
         }
     }
 
@@ -37,5 +54,10 @@ class SettingsActivity : CustomizedLangActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

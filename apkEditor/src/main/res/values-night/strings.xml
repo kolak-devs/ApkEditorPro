@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_general">General</string>
+    <string name="tab_apk_decoding">Apk compiling</string>
+    <string name="tab_text_editor">Text editor</string>
+</resources>

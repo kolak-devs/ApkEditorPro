@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="Редактор">
+
+        <EditTextPreference
+            android:defaultValue="14"
+            android:key="editor_text_size"
+            android:title="Font size" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="editor_wordwrap"
+            android:title="@string/wordwrap" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="editor_line_number"
+            android:title="@string/line_number_visibility" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="editor_pin_line_number"
+            android:title="@string/pin_line_number" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="editor_magnifier"
+            android:title="@string/magnifier" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="editor_use_icu_library"
+            android:title="@string/use_icu_library" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

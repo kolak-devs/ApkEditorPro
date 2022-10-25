@@ -333,6 +333,10 @@ public class Preferences {
         App.getPreferences().edit().putString("webview_language", key).apply();
     }
 
+    public static boolean isCustomSigning(){
+        return App.getPreferences().getBoolean("signing_on", false);
+    }
+
     public static String getKSPass(){
         return App.getPreferences().getString("signing_pass", "");
     }
@@ -343,5 +347,10 @@ public class Preferences {
 
     public static String getKeyPass(){
         return App.getPreferences().getString("signing_key_password", "");
+    }
+
+    public static int getSigningVersion(){
+        String ver = App.getPreferences().getString("signing_version", "1");
+        return Integer.parseInt(ver);
     }
 }

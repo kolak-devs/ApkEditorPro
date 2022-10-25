@@ -261,4 +261,7 @@
     <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
     <string name="file_open_as">Open as...</string>
+    <string name="tab_general">General</string>
+    <string name="tab_apk_decoding">Apk compiling</string>
+    <string name="tab_text_editor">Text editor</string>
 </resources>

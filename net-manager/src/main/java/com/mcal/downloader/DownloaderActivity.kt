@@ -9,7 +9,8 @@ import com.mcal.common.utils.isNetworkAvailable
 import com.mcal.downloader.databinding.DownloaderActivityBinding
 
 class DownloaderActivity : CustomizedLangActivity() {
-    private lateinit var binding: DownloaderActivityBinding
+    private var _binding: DownloaderActivityBinding? = null
+    private val binding get() = _binding!!
 
     val tools = listOf(
         "android-framework.jar" to "$DOMAIN_COM/apkeditor/framework/$SDK/android.jar",
@@ -24,7 +25,7 @@ class DownloaderActivity : CustomizedLangActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DownloaderActivityBinding.inflate(layoutInflater)
+        _binding = DownloaderActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "Управление инструментарием", true)
         val adapter = DownloaderAdapter(tools)
@@ -41,6 +42,11 @@ class DownloaderActivity : CustomizedLangActivity() {
         } else {
             View.GONE
         }
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
     companion object {

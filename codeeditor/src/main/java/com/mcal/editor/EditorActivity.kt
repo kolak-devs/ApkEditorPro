@@ -537,15 +537,6 @@ class EditorActivity : CustomizedLangActivity(),
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.text_wordwrap).isChecked = Preferences.isWordWrap()
-        menu.findItem(R.id.editor_line_number).isChecked = Preferences.isLineNumberEnabled()
-        menu.findItem(R.id.pin_line_number).isChecked = Preferences.isLineNumberPinned()
-        menu.findItem(R.id.magnifier).isChecked = Preferences.isMagnifier()
-        menu.findItem(R.id.useIcu).isChecked = Preferences.isUseICULibrary()
-        return super.onPrepareOptionsMenu(menu)
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         binding.editor.release()
@@ -810,16 +801,6 @@ class EditorActivity : CustomizedLangActivity(),
             editor.moveSelectionLeft()
         } else if (id == R.id.move_right) {
             editor.moveSelectionRight()
-        } else if (id == R.id.magnifier) {
-            val isChecked = !item.isChecked
-            item.isChecked = isChecked
-            editor.getComponent(Magnifier::class.java).isEnabled = isChecked
-            Preferences.setMagnifier(isChecked)
-        } else if (id == R.id.useIcu) {
-            val isChecked = !item.isChecked
-            item.isChecked = isChecked
-            editor.props.useICULibToSelectWords = isChecked
-            Preferences.setUseICULibrary(isChecked)
         } else if (id == R.id.code_format) {
             editor.formatCodeAsync()
         } else if (id == R.id.switch_language) {
@@ -882,21 +863,19 @@ class EditorActivity : CustomizedLangActivity(),
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
-        } else if (id == R.id.text_wordwrap) {
-            val isChecked = !item.isChecked
-            item.isChecked = isChecked
-            editor.isWordwrap = isChecked
-            Preferences.setWordWrap(isChecked)
-        } else if (id == R.id.editor_line_number) {
-            val isChecked = !item.isChecked
-            item.isChecked = isChecked
-            editor.isLineNumberEnabled = isChecked
-            Preferences.setLineNumberEnabled(isChecked)
-        } else if (id == R.id.pin_line_number) {
-            val isChecked = !item.isChecked
-            item.isChecked = isChecked
-            editor.setPinLineNumber(isChecked)
-            Preferences.setLineNumberPinned(isChecked)
+        } else if (id == R.id.action_settings) {
+            var intent: Intent? = null
+            try {
+                intent = Intent(
+                    this,
+                    Class.forName("com.mcal.apkeditor.activities.SettingsActivity")
+                ).apply {
+                    putExtra("startUpTab", 2)
+                }
+                startActivity(intent)
+            } catch (e: ClassNotFoundException) {
+                e.printStackTrace()
+            }
         }
         return super.onOptionsItemSelected(item)
     }

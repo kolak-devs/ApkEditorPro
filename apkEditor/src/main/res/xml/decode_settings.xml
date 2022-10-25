@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:key="DecodeCategory"
+        android:layout="@layout/preferences_category"
+        android:title="@string/apk_decoding">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="fixMultiRes"
+            android:summary="@string/pref_summary_multi_package"
+            android:title="@string/pref_title_multi_package" />
+
+        <EditTextPreference
+            android:key="DecodeDirectory"
+            android:summary="@string/decode_dir_summary_may_change"
+            android:title="@string/decode_dir" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="ApkBuilding"
+        android:layout="@layout/preferences_category"
+        android:title="@string/apk_building">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="ae_aapt_rules"
+            android:summary="Use the new built-in resource compiler"
+            android:title="AAPT Rules" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="aapt2"
+            android:summary="@string/pref_summary_aapt2"
+            android:title="@string/pref_title_aapt2" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="apktool_use_json"
+            android:summary="Use ApkTool json or yaml configurations"
+            android:title="ApkTool Json" />
+
+        <ListPreference
+            android:entries="@array/output_apkname_key"
+            android:entryValues="@array/output_apkname_value"
+            android:key="OutputApkName"
+            android:summary="@string/output_apk_name_summary"
+            android:title="@string/output_apk_name" />
+
+        <SwitchPreference
+            android:key="SmaliEditingEnabled"
+            android:summaryOff="@string/smali_edit_disabled_summary"
+            android:summaryOn="@string/smali_edit_summary"
+            android:title="@string/smali_editing" />
+
+        <SwitchPreference
+            android:key="RebuildConfirmation"
+            android:summaryOff="@string/rebuild_confirm_d_summary"
+            android:summaryOn="@string/rebuild_confirm_e_summary"
+            android:title="@string/rebuild_confirmation" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
+        android:title="Signing">
+        <SwitchPreference
+            android:key="signing_on"
+            android:title="Use custom signature file"
+            android:summary="You can place your custom JKS file into /Documents/ApkEditor/keys/"
+            app:defaultValue="false" />
+        <EditTextPreference
+            android:key="signing_pass"
+            android:title="Keystore password"
+            app:dependency="signing_on"/>
+        <EditTextPreference
+            android:key="signing_key_alias"
+            android:title="Key alias"
+            app:dependency="signing_on"/>
+        <EditTextPreference
+            android:key="signing_key_password"
+            android:title="Key password"
+            app:dependency="signing_on"/>
+        <SeekBarPreference
+            android:key="signing_version"
+            android:title="Signature version"
+            android:summary="Specify version of signature used to sign the APK. Must be from v1 to v4"
+            app:defaultValue="1"
+            app:updatesContinuously="false"
+            app:min="1"
+            android:max="4"
+            app:showSeekBarValue="true"
+            app:dependency="signing_on"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

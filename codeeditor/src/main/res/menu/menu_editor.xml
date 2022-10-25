@@ -62,42 +62,9 @@
 
     </item>
 
-    <item android:title="@string/feature_switches">
-
-        <menu>
-
-            <item
-                android:id="@+id/text_wordwrap"
-                android:checkable="true"
-                android:checked="true"
-                android:title="@string/wordwrap" />
-
-            <item
-                android:id="@+id/editor_line_number"
-                android:checkable="true"
-                android:checked="true"
-                android:title="@string/line_number_visibility" />
-
-            <item
-                android:id="@+id/pin_line_number"
-                android:checkable="true"
-                android:title="@string/pin_line_number" />
-
-            <item
-                android:id="@+id/magnifier"
-                android:checkable="true"
-                android:checked="true"
-                android:title="@string/magnifier" />
-
-            <item
-                android:id="@+id/useIcu"
-                android:checkable="true"
-                android:checked="true"
-                android:title="@string/use_icu_library" />
-
-        </menu>
-
-    </item>
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/feature_switches"/>
 
     <item
         android:id="@+id/search_panel_st"

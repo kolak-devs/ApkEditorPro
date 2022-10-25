@@ -28,7 +28,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     override fun onCreatePreferences(bundle: Bundle?, s: String?) {
-        addPreferencesFromResource(R.xml.settings)
+        addPreferencesFromResource(R.xml.main_settings)
 
         cleanData()
         cleanHistory()

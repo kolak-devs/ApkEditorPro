@@ -296,7 +296,11 @@ class FileListActivity : CustomizedLangActivity(), IListEventListener, IListItem
                 @Throws(Exception::class)
                 override fun process() {
                     CoroutineScope(Dispatchers.IO).launch {
-                        ApkSigner().signApkCustom(unsignedPath, signedPath)
+                        if (Preferences.isCustomSigning()) {
+                            ApkSigner().signApkCustom(unsignedPath, signedPath)
+                        } else {
+                            ApkSigner().signApk(unsignedPath, signedPath)
+                        }
                     }
                 }
 
