@@ -36,6 +36,19 @@
 
     <PreferenceCategory
         android:layout="@layout/preferences_category"
+        android:title="Connection">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="domain_com"
+            android:summaryOff="Russian"
+            android:summaryOn="Hong Kong"
+            android:title="Server" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preferences_category"
         android:title="@string/others">
 
         <Preference
@@ -58,9 +71,9 @@
             app:min="256"
             app:seekBarIncrement="128"
             app:showSeekBarValue="true"
-            app:updatesContinuously="false"
             app:summary="При превышении лимита автоматически будет выполнена очитска"
-            app:title="Лимит кеша в мегабайтах" />
+            app:title="Лимит кеша в мегабайтах"
+            app:updatesContinuously="false" />
 
         <ListPreference
             android:defaultValue="0"
