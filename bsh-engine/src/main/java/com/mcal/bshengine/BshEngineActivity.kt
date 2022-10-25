@@ -14,6 +14,7 @@ import com.mcal.bshengine.api.*
 import com.mcal.bshengine.databinding.BshengineActivityBinding
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.activities.WebViewActivity
+import com.mcal.common.data.Constants.DOMAIN
 import com.mcal.common.utils.ActivityHelper.attachParam
 import com.mcal.editor.TextEditor.getSoraEditor
 import java.io.File
@@ -93,7 +94,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                         return true
                     }
                     R.id.menu_patch_doc -> {
-                        val link = "$DOMAIN_COM/apkeditor/doc/bsh-patcher/index.html"
+                        val link = "$DOMAIN/apkeditor/doc/bsh-patcher/index.html"
                         val intent = Intent(this@BshEngineActivity, WebViewActivity::class.java)
                         attachParam(intent, "htmlUrl", link)
                         startActivity(intent)
@@ -138,9 +139,6 @@ class BshEngineActivity : CustomizedLangActivity() {
     }
 
     companion object {
-        private const val DOMAIN_RU = "https://timscriptov.ru"
-        private const val DOMAIN_COM = "https://timscriptov.com"
-
         private const val FILE_PATH = "filePath"
         private const val APK_PATH = "apkPath"
 

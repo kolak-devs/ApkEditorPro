@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mcal.common.activities.CustomizedLangActivity
+import com.mcal.common.data.Constants.DOMAIN
 import com.mcal.common.utils.isNetworkAvailable
 import com.mcal.downloader.databinding.DownloaderActivityBinding
 
@@ -13,14 +14,14 @@ class DownloaderActivity : CustomizedLangActivity() {
     private val binding get() = _binding!!
 
     val tools = listOf(
-        "android-framework.jar" to "$DOMAIN_COM/apkeditor/framework/$SDK/android.jar",
-        "aapt" to "$DOMAIN_COM/apkeditor/bin/$ABI/aapt",
-        "aapt2" to "$DOMAIN_COM/apkeditor/bin/$ABI/aapt2",
-        "mycp" to "$DOMAIN_COM/apkeditor/bin/$ABI/mycp",
-        "zipalign" to "$DOMAIN_COM/apkeditor/bin/$ABI/zipalign",
-        //"aaptz" to "$DOMAIN_COM/apkeditor/bin/aaptz",
-        "testkey.pk8" to "$DOMAIN_COM/apkeditor/keys/testkey.pk8",
-        "testkey.x509.pem" to "$DOMAIN_COM/apkeditor/keys/testkey.x509.pem",
+        "android-framework.jar" to "$DOMAIN/apkeditor/framework/$SDK/android.jar",
+        "aapt" to "$DOMAIN/apkeditor/bin/$ABI/aapt",
+        "aapt2" to "$DOMAIN/apkeditor/bin/$ABI/aapt2",
+        "mycp" to "$DOMAIN/apkeditor/bin/$ABI/mycp",
+        "zipalign" to "$DOMAIN/apkeditor/bin/$ABI/zipalign",
+        //"aaptz" to "DOMAIN/apkeditor/bin/aaptz",
+        "testkey.pk8" to "$DOMAIN/apkeditor/keys/testkey.pk8",
+        "testkey.x509.pem" to "$DOMAIN/apkeditor/keys/testkey.x509.pem",
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,9 +51,6 @@ class DownloaderActivity : CustomizedLangActivity() {
     }
 
     companion object {
-        private const val DOMAIN_RU = "https://timscriptov.ru"
-        private const val DOMAIN_COM = "https://timscriptov.com"
-
         private val ABI = Build.SUPPORTED_64_BIT_ABIS[0] ?: Build.SUPPORTED_32_BIT_ABIS[0] ?: "armeabi-v7a"
         private const val SDK = 33
     }
