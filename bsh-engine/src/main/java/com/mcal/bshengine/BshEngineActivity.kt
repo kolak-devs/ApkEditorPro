@@ -88,7 +88,6 @@ class BshEngineActivity : CustomizedLangActivity() {
                     R.id.menu_patch_edit -> {
                         scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
                             val intent = getSoraEditor(this@BshEngineActivity, it.path, null, 0, null)
-                            @Suppress("DEPRECATION")
                             startActivityForResult(intent, 0)
                         }
                         return true
@@ -106,7 +105,6 @@ class BshEngineActivity : CustomizedLangActivity() {
         })
     }
 
-    @Deprecated("Deprecated in Java")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode == Activity.RESULT_OK) {

@@ -34,7 +34,7 @@ import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.EditorSearcher
 import io.github.rosemoe.sora.widget.component.Magnifier
 import io.github.rosemoe.sora.widget.style.builtin.ScaleCursorAnimator
-import io.github.rosemoe.sorakt.subscribeEvent
+import io.github.rosemoe.sora.widget.subscribeEvent
 import jadx.api.JadxDecompiler
 import jadx.plugins.input.smali.SmaliInputPlugin
 import kotlinx.coroutines.CoroutineScope
@@ -274,7 +274,7 @@ class EditorActivity : CustomizedLangActivity(),
         filePath?.name?.let { fileName ->
             return if (fileName.endsWith(".smali")) {
                 getTextMateLanguageForSmali()
-            } else if (fileName.endsWith(".java")||fileName.endsWith(".bsh")) {
+            } else if (fileName.endsWith(".java") || fileName.endsWith(".bsh")) {
                 getTextMateLanguageForJava()
             } else if (fileName.endsWith(".kt")) {
                 getTextMateLanguageForKotlin()

@@ -52,9 +52,9 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
 
 //    implementation 'io.github.Rosemoe.sora-editor:editor-kt:0.15.0-dev-1'
-    implementation 'io.github.Rosemoe.sora-editor:editor:0.17.1'
-    implementation 'io.github.Rosemoe.sora-editor:language-java:0.17.1'
-    implementation 'io.github.Rosemoe.sora-editor:language-textmate:0.17.1'
-    implementation 'io.github.Rosemoe.sora-editor:editor-lsp:0.17.1'
+    implementation 'io.github.Rosemoe.sora-editor:editor:0.17.2'
+    implementation 'io.github.Rosemoe.sora-editor:language-java:0.17.2'
+    implementation 'io.github.Rosemoe.sora-editor:language-textmate:0.17.2'
+    implementation 'io.github.Rosemoe.sora-editor:editor-lsp:0.17.2'
     implementation 'androidx.preference:preference-ktx:1.2.0'
 }
