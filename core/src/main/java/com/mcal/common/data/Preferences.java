@@ -352,4 +352,13 @@ public class Preferences {
     public static void setDomainCom(boolean mode) {
         App.getPreferences().edit().putBoolean("domain_com", mode).apply();
     }
+
+    public static boolean isCustomSigning(){
+        return App.getPreferences().getBoolean("signing_on", false);
+    }
+
+    public static int getSigningVersion() {
+        String ver = App.getPreferences().getString("signing_version", "1");
+        return Integer.parseInt(ver);
+    }
 }
