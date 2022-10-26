@@ -23,6 +23,15 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
     private var searchingLayout: View? = null
     private var mAdapter: ApkListAdapter? = null
 
+    companion object {
+        const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1
+
+        const val FULL_EDIT = 0
+        const val SIMPLE_EDIT = 1
+        const val COMMON_EDIT = 2
+        const val SIGN_APK = 3
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_apksearch)
@@ -100,7 +109,7 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
             )
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
-                FileListActivity.SIMPLE_EDIT -> {
+                SIMPLE_EDIT -> {
                     intent = Intent(this, SimpleEditActivity::class.java)
                     intent?.let { i ->
                         ActivityHelper.attachParam(i, "apkPath", filePath)
@@ -109,11 +118,11 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
                     }
                     p112.dismiss()
                 }
-                FileListActivity.FULL_EDIT -> {
+                FULL_EDIT -> {
                     startFullEditActivity(this, filePath)
                     p112.dismiss()
                 }
-                FileListActivity.COMMON_EDIT -> {
+                COMMON_EDIT -> {
                     intent = Intent(this, CommonEditActivity::class.java)
                     intent?.let { i ->
                         ActivityHelper.attachParam(i, "apkPath", filePath)

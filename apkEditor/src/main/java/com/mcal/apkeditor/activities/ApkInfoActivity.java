@@ -1272,14 +1272,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     protected void composeApkFile() {
-        if (BuildConfig.LIMIT_NEW_VERSION && MainActivity.Companion.upgradedFromOldVersion(this)) {
-            MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(this);
-            alert.setTitle(R.string.please_note);
-            alert.setMessage(R.string.build_not_support_tip);
-            alert.show();
-            return;
-        }
-
         collectAndSaveChangedString();
 
         if (Preferences.isRebuildConfirmEnabled()) {

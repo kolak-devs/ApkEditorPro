@@ -1,7 +1,7 @@
 package com.mcal.apkeditor.activities
 
 import android.Manifest
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.os.Process
 import android.view.*
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,6 +25,7 @@ import com.mcal.apkeditor.adapters.MainMenuItem
 import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
+import com.mcal.apkeditor.filesystem.FilePickHelper
 import com.mcal.apkeditor.prj.ProjectListActivity
 import com.mcal.apkeditor.utils.OnlineMessage
 import com.mcal.apkeditor.utils.Utils
@@ -41,6 +43,7 @@ import java.io.File
 import kotlin.system.exitProcess
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {
+    private val REQUEST_PICK_APK = 677
     private var _binding: ActivityMainBinding? = null
 
     private val binding get() = _binding!!
@@ -48,10 +51,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     companion object {
         init {
             System.loadLibrary("apkeditorpro")
-        }
-
-        fun upgradedFromOldVersion(ctx: Context): Boolean {
-            return !File(ctx.filesDir, "work.xml").exists()
         }
     }
 
@@ -176,8 +175,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         fastApkAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
             when (mainMenuItem.id) {
                 0 -> {
-                    val intent = Intent(this, FileListActivity::class.java)
-                    startActivity(intent)
+                   selectSAF()
                     true
                 }
                 1 -> {
@@ -231,7 +229,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         if (!Preferences.isFrameworksInstalled()) {
             showToolManagerDialog()
         }
-
     }
 
     private fun showToolManagerDialog() {
@@ -283,7 +280,14 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         }
     }
 
-    fun initFileWithPermissionCheck() {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode === REQUEST_PICK_APK && resultCode === RESULT_OK) {
+            Toast.makeText(this, data?.data?.path, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    public fun initFileWithPermissionCheck() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED
         ) {
@@ -304,6 +308,11 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         if (BuildConfig.LIMIT_NEW_VERSION) {
             return
         }
+
+    }
+
+    private fun selectSAF(){
+        startActivityForResult(FilePickHelper.pickFile(true), REQUEST_PICK_APK);
     }
 
     @Throws(Exception::class)

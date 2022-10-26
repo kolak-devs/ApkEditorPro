@@ -39,7 +39,9 @@
         <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:key="apktool_use_json"
-            android:title="@string/apktool_config_title" />
+            android:title="@string/apktool_config_title"
+            android:summaryOn="JSON"
+            android:summaryOff="YML"/>
 
         <androidx.preference.ListPreference
             android:entries="@array/output_apkname_key"

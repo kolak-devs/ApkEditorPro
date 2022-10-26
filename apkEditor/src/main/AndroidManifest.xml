@@ -74,7 +74,6 @@
         <activity
             android:name="com.mcal.apkeditor.activities.ApkComposeActivity"
             android:launchMode="singleTask" />
-        <activity android:name="com.mcal.apkeditor.activities.FileListActivity" />
         <activity android:name="com.mcal.apkeditor.activities.UserAppActivity" />
         <activity android:name="com.mcal.apkeditor.activities.SettingsActivity" />
         <activity
@@ -84,7 +83,6 @@
         <activity android:name="com.mcal.apkeditor.activities.OdexPatchActivity" />
         <activity android:name="com.mcal.apkeditor.activities.ColorXmlActivity" />
         <activity android:name="com.mcal.apkeditor.prj.ProjectListActivity" />
-        <activity android:name="com.mcal.apkeditor.activities.EditorHelpActivity" />
         <activity android:name="com.mcal.apkeditor.ui.fulleditor.FullEditorActivity" />
 
         <activity android:name="com.mcal.pngeditor.PhotoViewerActivity" />
@@ -108,7 +106,6 @@
         <activity android:name="com.mcal.sqliteutil.SqliteTableListActivity" />
         <activity android:name="com.mcal.sqliteutil.SqliteTableViewActivity" />
         <activity android:name="com.mcal.sqliteutil.SqliteRowViewActivity" />
-
 
         <meta-data
             android:name="android.webkit.WebView.EnableSafeBrowsing"
