@@ -281,7 +281,7 @@
     <string name="sign_apk">Подписать APK</string>
     <string name="view_logs">Мененджер логов</string>
     <string name="about_gnu_license">Copyright (C) 2021-2022 Ivan Timashkov</string>
-    <string name="pref_title_aapt2">Aapt2</string>
+    <string name="pref_title_aapt2">AAPT2</string>
     <string name="pref_summary_aapt2">Использовать aapt2 для компиляции ресурсов</string>
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Игнорировать сторонние пакеты(features/multi res)</string>
@@ -310,6 +310,24 @@
     <string name="select_app">Приложение</string>
     <string name="projects_show_all">Показать все</string>
     <string name="tab_general">Общее</string>
-    <string name="tab_apk_decoding">Компилятор</string>
+    <string name="tab_apk_decoding">Декомпилятор</string>
     <string name="tab_text_editor">Текстовый редактор</string>
+    <string name="aapt_rules_sum">Использовать новые правила AAPT</string>
+    <string name="aapt_rules_title">Новые правила AAPT</string>
+    <string name="apktool_config_title">Конфигурационный файл ApkTool</string>
+    <string name="signing_catergory_title">Подпись</string>
+    <string name="signing_on_title">Использовать кастомный файл подписи</string>
+    <string name="signing_on_sum">Вы можете положить JKS-файл подписи по пути /Documents/ApkEditor/keys/</string>
+    <string name="signing_pass_title">Пароль хранилища</string>
+    <string name="signing_alias_title">Псевдоним ключа</string>
+    <string name="signing_password_title">Пароль ключа</string>
+    <string name="signing_signature_title">Версия подписи</string>
+    <string name="signing_signature_sum">Задать версию схемы для подписывания APK. Каждая следующая версия ключает в себя все предыдущие.
+        Изменяйте, если знаете, что делаете</string>
+    <string name="editor_category_title">Текстовый редактор</string>
+    <string name="editor_text_size_title">Размер шрифта</string>
+    <string name="settings_server_title">Переключние сервера</string>
+    <string name="settings_garbage_limit">Лимит кеша в мегабайтах</string>
+    <string name="garbage_limit_subtitle">При превышении лимита автоматически будет выполнена очистка мусора</string>
+    <string name="settings_connection_category">Сетевое соединение</string>
 </resources>

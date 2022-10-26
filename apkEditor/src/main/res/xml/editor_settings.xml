@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:layout="@layout/preferences_category"
-        android:title="Редактор">
+        android:title="@string/editor_category_title">
 
-        <EditTextPreference
+        <androidx.preference.EditTextPreference
             android:defaultValue="14"
             android:key="editor_text_size"
-            android:title="Font size" />
+            android:title="@string/editor_text_size_title" />
 
-        <SwitchPreference
+        <androidx.preference.SwitchPreference
             android:defaultValue="false"
             android:key="editor_wordwrap"
             android:title="@string/wordwrap" />
 
-        <SwitchPreference
+        <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:key="editor_line_number"
             android:title="@string/line_number_visibility" />
 
-        <SwitchPreference
+        <androidx.preference.SwitchPreference
             android:defaultValue="false"
             android:key="editor_pin_line_number"
             android:title="@string/pin_line_number" />
 
-        <SwitchPreference
+        <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:key="editor_magnifier"
             android:title="@string/magnifier" />
 
-        <SwitchPreference
+        <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:key="editor_use_icu_library"
             android:title="@string/use_icu_library" />
 
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>
