@@ -31,7 +31,10 @@ import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
 import com.mcal.common.filesystem.FilePickHelper
-import com.mcal.common.utils.*
+import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.copyFile
+import com.mcal.common.utils.deleteAll
+import com.mcal.common.utils.isNetworkAvailable
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import com.mcal.downloader.DownloaderActivity
 import com.mikepenz.fastadapter.FastAdapter
@@ -247,17 +250,20 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     ) = super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
     @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, resultData)
         if (requestCode == REQUEST_PICK_APK && resultCode == RESULT_OK) {
-            data?.data?.let {
-                val apk = File(ScopedStorage.getTmpDir().path, this.getFileName(it) ?: "decoded.apk")
+            resultData?.data?.let {
+                val apk = File(ScopedStorage.getTmpDir().path, FilePickHelper.getFileName(this, it))
                 contentResolver.openInputStream(it)?.let { it1 -> copyFile(it1, apk) }
-                this.startFullEditActivity(apk.path)
+                if (apk.exists() && apk.name.endsWith(".apk")) {
+                    this.startFullEditActivity(apk.path)
+                } else {
+                    Toast.makeText(this, "Неподдерживаемый файл", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-        Toast.makeText(this, data?.data?.path, Toast.LENGTH_SHORT).show()
     }
 
     fun initFileWithPermissionCheck() {

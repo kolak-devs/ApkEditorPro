@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -18,8 +20,9 @@ import java.util.List;
  */
 
 public class FilePickHelper {
-    private final static String LOG_TAG = FilePickHelper.class.getSimpleName();
+//    private final static String LOG_TAG = FilePickHelper.class.getSimpleName();
 
+    @NonNull
     public static Intent pickFile(boolean apk) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         if (apk) {
@@ -33,10 +36,11 @@ public class FilePickHelper {
         return Intent.createChooser(intent, "Select file");
     }
 
-    public static List<RequestFile> onActivityResult(Context context, Intent data) {
+    @NonNull
+    public static List<RequestFile> onActivityResult(@NonNull Context context, @NonNull Intent data) {
         List<RequestFile> files = new ArrayList<>();
         RequestFile tempFile;
-        Log.d(LOG_TAG, "onActivityResult " + data);
+//        Log.d(LOG_TAG, "onActivityResult " + data);
         if (data.getData() == null) {
             if (data.getClipData() != null) {
                 for (int i = 0; i < data.getClipData().getItemCount(); i++) {
@@ -51,9 +55,10 @@ public class FilePickHelper {
         return files;
     }
 
-    private static RequestFile createFile(Context context, Uri uri) {
+    @Nullable
+    private static RequestFile createFile(@NonNull Context context, @NonNull Uri uri) {
         RequestFile requestFile = null;
-        Log.d(LOG_TAG, "createFile " + uri);
+//        Log.d(LOG_TAG, "createFile " + uri);
         try {
             InputStream inputStream = null;
             String name = getFileName(context, uri);
@@ -72,31 +77,27 @@ public class FilePickHelper {
             }
             requestFile = new RequestFile(name, mimeType, inputStream);
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return requestFile;
     }
 
-    private static String getFileName(Context context, Uri uri) {
-        Log.d(LOG_TAG, "getFileName " + uri.getScheme() + " : " + context.getContentResolver().getType(uri));
+    @NonNull
+    public static String getFileName(@NonNull Context context, @NonNull Uri uri) {
+//        Log.d(LOG_TAG, "getFileName " + uri.getScheme() + " : " + context.getContentResolver().getType(uri));
         String result = null;
         if (uri.getScheme().equals("content")) {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            try {
+            try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
                 if (cursor != null && cursor.moveToFirst()) {
                     int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                     if (index >= 0) {
                         result = cursor.getString(index);
                     }
                 }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
             }
         }
         if (result == null) {
-            Log.d(LOG_TAG, "res " + uri.getPath());
+//            Log.d(LOG_TAG, "res " + uri.getPath());
             result = uri.getPath();
             int cut = result.lastIndexOf('/');
             if (cut != -1) {

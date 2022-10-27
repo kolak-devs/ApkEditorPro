@@ -17,6 +17,8 @@ import com.mcal.common.activities.WebViewActivity
 import com.mcal.common.data.Constants.DOMAIN
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ActivityHelper.attachParam
+import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.copyFile
 import com.mcal.editor.TextEditor.getSoraEditor
 import java.io.File
 import java.io.FileInputStream
@@ -34,7 +36,7 @@ class BshEngineActivity : CustomizedLangActivity() {
         setupToolbar(R.id.toolbar, "BSH Patcher", back = true)
         binding.btnSelectPatch.setOnClickListener {
             @Suppress("DEPRECATION")
-            startActivityForResult(FilePickHelper.pickFile(true), OPEN_REQUEST_CODE);
+            startActivityForResult(FilePickHelper.pickFile(false), OPEN_REQUEST_CODE);
         }
         binding.btnStartPatch.setOnClickListener {
             try {
@@ -87,6 +89,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                     R.id.menu_patch_edit -> {
                         scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
                             val intent = getSoraEditor(this@BshEngineActivity, it.path, null, 0, null)
+                            @Suppress("DEPRECATION")
                             startActivityForResult(intent, 0)
                         }
                         return true
@@ -110,14 +113,16 @@ class BshEngineActivity : CustomizedLangActivity() {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == OPEN_REQUEST_CODE) {
-                resultData?.data?.path?.takeIf { path ->
-                    val file = File(path);file.exists() && file.name.endsWith(".bsh")
-                }?.let { path ->
-                    val file = File(path)
-                    binding.textScriptPatch.setText(file.name)
-                    scriptPath = file
-                } ?: run {
-                    Toast.makeText(this, "Неподдерживаемый файл", Toast.LENGTH_SHORT).show()
+                resultData?.data?.let {
+                    val script = File(ScopedStorage.getTmpDir().path, FilePickHelper.getFileName(this, it))
+                    contentResolver.openInputStream(it)?.let { it1 -> copyFile(it1, script) }
+                    if (script.exists() && script.name.endsWith(".bsh")) {
+                        val file = File(script.path)
+                        binding.textScriptPatch.setText(file.name)
+                        scriptPath = file
+                    } else {
+                        Toast.makeText(this, "Неподдерживаемый файл", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
