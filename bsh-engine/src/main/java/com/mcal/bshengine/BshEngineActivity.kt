@@ -15,6 +15,7 @@ import com.mcal.bshengine.databinding.BshengineActivityBinding
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.activities.WebViewActivity
 import com.mcal.common.data.Constants.DOMAIN
+import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ActivityHelper.attachParam
 import com.mcal.editor.TextEditor.getSoraEditor
 import java.io.File
@@ -32,10 +33,8 @@ class BshEngineActivity : CustomizedLangActivity() {
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "BSH Patcher", back = true)
         binding.btnSelectPatch.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "application/bsh"
-            startActivityForResult(intent, OPEN_REQUEST_CODE)
+            @Suppress("DEPRECATION")
+            startActivityForResult(FilePickHelper.pickFile(true), OPEN_REQUEST_CODE);
         }
         binding.btnStartPatch.setOnClickListener {
             try {
@@ -105,7 +104,9 @@ class BshEngineActivity : CustomizedLangActivity() {
         })
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == OPEN_REQUEST_CODE) {

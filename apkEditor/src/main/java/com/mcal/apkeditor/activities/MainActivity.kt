@@ -1,7 +1,6 @@
 package com.mcal.apkeditor.activities
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -25,15 +24,14 @@ import com.mcal.apkeditor.adapters.MainMenuItem
 import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
-import com.mcal.apkeditor.filesystem.FilePickHelper
+import com.mcal.apkeditor.dialogs.startFullEditActivity
 import com.mcal.apkeditor.prj.ProjectListActivity
-import com.mcal.apkeditor.utils.OnlineMessage
 import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Preferences
-import com.mcal.common.utils.deleteAll
-import com.mcal.common.utils.isNetworkAvailable
+import com.mcal.common.filesystem.FilePickHelper
+import com.mcal.common.utils.*
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import com.mcal.downloader.DownloaderActivity
 import com.mikepenz.fastadapter.FastAdapter
@@ -43,44 +41,26 @@ import java.io.File
 import kotlin.system.exitProcess
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {
-    private val REQUEST_PICK_APK = 677
-    private var _binding: ActivityMainBinding? = null
-
-    private val binding get() = _binding!!
+    private lateinit var binding: ActivityMainBinding
 
     companion object {
         init {
             System.loadLibrary("apkeditorpro")
         }
-    }
 
-    // Used to show a dialog
-    private var prompter: OnlineMessage? = null
+        private const val REQUEST_PICK_APK = 677
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, getString(R.string.app_name), false)
         addMenuProvider(object : MenuProvider {
-            /**
-             * Called by the [MenuHost] to allow the [MenuProvider]
-             * to inflate [MenuItem]s into the menu.
-             *
-             * @param menu         the menu to inflate the new menu items into
-             * @param menuInflater the inflater to be used to inflate the updated menu
-             */
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_main, menu)
             }
 
-            /**
-             * Called by the [MenuHost] when a [MenuItem] is selected from the menu.
-             *
-             * @param menuItem the menu item that was selected
-             * @return `true` if the given menu item is handled by this menu provider,
-             * `false` otherwise
-             */
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     R.id.action_settings -> {
@@ -106,11 +86,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         })
         initUI()
 
-        // As pro has no network access, cannot get online message
-        if (!BuildConfig.IS_PRO) {
-            prompter = OnlineMessage(this)
-        }
-
         if (BuildConfig.SHOW_AGREEMENT) {
             if (!appLicenseAccepted(this)) {
                 AppAgreementDialog(this)
@@ -127,9 +102,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     }
 
     public override fun onResume() {
-        if (!BuildConfig.IS_PRO) {
-            prompter?.showMessageDialog()
-        }
         super.onResume()
         binding.errors.visibility = if (!isNetworkAvailable(this)) {
             binding.errors.text = "Отсутствует Интернет подключение"
@@ -140,7 +112,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     }
 
     public override fun onDestroy() {
-        _binding = null
         super.onDestroy()
     }
 
@@ -175,7 +146,8 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         fastApkAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
             when (mainMenuItem.id) {
                 0 -> {
-                   selectSAF()
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(FilePickHelper.pickFile(true), REQUEST_PICK_APK);
                     true
                 }
                 1 -> {
@@ -272,47 +244,30 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
-            initFile()
-        }
-    }
+    ) = super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === REQUEST_PICK_APK && resultCode === RESULT_OK) {
-            Toast.makeText(this, data?.data?.path, Toast.LENGTH_SHORT).show()
+        if (requestCode == REQUEST_PICK_APK && resultCode == RESULT_OK) {
+            data?.data?.let {
+                val apk = File(ScopedStorage.getTmpDir().path, this.getFileName(it) ?: "decoded.apk")
+                contentResolver.openInputStream(it)?.let { it1 -> copyFile(it1, apk) }
+                this.startFullEditActivity(apk.path)
+            }
         }
+        Toast.makeText(this, data?.data?.path, Toast.LENGTH_SHORT).show()
     }
 
-    public fun initFileWithPermissionCheck() {
+    fun initFileWithPermissionCheck() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.POST_NOTIFICATIONS), 1
             )
-        } else {
-            initFile()
         }
-
-    }
-
-    private fun initFile() {
-        if (!BuildConfig.IS_PRO) {
-            return
-        }
-
-        if (BuildConfig.LIMIT_NEW_VERSION) {
-            return
-        }
-
-    }
-
-    private fun selectSAF(){
-        startActivityForResult(FilePickHelper.pickFile(true), REQUEST_PICK_APK);
     }
 
     @Throws(Exception::class)

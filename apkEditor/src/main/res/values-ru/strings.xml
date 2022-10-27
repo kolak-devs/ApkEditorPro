@@ -311,7 +311,7 @@
     <string name="projects_show_all">Показать все</string>
     <string name="tab_general">Общее</string>
     <string name="tab_apk_decoding">Декомпилятор</string>
-    <string name="tab_text_editor">Текстовый редактор</string>
+    <string name="tab_text_editor">Редактор</string>
     <string name="aapt_rules_sum">Использовать новые правила AAPT</string>
     <string name="aapt_rules_title">Новые правила AAPT</string>
     <string name="apktool_config_title">Конфигурационный файл ApkTool</string>
@@ -326,7 +326,7 @@
         Изменяйте, если знаете, что делаете</string>
     <string name="editor_category_title">Текстовый редактор</string>
     <string name="editor_text_size_title">Размер шрифта</string>
-    <string name="settings_server_title">Переключние сервера</string>
+    <string name="settings_server_title">Переключение сервера</string>
     <string name="settings_garbage_limit">Лимит кеша в мегабайтах</string>
     <string name="garbage_limit_subtitle">При превышении лимита автоматически будет выполнена очистка мусора</string>
     <string name="settings_connection_category">Сетевое соединение</string>

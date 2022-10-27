@@ -9,7 +9,7 @@ import android.widget.ListView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.ApkListAdapter
 import com.mcal.apkeditor.R
-import com.mcal.apkeditor.activities.UserAppActivity.Companion.startFullEditActivity
+import com.mcal.apkeditor.dialogs.startFullEditActivity
 import com.mcal.apkeditor.se.SimpleEditActivity
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.ActivityHelper
@@ -100,7 +100,6 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
 
     private fun editModeDialog(filePath: String) {
         val dialog = MaterialAlertDialogBuilder(this)
-        var intent: Intent?
         dialog.setItems(
             arrayOf(
                 getString(R.string.full_edit),
@@ -110,25 +109,22 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
                 SIMPLE_EDIT -> {
-                    intent = Intent(this, SimpleEditActivity::class.java)
-                    intent?.let { i ->
-                        ActivityHelper.attachParam(i, "apkPath", filePath)
-                        startActivity(i)
-                        finish()
-                    }
+                    val intent = Intent(this, SimpleEditActivity::class.java)
+                    intent.putExtra("apkPath", filePath)
+                    startActivity(intent)
+                    finish()
+
                     p112.dismiss()
                 }
                 FULL_EDIT -> {
-                    startFullEditActivity(this, filePath)
+                    this.startFullEditActivity(filePath)
                     p112.dismiss()
                 }
                 COMMON_EDIT -> {
-                    intent = Intent(this, CommonEditActivity::class.java)
-                    intent?.let { i ->
-                        ActivityHelper.attachParam(i, "apkPath", filePath)
-                        startActivity(i)
-                        finish()
-                    }
+                    val intent = Intent(this, CommonEditActivity::class.java)
+                    intent.putExtra("apkPath", filePath)
+                    startActivity(intent)
+                    finish()
                     p112.dismiss()
                 }
             }

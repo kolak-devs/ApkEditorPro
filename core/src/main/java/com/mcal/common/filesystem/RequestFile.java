@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.filesystem;
+package com.mcal.common.filesystem;
 
 import java.io.InputStream;
 

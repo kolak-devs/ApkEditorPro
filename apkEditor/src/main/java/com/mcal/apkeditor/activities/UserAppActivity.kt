@@ -1,7 +1,5 @@
 package com.mcal.apkeditor.activities
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
@@ -14,7 +12,10 @@ import android.provider.Settings
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.Window
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,13 +23,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.AppInfo
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.AppListAdapter
+import com.mcal.apkeditor.dialogs.startFullEditActivity
 import com.mcal.apkeditor.se.SimpleEditActivity
 import com.mcal.appdm.PrefOverallActivity
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.Preferences
-import com.mcal.common.utils.copyFile
-import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.copyFile
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
@@ -174,7 +174,6 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
 
     private fun editModeDialog(filePath: String?) {
         val dialog = MaterialAlertDialogBuilder(this)
-        var intent: Intent?
         dialog.setItems(
             arrayOf(
                 getString(R.string.full_edit),
@@ -185,34 +184,30 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
                 SIMPLE_EDIT -> {
-                    intent = Intent(this, SimpleEditActivity::class.java)
-                    intent?.let { i ->
-                        ActivityHelper.attachParam(i, "apkPath", filePath)
-                        startActivity(i)
-                        finish()
-                    }
+                    val intent = Intent(this, SimpleEditActivity::class.java)
+                    intent.putExtra("apkPath", filePath)
+                    startActivity(intent)
+                    finish()
                     p112.dismiss()
                 }
                 FULL_EDIT -> {
-                    startFullEditActivity(this, filePath)
+                    this.startFullEditActivity(filePath)
                     p112.dismiss()
                 }
                 COMMON_EDIT -> {
-                    intent = Intent(this, CommonEditActivity::class.java)
-                    intent?.let { i ->
-                        ActivityHelper.attachParam(i, "apkPath", filePath)
-                        startActivity(i)
-                        finish()
-                    }
+                    val intent = Intent(this, CommonEditActivity::class.java)
+                    intent.putExtra("apkPath", filePath)
+                    startActivity(intent)
+                    finish()
                     p112.dismiss()
                 }
                 DATA_EDIT -> {
-                    val prefIntent = Intent(this, PrefOverallActivity::class.java)
+                    val intent = Intent(this, PrefOverallActivity::class.java)
                     val bundle = Bundle()
                     bundle.putString("packagePath", filePath)
                     bundle.putBoolean("backup", false)
-                    prefIntent.putExtras(bundle)
-                    startActivity(prefIntent)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
                 }
             }
         }
@@ -337,33 +332,5 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
         const val DETAILS = 0
         const val BACKUP = 1
         const val LAUNCH = 2
-
-        @JvmStatic
-        fun startFullEditActivity(activity: Activity, filePath: String?): Boolean {
-            val inflater = activity.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            @SuppressLint("InflateParams") val view: View = inflater.inflate(R.layout.dialog_decode_mode, null)
-            val assets: CheckBox = view.findViewById(R.id.decode_assets)
-            assets.isChecked = Preferences.isNeedDecodeAssets()
-            val resources: CheckBox = view.findViewById(R.id.decode_resources)
-            resources.isChecked = Preferences.isNeedDecodeResources()
-            val classes: CheckBox = view.findViewById(R.id.decode_classes)
-            classes.isChecked = Preferences.isNeedDecodeClasses()
-            val dialog = MaterialAlertDialogBuilder(activity)
-            dialog.setTitle("Режим декодирования")
-            dialog.setView(view)
-            dialog.setPositiveButton(android.R.string.ok) { _, _ ->
-                Preferences.setDecodeAssets(assets.isChecked)
-                Preferences.setDecodeResources(resources.isChecked)
-                Preferences.setDecodeClasses(classes.isChecked)
-                val intent = Intent(activity, ApkInfoExActivity::class.java)
-                ActivityHelper.attachParam(intent, "apkPath", filePath)
-                val fullDecoding = true
-                ActivityHelper.attachBoolParam(intent, "isFullDecoding", fullDecoding)
-                activity.startActivity(intent)
-                activity.finish()
-            }
-            dialog.create().show()
-            return true
-        }
     }
 }

@@ -1,7 +1,10 @@
 package com.mcal.common.utils
 
+import android.content.ContentResolver
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
+import android.provider.OpenableColumns
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ScopedStorage.getBinDir
 import org.jetbrains.annotations.Contract
@@ -210,6 +213,11 @@ fun copyFile(filename: File, output: File) {
 }
 
 @Throws(IOException::class)
+fun copyFile(input: InputStream, output: File) {
+    copyFile(input, FileOutputStream(output))
+}
+
+@Throws(IOException::class)
 fun copyFile(input: InputStream, output: OutputStream) {
     val buffer = ByteArray(1024)
     var length: Int = input.read(buffer)
@@ -385,3 +393,15 @@ fun InputStream.readInputStream(): String {
     }
     return sb.toString().trim()
 }
+
+fun Context.getFileName(uri: Uri): String? = when(uri.scheme) {
+    ContentResolver.SCHEME_CONTENT -> getContentFileName(uri)
+    else -> uri.path?.let(::File)?.name
+}
+
+private fun Context.getContentFileName(uri: Uri): String? = runCatching {
+    contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        cursor.moveToFirst()
+        return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)
+    }
+}.getOrNull()
