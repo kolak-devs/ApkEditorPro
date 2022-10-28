@@ -1,78 +1,72 @@
 package com.mcal.apkeditor.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
-import com.google.android.material.appbar.MaterialToolbar
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.mcal.apkeditor.R
-import com.mcal.apkeditor.dialogs.FileSelectDialog
-import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection
+import com.mcal.apkeditor.databinding.ActivityOdexPatchBinding
 import com.mcal.apkeditor.utils.OdexPatcher
 import com.mcal.common.activities.CustomizedLangActivity
+import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ApkInfoParser
+import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.copyFile
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
+import java.io.File
 
 /**
  * Created by phe3 on 1/30/2018.
  */
-class OdexPatchActivity : CustomizedLangActivity(), IFileSelection {
-    private var apkPathEt: EditText? = null
+class OdexPatchActivity : CustomizedLangActivity() {
+    private lateinit var binding: ActivityOdexPatchBinding
+    private lateinit var pickLauncher: ActivityResultLauncher<Intent>
     private var apkPath: String? = null
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_odex_patch)
-        setupToolbar("Odex Patcher")
+        binding = ActivityOdexPatchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setupToolbar(R.id.toolbar, "Odex Patcher", back = true)
         initView()
     }
 
-    private fun setupToolbar(text: String) {
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.apply {
-            title = text
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-        }
-    }
-
     private fun initView() {
-        apkPathEt = findViewById<View>(R.id.et_apkpath) as EditText
-        val selectBtn = findViewById<View>(R.id.btn_select_apkpath) as Button
-        selectBtn.setOnClickListener {
-            FileSelectDialog(
-                this@OdexPatchActivity,
-                this@OdexPatchActivity,
-                ".apk",
-                "",
-                null
-            )
+        binding.btnSelectApkpath.setOnClickListener {
+            pickApk()
         }
-        val applyBtn = findViewById<View>(R.id.btn_apply_patch) as Button
-        applyBtn.setOnClickListener {
-            apkPath = apkPathEt?.text.toString()
-            ProgressDialog(
-                this@OdexPatchActivity, "", "Working…", false,
-                PatchProcessor(), -1
-            ).show()
+        binding.btnApplyPatch.setOnClickListener {
+            apkPath?.takeIf { it.isNotEmpty() && File(it).exists() }?.let {
+                ProgressDialog(
+                    this@OdexPatchActivity, "", "Working…", false,
+                    PatchProcessor(), -1
+                ).show()
+            } ?: run {
+                Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+            }
+        }
+        pickLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.let { uri ->
+                    val apk = File(ScopedStorage.getTmpDir().path, FilePickHelper.getFileName(this, uri))
+                    contentResolver.openInputStream(uri)?.let { bytes -> copyFile(bytes, apk) }
+                    if (apk.exists() && apk.name.endsWith(".apk")) {
+                        val path = apk.path.also { apkPath = it }
+                        binding.etApkpath.setText(path)
+                    } else {
+                        Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
-    override fun fileSelectedInDialog(filePath: String?, extraStr: String?, openFile: Boolean) {
-        apkPathEt?.setText(filePath)
+    private fun pickApk() {
+        pickLauncher.launch(FilePickHelper.pickFile(true))
     }
-
-    override fun isInterestedFile(filename: String?, extraStr: String?): Boolean {
-        filename?.let {
-            return filename.endsWith(".apk")
-        }
-        return false
-    }
-
-    override fun getConfirmMessage(filePath: String?, extraStr: String?): String? = null
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {

@@ -92,6 +92,13 @@ object ScopedStorage {
     }
 
     @JvmStatic
+    fun getMyCp(): File {
+        val path = File(getBinDir(), "mycp")
+        path.setExecutable(true)
+        return path
+    }
+
+    @JvmStatic
     fun getAapt2(): File {
         val path = File(getBinDir(), "aapt2")
         path.setExecutable(true)

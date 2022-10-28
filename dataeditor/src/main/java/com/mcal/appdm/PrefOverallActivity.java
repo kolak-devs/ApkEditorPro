@@ -34,13 +34,13 @@ import com.mcal.appdm.utils.SignatureInfoReader;
 import com.mcal.appdm.utils.StringPair;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.utils.ActivityHelper;
+import com.mcal.common.utils.CommandInterface;
+import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
 import com.mcal.common.utils.RootCommand;
 import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.CommandInterface;
-import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 
@@ -122,20 +122,10 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
             this.pm = this.getPackageManager();
             this.applicationInfo = pm.getApplicationInfo(packagePath, 0);
             this.packageInfo = pm.getPackageInfo(packagePath, 0);
-        } catch (NameNotFoundException e) {
-            e.printStackTrace();
-        }
 
-        this.createTime = System.currentTimeMillis();
-        this.isRootMode = true;
-        try {
+            this.createTime = System.currentTimeMillis();
             // The target app shares the same user id with me
-            if (this.packageInfo.sharedUserId != null
-                    && packageInfo.sharedUserId
-                    .equals(pm.getPackageInfo(getPackageName(),
-                            0).sharedUserId)) {
-                this.isRootMode = false;
-            }
+            this.isRootMode = packageInfo.sharedUserId == null || !packageInfo.sharedUserId.equals(pm.getPackageInfo(getPackageName(), 0).sharedUserId);
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -657,7 +647,7 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
 
         CommandInterface rc = createCommandRunner();
         String strCmd = "cp";
-        File bin = new File(getFilesDir(), "mycp");
+        File bin = ScopedStorage.getMyCp();
         if (bin.exists()) {
             strCmd = bin.getPath();
         }

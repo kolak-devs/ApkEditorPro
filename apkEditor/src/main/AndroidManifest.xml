@@ -34,13 +34,6 @@
                 android:value="true" />
         </service>
         <meta-data
-            android:name="com.mcal.publish_channel"
-            android:value="gplay" />
-        <!-- For -->
-        <meta-data
-            android:name="heagoo.sdcard_folder"
-            android:value="ApkEditor" />
-        <meta-data
             android:name="android.max_aspect"
             android:value="2.3" />
         <activity

@@ -166,13 +166,13 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
         try {
             val moreInfo = packageManager.getApplicationInfo(item.packagePath, 0)
             val apkPath = moreInfo.sourceDir
-            editModeDialog(apkPath)
+            editModeDialog(apkPath, moreInfo.packageName)
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
     }
 
-    private fun editModeDialog(filePath: String?) {
+    private fun editModeDialog(filePath: String?, pkg: String?) {
         val dialog = MaterialAlertDialogBuilder(this)
         dialog.setItems(
             arrayOf(
@@ -204,7 +204,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                 DATA_EDIT -> {
                     val intent = Intent(this, PrefOverallActivity::class.java)
                     val bundle = Bundle()
-                    bundle.putString("packagePath", filePath)
+                    bundle.putString("packagePath", pkg)
                     bundle.putBoolean("backup", false)
                     intent.putExtras(bundle)
                     startActivity(intent)

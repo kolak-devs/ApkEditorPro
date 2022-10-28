@@ -444,7 +444,7 @@ public class PrefDetailActivity extends CustomizedLangActivity implements ITable
                         activity.tmpFilePath = tmpFilePath;
                         CommandInterface rc = createCommandRunner(activity.isRootMode);
                         String strCmd = "cp";
-                        File bin = new File(activity.getFilesDir(), "mycp");
+                        File bin = ScopedStorage.getMyCp();
                         if (bin.exists()) {
                             strCmd = bin.getPath();
                         }

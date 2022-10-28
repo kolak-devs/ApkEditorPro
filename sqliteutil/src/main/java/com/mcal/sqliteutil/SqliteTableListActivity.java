@@ -81,7 +81,7 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
 
         RootCommand rc = new RootCommand();
         String strCmd = "cp";
-        File bin = new File(getFilesDir(), "mycp");
+        File bin = ScopedStorage.getMyCp();
         if (bin.exists()) {
             strCmd = bin.getPath();
         }

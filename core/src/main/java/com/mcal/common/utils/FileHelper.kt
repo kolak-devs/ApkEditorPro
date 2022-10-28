@@ -7,6 +7,7 @@ import android.os.Environment
 import android.provider.OpenableColumns
 import com.mcal.common.data.Preferences
 import com.mcal.common.utils.ScopedStorage.getBinDir
+import com.mcal.common.utils.ScopedStorage.getMyCp
 import org.jetbrains.annotations.Contract
 import java.io.*
 import java.nio.charset.Charset
@@ -185,7 +186,7 @@ fun toByteArray(input: InputStream): ByteArray {
 fun copyBack(path: String, realPath: String, isRootMode: Boolean) {
     val rc = createCommandRunner(isRootMode)
     var strCmd = "cp"
-    val bin = File(getBinDir(), "mycp")
+    val bin = getMyCp()
     if (bin.exists()) {
         strCmd = bin.path
     }
