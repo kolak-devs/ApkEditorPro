@@ -34,7 +34,6 @@ fun Activity.startFullEditActivity(filePath: String?): Boolean {
         val fullDecoding = true
         ActivityHelper.attachBoolParam(intent, "isFullDecoding", fullDecoding)
         this.startActivity(intent)
-        this.finish()
     }
     dialog.create().show()
     return true
