@@ -1,10 +1,9 @@
 package com.mcal.apkeditor.activities
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.tabs.TabLayoutMediator
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.ViewPagerAdapter
 import com.mcal.apkeditor.databinding.ActivitySettingsBinding
@@ -23,13 +22,15 @@ class SettingsActivity : CustomizedLangActivity() {
         setContentView(binding.root)
         setupToolbar(getString(R.string.settings))
 
-        val pagerAdapter = ViewPagerAdapter(supportFragmentManager)
+        val pagerAdapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
         pagerAdapter.addFragment(SettingsFragment(), getString(R.string.tab_general))
         pagerAdapter.addFragment(ApkSettingsFragment(), getString(R.string.tab_apk_decoding))
         pagerAdapter.addFragment(TextSettingsFragment(), getString(R.string.tab_text_editor))
 
         binding.settingsViewpager.adapter = pagerAdapter
-        binding.tabLayout.setupWithViewPager(binding.settingsViewpager)
+        TabLayoutMediator(binding.tabLayout, binding.settingsViewpager) { tab, position ->
+            tab.text = pagerAdapter.getTabTitle(position)
+        }.attach()
 
         if (intent != null) {
             val index = intent.getIntExtra("startUpTab", 0)

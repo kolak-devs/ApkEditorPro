@@ -264,7 +264,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     override fun onBackPressed() {
         finishAfterTransition()
     }
-    
+
     fun initFileWithPermissionCheck() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED
