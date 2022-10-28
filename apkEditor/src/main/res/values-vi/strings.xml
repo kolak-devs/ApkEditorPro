@@ -318,4 +318,5 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="settings_garbage_limit">Cache limit im MBs</string>
     <string name="garbage_limit_subtitle">If the limit is exceeded, the cleaning will be performed automatically</string>
     <string name="settings_connection_category">Connection</string>
+    <string name="msg_unsupported_file">Unsupported file</string>
 </resources>

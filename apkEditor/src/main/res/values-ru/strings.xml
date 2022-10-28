@@ -330,4 +330,5 @@
     <string name="settings_garbage_limit">Лимит кеша в мегабайтах</string>
     <string name="garbage_limit_subtitle">При превышении лимита автоматически будет выполнена очистка мусора</string>
     <string name="settings_connection_category">Сетевое соединение</string>
+    <string name="msg_unsupported_file">Вы должны выбрать файл APK</string>
 </resources>

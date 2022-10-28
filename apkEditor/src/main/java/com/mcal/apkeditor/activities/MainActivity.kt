@@ -9,6 +9,9 @@ import android.view.*
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -44,19 +47,19 @@ import java.io.File
 import kotlin.system.exitProcess
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {
-    private lateinit var binding: ActivityMainBinding
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var pickLauncher: ActivityResultLauncher<Intent>
 
     companion object {
         init {
             System.loadLibrary("apkeditorpro")
         }
-
-        private const val REQUEST_PICK_APK = 677
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, getString(R.string.app_name), false)
         addMenuProvider(object : MenuProvider {
@@ -87,6 +90,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 return false
             }
         })
+
         initUI()
 
         if (BuildConfig.SHOW_AGREEMENT) {
@@ -97,6 +101,20 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             }
         } else {
             initFileWithPermissionCheck()
+        }
+
+        pickLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.let {
+                    val apk = File(ScopedStorage.getTmpDir().path, FilePickHelper.getFileName(this, it))
+                    contentResolver.openInputStream(it)?.let { it1 -> copyFile(it1, apk) }
+                    if (apk.exists() && apk.name.endsWith(".apk")) {
+                        this.startFullEditActivity(apk.path)
+                    } else {
+                        Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
@@ -115,6 +133,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     }
 
     public override fun onDestroy() {
+        _binding = null
         super.onDestroy()
     }
 
@@ -149,8 +168,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         fastApkAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
             when (mainMenuItem.id) {
                 0 -> {
-                    @Suppress("DEPRECATION")
-                    startActivityForResult(FilePickHelper.pickFile(true), REQUEST_PICK_APK);
+                    pickApk()
                     true
                 }
                 1 -> {
@@ -206,6 +224,10 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         }
     }
 
+    private fun pickApk() {
+        pickLauncher.launch(FilePickHelper.pickFile(true))
+    }
+
     private fun showToolManagerDialog() {
         val context = this@MainActivity
         val params = LinearLayout.LayoutParams(
@@ -242,30 +264,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     override fun onBackPressed() {
         finishAfterTransition()
     }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) = super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, resultData)
-        if (requestCode == REQUEST_PICK_APK && resultCode == RESULT_OK) {
-            resultData?.data?.let {
-                val apk = File(ScopedStorage.getTmpDir().path, FilePickHelper.getFileName(this, it))
-                contentResolver.openInputStream(it)?.let { it1 -> copyFile(it1, apk) }
-                if (apk.exists() && apk.name.endsWith(".apk")) {
-                    this.startFullEditActivity(apk.path)
-                } else {
-                    Toast.makeText(this, "Неподдерживаемый файл", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
+    
     fun initFileWithPermissionCheck() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED
