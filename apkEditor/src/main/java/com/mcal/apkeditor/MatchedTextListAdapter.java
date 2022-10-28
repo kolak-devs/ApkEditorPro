@@ -26,8 +26,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
-import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
+import com.mcal.common.view.AutoCompleteAdapter;
+import com.mcal.common.view.AutoCompleteTextView;
 import com.mcal.apkeditor.dialogs.MatchedLineItem;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.editor.TextEditor;

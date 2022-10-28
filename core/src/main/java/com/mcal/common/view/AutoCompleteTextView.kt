@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.autocomplete
+package com.mcal.common.view
 
 import android.content.Context
 import android.util.AttributeSet

@@ -15,7 +15,7 @@ import com.mcal.apkeditor.activities.ManifestSearchResultActivity
 import com.mcal.apkeditor.adapters.IManifestChangeCallback
 import com.mcal.apkeditor.adapters.LineRecord
 import com.mcal.apkeditor.adapters.ManifestListAdapter
-import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter
+import com.mcal.common.view.AutoCompleteAdapter
 import com.mcal.apkeditor.databinding.FragmentManifestBinding
 import com.mcal.apkeditor.ui.fulleditor.FullEditorViewModel
 import com.mcal.common.utils.writeToFile

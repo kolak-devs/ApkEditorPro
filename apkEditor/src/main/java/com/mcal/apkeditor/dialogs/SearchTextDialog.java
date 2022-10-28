@@ -25,8 +25,8 @@ import com.mcal.apkeditor.MatchedTextListAdapter;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.apkeditor.autocomplete.AutoCompleteAdapter;
-import com.mcal.apkeditor.autocomplete.AutoCompleteTextView;
+import com.mcal.common.view.AutoCompleteAdapter;
+import com.mcal.common.view.AutoCompleteTextView;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 

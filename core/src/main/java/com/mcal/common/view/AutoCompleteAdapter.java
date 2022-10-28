@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.autocomplete;
+package com.mcal.common.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,8 +11,8 @@ import android.widget.Filterable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.apkeditor.R;
 import com.mcal.common.App;
+import com.mcal.common.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

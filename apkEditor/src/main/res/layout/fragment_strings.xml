@@ -54,7 +54,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <com.mcal.apkeditor.autocomplete.AutoCompleteTextView
+        <com.mcal.common.view.AutoCompleteTextView
             android:id="@+id/keyword_edit"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"

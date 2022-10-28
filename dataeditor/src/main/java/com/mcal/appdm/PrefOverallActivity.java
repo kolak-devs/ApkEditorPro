@@ -102,12 +102,6 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     // Show backup or not
     private boolean bShowBackup;
 
-    private boolean prefModified = false;
-    private long prefClickTime;
-    private long prefReturnTime;
-    private long createTime;
-    private int prefClickedNum = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,8 +116,6 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
             this.pm = this.getPackageManager();
             this.applicationInfo = pm.getApplicationInfo(packagePath, 0);
             this.packageInfo = pm.getPackageInfo(packagePath, 0);
-
-            this.createTime = System.currentTimeMillis();
             // The target app shares the same user id with me
             this.isRootMode = packageInfo.sharedUserId == null || !packageInfo.sharedUserId.equals(pm.getPackageInfo(getPackageName(), 0).sharedUserId);
         } catch (NameNotFoundException e) {
@@ -139,21 +131,6 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Returned from detail activity
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == DETAIL_ACTIVITY_REQUEST_CODE) {
-            this.prefReturnTime = System.currentTimeMillis();
-            // Log.d("DEBUG", "onActivityResult called, stayTime= "
-            // + (prefReturnTime - prefClickTime) + ", resultCode=" +
-            // resultCode);
-            if (resultCode == 1) {
-                this.prefModified = true;
-            }
-        }
     }
 
     private void initUI() {
@@ -507,9 +484,6 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
         prefListView.setAdapter(
                 new NameAndPathAdapter(this, this.xmlFilePairs));
         prefListView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
-            PrefOverallActivity.this.prefClickTime = System
-                    .currentTimeMillis();
-            PrefOverallActivity.this.prefClickedNum += 1;
 
             Intent intent = new Intent(PrefOverallActivity.this,
                     PrefDetailActivity.class);
@@ -593,13 +567,10 @@ public class PrefOverallActivity extends CustomizedLangActivity implements OnCli
                             @SuppressWarnings("unchecked")
                             @Override
                             public void process() {
-                                List<FileRecord> subFiles = fileListAdapter
-                                        .listFiles(dirPath, true);
-                                Collections.sort(subFiles,
-                                        new FilenameComparator());
+                                List<FileRecord> subFiles = fileListAdapter.listFiles(dirPath, true);
                                 if (subFiles != null) {
-                                    fileListAdapter.updateList(dirPath,
-                                            subFiles);
+                                    Collections.sort(subFiles, new FilenameComparator());
+                                    fileListAdapter.updateList(dirPath, subFiles);
                                 }
                             }
 

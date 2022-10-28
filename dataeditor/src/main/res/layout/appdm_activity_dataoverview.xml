@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -15,8 +16,7 @@
             android:layout_width="64.0dip"
             android:layout_height="64.0dip"
             android:contentDescription="@android:string/no"
-            android:padding="10.0dip"
-            android:src="@android:drawable/btn_dialog" />
+            android:padding="10.0dip" />
 
         <LinearLayout
             android:layout_width="0.0dip"
@@ -33,9 +33,9 @@
                 android:ellipsize="marquee"
                 android:padding="2.0dip"
                 android:singleLine="true"
-                android:textColor="@color/colorGray"
                 android:textSize="16.0sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="ApkEditor Pro" />
 
             <TextView
                 android:id="@+id/app_pkgpath"
@@ -45,8 +45,9 @@
                 android:ellipsize="marquee"
                 android:paddingLeft="2.0dip"
                 android:singleLine="true"
-                android:textColor="@color/colorGray"
-                android:textSize="10.0sp" />
+                android:textSize="10.0sp"
+                tools:text="com.mcal.apkeditor.pro" />
+
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -63,8 +64,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0.0dip"
-        android:layout_weight="1.0"
-        android:background="@color/colorPrimary">
+        android:layout_weight="1.0">
 
         <!-- APP Info (Signature) -->
 
@@ -113,7 +113,6 @@
             android:id="@+id/layout_scanning"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="invisible">
@@ -131,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16.0dip"
-                android:text="@string/loading"
+                android:text="Loading"
                 android:textColor="@color/colorAccent" />
 
         </LinearLayout>

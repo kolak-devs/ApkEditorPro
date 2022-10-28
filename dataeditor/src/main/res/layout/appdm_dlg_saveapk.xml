@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@color/colorPrimary"
     android:orientation="vertical"
     android:padding="4dip">
 
@@ -21,7 +20,6 @@
         android:layout_below="@id/progressBar1"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="12dip"
-        android:text="@string/appdm_save_apk"
-        android:textColor="@color/colorAccent" />
+        android:text="@string/appdm_save_apk" />
 
 </RelativeLayout>
