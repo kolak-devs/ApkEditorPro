@@ -19,7 +19,6 @@
     <string name="cannot_find_ext_sdcard">Non trovo la scheda SD esterna.</string>
     <string name="cannot_parse_apk">Non è possibile analizzare il file apk</string>
     <string name="clean_garbage">Pulisci i file temporanei</string>
-    <string name="clean_garbage_summary">Fai clic qui per eliminare i file temporanei.</string>
     <string name="cleanup">Pulisci</string>
     <string name="close">Chiudi</string>
     <string name="code">Codice</string>

@@ -19,7 +19,6 @@
     <string name="cannot_find_ext_sdcard">Внешняя SD-карта не найдена.</string>
     <string name="cannot_parse_apk">Невозможно разобрать APK-файл</string>
     <string name="clean_garbage">Удаление мусора</string>
-    <string name="clean_garbage_summary">Нажмите здесь, чтобы очистить временные файлы.</string>
     <string name="cleanup">Очистка</string>
     <string name="close">Закрыть</string>
     <string name="code">Код</string>
@@ -322,7 +321,7 @@
     <string name="signing_alias_title">Псевдоним ключа</string>
     <string name="signing_password_title">Пароль ключа</string>
     <string name="signing_signature_title">Версия подписи</string>
-    <string name="signing_signature_sum">Задать версию схемы для подписывания APK. Каждая следующая версия ключает в себя все предыдущие.
+    <string name="signing_signature_sum">Задать версию схемы для подписывания APK. Каждая следующая версия включает в себя все предыдущие.
         Изменяйте, если знаете, что делаете</string>
     <string name="editor_category_title">Текстовый редактор</string>
     <string name="editor_text_size_title">Размер шрифта</string>
@@ -331,4 +330,5 @@
     <string name="garbage_limit_subtitle">При превышении лимита автоматически будет выполнена очистка мусора</string>
     <string name="settings_connection_category">Сетевое соединение</string>
     <string name="msg_unsupported_file">Вы должны выбрать файл APK</string>
+    <string name="clean_garbage_summary">Нажмите для удаления мусора</string>
 </resources>

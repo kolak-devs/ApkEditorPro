@@ -113,7 +113,6 @@
     <!-- version 1.3.18 -->
     <string name="others">其他</string>
     <string name="clean_garbage">垃圾清理</string>
-    <string name="clean_garbage_summary">点击清理临时文件.</string>
     <string name="temp_file_cleaned">临时文件已清理.</string>
 
     <!-- version 1.3.20 -->

@@ -94,7 +94,6 @@
     <string name="edit_data_root">&#201;diter donn&#233;es [ROOT]</string>
     <string name="others">Autre</string>
     <string name="clean_garbage">Nettoyer fichiers inutiles</string>
-    <string name="clean_garbage_summary">Cliquez ici pour nettoyer les fichiers temporaires.</string>
     <string name="temp_file_cleaned">Fichiers temporaires nettoy&#233;s</string>
     <string name="general_error">Erreur: %s</string>
     <string name="save_succeed_tip">%d chaine (s) enregistr&#233;e (s).</string>

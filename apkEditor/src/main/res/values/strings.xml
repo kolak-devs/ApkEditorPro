@@ -114,7 +114,6 @@
     <!-- version 1.3.18 -->
     <string name="others">Others</string>
     <string name="clean_garbage">Clean Garbage</string>
-    <string name="clean_garbage_summary">Click here to clean the temporary files.</string>
     <string name="temp_file_cleaned">Temporary file cleaned.</string>
 
     <!-- version 1.3.20 -->
@@ -427,4 +426,5 @@
     <string name="garbage_limit_subtitle">If the limit is exceeded, the cleaning will be performed automatically</string>
     <string name="settings_connection_category">Connection</string>
     <string name="msg_unsupported_file">Unsupported file</string>
+    <string name="clean_garbage_summary">Click to clean temporary files</string>
 </resources>

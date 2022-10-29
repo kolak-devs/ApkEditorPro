@@ -24,12 +24,10 @@
             android:title="Material You" />
 
         <androidx.preference.ListPreference
-            android:defaultValue=""
             android:entries="@array/language_key"
             android:entryValues="@array/language_value"
             android:icon="@drawable/ic_language"
             android:key="Language"
-            android:summary="@string/select_language_desc"
             android:title="@string/preferred_language" />
 
     </androidx.preference.PreferenceCategory>
@@ -38,12 +36,11 @@
         android:layout="@layout/preferences_category"
         android:title="@string/settings_connection_category">
 
-        <androidx.preference.SwitchPreference
-            android:defaultValue="true"
-            android:key="domain_com"
-            android:summaryOff="Russian"
-            android:summaryOn="Hong Kong"
-            android:title="@string/settings_server_title" />
+        <androidx.preference.DropDownPreference
+            android:key="domain_hk"
+            android:title="@string/settings_server_title"
+            android:entries="@array/domain_com"
+            android:entryValues="@array/domain_com_values"/>
 
     </androidx.preference.PreferenceCategory>
 
@@ -57,16 +54,18 @@
             android:summary="@string/pref_summary_clear_history"
             android:title="@string/title_clear_history" />
 
-        <androidx.preference.Preference
+        <com.mcal.apkeditor.dialogs.GarbageCleanPreference
             android:icon="@drawable/ic_delete"
-            android:key="CleanGarbage"
+            android:key="garbage_clean"
             android:summary="@string/clean_garbage_summary"
-            android:title="@string/clean_garbage" />
+            android:title="@string/clean_garbage"
+            android:entries="@array/garbage_deletion_key"
+            android:entryValues="@array/garbage_deletion_value"/>
 
         <androidx.preference.SeekBarPreference
             android:key="garbage_limit"
             android:max="1536"
-            app:defaultValue="256"
+            app:defaultValue="512"
             app:icon="@drawable/ic_settings_cache_limit"
             app:min="256"
             app:seekBarIncrement="128"

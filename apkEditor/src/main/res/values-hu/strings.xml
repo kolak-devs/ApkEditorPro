@@ -19,7 +19,6 @@
     <string name="cannot_find_ext_sdcard">Nem található a külső SD-kártya.</string>
     <string name="cannot_parse_apk">Nem sikerült elemezni az apk fájlt</string>
     <string name="clean_garbage">Ideiglenes fájlok törlése</string>
-    <string name="clean_garbage_summary">Kattintson ide az ideiglenes fájlok törléséhez.</string>
     <string name="cleanup">Tisztítás</string>
     <string name="close">Bezárás</string>
     <string name="code">Kód</string>

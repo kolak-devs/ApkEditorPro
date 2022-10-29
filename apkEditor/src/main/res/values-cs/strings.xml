@@ -96,7 +96,6 @@
     <string name="edit_data_root">Úprava Dat [ROOT]</string>
     <string name="others">Ostatní</string>
     <string name="clean_garbage">Vyčistit Odpad</string>
-    <string name="clean_garbage_summary">Klikněte zde a vyčistite dočasné soubory.</string>
     <string name="temp_file_cleaned">Dočasný soubor vyčištěn.</string>
     <string name="general_error">Chyba: %s</string>
     <string name="save_succeed_tip">%d řetězce uloženy.</string>

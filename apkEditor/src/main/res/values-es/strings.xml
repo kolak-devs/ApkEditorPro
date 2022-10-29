@@ -19,7 +19,6 @@
     <string name="cannot_find_ext_sdcard">¡No ha sido posible encontrar la Tarjeta-SD Externa!</string>
     <string name="cannot_parse_apk">¡No es posible analizar el archivo APK!</string>
     <string name="clean_garbage">Limpiar Archivos Temporales</string>
-    <string name="clean_garbage_summary">Pulse aquí para eliminar los Archivos Temporales</string>
     <string name="cleanup">Limpiando…</string>
     <string name="close">Cerrar</string>
     <string name="code">Cdgo</string>

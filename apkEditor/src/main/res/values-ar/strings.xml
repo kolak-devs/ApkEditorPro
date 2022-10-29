@@ -99,7 +99,6 @@
     <string name="edit_data_root">تحرير بيانات [الجذر]</string>
     <string name="others">آخرون</string>
     <string name="clean_garbage">تنظيف القمامة</string>
-    <string name="clean_garbage_summary">انقر هنا لتنظيف الملفات المؤقتة.</string>
     <string name="temp_file_cleaned">تنظيف الملفات المؤقتة.</string>
     <string name="general_error">خطأ: %s</string>
     <string name="save_succeed_tip">%d سلاسل المحفوظة.</string>

@@ -96,7 +96,6 @@
     <string name="edit_data_root">Daten bearbeiten [Root]</string>
     <string name="others">Sonstiges</string>
     <string name="clean_garbage">M&#252;ll bereinigen</string>
-    <string name="clean_garbage_summary">Hier klicken, um die tempor&#228;ren Dateien zu bereinigen.</string>
     <string name="temp_file_cleaned">Tempor&#228;re Dateien bereinigt.</string>
     <string name="general_error">Fehler: %s</string>
     <string name="save_succeed_tip">%d Strings gespeichert.</string>
