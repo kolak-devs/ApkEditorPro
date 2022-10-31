@@ -8,6 +8,8 @@ import com.mcal.common.App;
 import com.mcal.common.utils.CommandRunner;
 import com.mcal.common.utils.ScopedStorage;
 
+import java.util.Set;
+
 public class Preferences {
     // Some aapt must pass "--no-version-vectors" option to get the correct result
     public static boolean getNoVersionVectorOption(String aaptPath) {
@@ -33,94 +35,8 @@ public class Preferences {
         return option;
     }
 
-    // Assets Installer
-    public static boolean getInitialized() {
-        return App.getPreferences().getBoolean("initialized", false);
-    }
-
-    public static void setInitialized(boolean key) {
-        App.getPreferences().edit().putBoolean("initialized", key).apply();
-    }
-
-    public static String getVersionString() {
-        return App.getPreferences().getString("version", "");
-    }
-
-    public static void setVersionString(String key) {
-        App.getPreferences().edit().putString("version", key).apply();
-    }
-
     public static boolean isAapt2() {
         return App.getPreferences().getBoolean("aapt2", true);
-    }
-
-    /**
-     * ApkSigner
-     *
-     * @return null
-     */
-    public static String isSignatureKeyType() {
-        return App.getPreferences().getString("signatureKey", "0");
-    }
-
-    public static String getSignatureAlias() {
-        return App.getPreferences().getString("signatureAlias", "");
-    }
-
-    public static void setSignatureAlias(String key) {
-        App.getPreferences().edit().putString("signatureAlias", key).apply();
-    }
-
-    public static String getCertPassword() {
-        return App.getPreferences().getString("certPass", "");
-    }
-
-    public static void setCertPassword(String key) {
-        App.getPreferences().edit().putString("certPass", key).apply();
-    }
-
-    public static String getSignaturePassword() {
-        return App.getPreferences().getString("signaturePass", "");
-    }
-
-    public static void setSignaturePassword(String key) {
-        App.getPreferences().edit().putString("signaturePass", key).apply();
-    }
-
-    public static String getPk8() {
-        return App.getPreferences().getString("pk8Path", "");
-    }
-
-    public static void setPk8(String key) {
-        App.getPreferences().edit().putString("pk8Path", key).apply();
-    }
-
-    public static String getX509() {
-        return App.getPreferences().getString("x509Path", "");
-    }
-
-    public static void setX509(String key) {
-        App.getPreferences().edit().putString("x509Path", key).apply();
-    }
-
-    public static String getSignaturePath() {
-        return App.getPreferences().getString("signaturePath", "");
-    }
-
-    public static void setSignaturePath(String key) {
-        App.getPreferences().edit().putString("signaturePath", key).apply();
-    }
-
-    /**
-     * OTHERS
-     */
-    public static String getLastDirectory() {
-        String rootDir = ScopedStorage.getStorageDirectory().getPath();
-        return App.getPreferences().getString("apkDirectory", rootDir);
-    }
-
-    public static void setLastDirectory(String directory) {
-        App.getPreferences().edit().putString("apkDirectory", directory).apply();
     }
 
     public static String getListOrder() {
@@ -317,8 +233,8 @@ public class Preferences {
         App.getPreferences().edit().putBoolean("editor_use_icu_library", mode).apply();
     }
 
-    public static String getEditorFontSize() {
-        return App.getPreferences().getString("editor_text_size", "14");
+    public static int getEditorFontSize() {
+        return App.getPreferences().getInt("editor_font_size", 14);
     }
 
     public static void setEditorFontSize(String key) {
@@ -346,11 +262,8 @@ public class Preferences {
     }
 
     public static boolean isDomainCom() {
-        return App.getPreferences().getBoolean("domain_com", true);
-    }
-
-    public static void setDomainCom(boolean mode) {
-        App.getPreferences().edit().putBoolean("domain_com", mode).apply();
+        String domain = App.getPreferences().getString("domain_hk", "hk");
+        return domain.equals("hk");
     }
 
     public static boolean isCustomSigning(){

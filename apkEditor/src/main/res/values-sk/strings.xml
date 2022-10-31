@@ -19,7 +19,6 @@
     <string name="cannot_find_ext_sdcard">Nepodarilo sa nájsť externú SD kartu.</string>
     <string name="cannot_parse_apk">Nie je možné analyzovať súbor apk</string>
     <string name="clean_garbage">Vyčistiť zbytočnosti</string>
-    <string name="clean_garbage_summary">Pre vymazanie dočasných súborov, kliknite sem.</string>
     <string name="cleanup">Vyčistiť</string>
     <string name="close">Zavrieť</string>
     <string name="code">Kód</string>

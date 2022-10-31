@@ -147,6 +147,8 @@ android {
         resources.excludes += 'keys/*'
         resources.excludes += 'license/*'
         resources.excludes += '**/tmp/*'
+        resources.excludes += 'org/eclipse/*'
+        resources.excludes += 'android/*'
     }
     lint {
         abortOnError false

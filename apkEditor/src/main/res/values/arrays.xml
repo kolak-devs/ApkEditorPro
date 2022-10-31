@@ -80,4 +80,27 @@
         <item>1</item>
     </string-array>
 
+    <string-array name="garbage_deletion_key">
+        <item>Temporary files</item>
+        <item>Custom signing keys</item>
+        <item>Projects</item>
+        <item>App backups</item>
+    </string-array>
+    <string-array name="garbage_deletion_value">
+        <item>temp</item>
+        <item>signing</item>
+        <item>projects</item>
+        <item>backup</item>
+    </string-array>
+
+    <string-array name="domain_com">
+        <item>Russia</item>
+        <item>Hong Kong</item>
+    </string-array>
+
+    <string-array name="domain_com_values">
+        <item>ru</item>
+        <item>hk</item>
+    </string-array>
+
 </resources>

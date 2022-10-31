@@ -19,7 +19,6 @@
     <string name="cannot_find_ext_sdcard">Не атрымалася знайсці вонкавую sd-картку .</string>
     <string name="cannot_parse_apk">Немагчыма разабраць файл apk</string>
     <string name="clean_garbage">"Выдаленне смецця "</string>
-    <string name="clean_garbage_summary">Націсніце сюды каб ачысціць часовыя файлы.</string>
     <string name="cleanup">"Ачысціць "</string>
     <string name="close">Закрыць</string>
     <string name="code">Код</string>

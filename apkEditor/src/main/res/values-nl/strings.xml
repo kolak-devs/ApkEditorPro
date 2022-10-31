@@ -92,7 +92,6 @@
     <string name="edit_data_root">Bewerk Data [ROOT]</string>
     <string name="others">Anderen</string>
     <string name="clean_garbage">Prullenbak leeg maken</string>
-    <string name="clean_garbage_summary">Klik hier om de cache (tijdelijke bestanden) te verwijderen.</string>
     <string name="temp_file_cleaned">Cache (tijdelijke bestanden) verwijderd.</string>
     <string name="sign_apk">Sign APK</string>
     <string name="view_logs">Open logs</string>

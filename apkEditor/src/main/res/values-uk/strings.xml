@@ -96,7 +96,6 @@
     <string name="edit_data_root">Редагування даних [root]</string>
     <string name="others">Інші</string>
     <string name="clean_garbage">Видалення тимчасових файлів</string>
-    <string name="clean_garbage_summary">Натисніть тут, щоб очистити тимчасові файли.</string>
     <string name="temp_file_cleaned">Тимчасові файли видалені.</string>
     <string name="general_error">Помилка: %s</string>
     <string name="save_succeed_tip">%d рядків збережено.</string>

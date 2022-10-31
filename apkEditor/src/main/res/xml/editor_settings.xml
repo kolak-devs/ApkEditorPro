@@ -6,10 +6,13 @@
         android:layout="@layout/preferences_category"
         android:title="@string/editor_category_title">
 
-        <androidx.preference.EditTextPreference
+        <androidx.preference.SeekBarPreference
             android:defaultValue="14"
-            android:key="editor_text_size"
-            android:title="@string/editor_text_size_title" />
+            android:key="editor_font_size"
+            android:title="@string/editor_text_size_title"
+            app:min="12"
+            android:max="28"
+            app:showSeekBarValue="true"/>
 
         <androidx.preference.SwitchPreference
             android:defaultValue="false"

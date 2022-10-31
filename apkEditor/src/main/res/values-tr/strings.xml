@@ -19,7 +19,6 @@
     <string name="cannot_find_ext_sdcard">Harici SD Kart bulunamadı.</string>
     <string name="cannot_parse_apk">Apk dosyasını ayrıştır</string>
     <string name="clean_garbage">Temizle</string>
-    <string name="clean_garbage_summary">Geçici dosyaları temizlemek için buraya tıklayın.</string>
     <string name="cleanup">Tamamlandı</string>
     <string name="close">Kapat</string>
     <string name="code">Kod</string>
