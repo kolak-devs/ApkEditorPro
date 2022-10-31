@@ -96,6 +96,8 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sql_activity_tableview);
 
+        setupToolbar(R.id.toolbar, "Table Editor", true);
+
         this.originDbFilePath = ActivityHelper.getParam(getIntent(), "originDbFilePath");
         this.dbFilePath = ActivityHelper.getParam(getIntent(), "dbFilePath");
         this.tableName = ActivityHelper.getParam(getIntent(), "tableName");

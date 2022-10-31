@@ -108,9 +108,11 @@ public class PrefOverallActivity extends CustomizedLangActivity {
     }
 
     private void initUI() {
-        binding.appIcon.setImageDrawable(mApplicationInfo.loadIcon(mPackageManager));
-        binding.appName.setText(mApplicationInfo.loadLabel(mPackageManager));
-        binding.appPkgpath.setText(mApplicationInfo.packageName);
+        setupToolbar(R.id.toolbar,
+                mApplicationInfo.loadLabel(mPackageManager).toString(),
+                mApplicationInfo.packageName,
+                mApplicationInfo.loadIcon(mPackageManager),
+                true);
 
         // App info
         List<BasicInfoItem> data = new ArrayList<>();

@@ -4,8 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.MenuProvider
 import com.mcal.appdm.base.R
 import com.mcal.appdm.base.databinding.AppdmActivityPrefdetailBinding
 import com.mcal.appdm.utils.XmlUtils
@@ -78,13 +82,45 @@ class PrefDetailActivity : CustomizedLangActivity(), ITableRowClicked, View.OnCl
     }
 
     private fun initUI() {
-        binding.tvAppname.text = appName
-        filePath?.let {
-            binding.tvPrefname.text = getShortPath(it)
+        appName?.let {
+            setupToolbar(
+                R.id.toolbar,
+                it,
+                filePath?.let { it1 -> getShortPath(it1).toString() },
+                null,
+                true
+            )
         }
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_data_editor, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.action_code_editor -> {
+                        // Open the editor
+                        tmpFilePath?.let { tmp ->
+                            filePath?.let { file ->
+                                val intent = getSoraEditor(
+                                    this@PrefDetailActivity,
+                                    tmp,
+                                    file,
+                                    isRootMode,
+                                    intArrayOf(R.string.appdm_file_too_big, R.string.appdm_file_saved, R.string.appdm_not_found)
+                                )
+                                @Suppress("DEPRECATION")
+                                startActivityForResult(intent, 1000)
+                            }
+                        }
+                        return true
+                    }
+                }
+                return false
+            }
+        })
         binding.buttonSearch.visibility = View.GONE
         binding.buttonSearch.setOnClickListener(this)
-        binding.btnRawFile.setOnClickListener(this)
     }
 
     private fun getShortPath(path: String): @Unmodifiable CharSequence {
@@ -186,16 +222,6 @@ class PrefDetailActivity : CustomizedLangActivity(), ITableRowClicked, View.OnCl
             }
             R.id.button_search -> {
                 doSearch()
-            }
-            R.id.btn_raw_file -> {
-                // Open the editor
-                tmpFilePath?.let { tmp ->
-                    filePath?.let { file ->
-                        val intent = getSoraEditor(this, tmp, file, isRootMode, intArrayOf(R.string.appdm_file_too_big, R.string.appdm_file_saved, R.string.appdm_not_found))
-                        @Suppress("DEPRECATION")
-                        startActivityForResult(intent, 1000)
-                    }
-                }
             }
         }
     }

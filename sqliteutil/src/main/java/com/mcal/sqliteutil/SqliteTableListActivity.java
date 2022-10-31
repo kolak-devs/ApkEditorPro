@@ -86,9 +86,7 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
     }
 
     private void initView() {
-        // Title
-        TextView tv = (TextView) this.findViewById(R.id.title);
-        tv.setText(getResources().getString(R.string.tables_of) + " " + getFileName(originDbFilePath));
+        setupToolbar(R.id.toolbar, getResources().getString(R.string.tables_of) + " " + getFileName(originDbFilePath), true);
 
         // List
         ListView tableLv = (ListView) this.findViewById(R.id.tableList);
