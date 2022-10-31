@@ -5,14 +5,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TableLayout;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utils.HexHelper;
 import com.mcal.common.utils.ActivityHelper;
+import com.mcal.common.utils.HexHelper;
 import com.mcal.sqliteutil.util.PaddingTable;
+
+import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,24 +45,22 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
     private Button preBtn;
     private Button nextBtn;
 
-    private int themeId;
-
-    protected static boolean isDateType(String typeName) {
+    protected static boolean isDateType(@NonNull String typeName) {
         return typeName.equalsIgnoreCase("DATE")
                 || typeName.equalsIgnoreCase("DATETIME");
     }
 
-    protected static boolean isDoubleType(String typeName) {
+    protected static boolean isDoubleType(@NonNull String typeName) {
         return typeName.equalsIgnoreCase("DOUBLE")
                 || typeName.equalsIgnoreCase("DOUBLE PRECISION");
     }
 
-    protected static boolean isFloatType(String typeName) {
+    protected static boolean isFloatType(@NonNull String typeName) {
         return typeName.equalsIgnoreCase("REAL")
                 || typeName.equalsIgnoreCase("FLOAT");
     }
 
-    protected static boolean isIntType(String typeName) {
+    protected static boolean isIntType(@NonNull String typeName) {
         return typeName.equalsIgnoreCase("INTEGER")
                 || typeName.equalsIgnoreCase("LONG")
                 || typeName.equalsIgnoreCase("TINYINT")
@@ -70,15 +71,17 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
                 || typeName.startsWith("INT") || typeName.startsWith("BOOL");
     }
 
-    protected static boolean isBoolType(String typeName) {
+    @Contract(pure = true)
+    protected static boolean isBoolType(@NonNull String typeName) {
         return typeName.startsWith("BOOL");
     }
 
-    protected static boolean isBlobType(String typeName) {
+    @Contract(pure = true)
+    protected static boolean isBlobType(@NonNull String typeName) {
         return typeName.startsWith("BLOB");
     }
 
-    protected static boolean isStringType(String typeName) {
+    protected static boolean isStringType(@NonNull String typeName) {
         return typeName.equalsIgnoreCase("TEXT")
                 || typeName.equalsIgnoreCase("NCHAR")
                 || typeName.equalsIgnoreCase("CLOB")
@@ -209,16 +212,15 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
         ActivityHelper.attachParam(intent, "columnTypes", columnTypes);
         ActivityHelper.attachParam(intent, "columnIsPKs", columnIsPKs);
         ActivityHelper.attachParam(intent, "rowData", tableData.get(index));
-        ActivityHelper.attachParam(intent, "themeId", this.themeId);
         this.startActivityForResult(intent, 0);
     }
 
-    private List<ArrayList<String>> query(SQLiteDatabase db, int offset,
-                                          int limit) {
-        ArrayList<ArrayList<String>> recordList = new ArrayList<ArrayList<String>>();
+    @NonNull
+    private List<ArrayList<String>> query(SQLiteDatabase db, int offset, int limit) {
+        ArrayList<ArrayList<String>> recordList = new ArrayList<>();
         Cursor c = queryTheCursor(db, offset, limit);
         while (c.moveToNext()) {
-            ArrayList<String> record = new ArrayList<String>();
+            ArrayList<String> record = new ArrayList<>();
             for (int i = 0; i < columnNames.size(); i++) {
                 record.add(getValue(c, i));
             }
@@ -272,27 +274,23 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
      *
      * @return Cursor
      */
-    private Cursor queryTheCursor(SQLiteDatabase db, int offset, int limit) {
-        Cursor c = db.rawQuery("SELECT * FROM " + tableName + " limit " + limit
-                + " offset " + offset, null);
-        return c;
+    private Cursor queryTheCursor(@NonNull SQLiteDatabase db, int offset, int limit) {
+        return db.rawQuery("SELECT * FROM " + tableName + " limit " + limit + " offset " + offset, null);
     }
 
     protected void queryTableData() {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFilePath, null,
-                SQLiteDatabase.OPEN_READONLY);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFilePath, null, SQLiteDatabase.OPEN_READONLY);
         tableData = query(db, tableOffset, pageSize);
         db.close();
     }
 
     private void initColumnInfo(SQLiteDatabase db) {
         if (columnNames == null) {
-            this.columnNames = new ArrayList<String>();
-            this.columnTypes = new ArrayList<String>();
-            this.columnIsPKs = new ArrayList<String>();
+            this.columnNames = new ArrayList<>();
+            this.columnTypes = new ArrayList<>();
+            this.columnIsPKs = new ArrayList<>();
 
-            Cursor c = db
-                    .rawQuery("PRAGMA table_info(" + tableName + ")", null);
+            Cursor c = db.rawQuery("PRAGMA table_info(" + tableName + ")", null);
             if (c.moveToFirst()) {
                 int pkIdx = c.getColumnIndex("pk");
                 do {
@@ -312,10 +310,10 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
         }
     }
 
-    private void getTableSize(SQLiteDatabase db) {
+    private void getTableSize(@NonNull SQLiteDatabase db) {
         Cursor c = db.rawQuery("SELECT COUNT(*) FROM " + tableName, null);
         if (c.moveToFirst()) {
-            this.tableSize = c.getInt(0);
+            tableSize = c.getInt(0);
         }
         c.close();
     }

@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,10 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.utils.FileHelperKt;
-import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ActivityHelper;
+import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.RootCommand;
+import com.mcal.common.utils.ScopedStorage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,26 +29,19 @@ import java.util.ArrayList;
  * @author phe3
  */
 public class SqliteTableListActivity extends CustomizedLangActivity {
-
     private String originDbFilePath;
     private String dbFilePath;
     private ArrayList<String> tableList;
 
     private boolean isRootMode;
 
-    private int textColor = 0xff333333;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        this.textColor = 0xffcccccc;
         setContentView(R.layout.sql_activity_tablelist);
 
         Intent intent = getIntent();
-        this.originDbFilePath = ActivityHelper
-                .getParam(intent, "dbFilePath");
+        originDbFilePath = ActivityHelper.getParam(intent, "dbFilePath");
         String strRootMode = ActivityHelper.getParam(intent, "isRootMode");
         // This is the default value
         isRootMode = !"false".equalsIgnoreCase(strRootMode);
@@ -60,14 +52,14 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
             initView();
         } catch (Exception e) {
             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            this.finish();
+            finish();
         }
     }
 
     private void prepareAccessibleFile() throws Exception {
         // For non-root mode, just directly use the origin file
         if (!isRootMode) {
-            this.dbFilePath = originDbFilePath;
+            dbFilePath = originDbFilePath;
             return;
         }
 
@@ -77,7 +69,7 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
         }
 
         File f = new File(getFilesDir(), "work.db");
-        this.dbFilePath = f.getPath();
+        dbFilePath = f.getPath();
 
         RootCommand rc = new RootCommand();
         String strCmd = "cp";
@@ -100,22 +92,16 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
 
         // List
         ListView tableLv = (ListView) this.findViewById(R.id.tableList);
-        tableLv.setAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, tableList) {
+        tableLv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tableList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position,
-                        convertView, parent);
-                textView.setTextColor(textColor);
-                return textView;
+                return (TextView) super.getView(position, convertView, parent);
             }
         });
         tableLv.setOnItemClickListener((arg0, arg1, position, arg3) -> {
             String tableName = tableList.get(position);
-            Intent intent = new Intent(SqliteTableListActivity.this,
-                    SqliteTableViewActivity.class);
-            ActivityHelper.attachParam(intent, "originDbFilePath",
-                    originDbFilePath);
+            Intent intent = new Intent(SqliteTableListActivity.this, SqliteTableViewActivity.class);
+            ActivityHelper.attachParam(intent, "originDbFilePath", originDbFilePath);
             ActivityHelper.attachParam(intent, "dbFilePath", dbFilePath);
             ActivityHelper.attachParam(intent, "tableName", tableName);
             startActivity(intent);
@@ -130,10 +116,9 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
 
     @SuppressLint("Range")
     private void initData() {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFilePath, null,
-                SQLiteDatabase.OPEN_READONLY);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFilePath, null, SQLiteDatabase.OPEN_READONLY);
 
-        this.tableList = new ArrayList<>();
+        tableList = new ArrayList<>();
         @SuppressLint("Recycle") Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
 
         if (c.moveToFirst()) {
@@ -142,8 +127,6 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
                 c.moveToNext();
             }
         }
-
         db.close();
     }
-
 }

@@ -3,7 +3,6 @@ package com.mcal.sqliteutil;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -23,9 +22,9 @@ import androidx.annotation.NonNull;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.adapters.MySimpleAdapter;
-import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.RootCommand;
+import com.mcal.common.utils.ScopedStorage;
 
 import org.jetbrains.annotations.Contract;
 
@@ -40,8 +39,7 @@ import java.util.Map;
  *
  * @author phe3
  */
-public class SqliteRowViewActivity extends CustomizedLangActivity implements
-        OnItemClickListener, OnClickListener {
+public class SqliteRowViewActivity extends CustomizedLangActivity implements OnItemClickListener, OnClickListener {
 
     // All versions now editable
     private final boolean editable = true;
@@ -63,8 +61,7 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
 
         setContentView(R.layout.sql_activity_rowview);
 
-        this.originDbFilePath = ActivityHelper.getParam(intent,
-                "originDbFilePath");
+        this.originDbFilePath = ActivityHelper.getParam(intent, "originDbFilePath");
         this.dbFilePath = ActivityHelper.getParam(intent, "dbFilePath");
         this.tableName = ActivityHelper.getParam(intent, "tableName");
         this.columnNames = ActivityHelper.getStringArray(intent, "columnNames");
@@ -76,7 +73,7 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
         initButton();
 
         // Initially not modified
-        this.setResult(0);
+        setResult(0);
     }
 
     private void initListView() {
@@ -103,8 +100,7 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-        TableRecordDialog dlg = new TableRecordDialog(this, columnTypes,
-                columnNames, columnIsPKs, rowData, position, this.editable);
+        TableRecordDialog dlg = new TableRecordDialog(this, columnTypes, columnNames, columnIsPKs, rowData, position, this.editable);
         dlg.setTableInfo(dbFilePath, tableName);
     }
 
@@ -117,12 +113,10 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
         }
 
         String workingDir = ScopedStorage.getStorageDirectory().getPath() + File.separator + "HackAppData/tmp/";
-        this.dbFilePath = workingDir + "tmp.db";
+        dbFilePath = workingDir + "tmp.db";
 
         RootCommand rc = new RootCommand();
-        boolean copyRet = rc.runRootCommand(
-                String.format("cat %s > %s", dbFilePath, originDbFilePath),
-                null, 2000);
+        boolean copyRet = rc.runRootCommand(String.format("cat %s > %s", dbFilePath, originDbFilePath), null, 2000);
         // Copy file failed, use the original file
         if (!copyRet) {
             throw new Exception("Can not write to DB file.");
@@ -133,8 +127,7 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
     // index - modified column index
     public void saveValue(int index, Object newValue) throws Exception {
         String colName = columnNames.get(index);
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFilePath, null,
-                SQLiteDatabase.OPEN_READWRITE);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFilePath, null, SQLiteDatabase.OPEN_READWRITE);
         if (db == null) {
             throw new Exception("Can not open database.");
         }
@@ -156,15 +149,15 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
         valueListView.setAdapter(adapter);
 
         // Also set the result to notify the previous activity
-        this.setResult(1);
+        setResult(1);
     }
 
     @NonNull
     @Contract(" -> new")
     private MySimpleAdapter createListAdapter() {
-        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> data = new ArrayList<>();
         for (int i = 0; i < columnNames.size(); i++) {
-            Map<String, String> map1 = new HashMap<String, String>();
+            Map<String, String> map1 = new HashMap<>();
             map1.put("NAME", columnNames.get(i));
             map1.put("VALUE", rowData.get(i));
             data.add(map1);
@@ -204,8 +197,7 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
         // Log.d("DEBUG", "value: " + values.get(colName));
         // Log.d("DEBUG", "whereClause: " + whereClause);
         // Log.d("DEBUG", "valueList: " + valueList);
-        int ret = db.update(tableName, values, whereClause,
-                valueList.toArray(new String[valueList.size()]));
+        int ret = db.update(tableName, values, whereClause, valueList.toArray(new String[valueList.size()]));
         if (ret <= 0) {
             throw new Exception("Failed or no change detected!");
         }
@@ -249,11 +241,10 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
         }
 
         try {
-            List<String> valueList = new ArrayList<String>();
+            List<String> valueList = new ArrayList<>();
             String whereClause = buildCondition(valueList);
 
-            db.delete(tableName, whereClause,
-                    valueList.toArray(new String[valueList.size()]));
+            db.delete(tableName, whereClause, valueList.toArray(new String[valueList.size()]));
         } catch (Exception e) {
             throw e;
         } finally {
@@ -264,16 +255,16 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
         copyDbFile();
 
         // Set the result to notify the previous activity
-        this.setResult(1);
+        setResult(1);
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.btn_delete) {
             showDeleteDialog();
         } else if (id == R.id.btn_close) {
-            this.finish();
+            finish();
         }
     }
 
@@ -285,28 +276,20 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
                 .setMessage("Are you sure to delete the record?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton("YES",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                try {
-                                    deleteRecord();
-                                    SqliteRowViewActivity.this.finish();
-                                } catch (Exception e) {
-                                    Toast.makeText(
-                                            SqliteRowViewActivity.this,
-                                            e.getClass().getSimpleName() + ": "
-                                                    + e.getMessage(),
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                        (dialog, which) -> {
+                            try {
+                                deleteRecord();
+                                SqliteRowViewActivity.this.finish();
+                            } catch (Exception e) {
+                                Toast.makeText(
+                                        SqliteRowViewActivity.this,
+                                        e.getClass().getSimpleName() + ": "
+                                                + e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
                             }
                         })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // dismiss();
-                    }
-                }).create();
+                .setNegativeButton("NO", null)
+                .create();
         alertDialog.show();
     }
 }

@@ -121,7 +121,7 @@ class PrefDetailActivity : CustomizedLangActivity(), ITableRowClicked, View.OnCl
         val header = ArrayList<String>()
         header.add("Key")
         header.add("Value")
-        (paddingTable ?: PaddingTable(this, null, binding.valueTable, this).also { paddingTable = it }).apply {
+        (paddingTable ?: PaddingTable(this, binding.valueTable, this).also { paddingTable = it }).apply {
             setTableHeaderNames(header)
             setTableData(data)
             prepareTable()

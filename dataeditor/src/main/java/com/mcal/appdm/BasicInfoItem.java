@@ -14,8 +14,7 @@ public class BasicInfoItem {
         this.value = value;
     }
 
-    public BasicInfoItem(String title, String value, String opName,
-                         OnClickListener listener) {
+    public BasicInfoItem(String title, String value, String opName, OnClickListener listener) {
         this.title = title;
         this.value = value;
         this.opName = opName;

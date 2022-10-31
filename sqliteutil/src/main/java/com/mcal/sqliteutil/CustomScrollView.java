@@ -1,5 +1,6 @@
 package com.mcal.sqliteutil;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -17,6 +18,8 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class CustomScrollView extends FrameLayout {
@@ -29,6 +32,7 @@ public class CustomScrollView extends FrameLayout {
      */
     private static final int INVALID_POINTER = -1;
     private final Rect mTempRect = new Rect();
+    private final Rect normal = new Rect();
     private long mLastScroll;
     private Scroller mScroller;
     /**
@@ -88,7 +92,6 @@ public class CustomScrollView extends FrameLayout {
      * scrollview���������Լ�¼
      */
     private View inner;
-    private Rect normal = new Rect();
 
     public CustomScrollView(Context context) {
         this(context, null);
@@ -176,8 +179,7 @@ public class CustomScrollView extends FrameLayout {
         setFocusable(true);
         setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
         setWillNotDraw(false);
-        final ViewConfiguration configuration = ViewConfiguration
-                .get(getContext());
+        final ViewConfiguration configuration = ViewConfiguration.get(getContext());
         mTouchSlop = configuration.getScaledTouchSlop();
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
@@ -186,8 +188,7 @@ public class CustomScrollView extends FrameLayout {
     @Override
     public void addView(View child) {
         if (getChildCount() > 0) {
-            throw new IllegalStateException(
-                    "ScrollView can host only one direct child");
+            throw new IllegalStateException("ScrollView can host only one direct child");
         }
 
         super.addView(child);
@@ -196,8 +197,7 @@ public class CustomScrollView extends FrameLayout {
     @Override
     public void addView(View child, int index) {
         if (getChildCount() > 0) {
-            throw new IllegalStateException(
-                    "ScrollView can host only one direct child");
+            throw new IllegalStateException("ScrollView can host only one direct child");
         }
 
         super.addView(child, index);
@@ -206,8 +206,7 @@ public class CustomScrollView extends FrameLayout {
     @Override
     public void addView(View child, ViewGroup.LayoutParams params) {
         if (getChildCount() > 0) {
-            throw new IllegalStateException(
-                    "ScrollView can host only one direct child");
+            throw new IllegalStateException("ScrollView can host only one direct child");
         }
 
         super.addView(child, params);
@@ -216,8 +215,7 @@ public class CustomScrollView extends FrameLayout {
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         if (getChildCount() > 0) {
-            throw new IllegalStateException(
-                    "ScrollView can host only one direct child");
+            throw new IllegalStateException("ScrollView can host only one direct child");
         }
 
         super.addView(child, index, params);
@@ -230,8 +228,7 @@ public class CustomScrollView extends FrameLayout {
         View child = getChildAt(0);
         if (child != null) {
             int childHeight = child.getHeight();
-            return getHeight() < childHeight + getPaddingTop()
-                    + getPaddingBottom();
+            return getHeight() < childHeight + getPaddingTop() + getPaddingBottom();
         }
         return false;
     }
@@ -240,8 +237,7 @@ public class CustomScrollView extends FrameLayout {
         View child = getChildAt(0);
         if (child != null) {
             int childWidth = child.getWidth();
-            return getWidth() < childWidth + getPaddingLeft()
-                    + getPaddingRight();
+            return getWidth() < childWidth + getPaddingLeft() + getPaddingRight();
         }
         return false;
     }
@@ -296,8 +292,7 @@ public class CustomScrollView extends FrameLayout {
 
         final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        if (heightMode == MeasureSpec.UNSPECIFIED
-                && widthMode == MeasureSpec.UNSPECIFIED) {
+        if (heightMode == MeasureSpec.UNSPECIFIED && widthMode == MeasureSpec.UNSPECIFIED) {
             return;
         }
 
@@ -305,17 +300,14 @@ public class CustomScrollView extends FrameLayout {
             final View child = getChildAt(0);
             int height = getMeasuredHeight();
             int width = getMeasuredWidth();
-            if (child.getMeasuredHeight() < height
-                    || child.getMeasuredWidth() < width) {
+            if (child.getMeasuredHeight() < height || child.getMeasuredWidth() < width) {
                 width -= getPaddingLeft();
                 width -= getPaddingRight();
-                int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(width,
-                        MeasureSpec.EXACTLY);
+                int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
 
                 height -= getPaddingTop();
                 height -= getPaddingBottom();
-                int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-                        height, MeasureSpec.EXACTLY);
+                int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
 
                 child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
             }
@@ -336,7 +328,7 @@ public class CustomScrollView extends FrameLayout {
      * @param event The key event to execute.
      * @return Return true if the event was handled, else false.
      */
-    public boolean executeKeyEvent(KeyEvent event) {
+    public boolean executeKeyEvent(@NonNull KeyEvent event) {
         mTempRect.setEmpty();
 
         boolean handled = false;
@@ -389,16 +381,13 @@ public class CustomScrollView extends FrameLayout {
             final int scrollX = getScrollX();
             final int scrollY = getScrollY();
             final View child = getChildAt(0);
-            return !(y < child.getTop() - scrollY
-                    || y >= child.getBottom() - scrollY
-                    || x < child.getLeft() - scrollX || x >= child.getRight()
-                    - scrollX);
+            return !(y < child.getTop() - scrollY || y >= child.getBottom() - scrollY || x < child.getLeft() - scrollX || x >= child.getRight() - scrollX);
         }
         return false;
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
+    public boolean onInterceptTouchEvent(@NonNull MotionEvent ev) {
         /*
          * This method JUST determines whether we want to intercept the motion.
          * If we return true, onMotionEvent will be called and we do the actual
@@ -510,8 +499,9 @@ public class CustomScrollView extends FrameLayout {
         flexible = b;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
+    public boolean onTouchEvent(@NonNull MotionEvent ev) {
 
         if (ev.getAction() == MotionEvent.ACTION_DOWN && ev.getEdgeFlags() != 0) {
             // Don't handle edge touches immediately -- they may actually belong
@@ -557,8 +547,7 @@ public class CustomScrollView extends FrameLayout {
             case MotionEvent.ACTION_MOVE:
                 if (mIsBeingDragged || scrollableOutsideTouch) {
                     // Scroll to follow the motion event
-                    final int activePointerIndex = ev
-                            .findPointerIndex(mActivePointerId);
+                    final int activePointerIndex = ev.findPointerIndex(mActivePointerId);
                     final float y = ev.getY(activePointerIndex);
                     final int deltaY = (int) (mLastMotionY - y);
                     mLastMotionY = y;
@@ -572,13 +561,10 @@ public class CustomScrollView extends FrameLayout {
                     if (isNeedMove() && flexible) {
                         if (normal.isEmpty()) {
                             // ���������Ĳ�������
-                            normal.set(inner.getLeft(), inner.getTop(),
-                                    inner.getRight(), inner.getBottom());
+                            normal.set(inner.getLeft(), inner.getTop(), inner.getRight(), inner.getBottom());
                         }
                         // �ƶ�����
-                        inner.layout(inner.getLeft() - deltaX / 2, inner.getTop()
-                                        - deltaY / 2, inner.getRight() - deltaX / 2,
-                                inner.getBottom() - deltaY / 2);
+                        inner.layout(inner.getLeft() - deltaX / 2, inner.getTop() - deltaY / 2, inner.getRight() - deltaX / 2, inner.getBottom() - deltaY / 2);
                     }
                 }
                 break;
@@ -586,16 +572,12 @@ public class CustomScrollView extends FrameLayout {
                 if (mIsBeingDragged || scrollableOutsideTouch) {
                     if (mFlingEnabled) {
                         final VelocityTracker velocityTracker = mVelocityTracker;
-                        velocityTracker.computeCurrentVelocity(1000,
-                                mMaximumVelocity);
-                        int initialVelocitx = (int) velocityTracker
-                                .getXVelocity(mActivePointerId);
-                        int initialVelocity = (int) velocityTracker
-                                .getYVelocity(mActivePointerId);
+                        velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
+                        int initialVelocitx = (int) velocityTracker.getXVelocity(mActivePointerId);
+                        int initialVelocity = (int) velocityTracker.getYVelocity(mActivePointerId);
 
                         if (getChildCount() > 0) {
-                            if (Math.abs(initialVelocitx) > initialVelocitx
-                                    || Math.abs(initialVelocity) > mMinimumVelocity) {
+                            if (Math.abs(initialVelocitx) > initialVelocitx || Math.abs(initialVelocity) > mMinimumVelocity) {
                                 fling(-initialVelocitx, -initialVelocity);
                             }
 
@@ -630,7 +612,7 @@ public class CustomScrollView extends FrameLayout {
         return true;
     }
 
-    private void onSecondaryPointerUp(MotionEvent ev) {
+    private void onSecondaryPointerUp(@NonNull MotionEvent ev) {
         final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
         final int pointerId = ev.getPointerId(pointerIndex);
         if (pointerId == mActivePointerId) {
@@ -688,18 +670,14 @@ public class CustomScrollView extends FrameLayout {
                  * focusing
                  */
 
-                final boolean viewIsFullyContained = (top < viewTop)
-                        && (viewBottom < bottom);
+                final boolean viewIsFullyContained = (top < viewTop) && (viewBottom < bottom);
 
                 if (focusCandidate == null) {
                     /* No candidate, take this one */
                     focusCandidate = view;
                     foundFullyContainedFocusable = viewIsFullyContained;
                 } else {
-                    final boolean viewIsCloserToBoundary = (topFocus && viewTop < focusCandidate
-                            .getTop())
-                            || (!topFocus && viewBottom > focusCandidate
-                            .getBottom());
+                    final boolean viewIsCloserToBoundary = (topFocus && viewTop < focusCandidate.getTop()) || (!topFocus && viewBottom > focusCandidate.getBottom());
 
                     if (foundFullyContainedFocusable) {
                         if (viewIsFullyContained && viewIsCloserToBoundary) {
@@ -760,18 +738,14 @@ public class CustomScrollView extends FrameLayout {
                  * focusing
                  */
 
-                final boolean viewIsFullyContained = (left < viewLeft)
-                        && (viewRight < right);
+                final boolean viewIsFullyContained = (left < viewLeft) && (viewRight < right);
 
                 if (focusCandidate == null) {
                     /* No candidate, take this one */
                     focusCandidate = view;
                     foundFullyContainedFocusable = viewIsFullyContained;
                 } else {
-                    final boolean viewIsCloserToBoundary = (leftFocus && viewLeft < focusCandidate
-                            .getLeft())
-                            || (!leftFocus && viewRight > focusCandidate
-                            .getRight());
+                    final boolean viewIsCloserToBoundary = (leftFocus && viewLeft < focusCandidate.getLeft()) || (!leftFocus && viewRight > focusCandidate.getRight());
 
                     if (foundFullyContainedFocusable) {
                         if (viewIsFullyContained && viewIsCloserToBoundary) {
@@ -914,8 +888,7 @@ public class CustomScrollView extends FrameLayout {
         if (left >= containerLeft && right <= containerRight) {
             handled = false;
         } else {
-            int delta = goLeft ? (left - containerLeft)
-                    : (right - containerRight);
+            int delta = goLeft ? (left - containerLeft) : (right - containerRight);
             doScrollX(delta);
         }
 
@@ -939,13 +912,11 @@ public class CustomScrollView extends FrameLayout {
         if (currentFocused == this)
             currentFocused = null;
 
-        View nextFocused = FocusFinder.getInstance().findNextFocus(this,
-                currentFocused, direction);
+        View nextFocused = FocusFinder.getInstance().findNextFocus(this, currentFocused, direction);
 
         final int maxJump = getMaxScrollAmountV();
 
-        if (nextFocused != null
-                && isWithinDeltaOfScreenV(nextFocused, maxJump, getHeight())) {
+        if (nextFocused != null && isWithinDeltaOfScreenV(nextFocused, maxJump, getHeight())) {
             nextFocused.getDrawingRect(mTempRect);
             offsetDescendantRectToMyCoords(nextFocused, mTempRect);
             int scrollDelta = computeScrollDeltaToGetChildRectOnScreenV(mTempRect);
@@ -974,8 +945,7 @@ public class CustomScrollView extends FrameLayout {
             doScrollY(direction == View.FOCUS_DOWN ? scrollDelta : -scrollDelta);
         }
 
-        if (currentFocused != null && currentFocused.isFocused()
-                && isOffScreenV(currentFocused)) {
+        if (currentFocused != null && currentFocused.isFocused() && isOffScreenV(currentFocused)) {
             // previously focused item still has focus and is off screen, give
             // it up (take it back to ourselves)
             // (also, need to temporarily force FOCUS_BEFORE_DESCENDANTS so we
@@ -994,8 +964,7 @@ public class CustomScrollView extends FrameLayout {
         if (currentFocused == this)
             currentFocused = null;
 
-        View nextFocused = FocusFinder.getInstance().findNextFocus(this,
-                currentFocused, direction);
+        View nextFocused = FocusFinder.getInstance().findNextFocus(this, currentFocused, direction);
 
         final int maxJump = getMaxScrollAmountH();
 
@@ -1024,12 +993,10 @@ public class CustomScrollView extends FrameLayout {
             if (scrollDelta == 0) {
                 return false;
             }
-            doScrollX(direction == View.FOCUS_RIGHT ? scrollDelta
-                    : -scrollDelta);
+            doScrollX(direction == View.FOCUS_RIGHT ? scrollDelta : -scrollDelta);
         }
 
-        if (currentFocused != null && currentFocused.isFocused()
-                && isOffScreenH(currentFocused)) {
+        if (currentFocused != null && currentFocused.isFocused() && isOffScreenH(currentFocused)) {
             // previously focused item still has focus and is off screen, give
             // it up (take it back to ourselves)
             // (also, need to temporarily force FOCUS_BEFORE_DESCENDANTS so we
@@ -1058,21 +1025,19 @@ public class CustomScrollView extends FrameLayout {
      * @return whether the descendant of this scroll view is within delta pixels
      * of being on the screen.
      */
-    private boolean isWithinDeltaOfScreenV(View descendant, int delta,
+    private boolean isWithinDeltaOfScreenV(@NonNull View descendant, int delta,
                                            int height) {
         descendant.getDrawingRect(mTempRect);
         offsetDescendantRectToMyCoords(descendant, mTempRect);
 
-        return (mTempRect.bottom + delta) >= getScrollY()
-                && (mTempRect.top - delta) <= (getScrollY() + height);
+        return (mTempRect.bottom + delta) >= getScrollY() && (mTempRect.top - delta) <= (getScrollY() + height);
     }
 
-    private boolean isWithinDeltaOfScreenH(View descendant, int delta) {
+    private boolean isWithinDeltaOfScreenH(@NonNull View descendant, int delta) {
         descendant.getDrawingRect(mTempRect);
         offsetDescendantRectToMyCoords(descendant, mTempRect);
 
-        return (mTempRect.right + delta) >= getScrollX()
-                && (mTempRect.left - delta) <= (getScrollX() + getWidth());
+        return (mTempRect.right + delta) >= getScrollX() && (mTempRect.left - delta) <= (getScrollX() + getWidth());
     }
 
     /**
@@ -1114,8 +1079,7 @@ public class CustomScrollView extends FrameLayout {
         long duration = AnimationUtils.currentAnimationTimeMillis()
                 - mLastScroll;
         if (duration > ANIMATED_SCROLL_GAP) {
-            final int height = getHeight() - getPaddingBottom()
-                    - getPaddingTop();
+            final int height = getHeight() - getPaddingBottom() - getPaddingTop();
             final int bottom = getChildAt(0).getHeight();
             final int maxY = Math.max(0, bottom - height);
             final int scrollY = getScrollY();
@@ -1157,8 +1121,7 @@ public class CustomScrollView extends FrameLayout {
     @Override
     protected int computeVerticalScrollRange() {
         final int count = getChildCount();
-        final int contentHeight = getHeight() - getPaddingBottom()
-                - getPaddingTop();
+        final int contentHeight = getHeight() - getPaddingBottom() - getPaddingTop();
         if (count == 0) {
             return contentHeight;
         }
@@ -1169,8 +1132,7 @@ public class CustomScrollView extends FrameLayout {
     @Override
     protected int computeHorizontalScrollRange() {
         final int count = getChildCount();
-        final int contentWidth = getWidth() - getPaddingLeft()
-                - getPaddingRight();
+        final int contentWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         if (count == 0) {
             return contentWidth;
         }
@@ -1189,31 +1151,23 @@ public class CustomScrollView extends FrameLayout {
     }
 
     @Override
-    protected void measureChild(View child, int parentWidthMeasureSpec,
-                                int parentHeightMeasureSpec) {
+    protected void measureChild(@NonNull View child, int parentWidthMeasureSpec, int parentHeightMeasureSpec) {
         int childWidthMeasureSpec;
         int childHeightMeasureSpec;
 
-        childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(0,
-                MeasureSpec.UNSPECIFIED);
+        childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
 
-        childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0,
-                MeasureSpec.UNSPECIFIED);
+        childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
 
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
     }
 
     @Override
-    protected void measureChildWithMargins(View child,
-                                           int parentWidthMeasureSpec, int widthUsed,
-                                           int parentHeightMeasureSpec, int heightUsed) {
-        final MarginLayoutParams lp = (MarginLayoutParams) child
-                .getLayoutParams();
+    protected void measureChildWithMargins(@NonNull View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
 
-        final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
-                lp.leftMargin + lp.rightMargin, MeasureSpec.UNSPECIFIED);
-        final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-                lp.topMargin + lp.bottomMargin, MeasureSpec.UNSPECIFIED);
+        final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(lp.leftMargin + lp.rightMargin, MeasureSpec.UNSPECIFIED);
+        final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(lp.topMargin + lp.bottomMargin, MeasureSpec.UNSPECIFIED);
 
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
     }
@@ -1246,11 +1200,8 @@ public class CustomScrollView extends FrameLayout {
 
             if (getChildCount() > 0) {
                 View child = getChildAt(0);
-                x = clamp(x, getWidth() - getPaddingRight() - getPaddingLeft(),
-                        child.getWidth());
-                y = clamp(y,
-                        getHeight() - getPaddingBottom() - getPaddingTop(),
-                        child.getHeight());
+                x = clamp(x, getWidth() - getPaddingRight() - getPaddingLeft(), child.getWidth());
+                y = clamp(y, getHeight() - getPaddingBottom() - getPaddingTop(), child.getHeight());
                 super.scrollTo(x, y);
                 // getHeight()- child.getHeight()=y ->�ײ� y=0 ->����
                 // ����ǿ�� mScroller.getDuration()
@@ -1267,7 +1218,7 @@ public class CustomScrollView extends FrameLayout {
      *
      * @param child the View to scroll to
      */
-    private void scrollToChild(View child) {
+    private void scrollToChild(@NonNull View child) {
         child.getDrawingRect(mTempRect);
 
         /* Offset from child's local coordinates to ScrollView coordinates */
@@ -1312,8 +1263,9 @@ public class CustomScrollView extends FrameLayout {
      * @return The scroll delta.
      */
     protected int computeScrollDeltaToGetChildRectOnScreenV(Rect rect) {
-        if (getChildCount() == 0)
+        if (getChildCount() == 0) {
             return 0;
+        }
 
         int height = getHeight();
         int screenTop = getScrollY();
@@ -1466,10 +1418,8 @@ public class CustomScrollView extends FrameLayout {
         // direction = View.FOCUS_LEFT;
         // }
 
-        final View nextFocus = previouslyFocusedRect == null ? FocusFinder
-                .getInstance().findNextFocus(this, null, direction)
-                : FocusFinder.getInstance().findNextFocusFromRect(this,
-                previouslyFocusedRect, direction);
+        final View nextFocus = previouslyFocusedRect == null ? FocusFinder.getInstance().findNextFocus(this, null, direction)
+                : FocusFinder.getInstance().findNextFocusFromRect(this, previouslyFocusedRect, direction);
 
         if (nextFocus == null) {
             return false;
@@ -1483,11 +1433,10 @@ public class CustomScrollView extends FrameLayout {
     }
 
     @Override
-    public boolean requestChildRectangleOnScreen(View child, Rect rectangle,
+    public boolean requestChildRectangleOnScreen(@NonNull View child, @NonNull Rect rectangle,
                                                  boolean immediate) {
         // offset into coordinate space of this scroll view
-        rectangle.offset(child.getLeft() - child.getScrollX(), child.getTop()
-                - child.getScrollY());
+        rectangle.offset(child.getLeft() - child.getScrollX(), child.getTop() - child.getScrollY());
 
         return scrollToChildRect(rectangle, immediate);
     }
@@ -1503,8 +1452,7 @@ public class CustomScrollView extends FrameLayout {
         super.onLayout(changed, l, t, r, b);
         mIsLayoutDirty = false;
         // Give a child focus if it needs it
-        if (mChildToScrollTo != null
-                && isViewDescendantOf(mChildToScrollTo, this)) {
+        if (mChildToScrollTo != null && isViewDescendantOf(mChildToScrollTo, this)) {
             scrollToChild(mChildToScrollTo);
         }
         mChildToScrollTo = null;
@@ -1518,8 +1466,9 @@ public class CustomScrollView extends FrameLayout {
         super.onSizeChanged(w, h, oldw, oldh);
 
         View currentFocused = findFocus();
-        if (null == currentFocused || this == currentFocused)
+        if (null == currentFocused || this == currentFocused) {
             return;
+        }
 
         // If the currently-focused view was visible on the screen when the
         // screen was at the old height, then scroll the screen to make that
@@ -1550,8 +1499,7 @@ public class CustomScrollView extends FrameLayout {
         }
 
         final ViewParent theParent = child.getParent();
-        return (theParent instanceof ViewGroup)
-                && isViewDescendantOf((View) theParent, parent);
+        return (theParent instanceof ViewGroup) && isViewDescendantOf((View) theParent, parent);
     }
 
     /**
@@ -1568,9 +1516,7 @@ public class CustomScrollView extends FrameLayout {
 
             int height = getHeight() - getPaddingBottom() - getPaddingTop();
             int bottom = getChildAt(0).getHeight();
-            mScroller.fling(getScrollX(), getScrollY(), velocityX, velocityY,
-                    0, Math.max(0, right - width), 0,
-                    Math.max(0, bottom - height));
+            mScroller.fling(getScrollX(), getScrollY(), velocityX, velocityY, 0, Math.max(0, right - width), 0, Math.max(0, bottom - height));
             // final boolean movingDown = velocityX > 0 || velocityY > 0;
             //
             // View newFocused =
@@ -1601,10 +1547,8 @@ public class CustomScrollView extends FrameLayout {
         // we rely on the fact the View.scrollBy calls scrollTo.
         if (getChildCount() > 0) {
             View child = getChildAt(0);
-            x = clamp(x, getWidth() - getPaddingRight() - getPaddingLeft(),
-                    child.getWidth());
-            y = clamp(y, getHeight() - getPaddingBottom() - getPaddingTop(),
-                    child.getHeight());
+            x = clamp(x, getWidth() - getPaddingRight() - getPaddingLeft(), child.getWidth());
+            y = clamp(y, getHeight() - getPaddingBottom() - getPaddingTop(), child.getHeight());
             if (x != getScrollX() || y != getScrollY()) {
                 super.scrollTo(x, y);
             }
@@ -1642,6 +1586,7 @@ public class CustomScrollView extends FrameLayout {
 
     @Override
     protected void onFinishInflate() {
+        super.onFinishInflate();
         if (getChildCount() > 0) {
             inner = getChildAt(0);
         }
@@ -1660,18 +1605,15 @@ public class CustomScrollView extends FrameLayout {
     // ���������ƶ�
     public void animation() {
         // �����ƶ�����
-        TranslateAnimation ta = new TranslateAnimation(0, -inner.getLeft(), 0,
-                -inner.getTop());
+        TranslateAnimation ta = new TranslateAnimation(0, -inner.getLeft(), 0, -inner.getTop());
         ta.setDuration(200);
         inner.startAnimation(ta);
         // ���ûص������Ĳ���λ��
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                inner.clearAnimation();
-                inner.layout(normal.left, normal.top, normal.right,
-                        normal.bottom);
-                normal.setEmpty();
-            }
+        new Handler().postDelayed(() -> {
+            inner.clearAnimation();
+            inner.layout(normal.left, normal.top, normal.right,
+                    normal.bottom);
+            normal.setEmpty();
         }, 200);
 
     }
@@ -1686,9 +1628,6 @@ public class CustomScrollView extends FrameLayout {
 
         int offsetY = inner.getMeasuredHeight() - getHeight();
         int scrollY = getScrollY();
-        if (scrollY == 0 || scrollY == offsetY) {
-            return true;
-        }
-        return false;
+        return scrollY == 0 || scrollY == offsetY;
     }
 }

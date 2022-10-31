@@ -149,7 +149,6 @@ public class PaddingTable implements OnClickListener, OnTouchListener {
                 || ((action & MotionEvent.ACTION_OUTSIDE) != 0)) {
             v.setAlpha(0.45f);
         }
-
         return true;
     }
 

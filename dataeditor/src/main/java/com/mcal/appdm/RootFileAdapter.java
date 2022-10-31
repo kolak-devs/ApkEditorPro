@@ -12,9 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.mcal.appdm.base.R;
+import com.mcal.common.utils.CommandInterface;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
-import com.mcal.common.utils.CommandInterface;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,8 +34,7 @@ public class RootFileAdapter extends BaseAdapter {
     private final String strFileSize;
     private String curDir;
 
-    public RootFileAdapter(PrefOverallActivity activity, String rootDir,
-                           boolean rootMode) {
+    public RootFileAdapter(PrefOverallActivity activity, String rootDir, boolean rootMode) {
         this.activityRef = new WeakReference<>(activity);
         this.rootDir = rootDir;
         this.isRootMode = rootMode;
@@ -47,13 +46,7 @@ public class RootFileAdapter extends BaseAdapter {
     }
 
     private void showMessage_nonUiThread(final String msg) {
-        activityRef.get().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(activityRef.get(), msg, Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
+        activityRef.get().runOnUiThread(() -> Toast.makeText(activityRef.get(), msg, Toast.LENGTH_SHORT).show());
     }
 
     protected List<FileRecord> listFiles(String dirPath) {
@@ -78,7 +71,7 @@ public class RootFileAdapter extends BaseAdapter {
         }
         // Directly list files by java interfaces
         else {
-            List<FileRecord> subFiles = new ArrayList<FileRecord>();
+            List<FileRecord> subFiles = new ArrayList<>();
 
             File dir = new File(dirPath);
             File[] files = dir.listFiles();
@@ -98,8 +91,7 @@ public class RootFileAdapter extends BaseAdapter {
 
     // Update the list
     // can be called from non-ui thread
-    public void updateList(final String dirPath,
-                           final List<FileRecord> subFiles) {
+    public void updateList(final String dirPath, final List<FileRecord> subFiles) {
         Activity activity = activityRef.get();
         if (activity == null) {
             return;
@@ -135,7 +127,7 @@ public class RootFileAdapter extends BaseAdapter {
             br = new BufferedReader(new StringReader(output));
             String line = br.readLine();
             while (line != null) {
-                String segs[] = line.split("\\s+");
+                String[] segs = line.split("\\s+");
                 if (segs.length >= 5) {
                     FileRecord rec = null;
                     char c = segs[0].charAt(0);
@@ -145,6 +137,7 @@ public class RootFileAdapter extends BaseAdapter {
                         try {
                             rec.size = Integer.parseInt(segs[3]);
                         } catch (Throwable t) {
+                            t.printStackTrace();
                         }
                     } else if (c == 'd') { // directory
                         rec = new FileRecord();
@@ -196,19 +189,15 @@ public class RootFileAdapter extends BaseAdapter {
             return null;
         }
 
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
         // sawsem theme
         if (convertView == null) {
-            convertView = LayoutInflater.from(activityRef.get()).inflate((R.layout.appdm_item_file),
-                    null);
+            convertView = LayoutInflater.from(activityRef.get()).inflate((R.layout.appdm_item_file), null);
 
             viewHolder = new ViewHolder();
-            viewHolder.icon = (ImageView) convertView
-                    .findViewById(R.id.file_icon);
-            viewHolder.title = (TextView) convertView
-                    .findViewById(R.id.filename);
-            viewHolder.subTitle = (TextView) convertView
-                    .findViewById(R.id.detail1);
+            viewHolder.icon = (ImageView) convertView.findViewById(R.id.file_icon);
+            viewHolder.title = (TextView) convertView.findViewById(R.id.filename);
+            viewHolder.subTitle = (TextView) convertView.findViewById(R.id.detail1);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

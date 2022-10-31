@@ -23,7 +23,7 @@ public class DBManager {
     /**
      * add records
      *
-     * @param persons
+     * @param recordList
      */
     public void add(@NonNull List<BackupInfo> recordList) {
         db.beginTransaction();
@@ -55,9 +55,7 @@ public class DBManager {
         cv.put("package_name", record.packageName);
         cv.put("comment", record.comment);
         cv.put("size", record.backupSize);
-        int rows = db.update("data_backups", cv,
-                "_id = ?",
-                new String[]{String.valueOf(record._id)});
+        int rows = db.update("data_backups", cv, "_id = ?", new String[]{String.valueOf(record._id)});
         return rows > 0;
     }
 
@@ -65,8 +63,7 @@ public class DBManager {
      * delete old record
      */
     public void deleteOldRecord(@NonNull BackupInfo record) {
-        db.delete("data_backups", "backup_time = ?",
-                new String[]{record.backupTime});
+        db.delete("data_backups", "backup_time = ?", new String[]{record.backupTime});
     }
 
     /**
@@ -97,9 +94,7 @@ public class DBManager {
      * @return Cursor
      */
     public Cursor queryTheCursor() {
-        Cursor c = db.rawQuery(
-                "SELECT * FROM data_backups ORDER BY backup_time DESC", null);
-        return c;
+        return db.rawQuery("SELECT * FROM data_backups ORDER BY backup_time DESC", null);
     }
 
     /**

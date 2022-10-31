@@ -45,19 +45,14 @@ public class BasicInfoAdapter extends BaseAdapter {
             return null;
         }
 
-        ViewHolder viewHolder = null;
-        // sawsem theme
+        ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(activityRef.get()).inflate(
-                    (R.layout.appdm_item_basicinfo), null);
+            convertView = LayoutInflater.from(activityRef.get()).inflate((R.layout.appdm_item_basicinfo), null);
 
             viewHolder = new ViewHolder();
-            viewHolder.titleTv = (TextView) convertView
-                    .findViewById(R.id.tv_title);
-            viewHolder.valueTv = (TextView) convertView
-                    .findViewById(R.id.tv_value);
-            viewHolder.btn = (Button) convertView
-                    .findViewById(R.id.btn_operation);
+            viewHolder.titleTv = (TextView) convertView.findViewById(R.id.tv_title);
+            viewHolder.valueTv = (TextView) convertView.findViewById(R.id.tv_value);
+            viewHolder.btn = (Button) convertView.findViewById(R.id.btn_operation);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
