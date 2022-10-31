@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Unmodifiable
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.lang.ref.WeakReference
 import java.util.*
 
 class PrefDetailActivity : CustomizedLangActivity(), ITableRowClicked, View.OnClickListener {
@@ -111,9 +110,8 @@ class PrefDetailActivity : CustomizedLangActivity(), ITableRowClicked, View.OnCl
         mKeyValues = keyValues
         for (key in keyValues.keys) {
             val rowData = ArrayList<String?>()
-            val obj = keyValues[key]
             var value = ""
-            if (obj != null) {
+            keyValues[key]?.let { obj ->
                 value = obj.toString()
             }
             rowData.add(key)
@@ -157,13 +155,13 @@ class PrefDetailActivity : CustomizedLangActivity(), ITableRowClicked, View.OnCl
         }
 
         // Set as modified
-        this.setResult(1)
+        setResult(1)
     }
 
     @Throws(Exception::class)
     private fun saveValueRoot() {
-        tmpFilePath?.let { tmp->
-            filePath?.let { file->
+        tmpFilePath?.let { tmp ->
+            filePath?.let { file ->
                 val out = FileOutputStream(tmpFilePath)
                 XmlUtils.writeMapXml(mKeyValues, out)
                 out.close()
@@ -254,85 +252,83 @@ class PrefDetailActivity : CustomizedLangActivity(), ITableRowClicked, View.OnCl
     }
 
     @Suppress("DEPRECATION")
-    private class MyHandler(act: PrefDetailActivity) : Handler() {
-        private var ref = WeakReference(act)
+    private class MyHandler(activity: PrefDetailActivity) : Handler() {
+        private var mActivity = activity
         private var message: String? = null
 
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 0 -> {
-                    ref.get()?.showTable()
+                    mActivity.showTable()
                 }
-                1 -> Toast.makeText(ref.get(), "Error: $message", Toast.LENGTH_LONG).show()
+                1 -> Toast.makeText(mActivity, "Error: $message", Toast.LENGTH_LONG).show()
             }
         }
 
         fun setErrorMessage(errMsg: String?) {
-            this.message = errMsg
+            message = errMsg
         }
     }
 
-    internal class ParseThread(prefDetailActivity: PrefDetailActivity) : Thread() {
-        private val activityRef = WeakReference(prefDetailActivity)
+    internal class ParseThread(activity: PrefDetailActivity) : Thread() {
+        private val mActivity = activity
 
         override fun run() {
             var extraInfo: String? = null
-            val activity = activityRef.get()
-            if (activity != null) {
-                try {
-                    if (!exist()) {
-                        throw Exception("Can not find SD Card!")
-                    }
-                    val workingDir = getTempDir().path
-                    val dir = File(workingDir)
-                    if (!dir.exists()) {
-                        dir.mkdirs()
-                    }
-                    val result: HashMap<String?, Any?>?
-                    if (activity.isRootMode) {
-                        val f = File(activity.filesDir, "work.xml")
-                        var tmpFilePath = f.path
-                        activity.tmpFilePath = tmpFilePath
-                        val rc = createCommandRunner(activity.isRootMode)
-                        var strCmd = "cp"
-                        val bin = getMyCp()
-                        if (bin.exists()) {
-                            strCmd = bin.path
-                        }
-                        val copyRet = rc.runCommand(
-                            String.format("$strCmd \"%s\" %s", activity.filePath, tmpFilePath, tmpFilePath),
-                            null, 2000
-                        )
-                        extraInfo = rc.stdError
-                        // Copy file failed, try the original file
-                        if (!copyRet) {
-                            activity.filePath?.let {
-                                tmpFilePath = it
-                            }
-                        }
-                        val inputStream = FileInputStream(tmpFilePath)
-                        result = XmlUtils.readMapXml(inputStream) as HashMap<String?, Any?>?
-                        inputStream.close()
-                    } else {
-                        val inputStream = FileInputStream(
-                            activity.filePath
-                        )
-                        result = XmlUtils.readMapXml(inputStream) as HashMap<String?, Any?>?
-                        inputStream.close()
-                    }
-
-                    val ret = LinkedHashMap<String?, Any?>()
-                    if (result != null) {
-                        for ((key, value) in result) {
-                            ret[key] = value
-                        }
-                    }
-                    activity.prepareTable(ret)
-                    activity.parseFinished(null)
-                } catch (e: Exception) {
-                    val errMsg = e.message + ": " + extraInfo
-                    activity.parseFinished(errMsg)
+            val activity = mActivity
+            try {
+                if (!exist()) {
+                    throw Exception("Can not find SD Card!")
                 }
+                val workingDir = getTempDir().path
+                val dir = File(workingDir)
+                if (!dir.exists()) {
+                    dir.mkdirs()
+                }
+                val result: HashMap<String?, Any?>?
+                if (activity.isRootMode) {
+                    val f = File(activity.filesDir, "work.xml")
+                    var tmpFilePath = f.path
+                    activity.tmpFilePath = tmpFilePath
+                    val rc = createCommandRunner(activity.isRootMode)
+                    var strCmd = "cp"
+                    val bin = getMyCp()
+                    if (bin.exists()) {
+                        strCmd = bin.path
+                    }
+                    val copyRet = rc.runCommand(
+                        String.format("$strCmd \"%s\" %s", activity.filePath, tmpFilePath, tmpFilePath),
+                        null, 2000
+                    )
+                    extraInfo = rc.stdError
+                    // Copy file failed, try the original file
+                    if (!copyRet) {
+                        activity.filePath?.let {
+                            tmpFilePath = it
+                        }
+                    }
+                    val inputStream = FileInputStream(tmpFilePath)
+                    result = XmlUtils.readMapXml(inputStream) as HashMap<String?, Any?>?
+                    inputStream.close()
+                } else {
+                    val inputStream = FileInputStream(
+                        activity.filePath
+                    )
+                    result = XmlUtils.readMapXml(inputStream) as HashMap<String?, Any?>?
+                    inputStream.close()
+                }
+
+                val ret = LinkedHashMap<String?, Any?>()
+                if (result != null) {
+                    for ((key, value) in result) {
+                        ret[key] = value
+                    }
+                }
+                activity.prepareTable(ret)
+                activity.parseFinished(null)
+            } catch (e: Exception) {
+                val errMsg = e.message + ": " + extraInfo
+                activity.parseFinished(errMsg)
             }
         }
     }
