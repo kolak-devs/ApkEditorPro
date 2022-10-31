@@ -106,7 +106,6 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
         TableRecordDialog dlg = new TableRecordDialog(this, columnTypes,
                 columnNames, columnIsPKs, rowData, position, this.editable);
         dlg.setTableInfo(dbFilePath, tableName);
-        dlg.show();
     }
 
     // Copy temporary DB file to the original place

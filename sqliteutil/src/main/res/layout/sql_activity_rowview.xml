@@ -25,8 +25,7 @@
             android:gravity="center"
             android:minHeight="?attr/actionBarSize"
             android:text="@string/table_record"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/colorGray" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageView
             android:id="@+id/image_next"
@@ -48,27 +47,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/btn_delete"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:text="@string/delete"
-            android:textColor="@color/colorPrimary"
-            app:backgroundTint="@color/colorAccent" />
+            android:text="@string/delete" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/btn_close"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:text="@string/close"
-            android:textColor="@color/colorPrimary"
-            app:backgroundTint="@color/colorAccent" />
+            android:text="@string/close" />
 
     </LinearLayout>
 

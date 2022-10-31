@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -16,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
     namespace 'com.mcal.sqliteutil'
 }
 
@@ -25,5 +29,5 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
 
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
 }

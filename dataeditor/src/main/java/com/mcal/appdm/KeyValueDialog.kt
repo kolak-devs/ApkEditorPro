@@ -17,13 +17,12 @@ class KeyValueDialog(
     private var valueChanged = false
 
     private lateinit var materialDialog: AlertDialog
+    private lateinit var binding: AppdmDialogKeyvalueBinding
 
     init {
         initData(values)
         initView()
     }
-
-    private lateinit var binding: AppdmDialogKeyvalueBinding
 
     @SuppressLint("InflateParams")
     private fun initView() {

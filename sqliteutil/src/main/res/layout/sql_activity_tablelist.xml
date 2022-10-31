@@ -13,7 +13,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="4dip"
-            android:src="@drawable/round_storage_24" />
+            android:src="@drawable/ic_table" />
 
         <TextView
             android:id="@+id/title"
@@ -21,8 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="8dip"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/colorAccent" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 
