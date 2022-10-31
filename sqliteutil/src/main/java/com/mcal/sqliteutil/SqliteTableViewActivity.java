@@ -91,26 +91,9 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        // sawsem theme
-//		this.themeId = ActivityUtil.getIntParam(getIntent(), "themeId");
-//		switch (themeId) {
-//			case 1:
-//				super.setTheme(android.R.style.Theme_Black_NoTitleBar);
-//				setContentView(R.layout.sql_activity_tableview_dark);
-//				break;
-//			case 2:
-//				super.setTheme(android.R.style.Theme_Black_NoTitleBar);
-//				setContentView(R.layout.sql_activity_tableview_dark_ru);
-//				break;
-//			default:
         setContentView(R.layout.sql_activity_tableview);
-//				break;
-//		}
 
-        this.originDbFilePath = ActivityHelper.getParam(getIntent(),
-                "originDbFilePath");
+        this.originDbFilePath = ActivityHelper.getParam(getIntent(), "originDbFilePath");
         this.dbFilePath = ActivityHelper.getParam(getIntent(), "dbFilePath");
         this.tableName = ActivityHelper.getParam(getIntent(), "tableName");
 
@@ -128,18 +111,8 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
         if (tableSize < pageSize) { // One Page is enough
             nextBtn.setVisibility(View.GONE);
         } else {
-            preBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    prePageClicked();
-                }
-            });
-            nextBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    nextPageClicked();
-                }
-            });
+            preBtn.setOnClickListener(v -> prePageClicked());
+            nextBtn.setOnClickListener(v -> nextPageClicked());
         }
     }
 
@@ -148,17 +121,12 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
         // Table record modified in the SqliteRowViewActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == 1) {
-//			Log.d("DEBUG", "table should be updated!");
             queryTableData();
-            // updateTableView();
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
-//		Log.d("DEBUG",
-//				String.format("tableWidth=%d, tableHeight=%d",
-//						tableView.getWidth(), tableView.getHeight()));
         return super.onKeyDown(keyCode, event);
     }
 
@@ -207,8 +175,7 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
     private void initTableData() {
         this.tableOffset = 0;
 
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFilePath, null,
-                SQLiteDatabase.OPEN_READONLY);
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFilePath, null, SQLiteDatabase.OPEN_READONLY);
         initColumnInfo(db);
         getTableSize(db);
         tableData = query(db, tableOffset, pageSize);
@@ -217,12 +184,9 @@ public class SqliteTableViewActivity extends CustomizedLangActivity implements
 
     private void initTableView() {
 
-//		CustomScrollView scrollView = (CustomScrollView) this
-//				.findViewById(R.id.scrollView);
         this.tableView = (TableLayout) this.findViewById(R.id.valueTable);
 
-//		this.table = new PaddingTable(this, scrollView, tableView, this);
-        this.table = new PaddingTable(this, null, tableView, this, themeId != 0);
+        this.table = new PaddingTable(this, tableView, this);
         table.setTableHeaderNames(columnNames);
         table.setTableData(tableData);
         table.prepareTable();
