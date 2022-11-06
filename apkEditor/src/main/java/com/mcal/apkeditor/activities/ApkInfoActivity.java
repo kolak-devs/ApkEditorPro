@@ -41,7 +41,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,11 +67,12 @@ import com.mcal.apkeditor.ResNavigationMgr;
 import com.mcal.apkeditor.ResSelectionChangeListener;
 import com.mcal.apkeditor.SomethingChangedListener;
 import com.mcal.apkeditor.StringListAdapter;
+import com.mcal.apkeditor.activities.types.ActivityState;
+import com.mcal.apkeditor.activities.types.ProjectInfo;
+import com.mcal.apkeditor.activities.types.StringItem;
 import com.mcal.apkeditor.adapters.IManifestChangeCallback;
 import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.adapters.ManifestListAdapter;
-import com.mcal.common.view.AutoCompleteAdapter;
-import com.mcal.common.view.AutoCompleteTextView;
 import com.mcal.apkeditor.databinding.ActivityApkinfoBinding;
 import com.mcal.apkeditor.dialogs.AboutPluginDialog;
 import com.mcal.apkeditor.dialogs.AddFolderDialog;
@@ -105,6 +105,7 @@ import com.mcal.common.utils.StringHelperKt;
 import com.mcal.common.utils.TextFileReader;
 import com.mcal.common.utils.UriUtils;
 import com.mcal.common.utils.ZipHelper;
+import com.mcal.common.view.AutoCompleteAdapter;
 import com.mcal.common.view.ProgressDialog;
 import com.mcal.editor.TextEditor;
 import com.mcal.pngeditor.PhotoViewerActivity;
@@ -139,9 +140,6 @@ import brut.androlib.res.data.value.ResReferenceValue;
 import brut.androlib.res.data.value.ResScalarValue;
 import brut.androlib.res.data.value.ResValue;
 import brut.util.Duo;
-import com.mcal.apkeditor.activities.types.ActivityState;
-import com.mcal.apkeditor.activities.types.ProjectInfo;
-import com.mcal.apkeditor.activities.types.StringItem;
 
 public class ApkInfoActivity extends CustomizedLangActivity
         implements OnItemClickListener, OnItemLongClickListener,
@@ -185,21 +183,16 @@ public class ApkInfoActivity extends CustomizedLangActivity
     //Map<ResConfigFlags, Map<String, String>> changedStringValues;
     //private ResConfigFlags curConfig = null; // config flag for string resource
     //private ArrayList<ResConfigFlags> langConfigList;
-    private LinearLayout stringLayout;
     private StringListAdapter stringListAdapter;
     private String curConfig = null; // config flag for string resource
     private ArrayList<String> langConfigList;
-    private LinearLayout resourceLayout;
-    private ListView resourceList;
     private View resSearchLayout;
     private View resMenuLayout;
     private LinearLayout resNaviHeader;
     private View resSelectHeader;
     private TextView resSelectTip;
-    private LinearLayout manifestLayout;
     private RecyclerView manifestRecyclerView;
     private ManifestListAdapter manifestListAdapter;
-    private LinearLayout loadingLayout;
     private ImageButton patchMenu;
     private ImageButton bshEngine;
     private Button saveBtn;
@@ -215,13 +208,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private boolean stringParsed = false;
     private boolean resourceParsed = false;
     private int curSelectedRadio = 0; // 0 - String, 1 - Resource, 2 - Manifest
-    // For DEX decoding
-    private View dexDecodeLayout;
-    private Button dex2smaliImage;
-    private ProgressBar decodeProgressBar;
-    private View decodeResultLayout;
-    private TextView decodeResultTitle;
-    private TextView decodeResultDetail;
     private boolean dexDecoded = false;
     // Following 5 records are collected/renewed each time click at save button
     private HashMap<String, String> addedFiles;
@@ -253,7 +239,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private String filePathForExternal;
     private String entryNameForExternal;
     private long modifiedTimeBeforeOpen;
-    private BottomNavigationView buttonBar;
 
     // prjDirectory not ends with '/'
     @Nullable
@@ -691,7 +676,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // DEX decoded or not
         if (dexDecoded) {
-            dexDecodeLayout.setVisibility(View.GONE);
+            binding.mainResources.dexDecodeLayout.setVisibility(View.GONE);
         }
 
         // Search text or not
@@ -726,7 +711,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 // Recover from the old position
                 try {
                     Duo<Integer, Integer> pos = resListPosition.pop();
-                    resourceList.setSelectionFromTop(pos.m1, pos.m2);
+                    binding.mainResources.resourceList.setSelectionFromTop(pos.m1, pos.m2);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1015,10 +1000,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         findViewById(R.id.layout_search_mf).setVisibility(View.VISIBLE);
         setupMfSearch();
 
-        stringLayout = findViewById(R.id.string_layout);
         ListView stringList = findViewById(R.id.string_list);
-        resourceLayout = findViewById(R.id.resource_layout);
-        resourceList = findViewById(R.id.resource_list);
         findViewById(R.id.menu_search_res).setOnClickListener(this);
         resSearchLayout = findViewById(R.id.res_search_layout);
         resMenuLayout = findViewById(R.id.res_menu_layout);
@@ -1028,9 +1010,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         navigationMgr = new ResNavigationMgr(this, decodeRootPath, resNaviHeader, resNaviScrollView);
         resSelectTip = findViewById(R.id.selection_tip);
 
-        manifestLayout = findViewById(R.id.manifest_layout);
         manifestRecyclerView = findViewById(R.id.manifest_list);
-        loadingLayout = findViewById(R.id.layout_loading);
 
         if (apkInfo != null) {
             apkIcon.setImageDrawable(apkInfo.icon);
@@ -1051,18 +1031,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
         stringList.setOnItemClickListener(stringListAdapter);
 
         // DEX/Smali decoding
-        dexDecodeLayout = findViewById(R.id.dex_decode_layout);
         if (Preferences.isDex2smaliEnabled()) {
-            dex2smaliImage = findViewById(R.id.imageview_dex2smali);
+            final Button dex2smaliImage = binding.mainResources.imageviewDex2smali;
             dex2smaliImage.setOnClickListener(this);
             dex2smaliImage.setOnLongClickListener(this);
-            decodeProgressBar = findViewById(R.id.progressbar_dex2smali);
-            decodeResultLayout = findViewById(R.id.decode_result_layout);
-            decodeResultTitle = findViewById(R.id.decode_result_title);
-            decodeResultDetail = findViewById(R.id.decode_result_detail);
             findViewById(R.id.down_arrow_container).setOnClickListener(this);
         } else {
-            dexDecodeLayout.setVisibility(View.GONE);
+            binding.mainResources.dexDecodeLayout.setVisibility(View.GONE);
         }
 
         // File search option
@@ -1071,24 +1046,19 @@ public class ApkInfoActivity extends CustomizedLangActivity
         updateSearchOption();
 
         // keyword auto complete
-        AutoCompleteTextView editView = findViewById(R.id.keyword_edit);
         strKeywordAdapter = new AutoCompleteAdapter(this, "string_keywords");
-        editView.setAdapter(strKeywordAdapter);
-        editView = findViewById(R.id.et_res_keyword);
+        binding.mainStrings.keywordEdit.setAdapter(strKeywordAdapter);
+
         resKeywordAdapter = new AutoCompleteAdapter(this, "res_keywords");
-        editView.setAdapter(resKeywordAdapter);
-        editView = findViewById(R.id.mf_keyword);
+        binding.mainResources.etResKeyword.setAdapter(resKeywordAdapter);
+
         mfKeywordAdapter = new AutoCompleteAdapter(this, "mf_keywords");
-        editView.setAdapter(mfKeywordAdapter);
+        binding.mainManifest.mfKeyword.setAdapter(mfKeywordAdapter);
     }
 
     private void updateSearchOption() {
-        int txtId = searchTextContent ? R.drawable.round_feed_24
-                : R.drawable.round_feed_blue_24;
-        int caseId = searchResSensitive ? R.drawable.round_text_format_blue_24
-                : R.drawable.round_text_format_24;
-        searchOptionImage.setImageResource(txtId);
-        searchOptionCase.setImageResource(caseId);
+        searchOptionImage.setImageResource(searchTextContent ? R.drawable.round_feed_24 : R.drawable.round_feed_blue_24);
+        searchOptionCase.setImageResource(searchResSensitive ? R.drawable.round_text_format_blue_24 : R.drawable.round_text_format_24);
     }
 
     // Setup the manifest search button
@@ -1182,7 +1152,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // Hide the smali decoding result
         else if (id == R.id.down_arrow_container) {
-            dexDecodeLayout.setVisibility(View.GONE);
+            binding.mainResources.dexDecodeLayout.setVisibility(View.GONE);
         }
 
         // Apply a patch
@@ -1498,32 +1468,32 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     // Update the view in the center of the screen
     private void updateCenterView() {
-        loadingLayout.setVisibility(View.INVISIBLE);
-        manifestLayout.setVisibility(View.INVISIBLE);
-        stringLayout.setVisibility(View.INVISIBLE);
-        resourceLayout.setVisibility(View.INVISIBLE);
-        //FIXME
+        binding.mainLoading.layoutLoading.setVisibility(View.INVISIBLE);
+        binding.mainManifest.manifestLayout.setVisibility(View.INVISIBLE);
+        binding.mainStrings.stringLayout.setVisibility(View.INVISIBLE);
+        binding.mainResources.resourceLayout.setVisibility(View.INVISIBLE);
+        //FIXME... working now?
 
         switch (curSelectedRadio) {
             case 0:
                 if (stringParsed) {
-                    stringLayout.setVisibility(View.VISIBLE);
+                    binding.mainStrings.stringLayout.setVisibility(View.VISIBLE);
                 } else {
-                    loadingLayout.setVisibility(View.VISIBLE);
+                    binding.mainLoading.layoutLoading.setVisibility(View.VISIBLE);
                 }
                 break;
             case 1:
                 if (resourceParsed) {
-                    resourceLayout.setVisibility(View.VISIBLE);
+                    binding.mainResources.resourceLayout.setVisibility(View.VISIBLE);
                 } else {
-                    loadingLayout.setVisibility(View.VISIBLE);
+                    binding.mainLoading.layoutLoading.setVisibility(View.VISIBLE);
                 }
                 break;
             case 2:
                 if (resourceParsed) {
-                    manifestLayout.setVisibility(View.VISIBLE);
+                    binding.mainManifest.manifestLayout.setVisibility(View.VISIBLE);
                 } else {
-                    loadingLayout.setVisibility(View.VISIBLE);
+                    binding.mainLoading.layoutLoading.setVisibility(View.VISIBLE);
                 }
                 break;
         }
@@ -2139,8 +2109,8 @@ public class ApkInfoActivity extends CustomizedLangActivity
 //                }
             }
         }, this);
-        resListAdapter.setModification(res_addedFiles,
-                res_deletedFiles, res_replacedFiles);
+        resListAdapter.setModification(res_addedFiles, res_deletedFiles, res_replacedFiles);
+        final ListView resourceList = binding.mainResources.resourceList;
         resourceList.setAdapter(resListAdapter);
         resourceList.setOnItemClickListener(this);
         resourceList.setOnItemLongClickListener(this);
@@ -2170,9 +2140,10 @@ public class ApkInfoActivity extends CustomizedLangActivity
                     pos = resListPosition.pop();
                 }
                 if (pos != null) {
-                    resourceList.setSelectionFromTop(pos.m1, pos.m2);
+                    binding.mainResources.resourceList.setSelectionFromTop(pos.m1, pos.m2);
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -2213,6 +2184,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }
 
         if (rec.isDir) {
+            final ListView resourceList = binding.mainResources.resourceList;
             boolean isUpToParent = false;
             String targetPath;
             if (rec.fileName.equals("..")) {
@@ -2223,8 +2195,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 // save index and top position
                 int index = resourceList.getFirstVisiblePosition();
                 View v = resourceList.getChildAt(0);
-                int top = (v == null) ? 0
-                        : (v.getTop() - resourceList.getPaddingTop());
+                int top = (v == null) ? 0 : (v.getTop() - resourceList.getPaddingTop());
                 resListPosition.push(new Duo<>(index, top));
 
                 targetPath = oldDir + "/" + rec.fileName;
@@ -2235,19 +2206,12 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 try {
                     Duo<Integer, Integer> pos = resListPosition.pop();
                     resourceList.setSelectionFromTop(pos.m1, pos.m2);
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else {
                 resourceList.setSelectionAfterHeaderView();
             }
-
-            // After open the folder, check if it exist
-            // String curFolder = resListAdapter.getData(null);
-            // if (new File(curFolder).exists()) {
-            // this.resSearchLayout.setVisibility(View.VISIBLE);
-            // } else {
-            // this.resSearchLayout.setVisibility(View.GONE);
-            // }
         }
         // Try to open the file
         else {
@@ -2740,9 +2704,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // To show the dex decoding progress bar
     @Override
     public void dexDecodingStarted() {
-        dex2smaliImage.setVisibility(View.INVISIBLE);
-        decodeResultLayout.setVisibility(View.INVISIBLE);
-        decodeProgressBar.setVisibility(View.VISIBLE);
+        binding.mainResources.imageviewDex2smali.setVisibility(View.INVISIBLE);
+        binding.mainResources.decodeResultLayout.setVisibility(View.INVISIBLE);
+        binding.mainResources.progressbarDex2smali.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -2753,7 +2717,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
             mDexDecodedCallback.callbackFunc();
             mDexDecodedCallback = null;
         }
-
+        
+        final TextView decodeResultTitle = binding.mainResources.decodeResultTitle;
+        final TextView decodeResultDetail = binding.mainResources.decodeResultDetail;
         boolean showResult = true;
         if (ret) {
             if (strWarning != null) {
@@ -2777,12 +2743,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
         }
 
         // Switch the layout (decoding panel)
+        final Button dex2smaliImage = binding.mainResources.imageviewDex2smali;
         dex2smaliImage.setVisibility(View.INVISIBLE);
-        decodeProgressBar.setVisibility(View.INVISIBLE);
+        binding.mainResources.progressbarDex2smali.setVisibility(View.INVISIBLE);
         if (showResult) {
-            decodeResultLayout.setVisibility(View.VISIBLE);
+            binding.mainResources.decodeResultLayout.setVisibility(View.VISIBLE);
         } else {
-            dexDecodeLayout.setVisibility(View.GONE);
+            dex2smaliImage.setVisibility(View.GONE);
             Toast.makeText(this, R.string.dex_decode_succeed, Toast.LENGTH_LONG).show();
         }
 
@@ -2797,7 +2764,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     public boolean onLongClick(@NonNull View v) {
         int id = v.getId();
         if (id == R.id.imageview_dex2smali) {
-            dexDecodeLayout.setVisibility(View.GONE);
+            binding.mainResources.imageviewDex2smali.setVisibility(View.GONE);
             return true;
         }
         return false;

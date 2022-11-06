@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -79,11 +79,11 @@
             android:layout_gravity="center"
             android:layout_marginLeft="4dip"
             android:layout_marginRight="4dip"
+            android:drawableLeft="@drawable/ic_build"
             android:text="@string/build"
             android:textColor="@color/colorGray"
             android:visibility="invisible"
-            tools:visibility="visible"
-            android:drawableLeft="@drawable/ic_build" />
+            tools:visibility="visible" />
 
     </LinearLayout>
 
@@ -95,24 +95,28 @@
         <!-- String -->
 
         <include
+            android:id="@+id/main_strings"
             layout="@layout/activity_apkinfo_string"
             tools:visibility="visible" />
 
         <!-- Resource -->
 
         <include
+            android:id="@+id/main_resources"
             layout="@layout/activity_apkinfo_resource"
             tools:visibility="gone" />
 
         <!-- Manifest -->
 
         <include
+            android:id="@+id/main_manifest"
             layout="@layout/activity_apkinfo_manifest"
             tools:visibility="gone" />
 
         <!-- Loading -->
 
         <include
+            android:id="@+id/main_loading"
             layout="@layout/activity_apkinfo_loading"
             tools:visibility="gone" />
 
@@ -120,10 +124,10 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_radio"
+        style="@style/Widget.Material3.BottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        style="@style/Widget.Material3.BottomNavigationView"
-        app:menu="@menu/menu_apkinfo_navigation"/>
+        app:menu="@menu/menu_apkinfo_navigation" />
 
 </LinearLayout>
