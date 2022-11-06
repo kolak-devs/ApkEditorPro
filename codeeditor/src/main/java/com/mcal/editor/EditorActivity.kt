@@ -273,110 +273,38 @@ class EditorActivity : CustomizedLangActivity(),
     private fun getLanguage(): TextMateLanguage? {
         filePath?.name?.let { fileName ->
             return if (fileName.endsWith(".smali")) {
-                getTextMateLanguageForSmali()
+                getTextMateLanguage("smali.tmLanguage.json", "textmate/smali/syntaxes/smali.tmLanguage.json")
             } else if (fileName.endsWith(".java") || fileName.endsWith(".bsh")) {
-                getTextMateLanguageForJava()
+                getTextMateLanguage("java.tmLanguage.json", "textmate/java/syntaxes/java.tmLanguage.json")
             } else if (fileName.endsWith(".kt")) {
-                getTextMateLanguageForKotlin()
+                getTextMateLanguage("kotlin.tmLanguage.json", "textmate/kotlin/syntaxes/kotlin.tmLanguage")
             } else if (fileName.endsWith(".groovy") || fileName.endsWith(".gradle")) {
-                getTextMateLanguageForGroovy()
+                getTextMateLanguage("groovy.tmLanguage.json", "textmate/groovy/syntaxes/groovy.tmLanguage")
             } else if (fileName.endsWith(".json")) {
-                getTextMateLanguageForJson()
+                getTextMateLanguage("json.tmLanguage.json", "textmate/json/syntaxes/json.tmLanguage.json")
             } else if (fileName.endsWith(".xml")) {
-                getTextMateLanguageForXml()
+                getTextMateLanguage("xml.tmLanguage.json", "textmate/xml/syntaxes/xml.tmLanguage.json")
+            } else if (fileName.endsWith(".html")) {
+                getTextMateLanguage("html.tmLanguage.json", "textmate/html/syntaxes/html.tmLanguage.json")
+            } else if (fileName.endsWith(".js")) {
+                getTextMateLanguage("javascript.tmLanguage.json", "textmate/javascript/syntaxes/JavaScript.tmLanguage.json")
+            } else if (fileName.endsWith(".mk")) {
+                getTextMateLanguage("markdown.tmLanguage.json", "textmate/markdown/syntaxes/markdown.tmLanguage.json")
+            } else if (fileName.endsWith(".py")) {
+                getTextMateLanguage("python.tmLanguage.json", "textmate/python/syntaxes/python.tmLanguage.json")
             } else {
-                getTextMateLanguageForJava()
+                getTextMateLanguage("java.tmLanguage.json", "textmate/java/syntaxes/java.tmLanguage.json")
             }
         }
         return null
     }
 
-    private fun getTextMateLanguageForXml(): TextMateLanguage? {
+    private fun getTextMateLanguage(name: String, path: String): TextMateLanguage? {
         return try {
             TextMateLanguage.create(
                 IGrammarSource.fromInputStream(
-                    assets.open("textmate/xml/syntaxes/xml.tmLanguage.json"),
-                    "xml.tmLanguage.json",
-                    null
-                ),
-                null,
-                getDarkTheme()
-            )
-        } catch (e: java.lang.Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
-    private fun getTextMateLanguageForJson(): TextMateLanguage? {
-        return try {
-            TextMateLanguage.create(
-                IGrammarSource.fromInputStream(
-                    assets.open("textmate/json/syntaxes/json.tmLanguage.json"),
-                    "json.tmLanguage.json",
-                    null
-                ),
-                null,
-                getDarkTheme()
-            )
-        } catch (e: java.lang.Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
-    private fun getTextMateLanguageForGroovy(): TextMateLanguage? {
-        return try {
-            TextMateLanguage.create(
-                IGrammarSource.fromInputStream(
-                    assets.open("textmate/groovy/syntaxes/groovy.tmLanguage"),
-                    "groovy.tmLanguage.json",
-                    null
-                ),
-                null,
-                getDarkTheme()
-            )
-        } catch (e: java.lang.Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
-    private fun getTextMateLanguageForKotlin(): TextMateLanguage? {
-        return try {
-            TextMateLanguage.create(
-                IGrammarSource.fromInputStream(
-                    assets.open("textmate/kotlin/syntaxes/kotlin.tmLanguage"),
-                    "kotlin.tmLanguage.json",
-                    null
-                ),
-                null,
-                getDarkTheme()
-            )
-        } catch (e: java.lang.Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
-    private fun getTextMateLanguageForJava(): TextMateLanguage? {
-        return try {
-            TextMateLanguage.create(
-                IGrammarSource.fromInputStream(
-                    assets.open("textmate/java/syntaxes/java.tmLanguage.json"),
-                    "java.tmLanguage.json",
-                    null
-                ),
-                null,
-                getDarkTheme()
-            )
-        } catch (e: java.lang.Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
-    private fun getTextMateLanguageForSmali(): TextMateLanguage? {
-        return try {
-            TextMateLanguage.create(
-                IGrammarSource.fromInputStream(
-                    assets.open("textmate/smali/syntaxes/smali.tmLanguage.json"),
-                    "smali.tmLanguage.json",
+                    assets.open(path),
+                    name,
                     null
                 ),
                 null,
@@ -802,7 +730,12 @@ class EditorActivity : CustomizedLangActivity(),
         } else if (id == R.id.move_right) {
             editor.moveSelectionRight()
         } else if (id == R.id.code_format) {
-            editor.formatCodeAsync()
+            val cursor = editor.text.cursor
+            if (cursor.isSelected) {
+                editor.formatCodeAsync(cursor.left(), cursor.right())
+            } else {
+                editor.formatCodeAsync()
+            }
         } else if (id == R.id.switch_language) {
             AlertDialog.Builder(this)
                 .setTitle(R.string.switch_language)
@@ -814,17 +747,25 @@ class EditorActivity : CustomizedLangActivity(),
                         "Kotlin",
                         "Smali",
                         "Xml",
+                        "Html",
+                        "JavaScript",
+                        "MarkDown",
+                        "Python",
                         "None"
                     ), -1
                 ) { dialog: DialogInterface, which: Int ->
                     when (which) {
-                        0 -> editor.setEditorLanguage(getTextMateLanguageForGroovy())
-                        1 -> editor.setEditorLanguage(getTextMateLanguageForJava())
-                        2 -> editor.setEditorLanguage(getTextMateLanguageForJson())
-                        3 -> editor.setEditorLanguage(getTextMateLanguageForKotlin())
-                        4 -> editor.setEditorLanguage(getTextMateLanguageForSmali())
-                        5 -> editor.setEditorLanguage(getTextMateLanguageForXml())
-                        6 -> loadTMLLauncher.launch("*/*")
+                        0 -> editor.setEditorLanguage(getTextMateLanguage("groovy.tmLanguage.json", "textmate/groovy/syntaxes/groovy.tmLanguage"))
+                        1 -> editor.setEditorLanguage(getTextMateLanguage("java.tmLanguage.json", "textmate/java/syntaxes/java.tmLanguage.json"))
+                        2 -> editor.setEditorLanguage(getTextMateLanguage("json.tmLanguage.json", "textmate/json/syntaxes/json.tmLanguage.json"))
+                        3 -> editor.setEditorLanguage(getTextMateLanguage("kotlin.tmLanguage.json", "textmate/kotlin/syntaxes/kotlin.tmLanguage"))
+                        4 -> editor.setEditorLanguage(getTextMateLanguage("smali.tmLanguage.json", "textmate/smali/syntaxes/smali.tmLanguage.json"))
+                        5 -> editor.setEditorLanguage(getTextMateLanguage("xml.tmLanguage.json", "textmate/xml/syntaxes/xml.tmLanguage.json"))
+                        6 -> editor.setEditorLanguage(getTextMateLanguage("html.tmLanguage.json", "textmate/html/syntaxes/html.tmLanguage.json"))
+                        7 -> editor.setEditorLanguage(getTextMateLanguage("javascript.tmLanguage.json", "textmate/javascript/syntaxes/JavaScript.tmLanguage.json"))
+                        8 -> editor.setEditorLanguage(getTextMateLanguage("markdown.tmLanguage.json", "textmate/markdown/syntaxes/markdown.tmLanguage.json"))
+                        9 -> editor.setEditorLanguage(getTextMateLanguage("python.tmLanguage.json", "textmate/python/syntaxes/python.tmLanguage.json"))
+                        10 -> loadTMLLauncher.launch("*/*")
                         else -> editor.setEditorLanguage(EmptyLanguage())
                     }
                     dialog.dismiss()
