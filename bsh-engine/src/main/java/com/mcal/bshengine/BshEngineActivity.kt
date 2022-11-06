@@ -25,13 +25,16 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 
 class BshEngineActivity : CustomizedLangActivity() {
-    private lateinit var binding: BshengineActivityBinding
+    private var _binding: BshengineActivityBinding? = null
+    private val binding get() = _binding!!
+
     private var scriptPath: File? = null
     private var mDecodedDir: String? = null
     private var mApkPath: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = BshengineActivityBinding.inflate(layoutInflater)
+        _binding = BshengineActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "BSH Patcher", back = true)
         binding.btnSelectPatch.setOnClickListener {
@@ -126,6 +129,11 @@ class BshEngineActivity : CustomizedLangActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
