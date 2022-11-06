@@ -24,13 +24,13 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mcal.apkeditor.R;
-import com.mcal.common.view.AutoCompleteAdapter;
-import com.mcal.common.view.AutoCompleteTextView;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.StringHelperKt;
 import com.mcal.common.utils.ZipHelper;
+import com.mcal.common.view.AutoCompleteAdapter;
+import com.mcal.common.view.AutoCompleteTextView;
 
 import java.io.Closeable;
 import java.io.File;
@@ -60,16 +60,12 @@ public class ApkInfoExActivity extends ApkInfoActivity {
     // Search file name or file content
     public void reverseSearchOption() {
         searchTextContent = !searchTextContent;
-
-        searchOptionImage.setImageResource(searchTextContent ? R.drawable.round_feed_24
-                : R.drawable.round_feed_blue_24);
+        binding.mainResources.imageviewTextCheck.setImageResource(searchTextContent ? R.drawable.round_feed_24 : R.drawable.round_feed_blue_24);
     }
 
     public void reverseSearchCaseSensitive() {
         searchResSensitive = !searchResSensitive;
-
-        searchOptionCase.setImageResource(searchResSensitive ? R.drawable.round_text_format_blue_24
-                : R.drawable.round_text_format_24);
+        binding.mainResources.imageviewInsensitiveCheck.setImageResource(searchResSensitive ? R.drawable.round_text_format_blue_24 : R.drawable.round_text_format_24);
     }
 
     private void initResourceMenu() {
