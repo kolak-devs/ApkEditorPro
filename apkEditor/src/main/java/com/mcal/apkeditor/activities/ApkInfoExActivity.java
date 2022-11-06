@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -69,63 +68,33 @@ public class ApkInfoExActivity extends ApkInfoActivity {
     }
 
     private void initResourceMenu() {
-        // Menu when no file selected
-        ImageButton menuItem_home = findViewById(R.id.menu_home);
-        ImageButton menuItem_done = findViewById(R.id.menu_done);
-        ImageButton menuItem_select = findViewById(R.id.menu_select);
-        ImageButton menuItem_addFile = findViewById(R.id.menu_addfile);
-        ImageButton menuItem_addDir = findViewById(R.id.menu_addfolder);
-        ImageButton menuItem_searchOptions = findViewById(R.id.imageview_text_check);
-        // case sensitive or insensitive
-        ImageButton menuItem_searchCaseS = findViewById(R.id.imageview_insensitive_check);
-        menuItem_home.setOnClickListener(clickListener);
-        menuItem_done.setOnClickListener(clickListener);
-        menuItem_select.setOnClickListener(clickListener);
-        menuItem_addFile.setOnClickListener(clickListener);
-        menuItem_addDir.setOnClickListener(clickListener);
-        menuItem_searchOptions.setOnClickListener(clickListener);
-        menuItem_searchCaseS.setOnClickListener(clickListener);
+        binding.mainResources.menuHome.setOnClickListener(clickListener);
+        binding.mainResources.menuDone.setOnClickListener(clickListener);
+        binding.mainResources.menuSelect.setOnClickListener(clickListener);
+        binding.mainResources.menuAddfile.setOnClickListener(clickListener);
+        binding.mainResources.menuAddfolder.setOnClickListener(clickListener);
+        binding.mainResources.imageviewTextCheck.setOnClickListener(clickListener);
+        binding.mainResources.imageviewInsensitiveCheck.setOnClickListener(clickListener);
 
-        // Menu when file is selected
-        LinearLayout menuLayout = findViewById(R.id.res_menu_layout);
-
-        View menuItem_save = createMenuItem(R.drawable.round_save_24, R.string.extract);
-        this.menuItem_replace = createMenuItem(R.drawable.round_content_copy_24, R.string.replace);
-        View menuItem_search = createMenuItem(R.drawable.round_search_24, R.string.search);
-        View menuItem_delete = createMenuItem(R.drawable.ic_delete, R.string.delete);
-        this.menuItem_details = createMenuItem(R.drawable.round_menu_24, R.string.detail);
-
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
-        menuLayout.addView(menuItem_save, param);
-        menuLayout.addView(createVerticalLine());
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
+        LinearLayout menuLayout = binding.mainResources.resMenuLayout;
+        menuLayout.addView(createMenuItem(R.drawable.round_save_24, R.string.extract), param);
+        menuItem_replace = createMenuItem(R.drawable.round_content_copy_24, R.string.replace);
         menuLayout.addView(menuItem_replace, param);
-        menuLayout.addView(createVerticalLine());
-        menuLayout.addView(menuItem_search, param);
-        menuLayout.addView(createVerticalLine());
-        menuLayout.addView(menuItem_delete, param);
-        menuLayout.addView(createVerticalLine());
+        menuLayout.addView(createMenuItem(R.drawable.round_search_24, R.string.search), param);
+        menuLayout.addView(createMenuItem(R.drawable.ic_delete, R.string.delete), param);
+        menuItem_details = createMenuItem(R.drawable.round_menu_24, R.string.detail);
         menuLayout.addView(menuItem_details, param);
-    }
-
-    @NonNull
-    private View createVerticalLine() {
-        View line = new View(this);
-        line.setLayoutParams(
-                new LinearLayout.LayoutParams(1, LayoutParams.MATCH_PARENT));
-
-        line.setBackgroundColor(0xffe3e3e3);
-        return line;
     }
 
     // drawable2 is for dark theme
     @NonNull
     @SuppressLint("InflateParams")
     private View createMenuItem(int drawable, int title) {
-        View view = LayoutInflater.from(this).inflate(R.layout.item_res_menu, null);
-        ImageView icon = view.findViewById(R.id.menu_icon);
+        final View view = LayoutInflater.from(this).inflate(R.layout.item_res_menu, null);
+        final ImageView icon = view.findViewById(R.id.menu_icon);
         icon.setImageResource(drawable);
-        TextView tv = view.findViewById(R.id.menu_title);
+        final TextView tv = view.findViewById(R.id.menu_title);
         tv.setText(title);
         view.setId(drawable); // borrow the drawable id
         view.setOnClickListener(this.clickListener);
@@ -133,16 +102,14 @@ public class ApkInfoExActivity extends ApkInfoActivity {
     }
 
     private void enableMenuItem(@NonNull View view, boolean enabled) {
-        ImageView icon = view.findViewById(R.id.menu_icon);
-        TextView tv = view.findViewById(R.id.menu_title);
+        final ImageView icon = view.findViewById(R.id.menu_icon);
+        final TextView tv = view.findViewById(R.id.menu_title);
         if (enabled) {
             icon.getDrawable().setAlpha(255);
             tv.setEnabled(true);
-            tv.setTextColor(0xff333333);
         } else {
             icon.getDrawable().setAlpha(80);
             tv.setEnabled(false);
-            tv.setTextColor(0xff808080);
         }
         view.setClickable(enabled);
         view.setEnabled(enabled);
@@ -168,11 +135,11 @@ public class ApkInfoExActivity extends ApkInfoActivity {
     public void selectionChanged(Set<Integer> selected) {
         super.selectionChanged(selected);
         if (selected.size() == 1) {
-            this.enableMenuItem(this.menuItem_replace, true);
-            this.enableMenuItem(this.menuItem_details, true);
+            enableMenuItem(menuItem_replace, true);
+            enableMenuItem(menuItem_details, true);
         } else {
-            this.enableMenuItem(this.menuItem_replace, false);
-            this.enableMenuItem(this.menuItem_details, false);
+            enableMenuItem(menuItem_replace, false);
+            enableMenuItem(menuItem_details, false);
         }
     }
 
@@ -234,108 +201,90 @@ public class ApkInfoExActivity extends ApkInfoActivity {
 
         private void inputKeywordAndSearch() {
             final Context context = ApkInfoExActivity.this;
-            MaterialAlertDialogBuilder inputDlg = new MaterialAlertDialogBuilder(
-                    context);
-            inputDlg.setTitle(R.string.search);
-            inputDlg.setMessage(R.string.pls_input_keyword);
+            final MaterialAlertDialogBuilder materialDialog = new MaterialAlertDialogBuilder(context);
+            materialDialog.setTitle(R.string.search);
+            materialDialog.setMessage(R.string.pls_input_keyword);
 
             // Set an EditText view to get user input
-            AutoCompleteAdapter adapter = new AutoCompleteAdapter(
-                    context, "res_keywords");
+            final AutoCompleteAdapter adapter = new AutoCompleteAdapter(context, "res_keywords");
 
-            LinearLayout layout = new LinearLayout(context);
+            final LinearLayout layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.VERTICAL);
-            layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT));
+            layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
             final AutoCompleteTextView input = new AutoCompleteTextView(context);
             input.setAdapter(adapter);
-            layout.addView(input, new LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT));
+            layout.addView(input, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
             final CheckBox caseInsstCb = new CheckBox(context);
             caseInsstCb.setText(R.string.case_insensitive);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 8, 0, 0);
             caseInsstCb.setLayoutParams(params);
             layout.addView(caseInsstCb);
 
             final CheckBox filenameCb = new CheckBox(context);
             filenameCb.setText(R.string.search_file_names);
-            LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            final LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             params2.setMargins(0, 8, 0, 32);
             filenameCb.setLayoutParams(params2);
             layout.addView(filenameCb);
 
-            inputDlg.setView(layout);
-
-            inputDlg.setPositiveButton(android.R.string.ok,
+            materialDialog.setView(layout);
+            materialDialog.setPositiveButton(android.R.string.ok,
                     (dialog, whichButton) -> {
                         String keyword = input.getText().toString();
                         keyword = keyword.trim();
                         if ("".equals(keyword)) {
-                            Toast.makeText(context,
-                                    R.string.empty_input_tip,
-                                    Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, R.string.empty_input_tip, Toast.LENGTH_LONG).show();
                         } else {
-                            boolean bSearchName = filenameCb.isChecked();
-                            boolean bCaseIsst = caseInsstCb.isChecked();
-                            doSearchInSelectedItems(keyword, bSearchName,
-                                    bCaseIsst);
+                            final boolean bSearchName = filenameCb.isChecked();
+                            final boolean bCaseIsst = caseInsstCb.isChecked();
+                            doSearchInSelectedItems(keyword, bSearchName, bCaseIsst);
                         }
                     });
-
-            inputDlg.setNegativeButton(android.R.string.cancel, null);
-
-            inputDlg.show();
+            materialDialog.setNegativeButton(android.R.string.cancel, null);
+            materialDialog.show();
         }
 
         // Keyword already input, now search in selected items
-        protected void doSearchInSelectedItems(String keyword,
-                                               boolean bSearchName, boolean bCaseIsst) {
-            Set<Integer> selected = resListAdapter.getCheckedItems();
+        protected void doSearchInSelectedItems(String keyword, boolean bSearchName, boolean bCaseIsst) {
+            final Set<Integer> selected = resListAdapter.getCheckedItems();
             if (selected.isEmpty()) {
                 return;
             }
 
-            List<FileRecord> records = new ArrayList<>();
-            String baseFolder = resListAdapter.getData(records);
-            ArrayList<String> filenameList = new ArrayList<>();
-            ArrayList<Integer> positions = new ArrayList<>(
-                    selected.size());
+            final List<FileRecord> records = new ArrayList<>();
+            final String baseFolder = resListAdapter.getData(records);
+            final ArrayList<String> filenameList = new ArrayList<>();
+            final ArrayList<Integer> positions = new ArrayList<>(selected.size());
             positions.addAll(selected);
             for (int index : positions) {
                 filenameList.add(records.get(index).fileName);
             }
 
             // Call real search
-            ApkInfoExActivity.this.searchInResourceFiles(keyword, baseFolder,
-                    filenameList, bSearchName, !bCaseIsst);
+           searchInResourceFiles(keyword, baseFolder, filenameList, bSearchName, !bCaseIsst);
         }
 
         private void showResourceInformation() {
-            Set<Integer> selected = resListAdapter.getCheckedItems();
+            final Set<Integer> selected = resListAdapter.getCheckedItems();
             if (selected.isEmpty()) {
                 return;
             }
 
-            int position = selected.iterator().next();
+            final int position = selected.iterator().next();
 
             // Check the item is directory or not
-            List<FileRecord> records = new ArrayList<>();
-            String curDir = resListAdapter.getData(records);
-            FileRecord record = records.get(position);
+            final List<FileRecord> records = new ArrayList<>();
+            final String curDir = resListAdapter.getData(records);
+            final FileRecord record = records.get(position);
 
-            AlertDialog infoDlg = createInfoDialog(curDir, record, position);
-            infoDlg.show();
+            createInfoDialog(curDir, record, position);
         }
 
         // The detail/more/information dialog
-        @NonNull
-        private AlertDialog createInfoDialog(final String curDir,
-                                             @NonNull final FileRecord record, final int position) {
+        private void createInfoDialog(final String curDir, @NonNull final FileRecord record, final int position) {
             // Get file name and path
             String fileName = record.fileName;
             String filepath = curDir + "/" + record.fileName;
@@ -367,17 +316,17 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             }
 
             // Create dialog view
-            View view = LayoutInflater.from(ApkInfoExActivity.this).inflate(R.layout.dialog_resfile_more, null);
+            final View view = LayoutInflater.from(ApkInfoExActivity.this).inflate(R.layout.dialog_resfile_more, null);
             final TextInputEditText et = view.findViewById(R.id.filename);
             et.setText(fileName);
-            TextView et2 = view.findViewById(R.id.filepath);
+            final TextView et2 = view.findViewById(R.id.filepath);
             et2.setText(relativePath);
-            TextView et3 = view.findViewById(R.id.fileentry);
+            final TextView et3 = view.findViewById(R.id.fileentry);
             et3.setText(entryName != null ? entryName : getString(R.string.not_available));
 
             // Extract the original entry (for DEBUG)
             final String _entry = entryName;
-            Button extractBtn = view.findViewById(R.id.btn_extract);
+            final Button extractBtn = view.findViewById(R.id.btn_extract);
             if (record.isDir) {
                 extractBtn.setVisibility(View.GONE);
             } else {
@@ -391,7 +340,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             }
 
             // Setup rename button listener
-            Button renameBtn = view.findViewById(R.id.btn_rename);
+            final Button renameBtn = view.findViewById(R.id.btn_rename);
             if (!isFullDecoding && record.isDir) {
                 renameBtn.setVisibility(View.GONE);
             }
@@ -399,26 +348,19 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 final String newName = et.getText().toString().trim();
                 // Empty input
                 if (newName.equals("")) {
-                    Toast.makeText(ApkInfoExActivity.this,
-                            R.string.empty_input_tip,
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ApkInfoExActivity.this, R.string.empty_input_tip, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // Not changed
                 if (newName.equals(record.fileName)) {
-                    Toast.makeText(ApkInfoExActivity.this,
-                            R.string.no_change_detected,
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ApkInfoExActivity.this, R.string.no_change_detected, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // If file extension is changed, show tip
                 if (!record.isDir && isExtensionChanged(record.fileName, newName)) {
-                    MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(
-                            ApkInfoExActivity.this);
+                    final MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(ApkInfoExActivity.this);
                     dlg.setMessage(R.string.extension_changed_tip);
-                    dlg.setPositiveButton(R.string.yes,
-                            (dialog, which) -> doFileRename(curDir, record, _entry,
-                                    newName, position));
+                    dlg.setPositiveButton(R.string.yes, (dialog, which) -> doFileRename(curDir, record, _entry, newName, position));
                     dlg.setNegativeButton(R.string.no, null);
                     dlg.show();
                 } else {
@@ -426,7 +368,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 }
             });
 
-            MaterialAlertDialogBuilder infoDlg = new MaterialAlertDialogBuilder(ApkInfoExActivity.this);
+            final MaterialAlertDialogBuilder infoDlg = new MaterialAlertDialogBuilder(ApkInfoExActivity.this);
             infoDlg.setTitle(R.string.detail);
             infoDlg.setView(view);
             infoDlg.setNeutralButton(R.string.copy_file_path,
@@ -439,8 +381,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                         Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
                     });
             infoDlg.setPositiveButton(android.R.string.ok, null);
-
-            return infoDlg.create();
+            infoDlg.create().show();
         }
 
         protected boolean isExtensionChanged(@NonNull String fileName, String newName) {
