@@ -31,6 +31,12 @@
 
         <androidx.preference.SwitchPreference
             android:defaultValue="true"
+            android:key="editor_printable_characters"
+            android:title="Непечатаемые символы"
+            android:summary="Визуальное отображение пробелов и переносов строк"/>
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="true"
             android:key="editor_magnifier"
             android:title="@string/magnifier" />
 

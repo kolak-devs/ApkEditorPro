@@ -61,7 +61,7 @@ public class Preferences {
     }
 
     public static boolean isNightModeEnabled() {
-        return App.getPreferences().getBoolean("night_mode", false);
+        return App.getPreferences().getBoolean("str", false);
     }
 
     public static void setNightModeEnabled(boolean flag) {
