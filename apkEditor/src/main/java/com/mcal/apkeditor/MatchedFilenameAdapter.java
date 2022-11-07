@@ -22,35 +22,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MatchedFilenameAdapter extends BaseAdapter implements
-        OnCheckedChangeListener {
-
-    private WeakReference<ApkInfoActivity> activityRef;
-    private WeakReference<ResSelectionChangeListener> listenerRef;
-    private String pathPrefix;
+public class MatchedFilenameAdapter extends BaseAdapter implements OnCheckedChangeListener {
+    private final WeakReference<ApkInfoActivity> activityRef;
+    private final WeakReference<ResSelectionChangeListener> listenerRef;
+    private final String pathPrefix;
     private ArrayList<String> matchedFiles;
 
     private Set<Integer> checkedItems;
 
-    private int layoutId;
-
-    public MatchedFilenameAdapter(ApkInfoActivity activity,
-                                  ResSelectionChangeListener listener, String pathPrefix,
-                                  ArrayList<String> matchedFiles) {
-        this.activityRef = new WeakReference<ApkInfoActivity>(activity);
-        this.listenerRef = new WeakReference<ResSelectionChangeListener>(
-                listener);
+    public MatchedFilenameAdapter(ApkInfoActivity activity, ResSelectionChangeListener listener, String pathPrefix, ArrayList<String> matchedFiles) {
+        this.activityRef = new WeakReference<>(activity);
+        this.listenerRef = new WeakReference<>(listener);
         this.pathPrefix = pathPrefix;
         this.matchedFiles = matchedFiles;
 
-        this.checkedItems = new HashSet<Integer>();
-
-        this.layoutId = R.layout.item_file_selectable;
+        this.checkedItems = new HashSet<>();
     }
 
     // Compute how many values are lower than val
     // values in list already sorted
-    private static int valuesLowerThan(List<Integer> values, int val) {
+    private static int valuesLowerThan(@NonNull List<Integer> values, int val) {
         int count = 0;
         for (int i = 0; i < values.size(); ++i) {
             int curVal = values.get(i);
@@ -83,19 +74,14 @@ public class MatchedFilenameAdapter extends BaseAdapter implements
         String filePath = this.matchedFiles.get(position);
         String label = filePath.substring(pathPrefix.length() + 1);
 
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(activityRef.get()).inflate(
-                    layoutId, null);
+            convertView = LayoutInflater.from(activityRef.get()).inflate(R.layout.item_file_selectable, null);
             viewHolder = new ViewHolder();
-            viewHolder.fileIcon = (ImageView) convertView
-                    .findViewById(R.id.file_icon);
-            viewHolder.pathTv = (TextView) convertView
-                    .findViewById(R.id.filename);
-            viewHolder.detailTv = (TextView) convertView
-                    .findViewById(R.id.detail1);
-            viewHolder.checkbox = (CheckBox) convertView
-                    .findViewById(R.id.checkBox);
+            viewHolder.fileIcon = convertView.findViewById(R.id.file_icon);
+            viewHolder.pathTv = convertView.findViewById(R.id.filename);
+            viewHolder.detailTv = convertView.findViewById(R.id.detail1);
+            viewHolder.checkbox = convertView.findViewById(R.id.checkBox);
 
             viewHolder.pathTv.setSingleLine(false);
             viewHolder.pathTv.setMaxLines(2);
@@ -110,11 +96,7 @@ public class MatchedFilenameAdapter extends BaseAdapter implements
 
         // Checkbox
         viewHolder.checkbox.setId(position);
-        if (checkedItems.contains(position)) {
-            viewHolder.checkbox.setChecked(true);
-        } else {
-            viewHolder.checkbox.setChecked(false);
-        }
+        viewHolder.checkbox.setChecked(checkedItems.contains(position));
         viewHolder.checkbox.setOnCheckedChangeListener(this);
 
         return convertView;
@@ -173,21 +155,21 @@ public class MatchedFilenameAdapter extends BaseAdapter implements
     public void onCheckedChanged(CompoundButton view, boolean isChecked) {
         int id = view.getId();
         if (isChecked) {
-            this.checkedItems.add(id);
+            checkedItems.add(id);
         } else {
-            this.checkedItems.remove(id);
+            checkedItems.remove(id);
         }
 
-        if (this.listenerRef != null) {
+        if (listenerRef != null) {
             listenerRef.get().selectionChanged(checkedItems);
         }
     }
 
     public void selectAll() {
-        for (int i = 0; i < this.matchedFiles.size(); ++i) {
-            this.checkedItems.add(i);
+        for (int i = 0; i < matchedFiles.size(); ++i) {
+            checkedItems.add(i);
         }
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public void selectNone() {

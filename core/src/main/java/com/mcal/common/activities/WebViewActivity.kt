@@ -21,13 +21,15 @@ import com.mcal.common.utils.isNetworkAvailable
 import kotlinx.coroutines.*
 
 class WebViewActivity : CustomizedLangActivity() {
-    private lateinit var binding: WebviewActivityBinding
+    private var _binding: WebviewActivityBinding? = null
+    private val binding get() = _binding!!
+
     private var mHtmlUrl: String? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = WebviewActivityBinding.inflate(layoutInflater)
+        _binding = WebviewActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "Documentation", back = true)
         val webView = binding.webView
@@ -110,6 +112,11 @@ class WebViewActivity : CustomizedLangActivity() {
         }
         dialog.create()
         dialog.show()
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
     fun refresh() {
