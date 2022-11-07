@@ -38,6 +38,7 @@
 
         <androidx.preference.DropDownPreference
             android:key="domain_hk"
+            android:defaultValue="hk"
             android:title="@string/settings_server_title"
             android:entries="@array/domain_com"
             android:entryValues="@array/domain_com_values"/>

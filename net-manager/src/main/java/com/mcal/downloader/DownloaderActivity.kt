@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.Constants.DOMAIN
+import com.mcal.common.data.Constants
+import com.mcal.common.data.Constants.getDomain
 import com.mcal.common.utils.isNetworkAvailable
 import com.mcal.downloader.databinding.DownloaderActivityBinding
 
@@ -14,14 +15,14 @@ class DownloaderActivity : CustomizedLangActivity() {
     private val binding get() = _binding!!
 
     val tools = listOf(
-        "android-framework.jar" to "$DOMAIN/apkeditor/framework/$SDK/android.jar",
-        "aapt" to "$DOMAIN/apkeditor/bin/$ABI/aapt",
-        "aapt2" to "$DOMAIN/apkeditor/bin/$ABI/aapt2",
-        "mycp" to "$DOMAIN/apkeditor/bin/$ABI/mycp",
-        "zipalign" to "$DOMAIN/apkeditor/bin/$ABI/zipalign",
+        "android-framework.jar" to "${getDomain()}/apkeditor/framework/$SDK/android.jar",
+        "aapt" to "${getDomain()}/apkeditor/bin/$ABI/aapt",
+        "aapt2" to "${getDomain()}/apkeditor/bin/$ABI/aapt2",
+        "mycp" to "${getDomain()}/apkeditor/bin/$ABI/mycp",
+        "zipalign" to "${getDomain()}/apkeditor/bin/$ABI/zipalign",
         //"aaptz" to "DOMAIN/apkeditor/bin/aaptz",
-        "testkey.pk8" to "$DOMAIN/apkeditor/keys/testkey.pk8",
-        "testkey.x509.pem" to "$DOMAIN/apkeditor/keys/testkey.x509.pem",
+        "testkey.pk8" to "${getDomain()}/apkeditor/keys/testkey.pk8",
+        "testkey.x509.pem" to "${getDomain()}/apkeditor/keys/testkey.x509.pem",
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

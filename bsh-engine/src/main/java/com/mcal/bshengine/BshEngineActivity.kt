@@ -14,7 +14,7 @@ import com.mcal.bshengine.api.*
 import com.mcal.bshengine.databinding.BshengineActivityBinding
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.activities.WebViewActivity
-import com.mcal.common.data.Constants.DOMAIN
+import com.mcal.common.data.Constants.getDomain
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ActivityHelper.attachParam
 import com.mcal.common.utils.ScopedStorage
@@ -98,7 +98,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                         return true
                     }
                     R.id.menu_patch_doc -> {
-                        val link = "$DOMAIN/apkeditor/doc/bsh-patcher/index.html"
+                        val link = "${getDomain()}/apkeditor/doc/bsh-patcher/index.html"
                         val intent = Intent(this@BshEngineActivity, WebViewActivity::class.java)
                         attachParam(intent, "htmlUrl", link)
                         startActivity(intent)

@@ -237,10 +237,6 @@ public class Preferences {
         return App.getPreferences().getInt("editor_font_size", 14);
     }
 
-    public static void setEditorFontSize(String key) {
-        App.getPreferences().edit().putString("editor_text_size", key).apply();
-    }
-
     public static String getWebViewLanguage() {
         return App.getPreferences().getString("webview_language", "ru");
     }

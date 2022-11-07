@@ -8,5 +8,8 @@ object Constants {
 
     private const val DOMAIN_RU = "https://timscriptov.ru"
     private const val DOMAIN_COM = "https://timscriptov.com"
-    val DOMAIN = if (isDomainCom()) DOMAIN_COM else DOMAIN_RU
+
+    fun getDomain(): String {
+        return if (isDomainCom()) DOMAIN_COM else DOMAIN_RU
+    }
 }
