@@ -41,9 +41,6 @@ class AsyncDecodeTask(
 
     private suspend fun doInBackground(): Boolean = withContext(Dispatchers.IO) {
         return@withContext try {
-            CoroutineScope(Dispatchers.IO).launch {
-
-            }
             doAllJobs()
             true
         } catch (e: Exception) {

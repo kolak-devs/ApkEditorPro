@@ -20,7 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
-import com.mcal.common.data.Preferences;
+import com.mcal.common.data.LegacyPreferences;
 import com.mcal.patchview.R;
 import com.mcal.patchview.utils.RegexPattern;
 
@@ -237,17 +237,17 @@ public class ShaderText extends AppCompatTextView {
     }
 
     private void setSyntaxColors() {
-        colorNumber = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
-                R.color.syntax_arta_num) : ContextCompat.getColor(getContext(), R.color.syntax_num);
-        colorKeyword = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
-                R.color.syntax_arta_keyword) : ContextCompat.getColor(getContext(), R.color.syntax_keyword);
+        colorNumber = ContextCompat.getColor(getContext(),
+                R.color.syntax_arta_num);
+        colorKeyword = ContextCompat.getColor(getContext(),
+                R.color.syntax_arta_keyword);
         colorBuiltin = ContextCompat.getColor(getContext(), R.color.syntax_sub_element);
-        colorComment = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
-                R.color.syntax_arta_string) : ContextCompat.getColor(getContext(), R.color.syntax_string);
-        colorAttr = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
-                R.color.syntax_arta_element) : ContextCompat.getColor(getContext(), R.color.syntax_element);
-        colorOperator = Preferences.isArtaSyntaxAllowed() ? ContextCompat.getColor(getContext(),
-                R.color.syntax_arta_num_attribute) : ContextCompat.getColor(getContext(), R.color.syntax_num_attribute);
+        colorComment = ContextCompat.getColor(getContext(),
+                R.color.syntax_arta_string);
+        colorAttr = ContextCompat.getColor(getContext(),
+                R.color.syntax_arta_element);
+        colorOperator = ContextCompat.getColor(getContext(),
+                R.color.syntax_arta_num_attribute);
     }
 
     private void cancelUpdate() {

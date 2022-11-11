@@ -11,9 +11,11 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.view.MenuProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.common.R
-import com.mcal.common.data.Preferences
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.databinding.WebviewActivityBinding
 import com.mcal.common.utils.FileReader
 import com.mcal.common.utils.HtmlRenderer
@@ -51,13 +53,13 @@ class WebViewActivity : CustomizedLangActivity() {
                 }
                 val result = async.await()
                 withContext(Dispatchers.Main) {
-                    val finalLink = link + "#googtrans(ru|" + Preferences.getWebViewLanguage() + ")"
+                    val finalLink = link + "#googtrans(ru|" + ReactivePreferences.getWebViewLanguage() + ")"
                     webView.loadDataWithBaseURL(finalLink, result, "text/html", "UTF-8", finalLink)
                 }
             }
         } ?: run {
             binding.errors.visibility = View.VISIBLE
-            binding.errors.text = "Не верная ссылка, попробуйте позже"
+            binding.errors.text = "Неверная ссылка, попробуйте позже"
         }
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -99,12 +101,16 @@ class WebViewActivity : CustomizedLangActivity() {
         dialog.setItems(items) { p112: DialogInterface, p2: Int ->
             when (p2) {
                 0 -> {
-                    Preferences.setWebViewLanguage("ru")
+                    lifecycleScope.launch {
+                        ReactivePreferences.setWebViewLanguage("ru")
+                    }
                     p112.dismiss()
                     refresh()
                 }
                 1 -> {
-                    Preferences.setWebViewLanguage("en")
+                    lifecycleScope.launch {
+                        ReactivePreferences.setWebViewLanguage("en")
+                    }
                     p112.dismiss()
                     refresh()
                 }

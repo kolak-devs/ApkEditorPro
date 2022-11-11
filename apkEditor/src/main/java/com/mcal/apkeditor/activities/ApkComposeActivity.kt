@@ -34,7 +34,7 @@ import com.mcal.apkeditor.utils.AxmlStringModifier
 import com.mcal.apkeditor.utils.ErrorFixManager
 import com.mcal.apkeditor.utils.OdexPatcher
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.Preferences
+import com.mcal.common.data.LegacyPreferences
 import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.utils.ApkInstaller
 import com.mcal.common.utils.ClipboardUtils.copyToClipboard
@@ -537,28 +537,6 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
         return null
     }
 
-    private fun showTipDialog() {
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_tip, null)
-        val msgTv = view.findViewById<AppCompatTextView>(R.id.tv_message)
-        msgTv.setText(R.string.build_still_running_tip)
-        val cb = view.findViewById<AppCompatCheckBox>(R.id.cb_show_once)
-        val dialog = MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.tip)
-            .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int ->
-                // Still running means task is still in status bar
-                mBinder?.let { binder ->
-                    if (binder.isRunning()) {
-                        finish()
-                    }
-                }
-                // Remember the option and save to preference
-                if (cb.isChecked) {
-                    Preferences.setDoNotShowComposeTip(true)
-                }
-            }
-        dialog.setView(view)
-        dialog.show()
-    }
 
     private fun stopBuildAndGoBack() {
         try {
@@ -589,14 +567,11 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
     override fun onBackPressed() {
         mBinder?.let { binder ->
             if (binder.isRunning()) {
-                if (!Preferences.isDoNotShowComposeTip()) {
-                    showTipDialog()
-                } else {
                     finish()
                 }
-            } else {
-                finish()
-            }
+//            } else {
+//                finish()
+//            }
         }
     }
 

@@ -1,6 +1,8 @@
 package com.mcal.common.data
 
-import com.mcal.common.data.Preferences.isDomainCom
+import com.mcal.common.App
+import kotlinx.coroutines.runBlocking
+
 
 object Constants {
     const val PACKAGE_NAME = "com.mcal.apkeditor.pro"
@@ -10,6 +12,12 @@ object Constants {
     private const val DOMAIN_COM = "https://timscriptov.com"
 
     fun getDomain(): String {
-        return if (isDomainCom()) DOMAIN_COM else DOMAIN_RU
+        val comOrNot: Boolean
+        runBlocking {
+         comOrNot = ReactivePreferences.isDomainCom()
+        }
+        return if (comOrNot) {
+            DOMAIN_COM
+        } else DOMAIN_RU
     }
 }

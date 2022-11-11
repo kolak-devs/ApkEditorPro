@@ -5,9 +5,10 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.provider.OpenableColumns
-import com.mcal.common.data.Preferences
-import com.mcal.common.utils.ScopedStorage.getBinDir
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage.getMyCp
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.annotations.Contract
 import java.io.*
 import java.nio.charset.Charset
@@ -287,12 +288,15 @@ fun InputStream.readText(charset: Charset = Charsets.UTF_8): String {
 }
 
 fun getDecodeDirectory(): String? {
-    var str = Preferences.getDecodeDirectory()
+    var str: String?
+    runBlocking {
+        str = ReactivePreferences.getDecodeDirectory()
+    }
     if (str != null) {
-        if (str.endsWith("/")) {
-            str = str.substring(0, str.length - 1)
+        if (str!!.endsWith("/")) {
+            str = str!!.substring(0, str!!.length - 1)
         }
-        if (dirCanWrite(str)) {
+        if (dirCanWrite(str!!)) {
             return str
         }
     }

@@ -22,7 +22,7 @@ public class FileReader {
     public static String fromAssets(String path) {
         try {
             StringBuilder sb = new StringBuilder();
-            BufferedReader br = new BufferedReader(new InputStreamReader(App.getContext().getAssets().open(path), StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(new InputStreamReader(App.Companion.getContext().getAssets().open(path), StandardCharsets.UTF_8));
             String line;
             while ((line = br.readLine()) != null) sb.append(line).append("\n");
             return sb.toString();
@@ -42,7 +42,7 @@ public class FileReader {
         } catch (Exception e) {
             if (e instanceof SSLException) {
                 try {
-                    ProviderInstaller.installIfNeeded(App.getContext());
+                    ProviderInstaller.installIfNeeded(App.Companion.getContext());
                     return fromUrl(url);
                 } catch (GooglePlayServicesRepairableException e1) {
                     return "<p style='color:red;'>Произошла ошибка:</p>" + Log.getStackTraceString(e1);

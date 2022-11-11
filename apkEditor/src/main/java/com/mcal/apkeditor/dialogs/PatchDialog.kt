@@ -25,6 +25,9 @@ import com.mcal.common.utils.copyFile
 import com.mcal.common.utils.makeDir
 import com.mcal.common.utils.readText
 import com.mcal.patchview.ui.CodeText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.xml.sax.SAXException
 import ru.mcal.manifestparser.xml.AndroidManifestParser
 import java.io.*
@@ -58,7 +61,9 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
         val saveExamplesTv = view.findViewById<TextView>(R.id.tv_save_patches)
         saveExamplesTv.setOnClickListener(this)
         webView = view.findViewById(R.id.web_instructions)
-        webView?.loadUrl("file:///android_asset/doc/" + LocaleManager.getDocLanguage() + "/patch.html")
+        CoroutineScope(Dispatchers.Main).launch {
+            webView?.loadUrl("file:///android_asset/doc/" + LocaleManager.getDocLanguage() + "/patch.html")
+        }
         logLayout = view.findViewById(R.id.log_layout)
         logTv = view.findViewById(R.id.tv_patchlog)
         materialDialog = MaterialAlertDialogBuilder(activity)

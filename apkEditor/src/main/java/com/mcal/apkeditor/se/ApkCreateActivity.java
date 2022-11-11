@@ -27,8 +27,6 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.activities.ApkInfoActivity;
-import com.mcal.apkeditor.activities.MainActivity;
 import com.mcal.apkeditor.ce.IApkMaking;
 import com.mcal.apkeditor.ce.IDescriptionUpdate;
 import com.mcal.apkeditor.ce.e.ResourceEditor;
@@ -36,7 +34,7 @@ import com.mcal.apkeditor.dex.DexStringEditor;
 import com.mcal.apkeditor.utils.SignHelper;
 import com.mcal.apksigner.ApkSigner;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.data.Preferences;
+import com.mcal.common.data.LegacyPreferences;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ApkInfoParser.AppInfo;
@@ -446,7 +444,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
 
                 String outApkName;
                 final String strTail = "_signed.apk";
-                final String nameRule = Preferences.getOutputApkName();
+                final String nameRule = /*LegacyPreferences.getOutputApkName();*/ "2";//FIXME MOTHERFUCKER
                 switch (nameRule) {
                     case "0":
                         outApkName = activity.packageName + strTail;

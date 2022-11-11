@@ -13,7 +13,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.mcal.common.data.Preferences;
+import com.mcal.common.data.LegacyPreferences;
+import com.mcal.common.data.ReactivePreferences;
 import com.mcal.patchview.R;
 
 /**
@@ -36,11 +37,9 @@ public class CodeText extends ShaderText {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
-        if (Preferences.isMonospaceFontAllowed()) {
-            setTypeface(ResourcesCompat.getFont(getContext(), R.font.mono));
-        }
-        setTextSize(Preferences.getFontSize());
-        paint.setColor(Color.parseColor(!Preferences.isNightModeEnabled() ? "#000000" : "#fafafa"));
+        setTypeface(ResourcesCompat.getFont(getContext(), R.font.mono));
+        setTextSize(16);
+        paint.setColor(Color.parseColor(!ReactivePreferences.isLegacyNightMode() ? "#000000" : "#fafafa"));
         paint.setTextSize(getPixels(14));
         getViewTreeObserver().addOnGlobalLayoutListener(() -> layout = getLayout());
     }

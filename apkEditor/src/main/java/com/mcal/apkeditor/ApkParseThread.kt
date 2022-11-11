@@ -7,9 +7,13 @@ import brut.androlib.res.data.ResTable
 import brut.androlib.res.decoder.ARSCDecoder
 import brut.androlib.res.util.ExtFile
 import com.mcal.apkeditor.ui.fulleditor.utils.TaskDecoder
-import com.mcal.common.data.Preferences
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.deleteAll
 import com.mcal.common.utils.readFully
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
@@ -51,7 +55,9 @@ class ApkParseThread(
             if (apkPath != null && decodePath != null) {
                 val apkFile = ExtFile(File(apkPath))
                 // After decoding resource table, show string list
-                resTable = getResTable(apkFile)
+                CoroutineScope(Dispatchers.Main).launch {
+                    resTable = getResTable(apkFile)
+                }
                 consumerRef.get()?.resTableDecoded(true)
                 deleteAll(File(decodePath))
                 val outDir = File(decodePath)
@@ -69,10 +75,10 @@ class ApkParseThread(
     }
 
     @Throws(AndrolibException::class)
-    private fun getResTable(apkFile: File, loadMainPkg: Boolean = true): ResTable {
+    suspend fun getResTable(apkFile: File, loadMainPkg: Boolean = true): ResTable {
         val resTable = ResTable()
         if (loadMainPkg) {
-            if (Preferences.isFixMultiRes()) {
+            if (ReactivePreferences.isFixMultiRes()) {
                 loadOneMainPkg(resTable, apkFile)
             } else {
                 loadMainPkg(resTable, apkFile)

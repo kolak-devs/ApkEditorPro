@@ -32,6 +32,10 @@ object PreferenceScheme {
       val SIGNING_KEY_ALIAS = stringPreferencesKey("signing_key_alias")
       val SIGNING_KEY_PASS = stringPreferencesKey("signing_key_password")
       val SIGNING_VERSION = intPreferencesKey("signing_version")
+      val FRAMEWORKS_INSTALLED = booleanPreferencesKey("frameworks_installed")
+      val DECODE_ASSETS = booleanPreferencesKey("decode_assets")
+      val DECODE_RESOURCES = booleanPreferencesKey("decode_resources")
+      val DECODE_CLASSES = booleanPreferencesKey("decode_classes")
    }
 
    object Editor {
@@ -42,6 +46,14 @@ object PreferenceScheme {
       val SHOW_UNPRINTABLE = booleanPreferencesKey("editor_printable_characters")
       val MAGNIFIER = booleanPreferencesKey("editor_magnifier")
       val USE_ICU_LIB = booleanPreferencesKey("editor_use_icu_library")
+   }
+
+   object Misc {
+      val HISTORY_RESOURCE = stringPreferencesKey("res_keywords")
+      val HISTORY_FILES = stringPreferencesKey("mf_keywords")
+      val HISTORY_MANIFEST = stringPreferencesKey("string_keywords")
+      val WEB_LANGUAGE = stringPreferencesKey("webview_language")
+
    }
 
 }

@@ -8,7 +8,8 @@ import com.mcal.apkeditor.pro.DexEncoder
 import com.mcal.apkeditor.smali.ISmaliAssembleCallback
 import com.mcal.apkeditor.utils.AssetsInstaller
 import com.mcal.apksigner.ApkSigner
-import com.mcal.common.data.Preferences
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.fastzip.FastZip
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.ScopedStorage.getApkEditorDir
@@ -41,6 +42,7 @@ class ApkComposeThread(
     private var decodedFilePath: String? = null
     private var srcApkPath: String? = null
     private var targetApkPath: String? = null // Target APK path
+    private val TAG = "ApkComposeThread"
 
 
     // Record all the dex file replaces
@@ -479,8 +481,14 @@ class ApkComposeThread(
 
     private fun composeResource(): Boolean {
         tempApkPath = "$targetApkPath.in"
+
+        var gett: Boolean
+        runBlocking {
+            gett = ReactivePreferences.isAapt2()
+            Log.d(TAG, "composeResource AAPT2: $gett")
+        }
         return try {
-            if (Preferences.isAapt2()) aapt2() else aapt()
+            return if (gett) aapt2() else aapt()
         } catch (e: IOException) {
             e.printStackTrace()
             false
@@ -488,7 +496,7 @@ class ApkComposeThread(
     }
 
     fun aapt(): Boolean {
-        val noVersionVectorOption = Preferences.getNoVersionVectorOption(aaptPath)
+        val noVersionVectorOption = LegacyPreferences.getNoVersionVectorOption(aaptPath)
         val paramList: MutableList<String> = ArrayList()
         paramList.add(aaptPath)
         paramList.add("package")
@@ -519,7 +527,7 @@ class ApkComposeThread(
 
     @Throws(IOException::class)
     fun aapt2(): Boolean {
-        val noVersionVectorOption = Preferences.getNoVersionVectorOption(aaptPath2)
+        val noVersionVectorOption = LegacyPreferences.getNoVersionVectorOption(aaptPath2)
         val args = ArrayList<String>()
         //compile resources
         args.add(aaptPath2)

@@ -2,22 +2,24 @@ package com.mcal.common.utils
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
-import com.mcal.common.data.Preferences
+import com.mcal.common.App
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.ReactivePreferences
+import kotlinx.coroutines.runBlocking
 
 object LocaleManager {
-    @JvmStatic
-    fun apply() {
-        val language = Preferences.getAppLanguage()
+    suspend fun apply() {
+        val language = ReactivePreferences.getAppLanguage()
         val locales = LocaleListCompat.forLanguageTags(language)
-        if (language.isNullOrEmpty()) {
+        if (language.isEmpty()) {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.getDefault())
         } else {
             AppCompatDelegate.setApplicationLocales(locales)
         }
     }
 
-    fun getDocLanguage(): String {
-        return when (Preferences.getAppLanguage()) {
+    suspend fun getDocLanguage(): String {
+        return when (ReactivePreferences.getAppLanguage()) {
             "de" -> {
                 "de"
             }

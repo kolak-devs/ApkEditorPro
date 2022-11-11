@@ -12,7 +12,9 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
-import com.mcal.common.data.Preferences
+import com.mcal.common.data.BridgeDataStore
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.prefStore
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 
@@ -21,6 +23,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun onCreatePreferences(bundle: Bundle?, s: String?) {
+        val customStore = BridgeDataStore()
+        customStore.attachDataStore(requireContext().prefStore)
+        preferenceManager.preferenceDataStore = customStore
         addPreferencesFromResource(R.xml.main_settings)
 
         cleanData()
@@ -30,8 +35,6 @@ class SettingsFragment : PreferenceFragmentCompat(),
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             findPreference<SwitchPreference>("ui_monet")?.isEnabled = false
         }
-        setCurrentValue2(findPreference("Language"))
-        setCurrentValue(findPreference("domain_hk"))
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
@@ -103,9 +106,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
                         requireActivity(), "", "Working…", false,
                         object : ProcessingInterface {
                             override fun process() {
-                                Preferences.setMfKeywordHistory("")
-                                Preferences.setStringKeywordHistory("")
-                                Preferences.setResKeywordHistory("")
+//                                LegacyPreferences.setMfKeywordHistory("")
+//                                LegacyPreferences.setStringKeywordHistory("")
+//                                LegacyPreferences.setResKeywordHistory("")
                             }
 
                             override fun afterProcess() {}

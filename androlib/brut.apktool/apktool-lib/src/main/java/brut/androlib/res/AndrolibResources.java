@@ -20,7 +20,7 @@ import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.PackageInfo;
 import com.mcal.androlib.meta.VersionInfo;
 import com.mcal.androlib.options.BuildOptions;
-import com.mcal.common.data.Preferences;
+import com.mcal.common.data.ReactivePreferences;
 import com.mcal.common.tasks.Aapt;
 import com.mcal.common.tasks.Aapt2;
 
@@ -376,7 +376,7 @@ final public class AndrolibResources {
 
     private void aapt2Package(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include, List<String> cmd, boolean customAapt)
             throws AndrolibException {
-        if (Preferences.isAEAAPTRules()) {
+        if (ReactivePreferences.isAaptRules()) {
             Aapt2.build(apkFile, include, manifest, resDir, mMinSdkVersion, mTargetSdkVersion);
         } else {
             List<String> compileCommand = new ArrayList<>(cmd);
@@ -543,7 +543,7 @@ final public class AndrolibResources {
 
     private void aapt1Package(File apkFile, File manifest, File resDir, File rawDir, File assetDir, File[] include, List<String> cmd, boolean customAapt)
             throws AndrolibException {
-        if (Preferences.isAEAAPTRules()) {
+        if (ReactivePreferences.isAaptRules()) {
             Aapt.build(apkFile, include, manifest, resDir, mMinSdkVersion, mTargetSdkVersion);
         } else {
             cmd.add("p");

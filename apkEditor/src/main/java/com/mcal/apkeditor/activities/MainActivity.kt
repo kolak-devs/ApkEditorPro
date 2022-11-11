@@ -9,13 +9,13 @@ import android.view.*
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -32,7 +32,8 @@ import com.mcal.apkeditor.prj.ProjectListActivity
 import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.Preferences
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyFile
@@ -43,6 +44,7 @@ import com.mcal.downloader.DownloaderActivity
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -75,15 +77,18 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                         return true
                     }
                     R.id.action_night_mode -> {
-                        if (Preferences.isNightModeEnabled()) {
-                            Preferences.setNightModeEnabled(false)
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                            delegate.applyDayNight()
-                        } else {
-                            Preferences.setNightModeEnabled(true)
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                            delegate.applyDayNight()
+                        lifecycleScope.launch {
+                            if (ReactivePreferences.isLegacyNightMode()) {
+                                ReactivePreferences.setNightMode(false)
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                                delegate.applyDayNight()
+                            } else {
+                                ReactivePreferences.setNightMode(true)
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                                delegate.applyDayNight()
+                            }
                         }
+
                         return true
                     }
                 }
@@ -218,9 +223,10 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 //        } else {
 //            msg.visibility = View.INVISIBLE
 //        }
-
-        if (!Preferences.isFrameworksInstalled()) {
-            showToolManagerDialog()
+        lifecycleScope.launch {
+            if (!ReactivePreferences.isFrameworksInstalled()) {
+                showToolManagerDialog()
+            }
         }
     }
 
@@ -237,8 +243,10 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         val isNotShowAgain = CheckBox(context).apply {
             text = getString(R.string.donot_show_again)
         }
-        isNotShowAgain.setOnCheckedChangeListener { _, p2 ->
-            Preferences.setFrameworksInstalled(p2)
+        isNotShowAgain.setOnCheckedChangeListener { _, checked ->
+            lifecycleScope.launch {
+                ReactivePreferences.setFrameworksInstalled(checked)
+            }
         }
 
         val padding = App.dp2px(16f, context).toInt()

@@ -20,7 +20,8 @@ import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.UsesFramework;
 import com.mcal.androlib.options.BuildOptions;
 import com.mcal.androlib.util.Logger;
-import com.mcal.common.data.Preferences;
+import com.mcal.common.data.LegacyPreferences;
+import com.mcal.common.data.ReactivePreferences;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -307,7 +308,7 @@ public class Androlib {
 
     // TODO: For ApkEditor
     public void writeMetaFile(File mOutDir, MetaInfo meta) throws AndrolibException {
-        if(Preferences.isApkToolJson()) {
+        if(ReactivePreferences.isJsonConfig()) {
             try {
                 meta.save(new File(mOutDir, "apktool.json"));
             } catch (IOException | JSONException ex) {
@@ -324,7 +325,7 @@ public class Androlib {
 
     // TODO: For ApkEditor
     public MetaInfo readMetaFile(ExtFile appDir) throws AndrolibException {
-        if(Preferences.isApkToolJson()) {
+        if(ReactivePreferences.isJsonConfig()) {
             try {
                 InputStream in = appDir.getDirectory().getFileInput("apktool.json");
                 MetaInfo meta = MetaInfo.load(in);

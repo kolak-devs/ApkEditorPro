@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.common.App;
 import com.mcal.common.R;
+import com.mcal.common.data.LegacyPreferences;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +33,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         filter = new ItemFilter();
 
-        String history = new App().getPreferences().getString(tag, "");
+        String history = LegacyPreferences.getLegacyString(tag, "");
         if (!history.equals("")) {
             historyWords = history.split("\n");
         } else {
@@ -102,7 +103,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
         }
 
         historyWords = updatedHistory.toArray(new String[updatedHistory.size()]);
-        App.getPreferences().edit().putString(mTag, sb.toString()).apply();
+        LegacyPreferences.putLegacyString(mTag, sb.toString());
     }
 
     static class AutoCompleteViewHolder {

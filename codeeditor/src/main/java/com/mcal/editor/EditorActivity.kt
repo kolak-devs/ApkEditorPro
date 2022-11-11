@@ -12,9 +12,11 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.Preferences
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
@@ -97,8 +99,6 @@ class EditorActivity : CustomizedLangActivity(),
             lineSeparator = LineSeparator.CRLF
             typefaceText = Typeface.createFromAsset(assets, "JetBrainsMono-Regular.ttf")
             setLineSpacing(2f, 1.1f)
-            nonPrintablePaintingFlags =
-                CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
             // Update display dynamically
             subscribeEvent<SelectionChangeEvent> { _, _ -> updatePositionText() }
             subscribeEvent<ContentChangeEvent> { _, _ ->
@@ -122,14 +122,21 @@ class EditorActivity : CustomizedLangActivity(),
             // Custom cursor animator
             cursorAnimator = ScaleCursorAnimator(editor)
             typefaceText = Typeface.MONOSPACE
-            colorScheme = getCodeColorScheme()
-            editor.isWordwrap = Preferences.isWordWrap()
-            editor.isLineNumberEnabled = Preferences.isLineNumberEnabled()
-            editor.setPinLineNumber(Preferences.isLineNumberPinned())
-            editor.getComponent(Magnifier::class.java).isEnabled = Preferences.isMagnifier()
-            editor.props.useICULibToSelectWords = Preferences.isUseICULibrary()
-            setEditorLanguage(getLanguage())
-            setTextSize(Preferences.getEditorFontSize().toFloat())
+
+            lifecycleScope.launch {
+                if (ReactivePreferences.isShowUnprintable()){
+                    nonPrintablePaintingFlags =
+                        CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
+                }
+                colorScheme = getCodeColorScheme()
+                editor.isWordwrap = ReactivePreferences.isWordWrap()
+                editor.isLineNumberEnabled = ReactivePreferences.isLineNumberEnabled()
+                editor.setPinLineNumber(ReactivePreferences.isLineNumberPinned())
+                editor.getComponent(Magnifier::class.java).isEnabled = ReactivePreferences.isMagnifier()
+                editor.props.useICULibToSelectWords = ReactivePreferences.isUseICULibrary()
+                setEditorLanguage(getLanguage())
+                setTextSize(ReactivePreferences.getFontSize().toFloat())
+            }
         }
     }
 
@@ -236,9 +243,9 @@ class EditorActivity : CustomizedLangActivity(),
         )
     }
 
-    private fun getCodeColorScheme(): TextMateColorScheme {
+    private suspend fun getCodeColorScheme(): TextMateColorScheme {
         return TextMateColorScheme(
-            if (Preferences.isNightModeEnabled()) {
+            if (ReactivePreferences.isNightMode()) {
                 getDarkTheme()
             } else {
                 getLightTheme()

@@ -12,7 +12,7 @@ import ru.svolf.melissa.swipeback.SwipeBackLayout
 open class CustomizedLangActivity : SwipeBackActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LocaleManager.apply()
+        //LocaleManager.apply()
         setEdgeLevel(SwipeBackLayout.EdgeLevel.MIN)
     }
 

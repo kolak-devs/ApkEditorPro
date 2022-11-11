@@ -1,31 +1,42 @@
 package com.mcal.common.utils
 
-import com.mcal.common.data.Preferences
+import com.mcal.common.App
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.ReactivePreferences
 import org.jetbrains.annotations.Contract
 
 object HtmlRenderer {
     @JvmStatic
-    fun renderHtml(html: String): String {
+    suspend fun renderHtml(html: String): String {
         return html
-            .replace("<head>", "<head>$style")
+            .replace("<head>", "<head>${style()}")
             .replace(
                 "androidstudio.css",
-                if (Preferences.isNightModeEnabled()) "darkcode.css" else "androidstudio.css"
+                if (ReactivePreferences.isNightMode())
+                    "darkcode.css"
+                else "androidstudio.css"
             )
             .replace("<body>", "<body>$translatePlugin")
-            .replace("<body>", if (Preferences.isNightModeEnabled()) "<body style='$darkMode'>" else "<body>")
+            .replace("<body>", if (ReactivePreferences.isNightMode()) "<body style='${darkMode()}'>" else "<body>")
     }
 
-    private val style: String
-        get() = ("<style>@font-face{font-family:CustomFont; src:url(file:///android_asset/JetBrainsMono-Regular.ttf);}"
-                + "p, h1, h2, h3, table, ul, ol {font-size:" + Preferences.getFontSize() + "; font-family:CustomFont;}"
-                + "pre,code {font-size:" + Preferences.getFontSize() + "; font-family:CustomFont;}"
-                + ".goog-te-banner-frame{display:none;}"
-                + if (Preferences.isNightModeEnabled()) "$darkMode</style>" else "</style>")
+    private suspend fun style(): String {
+        return StringBuilder().append("<style>@font-face{font-family:CustomFont; src:url(file:///android_asset/JetBrainsMono-Regular.ttf);}")
+            .append("p, h1, h2, h3, table, ul, ol {font-size:" + ReactivePreferences.getFontSize() + "; font-family:CustomFont;}")
+            .append("pre,code {font-size:" + ReactivePreferences.getFontSize() + "; font-family:CustomFont;}")
+            .append(".goog-te-banner-frame{display:none;}")
+            .append("")
+            .append(darkMode())
+            .append("</style>")
+            .toString()
+    }
 
-    @get:Contract(pure = true)
-    private val darkMode: String
-        get() = "background:#323232; color:#FAFAFA;"
+    private suspend fun darkMode(): String {
+        return if (ReactivePreferences.isNightMode()){
+            "background:#323232; color:#FAFAFA;"
+        } else ""
+    }
+
 
     private val translatePlugin: String
         get() = FileReader.fromAssets("translate/google.html")

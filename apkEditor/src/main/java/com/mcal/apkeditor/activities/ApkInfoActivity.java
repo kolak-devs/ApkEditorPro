@@ -81,7 +81,6 @@ import com.mcal.apkeditor.dialogs.PatchDialog;
 import com.mcal.apkeditor.dialogs.RebuildConfirmDialog;
 import com.mcal.apkeditor.dialogs.SearchFilenameDialog;
 import com.mcal.apkeditor.dialogs.SearchTextDialog;
-import com.mcal.apkeditor.dialogs.SmaliNoticeDialog;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.smali.AsyncDecodeTask;
 import com.mcal.apkeditor.smali.AsyncDecodeTask.IDecodeTaskCallback;
@@ -91,7 +90,8 @@ import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
 import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
 import com.mcal.bshengine.BshEngineActivity;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.data.Preferences;
+import com.mcal.common.data.LegacyPreferences;
+import com.mcal.common.data.ReactivePreferences;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.FileHelperKt;
@@ -997,7 +997,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         stringList.setOnItemClickListener(stringListAdapter);
 
         // DEX/Smali decoding
-        if (Preferences.isDex2smaliEnabled()) {
+        if (ReactivePreferences.isLegacySmaliEnabled()) {
             final Button dex2smaliImage = binding.mainResources.imageviewDex2smali;
             dex2smaliImage.setOnClickListener(this);
             dex2smaliImage.setOnLongClickListener(this);
@@ -1104,9 +1104,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // Image of dex2smali
         else if (id == R.id.imageview_dex2smali) {
-            if (!Preferences.isSmaliLicenseShowed()) {
-                new SmaliNoticeDialog(this);
-            }
             decodeDex(null);
         }
 
@@ -1196,7 +1193,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     protected void composeApkFile() {
         collectAndSaveChangedString();
 
-        if (Preferences.isRebuildConfirmEnabled()) {
+        if (ReactivePreferences.isLegacyRebuildConfirmation()) {
             Map<String, String> added = resListAdapter.getAddedFiles();
             Map<String, String> replaced = resListAdapter.getReplacedFiles();
             Set<String> deleted = resListAdapter.getDeletedFiles();
@@ -1351,7 +1348,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     private void launchWithoutCheck(boolean bSign) {
         String outputDir = ScopedStorage.getApkEditorDir().getPath();
-        final String outputApkRule = Preferences.getOutputApkName();
+        final String outputApkRule = /*LegacyPreferences.getOutputApkName();*/ "2"; //FIXME MOTHERFUCKER
         String filename;
         switch (outputApkRule) {
             case "0":
@@ -1466,16 +1463,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         curSelectedRadio = 1;
         updateCenterView();
-
-        if (!dexDecoded) {
-            int showTimes = Preferences.getHideSmaliMsgShown();
-            if (showTimes < 1) {
-                if (Preferences.isDex2smaliEnabled()) {
-                    Toast.makeText(this, R.string.hide_smali_tip, Toast.LENGTH_LONG).show();
-                    Preferences.setHideSmaliMsgShown(showTimes + 1);
-                }
-            }
-        }
     }
 
     protected void stringRadioClicked() {

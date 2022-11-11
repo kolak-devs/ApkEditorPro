@@ -7,56 +7,58 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.preference.PreferenceManager
 import com.mcal.common.utils.LocaleManager.apply
-import com.mcal.common.App
 import com.balsikandar.crashreporter.CrashReporter
 import com.google.android.material.color.DynamicColors
-import com.mcal.common.data.Preferences
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.PreferenceScheme
+import com.mcal.common.data.ReactivePreferences
+import com.mcal.common.data.prefStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class App : Application() {
+
     override fun onCreate() {
         super.onCreate()
-        context = applicationContext
-        preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        context = this
         CrashReporter.initialize(this)
-        if (Preferences.isNightModeEnabled()) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        CoroutineScope(Dispatchers.Main).launch {
+            if (ReactivePreferences.isNightMode()){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            if (ReactivePreferences.isMonetEnabled()){
+                DynamicColors.applyToActivitiesIfAvailable(this@App)
+            }
+            // Support android 12 Monet Engine
+            apply()
         }
-        // Support android 12 Monet Engine
-        if (Preferences.isMonetEnabled()) {
-            DynamicColors.applyToActivitiesIfAvailable(this)
-        }
-        apply()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        apply()
+        CoroutineScope(Dispatchers.Main).launch {
+            apply()
+        }
     }
 
     companion object {
-        @SuppressLint("StaticFieldLeak")
-        private lateinit var context: Context
-        private var preferences: SharedPreferences? = null
+        @JvmStatic
+        private var context: Context? = null
+
         @JvmStatic
         fun getContext(): Context {
             if (context == null) {
                 context = App()
             }
-            return context
+            return context!!
         }
-
-        @JvmStatic
-        fun getPreferences(): SharedPreferences? {
-            if (preferences == null) {
-                preferences = PreferenceManager.getDefaultSharedPreferences(getContext()!!)
-            }
-            return preferences
-        }
-
         /**
          * This method converts dp unit to equivalent pixels, depending on device density.
          *

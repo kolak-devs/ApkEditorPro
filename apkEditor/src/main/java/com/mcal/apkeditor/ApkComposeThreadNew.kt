@@ -9,7 +9,8 @@ import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.smali.ISmaliAssembleCallback
 import com.mcal.apkeditor.utils.AssetsInstaller
 import com.mcal.apksigner.ApkSigner
-import com.mcal.common.data.Preferences
+import com.mcal.common.data.LegacyPreferences
+import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.cleanup
 import com.mcal.common.utils.ITaskCallback
@@ -89,8 +90,8 @@ class ApkComposeThreadNew(
             val tmp = File(ctx.cacheDir, "app.apk")
             val binFolder = File(ctx.filesDir.toString() + "/bin")
             val options = BuildOptions()
-            options.useAapt2 = Preferences.isAapt2()
-            options.aaptPath = binFolder.toString() + File.separator + if (Preferences.isAapt2()) "aapt2" else "aapt"
+            options.useAapt2 = ReactivePreferences.isAapt2()
+            options.aaptPath = binFolder.toString() + File.separator + if (ReactivePreferences.isAapt2()) "aapt2" else "aapt"
             options.frameworkFolderLocation = binFolder.path
             val androlib = Androlib(options, this@ApkComposeThreadNew)
             try {
