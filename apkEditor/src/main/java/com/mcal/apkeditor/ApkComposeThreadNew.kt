@@ -98,7 +98,7 @@ class ApkComposeThreadNew(
                 launch(Dispatchers.IO) {
                     tmp.createNewFile()
                 }
-                stepInfo.stepTotal = 4
+                stepInfo.stepTotal = 12
                 setNextStep("Preparing...")
                 AssetsInstaller(ctx).install()
                 setNextStep("Compiling...")

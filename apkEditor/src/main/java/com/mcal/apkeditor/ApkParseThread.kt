@@ -7,7 +7,6 @@ import brut.androlib.res.data.ResTable
 import brut.androlib.res.decoder.ARSCDecoder
 import brut.androlib.res.util.ExtFile
 import com.mcal.apkeditor.ui.fulleditor.utils.TaskDecoder
-import com.mcal.common.data.LegacyPreferences
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.deleteAll
 import com.mcal.common.utils.readFully

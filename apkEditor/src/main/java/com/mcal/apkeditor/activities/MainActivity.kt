@@ -223,10 +223,8 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 //        } else {
 //            msg.visibility = View.INVISIBLE
 //        }
-        lifecycleScope.launch {
-            if (!ReactivePreferences.isFrameworksInstalled()) {
-                showToolManagerDialog()
-            }
+        if (!ScopedStorage.isToolsInstalled()) {
+            showToolManagerDialog()
         }
     }
 
