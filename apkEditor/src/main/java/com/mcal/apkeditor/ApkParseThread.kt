@@ -50,21 +50,21 @@ class ApkParseThread(
 
     private fun parse(): Boolean {
         try {
-            val apkPath = mApkPath
-            val decodePath = mDecodeRootPath
-            if (apkPath != null && decodePath != null) {
-                val apkFile = ExtFile(File(apkPath))
-                // After decoding resource table, show string list
-                CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                val apkPath = mApkPath
+                val decodePath = mDecodeRootPath
+                if (apkPath != null && decodePath != null) {
+                    val apkFile = ExtFile(File(apkPath))
+                    // After decoding resource table, show string list
                     resTable = getResTable(apkFile)
-                }
-                consumerRef.get()?.resTableDecoded(true)
-                deleteAll(File(decodePath))
-                val outDir = File(decodePath)
-                if (!outDir.exists()) {
-                    outDir.mkdirs()
-                }
-                TaskDecoder().decode(consumer, File(apkPath), File(decodePath))
+                    consumerRef.get()?.resTableDecoded(true)
+                    deleteAll(File(decodePath))
+                    val outDir = File(decodePath)
+                    if (!outDir.exists()) {
+                        outDir.mkdirs()
+                    }
+                    TaskDecoder().decode(consumer, File(apkPath), File(decodePath))
+            }
             }
             return true
         } catch (e: Exception) {

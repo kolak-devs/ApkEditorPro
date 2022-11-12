@@ -479,16 +479,11 @@ class ApkComposeThread(
         return false
     }
 
-    private fun composeResource(): Boolean {
+    private suspend fun composeResource(): Boolean {
         tempApkPath = "$targetApkPath.in"
 
-        var gett: Boolean
-        runBlocking {
-            gett = ReactivePreferences.isAapt2()
-            Log.d(TAG, "composeResource AAPT2: $gett")
-        }
         return try {
-            return if (gett) aapt2() else aapt()
+            return if (ReactivePreferences.isAapt2()) aapt2() else aapt()
         } catch (e: IOException) {
             e.printStackTrace()
             false

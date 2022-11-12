@@ -61,11 +61,11 @@ class PatchDialog(activity: Activity, private val listener: ApkInfoListener) : V
         val saveExamplesTv = view.findViewById<TextView>(R.id.tv_save_patches)
         saveExamplesTv.setOnClickListener(this)
         webView = view.findViewById(R.id.web_instructions)
+        logLayout = view.findViewById(R.id.log_layout)
+        logTv = view.findViewById(R.id.tv_patchlog)
         CoroutineScope(Dispatchers.Main).launch {
             webView?.loadUrl("file:///android_asset/doc/" + LocaleManager.getDocLanguage() + "/patch.html")
         }
-        logLayout = view.findViewById(R.id.log_layout)
-        logTv = view.findViewById(R.id.tv_patchlog)
         materialDialog = MaterialAlertDialogBuilder(activity)
             .setView(view)
             .setPositiveButton(activity.getString(R.string.select_patch), null)
