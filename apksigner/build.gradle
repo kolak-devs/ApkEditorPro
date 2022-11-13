@@ -41,4 +41,5 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.4.0'
 
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4"
 }

@@ -9,6 +9,8 @@ import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.ScopedStorage.filesDir
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.future.future
 import kotlinx.coroutines.withContext
 import org.spongycastle.jce.provider.BouncyCastleProvider
 import java.io.File
@@ -18,6 +20,7 @@ import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.Security
 import java.security.cert.X509Certificate
+import java.util.concurrent.CompletableFuture
 
 class ApkSigner {
     suspend fun signApk(inputPath: String, outputPath: String): Boolean = withContext(Dispatchers.IO) {
@@ -112,4 +115,8 @@ class ApkSigner {
             }
         }
     }
+
+    // Helper to call coroutines from java
+    fun signAsync(inputPath: String, outputPath: String): CompletableFuture<Boolean> =
+        GlobalScope.future { signApk(inputPath, outputPath) }
 }

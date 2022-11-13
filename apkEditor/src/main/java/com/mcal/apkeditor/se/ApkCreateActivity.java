@@ -467,7 +467,7 @@ public class ApkCreateActivity extends CustomizedLangActivity implements OnClick
                 // Build Apk
                 SignHelper.sign(apkPath, unsigned, jarPath2FilePath, null, null);
                 // Sign Apk
-                new ApkSigner().signApk(unsigned, outputApkPath);
+                new ApkSigner().signAsync(unsigned, outputApkPath);
                 new File(unsigned).delete();
 
                 activity.handler.sendEmptyMessage(0);
