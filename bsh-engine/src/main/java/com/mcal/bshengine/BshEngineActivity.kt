@@ -53,7 +53,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                         mApkPath = apkPath
                         i["XStorage"] = XStorage(decodedDir, apkPath)
                     } ?: run {
-                        Toast.makeText(this, "Apk не найден!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.apk_not_found), Toast.LENGTH_SHORT).show()
                     }
                     i["XMatcher"] = XMatcher()
                     i["XCipher"] = XCipher()
@@ -68,11 +68,11 @@ class BshEngineActivity : CustomizedLangActivity() {
                         scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
                             i.eval(InputStreamReader(FileInputStream(it)))
                         } ?: run {
-                            Toast.makeText(this, "Неподдерживаемый файл", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
                         }
                     }
                 } ?: run {
-                    Toast.makeText(this, "Директория проекта отсутствует", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.not_found_project_dir), Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 val dialog = MaterialAlertDialogBuilder(this)
@@ -124,7 +124,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                         binding.textScriptPatch.setText(file.name)
                         scriptPath = file
                     } else {
-                        Toast.makeText(this, "Неподдерживаемый файл", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

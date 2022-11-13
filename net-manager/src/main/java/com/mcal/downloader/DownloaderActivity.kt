@@ -28,7 +28,7 @@ class DownloaderActivity : CustomizedLangActivity() {
         super.onCreate(savedInstanceState)
         _binding = DownloaderActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupToolbar(R.id.toolbar, "Управление инструментарием", true)
+        setupToolbar(R.id.toolbar, getString(R.string.tools_manager), true)
         val adapter = DownloaderAdapter(tools)
         val recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -38,7 +38,7 @@ class DownloaderActivity : CustomizedLangActivity() {
     override fun onResume() {
         super.onResume()
         binding.errors.visibility = if (!isNetworkAvailable(this)) {
-            binding.errors.text = "Отсутствует Интернет подключение"
+            binding.errors.text = getString(R.string.network_available)
             View.VISIBLE
         } else {
             View.GONE

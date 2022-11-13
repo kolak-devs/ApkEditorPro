@@ -1,0 +1,4 @@
+<resources>
+    <string name="tools_manager">Управление инструментарием</string>
+    <string name="network_available">Отсутствует Интернет подключение</string>
+</resources>

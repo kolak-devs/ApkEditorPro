@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unsupported_file">Неподдерживаемый файл</string>
+    <string name="not_found_project_dir">Директория проекта отсутствует</string>
+    <string name="apk_not_found">Apk не найден!</string>
+</resources>

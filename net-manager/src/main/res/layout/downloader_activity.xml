@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="16dp"
-        android:text="Отсутствует Интернет подключение"
+        android:text="@string/network_available"
         android:translationZ="8dp"
         android:visibility="gone"
         tools:visibility="visible" />

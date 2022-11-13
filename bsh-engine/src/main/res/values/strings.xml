@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unsupported_file">Unsupported file</string>
+    <string name="not_found_project_dir">Not found project directory</string>
+    <string name="apk_not_found">APK file not found!</string>
+</resources>

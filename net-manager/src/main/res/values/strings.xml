@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">downloader</string>
+    <string name="tools_manager">Tools Manager</string>
+    <string name="network_available">No Internet Connection</string>
 </resources>
