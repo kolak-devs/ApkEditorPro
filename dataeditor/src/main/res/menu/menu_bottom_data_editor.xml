@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_appinfo"
+        android:icon="@drawable/round_info_24"
+        android:title="@string/appdm_basic_info" />
+
+    <item
+        android:id="@+id/tab_preference"
+        android:icon="@drawable/round_settings_suggest_24"
+        android:title="@string/appdm_preference" />
+
+    <item
+        android:id="@+id/tab_database"
+        android:icon="@drawable/round_storage_24"
+        android:title="@string/appdm_database" />
+
+    <item
+        android:id="@+id/tab_files"
+        android:icon="@drawable/round_folder_24"
+        android:title="@string/appdm_files" />
+</menu>

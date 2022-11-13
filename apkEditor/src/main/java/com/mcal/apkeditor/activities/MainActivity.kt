@@ -27,12 +27,11 @@ import com.mcal.apkeditor.adapters.MainMenuItem
 import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
-import com.mcal.apkeditor.dialogs.startFullEditActivity
+import com.mcal.apkeditor.dialogs.selectFullEditDialog
 import com.mcal.apkeditor.prj.ProjectListActivity
 import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.LegacyPreferences
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ScopedStorage
@@ -114,7 +113,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     val apk = File(ScopedStorage.getTmpDir().path, FilePickHelper.getFileName(this, it))
                     contentResolver.openInputStream(it)?.let { it1 -> copyFile(it1, apk) }
                     if (apk.exists() && apk.name.endsWith(".apk")) {
-                        this.startFullEditActivity(apk.path)
+                        selectFullEditDialog(this, apk.path)
                     } else {
                         Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
                     }

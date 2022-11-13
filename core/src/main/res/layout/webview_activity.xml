@@ -12,35 +12,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.mcal.common.view.NestedWebView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/errors"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Отсутствует Интернет подключение"
+                android:translationZ="8dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
-                <TextView
-                    android:id="@+id/errors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="Отсутствует Интернет подключение"
-                    android:translationZ="8dp"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-                <WebView
-                    android:id="@+id/webView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
-
-        </com.mcal.common.view.NestedWebView>
+        </LinearLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

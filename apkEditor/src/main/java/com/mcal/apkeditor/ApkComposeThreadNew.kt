@@ -1,20 +1,17 @@
 package com.mcal.apkeditor
 
 import android.content.Context
-import android.util.Log
 import brut.androlib.Androlib
 import com.mcal.androlib.options.BuildOptions
 import com.mcal.androlib.util.Logger
 import com.mcal.apkeditor.ce.IApkMaking
-import com.mcal.apkeditor.smali.ISmaliAssembleCallback
 import com.mcal.apkeditor.utils.AssetsInstaller
 import com.mcal.apksigner.ApkSigner
-import com.mcal.common.data.LegacyPreferences
 import com.mcal.common.data.ReactivePreferences
-import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utils.cleanup
 import com.mcal.common.utils.ITaskCallback
 import com.mcal.common.utils.ITaskCallback.TaskStepInfo
+import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.cleanup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -23,35 +20,30 @@ import java.io.File
 import java.util.logging.Level
 import kotlin.coroutines.CoroutineContext
 
-
 /**
- * @param ctx             Context
+ * @param context             Context
  * @param decodedFilePath path store all the decoded files
  * @param apkPath         target apk path
  */
 class ApkComposeThreadNew(
-    private val ctx: Context,
+    private val context: Context,
     decodedFilePath: String,
     apkPath: String
-) : ComposeThread(), ISmaliAssembleCallback, Logger {
-    private val decodedFilePath: String
-    private val targetApkPath: String // Target APK path
+) : ComposeThread(), Logger {
+    private val mDecodedFilePath: String
+    private val mTargetApkPath: String // Target APK path
 
-    private val stepInfo: TaskStepInfo
-
-    // Last time updating the smali assemble info
-    private val lastUpdateAssembleTime: Long = 0
+    private val mStepInfo: TaskStepInfo
 
     // Indicate succeed or not
-    private var succeed = false
-    var errMessage: String? = null
-        private set
-    private var taskCallback: ITaskCallback? = null
+    private var isSucceed = false
+    private var mErrorMessage: String? = null
+    private var mTaskCallback: ITaskCallback? = null
 
     // Flag to control run or not
-    private var stopFlag = false
-    private var bSignApk = false
-    private var extraMaker: IApkMaking? = null
+    private var isStopFlag = false
+    private var isNeedSignApk = false
+    private var mExtraMaker: IApkMaking? = null
 
     private var runningJob = Job()
 
@@ -71,106 +63,100 @@ class ApkComposeThreadNew(
         fileEntry2ZipEntry: Map<String, String>?,
         bSignApk: Boolean
     ) {
-        this.bSignApk = bSignApk
+        this.isNeedSignApk = bSignApk
     }
 
+    /**
+     * Запуск фонового процесса
+     */
     override fun execute() = launch {
         doInBackground()
     }
 
+    /**
+     * Компиляция в фоновом процессе
+     */
     private suspend fun doInBackground(): Boolean = withContext(Dispatchers.IO) {
         // Make sure build directory is created
-        val buildDir = File("$decodedFilePath/build")
+        val buildDir = File("$mDecodedFilePath/build")
         if (!buildDir.exists()) {
-            if (buildDir.mkdir()) {
-                Log.e(javaClass.name, "$buildDir created")
-            }
+            buildDir.mkdir()
         }
         do {
-            val tmp = File(ctx.cacheDir, "app.apk")
-            val binFolder = File(ctx.filesDir.toString() + "/bin")
-            val options = BuildOptions()
-            options.useAapt2 = ReactivePreferences.isAapt2()
-            options.aaptPath = binFolder.toString() + File.separator + if (ReactivePreferences.isAapt2()) "aapt2" else "aapt"
-            options.frameworkFolderLocation = binFolder.path
-            val androlib = Androlib(options, this@ApkComposeThreadNew)
+            val tmpApkFile = File(ScopedStorage.getTmpDir(), "app.apk")
+            val binDir = ScopedStorage.getBinDir()
             try {
                 launch(Dispatchers.IO) {
-                    tmp.createNewFile()
+                    tmpApkFile.createNewFile()
                 }
-                stepInfo.stepTotal = 12
-                setNextStep("Preparing...")
-                AssetsInstaller(ctx).install()
-                setNextStep("Compiling...")
-                androlib.build(File(decodedFilePath), tmp)
-                setNextStep("Signing...")
-                if (!signApk(tmp.path)) {
-                    break
+                mStepInfo.stepTotal = 12
+                setNextStep(context.getString(R.string.build_preparing))
+                AssetsInstaller(context).install()
+                setNextStep(context.getString(R.string.build_compiling))
+                Androlib(BuildOptions().apply {
+                    useAapt2 = ReactivePreferences.isAapt2()
+                    aaptPath = binDir.path + File.separator + if (ReactivePreferences.isAapt2()) "aapt2" else "aapt"
+                    frameworkFolderLocation = binDir.path
+                }, this@ApkComposeThreadNew).build(File(mDecodedFilePath), tmpApkFile)
+                setNextStep(context.getString(R.string.build_signing))
+                if (!signApk(tmpApkFile.path)) {
+                    setNextStep(context.getString(R.string.build_error_signing))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                errMessage = e.message
+                mErrorMessage = e.message
                 break
             }
             // Clean up
-            if (stopFlag) {
-                errMessage = "User request to stop"
+            if (isStopFlag) {
+                mErrorMessage = context.getString(R.string.build_canceled)
                 break
             }
-            setNextStep(ctx.getString(R.string.cleanup))
+            setNextStep(context.getString(R.string.cleanup))
             ScopedStorage.getTempDir().cleanup()
             ScopedStorage.getTmpDir().cleanup()
             ScopedStorage.getDecodedDir().cleanup()
-            tmp.delete()
-            succeed = true
+            tmpApkFile.delete()
+            isSucceed = true
         } while (false)
-        if (!stopFlag) {
-            if (succeed) {
-                taskCallback?.taskSucceed()
+        if (!isStopFlag) {
+            if (isSucceed) {
+                mTaskCallback?.taskSucceed()
             } else {
-                taskCallback?.taskFailed(errMessage)
+                mTaskCallback?.taskFailed(mErrorMessage)
             }
         }
         return@withContext true
     }
 
     private fun setNextStep(description: String) {
-        stepInfo.stepIndex += 1
-        stepInfo.stepDescription = description
-        taskCallback?.setTaskStepInfo(stepInfo)
+        mStepInfo.stepIndex += 1
+        mStepInfo.stepDescription = description
+        mTaskCallback?.setTaskStepInfo(mStepInfo)
     }
 
     private suspend fun signApk(inApk: String): Boolean {
-        return if (!ReactivePreferences.isCustomSigningEnabled()) ApkSigner().signApk(inApk, targetApkPath)
-        else ApkSigner().signApkCustom(inApk, targetApkPath)
+        return if (!ReactivePreferences.isCustomSigningEnabled()) ApkSigner().signApk(inApk, mTargetApkPath)
+        else ApkSigner().signApkCustom(inApk, mTargetApkPath)
     }
 
     override fun setTaskCallback(callback: ITaskCallback?) {
-        this.taskCallback = callback
-    }
-
-    override fun updateAssembledFiles(assembledFiles: Int, totalFiles: Int) {
-        val curTime = System.currentTimeMillis()
-        if (curTime > lastUpdateAssembleTime + 500) {
-            val fmt = ctx.getString(R.string.assemble_dex_detail)
-            stepInfo.stepDescription = String.format(fmt, assembledFiles, totalFiles)
-            taskCallback?.setTaskStepInfo(stepInfo)
-        }
+        this.mTaskCallback = callback
     }
 
     override fun stopRunning() {
-        stopFlag = true
+        isStopFlag = true
         runningJob.cancel()
     }
 
     override fun setExtraMaker(extraMaker: IApkMaking?) {
-        this.extraMaker = extraMaker
+        this.mExtraMaker = extraMaker
     }
 
     init {
-        this.decodedFilePath = decodedFilePath
-        targetApkPath = apkPath
-        stepInfo = TaskStepInfo()
+        mDecodedFilePath = decodedFilePath
+        mTargetApkPath = apkPath
+        mStepInfo = TaskStepInfo()
     }
 
     override fun error(args: String?) {
@@ -198,7 +184,7 @@ class ApkComposeThreadNew(
     }
 
     override fun fine(args: String?) {
-//        setNextStep(String.format("F: %s", args))
+        setNextStep(String.format("F: %s", args))
     }
 
     override fun warning(args: String?) {

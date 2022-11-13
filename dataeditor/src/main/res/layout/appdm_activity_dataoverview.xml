@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -81,46 +82,12 @@
 
     </FrameLayout>
 
-    <RadioGroup
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_radio"
+        style="@style/Widget.Material3.BottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
-
-        <RadioButton
-            android:id="@+id/tab_appinfo"
-            style="@style/main_tab_bottom"
-            android:checked="true"
-            android:drawableTop="@drawable/round_info_blue_24"
-            android:singleLine="true"
-            android:text="@string/appdm_basic_info" />
-
-        <RadioButton
-            android:id="@+id/tab_preference"
-            style="@style/main_tab_bottom"
-            android:checked="true"
-            android:drawableTop="@drawable/round_settings_suggest_24"
-            android:singleLine="true"
-            android:text="@string/appdm_preference" />
-
-        <RadioButton
-            android:id="@+id/tab_database"
-            style="@style/main_tab_bottom"
-            android:checked="false"
-            android:drawableTop="@drawable/round_storage_24"
-            android:singleLine="true"
-            android:text="@string/appdm_database" />
-
-        <RadioButton
-            android:id="@+id/tab_files"
-            style="@style/main_tab_bottom"
-            android:checked="false"
-            android:drawableTop="@drawable/round_folder_24"
-            android:singleLine="true"
-            android:text="@string/appdm_files" />
-
-    </RadioGroup>
+        app:menu="@menu/menu_bottom_data_editor" />
 
 </LinearLayout>

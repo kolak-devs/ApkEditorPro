@@ -331,4 +331,9 @@
     <string name="settings_connection_category">Сетевое соединение</string>
     <string name="msg_unsupported_file">Вы должны выбрать файл APK</string>
     <string name="clean_garbage_summary">Нажмите для удаления мусора</string>
+    <string name="build_preparing">Подготовка...</string>
+    <string name="build_compiling">Компиляция...</string>
+    <string name="build_signing">Подпись...</string>
+    <string name="build_error_signing">Не удалось подписать APK</string>
+    <string name="build_canceled">Компиляция была остановлена</string>
 </resources>

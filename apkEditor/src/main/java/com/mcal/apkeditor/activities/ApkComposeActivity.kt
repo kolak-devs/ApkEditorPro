@@ -15,13 +15,8 @@ import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatCheckBox
-import androidx.appcompat.widget.AppCompatTextView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.ApkComposeFailAdapter
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.ApkComposeService.ComposeServiceBinder
@@ -34,7 +29,6 @@ import com.mcal.apkeditor.utils.AxmlStringModifier
 import com.mcal.apkeditor.utils.ErrorFixManager
 import com.mcal.apkeditor.utils.OdexPatcher
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.LegacyPreferences
 import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.utils.ApkInstaller
 import com.mcal.common.utils.ClipboardUtils.copyToClipboard
@@ -129,53 +123,9 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
         // Create notification channel
         createChannel()
         intentAction = intent.action
-        window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = ActivityApkcomposeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initView()
-        bind2Service()
-    }
 
-    public override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        intentAction = intent.action
-        // Cancel the notification if invoked from service
-        if (Constants.ACTION.MAIN_ACTION == intentAction) {
-            mBinder?.let { binder ->
-                if (!binder.isRunning()) {
-                    binder.hideNotification()
-                }
-            }
-        }
-    }
-
-    private fun bind2Service() {
-        val intent = Intent(this, ApkComposeService::class.java)
-        connection?.let { conn ->
-            bindService(intent, conn, Context.BIND_AUTO_CREATE)
-        }
-    }
-
-    public override fun onPause() {
-        isActivityVisible = false
-        super.onPause()
-    }
-
-    override fun onDestroy() {
-        connection?.let { conn ->
-            unbindService(conn)
-            connection = null
-        }
-        stopBuildAndGoBack()
-        super.onDestroy()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        isActivityVisible = true
-    }
-
-    private fun initView() {
         binding.result.setOnClickListener(this)
         switchView(true)
 
@@ -196,6 +146,43 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
 
         // Put it to background
         binding.btnBg.setOnClickListener(this)
+
+        // Запуск сервиса
+        connection?.let { conn ->
+            bindService(Intent(this, ApkComposeService::class.java), conn, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    public override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        intentAction = intent.action
+        // Cancel the notification if invoked from service
+        if (Constants.ACTION.MAIN_ACTION == intentAction) {
+            mBinder?.let { binder ->
+                if (!binder.isRunning()) {
+                    binder.hideNotification()
+                }
+            }
+        }
+    }
+
+    public override fun onPause() {
+        isActivityVisible = false
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        connection?.let { conn ->
+            unbindService(conn)
+            connection = null
+        }
+        stopBuildAndGoBack()
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isActivityVisible = true
     }
 
     override fun setTaskStepInfo(stepInfo: TaskStepInfo) {
@@ -567,8 +554,8 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
     override fun onBackPressed() {
         mBinder?.let { binder ->
             if (binder.isRunning()) {
-                    finish()
-                }
+                finish()
+            }
 //            } else {
 //                finish()
 //            }

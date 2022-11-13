@@ -23,8 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.AppInfo
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.AppListAdapter
-import com.mcal.apkeditor.dialogs.startFullEditActivity
-import com.mcal.apkeditor.se.SimpleEditActivity
+import com.mcal.apkeditor.dialogs.selectFullEditDialog
 import com.mcal.appdm.PrefOverallActivity
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.ScopedStorage
@@ -177,28 +176,12 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
         dialog.setItems(
             arrayOf(
                 getString(R.string.full_edit),
-                getString(R.string.simple_edit),
-                getString(R.string.common_edit),
                 getString(R.string.edit_data_root)
             )
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
-                SIMPLE_EDIT -> {
-                    val intent = Intent(this, SimpleEditActivity::class.java)
-                    intent.putExtra("apkPath", filePath)
-                    startActivity(intent)
-                    finish()
-                    p112.dismiss()
-                }
                 FULL_EDIT -> {
-                    this.startFullEditActivity(filePath)
-                    p112.dismiss()
-                }
-                COMMON_EDIT -> {
-                    val intent = Intent(this, CommonEditActivity::class.java)
-                    intent.putExtra("apkPath", filePath)
-                    startActivity(intent)
-                    finish()
+                    selectFullEditDialog(this, filePath)
                     p112.dismiss()
                 }
                 DATA_EDIT -> {
@@ -325,9 +308,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
 
     companion object {
         const val FULL_EDIT = 0
-        const val SIMPLE_EDIT = 1
-        const val COMMON_EDIT = 2
-        const val DATA_EDIT = 3
+        const val DATA_EDIT = 1
 
         const val DETAILS = 0
         const val BACKUP = 1

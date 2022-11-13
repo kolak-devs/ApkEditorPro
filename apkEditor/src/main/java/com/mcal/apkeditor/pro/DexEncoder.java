@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-import com.mcal.apkeditor.smali.ISmaliAssembleCallback;
 
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
@@ -28,15 +27,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class DexEncoder {
-
-    public static void smali2Dex(String srcDirectory, String outputDexFile,
-                                 ISmaliAssembleCallback callback) throws Exception {
+    public static void smali2Dex(String srcDirectory, String outputDexFile) throws Exception {
         final SmaliOptions options = new SmaliOptions();
 
         options.jobs = Runtime.getRuntime().availableProcessors();
@@ -44,11 +40,6 @@ public class DexEncoder {
         options.outputDexFile = outputDexFile;
         options.allowOdexOpcodes = false;
         options.verboseErrors = false;
-
-//        List<String> input = new ArrayList<>();
-//        input.add(srcDirectory);
-//        Smali.assemble(options, input);
-
 
         long startTime = System.currentTimeMillis();
         try {
@@ -66,24 +57,15 @@ public class DexEncoder {
             List<Future<Boolean>> tasks = Lists.newArrayList();
 
             for (final File file : filesToProcessSet) {
-                tasks.add(executor.submit(new Callable<Boolean>() {
-                    @Override
-                    public Boolean call() throws Exception {
-                        return assembleSmaliFile(file, dexBuilder, options);
-                    }
-                }));
+                tasks.add(executor.submit(() -> assembleSmaliFile(file, dexBuilder, options)));
             }
 
-            int totalTasks = tasks.size();
-            int finishedTasks = 0;
             for (Future<Boolean> task : tasks) {
                 while (true) {
                     try {
                         if (!task.get()) {
                             errors = true;
                         }
-                        finishedTasks += 1;
-                        callback.updateAssembledFiles(finishedTasks, totalTasks);
                     } catch (InterruptedException ex) {
                         continue;
                     }

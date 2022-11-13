@@ -61,22 +61,23 @@ class ApkComposeService : Service(), ITaskCallback {
     private var lastUpdateTime: Long = 0
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        // When the service is restarted, intent = null
-        decodeRootPath = ActivityHelper.getParam(intent, "decodeRootPath")
-        srcApkPath = ActivityHelper.getParam(intent, "srcApkPath")
-        targetApkPath = ActivityHelper.getParam(intent, "targetApkPath")
-        stringModified = ActivityHelper.getParam(intent, "stringModified").toBoolean()
-        manifestModified = ActivityHelper.getParam(intent, "manifestModified").toBoolean()
-        resFileModified = ActivityHelper.getParam(intent, "resFileModified").toBoolean()
-        modifiedSmaliFolders = ActivityHelper.getStringArray(intent, "modifiedSmaliFolders")
-        signAPK = ActivityHelper.getBoolParam(intent, "signAPK")
-        addedFiles = ActivityHelper.getMapParam(intent, "addedFiles")
-        replacedFiles = ActivityHelper.getMapParam(intent, "replacedFiles")
-        ActivityHelper.getStringArray(intent, "deletedFiles")?.let { entries ->
-            deletedFiles.addAll(entries)
-        }
-        ActivityHelper.getParam(intent, "fileEntry2ZipEntry")?.let { passedFile ->
-            fileEntry2ZipEntry = getMapFromFile(passedFile)
+        intent.extras?.let {
+            decodeRootPath = it.getString("decodeRootPath")
+            srcApkPath = it.getString("srcApkPath")
+            targetApkPath = it.getString("targetApkPath")
+            stringModified = it.getString("stringModified").toBoolean()
+            manifestModified = it.getString("manifestModified").toBoolean()
+            resFileModified = it.getString("resFileModified").toBoolean()
+            modifiedSmaliFolders = it.getStringArrayList("modifiedSmaliFolders")
+            signAPK = it.getBoolean("signAPK")
+            addedFiles = ActivityHelper.getMapParam(intent, "addedFiles")
+            replacedFiles = ActivityHelper.getMapParam(intent, "replacedFiles")
+            it.getStringArrayList("deletedFiles")?.let { entries ->
+                deletedFiles.addAll(entries)
+            }
+            it.getString("fileEntry2ZipEntry")?.let { passedFile ->
+                fileEntry2ZipEntry = getMapFromFile(passedFile)
+            }
         }
         resetStatus()
 
@@ -131,37 +132,26 @@ class ApkComposeService : Service(), ITaskCallback {
     }
 
     private fun startComposeThread() {
-        composeThread = if (srcApkPath != null) {
-            ApkComposeThread(
-                this, decodeRootPath,
-                srcApkPath, targetApkPath
-            )
-        } else {
-            // srcApkPath == null, means currently is a full decoding
-            decodeRootPath?.let { decodePath ->
-                targetApkPath?.let { apkPath ->
-                    ApkComposeThreadNew(this, decodePath, apkPath)
+        decodeRootPath?.let { decodePath ->
+            targetApkPath?.let { apkPath ->
+                val thread = ApkComposeThreadNew(this, decodePath, apkPath)
+                extraMaker?.let { maker ->
+                    thread.setExtraMaker(maker)
                 }
-            }
-        }
-        composeThread?.let { thread ->
-            extraMaker?.let { maker ->
-                thread.setExtraMaker(maker)
-            }
-
-            stringModified?.let { string ->
-                manifestModified?.let { manifest ->
-                    resFileModified?.let { res ->
-                        thread.setModification(
-                            string, manifest, res,
-                            modifiedSmaliFolders, addedFiles, replacedFiles,
-                            deletedFiles, fileEntry2ZipEntry, signAPK
-                        )
+                stringModified?.let { string ->
+                    manifestModified?.let { manifest ->
+                        resFileModified?.let { res ->
+                            thread.setModification(
+                                string, manifest, res,
+                                modifiedSmaliFolders, addedFiles, replacedFiles,
+                                deletedFiles, fileEntry2ZipEntry, signAPK
+                            )
+                        }
                     }
                 }
+                thread.setTaskCallback(this)
+                thread.execute()
             }
-            thread.setTaskCallback(this)
-            thread.execute()
         }
     }
 

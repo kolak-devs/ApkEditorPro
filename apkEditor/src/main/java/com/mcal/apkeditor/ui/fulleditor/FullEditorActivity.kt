@@ -44,7 +44,6 @@ class FullEditorActivity : CustomizedLangActivity(), ApkParseConsumer {
             }
         }
         viewModel.apkPath = ActivityHelper.getParam(intent, "apkPath")
-        viewModel.isFullDecoding = ActivityHelper.getBoolParam(intent, "isFullDecoding")
         viewModel.curConfig = ActivityHelper.getParam(intent, "curConfig")
         viewModel.allStringValuesFile = ActivityHelper.getParam(intent, "allStringValues_file")
         viewModel.changedStringValuesFile = ActivityHelper.getParam(intent, "changedStringValues_file")

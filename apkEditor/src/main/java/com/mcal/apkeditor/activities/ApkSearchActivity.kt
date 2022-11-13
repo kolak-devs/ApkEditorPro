@@ -1,7 +1,6 @@
 package com.mcal.apkeditor.activities
 
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -9,8 +8,7 @@ import android.widget.ListView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.ApkListAdapter
 import com.mcal.apkeditor.R
-import com.mcal.apkeditor.dialogs.startFullEditActivity
-import com.mcal.apkeditor.se.SimpleEditActivity
+import com.mcal.apkeditor.dialogs.selectFullEditDialog
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.ActivityHelper
 import java.io.File
@@ -24,12 +22,8 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
     private var mAdapter: ApkListAdapter? = null
 
     companion object {
-        const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1
-
         const val FULL_EDIT = 0
-        const val SIMPLE_EDIT = 1
-        const val COMMON_EDIT = 2
-        const val SIGN_APK = 3
+        const val SIGN_APK = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,29 +97,16 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
         dialog.setItems(
             arrayOf(
                 getString(R.string.full_edit),
-                getString(R.string.simple_edit),
-                getString(R.string.common_edit)
+                getString(R.string.sign_apk)
             )
         ) { p112: DialogInterface, p2: Int ->
             when (p2) {
-                SIMPLE_EDIT -> {
-                    val intent = Intent(this, SimpleEditActivity::class.java)
-                    intent.putExtra("apkPath", filePath)
-                    startActivity(intent)
-                    finish()
-
-                    p112.dismiss()
-                }
                 FULL_EDIT -> {
-                    this.startFullEditActivity(filePath)
+                    selectFullEditDialog(this, filePath)
                     p112.dismiss()
                 }
-                COMMON_EDIT -> {
-                    val intent = Intent(this, CommonEditActivity::class.java)
-                    intent.putExtra("apkPath", filePath)
-                    startActivity(intent)
-                    finish()
-                    p112.dismiss()
+                SIGN_APK -> {
+                    // todo
                 }
             }
         }

@@ -6,7 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,7 +55,6 @@ public class PrefOverallActivity extends CustomizedLangActivity {
     // 1, succeed
     int mStage = -1;
     String mErrorMessage;
-    int mCurTabIndex = 0;
     private String mPackagePath;
     private ScanThread mThread;
     private PackageManager mPackageManager;
@@ -64,14 +62,6 @@ public class PrefOverallActivity extends CustomizedLangActivity {
     private PackageInfo mPackageInfo;
     private String mAppName;
     private RootFileAdapter mFileListAdapter;
-    private Drawable infoDrawable;
-    private Drawable infoBlueDrawable;
-    private Drawable prefDrawable;
-    private Drawable prefBlueDrawable;
-    private Drawable dbDrawable;
-    private Drawable dbBlueDrawable;
-    private Drawable fileDrawable;
-    private Drawable fileBlueDrawable;
     // Is root mode or not
     private boolean isRootMode;
 
@@ -234,81 +224,30 @@ public class PrefOverallActivity extends CustomizedLangActivity {
 
                 initPrefListView();
                 initDbListView();
-                updateListView();
             } else {
                 Toast.makeText(PrefOverallActivity.this, mErrorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    protected void updateListView() {
-        switch (mCurTabIndex) {
-            case 0:
-                drawAppInfoListView();
-                break;
-            case 1:
-                drawPrefListView();
-                break;
-            case 2:
-                drawDbListView();
-                break;
-        }
-    }
-
     @SuppressWarnings("deprecation")
     private void enableListSwitch() {
-        final Resources res = getResources();
-        this.infoDrawable = res.getDrawable(R.drawable.round_info_24);
-        this.infoBlueDrawable = res.getDrawable(R.drawable.round_info_blue_24);
-        this.prefDrawable = res.getDrawable(R.drawable.round_settings_suggest_24);
-        this.prefBlueDrawable = res.getDrawable(R.drawable.round_settings_suggest_blue_24);
-        this.dbDrawable = res.getDrawable(R.drawable.round_storage_24);
-        this.dbBlueDrawable = res.getDrawable(R.drawable.round_storage_blue_24);
-        this.fileDrawable = res.getDrawable(R.drawable.round_folder_24);
-        this.fileBlueDrawable = res.getDrawable(R.drawable.round_folder_blue_24);
-
-        binding.tabAppinfo.setOnClickListener(v -> {
-            mCurTabIndex = 0;
-
-            drawAppInfoListView();
-
-            binding.tabAppinfo.setCompoundDrawablesWithIntrinsicBounds(null, infoBlueDrawable, null, null);
-            binding.tabPreference.setCompoundDrawablesWithIntrinsicBounds(null, prefDrawable, null, null);
-            binding.tabDatabase.setCompoundDrawablesWithIntrinsicBounds(null, dbDrawable, null, null);
-            binding.tabFiles.setCompoundDrawablesWithIntrinsicBounds(null, fileDrawable, null, null);
-        });
-
-        binding.tabPreference.setOnClickListener(v -> {
-            mCurTabIndex = 1;
-
-            drawPrefListView();
-
-            binding.tabAppinfo.setCompoundDrawablesWithIntrinsicBounds(null, infoDrawable, null, null);
-            binding.tabPreference.setCompoundDrawablesWithIntrinsicBounds(null, prefBlueDrawable, null, null);
-            binding.tabDatabase.setCompoundDrawablesWithIntrinsicBounds(null, dbDrawable, null, null);
-            binding.tabFiles.setCompoundDrawablesWithIntrinsicBounds(null, fileDrawable, null, null);
-        });
-
-        binding.tabDatabase.setOnClickListener(v -> {
-            mCurTabIndex = 2;
-
-            drawDbListView();
-
-            binding.tabAppinfo.setCompoundDrawablesWithIntrinsicBounds(null, infoDrawable, null, null);
-            binding.tabPreference.setCompoundDrawablesWithIntrinsicBounds(null, prefDrawable, null, null);
-            binding.tabDatabase.setCompoundDrawablesWithIntrinsicBounds(null, dbBlueDrawable, null, null);
-            binding.tabFiles.setCompoundDrawablesWithIntrinsicBounds(null, fileDrawable, null, null);
-        });
-
-        binding.tabFiles.setOnClickListener(v -> {
-            mCurTabIndex = 3;
-
-            drawFileListView();
-
-            binding.tabAppinfo.setCompoundDrawablesWithIntrinsicBounds(null, infoDrawable, null, null);
-            binding.tabPreference.setCompoundDrawablesWithIntrinsicBounds(null, prefDrawable, null, null);
-            binding.tabDatabase.setCompoundDrawablesWithIntrinsicBounds(null, dbDrawable, null, null);
-            binding.tabFiles.setCompoundDrawablesWithIntrinsicBounds(null, fileBlueDrawable, null, null);
+        binding.mainRadio.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.tab_appinfo) {
+                drawAppInfoListView();
+                return true;
+            } else if (itemId == R.id.tab_preference) {
+                drawPrefListView();
+                return true;
+            } else if (itemId == R.id.tab_database) {
+                drawDbListView();
+                return true;
+            } else if (itemId == R.id.tab_files) {
+                drawFileListView();
+                return true;
+            }
+            return false;
         });
     }
 

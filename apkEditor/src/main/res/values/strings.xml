@@ -427,4 +427,9 @@
     <string name="settings_connection_category">Connection</string>
     <string name="msg_unsupported_file">Unsupported file</string>
     <string name="clean_garbage_summary">Click to clean temporary files</string>
+    <string name="build_preparing">Preparing...</string>
+    <string name="build_compiling">Compiling...</string>
+    <string name="build_signing">Signing...</string>
+    <string name="build_error_signing">Failed signing APK</string>
+    <string name="build_canceled">User request to stop</string>
 </resources>

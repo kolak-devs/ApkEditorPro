@@ -21,4 +21,9 @@
     <string name="garbage_limit_subtitle">If the limit is exceeded, the cleaning will be performed automatically</string>
     <string name="settings_connection_category">Connection</string>
     <string name="msg_unsupported_file">Unsupported file</string>
+    <string name="build_preparing">Preparing...</string>
+    <string name="build_compiling">Compiling...</string>
+    <string name="build_signing">Signing...</string>
+    <string name="build_error_signing">Failed signing APK</string>
+    <string name="build_canceled">User request to stop</string>
 </resources>
