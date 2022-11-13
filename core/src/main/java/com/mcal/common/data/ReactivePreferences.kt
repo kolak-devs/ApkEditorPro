@@ -2,11 +2,8 @@ package com.mcal.common.data
 
 import androidx.datastore.preferences.core.edit
 import com.mcal.common.App
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 object ReactivePreferences {
     suspend fun isNightMode(): Boolean {
@@ -123,6 +120,26 @@ object ReactivePreferences {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Compiler.DECODE_CLASSES] = enabled
         }
+    }
+
+    suspend fun getKeyPassword(): String {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_KEY_PASS] ?: ""
+    }
+
+    suspend fun getKeyAlias(): String {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_KEY_ALIAS] ?: ""
+    }
+
+    suspend fun getSigningPassword(): String {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_PASS] ?: ""
+    }
+
+    suspend fun isCustomSigningEnabled(): Boolean {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_CUSTOM_ON] ?: false
+    }
+
+    suspend fun getSigningVersion(): Int {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_VERSION] ?: 2
     }
 
     @JvmStatic

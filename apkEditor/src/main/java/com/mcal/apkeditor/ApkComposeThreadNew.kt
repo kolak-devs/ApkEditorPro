@@ -140,15 +140,9 @@ class ApkComposeThreadNew(
         taskCallback?.setTaskStepInfo(stepInfo)
     }
 
-    private fun signApk(inApk: String): Boolean {
-        try {
-            ApkSigner().signApk(inApk, targetApkPath)
-            return true
-        } catch (e: Exception) {
-            val strHeader = ctx.resources.getString(R.string.sign_error)
-            errMessage = strHeader + e.message
-        }
-        return false
+    private suspend fun signApk(inApk: String): Boolean {
+        return if (!ReactivePreferences.isCustomSigningEnabled()) ApkSigner().signApk(inApk, targetApkPath)
+        else ApkSigner().signApkCustom(inApk, targetApkPath)
     }
 
     override fun setTaskCallback(callback: ITaskCallback?) {

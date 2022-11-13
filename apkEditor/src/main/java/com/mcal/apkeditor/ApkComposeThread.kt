@@ -462,21 +462,13 @@ class ApkComposeThread(
     private val isResourceModified: Boolean
         get() = (stringModified || manifestModified || resFileModified)
 
-    private fun signApk(): Boolean {
+    private suspend fun signApk(): Boolean {
         // When smali code is edited, also replace classes.dex
         replacedFiles?.putAll(dexReplaces)
-        try {
-            ApkSigner().signApk(
-                getApkEditorDir().toString() + File.separator + "gen_unsigned.apk",
-                getApkEditorDir().toString() + File.separator + "gen_signed.apk"
-            )
-            return true
-        } catch (e: Exception) {
-            val strHeader = ctx.resources
-                .getString(R.string.sign_error)
-            errMessage = strHeader + e.message
-        }
-        return false
+        return ApkSigner().signApk(
+            getApkEditorDir().toString() + File.separator + "gen_unsigned.apk",
+            getApkEditorDir().toString() + File.separator + "gen_signed.apk"
+        )
     }
 
     private suspend fun composeResource(): Boolean {
