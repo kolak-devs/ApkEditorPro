@@ -51,6 +51,7 @@
             android:title="@string/output_apk_name" />
 
         <androidx.preference.SwitchPreference
+            app:defaultValue="true"
             android:key="SmaliEditingEnabled"
             android:summaryOff="@string/smali_edit_disabled_summary"
             android:summaryOn="@string/smali_edit_summary"

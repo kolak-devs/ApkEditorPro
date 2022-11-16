@@ -101,7 +101,7 @@ object ReactivePreferences {
     }
 
     suspend fun isDexToSmali(): Boolean{
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.BUILD_SMALI_EDITING] ?: false
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.BUILD_SMALI_EDITING] ?: true
     }
 
     suspend fun setDecodeAssets(enabled: Boolean){
