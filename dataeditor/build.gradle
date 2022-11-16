@@ -29,9 +29,9 @@ dependencies {
     api project(':codeeditor')
     implementation project(":melissa")
 
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation jetpack.appcompat
 
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation jetpack.material
 
-    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation misc.annotations
 }

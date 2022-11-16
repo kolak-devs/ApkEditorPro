@@ -31,7 +31,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation jetpack.preference
 
-    implementation "androidx.core:core-ktx:1.8.0"
+    implementation jetpack.core
 }

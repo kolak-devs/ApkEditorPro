@@ -167,7 +167,7 @@ configurations {
 
 dependencies {
 
-    def latestFastAdapterRelease = "5.6.0"
+
 
     implementation project(':androlib:brut.apktool:apktool-lib')
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
@@ -187,33 +187,33 @@ dependencies {
 
     implementation project(':libraries')
 
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
-    implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    implementation 'androidx.navigation:navigation-fragment:2.5.2'
-    implementation 'androidx.navigation:navigation-ui:2.5.2'
+    implementation jetpack.core
+    implementation jetpack.appcompat
+    implementation jetpack.preference
+    implementation jetpack.mvvm_vm
+    implementation jetpack.mvvm_ld
+    implementation jetpack.fragment
+    implementation jetpack.navigation
 
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation jetpack.material
 
-    implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+    implementation misc.annotations
+    implementation misc.coroutines_core
 
-    implementation 'com.google.guava:guava:31.1-android'
-    implementation 'org.antlr:antlr-runtime:3.5.2'
+    implementation misc.guava
+    implementation misc.antlr
 
-    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation jetpack.constraint
 
-    implementation "com.mikepenz:fastadapter:${latestFastAdapterRelease}"
-    implementation "com.mikepenz:fastadapter-extensions-binding:${latestFastAdapterRelease}" // view binding helpers
+    implementation ui.fastadapter
+    implementation ui.fastadapter_binding
 
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
-    implementation "androidx.datastore:datastore-preferences-core:1.0.0"
+    implementation jetpack.vp2
+    implementation jetpack.preferences
+    implementation jetpack.preferences_core
 
     // LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
+    debugImplementation misc.leaks
 
     configurations.all {
         exclude group: "org.yaml", module: "snakeyaml"

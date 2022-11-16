@@ -29,8 +29,8 @@ dependencies {
     api files('libs/dexlib2-2.5.2.jar')
     api files('libs/util-2.5.2.jar')
 
-    implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'androidx.annotation:annotation:1.5.0'
+    implementation misc.annotations
+    implementation misc.annotations_android
 
-    implementation 'com.google.guava:guava:31.1-android'
+    implementation misc.guava
 }

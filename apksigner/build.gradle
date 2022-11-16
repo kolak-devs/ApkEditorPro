@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdk 14
-        targetSdk 32
+        targetSdk 33
     }
 
     buildTypes {
@@ -26,20 +26,16 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api project(':libraries')
-    implementation project(':core')
-    implementation project(':sun')
+    api project(flat.jars)
+    implementation project(flat.core)
+    implementation project(flat.sun)
 
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation signing.spongy_core
+    implementation signing.spongy_prov
 
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation misc.annotations
+    implementation misc.annotations_android
 
-    implementation 'com.madgag.spongycastle:core:1.58.0.0'
-    implementation 'com.madgag.spongycastle:prov:1.58.0.0'
-
-    implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'androidx.annotation:annotation:1.4.0'
-
-    implementation 'org.conscrypt:conscrypt-android:2.5.2'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4"
+    implementation signing.conscrypt
+    implementation misc.coroutines_java
 }

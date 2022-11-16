@@ -25,6 +25,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'androidx.annotation:annotation:1.4.0'
+    implementation misc.annotations
+    implementation misc.annotations_android
 }
