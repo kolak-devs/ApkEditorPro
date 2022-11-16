@@ -59,10 +59,7 @@
             android:name="com.mcal.apkeditor.activities.ApkInfoExActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name="com.mcal.apkeditor.se.SimpleEditActivity" />
-        <activity android:name="com.mcal.apkeditor.activities.CommonEditActivity" />
 
-        <activity android:name="com.mcal.apkeditor.se.ApkCreateActivity" />
         <activity android:name="com.mcal.pngeditor.ViewZipImageActivity" />
         <activity
             android:name="com.mcal.apkeditor.activities.ApkComposeActivity"

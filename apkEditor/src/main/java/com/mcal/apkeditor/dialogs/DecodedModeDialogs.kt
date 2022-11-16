@@ -28,7 +28,7 @@ fun selectFullEditDialog(context: Context, filePath: String?): Boolean {
         classes.isChecked = ReactivePreferences.isNeedDecodeClasses()
     }
     val dialog = MaterialAlertDialogBuilder(context)
-    dialog.setTitle("Режим декодирования")
+    dialog.setTitle(R.string.apk_decoding)
     dialog.setView(view)
     dialog.setPositiveButton(android.R.string.ok) { _, _ ->
         CoroutineScope(Dispatchers.Main).launch {

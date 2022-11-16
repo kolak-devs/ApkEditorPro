@@ -75,20 +75,23 @@
         <androidx.preference.EditTextPreference
             android:key="signing_pass"
             android:title="@string/signing_pass_title"
-            app:dependency="signing_on"/>
+            app:dependency="signing_on"
+            app:useSimpleSummaryProvider="true"/>
         <androidx.preference.EditTextPreference
             android:key="signing_key_alias"
             android:title="@string/signing_alias_title"
-            app:dependency="signing_on"/>
+            app:dependency="signing_on"
+            app:useSimpleSummaryProvider="true"/>
         <androidx.preference.EditTextPreference
             android:key="signing_key_password"
             android:title="@string/signing_password_title"
-            app:dependency="signing_on"/>
+            app:dependency="signing_on"
+            app:useSimpleSummaryProvider="true"/>
         <androidx.preference.SeekBarPreference
             android:key="signing_version"
             android:title="@string/signing_signature_title"
             android:summary="@string/signing_signature_sum"
-            app:defaultValue="1"
+            app:defaultValue="2"
             app:updatesContinuously="false"
             app:min="1"
             android:max="4"

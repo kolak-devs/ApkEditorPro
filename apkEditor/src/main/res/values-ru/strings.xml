@@ -336,4 +336,7 @@
     <string name="build_signing">Подпись...</string>
     <string name="build_error_signing">Не удалось подписать APK</string>
     <string name="build_canceled">Компиляция была остановлена</string>
+    <string name="mode_decode_assets">Декодировать DEX в /assets/ (если доступно)</string>
+    <string name="mode_decode_resources">Декодировать ресурсы и XML</string>
+    <string name="mode_decode_classes">Декодировать DEX классы</string>
 </resources>

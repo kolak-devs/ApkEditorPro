@@ -240,4 +240,7 @@
     <string name="build_signing">Signing...</string>
     <string name="build_error_signing">Failed signing APK</string>
     <string name="build_canceled">User request to stop</string>
+    <string name="mode_decode_assets">Decode DEX in /assets/ (if needed)</string>
+    <string name="mode_decode_resources">Decode resources and XML\'s</string>
+    <string name="mode_decode_classes">Decode DEX classes</string>
 </resources>

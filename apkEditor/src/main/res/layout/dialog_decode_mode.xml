@@ -11,21 +11,21 @@
         android:id="@+id/decode_assets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Decode Assets"
+        android:text="@string/mode_decode_assets"
         style="@style/AppTheme.SweetCheckBox" />
 
     <CheckBox
         android:id="@+id/decode_resources"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Decode Resources"
+        android:text="@string/mode_decode_resources"
         style="@style/AppTheme.SweetCheckBox"/>
 
     <CheckBox
         android:id="@+id/decode_classes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Decode Classes"
+        android:text="@string/mode_decode_classes"
         style="@style/AppTheme.SweetCheckBox"/>
 
 </LinearLayout>
