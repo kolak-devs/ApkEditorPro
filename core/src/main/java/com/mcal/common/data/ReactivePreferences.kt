@@ -78,16 +78,6 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_MULTIRES] ?: false
     }
 
-    suspend fun isFrameworksInstalled(): Boolean {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.FRAMEWORKS_INSTALLED] ?: false
-    }
-
-    suspend fun setFrameworksInstalled(installed: Boolean){
-        App.getContext().prefStore.edit {
-            it[PreferenceScheme.Compiler.FRAMEWORKS_INSTALLED] = installed
-        }
-    }
-
     suspend fun isNeedDecodeAssets(): Boolean{
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_ASSETS] ?: false
     }

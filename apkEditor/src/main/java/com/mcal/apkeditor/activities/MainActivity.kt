@@ -237,21 +237,12 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
-        val isNotShowAgain = CheckBox(context).apply {
-            text = getString(R.string.donot_show_again)
-        }
-        isNotShowAgain.setOnCheckedChangeListener { _, checked ->
-            lifecycleScope.launch {
-                ReactivePreferences.setFrameworksInstalled(checked)
-            }
-        }
 
         val padding = App.dp2px(16f, context).toInt()
         val container = LinearLayout(context).apply {
             layoutParams = params
             orientation = LinearLayout.VERTICAL
             setPadding(padding, padding, padding, 0)
-            addView(isNotShowAgain)
         }
 
         MaterialAlertDialogBuilder(context)
