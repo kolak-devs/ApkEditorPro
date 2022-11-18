@@ -27,6 +27,7 @@ object PreferenceScheme {
       val BUILD_OUTPUT_NAME = booleanPreferencesKey("OutputApkName")
       val BUILD_SMALI_EDITING = booleanPreferencesKey("SmaliEditingEnabled")
       val BUILD_CONFIRMATION = booleanPreferencesKey("RebuildConfirmation")
+      val SIGNING_ENABLED = booleanPreferencesKey("signing_enabled")
       val SIGNING_CUSTOM_ON = booleanPreferencesKey("signing_on")
       val SIGNING_PASS = stringPreferencesKey("signing_pass")
       val SIGNING_KEY_ALIAS = stringPreferencesKey("signing_key_alias")

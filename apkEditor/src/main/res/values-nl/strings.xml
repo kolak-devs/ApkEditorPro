@@ -142,4 +142,10 @@
     <string name="mode_decode_assets">Decode DEX in /assets/ (if needed)</string>
     <string name="mode_decode_resources">Decode resources and XML\'s</string>
     <string name="mode_decode_classes">Decode DEX classes</string>
+    <string name="settings_unprintable">Unprintable characters</string>
+    <string name="settings_unprintable_sum">Visual display of spaces and line breaks</string>
+    <string name="settings_signing_title">APK signing</string>
+    <string name="settings_signing_on">The APK will be signed with a test signature, or a custom one, depending on the settings below</string>
+    <string name="settings_signing_off">The APK will not be signed when compiled. Also affects custom signature settings</string>
+    <string name="message_signing_disabled">Apk signing disabled, aborting...</string>
 </resources>

@@ -32,8 +32,8 @@
         <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:key="editor_printable_characters"
-            android:title="Непечатаемые символы"
-            android:summary="Визуальное отображение пробелов и переносов строк"/>
+            android:title="@string/settings_unprintable"
+            android:summary="@string/settings_unprintable_sum"/>
 
         <androidx.preference.SwitchPreference
             android:defaultValue="true"

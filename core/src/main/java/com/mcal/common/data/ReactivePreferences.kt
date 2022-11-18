@@ -25,7 +25,7 @@ object ReactivePreferences {
     }
 
     suspend fun getAppLanguage(): String {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_LANGUAGE] ?: ""
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_LANGUAGE].orEmpty()
     }
 
     suspend fun getDecodeDirectory(): String? {
@@ -113,15 +113,19 @@ object ReactivePreferences {
     }
 
     suspend fun getKeyPassword(): String {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_KEY_PASS] ?: ""
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_KEY_PASS].orEmpty()
     }
 
     suspend fun getKeyAlias(): String {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_KEY_ALIAS] ?: ""
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_KEY_ALIAS].orEmpty()
     }
 
     suspend fun getSigningPassword(): String {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_PASS] ?: ""
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_PASS].orEmpty()
+    }
+
+    suspend fun isSigningEnabled(): Boolean {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_ENABLED] ?: true
     }
 
     suspend fun isCustomSigningEnabled(): Boolean {

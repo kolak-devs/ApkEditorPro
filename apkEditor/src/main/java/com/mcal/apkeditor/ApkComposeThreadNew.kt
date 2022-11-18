@@ -95,12 +95,12 @@ class ApkComposeThreadNew(
                 setNextStep(context.getString(R.string.build_compiling))
                 Androlib(BuildOptions().apply {
                     useAapt2 = ReactivePreferences.isAapt2()
-                    aaptPath = binDir.path + File.separator + if (ReactivePreferences.isAapt2()) "aapt2" else "aapt"
+                    aaptPath = binDir.path + File.separator + if (useAapt2) "aapt2" else "aapt"
                     frameworkFolderLocation = binDir.path
                 }, this@ApkComposeThreadNew).build(File(mDecodedFilePath), tmpApkFile)
                 setNextStep(context.getString(R.string.build_signing))
                 if (!signApk(tmpApkFile.path)) {
-                    setNextStep(context.getString(R.string.build_error_signing))
+                    setNextStep(context.getString(R.string.message_signing_disabled))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -136,8 +136,10 @@ class ApkComposeThreadNew(
     }
 
     private suspend fun signApk(inApk: String): Boolean {
-        return if (!ReactivePreferences.isCustomSigningEnabled()) ApkSigner().signApk(inApk, mTargetApkPath)
-        else ApkSigner().signApkCustom(inApk, mTargetApkPath)
+        return if (ReactivePreferences.isSigningEnabled()) {
+            if (!ReactivePreferences.isCustomSigningEnabled()) ApkSigner().signApk(inApk, mTargetApkPath)
+            else ApkSigner().signApkCustom(inApk, mTargetApkPath)
+        } else false
     }
 
     override fun setTaskCallback(callback: ITaskCallback?) {

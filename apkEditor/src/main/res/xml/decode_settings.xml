@@ -69,10 +69,17 @@
         android:layout="@layout/preferences_category"
         android:title="@string/signing_catergory_title">
         <androidx.preference.SwitchPreference
+            android:key="signing_enabled"
+            android:summaryOff="@string/settings_signing_off"
+            android:summaryOn="@string/settings_signing_on"
+            android:title="@string/settings_signing_title"
+            app:defaultValue="true"/>
+        <androidx.preference.SwitchPreference
             android:key="signing_on"
             android:title="@string/signing_on_title"
             android:summary="@string/signing_on_sum"
-            app:defaultValue="false" />
+            app:defaultValue="false"
+            android:dependency="signing_enabled"/>
         <androidx.preference.EditTextPreference
             android:key="signing_pass"
             android:title="@string/signing_pass_title"

@@ -339,4 +339,10 @@
     <string name="mode_decode_assets">Декодировать DEX в /assets/ (если доступно)</string>
     <string name="mode_decode_resources">Декодировать ресурсы и XML</string>
     <string name="mode_decode_classes">Декодировать DEX классы</string>
+    <string name="settings_unprintable">Служебные символы</string>
+    <string name="settings_unprintable_sum">Визуальное отображение пробелов и номеров строк</string>
+    <string name="settings_signing_title">Подписывание APK</string>
+    <string name="settings_signing_on">APK будет подписан либо тестовой подписью, либо пользовательской, в зависимости от настроек ниже</string>
+    <string name="settings_signing_off">APK не будет подписан после сборки, также влияет на настройку кастомной подписи</string>
+    <string name="message_signing_disabled">Подписывание APK отключено, отмена подписи...</string>
 </resources>
