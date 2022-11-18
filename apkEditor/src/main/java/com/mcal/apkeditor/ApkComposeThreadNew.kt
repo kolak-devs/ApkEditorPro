@@ -137,8 +137,12 @@ class ApkComposeThreadNew(
 
     private suspend fun signApk(inApk: String): Boolean {
         return if (ReactivePreferences.isSigningEnabled()) {
-            if (!ReactivePreferences.isCustomSigningEnabled()) ApkSigner().signApk(inApk, mTargetApkPath)
-            else ApkSigner().signApkCustom(inApk, mTargetApkPath)
+            if (!ReactivePreferences.isCustomSigningEnabled()) {
+                return ApkSigner().signApk(inApk, mTargetApkPath)
+            }
+            else {
+                return ApkSigner().signApkCustom(inApk, mTargetApkPath)
+            }
         } else false
     }
 

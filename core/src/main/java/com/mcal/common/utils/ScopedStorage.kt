@@ -40,10 +40,8 @@ object ScopedStorage {
     }
 
     @JvmStatic
-    fun getFrameworkDir(): File {
-        val path = File(getBinDir(), "android-framework.jar")
-        if (!path.exists()) path.mkdirs()
-        return path
+    fun getFramework(): File {
+        return File(getBinDir(), "android-framework.jar")
     }
 
     @JvmStatic
@@ -128,6 +126,6 @@ object ScopedStorage {
     @JvmStatic
     fun isToolsInstalled(): Boolean {
         return getAapt().exists() or getAapt2().exists() and getMyCp().exists() and getPublicKey().exists() and getPrivateKey().exists() and
-                getFrameworkDir().exists()
+                (getFramework().exists() and getFramework().isFile)
     }
 }
