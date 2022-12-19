@@ -21,8 +21,7 @@ import java.util.zip.ZipFile
 
 class ApkParseThread(
     activity: Activity, private val consumer: ApkParseConsumer?,
-    apkPath: String?, decodeRootPath: String?,
-    isFullDecoding: Boolean
+    apkPath: String?, decodeRootPath: String?
 ) : Thread() {
     private val mActivity: Activity
     private val consumerRef: WeakReference<ApkParseConsumer?>

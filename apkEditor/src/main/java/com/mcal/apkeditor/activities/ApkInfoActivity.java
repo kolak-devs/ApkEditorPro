@@ -164,8 +164,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // Record all the file entry to zip entry
     // As images are dummy, we need this info to show original image
     protected Map<String, String> mFileEntry2ZipEntry;
-    // Decode all files or not (all files means files include assets, libs, and unknown files)
-    protected boolean isFullDecoding;
     ApkInfoParser.AppInfo apkInfo;
     // Is it OK to change to String type
     HashMap<String, ArrayList<StringItem>> allStringValues;
@@ -224,6 +222,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private String entryNameForExternal;
     private long modifiedTimeBeforeOpen;
 
+    boolean isFullDecoding = ReactivePreferences.isNeedDecodeResourcesAsync();
     // prjDirectory not ends with '/'
     @Nullable
     public static ProjectInfo loadProject(String prjDirectory) {
@@ -410,8 +409,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 finish();
             }
         } else {
-            this.isFullDecoding = ActivityHelper.getBoolParam(getIntent(), "isFullDecoding");
-            this.parseThread = new ApkParseThread(this, this, apkPath, decodeRootPath, isFullDecoding);
+            this.parseThread = new ApkParseThread(this, this, apkPath, decodeRootPath);
             parseThread.start();
         }
     }

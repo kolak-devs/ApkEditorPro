@@ -82,6 +82,15 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_ASSETS] ?: false
     }
 
+    @JvmStatic
+    fun isNeedDecodeResourcesAsync(): Boolean{
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_RESOURCES] ?: true
+        }
+        return fallback
+    }
+
     suspend fun isNeedDecodeResources(): Boolean{
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_RESOURCES] ?: false
     }
