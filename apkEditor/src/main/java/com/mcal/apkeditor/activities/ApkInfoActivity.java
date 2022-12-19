@@ -1346,20 +1346,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     private void launchWithoutCheck(boolean bSign) {
         String outputDir = ScopedStorage.getApkEditorDir().getPath();
-        final String outputApkRule = /*LegacyPreferences.getOutputApkName();*/ "2"; //FIXME MOTHERFUCKER
-        String filename;
-        switch (outputApkRule) {
-            case "0":
-                filename = apkInfo.pkgName + "_signed";
-                break;
-            case "2":
-                filename = apkInfo.label + "_signed";
-                break;
-            default:
-                filename = "gen_signed";
-                break;
-        }
-        filename = reviseFileName(filename);
+        String filename = reviseFileName(apkInfo.label + "_signed");
 
         String targetApkPath = createOutputPath(apkPath, outputDir, filename);
 

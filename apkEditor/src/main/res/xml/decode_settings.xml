@@ -43,13 +43,6 @@
             android:summaryOn="JSON"
             android:summaryOff="YML"/>
 
-        <androidx.preference.ListPreference
-            android:entries="@array/output_apkname_key"
-            android:entryValues="@array/output_apkname_value"
-            android:key="OutputApkName"
-            android:summary="@string/output_apk_name_summary"
-            android:title="@string/output_apk_name" />
-
         <androidx.preference.SwitchPreference
             app:defaultValue="true"
             android:key="SmaliEditingEnabled"
