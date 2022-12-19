@@ -990,9 +990,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
             apkPkgPath.setVisibility(View.GONE);
         }
 
-        ListView stringList = binding.mainStrings.stringList;
+        RecyclerView stringList = binding.mainStrings.stringList;
+        stringList.setLayoutManager(new LinearLayoutManager(this));
         stringList.setAdapter(stringListAdapter);
-        stringList.setOnItemClickListener(stringListAdapter);
 
         // DEX/Smali decoding
         if (ReactivePreferences.isLegacySmaliEnabled()) {
