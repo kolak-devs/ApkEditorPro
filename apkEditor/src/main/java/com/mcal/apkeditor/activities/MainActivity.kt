@@ -3,7 +3,6 @@ package com.mcal.apkeditor.activities
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Process
 import android.view.*
@@ -102,9 +101,14 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         pickLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 result.data?.data?.let { uri ->
-                    val apk = File(getProjects(), "app.apk")
+                    val projectsDir = getProjects()
+                    var apk = File(projectsDir, FilePickHelper.getFileName(this, uri))
                     contentResolver.openInputStream(uri)?.let { inputStream ->
                         copyFile(inputStream, apk)
+                        ApkInfoParser().parse(this@MainActivity, apk.path)?.label?.let {
+                            val newApkPath = File(projectsDir, "$it.apk")
+                            apk.renameTo(newApkPath).also { apk = newApkPath }
+                        }
                     }.also {
                         if (apk.exists()) {
                             selectFullEditDialog(this@MainActivity, apk.path)
@@ -165,7 +169,14 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             for (f in files) {
                 if (f.isFile) continue
                 findProjectFile(f.listFiles()) ?: continue
-                val icon = ContextCompat.getDrawable(applicationContext, R.drawable.ic_android);
+                var icon = ContextCompat.getDrawable(applicationContext, R.drawable.ic_android)
+                files.forEach { file ->
+                    if (file.name.endsWith(".apk") && file.name.replace(".apk", "").contains(f.name)) {
+                        ApkInfoParser().parse(this@MainActivity, file.path)?.icon?.let {
+                            icon = it
+                        }
+                    }
+                }
                 val info = ApkInfoActivity.loadProject(f.path) ?: continue
                 projectAdapter.add(
                     MainProjectItem(System.currentTimeMillis().toInt(), icon, File(info.decodeRootPath).name),
