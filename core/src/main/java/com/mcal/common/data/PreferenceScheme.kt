@@ -24,7 +24,6 @@ object PreferenceScheme {
       val BUILD_AAPT_RULES = booleanPreferencesKey("ae_aapt_rules")
       val BUILD_USE_AAPT2 = booleanPreferencesKey("aapt2")
       val BUILD_JSON_CONFIG = booleanPreferencesKey("apktool_use_json")
-      val BUILD_OUTPUT_NAME = booleanPreferencesKey("OutputApkName")
       val BUILD_SMALI_EDITING = booleanPreferencesKey("SmaliEditingEnabled")
       val BUILD_CONFIRMATION = booleanPreferencesKey("RebuildConfirmation")
       val SIGNING_ENABLED = booleanPreferencesKey("signing_enabled")
