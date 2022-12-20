@@ -108,30 +108,31 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     val apk = File(getProjects(), "app.apk")
                     contentResolver.openInputStream(uri)?.let { inputStream ->
                         copyFile(inputStream, apk)
-                    }
-                    ApkInfoParser().parse(this, apk.path)?.let {
-                        val projectDir = File(getProjects(), "${it.label}")
-                        if (!projectDir.exists()) {
-                            projectDir.mkdir()
-                        }
-                        val newApkFile = File(projectDir, "app.apk")
-                        val newApkPath = newApkFile.path
-                        writeToFile(
-                            projectDir.path + "/info.json",
-                            GsonBuilder().create().toJson(
-                                ProjectData(
-                                    it.label,
-                                    it.pkgName,
-                                    newApkPath,
-                                    isNeedDecodeResourcesAsync()
+                    }.also {
+                        ApkInfoParser().parse(this@MainActivity, apk.path)?.let {
+                            val projectDir = File(getProjects(), "${it.label}")
+                            if (!projectDir.exists()) {
+                                projectDir.mkdir()
+                            }
+                            val newApkFile = File(projectDir, "app.apk")
+                            val newApkPath = newApkFile.path
+                            writeToFile(
+                                projectDir.path + "/info.json",
+                                GsonBuilder().create().toJson(
+                                    ProjectData(
+                                        it.label,
+                                        it.pkgName,
+                                        newApkPath,
+                                        isNeedDecodeResourcesAsync()
+                                    )
                                 )
                             )
-                        )
-                        apk.renameTo(newApkFile)
-                        if (newApkFile.exists() && newApkFile.name.endsWith(".apk")) {
-                            selectFullEditDialog(this, newApkPath)
-                        } else {
-                            Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                            apk.renameTo(newApkFile)
+                            if (newApkFile.exists() && newApkFile.name.endsWith(".apk")) {
+                                selectFullEditDialog(this@MainActivity, newApkPath)
+                            } else {
+                                Toast.makeText(this@MainActivity, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
@@ -182,7 +183,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(0, R.drawable.ic_android, R.string.select_file),
             MainMenuItem(1, R.drawable.apps_box, R.string.select_app),
         )
-        
+
         getProjects().listFiles()?.let { files ->
             for (f in files) {
                 if (f.isFile) continue

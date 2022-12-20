@@ -5,7 +5,7 @@ plugins {
 def Properties versionProps = new Properties()
 
 android {
-    compileSdk project.targetSDK.toInteger()
+    compileSdk project.compileSDK.toInteger()
     ndkVersion '24.0.8215888'
 
     def versionPropsFile = file('version.properties')

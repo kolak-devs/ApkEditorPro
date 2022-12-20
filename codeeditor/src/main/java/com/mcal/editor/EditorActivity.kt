@@ -342,16 +342,6 @@ class EditorActivity : CustomizedLangActivity(),
         }
     }
 
-    private fun setResult() {
-        // Используется в AXML редакторе
-        filePath?.let { path ->
-            val intent = Intent()
-            intent.putExtra("filePath", path.path)
-            intent.putExtra("extraString", path.name)
-            setResult(1, intent)
-        }
-    }
-
     private fun copyBack2RealPath(realPath: String) {
         try {
             filePath?.let { path ->
@@ -493,7 +483,6 @@ class EditorActivity : CustomizedLangActivity(),
                             copyBack2RealPath(path)
                         }
                         withContext(Dispatchers.Main) {
-                            setResult()
                             openFile()
                             updatePositionText()
                             updateBtnState()
@@ -502,12 +491,9 @@ class EditorActivity : CustomizedLangActivity(),
                             }
                         }
                     }
-                    //setResult(1) todo
                 }
 
-                override fun afterProcess() {
-                    setResult()
-                }
+                override fun afterProcess() = Unit
             }, resIdFileSaved
         ).show()
     }

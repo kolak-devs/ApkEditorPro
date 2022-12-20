@@ -26,10 +26,7 @@ object ScopedStorage {
 
     @JvmStatic
     fun getApkEditorDir(): File {
-        val parent = File(storageDirectory, Environment.DIRECTORY_DOCUMENTS)
-        val path = File(parent, "ApkEditor")
-        if (!path.exists()) path.mkdirs()
-        return path
+        return App.getContext().getExternalFilesDir(null) ?: getApkEditorDir()
     }
 
     @JvmStatic

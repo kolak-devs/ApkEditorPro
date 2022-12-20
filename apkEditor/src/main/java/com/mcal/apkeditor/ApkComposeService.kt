@@ -1,9 +1,8 @@
 package com.mcal.apkeditor
 
 import android.annotation.SuppressLint
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.os.*
 import android.util.Log
@@ -92,21 +91,38 @@ class ApkComposeService : Service(), ITaskCallback {
         val composeIntent = Intent(this, ApkComposeActivity::class.java)
         composeIntent.action = Constants.ACTION.MAIN_ACTION
         composeIntent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-        val pendingIntent = PendingIntent.getActivity(this, 0, composeIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val iconId = R.mipmap.ic_launcher_round
-        val appName = getString(R.string.app_name)
-        mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        mNotifyBuilder = NotificationCompat.Builder(this, ApkComposeActivity.PRIMARY_NOTIFY_CHANNEL)
-        mNotifyBuilder?.let { builder ->
-            builder.setContentTitle(appName)
-                .setTicker(appName)
-                .setContentText(getString(R.string.build_ongoing))
-                .setSmallIcon(iconId)
-                .setContentIntent(pendingIntent)
-                .setOngoing(true)
-            startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, builder.build())
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(
+                this,
+                0, composeIntent,
+                PendingIntent.FLAG_IMMUTABLE
+            );
+        } else {
+            PendingIntent.getActivity(
+                this,
+                0, composeIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
         }
-        foregroundStarted = true
+
+        val chan = NotificationChannel(ApkComposeActivity.PRIMARY_NOTIFY_CHANNEL, "ApkEditor Service", NotificationManager.IMPORTANCE_NONE)
+        mNotificationManager = (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+        mNotificationManager?.createNotificationChannel(chan)
+        mNotifyBuilder = NotificationCompat.Builder(this, ApkComposeActivity.PRIMARY_NOTIFY_CHANNEL)
+        mNotifyBuilder?.let { notification ->
+            val appName = getString(R.string.app_name)
+            notification.setOngoing(true)
+            notification.setTicker(appName)
+            notification.setSmallIcon(R.mipmap.ic_launcher_round)
+            notification.setContentTitle(appName)
+            notification.setContentText(getString(R.string.build_ongoing))
+            notification.setOngoing(true)
+            notification.priority = NotificationManager.IMPORTANCE_MIN
+            notification.setCategory(Notification.CATEGORY_SERVICE)
+            notification.setContentIntent(pendingIntent)
+            startForeground(2, notification.build())
+            foregroundStarted = true
+        }
     }
 
     private fun updateNotification(forceShow: Boolean, title: String, desc: String) {

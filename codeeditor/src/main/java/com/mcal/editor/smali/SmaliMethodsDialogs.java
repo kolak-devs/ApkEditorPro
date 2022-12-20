@@ -134,8 +134,7 @@ public class SmaliMethodsDialogs implements OnClick {
             final String mLine = line.trim();
             // For 'public' 'private' 'protected'
             if (mLine.length() > 6 && mLine.charAt(0) == 'p' && (mLine.charAt(1) == 'u' || mLine.charAt(1) == 'r')) {
-                final Matcher matcher = Pattern.compile("(public|protected|private|static|\\s) +[\\w<>\\[\\]]+\\s+(\\w+) *\\([^)]*\\) *(\\{?|[^;])").matcher(mLine);
-                //Matcher matcher = Pattern.compile("(public|protected|private|static|\\s) +[\\w\\<\\>\\[\\]]+\\s+(\\w+) *\\([^\\)]*\\) *").matcher(line);
+                final Matcher matcher = Pattern.compile("(public|protected|private|static|\\s) +[\\w\\<\\>\\[\\]]+\\s+(\\w+) *\\([^\\)]*\\) *").matcher(line);
                 if (matcher.matches()) {
                     String prototype = matcher.group(0);
                     if (prototype != null && prototype.endsWith("{")) {
