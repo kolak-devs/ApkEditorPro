@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -264,7 +263,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             }
 
             // Call real search
-           searchInResourceFiles(keyword, baseFolder, filenameList, bSearchName, !bCaseIsst);
+            searchInResourceFiles(keyword, baseFolder, filenameList, bSearchName, !bCaseIsst);
         }
 
         private void showResourceInformation() {

@@ -20,19 +20,14 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.GsonBuilder
 import com.mcal.apkeditor.AppInfo
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.AppListAdapter
-import com.mcal.apkeditor.data.ProjectData
 import com.mcal.apkeditor.dialogs.selectFullEditDialog
 import com.mcal.appdm.PrefOverallActivity
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.ReactivePreferences
-import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyFile
-import com.mcal.common.utils.writeToFile
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
@@ -170,31 +165,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
         try {
             val moreInfo = packageManager.getApplicationInfo(item.packagePath, 0)
             val apkPath = moreInfo.sourceDir
-            ApkInfoParser().parse(this, apkPath)?.let {
-                val projectDir = File(ScopedStorage.getProjects(), "${it.label}")
-                if (!projectDir.exists()) {
-                    projectDir.mkdir()
-                }
-                val newApkFile = File(projectDir, "app.apk")
-                val newApkPath = newApkFile.path
-                writeToFile(
-                    projectDir.path + "/info.json",
-                    GsonBuilder().create().toJson(
-                        ProjectData(
-                            it.label,
-                            it.pkgName,
-                            newApkPath,
-                            ReactivePreferences.isNeedDecodeResourcesAsync()
-                        )
-                    )
-                )
-                copyFile(File(apkPath), newApkFile)
-                if (newApkFile.exists() && newApkFile.name.endsWith(".apk")) {
-                    editModeDialog(newApkPath, moreInfo.packageName)
-                } else {
-                    Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
-                }
-            }
+            editModeDialog(apkPath, moreInfo.packageName)
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
