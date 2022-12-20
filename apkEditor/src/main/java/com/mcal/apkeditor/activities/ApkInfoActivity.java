@@ -153,7 +153,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private static final int RC_COMPOSE = 1;
     private static final int RC_COLOR_EDITOR = 3;
     private static final int RC_TRANSLATE = 1000;
-    private static final String TMP_EDITOR_FILE = "APKEDITOR.xcrhfvke";
     private final Stack<Duo<Integer, Integer>> resListPosition = new Stack<>();
     protected String apkPath;
     protected String decodeRootPath; // not ends with "/"
@@ -164,7 +163,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // Record all the file entry to zip entry
     // As images are dummy, we need this info to show original image
     protected Map<String, String> mFileEntry2ZipEntry;
-    ApkInfoParser.AppInfo apkInfo;
+    private ApkInfoParser.AppInfo apkInfo;
     // Is it OK to change to String type
     HashMap<String, ArrayList<StringItem>> allStringValues;
     Map<String, Map<String, String>> changedStringValues;
@@ -349,7 +348,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 decodeRootPath = prjInfo.decodeRootPath;
             } catch (Exception e) {
                 Toast.makeText(this, R.string.cannot_load_project_info, Toast.LENGTH_LONG).show();
-                this.finish();
+                finish();
                 return;
             }
         } else {
@@ -386,13 +385,13 @@ public class ApkInfoActivity extends CustomizedLangActivity
         // Parse information from apk
         try {
             if (apkPath != null && !"".equals(apkPath)) {
-                this.apkInfo = new ApkInfoParser().parse(this, apkPath);
+                apkInfo = new ApkInfoParser().parse(this, apkPath);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        this.stringListAdapter = new StringListAdapter(this);
+        stringListAdapter = new StringListAdapter(this);
         initView();
 
         // If saved instance != null, do not need to parse any more
@@ -901,9 +900,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         // It is a temporary file
         // Rename it to other names, as it will be overwritten
-        if (pathRemovedType != null && pathRemovedType.endsWith("/" + TMP_EDITOR_FILE)) {
+        if (pathRemovedType != null && pathRemovedType.endsWith("/" + new File(filePath).getName())) {
             File oldFile = new File(filePath);
-            String newPath = pathRemovedType.substring(0, pathRemovedType.length() - TMP_EDITOR_FILE.length()) + getRandomString(8);
+            String newPath = pathRemovedType.substring(0, pathRemovedType.length() - new File(filePath).getName().length()) + getRandomString(8);
             File newFile = new File(newPath);
             if (oldFile.renameTo(newFile)) {
                 filePath = newPath;
@@ -2449,7 +2448,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         try {
             String zipEntry = mFileEntry2ZipEntry.get(entryName);
-            String dstPath = ScopedStorage.getTmpDir() + File.separator + TMP_EDITOR_FILE + fileType;
+            String dstPath = ScopedStorage.getTmpDir() + File.separator + new File(entryName).getName() + fileType;
             if (zipEntry != null) {
                 entryName = zipEntry;
             }

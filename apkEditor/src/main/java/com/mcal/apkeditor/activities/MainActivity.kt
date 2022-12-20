@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Process
 import android.view.*
-import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -34,10 +33,8 @@ import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.filesystem.FilePickHelper
-import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utils.copyFile
-import com.mcal.common.utils.deleteAll
-import com.mcal.common.utils.isNetworkAvailable
+import com.mcal.common.utils.*
+import com.mcal.common.utils.ScopedStorage.getProjects
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import com.mcal.downloader.DownloaderActivity
 import com.mikepenz.fastadapter.FastAdapter
@@ -109,17 +106,22 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
         pickLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                result.data?.data?.let { uri->
-                    val apk = File(ScopedStorage.getTmpDir().path, "app.apk")
+                result.data?.data?.let { uri ->
+                    val apk = File(getProjects(), "app.apk")
                     contentResolver.openInputStream(uri)?.let { inputStream ->
                         copyFile(inputStream, apk)
                     }
-                    if (apk.exists() && apk.name.endsWith(".apk")) {
-                        selectFullEditDialog(this, apk.path)
-                    } else {
-                        Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                    ApkInfoParser().parse(this, apk.path)?.label?.let {
+                        val newApkPath = File(getProjects(), "$it/app.apk")
+                        apk.renameTo(newApkPath)
+                        if (newApkPath.exists() && newApkPath.name.endsWith(".apk")) {
+                            selectFullEditDialog(this, newApkPath.path)
+                        } else {
+                            Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
+                // todo gen JSON
             }
         }
     }

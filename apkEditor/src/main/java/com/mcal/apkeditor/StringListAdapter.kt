@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.mcal.apkeditor.dialogs.StringValueDialog
 import com.mcal.apkeditor.activities.types.StringItem
+import com.mcal.apkeditor.dialogs.StringValueDialog
 
-class StringListAdapter(activity: Activity) : RecyclerView.Adapter<StringListAdapter.StringsListViewHolder>() {
+class StringListAdapter(private val activity: Activity) : RecyclerView.Adapter<StringListAdapter.StringsListViewHolder>() {
     private val valueList: MutableList<StringItem> = ArrayList()
-    private val mActivity: Activity
 
     // Record changed value
     private var changedValues: MutableMap<String, MutableMap<String, String>> = HashMap()
@@ -19,11 +18,15 @@ class StringListAdapter(activity: Activity) : RecyclerView.Adapter<StringListAda
     // Current configuration (which language)
     private var mConfig: String?
     override fun getItemCount(): Int {
-        synchronized(valueList) { return valueList.size }
+        synchronized(valueList) {
+            return valueList.size
+        }
     }
 
     fun getItem(position: Int): Any {
-        synchronized(valueList) { return valueList[position] }
+        synchronized(valueList) {
+            return valueList[position]
+        }
     }
 
     override fun getItemId(position: Int): Long {
@@ -43,7 +46,7 @@ class StringListAdapter(activity: Activity) : RecyclerView.Adapter<StringListAda
             holder.value.text = value.value
 
             holder.value.setOnClickListener {
-                val dialog = StringValueDialog(mActivity, this, position)
+                val dialog = StringValueDialog(activity, this, position)
                 synchronized(valueList) {
                     val item = valueList[position]
                     dialog.setKeyValue(item.name, item.value)
@@ -102,7 +105,6 @@ class StringListAdapter(activity: Activity) : RecyclerView.Adapter<StringListAda
     }
 
     init {
-        mActivity = activity
         mConfig = null
     }
 }
