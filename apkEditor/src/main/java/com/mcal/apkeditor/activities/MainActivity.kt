@@ -165,16 +165,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             for (f in files) {
                 if (f.isFile) continue
                 findProjectFile(f.listFiles()) ?: continue
-                val apk = File(f, "app.apk")
-                var icon: Drawable? = null
-                if (apk.exists()) {
-                    ApkInfoParser().parse(this@MainActivity, apk.path)?.icon?.let {
-                        icon = it
-                    }
-                }
-                if (icon == null) {
-                    icon = ContextCompat.getDrawable(applicationContext, R.drawable.ic_android);
-                }
+                val icon = ContextCompat.getDrawable(applicationContext, R.drawable.ic_android);
                 val info = ApkInfoActivity.loadProject(f.path) ?: continue
                 projectAdapter.add(
                     MainProjectItem(System.currentTimeMillis().toInt(), icon, File(info.decodeRootPath).name),

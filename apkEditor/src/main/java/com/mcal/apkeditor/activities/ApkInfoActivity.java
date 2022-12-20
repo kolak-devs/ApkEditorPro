@@ -407,7 +407,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             }
         } else {
             isFullDecoding = true; // TODO
-            this.parseThread = new ApkParseThread(this, this, apkPath, decodeRootPath);
+            parseThread = new ApkParseThread(this, this, apkPath, decodeRootPath);
             parseThread.start();
         }
     }

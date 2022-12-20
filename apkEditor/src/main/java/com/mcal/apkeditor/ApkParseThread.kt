@@ -28,9 +28,6 @@ class ApkParseThread(
     private val mApkPath: String?
     private val mDecodeRootPath: String?
 
-    // Full decoding means to decode all the files include images, assets, libs, and unknown files
-    private var isFullDecoding = false
-
     // Record resource information
     var apkPackage: ResPackage? = null
         private set
@@ -209,6 +206,5 @@ class ApkParseThread(
         consumerRef = WeakReference(consumer)
         mApkPath = apkPath
         mDecodeRootPath = decodeRootPath
-        this.isFullDecoding = isFullDecoding;
     }
 }
