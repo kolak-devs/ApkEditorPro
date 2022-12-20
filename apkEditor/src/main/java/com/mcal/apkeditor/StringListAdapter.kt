@@ -1,5 +1,6 @@
 package com.mcal.apkeditor
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +9,27 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.activities.types.StringItem
 import com.mcal.apkeditor.dialogs.StringValueDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.*
 
-class StringListAdapter(private val activity: Activity) : RecyclerView.Adapter<StringListAdapter.StringsListViewHolder>() {
-    private val valueList: MutableList<StringItem> = ArrayList()
+class StringListAdapter(
+    private val activity: Activity,
+    private val listener: StringItemListener
+) : RecyclerView.Adapter<StringListAdapter.StringsListViewHolder>() {
+    private var valueList: MutableList<StringItem> = ArrayList()
+
+    private val dataBackup: MutableList<StringItem> = ArrayList()
 
     // Record changed value
     private var changedValues: MutableMap<String, MutableMap<String, String>> = HashMap()
+
+    @JvmField
+    var newValue: String? = null
+
+    @JvmField
+    var canStartFilterProcess = true
 
     // Current configuration (which language)
     private var mConfig: String?
@@ -61,6 +77,7 @@ class StringListAdapter(private val activity: Activity) : RecyclerView.Adapter<S
             this.mConfig = config
             valueList.clear()
             valueList.addAll(list)
+            dataBackup.addAll(list)
         }
         notifyDataSetChanged()
     }
@@ -97,6 +114,75 @@ class StringListAdapter(private val activity: Activity) : RecyclerView.Adapter<S
 
     fun setChangedValues(changedStringValues: MutableMap<String, MutableMap<String, String>>) {
         changedValues = changedStringValues
+    }
+
+    fun filter(constraint: CharSequence?) = CoroutineScope(Dispatchers.IO).launch {
+        val startResultList = mutableListOf<StringItem>()
+        val resultList = mutableListOf<StringItem>()
+        val endResultList = mutableListOf<StringItem>()
+        val charSearch = constraint.toString().lowercase(Locale.ROOT)
+        if (charSearch.isEmpty()) {
+            valueList = dataBackup
+        } else {
+            loop@ for (row in dataBackup) {
+                val name = row.value
+                var index = name.indexOf(charSearch)
+                if (index == 0) {
+                    startResultList.add(row)
+                } else if (index > 0) {
+                    do {
+                        if (name[index - 1] == ' ') {
+                            resultList.add(row)
+                            continue@loop
+                        }
+                        index = name.indexOf(charSearch, index + 1)
+                    } while (index > 0)
+                    endResultList.add(row)
+                } else if (name.contains(charSearch)) {
+                    endResultList.add(row)
+                }
+            }
+            val offset1 = startResultList.size
+            val offset2 = resultList.size
+            val length = offset1 + offset2 + endResultList.size
+            val list: MutableList<StringItem> = java.util.ArrayList(length)
+            for (app in startResultList) {
+                list.add(0, app)
+            }
+            for (app in resultList) {
+                list.add(offset1, app)
+            }
+            for (app in endResultList) {
+                list.add(offset1 + offset2, app)
+            }
+            valueList = list
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            publishResults(valueList)
+        }
+    }
+
+    interface StringItemListener {
+        fun onFoundStrings(mode: Boolean)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun publishResults(results: MutableList<StringItem>?) {
+        if (results != null) {
+            val length = results.size
+            listener.onFoundStrings(length > 0)
+            if (length >= 0) {
+                valueList = results
+                notifyDataSetChanged()
+            }
+        }
+        val text = newValue
+        if (text.isNullOrEmpty()) {
+            canStartFilterProcess = true
+            return
+        }
+        newValue = null
+        filter(text)
     }
 
     class StringsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
