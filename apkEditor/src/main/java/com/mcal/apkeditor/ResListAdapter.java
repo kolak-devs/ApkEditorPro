@@ -398,7 +398,11 @@ public class ResListAdapter extends BaseAdapter implements
             if (isImageFile(rec.fileName)) {
                 String entryName = getEntryName(curPath, rec.fileName);
                 ImageThumbnailInfo info = getImageInfo(entryName, rec.isInZip);
-                viewHolder.icon.setImageBitmap(info.thumbnail);
+                if (info.thumbnail == null){
+                    viewHolder.icon.setImageResource(R.drawable.ic_warning);
+                } else {
+                    viewHolder.icon.setImageBitmap(info.thumbnail);
+                }
                 detailInfo = info.detailInfo;
             } else if (rec.fileName.endsWith(".xml")) {
                 viewHolder.icon.setImageResource(R.drawable.round_insert_drive_file_yellow_24);

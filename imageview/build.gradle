@@ -4,10 +4,10 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk project.targetSDK.toInteger()
     defaultConfig {
-        minSdk 14
-        targetSdk 32
+        minSdk project.minSDK.toInteger()
+        targetSdk project.targetSDK.toInteger()
     }
     buildTypes {
         release {
@@ -31,4 +31,5 @@ dependencies {
     implementation jetpack.appcompat
 
     implementation jetpack.material
+    implementation ui.imageview
 }

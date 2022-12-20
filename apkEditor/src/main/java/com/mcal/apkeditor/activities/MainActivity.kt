@@ -162,7 +162,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(1, R.drawable.apps_box, R.string.select_app),
         )
         itemAdapter.add(
-            MainMenuItem(2, R.drawable.round_inventory_2_24, R.string.projects),
+            MainMenuItem(2, R.drawable.ic_menu_projects, R.string.projects),
             MainMenuItem(3, R.drawable.puzzle, R.string.odex_patcher),
             MainMenuItem(4, R.drawable.settings, R.string.tools_manager),
             MainMenuItem(5, R.drawable.round_logo_dev_24, R.string.view_logs),

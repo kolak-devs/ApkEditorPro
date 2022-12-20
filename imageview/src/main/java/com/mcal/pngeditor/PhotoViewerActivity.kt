@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.davemorrissey.labs.subscaleview.ImageSource
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.pngeditor.databinding.ActivityPhotoViewBinding
 
@@ -25,10 +26,10 @@ class PhotoViewerActivity : CustomizedLangActivity() {
             filepath = intent.getStringExtra("filePath")
 
             filepath?.let { path ->
-                val bitmap = BitmapFactory.decodeFile(path)
-                binding.image.setImageDrawable(BitmapDrawable(resources, bitmap))
 
-                val message = "(" + bitmap.width + "x" + bitmap.height + ")"
+                binding.image.setImage(ImageSource.uri(path))
+
+                val message = "(" + binding.image.sWidth + "x" + binding.image.sHeight + ")"
                 setupToolbar(R.id.toolbar, getString(R.string.app_name), message, true)
             }
         }

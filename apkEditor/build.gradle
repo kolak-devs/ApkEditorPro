@@ -5,7 +5,7 @@ plugins {
 def Properties versionProps = new Properties()
 
 android {
-    compileSdk 33
+    compileSdk project.targetSDK.toInteger()
     ndkVersion '24.0.8215888'
 
     def versionPropsFile = file('version.properties')
@@ -51,9 +51,9 @@ android {
 
         defaultConfig {
             applicationId "com.mcal.apkeditor.pro"
-            minSdk 26
+            minSdk project.minSDK.toInteger()
             //noinspection ExpiredTargetSdkVersion
-            targetSdk 26
+            targetSdk project.targetSDK.toInteger()
             versionCode versionBuild
             versionName "${versionMajor}.${versionMinor}.${versionPatch}"
             multiDexEnabled true

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk project.targetSDK.toInteger()
 
     defaultConfig {
-        minSdk 26
-        targetSdk 33
+        minSdk project.minSDK.toInteger()
+        targetSdk project.targetSDK.toInteger()
     }
 
     buildTypes {
