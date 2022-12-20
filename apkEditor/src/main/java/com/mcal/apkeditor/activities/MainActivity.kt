@@ -19,10 +19,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.MainMenuItem
+import com.mcal.apkeditor.data.ProjectData
 import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
@@ -111,17 +113,28 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     contentResolver.openInputStream(uri)?.let { inputStream ->
                         copyFile(inputStream, apk)
                     }
-                    ApkInfoParser().parse(this, apk.path)?.label?.let {
-                        val newApkPath = File(getProjects(), "$it/app.apk")
-                        apk.renameTo(newApkPath)
-                        if (newApkPath.exists() && newApkPath.name.endsWith(".apk")) {
-                            selectFullEditDialog(this, newApkPath.path)
+                    ApkInfoParser().parse(this, apk.path)?.let {
+                        val projectDir = File(getProjects(), "${it.label}")
+                        val newApkFile = File(projectDir, "app.apk")
+                        val newApkPath = newApkFile.path
+                        writeToFile(
+                            projectDir.path + "/info.json",
+                            GsonBuilder().create().toJson(
+                                ProjectData(
+                                    it.label,
+                                    it.pkgName,
+                                    newApkPath
+                                )
+                            )
+                        )
+                        apk.renameTo(newApkFile)
+                        if (newApkFile.exists() && newApkFile.name.endsWith(".apk")) {
+                            selectFullEditDialog(this, newApkPath)
                         } else {
                             Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-                // todo gen JSON
             }
         }
     }

@@ -166,9 +166,6 @@ configurations {
 
 
 dependencies {
-
-
-
     implementation project(':androlib:brut.apktool:apktool-lib')
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':smali')
@@ -198,6 +195,7 @@ dependencies {
     implementation jetpack.material
 
     implementation misc.annotations
+    implementation misc.gson
     implementation misc.coroutines_core
 
     implementation misc.guava
@@ -211,7 +209,7 @@ dependencies {
     implementation jetpack.vp2
     implementation jetpack.preferences
     implementation jetpack.preferences_core
-
+    
     // LeakCanary
     debugImplementation misc.leaks
 
