@@ -109,9 +109,11 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
         pickLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                result.data?.data?.let {
-                    val apk = File(ScopedStorage.getTmpDir().path, FilePickHelper.getFileName(this, it))
-                    contentResolver.openInputStream(it)?.let { it1 -> copyFile(it1, apk) }
+                result.data?.data?.let { uri->
+                    val apk = File(ScopedStorage.getTmpDir().path, "app.apk")
+                    contentResolver.openInputStream(uri)?.let { inputStream ->
+                        copyFile(inputStream, apk)
+                    }
                     if (apk.exists() && apk.name.endsWith(".apk")) {
                         selectFullEditDialog(this, apk.path)
                     } else {
