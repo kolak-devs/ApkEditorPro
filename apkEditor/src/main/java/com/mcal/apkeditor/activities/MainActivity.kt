@@ -165,6 +165,8 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(1, R.drawable.apps_box, R.string.select_app),
         )
 
+        // TODO: Создать res/integer значение по умолчанию 3, ландшафт 5 (ограничение)
+        // TODO: Обновить список если Пользователь нажал "Сохранить как проект"
         getProjects().listFiles()?.let { files ->
             for (f in files) {
                 if (f.isFile) continue
