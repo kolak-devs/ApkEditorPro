@@ -1,6 +1,7 @@
 package com.mcal.pngeditor
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -8,6 +9,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.decoder.CompatDecoderFactory
+import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
+import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.pngeditor.databinding.ActivityPhotoViewBinding
 
@@ -26,6 +30,8 @@ class PhotoViewerActivity : CustomizedLangActivity() {
             filepath = intent.getStringExtra("filePath")
 
             filepath?.let { path ->
+                binding.image.setBitmapDecoderFactory(CompatDecoderFactory(SkiaImageDecoder::class.java, Bitmap.Config.ARGB_8888))
+                binding.image.setRegionDecoderFactory(CompatDecoderFactory(SkiaPooledImageRegionDecoder::class.java, Bitmap.Config.ARGB_8888))
 
                 binding.image.setImage(ImageSource.uri(path))
 
