@@ -3,6 +3,9 @@ package com.mcal.apkeditor.activities
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Process
 import android.view.*
@@ -24,6 +27,7 @@ import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.MainMenuItem
+import com.mcal.apkeditor.adapters.MainProjectItem
 import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
@@ -148,6 +152,9 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         val apkItemAdapter = ItemAdapter<MainMenuItem>()
         val fastApkAdapter = FastAdapter.with(apkItemAdapter)
 
+        val projectAdapter = ItemAdapter<MainProjectItem>()
+        val fastProjectAdapter = FastAdapter.with(projectAdapter)
+
         val itemAdapter = ItemAdapter<MainMenuItem>()
         val fastAdapter = FastAdapter.with(itemAdapter)
 
@@ -155,6 +162,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             layoutManager = GridLayoutManager(this@MainActivity, 2)
             adapter = fastApkAdapter
         }
+        binding.projectsRecycler.adapter = fastProjectAdapter
         binding.menuRecycler.adapter = fastAdapter
 
         // id может быть любым числом, главное, чтобы оно было уникальным. Сделано для того, чтобы не ломалась логика
@@ -163,8 +171,13 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(0, R.drawable.ic_android, R.string.select_file),
             MainMenuItem(1, R.drawable.apps_box, R.string.select_app),
         )
+        projectAdapter.add(
+            MainProjectItem(System.currentTimeMillis().toInt(), BitmapFactory.decodeResource(binding.root.resources, R.drawable.info), "Ебануть"),
+            MainProjectItem(System.currentTimeMillis().toInt(), BitmapFactory.decodeResource(binding.root.resources, R.drawable.info), "список"),
+            MainProjectItem(System.currentTimeMillis().toInt(), BitmapFactory.decodeResource(binding.root.resources, R.drawable.info), "проектов"),
+        )
+
         itemAdapter.add(
-            MainMenuItem(2, R.drawable.ic_menu_projects, R.string.projects),
             MainMenuItem(3, R.drawable.puzzle, R.string.odex_patcher),
             MainMenuItem(4, R.drawable.settings, R.string.tools_manager),
             MainMenuItem(5, R.drawable.round_logo_dev_24, R.string.view_logs),
@@ -188,11 +201,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         fastAdapter.onClickListener =
             { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
                 when (mainMenuItem.id) {
-                    2 -> {
-                        val intent = Intent(this, ProjectListActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
                     3 -> {
                         val intent = Intent(this, OdexPatchActivity::class.java)
                         startActivity(intent)
