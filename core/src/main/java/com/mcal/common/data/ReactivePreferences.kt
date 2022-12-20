@@ -75,7 +75,7 @@ object ReactivePreferences {
     }
 
     suspend fun isFixMultiRes(): Boolean {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_MULTIRES] ?: false
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_MULTIRES] ?: true
     }
 
     suspend fun isNeedDecodeAssets(): Boolean{
