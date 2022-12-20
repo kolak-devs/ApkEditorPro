@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Process
 import android.view.*
-import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -23,11 +22,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.balsikandar.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.MainMenuItem
 import com.mcal.apkeditor.adapters.MainProjectItem
+import com.mcal.apkeditor.data.ProjectData
 import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
@@ -38,10 +39,8 @@ import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.filesystem.FilePickHelper
-import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utils.copyFile
-import com.mcal.common.utils.deleteAll
-import com.mcal.common.utils.isNetworkAvailable
+import com.mcal.common.utils.*
+import com.mcal.common.utils.ScopedStorage.getProjects
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import com.mcal.downloader.DownloaderActivity
 import com.mikepenz.fastadapter.FastAdapter
@@ -113,15 +112,31 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
         pickLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                result.data?.data?.let { uri->
-                    val apk = File(ScopedStorage.getTmpDir().path, "app.apk")
+                result.data?.data?.let { uri ->
+                    val apk = File(getProjects(), "app.apk")
                     contentResolver.openInputStream(uri)?.let { inputStream ->
                         copyFile(inputStream, apk)
                     }
-                    if (apk.exists() && apk.name.endsWith(".apk")) {
-                        selectFullEditDialog(this, apk.path)
-                    } else {
-                        Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                    ApkInfoParser().parse(this, apk.path)?.let {
+                        val projectDir = File(getProjects(), "${it.label}")
+                        val newApkFile = File(projectDir, "app.apk")
+                        val newApkPath = newApkFile.path
+                        writeToFile(
+                            projectDir.path + "/info.json",
+                            GsonBuilder().create().toJson(
+                                ProjectData(
+                                    it.label,
+                                    it.pkgName,
+                                    newApkPath
+                                )
+                            )
+                        )
+                        apk.renameTo(newApkFile)
+                        if (newApkFile.exists() && newApkFile.name.endsWith(".apk")) {
+                            selectFullEditDialog(this, newApkPath)
+                        } else {
+                            Toast.makeText(this, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
