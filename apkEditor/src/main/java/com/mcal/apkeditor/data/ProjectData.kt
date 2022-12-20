@@ -5,5 +5,6 @@ import com.google.gson.annotations.SerializedName
 data class ProjectData(
     @field:SerializedName("label") var label: String?,
     @field:SerializedName("package") var packageName: String?,
-    @field:SerializedName("path") var path: String?
+    @field:SerializedName("path") var path: String?,
+    @field:SerializedName("decodedResources") var decodedResources: Boolean = false,
 )

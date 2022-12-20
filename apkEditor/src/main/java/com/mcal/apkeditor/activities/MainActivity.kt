@@ -34,6 +34,7 @@ import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.ReactivePreferences
+import com.mcal.common.data.ReactivePreferences.isNeedDecodeResourcesAsync
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.*
 import com.mcal.common.utils.ScopedStorage.getProjects
@@ -123,7 +124,8 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                                 ProjectData(
                                     it.label,
                                     it.pkgName,
-                                    newApkPath
+                                    newApkPath,
+                                    isNeedDecodeResourcesAsync()
                                 )
                             )
                         )

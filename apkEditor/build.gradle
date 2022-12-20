@@ -209,7 +209,7 @@ dependencies {
     implementation jetpack.vp2
     implementation jetpack.preferences
     implementation jetpack.preferences_core
-    
+
     // LeakCanary
     debugImplementation misc.leaks
 

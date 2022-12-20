@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.provider.OpenableColumns
-import com.mcal.common.data.LegacyPreferences
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage.getMyCp
 import kotlinx.coroutines.runBlocking
@@ -16,6 +15,11 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.zip.ZipFile
+
+
+fun readFile(fileName: String) = readFile(File(fileName))
+
+fun readFile(fileName: File) = fileName.inputStream().readBytes().toString(Charsets.UTF_8)
 
 // Support root mode and non-root mode
 @Contract("_ -> new")
@@ -399,7 +403,7 @@ fun InputStream.readInputStream(): String {
     return sb.toString().trim()
 }
 
-fun Context.getFileName(uri: Uri): String? = when(uri.scheme) {
+fun Context.getFileName(uri: Uri): String? = when (uri.scheme) {
     ContentResolver.SCHEME_CONTENT -> getContentFileName(uri)
     else -> uri.path?.let(::File)?.name
 }

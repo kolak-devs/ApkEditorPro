@@ -1,6 +1,7 @@
 package com.mcal.apkeditor.activities;
 
 import static com.mcal.common.utils.FileHelperKt.copyFile;
+import static com.mcal.common.utils.FileHelperKt.readFile;
 import static com.mcal.common.utils.FileHelperKt.readObjectFromFile;
 import static com.mcal.common.utils.FileHelperKt.recursiveModifiedTime;
 import static com.mcal.common.utils.FileHelperKt.reviseFileName;
@@ -51,6 +52,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mcal.androlib.LanguageMapping;
 import com.mcal.androlib.util.OpenFiles;
 import com.mcal.apkeditor.ApkComposeService;
@@ -70,6 +73,7 @@ import com.mcal.apkeditor.activities.types.StringItem;
 import com.mcal.apkeditor.adapters.IManifestChangeCallback;
 import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.adapters.ManifestListAdapter;
+import com.mcal.apkeditor.data.ProjectData;
 import com.mcal.apkeditor.databinding.ActivityApkinfoBinding;
 import com.mcal.apkeditor.dialogs.AboutPluginDialog;
 import com.mcal.apkeditor.dialogs.AddFolderDialog;
@@ -221,7 +225,16 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private String entryNameForExternal;
     private long modifiedTimeBeforeOpen;
 
-    boolean isFullDecoding = ReactivePreferences.isNeedDecodeResourcesAsync();
+    static boolean isFullDecoding = false;
+
+
+    private static boolean isDecodedRes(String prjDirectory) {
+        String content = readFile(new File(prjDirectory, "info.json"));
+        ProjectData data = new GsonBuilder().create().fromJson(content, ProjectData.class);
+        return data.getDecodedResources();
+    }
+
+
     // prjDirectory not ends with '/'
     @Nullable
     public static ProjectInfo loadProject(String prjDirectory) {
@@ -240,6 +253,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 e.printStackTrace();
             }
         }
+
         return null;
     }
 
@@ -408,6 +422,11 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 finish();
             }
         } else {
+            String projectName = "UNKNOWN";
+            if (apkInfo != null) {
+                projectName = apkInfo.label;
+            }
+            isFullDecoding = isDecodedRes(new File(ScopedStorage.getProjects(), projectName).getPath());
             this.parseThread = new ApkParseThread(this, this, apkPath, decodeRootPath);
             parseThread.start();
         }
