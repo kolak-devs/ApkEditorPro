@@ -3,9 +3,7 @@ package com.mcal.apkeditor.activities
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Process
 import android.view.*
@@ -33,7 +31,6 @@ import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
 import com.mcal.apkeditor.dialogs.selectFullEditDialog
-import com.mcal.apkeditor.prj.ProjectListActivity
 import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
@@ -55,12 +52,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var pickLauncher: ActivityResultLauncher<Intent>
-
-    companion object {
-        init {
-            System.loadLibrary("apkeditorpro")
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,6 +111,9 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     }
                     ApkInfoParser().parse(this, apk.path)?.let {
                         val projectDir = File(getProjects(), "${it.label}")
+                        if (!projectDir.exists()) {
+                            projectDir.mkdir()
+                        }
                         val newApkFile = File(projectDir, "app.apk")
                         val newApkPath = newApkFile.path
                         writeToFile(
@@ -188,11 +182,27 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(0, R.drawable.ic_android, R.string.select_file),
             MainMenuItem(1, R.drawable.apps_box, R.string.select_app),
         )
-        projectAdapter.add(
-            MainProjectItem(System.currentTimeMillis().toInt(), BitmapFactory.decodeResource(binding.root.resources, R.drawable.info), "Ебануть"),
-            MainProjectItem(System.currentTimeMillis().toInt(), BitmapFactory.decodeResource(binding.root.resources, R.drawable.info), "список"),
-            MainProjectItem(System.currentTimeMillis().toInt(), BitmapFactory.decodeResource(binding.root.resources, R.drawable.info), "проектов"),
-        )
+        
+        getProjects().listFiles()?.let { files ->
+            for (f in files) {
+                if (f.isFile) continue
+                findProjectFile(f.listFiles()) ?: continue
+                val apk = File(f, "app.apk")
+                var icon: Drawable? = null
+                if (apk.exists()) {
+                    ApkInfoParser().parse(this@MainActivity, apk.path)?.icon?.let {
+                        icon = it
+                    }
+                }
+                if (icon == null) {
+                    icon = ContextCompat.getDrawable(applicationContext, R.drawable.ic_android);
+                }
+                val info = ApkInfoActivity.loadProject(f.path) ?: continue
+                projectAdapter.add(
+                    MainProjectItem(System.currentTimeMillis().toInt(), icon, File(info.decodeRootPath).name),
+                )
+            }
+        }
 
         itemAdapter.add(
             MainMenuItem(3, R.drawable.puzzle, R.string.odex_patcher),
@@ -252,6 +262,18 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         if (!ScopedStorage.isToolsInstalled()) {
             showToolManagerDialog()
         }
+    }
+
+    private fun findProjectFile(files: Array<File>?): File? {
+        if (files == null) {
+            return null
+        }
+        for (f in files) {
+            if (f.isFile && f.name == "info.bin") {
+                return f
+            }
+        }
+        return null
     }
 
     private fun pickApk() {

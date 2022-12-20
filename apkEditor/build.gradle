@@ -65,20 +65,9 @@ android {
         throw new GradleException("Could not read version.properties!")
     }
 
-    externalNativeBuild {
-        cmake {
-            version '3.18.1'
-            path 'src/main/cpp/CMakeLists.txt'
-        }
-    }
-
     buildTypes {
         release {
             defaultConfig.versionCode = versionProps['VERSION_BUILD'].toInteger()
-
-            ndk {
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
-            }
 
             minifyEnabled true
             shrinkResources true

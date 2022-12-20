@@ -234,7 +234,6 @@ public class ApkInfoActivity extends CustomizedLangActivity
         return data.getDecodedResources();
     }
 
-
     // prjDirectory not ends with '/'
     @Nullable
     public static ProjectInfo loadProject(String prjDirectory) {

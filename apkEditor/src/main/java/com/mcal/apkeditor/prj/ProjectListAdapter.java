@@ -182,7 +182,7 @@ class ProjectListAdapter extends BaseAdapter
         AppCompatImageButton delMenu;
     }
 
-    static class ItemInfo {
+   public static class ItemInfo {
         String name;
         String apkPath;
         String decodeDirectory;

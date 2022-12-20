@@ -1,21 +1,23 @@
 package com.mcal.apkeditor.adapters
 
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import com.mcal.apkeditor.R
+import com.mcal.apkeditor.activities.ApkInfoExActivity
+import com.mcal.common.utils.ActivityHelper.attachParam
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
 open class MainProjectItem() : AbstractItem<MainProjectItem.ViewHolder>() {
     var id: Int? = null
-    var icon: Bitmap? = null
+    var icon: Drawable? = null
     var title: String? = null
 
-    constructor(id: Int, icon: Bitmap? = null, title: String? = null) : this() {
+    constructor(id: Int, icon: Drawable? = null, title: String? = null) : this() {
         this.id = id
         this.icon = icon
         this.title = title
@@ -33,17 +35,22 @@ open class MainProjectItem() : AbstractItem<MainProjectItem.ViewHolder>() {
         return ViewHolder(v)
     }
 
-    class ViewHolder(view: View) : FastAdapter.ViewHolder<MainProjectItem>(view) {
-        var icon: ImageView = view.findViewById(R.id.menu_icon)
-        var title: TextView = view.findViewById(R.id.menu_title)
+    class ViewHolder(private val view: View) : FastAdapter.ViewHolder<MainProjectItem>(view) {
+        var iconView: ImageView = view.findViewById(R.id.menu_icon)
+        var titleView: TextView = view.findViewById(R.id.menu_title)
 
         /** Binds the data of this item onto the viewHolder */
         override fun bindView(item: MainProjectItem, payloads: List<Any>) {
             item.icon?.let {
-                icon.setImageBitmap(it)
+                iconView.setImageDrawable(it)
             }
-            item.title?.let {
-                title.text = it
+            item.title?.let { title ->
+                titleView.text = title
+                view.setOnClickListener {
+                    val intent = Intent(view.context, ApkInfoExActivity::class.java)
+                    attachParam(intent, "projectName", title)
+                    view.context.startActivity(intent)
+                }
             }
         }
 

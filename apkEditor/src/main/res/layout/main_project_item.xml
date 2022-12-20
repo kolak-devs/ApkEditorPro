@@ -24,9 +24,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?colorPrimary"
-            tools:src="@drawable/settings"
-            android:alpha="0.3" />
+            tools:src="@drawable/settings" />
+
+<!--        android:alpha="0.3"-->
+<!--        app:tint="?colorPrimary"-->
 
         <TextView
             android:id="@+id/menu_title"
