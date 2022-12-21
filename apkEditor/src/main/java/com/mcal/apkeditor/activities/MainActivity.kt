@@ -28,6 +28,7 @@ import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
 import com.mcal.apkeditor.dialogs.selectFullEditDialog
+import com.mcal.apkeditor.prj.ProjectListActivity
 import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
@@ -42,12 +43,16 @@ import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.coroutines.launch
 import java.io.File
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import kotlin.system.exitProcess
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var pickLauncher: ActivityResultLauncher<Intent>
+    // id для перехода на основной экран проектов
+    private val REQ_SHOW_ALL = 670;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -165,13 +170,13 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(1, R.drawable.apps_box, R.string.select_app),
         )
 
-        // TODO: Создать res/integer значение по умолчанию 3, ландшафт 5 (ограничение)
         // TODO: Обновить список если Пользователь нажал "Сохранить как проект"
         getProjects().listFiles()?.let { files ->
-            for (f in files) {
+            //Обрезаем список до 5 первых элементов
+            for (f in files.take(5)) {
                 if (f.isFile) continue
                 findProjectFile(f.listFiles()) ?: continue
-                var icon = ContextCompat.getDrawable(applicationContext, R.drawable.ic_android)
+                var icon = ContextCompat.getDrawable(this, R.drawable.ic_android)
                 files.forEach { file ->
                     if (file.name.endsWith(".apk") && file.name.replace(".apk", "").contains(f.name)) {
                         ApkInfoParser().parse(this@MainActivity, file.path)?.icon?.let {
@@ -179,11 +184,16 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                         }
                     }
                 }
+
                 val info = ApkInfoActivity.loadProject(f.path) ?: continue
+                val fmt: DateFormat = SimpleDateFormat("EEE, HH:mm")
                 projectAdapter.add(
-                    MainProjectItem(System.currentTimeMillis().toInt(), icon, File(info.decodeRootPath).name),
-                )
+                    MainProjectItem(System.currentTimeMillis().toInt(), icon, File(info.decodeRootPath).name,
+                        fmt.format(File(info.decodeRootPath).lastModified())))
             }
+
+            projectAdapter.add(MainProjectItem(REQ_SHOW_ALL, ContextCompat.getDrawable(this, R.drawable.ic_go_into),
+                getString(R.string.projects_show_all), null))
         }
 
         itemAdapter.add(
@@ -206,6 +216,18 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 }
                 else -> false
             }
+        }
+        fastProjectAdapter.onClickListener = { view: View?, iAdapter: IAdapter<MainProjectItem>, mainProjectItem: MainProjectItem, i: Int ->
+           if (mainProjectItem.id == REQ_SHOW_ALL) {
+               startActivity(Intent(this, ProjectListActivity::class.java))
+               true
+           } else {
+               val intent = Intent(this, ApkInfoExActivity::class.java)
+               ActivityHelper.attachParam(intent, "projectName", fastProjectAdapter.getItem(fastProjectAdapter.getPosition(mainProjectItem))?.title)
+               startActivity(intent)
+               true
+           }
+
         }
         fastAdapter.onClickListener =
             { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->

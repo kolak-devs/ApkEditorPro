@@ -16,11 +16,13 @@ open class MainProjectItem() : AbstractItem<MainProjectItem.ViewHolder>() {
     var id: Int? = null
     var icon: Drawable? = null
     var title: String? = null
+    var subtitle: String? = null;
 
-    constructor(id: Int, icon: Drawable? = null, title: String? = null) : this() {
+    constructor(id: Int, icon: Drawable? = null, title: String? = null, subtitle: String? = null) : this() {
         this.id = id
         this.icon = icon
         this.title = title
+        this.subtitle = subtitle
     }
 
     /** The type of the Item. Can be a hardcoded INT, but preferred is a defined id */
@@ -38,6 +40,7 @@ open class MainProjectItem() : AbstractItem<MainProjectItem.ViewHolder>() {
     class ViewHolder(private val view: View) : FastAdapter.ViewHolder<MainProjectItem>(view) {
         var iconView: ImageView = view.findViewById(R.id.menu_icon)
         var titleView: TextView = view.findViewById(R.id.menu_title)
+        var subtitleView: TextView = view.findViewById(R.id.menu_subtitle)
 
         /** Binds the data of this item onto the viewHolder */
         override fun bindView(item: MainProjectItem, payloads: List<Any>) {
@@ -46,11 +49,9 @@ open class MainProjectItem() : AbstractItem<MainProjectItem.ViewHolder>() {
             }
             item.title?.let { title ->
                 titleView.text = title
-                view.setOnClickListener {
-                    val intent = Intent(view.context, ApkInfoExActivity::class.java)
-                    attachParam(intent, "projectName", title)
-                    view.context.startActivity(intent)
-                }
+            }
+            item.subtitle.let { subtitle ->
+                subtitleView.text = subtitle
             }
         }
 
