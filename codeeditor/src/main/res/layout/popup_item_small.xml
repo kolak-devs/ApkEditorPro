@@ -18,6 +18,7 @@
         app:cardBackgroundColor="#FF784D">
 
         <TextView
+            android:id="@+id/type"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

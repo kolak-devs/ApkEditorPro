@@ -28,8 +28,25 @@ class SmaliMethodAdapter(val listener: OnClick, private val methods: List<SmaliM
     override fun onBindViewHolder(holder: SmaliViewHolder, position: Int) {
         val text = methods[position].methodDesc
         val spanText = SpannableString(text)
-        spanText.setSpan(ForegroundColorSpan(Color.GRAY), text.indexOf("("), text.indexOf(")") + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        holder.tv.text = spanText
+        if (text.contains("(")) {
+            holder.type.text = "M"
+            holder.type.setBackgroundColor(Color.parseColor("#FFAB91"))
+            val start = text.indexOf("(")
+            val end = text.indexOf(")") + 1
+            if (start >= 0 && end >= 0) {
+                spanText.setSpan(ForegroundColorSpan(Color.GRAY), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            holder.tv.text = spanText
+        } else {
+            holder.type.text = "F"
+            holder.type.setBackgroundColor(Color.parseColor("#B39DDB"))
+            val start = text.indexOf(":")
+            val end = text.indexOf(";")
+            if (start >= 0 && end >= 0) {
+                spanText.setSpan(ForegroundColorSpan(Color.GRAY), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            holder.tv.text = spanText
+        }
         holder.tv.setOnClickListener {
             listener.onClick(position)
         }
@@ -37,5 +54,6 @@ class SmaliMethodAdapter(val listener: OnClick, private val methods: List<SmaliM
 
     class SmaliViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tv: TextView = itemView.findViewById(R.id.groupItem)
+        var type: TextView = itemView.findViewById(R.id.type)
     }
 }

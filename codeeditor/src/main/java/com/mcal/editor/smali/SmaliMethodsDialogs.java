@@ -148,6 +148,9 @@ public class SmaliMethodsDialogs implements OnClick {
             if (line.startsWith(".method ")) {
                 final String prototype = line.substring(8);
                 methodList.add(new SmaliMethodInfo(lineIndex, prototype));
+            } else if (line.startsWith(".field ")) {
+                final String prototype = line.substring(7);
+                methodList.add(new SmaliMethodInfo(lineIndex, prototype));
             }
         }
 
