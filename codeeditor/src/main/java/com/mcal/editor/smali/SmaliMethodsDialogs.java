@@ -26,23 +26,22 @@ import java.util.regex.Pattern;
 
 // Popup window helper
 public class SmaliMethodsDialogs implements OnClick {
-    private final WeakReference<ISmaliMethodClicked> callbackRef;
-
-    private String methodComputedFrom; // Record the method is from which file
+    private final ISmaliMethodClicked mCallback;
+    private String mMethodComputedFrom; // Record the method is from which file
 
     public SmaliMethodsDialogs(ISmaliMethodClicked callback) {
-        callbackRef = new WeakReference<>(callback);
+        mCallback = callback;
     }
 
     public String getFile() {
-        return methodComputedFrom;
+        return mMethodComputedFrom;
     }
 
     private List<SmaliMethodInfo> mMethodList;
     private AlertDialog mMaterialDialog;
 
     private void createPopWindow(@NonNull Activity activity, String smaliFile, final List<SmaliMethodInfo> methodList) {
-        this.methodComputedFrom = smaliFile;
+        this.mMethodComputedFrom = smaliFile;
         mMethodList = methodList;
 
         final View layout = LayoutInflater.from(activity).inflate(R.layout.dialog_methods_list, null);
@@ -67,8 +66,8 @@ public class SmaliMethodsDialogs implements OnClick {
         final List<SmaliMethodInfo> methodList = mMethodList;
         if (position < methodList.size()) {
             SmaliMethodInfo info = methodList.get(position);
-            if (callbackRef.get() != null) {
-                callbackRef.get().gotoLine(info.lineIndex);
+            if (mCallback != null) {
+                mCallback.gotoLine(info.lineIndex);
             }
             mMaterialDialog.dismiss();
         }
@@ -134,7 +133,7 @@ public class SmaliMethodsDialogs implements OnClick {
             final String mLine = line.trim();
             // For 'public' 'private' 'protected'
             if (mLine.length() > 6 && mLine.charAt(0) == 'p' && (mLine.charAt(1) == 'u' || mLine.charAt(1) == 'r')) {
-                final Matcher matcher = Pattern.compile("(public|protected|private|static|\\s) +[\\w\\<\\>\\[\\]]+\\s+(\\w+) *\\([^\\)]*\\) *").matcher(line);
+                final Matcher matcher = Pattern.compile("^[ \\t]*(?:(?:public|protected|private)\\s+)?(?:(static|final|native|synchronized|abstract|threadsafe|transient|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)\\s+)*(?!return)\\b([\\w.]+)\\b(?:|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)((?:\\[])*)\\s+\\b\\w+\\b\\s*\\(\\s*(?:\\b([\\w.]+)\\b(?:|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)((?:\\[])*)(\\.\\.\\.)?\\s+(\\w+)\\b(?![>\\[])\\s*(?:,\\s+\\b([\\w.]+)\\b(?:|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)((?:\\[])*)(\\.\\.\\.)?\\s+(\\w+)\\b(?![>\\[])\\s*)*)?\\s*\\)(?:\\s*throws [\\w.]+(\\s*,\\s*[\\w.]+))?\\s*[{;][ \\t]*$").matcher(line);
                 if (matcher.matches()) {
                     String prototype = matcher.group(0);
                     if (prototype != null && prototype.endsWith("{")) {
