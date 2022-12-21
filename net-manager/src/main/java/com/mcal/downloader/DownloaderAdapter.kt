@@ -11,6 +11,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.mcal.common.utils.ScopedStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 class DownloaderAdapter(
@@ -67,11 +70,13 @@ class DownloaderAdapter(
                 }
             } else {
                 buttonDownload.isEnabled = false
-                NetHelper.download(
-                    url,
-                    path,
-                    container
-                )
+                CoroutineScope(Dispatchers.IO).launch {
+                    NetHelper.download(
+                        url,
+                        path,
+                        container
+                    )
+                }
             }
         }
     }

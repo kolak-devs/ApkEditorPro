@@ -13,26 +13,26 @@ class DownloaderActivity : CustomizedLangActivity() {
     private var _binding: DownloaderActivityBinding? = null
     private val binding get() = _binding!!
 
-    val tools = listOf(
-        "android-framework.jar" to "${getDomain()}/apkeditor/framework/$SDK/android.jar",
-        "aapt" to "${getDomain()}/apkeditor/bin/$ABI/aapt",
-        "aapt2" to "${getDomain()}/apkeditor/bin/$ABI/aapt2",
-        "mycp" to "${getDomain()}/apkeditor/bin/$ABI/mycp",
-        "zipalign" to "${getDomain()}/apkeditor/bin/$ABI/zipalign",
-        //"aaptz" to "DOMAIN/apkeditor/bin/aaptz",
-        "testkey.pk8" to "${getDomain()}/apkeditor/keys/testkey.pk8",
-        "testkey.x509.pem" to "${getDomain()}/apkeditor/keys/testkey.x509.pem",
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = DownloaderActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, getString(R.string.tools_manager), true)
-        val adapter = DownloaderAdapter(tools)
-        val recyclerView = binding.recyclerview
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        binding.recyclerview.apply {
+            layoutManager = LinearLayoutManager(this@DownloaderActivity)
+            adapter = DownloaderAdapter(
+                listOf(
+                    "android-framework.jar" to "${getDomain()}/apkeditor/framework/$SDK/android.jar",
+                    "aapt" to "${getDomain()}/apkeditor/bin/$ABI/aapt",
+                    "aapt2" to "${getDomain()}/apkeditor/bin/$ABI/aapt2",
+                    "mycp" to "${getDomain()}/apkeditor/bin/$ABI/mycp",
+                    "zipalign" to "${getDomain()}/apkeditor/bin/$ABI/zipalign",
+                    //"aaptz" to "DOMAIN/apkeditor/bin/aaptz",
+                    "testkey.pk8" to "${getDomain()}/apkeditor/keys/testkey.pk8",
+                    "testkey.x509.pem" to "${getDomain()}/apkeditor/keys/testkey.x509.pem",
+                )
+            )
+        }
     }
 
     override fun onResume() {

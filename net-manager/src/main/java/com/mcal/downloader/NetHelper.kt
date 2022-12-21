@@ -48,9 +48,7 @@ object NetHelper {
                         var totalBytesRead: Long = 0
                         val bufferSize = 8 * 1024
                         var bytesRead: Long
-                        while (source.read(sinkBuffer, bufferSize.toLong())
-                                .also { bytesRead = it } != -1L
-                        ) {
+                        while (source.read(sinkBuffer, bufferSize.toLong()).also { bytesRead = it } != -1L) {
                             sink.emit()
                             totalBytesRead += bytesRead
                             val progress = (totalBytesRead * 100 / contentLength).toInt()
