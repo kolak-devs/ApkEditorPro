@@ -51,6 +51,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var pickLauncher: ActivityResultLauncher<Intent>
+
     // id для перехода на основной экран проектов
     private val REQ_SHOW_ALL = 670;
 
@@ -186,14 +187,26 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 }
 
                 val info = ApkInfoActivity.loadProject(f.path) ?: continue
-                val fmt: DateFormat = SimpleDateFormat("EEE, HH:mm")
+                val fmt = SimpleDateFormat("EEE, HH:mm")
                 projectAdapter.add(
-                    MainProjectItem(System.currentTimeMillis().toInt(), icon, File(info.decodeRootPath).name,
-                        fmt.format(File(info.decodeRootPath).lastModified())))
+                    MainProjectItem(
+                        System.currentTimeMillis().toInt(), icon, File(info.decodeRootPath).name,
+                        fmt.format(File(info.decodeRootPath).lastModified())
+                    )
+                )
             }
 
-            projectAdapter.add(MainProjectItem(REQ_SHOW_ALL, ContextCompat.getDrawable(this, R.drawable.ic_go_into),
-                getString(R.string.projects_show_all), null))
+            if (projectAdapter.adapterItemCount > 0) {
+                binding.titleProjects.visibility = View.VISIBLE
+                projectAdapter.add(
+                    MainProjectItem(
+                        REQ_SHOW_ALL, ContextCompat.getDrawable(this, R.drawable.ic_go_into),
+                        getString(R.string.projects_show_all), null
+                    )
+                )
+            } else {
+                binding.titleProjects.visibility = View.GONE
+            }
         }
 
         itemAdapter.add(
@@ -218,15 +231,15 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             }
         }
         fastProjectAdapter.onClickListener = { view: View?, iAdapter: IAdapter<MainProjectItem>, mainProjectItem: MainProjectItem, i: Int ->
-           if (mainProjectItem.id == REQ_SHOW_ALL) {
-               startActivity(Intent(this, ProjectListActivity::class.java))
-               true
-           } else {
-               val intent = Intent(this, ApkInfoExActivity::class.java)
-               ActivityHelper.attachParam(intent, "projectName", fastProjectAdapter.getItem(fastProjectAdapter.getPosition(mainProjectItem))?.title)
-               startActivity(intent)
-               true
-           }
+            if (mainProjectItem.id == REQ_SHOW_ALL) {
+                startActivity(Intent(this, ProjectListActivity::class.java))
+                true
+            } else {
+                val intent = Intent(this, ApkInfoExActivity::class.java)
+                ActivityHelper.attachParam(intent, "projectName", fastProjectAdapter.getItem(fastProjectAdapter.getPosition(mainProjectItem))?.title)
+                startActivity(intent)
+                true
+            }
 
         }
         fastAdapter.onClickListener =
