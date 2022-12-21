@@ -14,15 +14,15 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         app:strokeColor="@android:color/transparent"
-        app:strokeWidth="1dp"
-        app:cardBackgroundColor="#FF784D">
+        app:strokeWidth="1dp">
 
         <TextView
             android:id="@+id/type"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="M" />
+            android:text="M"
+            tools:background="#FF784D" />
 
     </com.google.android.material.card.MaterialCardView>
 
