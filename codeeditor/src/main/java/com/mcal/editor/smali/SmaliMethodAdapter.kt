@@ -1,5 +1,9 @@
 package com.mcal.editor.smali
 
+import android.graphics.Color
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +26,10 @@ class SmaliMethodAdapter(val listener: OnClick, private val methods: List<SmaliM
     }
 
     override fun onBindViewHolder(holder: SmaliViewHolder, position: Int) {
-        holder.tv.text = methods[position].methodDesc
+        val text = methods[position].methodDesc
+        val spanText = SpannableString(text)
+        spanText.setSpan(ForegroundColorSpan(Color.GRAY), text.indexOf("("), text.indexOf(")") + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        holder.tv.text = spanText
         holder.tv.setOnClickListener {
             listener.onClick(position)
         }

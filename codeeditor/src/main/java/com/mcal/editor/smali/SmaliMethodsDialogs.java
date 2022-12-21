@@ -18,7 +18,6 @@ import com.mcal.neweditor.R;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -82,16 +81,16 @@ public class SmaliMethodsDialogs implements OnClick {
     private class MethodAsyncLoader extends AsyncTask<Void, Integer, Boolean> {
         private final int FILE_TYPE_SMALI = 0;
         private final int FILE_TYPE_JAVA = 1;
-        private final WeakReference<Activity> activityRef;
-        private final String smaliFile;
+        private final Activity mActivity;
+        private final String mSmaliFile;
         private final String content;
         private final List<SmaliMethodInfo> methodList;
         private int fileType = -1;
 
         @SuppressWarnings("deprecation")
         MethodAsyncLoader(Activity activity, @NonNull String filePath, String fileContent) {
-            activityRef = new WeakReference<>(activity);
-            smaliFile = filePath;
+            mActivity = activity;
+            mSmaliFile = filePath;
             content = fileContent;
             methodList = new ArrayList<>();
 
@@ -154,7 +153,7 @@ public class SmaliMethodsDialogs implements OnClick {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            createPopWindow(activityRef.get(), smaliFile, methodList);
+            createPopWindow(mActivity, mSmaliFile, methodList);
         }
     }
 }
