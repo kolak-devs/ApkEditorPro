@@ -135,7 +135,7 @@ public class SmaliMethodsDialogs implements OnClick {
                 final Matcher matcher = Pattern.compile("^[ \\t]*(?:(?:public|protected|private)\\s+)?(?:(static|final|native|synchronized|abstract|threadsafe|transient|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)\\s+)*(?!return)\\b([\\w.]+)\\b(?:|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)((?:\\[])*)\\s+\\b\\w+\\b\\s*\\(\\s*(?:\\b([\\w.]+)\\b(?:|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)((?:\\[])*)(\\.\\.\\.)?\\s+(\\w+)\\b(?![>\\[])\\s*(?:,\\s+\\b([\\w.]+)\\b(?:|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)((?:\\[])*)(\\.\\.\\.)?\\s+(\\w+)\\b(?![>\\[])\\s*)*)?\\s*\\)(?:\\s*throws [\\w.]+(\\s*,\\s*[\\w.]+))?\\s*[{;][ \\t]*$").matcher(line);
                 if (matcher.matches()) {
                     String prototype = matcher.group(0);
-                    if (prototype != null && prototype.endsWith("{")) {
+                    if (prototype != null && (prototype.endsWith("{") || prototype.endsWith(";"))) {
                         prototype = prototype.substring(0, prototype.length() - 1);
                         prototype = prototype.trim();
                         methodList.add(new SmaliMethodInfo(lineIndex, prototype));
