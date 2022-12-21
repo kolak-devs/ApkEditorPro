@@ -15,12 +15,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.LegacyPreferences
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
-import com.mcal.editor.smali.SmaliMethodsDialogs
+import com.mcal.editor.navigation.CodeNavigationDialog
 import com.mcal.editor.utils.FileUtils
 import com.mcal.editor.utils.JavaExtractor
 import com.mcal.neweditor.R
@@ -53,7 +52,7 @@ import java.util.regex.PatternSyntaxException
 
 
 class EditorActivity : CustomizedLangActivity(),
-    SmaliMethodsDialogs.ISmaliMethodClicked {
+    CodeNavigationDialog.ISmaliMethodClicked {
     private lateinit var binding: ActivitySoraeditorBinding
 
     private var save: MenuItem? = null
@@ -852,7 +851,7 @@ class EditorActivity : CustomizedLangActivity(),
 
     private fun showNavigationMethods() {
         filePath?.let { path ->
-            SmaliMethodsDialogs(this).asyncShowPopup(
+            CodeNavigationDialog(this).asyncShowPopup(
                 this,
                 path.path,
                 binding.editor.text.toString()

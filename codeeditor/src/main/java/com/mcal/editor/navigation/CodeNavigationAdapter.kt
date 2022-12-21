@@ -1,4 +1,4 @@
-package com.mcal.editor.smali
+package com.mcal.editor.navigation
 
 import android.graphics.Color
 import android.text.Spannable
@@ -11,7 +11,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.neweditor.R
 
-class SmaliMethodAdapter(val listener: OnClick, private val methods: List<SmaliMethodInfo>) : RecyclerView.Adapter<SmaliMethodAdapter.SmaliViewHolder>() {
+class CodeNavigationAdapter(private val listener: CodeNavigationClick, private val methods: List<CodeNavigationInfo>) :
+    RecyclerView.Adapter<CodeNavigationAdapter.SmaliViewHolder>() {
     override fun getItemCount(): Int {
         return methods.size
     }
