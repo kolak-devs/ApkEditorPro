@@ -52,8 +52,10 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     private val binding get() = _binding!!
     private lateinit var pickLauncher: ActivityResultLauncher<Intent>
 
-    // id для перехода на основной экран проектов
-    private val REQ_SHOW_ALL = 670;
+    companion object {
+        // id для перехода на основной экран проектов
+        private const val REQ_SHOW_ALL = 670;
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,8 +70,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     R.id.action_settings -> {
-                        val i = Intent(this@MainActivity, SettingsActivity::class.java)
-                        startActivity(i)
+                        startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
                         return true
                     }
                     R.id.action_night_mode -> {
@@ -236,7 +237,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 true
             } else {
                 val intent = Intent(this, ApkInfoExActivity::class.java)
-                ActivityHelper.attachParam(intent, "projectName", fastProjectAdapter.getItem(fastProjectAdapter.getPosition(mainProjectItem))?.title)
+                ActivityHelper.attachParam(intent, "projectName", fastProjectAdapter.getItem(i)?.title)
                 startActivity(intent)
                 true
             }
@@ -321,10 +322,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 startActivity(intent)
                 dialog.dismiss()
             }.show()
-    }
-
-    override fun onBackPressed() {
-        finishAfterTransition()
     }
 
     fun initFileWithPermissionCheck() {
