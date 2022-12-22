@@ -54,6 +54,8 @@
         <activity
             android:name="com.mcal.apkeditor.activities.ApkInfoActivity" />
         <activity
+            android:name="com.mcal.apkeditor.activities.PatcherActivity" />
+        <activity
             android:name="com.mcal.apkeditor.activities.ApkInfoExActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

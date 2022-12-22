@@ -1111,14 +1111,18 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
         // Apply a patch
         else if (id == R.id.menu_apply_patch) {
-            new PatchDialog(this, this);
+            final Intent intent = new Intent(this, PatcherActivity.class);
+            intent.putExtra("decodeRootPath", decodeRootPath);
+            intent.putExtra("apkPath", apkPath);
+            intent.putExtra("dex2smaliClicked", dexDecoded);
+            startActivity(intent);
+            //new PatchDialog(this, this);
         } else if (id == R.id.bsh_patcher) {
-            Intent intent = new Intent(this, BshEngineActivity.class);
+            final Intent intent = new Intent(this, BshEngineActivity.class);
             intent.putExtra("filePath", decodeRootPath);
             intent.putExtra("apkPath", apkPath);
             startActivity(intent);
         }
-
         // Auto translate
         else if (id == R.id.translate) {
             startNewTranslation();
