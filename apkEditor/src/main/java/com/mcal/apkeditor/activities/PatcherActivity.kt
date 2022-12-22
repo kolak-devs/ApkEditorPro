@@ -14,9 +14,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.MenuProvider
-import androidx.lifecycle.lifecycleScope
 import com.mcal.apkeditor.IGeneralCallback
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.ResListAdapter
@@ -28,13 +26,11 @@ import com.mcal.apkeditor.smali.AsyncDecodeTask
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.activities.WebViewActivity
 import com.mcal.common.data.Constants
-import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.utils.ScopedStorage.getPatchesDir
 import com.mcal.common.utils.copyFile
-import kotlinx.coroutines.launch
 import org.xml.sax.SAXException
 import ru.mcal.manifestparser.xml.AndroidManifestParser
 import java.io.File
@@ -43,7 +39,7 @@ import java.io.IOException
 import java.util.zip.ZipFile
 import javax.xml.parsers.ParserConfigurationException
 
-class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext {
+class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext, AsyncDecodeTask.IDecodeTaskCallback {
     private var _binding: ActivityPatcherBinding? = null
     private val binding get() = _binding!!
     private lateinit var pickLauncher: ActivityResultLauncher<Intent>
@@ -52,9 +48,10 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
     private var mApkInfo: ApkInfoParser.AppInfo? = null
     private var mPatchPath: String? = null
     private var mIsDexDecoded: Boolean = false
-
+    private var mDexDecodedCallback: IGeneralCallback? = null
     // Record all the global parameter values
     private val globalVariableValues: MutableMap<String, String> = HashMap()
+    private var mResListAdapter: ResListAdapter? = null
 
     // Record executor as the parse is done there
     private var patchExecutor: PatchExecutor? = null
@@ -126,7 +123,9 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         super.onDestroy()
     }
 
-    override fun getResListAdapter(): ResListAdapter? = null
+    override fun getResListAdapter(): ResListAdapter? {
+        return mResListAdapter // TODO
+    }
 
     override fun getDecodeRootPath(): String? = mDecodedPath
 
@@ -270,10 +269,12 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         return mIsDexDecoded
     }
 
-    override fun decodeDex(patchExecutor: IGeneralCallback?) {
+    override fun decodeDex(dexDecodedCallback: IGeneralCallback?) {
+        mDexDecodedCallback = dexDecodedCallback
         mApkPath?.let { apkPath ->
             mDecodedPath?.let { decodedPath ->
-                AsyncDecodeTask(apkPath, decodedPath, null).execute()
+                AsyncDecodeTask(apkPath, decodedPath, this).execute()
+                mIsDexDecoded = true
             }
         }
     }
@@ -304,5 +305,13 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                 binding.log.append(txt)
             }
         }
+    }
+
+    override fun dexDecodingStarted() {
+
+    }
+
+    override fun dexDecodingFinished(result: Boolean, strError: String?, strWarning: String?) {
+        mDexDecodedCallback?.callbackFunc()
     }
 }
