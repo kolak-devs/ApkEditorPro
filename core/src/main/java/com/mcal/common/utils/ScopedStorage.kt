@@ -30,6 +30,13 @@ object ScopedStorage {
     }
 
     @JvmStatic
+    fun getPatchesDir(): File {
+        val path = File(getApkEditorDir(), "patches")
+        if (!path.exists()) path.mkdirs()
+        return path
+    }
+
+    @JvmStatic
     fun getBinDir(): File {
         val path = File(filesDir, "bin")
         if (!path.exists()) path.mkdirs()
