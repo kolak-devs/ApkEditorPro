@@ -1,15 +1,17 @@
 package com.mcal.apkeditor.patch.rules;
 
+import static com.mcal.common.utils.FileHelperKt.deleteFile;
+
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.patch.LinedReader;
 import com.mcal.apkeditor.patch.PatchRule;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
+import com.mcal.common.utils.FileHelperKt;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +65,6 @@ public class PatchRuleRemoveFiles extends PatchRule {
                               IPatchContext logger) {
         String rootPath = listener.getDecodeRootPath();
 
-        ResListAdapter resAdapter = listener.getResListAdapter();
         for (int i = 0; i < targetList.size(); ++i) {
             String targetPath = targetList.get(i);
             String filePath = rootPath + "/" + targetPath;
@@ -71,14 +72,18 @@ public class PatchRuleRemoveFiles extends PatchRule {
             String dirPath = filePath.substring(0, pos);
             String fileName = filePath.substring(pos + 1);
 
-            File f = new File(filePath);
-            if (f.exists()) {
-                resAdapter.deleteFile(dirPath, fileName, false);
-            } else {
-                resAdapter.deleteFile(dirPath, fileName, true);
+            try {
+                File f = new File(filePath);
+                File file1 = new File(dirPath, fileName);
+                if (f.exists()) {
+                    deleteFile(file1);
+                } else {
+                    FileHelperKt.deleteAll(file1);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-
         return null;
     }
 

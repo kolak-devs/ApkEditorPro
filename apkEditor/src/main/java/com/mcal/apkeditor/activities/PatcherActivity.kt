@@ -49,9 +49,9 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
     private var mPatchPath: String? = null
     private var mIsDexDecoded: Boolean = false
     private var mDexDecodedCallback: IGeneralCallback? = null
+
     // Record all the global parameter values
     private val globalVariableValues: MutableMap<String, String> = HashMap()
-    private var mResListAdapter: ResListAdapter? = null
 
     // Record executor as the parse is done there
     private var patchExecutor: PatchExecutor? = null
@@ -124,7 +124,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
     }
 
     override fun getResListAdapter(): ResListAdapter? {
-        return mResListAdapter // TODO
+        return null
     }
 
     override fun getDecodeRootPath(): String? = mDecodedPath

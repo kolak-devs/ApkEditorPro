@@ -79,7 +79,6 @@ import com.mcal.apkeditor.dialogs.FileCopyDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.dialogs.LanguageSelectDialog;
-import com.mcal.apkeditor.dialogs.PatchDialog;
 import com.mcal.apkeditor.dialogs.RebuildConfirmDialog;
 import com.mcal.apkeditor.dialogs.SearchFilenameDialog;
 import com.mcal.apkeditor.dialogs.SearchTextDialog;

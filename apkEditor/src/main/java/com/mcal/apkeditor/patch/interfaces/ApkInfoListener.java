@@ -21,5 +21,6 @@ public interface ApkInfoListener {
 
     // Strings
     String addLanguageRetError(String strCode);
+
     void translateLanguage(String lang);
 }

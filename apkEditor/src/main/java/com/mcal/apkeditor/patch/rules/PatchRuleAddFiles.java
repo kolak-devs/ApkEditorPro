@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.patch.rules;
 
+import static com.mcal.common.utils.FileHelperKt.addFile;
 import static com.mcal.common.utils.FileHelperKt.copyFile;
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
 
@@ -85,14 +86,13 @@ public class PatchRuleAddFiles extends PatchRule {
 
             // Directly copy the content
             if (!this.bExtract) {
-                String targetPath = listener.getDecodeRootPath() + "/"
-                        + targetFile;
-                listener.getResListAdapter().addFile(targetPath, input);
+                String targetPath = listener.getDecodeRootPath() + "/" + targetFile;
+                addFile(targetPath, input);
             }
             // Source is a zip file
             else {
                 String tmpDir = ScopedStorage.getTmpDir().getPath();
-                String path = tmpDir  + File.separator + getRandomString(6);
+                String path = tmpDir + File.separator + getRandomString(6);
                 fos = new FileOutputStream(path);
                 copyFile(input, fos);
                 fos.close();

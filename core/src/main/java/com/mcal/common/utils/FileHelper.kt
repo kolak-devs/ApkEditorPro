@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.provider.OpenableColumns
+import android.util.Log
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage.getMyCp
 import kotlinx.coroutines.runBlocking
@@ -92,6 +93,18 @@ fun deleteAll(f: File) {
         }
     }
     f.delete()
+}
+
+@Throws(IOException::class)
+fun deleteFile(file: File): Boolean {
+    if (file.isDirectory) {
+        file.listFiles()?.let { files ->
+            for (f in files) {
+                deleteFile(f)
+            }
+        }
+    }
+    return Files.deleteIfExists(file.toPath())
 }
 
 fun writeToFile(fileName: String, lines: List<String>) {
@@ -224,16 +237,12 @@ fun copyFile(input: InputStream, output: File) {
 }
 
 @Throws(IOException::class)
-fun copyFile(input: InputStream, output: OutputStream) {
-    val buffer = ByteArray(1024)
-    var length: Int = input.read(buffer)
-    while ((length) > 0) {
-        output.write(buffer, 0, length)
-        length = input.read(buffer)
+fun copyFile(source: InputStream, target: OutputStream) {
+    val buf = ByteArray(8192)
+    var length: Int
+    while (source.read(buf).also { length = it } != -1) {
+        target.write(buf, 0, length)
     }
-    input.close()
-    output.flush()
-    output.close()
 }
 
 @Throws(IOException::class)
@@ -414,3 +423,22 @@ private fun Context.getContentFileName(uri: Uri): String? = runCatching {
         return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)
     }
 }.getOrNull()
+
+@Throws(IOException::class)
+fun addFile(targetPath: String, filePath: InputStream) {
+    val pos = targetPath.lastIndexOf(47.toChar())
+    val dirPath = File(targetPath.substring(0, pos))
+    if (!dirPath.exists()) {
+        dirPath.mkdirs()
+    }
+    copyFile(filePath, FileOutputStream(targetPath))
+}
+
+@Throws(java.lang.Exception::class)
+fun makeDir(dirPath: String?, folderName: String) {
+    val f = File(dirPath, folderName)
+    if (f.exists()) {
+        throw java.lang.Exception(java.lang.String.valueOf(Log.e("IOUtils", String.format("Folder %s exits", folderName))))
+    }
+    f.mkdir()
+}

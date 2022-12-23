@@ -327,10 +327,6 @@ public class PatchRuleMerge extends PatchRule {
                 int pos = name.indexOf('/');
                 if (pos != -1) {
                     refactorAndSaveSmaliFiles(targetPath, zfile, entry);
-                    // Make a trick to notify smali folder modified
-                    String fakeSmali = name.substring(0, pos + 1) + "a.smali";
-                    listener.getResListAdapter().fileModified(fakeSmali,
-                            targetPath);
                     return true;
                 }
             }

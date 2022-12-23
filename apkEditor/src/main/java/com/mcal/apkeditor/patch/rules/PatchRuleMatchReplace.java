@@ -119,15 +119,14 @@ public class PatchRuleMatchReplace extends PatchRule {
 
         String nextPath = pathFinder.getNextPath();
         while (nextPath != null) {
-            executeOnEntry(activity, listener, patchZip, logger, nextPath, pattern);
+            executeOnEntry(listener, patchZip, logger, nextPath, pattern);
             nextPath = pathFinder.getNextPath();
         }
         return null;
     }
 
-    private void executeOnEntry(Activity activity, @NonNull ApkInfoListener listener, ZipFile patchZip,
+    private void executeOnEntry(@NonNull ApkInfoListener listener, ZipFile patchZip,
                                 IPatchContext patchCtx, String targetFile, Pattern pattern) {
-        boolean modified = false;
         String filepath = listener.getDecodeRootPath() + "/" + targetFile;
 
         if (pattern != null) {
@@ -166,7 +165,6 @@ public class PatchRuleMatchReplace extends PatchRule {
             } else {
                 try {
                     writeReplaces(filepath, content, sections);
-                    modified = true;
                     String message = patchCtx.getString(R.string.patch_info_num_replaced);
                     message = targetFile + ": " + String.format(message, sections.size());
                     patchCtx.info(message, false);
@@ -202,21 +200,11 @@ public class PatchRuleMatchReplace extends PatchRule {
             } else {
                 try {
                     writeReplaces(filepath, lines, matchedIndexes);
-                    modified = true;
                     patchCtx.info(R.string.patch_info_num_replaced, false,
                             matchedIndexes.size());
                 } catch (IOException e) {
                     patchCtx.error(R.string.patch_error_write_to, targetFile);
                 }
-            }
-        }
-
-        // The file is indeed modified
-        if (modified) {
-            if ("AndroidManifest.xml".equals(targetFile)) {
-                listener.setManifestModified(false);
-            } else {
-                listener.getResListAdapter().fileModified(targetFile, filepath);
             }
         }
     }

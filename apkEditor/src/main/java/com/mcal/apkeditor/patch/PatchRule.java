@@ -1,5 +1,8 @@
 package com.mcal.apkeditor.patch;
 
+import static com.mcal.common.utils.FileHelperKt.copyFile;
+import static com.mcal.common.utils.FileHelperKt.makeDir;
+
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
@@ -14,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -190,41 +194,35 @@ public abstract class PatchRule {
     }
 
     // targetDir is the absolute directory path
-    private boolean addFileEntry(Activity activity, @NonNull ApkInfoListener listener, ZipFile zfile, @NonNull ZipEntry entry, String targetDir, IPatchContext logger) {
-        String name = entry.getName();
-        String path = targetDir + "/" + name;
+    private void addFileEntry(ZipFile zfile, @NonNull ZipEntry entry, String targetDir, IPatchContext logger) {
+        String path = targetDir + "/" + entry.getName();
 
         // Create the folder if not exist
         String parent = getParentFolder(path);
-        while (!listener.getResListAdapter().isFolderExist(parent)) {
-            //Log.d("DEBUG", "folder " + parent + " not exist");
+        while (!new File(parent).exists()) {
             parent = getParentFolder(parent);
         }
         String[] paths = path.substring(parent.length() + 1).split("/");
         if (paths.length > 1) {
             for (int i = 0; i < paths.length - 1; ++i) {
                 try {
-                    listener.getResListAdapter().addFolderReportError(parent,
-                            paths[i], false);
+                    makeDir(parent, paths[i]);
+                    parent = parent + "/" + paths[i];
                 } catch (Exception e) {
                     logger.error(R.string.failed_create_dir, e.getMessage());
-                    return false;
                 }
-                parent += "/" + paths[i];
             }
         }
 
         InputStream input = null;
         try {
             input = zfile.getInputStream(entry);
-            return listener.getResListAdapter().addFile(path, input) != null;
+            copyFile(input, new FileOutputStream(path));
         } catch (Exception e) {
             logger.error(R.string.general_error, e.getMessage());
         } finally {
             closeQuietly(input);
         }
-
-        return false;
     }
 
     public void addFilesInZip(Activity activity, @NonNull ApkInfoListener listener, String zipFile,
@@ -249,7 +247,7 @@ public abstract class PatchRule {
                     consumed = hook.consumeAddedFile(activity, listener, zfile, ze);
                 }
                 if (!consumed) {
-                    addFileEntry(activity, listener, zfile, ze, targetDir, logger);
+                    addFileEntry(zfile, ze, targetDir, logger);
                 }
             }
             zfile.close();
