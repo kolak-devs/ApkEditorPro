@@ -46,7 +46,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import kotlin.system.exitProcess
 
@@ -57,6 +56,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
     companion object {
         private const val TAG = "MainActivity"
+
         // id для перехода на основной экран проектов
         private const val REQ_SHOW_ALL = 670;
     }
@@ -341,15 +341,19 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     }
 
     // Очистка мусора исходя из заданного лимита
-    private fun scheduleCleaning(){
+    private fun scheduleCleaning() {
         CoroutineScope(Dispatchers.IO).launch {
             // Общий размер всех папок в мегабайтах
-            val total = Utils.getFoldersSize(ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),
-                ScopedStorage.getProjects(), ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir(), ScopedStorage.getTempDir()) / 1000 / 1000
+            val total = Utils.getFoldersSize(
+                ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),
+                ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir(), ScopedStorage.getTempDir()
+            ) / 1000 / 1000
             Log.i(TAG, "scheduleCleaning: cache size = " + total)
-            if (total > ReactivePreferences.getGarbageLimit()){
-                Utils.deleteFiles(ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),
-                    ScopedStorage.getProjects(), ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir(), ScopedStorage.getTempDir())
+            if (total > ReactivePreferences.getGarbageLimit()) {
+                Utils.deleteFiles(
+                    ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),
+                    ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir(), ScopedStorage.getTempDir()
+                )
             }
         }
     }
