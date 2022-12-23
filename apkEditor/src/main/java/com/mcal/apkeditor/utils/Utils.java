@@ -7,8 +7,18 @@ import androidx.annotation.NonNull;
 
 import com.mcal.apkeditor.BuildConfig;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
+
+import kotlin.io.FilesKt;
 
 public class Utils {
 
@@ -151,4 +161,64 @@ public class Utils {
     public static String getVersionString(){
         return "v. " + BuildConfig.VERSION_NAME + " [" + Build.SUPPORTED_ABIS[0] + "]";
     }
+
+    public static long getFoldersSize(File... folders){
+        long commonSize = 0;
+        for (File folder: folders){
+            commonSize += sizeFromPath(folder.toPath());
+        }
+        return commonSize;
+    }
+
+    /**
+     * Attempts to calculate the size of a file or directory.
+     *
+     * <p>
+     * Since the operation is non-atomic, the returned value may be inaccurate.
+     * However, this method is quick and does its best.
+     */
+    public static long sizeFromPath(Path path) {
+
+        final AtomicLong size = new AtomicLong(0);
+
+        try {
+            Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+
+                    size.addAndGet(attrs.size());
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) {
+
+                    Log.i("Apk Editor", "skipped: " + file + " (" + exc + ")");
+                    // Skip folders that can't be traversed
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+
+                    if (exc != null)
+                        System.out.println("had trouble traversing: " + dir + " (" + exc + ")");
+                    // Ignore errors traversing a folder
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            throw new AssertionError("walkFileTree will not throw IOException if the FileVisitor does not");
+        }
+
+        return size.get();
+    }
+
+    //delete folders
+    public static void deleteFiles(File... files){
+        for (File fs : files){
+            FilesKt.deleteRecursively(fs);
+        }
+    }
+
 }

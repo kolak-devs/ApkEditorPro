@@ -145,6 +145,10 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_VERSION] ?: 2
     }
 
+    suspend fun getGarbageLimit(): Int {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Main.OTHER_GARBAGE_LMT] ?: 512
+    }
+
     @JvmStatic
     fun isJsonConfig(): Boolean {
         var fallback: Boolean

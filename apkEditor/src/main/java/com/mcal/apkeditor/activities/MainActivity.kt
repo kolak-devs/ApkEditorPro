@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Process
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -41,6 +42,8 @@ import com.mcal.downloader.DownloaderActivity
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.DateFormat
@@ -53,6 +56,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     private lateinit var pickLauncher: ActivityResultLauncher<Intent>
 
     companion object {
+        private const val TAG = "MainActivity"
         // id для перехода на основной экран проектов
         private const val REQ_SHOW_ALL = 670;
     }
@@ -126,6 +130,8 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 }
             }
         }
+
+        scheduleCleaning()
     }
 
     public override fun onPause() {
@@ -331,6 +337,20 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             ActivityCompat.requestPermissions(
                 this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.POST_NOTIFICATIONS), 1
             )
+        }
+    }
+
+    // Очистка мусора исходя из заданного лимита
+    private fun scheduleCleaning(){
+        CoroutineScope(Dispatchers.IO).launch {
+            // Общий размер всех папок в мегабайтах
+            val total = Utils.getFoldersSize(ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),
+                ScopedStorage.getProjects(), ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir(), ScopedStorage.getTempDir()) / 1000 / 1000
+            Log.i(TAG, "scheduleCleaning: cache size = " + total)
+            if (total > ReactivePreferences.getGarbageLimit()){
+                Utils.deleteFiles(ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),
+                    ScopedStorage.getProjects(), ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir(), ScopedStorage.getTempDir())
+            }
         }
     }
 
