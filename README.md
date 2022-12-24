@@ -24,7 +24,7 @@
     brut.androlib.res.AndrolibResources.aapt2Package
     brut.androlib.res.AndrolibResources.aapt1Package
     
-    _Вывод нормальных ошибок при компиляции дексов_
+    Вывод нормальных ошибок при компиляции дексов
     brut.androlib.src.SmaliBuilder
 
 ### ADD:
