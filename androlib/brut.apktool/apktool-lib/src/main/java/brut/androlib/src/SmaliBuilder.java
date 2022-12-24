@@ -20,11 +20,14 @@ import org.antlr.runtime.RecognitionException;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.writer.builder.DexBuilder;
 import org.jf.dexlib2.writer.io.FileDataStore;
+import org.jf.smali.smaliFlexLexer;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 import brut.androlib.AndrolibException;
@@ -75,7 +78,9 @@ public class SmaliBuilder {
         if (fileName.endsWith(".smali")) {
             try {
                 if (!SmaliMod.assembleSmaliFile(inFile, dexBuilder, mApiLevel, false, false)) {
-                    throw new AndrolibException("Could not smali file: " + fileName);
+                    smaliFlexLexer lexer = new smaliFlexLexer(new InputStreamReader(new FileInputStream(new File(mSmaliDir, fileName)), StandardCharsets.UTF_8), mApiLevel);
+                    String errorMsg = "\nSource: " + fileName + "\nLine: " + lexer.getLine() + "\nColumn: " + lexer.getColumn();
+                    throw new AndrolibException("Could not smali file: " + fileName + errorMsg);
                 }
             } catch (IOException | RecognitionException ex) {
                 throw new AndrolibException(ex);
