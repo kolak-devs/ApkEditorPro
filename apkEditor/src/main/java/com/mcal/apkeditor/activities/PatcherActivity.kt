@@ -83,6 +83,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
             mPatchPath?.let { path ->
                 patchExecutor = PatchExecutor(this, this, path, this)
                 patchExecutor?.applyPatch()
+                binding.applyPatch.isEnabled = false
             }
         }
 
@@ -333,6 +334,9 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
 
     override fun patchFinished() {
         appendText("\nFinished", bold = true, red = false) // TODO timer
+        runOnUiThread {
+            binding.applyPatch.isEnabled = true
+        }
     }
 
     override fun setVariableValue(key: String, value: String) {
