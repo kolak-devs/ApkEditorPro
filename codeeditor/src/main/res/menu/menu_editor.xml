@@ -91,4 +91,8 @@
         android:id="@+id/smali_to_java"
         android:title="Smali to Java" />
 
+    <item
+        android:id="@+id/template"
+        android:title="Template" />
+
 </menu>

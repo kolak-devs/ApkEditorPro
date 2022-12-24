@@ -37,6 +37,7 @@
 -keep class brut.** { *; }
 -keep class jadx.** { *; }
 -keep class com.google.common.collect.** { *; }
+-keep class apkeditor.Utils.** { *; }
 
 -obfuscationdictionary proguard-dictionary.txt
 -packageobfuscationdictionary proguard-dictionary.txt

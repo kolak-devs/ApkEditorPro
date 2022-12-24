@@ -22,6 +22,7 @@ import com.mcal.common.view.ProgressDialog
 import com.mcal.editor.navigation.CodeNavigationDialog
 import com.mcal.editor.utils.FileUtils
 import com.mcal.editor.utils.JavaExtractor
+import com.mcal.editor.utils.SmaliCodeDialog
 import com.mcal.neweditor.R
 import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
 import io.github.rosemoe.sora.event.*
@@ -123,7 +124,7 @@ class EditorActivity : CustomizedLangActivity(),
             typefaceText = Typeface.MONOSPACE
 
             lifecycleScope.launch {
-                if (ReactivePreferences.isShowUnprintable()){
+                if (ReactivePreferences.isShowUnprintable()) {
                     nonPrintablePaintingFlags =
                         CodeEditor.FLAG_DRAW_WHITESPACE_LEADING or CodeEditor.FLAG_DRAW_LINE_SEPARATOR or CodeEditor.FLAG_DRAW_WHITESPACE_IN_SELECTION
                 }
@@ -589,7 +590,7 @@ class EditorActivity : CustomizedLangActivity(),
         val inflater = LayoutInflater.from(this)
         val view: View = inflater.inflate(R.layout.dialog_proccessing, null)
 
-        val dialog: AlertDialog = MaterialAlertDialogBuilder(this).create()
+        val dialog = MaterialAlertDialogBuilder(this).create()
         dialog.setView(view)
         dialog.setCancelable(false)
         dialog.show()
@@ -692,122 +693,144 @@ class EditorActivity : CustomizedLangActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         val editor = binding.editor
-        if (id == R.id.methods) {
-            showNavigationMethods()
-        } else if (id == R.id.smali_to_java) {
-            smaliToJava()
-        } else if (id == R.id.dex_to_java) {
-            dexToJava()
-        } else if (id == R.id.text_save) {
-            save()
-        } else if (id == R.id.text_undo) {
-            editor.undo()
-        } else if (id == R.id.text_redo) {
-            editor.redo()
-        } else if (id == R.id.goto_end) {
-            editor.setSelection(
-                editor.text.lineCount - 1,
-                editor.text.getColumnCount(editor.text.lineCount - 1)
-            )
-        } else if (id == R.id.move_up) {
-            editor.moveSelectionUp()
-        } else if (id == R.id.move_down) {
-            editor.moveSelectionDown()
-        } else if (id == R.id.home) {
-            editor.moveSelectionHome()
-        } else if (id == R.id.end) {
-            editor.moveSelectionEnd()
-        } else if (id == R.id.move_left) {
-            editor.moveSelectionLeft()
-        } else if (id == R.id.move_right) {
-            editor.moveSelectionRight()
-        } else if (id == R.id.code_format) {
-            val cursor = editor.text.cursor
-            if (cursor.isSelected) {
-                editor.formatCodeAsync(cursor.left(), cursor.right())
-            } else {
-                editor.formatCodeAsync()
+        when (id) {
+            R.id.methods -> {
+                showNavigationMethods()
             }
-        } else if (id == R.id.switch_language) {
-            AlertDialog.Builder(this)
-                .setTitle(R.string.switch_language)
-                .setSingleChoiceItems(
-                    arrayOf(
-                        "Groovy",
-                        "Java",
-                        "Json",
-                        "Kotlin",
-                        "Smali",
-                        "Xml",
-                        "Html",
-                        "JavaScript",
-                        "MarkDown",
-                        "Python",
-                        "None"
-                    ), -1
-                ) { dialog: DialogInterface, which: Int ->
-                    when (which) {
-                        0 -> editor.setEditorLanguage(getTextMateLanguage("groovy.tmLanguage.json", "textmate/groovy/syntaxes/groovy.tmLanguage"))
-                        1 -> editor.setEditorLanguage(getTextMateLanguage("java.tmLanguage.json", "textmate/java/syntaxes/java.tmLanguage.json"))
-                        2 -> editor.setEditorLanguage(getTextMateLanguage("json.tmLanguage.json", "textmate/json/syntaxes/json.tmLanguage.json"))
-                        3 -> editor.setEditorLanguage(getTextMateLanguage("kotlin.tmLanguage.json", "textmate/kotlin/syntaxes/kotlin.tmLanguage"))
-                        4 -> editor.setEditorLanguage(getTextMateLanguage("smali.tmLanguage.json", "textmate/smali/syntaxes/smali.tmLanguage.json"))
-                        5 -> editor.setEditorLanguage(getTextMateLanguage("xml.tmLanguage.json", "textmate/xml/syntaxes/xml.tmLanguage.json"))
-                        6 -> editor.setEditorLanguage(getTextMateLanguage("html.tmLanguage.json", "textmate/html/syntaxes/html.tmLanguage.json"))
-                        7 -> editor.setEditorLanguage(getTextMateLanguage("javascript.tmLanguage.json", "textmate/javascript/syntaxes/JavaScript.tmLanguage.json"))
-                        8 -> editor.setEditorLanguage(getTextMateLanguage("markdown.tmLanguage.json", "textmate/markdown/syntaxes/markdown.tmLanguage.json"))
-                        9 -> editor.setEditorLanguage(getTextMateLanguage("python.tmLanguage.json", "textmate/python/syntaxes/python.tmLanguage.json"))
-                        10 -> loadTMLLauncher.launch("*/*")
-                        else -> editor.setEditorLanguage(EmptyLanguage())
-                    }
-                    dialog.dismiss()
+            R.id.template -> {
+                filePath?.let {
+                    SmaliCodeDialog(this, it.path).show()
                 }
-                .setNegativeButton(android.R.string.cancel, null)
-                .show()
-        } else if (id == R.id.search_panel_st) {
-            if (binding.searchPanel.visibility == View.GONE) {
-                binding.apply {
-                    replaceEditor.setText("")
-                    searchEditor.setText("")
+            }
+            R.id.smali_to_java -> {
+                smaliToJava()
+            }
+            R.id.dex_to_java -> {
+                dexToJava()
+            }
+            R.id.text_save -> {
+                save()
+            }
+            R.id.text_undo -> {
+                editor.undo()
+            }
+            R.id.text_redo -> {
+                editor.redo()
+            }
+            R.id.goto_end -> {
+                editor.setSelection(
+                    editor.text.lineCount - 1,
+                    editor.text.getColumnCount(editor.text.lineCount - 1)
+                )
+            }
+            R.id.move_up -> {
+                editor.moveSelectionUp()
+            }
+            R.id.move_down -> {
+                editor.moveSelectionDown()
+            }
+            R.id.home -> {
+                editor.moveSelectionHome()
+            }
+            R.id.end -> {
+                editor.moveSelectionEnd()
+            }
+            R.id.move_left -> {
+                editor.moveSelectionLeft()
+            }
+            R.id.move_right -> {
+                editor.moveSelectionRight()
+            }
+            R.id.code_format -> {
+                val cursor = editor.text.cursor
+                if (cursor.isSelected) {
+                    editor.formatCodeAsync(cursor.left(), cursor.right())
+                } else {
+                    editor.formatCodeAsync()
+                }
+            }
+            R.id.switch_language -> {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.switch_language)
+                    .setSingleChoiceItems(
+                        arrayOf(
+                            "Groovy",
+                            "Java",
+                            "Json",
+                            "Kotlin",
+                            "Smali",
+                            "Xml",
+                            "Html",
+                            "JavaScript",
+                            "MarkDown",
+                            "Python",
+                            "None"
+                        ), -1
+                    ) { dialog: DialogInterface, which: Int ->
+                        when (which) {
+                            0 -> editor.setEditorLanguage(getTextMateLanguage("groovy.tmLanguage.json", "textmate/groovy/syntaxes/groovy.tmLanguage"))
+                            1 -> editor.setEditorLanguage(getTextMateLanguage("java.tmLanguage.json", "textmate/java/syntaxes/java.tmLanguage.json"))
+                            2 -> editor.setEditorLanguage(getTextMateLanguage("json.tmLanguage.json", "textmate/json/syntaxes/json.tmLanguage.json"))
+                            3 -> editor.setEditorLanguage(getTextMateLanguage("kotlin.tmLanguage.json", "textmate/kotlin/syntaxes/kotlin.tmLanguage"))
+                            4 -> editor.setEditorLanguage(getTextMateLanguage("smali.tmLanguage.json", "textmate/smali/syntaxes/smali.tmLanguage.json"))
+                            5 -> editor.setEditorLanguage(getTextMateLanguage("xml.tmLanguage.json", "textmate/xml/syntaxes/xml.tmLanguage.json"))
+                            6 -> editor.setEditorLanguage(getTextMateLanguage("html.tmLanguage.json", "textmate/html/syntaxes/html.tmLanguage.json"))
+                            7 -> editor.setEditorLanguage(getTextMateLanguage("javascript.tmLanguage.json", "textmate/javascript/syntaxes/JavaScript.tmLanguage.json"))
+                            8 -> editor.setEditorLanguage(getTextMateLanguage("markdown.tmLanguage.json", "textmate/markdown/syntaxes/markdown.tmLanguage.json"))
+                            9 -> editor.setEditorLanguage(getTextMateLanguage("python.tmLanguage.json", "textmate/python/syntaxes/python.tmLanguage.json"))
+                            10 -> loadTMLLauncher.launch("*/*")
+                            else -> editor.setEditorLanguage(EmptyLanguage())
+                        }
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            }
+            R.id.search_panel_st -> {
+                if (binding.searchPanel.visibility == View.GONE) {
+                    binding.apply {
+                        replaceEditor.setText("")
+                        searchEditor.setText("")
+                        editor.searcher.stopSearch()
+                        searchPanel.visibility = View.VISIBLE
+                        item.isChecked = true
+                    }
+                } else {
+                    binding.searchPanel.visibility = View.GONE
                     editor.searcher.stopSearch()
-                    searchPanel.visibility = View.VISIBLE
-                    item.isChecked = true
+                    item.isChecked = false
                 }
-            } else {
-                binding.searchPanel.visibility = View.GONE
-                editor.searcher.stopSearch()
-                item.isChecked = false
             }
-        } else if (id == R.id.switch_colors) {
-            val themes = arrayOf(
-                "Light",
-                "Dark",
-                "TM theme from file"
-            )
-            AlertDialog.Builder(this)
-                .setTitle(R.string.color_scheme)
-                .setSingleChoiceItems(themes, -1) { dialog: DialogInterface, which: Int ->
-                    when (which) {
-                        0 -> editor.colorScheme = TextMateColorScheme(getLightTheme())
-                        1 -> editor.colorScheme = TextMateColorScheme(getDarkTheme())
-                        3 -> loadTMTLauncher.launch("*/*")
+            R.id.switch_colors -> {
+                val themes = arrayOf(
+                    "Light",
+                    "Dark",
+                    "TM theme from file"
+                )
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.color_scheme)
+                    .setSingleChoiceItems(themes, -1) { dialog: DialogInterface, which: Int ->
+                        when (which) {
+                            0 -> editor.colorScheme = TextMateColorScheme(getLightTheme())
+                            1 -> editor.colorScheme = TextMateColorScheme(getDarkTheme())
+                            3 -> loadTMTLauncher.launch("*/*")
+                        }
+                        dialog.dismiss()
                     }
-                    dialog.dismiss()
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            }
+            R.id.action_settings -> {
+                try {
+                    startActivity(Intent(
+                        this,
+                        Class.forName("com.mcal.apkeditor.activities.SettingsActivity")
+                    ).apply {
+                        putExtra("startUpTab", 2)
+                    })
+                } catch (e: ClassNotFoundException) {
+                    e.printStackTrace()
                 }
-                .setNegativeButton(android.R.string.cancel, null)
-                .show()
-        } else if (id == R.id.action_settings) {
-            var intent: Intent? = null
-            try {
-                intent = Intent(
-                    this,
-                    Class.forName("com.mcal.apkeditor.activities.SettingsActivity")
-                ).apply {
-                    putExtra("startUpTab", 2)
-                }
-                startActivity(intent)
-            } catch (e: ClassNotFoundException) {
-                e.printStackTrace()
             }
         }
         return super.onOptionsItemSelected(item)
