@@ -1,7 +1,7 @@
 # apk_editor_pro
 
 # Update JaDX
-###REPLACE:
+### REPLACE:
     jadx.core.utils.android.Res9patchStreamDecoder
 
 
