@@ -1,15 +1,15 @@
 # apk_editor_pro
 
 # Update JaDX
-REPLACE:
+###REPLACE:
     jadx.core.utils.android.Res9patchStreamDecoder
 
 
 # Update ApkTool
-REPLACE:
+### REPLACE:
     brut.androlib.res.decoder.Res9patchStreamDecoder
 
-UPDATE:
+### UPDATE:
     brut.androlib.res.xml.ResXmlEncoders.isPrintableChar()
     brut.androlib.res.data.value.ResValueFactory.factory():
         0x08: TypedValue.TYPE_DYNAMIC_ATTRIBUTE:
@@ -23,8 +23,11 @@ UPDATE:
     brut.androlib.Androlib.readMetaFile() - yaml to json
     brut.androlib.res.AndrolibResources.aapt2Package
     brut.androlib.res.AndrolibResources.aapt1Package
+    
+    _Вывод нормальных ошибок при компиляции дексов_
+    brut.androlib.src.SmaliBuilder
 
-ADD:
+### ADD:
     brut.androlib.res.data.ResResSpec.getAllResources()
     brut.androlib.res.data.value.ResScalarValue.getRawValue()
     brut.androlib.res.data.value.getPath()
