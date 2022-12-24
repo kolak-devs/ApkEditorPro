@@ -8,16 +8,18 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.IGeneralCallback
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.ResListAdapter
+import com.mcal.apkeditor.adapters.PatcherHistoryItem
 import com.mcal.apkeditor.databinding.ActivityPatcherBinding
 import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener
@@ -31,11 +33,15 @@ import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.utils.ScopedStorage.getPatchesDir
 import com.mcal.common.utils.copyFile
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.IAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
 import org.xml.sax.SAXException
 import ru.mcal.manifestparser.xml.AndroidManifestParser
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.zip.ZipFile
 import javax.xml.parsers.ParserConfigurationException
 
@@ -82,7 +88,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
 
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.patcher_menu, menu)
+                menuInflater.inflate(R.menu.menu_patcher, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -94,6 +100,48 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                         startActivity(intent)
                         return true
                     }
+                    R.id.history -> {
+                        val itemAdapter = ItemAdapter<PatcherHistoryItem>()
+                        val fastAdapter = FastAdapter.with(itemAdapter)
+                        /**
+                         * Получаем список файлов в директории патчей. И отображаем на экране все архивы
+                         */
+                        getPatchesDir().listFiles()?.let { files ->
+                            for (f in files) {
+                                if (f.exists() && f.name.endsWith(".zip")) {
+                                    val fmt = SimpleDateFormat("EEE, HH:mm")
+                                    itemAdapter.add(
+                                        PatcherHistoryItem(
+                                            System.currentTimeMillis().toInt(), ContextCompat.getDrawable(this@PatcherActivity, R.drawable.ic_android), f.name,
+                                            fmt.format(f.lastModified())
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
+                        if (itemAdapter.adapterItemCount >= 0) {
+                            LayoutInflater.from(this@PatcherActivity).inflate(R.layout.dialog_patcher_history, null).apply {
+                                findViewById<RecyclerView>(R.id.recycler_view).apply {
+                                    adapter = fastAdapter
+                                }
+                                val dialog = MaterialAlertDialogBuilder(this@PatcherActivity).create()
+                                dialog.setTitle(R.string.select_patch)
+                                dialog.setView(this)
+                                dialog.show()
+
+                                fastAdapter.onClickListener = { _: View?, _: IAdapter<PatcherHistoryItem>, mainMenuItem: PatcherHistoryItem, i: Int ->
+                                    mainMenuItem.title?.let { title ->
+                                        mPatchPath = File(getPatchesDir(), title).path
+                                        binding.filename.setText(title)
+                                        dialog.dismiss()
+                                    }
+                                    true
+                                }
+                            }
+                        }
+                        return true
+                    }
                 }
                 return false
             }
@@ -102,6 +150,9 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         pickLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 result.data?.data?.let { uri ->
+                    /**
+                     * Получаем URI на АПК и копируем его в директорию проектов для работы с этим АПК
+                     */
                     val patchFile = File(getPatchesDir(), FilePickHelper.getFileName(this, uri))
                     contentResolver.openInputStream(uri)?.let { inputStream ->
                         copyFile(inputStream, patchFile)
@@ -164,10 +215,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
     override fun getApplicationName(): String? {
         try {
             val parser = AndroidManifestParser.parse(FileInputStream(File("$mDecodedPath/AndroidManifest.xml")))
-            val name = parser.applicationName
-            name?.let {
-                return name
-            }
+            return parser.applicationName
         } catch (e: ParserConfigurationException) {
             e.printStackTrace()
         } catch (e: SAXException) {

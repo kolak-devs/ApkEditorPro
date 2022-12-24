@@ -2,10 +2,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.MainActivity">
+
+    <item
+        android:id="@+id/history"
+        android:icon="@drawable/ic_history"
+        android:orderInCategory="100"
+        android:title="@string/patcher_history"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/help"
         android:icon="@drawable/info"
         android:orderInCategory="100"
-        android:title="Night Mode"
+        android:title="@string/help"
         app:showAsAction="always" />
+
 </menu>

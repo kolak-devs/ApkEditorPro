@@ -345,4 +345,5 @@
     <string name="settings_signing_on">APK будет подписан либо тестовой подписью, либо пользовательской, в зависимости от настроек ниже</string>
     <string name="settings_signing_off">APK не будет подписан после сборки, также влияет на настройку кастомной подписи</string>
     <string name="message_signing_disabled">Подписывание APK отключено, отмена подписи...</string>
+    <string name="patcher_history">История</string>
 </resources>
