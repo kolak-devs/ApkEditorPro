@@ -69,9 +69,9 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         setupToolbar(R.id.toolbar, "Patcher", true)
 
         if (intent.extras != null) {
-            mDecodedPath = intent.getStringExtra("decodeRootPath")
-            mApkPath = intent.getStringExtra("apkPath")
-            mIsDexDecoded = intent.getBooleanExtra("dex2smaliClicked", false)
+            mDecodedPath = intent.getStringExtra(DECODE_PATH)
+            mApkPath = intent.getStringExtra(APK_PATH)
+            mIsDexDecoded = intent.getBooleanExtra(IS_DECODED_DEX, false)
             mApkInfo = ApkInfoParser().parse(this, mApkPath)
         }
 
@@ -96,7 +96,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                     R.id.help -> {
                         val link = "${Constants.getDomain()}/apkeditor/doc/patcher/index.html"
                         val intent = Intent(this@PatcherActivity, WebViewActivity::class.java)
-                        ActivityHelper.attachParam(intent, "htmlUrl", link)
+                        ActivityHelper.attachParam(intent, HTML_URL, link)
                         startActivity(intent)
                         return true
                     }
@@ -168,6 +168,40 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
             }
         }
     }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        savedInstanceState?.let {
+            mPatchPath = it.getString(PATCH_PATH)
+            mDecodedPath = it.getString(DECODE_PATH)
+            mApkPath = it.getString(APK_PATH)
+            mIsDexDecoded = it.getBoolean(IS_DECODED_DEX)
+            binding.log.text = it.getString(LOG)
+            binding.filename.setText(it.getString(PATCH_NAME))
+            mApkInfo = ApkInfoParser().parse(this, mApkPath)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(PATCH_PATH, mPatchPath)
+        outState.putString(DECODE_PATH, mDecodedPath)
+        outState.putString(APK_PATH, mApkPath)
+        outState.putBoolean(IS_DECODED_DEX, mIsDexDecoded)
+        outState.putString(LOG, binding.log.text.toString())
+        outState.putString(PATCH_NAME, binding.filename.text.toString())
+    }
+
+    companion object {
+        const val PATCH_NAME = "name"
+        const val LOG = "log"
+        const val PATCH_PATH = "patchPath"
+        const val HTML_URL = "htmlUrl"
+        const val DECODE_PATH = "decodeRootPath"
+        const val APK_PATH = "apkPath"
+        const val IS_DECODED_DEX = "dex2smaliClicked"
+    }
+
 
     public override fun onDestroy() {
         _binding = null
