@@ -28,4 +28,12 @@
     <string name="magnifier">Лупа</string>
     <string name="use_icu_library">Использовать ICU библиотеку</string>
     <string name="settings">Настройки</string>
+    <string name="smaple_code">Пример кода</string>
+    <string name="name">Название</string>
+    <string name="copy">Копировать</string>
+    <string name="show_toast">Показать уведомление</string>
+    <string name="log_message">Регистрация сообщения</string>
+    <string name="dump_value">Извлечь значение</string>
+    <string name="print_stacktrace">Вывод трасировки стека</string>
+    <string name="template">Шаблоны</string>
 </resources>

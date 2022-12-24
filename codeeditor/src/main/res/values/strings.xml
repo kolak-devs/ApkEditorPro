@@ -28,4 +28,12 @@
     <string name="magnifier">Magnifier</string>
     <string name="use_icu_library">Use ICU library</string>
     <string name="settings">Settings</string>
+    <string name="smaple_code">Sample code</string>
+    <string name="name">Name</string>
+    <string name="copy">Copy</string>
+    <string name="show_toast">Показать уведомление</string>
+    <string name="log_message">Регистрация сообщения</string>
+    <string name="dump_value">Извлечь значение</string>
+    <string name="print_stacktrace">Вывод трасировки стека</string>
+    <string name="template">Template</string>
 </resources>

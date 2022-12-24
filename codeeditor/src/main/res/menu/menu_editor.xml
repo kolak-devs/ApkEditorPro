@@ -93,6 +93,6 @@
 
     <item
         android:id="@+id/template"
-        android:title="Template" />
+        android:title="@string/template" />
 
 </menu>

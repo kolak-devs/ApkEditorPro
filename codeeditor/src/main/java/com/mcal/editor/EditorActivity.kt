@@ -19,10 +19,10 @@ import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
+import com.mcal.editor.dialogs.SmaliCodeDialog
 import com.mcal.editor.navigation.CodeNavigationDialog
 import com.mcal.editor.utils.FileUtils
 import com.mcal.editor.utils.JavaExtractor
-import com.mcal.editor.utils.SmaliCodeDialog
 import com.mcal.neweditor.R
 import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
 import io.github.rosemoe.sora.event.*
@@ -62,6 +62,7 @@ class EditorActivity : CustomizedLangActivity(),
     private var dexToJava: MenuItem? = null
     private var smaliToJava: MenuItem? = null
     private var methodsList: MenuItem? = null
+    private var templatesMenu: MenuItem? = null
 
     private var filePath: File? = null
     private var apkPath: File? = null
@@ -398,6 +399,7 @@ class EditorActivity : CustomizedLangActivity(),
             dexToJava?.isVisible = path.name.endsWith(".smali")
             smaliToJava?.isVisible = path.name.endsWith(".smali")
             methodsList?.isVisible = path.name.endsWith(".smali") or path.name.endsWith(".java")
+            templatesMenu?.isVisible = path.name.endsWith(".smali")
         }
     }
 
@@ -459,6 +461,7 @@ class EditorActivity : CustomizedLangActivity(),
         dexToJava = menu.findItem(R.id.dex_to_java)
         smaliToJava = menu.findItem(R.id.smali_to_java)
         methodsList = menu.findItem(R.id.methods)
+        templatesMenu = menu.findItem(R.id.template)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -699,7 +702,7 @@ class EditorActivity : CustomizedLangActivity(),
             }
             R.id.template -> {
                 filePath?.let {
-                    SmaliCodeDialog(this, it.path).show()
+                    SmaliCodeDialog(this, it.path)
                 }
             }
             R.id.smali_to_java -> {
