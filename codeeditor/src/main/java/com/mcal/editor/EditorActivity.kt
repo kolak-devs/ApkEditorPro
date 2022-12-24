@@ -497,6 +497,7 @@ class EditorActivity : CustomizedLangActivity(),
         ).show()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (canSave()) {
             val dialog = MaterialAlertDialogBuilder(this)
@@ -540,8 +541,7 @@ class EditorActivity : CustomizedLangActivity(),
                     decompiler.load()
                     for (cls in decompiler.classes) {
                         val packageNamePath = File(
-                            ScopedStorage.getApkEditorDir().path + File.separator + cls.getPackage()
-                                .replace(".", "/")
+                            ScopedStorage.getTmpDir().path + File.separator + cls.getPackage().replace(".", "/")
                         )
                         if (!packageNamePath.exists()) {
                             packageNamePath.mkdirs()

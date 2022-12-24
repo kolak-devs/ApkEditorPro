@@ -113,7 +113,6 @@ class ApkComposeThreadNew(
                 break
             }
             setNextStep(context.getString(R.string.cleanup))
-            ScopedStorage.getTempDir().cleanup()
             ScopedStorage.getTmpDir().cleanup()
             ScopedStorage.getDecodedDir().cleanup()
             tmpApkFile.delete()

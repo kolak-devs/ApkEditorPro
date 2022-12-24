@@ -333,7 +333,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
     }
 
     override fun patchFinished() {
-        appendText("\nFinished", bold = true, red = false) // TODO timer
+        appendText("\nFinished", bold = true, red = false)
         runOnUiThread {
             binding.applyPatch.isEnabled = true
         }

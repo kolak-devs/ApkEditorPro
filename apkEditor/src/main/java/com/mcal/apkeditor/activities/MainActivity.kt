@@ -346,13 +346,13 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             // Общий размер всех папок в мегабайтах
             val total = Utils.getFoldersSize(
                 ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),
-                ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir(), ScopedStorage.getTempDir()
+                ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir()
             ) / 1000 / 1000
             Log.i(TAG, "scheduleCleaning: cache size = " + total)
             if (total > ReactivePreferences.getGarbageLimit()) {
                 Utils.deleteFiles(
                     ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),
-                    ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir(), ScopedStorage.getTempDir()
+                    ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir()
                 )
             }
         }

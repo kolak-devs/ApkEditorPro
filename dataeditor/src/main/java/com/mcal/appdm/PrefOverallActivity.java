@@ -430,7 +430,7 @@ public class PrefOverallActivity extends CustomizedLangActivity {
                 postfix = null;
             }
         }
-        final String tempDir = ScopedStorage.getTempDir().getPath();
+        final String tempDir = ScopedStorage.getTmpDir().getPath();
         final String tmpFilePath = tempDir + "/_work" + (postfix != null ? postfix : "");
 
         final CommandInterface rc = createCommandRunner();

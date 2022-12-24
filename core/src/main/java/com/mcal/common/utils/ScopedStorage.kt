@@ -56,13 +56,6 @@ object ScopedStorage {
     }
 
     @JvmStatic
-    fun getTempDir(): File {
-        val path = File(getApkEditorDir(), "temp")
-        if (!path.exists()) path.mkdirs()
-        return path
-    }
-
-    @JvmStatic
     fun getBackupsDir(): File {
         val path = File(getApkEditorDir(), "backups")
         if (!path.exists()) path.mkdirs()

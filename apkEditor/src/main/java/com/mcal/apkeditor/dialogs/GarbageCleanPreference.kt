@@ -25,7 +25,6 @@ class GarbageCleanPreference : MultiSelectListPreference {
                     ScopedStorage.cacheDir.deleteRecursively()
                     ScopedStorage.getDecodedDir().deleteRecursively()
                     ScopedStorage.getTmpDir().deleteRecursively()
-                    ScopedStorage.getTempDir().deleteRecursively()
                     Log.d(TAG, "onClick: temp")
                 } else if (option.equals("signing")) {
                     ScopedStorage.getKeysDir().deleteRecursively()

@@ -18,7 +18,7 @@ import com.mcal.common.utils.*
 import com.mcal.common.utils.ActivityHelper.getBoolParam
 import com.mcal.common.utils.ActivityHelper.getParam
 import com.mcal.common.utils.ScopedStorage.getMyCp
-import com.mcal.common.utils.ScopedStorage.getTempDir
+import com.mcal.common.utils.ScopedStorage.getTmpDir
 import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.sqliteutil.util.PaddingTable
 import com.mcal.sqliteutil.util.PaddingTable.ITableRowClicked
@@ -306,7 +306,7 @@ class PrefDetailActivity : CustomizedLangActivity(), ITableRowClicked, View.OnCl
                 if (!exist()) {
                     throw Exception("Can not find SD Card!")
                 }
-                val workingDir = getTempDir().path
+                val workingDir = getTmpDir().path
                 val dir = File(workingDir)
                 if (!dir.exists()) {
                     dir.mkdirs()
