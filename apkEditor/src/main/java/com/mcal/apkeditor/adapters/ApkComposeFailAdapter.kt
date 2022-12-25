@@ -23,7 +23,6 @@ class ApkComposeFailAdapter(
     }
 
     private fun updateMessage(errMessage: String?) {
-        lines.clear()
         if (errMessage != null) {
             lines.add(errMessage)
         }
@@ -55,26 +54,40 @@ class ApkComposeFailAdapter(
         val pathMatcher = Pattern.compile("(Source: )(.+)(;)(Line: )(\\d+)(;)(Message: )(.*)").matcher(strLine)
         if (pathMatcher.find()) {
             filePath = pathMatcher.group(2)?.takeIf { File(it).exists() }?.also {
-                holder.pathView.text = "Path: ${it.replace(ScopedStorage.filesDir.path, "")}"
+                holder.pathView.text = buildString {
+                    append(activity.getString(R.string.error_path))
+                    append(it.replace(ScopedStorage.filesDir.path, ""))
+                }
             }
             pathMatcher.group(5)?.let {
-                holder.lineView.text = "Line: $it"
+                holder.lineView.text = buildString {
+                    append(activity.getString(R.string.error_line))
+                    append(it)
+                }
                 lineIndex = it.toInt()
             }
             pathMatcher.group(7)?.let { key ->
                 if (key.startsWith("Message")) {
                     pathMatcher.group(8)?.let { value ->
-                        holder.messageView.text = "Message: $value"
+                        holder.messageView.text = buildString {
+                            append(activity.getString(R.string.error_message))
+                            append(value)
+                        }
                     }
                 } else if (key.startsWith("Column")) {
                     pathMatcher.group(8)?.let { value ->
-                        holder.messageView.text = "Column: $value"
+                        holder.messageView.text = buildString {
+                            append(activity.getString(R.string.error_column))
+                            append(value)
+                        }
                     }
                 } else {
-
                 }
             } ?: run {
-                holder.messageView.text = "Message: $strLine"
+                holder.messageView.text = buildString {
+                    append(activity.getString(R.string.error_message))
+                    append(strLine)
+                }
             }
         }
         filePath?.let { path ->

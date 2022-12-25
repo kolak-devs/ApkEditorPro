@@ -324,4 +324,8 @@ Ha korábban vásárolta az APK Editor Pro programot, és ez nem az, amit szeret
     <string name="message_signing_disabled">Apk signing disabled, aborting...</string>
     <string name="patcher_history">History</string>
     <string name="msg_decode_notice">Select one or more items by clicking on them</string>
+    <string name="error_path">\"Path: \"</string>
+    <string name="error_line">\"Line: \"</string>
+    <string name="error_message">\"Message: \"</string>
+    <string name="error_column">\"Column: \"</string>
 </resources>

@@ -30,7 +30,7 @@ object LogHelper {
 //                level = m.group(2) as String
                 message = m.group(3) as String
             } else {
-                val trim = line.trim()
+//                val trim = line.trim()
 //                level = if (trim.startsWith("error")) {
 //                    "Error"
 //                } else {

@@ -347,4 +347,8 @@
     <string name="message_signing_disabled">Подписывание APK отключено, отмена подписи...</string>
     <string name="patcher_history">История</string>
     <string name="msg_decode_notice">Выберите один или несколько пунктов, нажатием на них</string>
+    <string name="error_path">"Путь: "</string>
+    <string name="error_line">"Строка: "</string>
+    <string name="error_message">"Сообщение: "</string>
+    <string name="error_column">"Столбец: "</string>
 </resources>
