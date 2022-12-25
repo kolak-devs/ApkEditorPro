@@ -33,9 +33,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import brut.androlib.AndrolibException;
+
 public class SmaliMod {
     public static boolean assembleSmaliFile(File smaliFile, DexBuilder dexBuilder, int apiLevel, boolean verboseErrors,
-                                            boolean printTokens) throws IOException, RecognitionException {
+                                            boolean printTokens) throws IOException, RecognitionException, AndrolibException {
 
         CommonTokenStream tokens;
         smaliFlexLexer lexer;
@@ -66,10 +68,15 @@ public class SmaliMod {
 
         smaliParser.smali_file_return result = parser.smali_file();
 
+        is.close();
+        reader.close();
         if (parser.getNumberOfSyntaxErrors() > 0 || lexer.getNumberOfSyntaxErrors() > 0) {
-            is.close();
-            reader.close();
-            return false;
+            String sourceName = lexer.getSourceName();
+            String errorMsg =
+                    "\nSource: " + sourceName +
+                            "\nLine: " + lexer.getLine() +
+                            "\nColumn: " + lexer.getColumn();
+            throw new AndrolibException(errorMsg);
         }
 
         CommonTree t = result.getTree();
@@ -85,6 +92,14 @@ public class SmaliMod {
 
         is.close();
         reader.close();
+        if (dexGen.getNumberOfSyntaxErrors() != 0) {
+            String sourceName = lexer.getSourceName();
+            String errorMsg =
+                    "\nSource: " + sourceName +
+                            "\nLine: " + lexer.getLine() +
+                            "\nColumn: " + lexer.getColumn();
+            throw new AndrolibException(errorMsg);
+        }
 
         return dexGen.getNumberOfSyntaxErrors() == 0;
     }

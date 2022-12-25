@@ -16,20 +16,15 @@
  */
 package brut.androlib.src;
 
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.writer.builder.DexBuilder;
 import org.jf.dexlib2.writer.io.FileDataStore;
-import org.jf.smali.smaliFlexLexer;
-import org.jf.smali.smaliParser;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 import brut.androlib.AndrolibException;
@@ -80,25 +75,7 @@ public class SmaliBuilder {
         if (fileName.endsWith(".smali")) {
             try {
                 if (!SmaliMod.assembleSmaliFile(inFile, dexBuilder, mApiLevel, false, false)) {
-                    InputStreamReader reader = new InputStreamReader(inStream, StandardCharsets.UTF_8);
-                    smaliFlexLexer lexer = new smaliFlexLexer(reader, mApiLevel);
-                    lexer.setSourceFile(inFile);
-
-                    smaliParser parser = new smaliParser(new CommonTokenStream(lexer));
-                    parser.setVerboseErrors(true);
-                    parser.setAllowOdex(true);
-                    parser.setApiLevel(mApiLevel);
-
-                    if (parser.getNumberOfSyntaxErrors() > 0 || lexer.getNumberOfSyntaxErrors() > 0) {
-                        String sourceName = lexer.getSourceName();
-                        String errorMsg =
-                                "\nSource: " + sourceName +
-                                        "\nLine: " + lexer.getLine() +
-                                        "\nColumn: " + lexer.getColumn();
-                        throw new AndrolibException("Could not smali file: " + fileName + errorMsg);
-                    } else {
-                        throw new AndrolibException("Could not smali file: " + fileName);
-                    }
+                    throw new AndrolibException("Could not smali file: " + fileName);
                 }
             } catch (IOException | RecognitionException ex) {
                 throw new AndrolibException(ex);
