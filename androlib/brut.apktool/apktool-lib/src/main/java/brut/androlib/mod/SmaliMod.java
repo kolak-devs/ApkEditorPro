@@ -72,10 +72,7 @@ public class SmaliMod {
         reader.close();
         if (parser.getNumberOfSyntaxErrors() > 0 || lexer.getNumberOfSyntaxErrors() > 0) {
             String sourceName = lexer.getSourceName();
-            String errorMsg =
-                    "\nSource: " + sourceName +
-                            "\nLine: " + lexer.getLine() +
-                            "\nColumn: " + lexer.getColumn();
+            String errorMsg = "Source: " + sourceName + "Line: " + lexer.getLine() + "Column: " + lexer.getColumn();
             throw new AndrolibException(errorMsg);
         }
 
@@ -94,10 +91,7 @@ public class SmaliMod {
         reader.close();
         if (dexGen.getNumberOfSyntaxErrors() != 0) {
             String sourceName = lexer.getSourceName();
-            String errorMsg =
-                    "\nSource: " + sourceName +
-                            "\nLine: " + lexer.getLine() +
-                            "\nColumn: " + lexer.getColumn();
+            final String errorMsg = "Source: " + sourceName + ";Line: " + lexer.getLine() + ";Column: " + lexer.getColumn();
             throw new AndrolibException(errorMsg);
         }
 

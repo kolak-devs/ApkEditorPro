@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -61,27 +62,21 @@
                 android:src="@drawable/round_done_green_24"
                 android:background="#4CAF50"/>
 
-            <Button
-                android:id="@+id/btn_hide_warning"
-                style="@style/Widget.Material3.Button.TonalButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="4dip"
-                android:paddingRight="4dip"
-                android:text="@string/hide_warnings"
-                android:visibility="gone" />
-
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1">
 
-                <ListView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/failed_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    android:divider="@null" />
+                    android:divider="@null"
+                    android:fadingEdge="none"
+                    android:groupIndicator="@null"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+
 
                 <ScrollView
                     android:id="@+id/succeeded_view"

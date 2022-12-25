@@ -17,7 +17,7 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.mcal.apkeditor.ApkComposeFailAdapter
+import com.mcal.apkeditor.adapters.ApkComposeFailAdapter
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.ApkComposeService.ComposeServiceBinder
 import com.mcal.apkeditor.BuildConfig
@@ -140,9 +140,6 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
 
         // Copy error message
         binding.btnCopyErrmsg.setOnClickListener(this)
-
-        // Hide warning
-        binding.btnHideWarning.setOnClickListener(this)
 
         // Put it to background
         binding.btnBg.setOnClickListener(this)
@@ -300,15 +297,6 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
             }
             binding.resultImage.setImageResource(R.drawable.round_close_red_24)
 
-            // Show "Hide Warnings" button or not
-            errMessage?.let { message ->
-                if (message.contains("warning:")) {
-                    binding.btnHideWarning.visibility = View.VISIBLE
-                } else {
-                    binding.btnHideWarning.visibility = View.GONE
-                }
-            }
-
             // Auto fix
             errMessage?.let { message ->
                 errFixer?.let { fixer ->
@@ -398,23 +386,6 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
                 } else {
                     launchApp()
                 }
-            }
-            R.id.btn_hide_warning -> {
-                val sb = StringBuilder()
-                errMessage?.let { message ->
-                    val lines = message.split("\n").toTypedArray()
-                    for (line in lines) {
-                        if (!line.startsWith("warning:")) {
-                            sb.append(line)
-                            sb.append("\n")
-                        }
-                    }
-                }
-                // Hide the warning message
-                val adapter = binding.failedView.adapter as ApkComposeFailAdapter
-                adapter.updateMessage(sb.toString())
-                adapter.notifyDataSetChanged()
-                binding.btnHideWarning.visibility = View.GONE
             }
             R.id.btn_bg -> {
                 finish()
