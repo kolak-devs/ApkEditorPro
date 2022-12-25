@@ -1,0 +1,10 @@
+<resources>
+    <string name="colormixer_set">Copy</string>
+    <string name="colormixer_red">Red</string>
+    <string name="colormixer_green">Green</string>
+    <string name="colormixer_blue">Blue</string>
+    <string name="colormixer_alpha">Alpha</string>
+    <string name="color">Color</string>
+    <string name="name">Name</string>
+    <string name="value">Value</string>
+</resources>

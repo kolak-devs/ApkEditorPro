@@ -36,4 +36,6 @@
     <string name="dump_value">Извлечь значение</string>
     <string name="print_stacktrace">Вывод трасировки стека</string>
     <string name="template">Template</string>
+    <string name="pallete">Палитра</string>
+    <string name="color_converter">Конвертер цветов</string>
 </resources>

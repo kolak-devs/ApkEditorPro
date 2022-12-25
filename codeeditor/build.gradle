@@ -40,6 +40,7 @@ dependencies {
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':jadx:jadx-plugins:jadx-smali-input')
     implementation project(':melissa')
+    implementation project(':colormixer')
     api project(':smali')
     implementation misc.guava
 

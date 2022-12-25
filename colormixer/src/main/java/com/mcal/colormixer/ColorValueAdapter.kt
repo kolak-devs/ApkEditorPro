@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import com.mcal.apkeditor.R
+import com.mcal.colormixer.R
 import java.lang.ref.WeakReference
 
 class ColorValueAdapter(

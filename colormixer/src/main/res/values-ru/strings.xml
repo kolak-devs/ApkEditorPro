@@ -1,0 +1,10 @@
+<resources>
+    <string name="colormixer_set">Копировать</string>
+    <string name="colormixer_red">Красный</string>
+    <string name="colormixer_green">Зелёный</string>
+    <string name="colormixer_blue">Голубой</string>
+    <string name="colormixer_alpha">Прозрачность</string>
+    <string name="color">Цвет</string>
+    <string name="name">Название</string>
+    <string name="value">Значение</string>
+</resources>

@@ -14,8 +14,11 @@ import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mcal.apkeditor.colormixer.ColorMixer
+import com.mcal.colormixer.ColorMixerDialog
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.ReactivePreferences
+import com.mcal.common.utils.ClipboardUtils.copyToClipboard
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
@@ -53,7 +56,7 @@ import java.util.regex.PatternSyntaxException
 
 
 class EditorActivity : CustomizedLangActivity(),
-    CodeNavigationDialog.ISmaliMethodClicked {
+    CodeNavigationDialog.ISmaliMethodClicked, ColorMixer.OnColorChangedListener {
     private lateinit var binding: ActivitySoraeditorBinding
 
     private var save: MenuItem? = null
@@ -699,6 +702,12 @@ class EditorActivity : CustomizedLangActivity(),
         val id = item.itemId
         val editor = binding.editor
         when (id) {
+            R.id.color_converter -> {
+
+            }
+            R.id.pallete -> {
+                ColorMixerDialog(this, 0xFFFFFF, this)
+            }
             R.id.methods -> {
                 showNavigationMethods()
             }
@@ -889,5 +898,10 @@ class EditorActivity : CustomizedLangActivity(),
 
     override fun gotoLine(lineNO: Int) {
         binding.editor.jumpToLine(lineNO)
+    }
+
+    override fun onColorChange(argb: Int) {
+        val strColor = String.format("#%08x", argb)
+        copyToClipboard(this, strColor)
     }
 }

@@ -20,7 +20,7 @@ import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import com.mcal.apkeditor.R
+import com.mcal.colormixer.R
 
 class ColorMixer : RelativeLayout, TextWatcher {
     private var swatch: View? = null
