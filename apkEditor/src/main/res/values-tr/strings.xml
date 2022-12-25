@@ -298,4 +298,5 @@ Başarı oranını yükseltmek için lütfen mümkün olduğunca küçük deği�
     <string name="settings_signing_off">The APK will not be signed when compiled. Also affects custom signature settings</string>
     <string name="message_signing_disabled">Apk signing disabled, aborting...</string>
     <string name="patcher_history">History</string>
+    <string name="msg_decode_notice">Select one or more items by clicking on them</string>
 </resources>

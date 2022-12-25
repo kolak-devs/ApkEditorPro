@@ -346,4 +346,5 @@
     <string name="settings_signing_off">APK не будет подписан после сборки, также влияет на настройку кастомной подписи</string>
     <string name="message_signing_disabled">Подписывание APK отключено, отмена подписи...</string>
     <string name="patcher_history">История</string>
+    <string name="msg_decode_notice">Выберите один или несколько пунктов, нажатием на них</string>
 </resources>
