@@ -70,7 +70,6 @@
 
     <style name="AppTheme.SweetCheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
         <item name="android:background">@drawable/sweet_checkbox</item>
-
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:paddingHorizontal">6dp</item>
         <item name="android:paddingVertical">6dp</item>

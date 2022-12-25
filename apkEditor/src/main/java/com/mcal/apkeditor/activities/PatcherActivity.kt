@@ -41,9 +41,12 @@ import ru.mcal.manifestparser.xml.AndroidManifestParser
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.nio.file.Files
 import java.text.SimpleDateFormat
+import java.util.stream.Collectors
 import java.util.zip.ZipFile
 import javax.xml.parsers.ParserConfigurationException
+import kotlin.io.path.name
 
 class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext, AsyncDecodeTask.IDecodeTaskCallback {
     private var _binding: ActivityPatcherBinding? = null
@@ -61,6 +64,17 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
 
     // Record executor as the parse is done there
     private var patchExecutor: PatchExecutor? = null
+
+    companion object {
+        const val PATCH_NAME = "name"
+        const val LOG = "log"
+        const val PATCH_PATH = "patchPath"
+        const val HTML_URL = "htmlUrl"
+        const val DECODE_PATH = "decodeRootPath"
+        const val APK_PATH = "apkPath"
+        const val IS_DECODED_DEX = "dex2smaliClicked"
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,18 +121,16 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                         /**
                          * Получаем список файлов в директории патчей. И отображаем на экране все архивы
                          */
-                        getPatchesDir().listFiles()?.let { files ->
-                            for (f in files) {
-                                if (f.exists() && f.name.endsWith(".zip")) {
-                                    val fmt = SimpleDateFormat("EEE, HH:mm")
-                                    itemAdapter.add(
-                                        PatcherHistoryItem(
-                                            System.currentTimeMillis().toInt(), ContextCompat.getDrawable(this@PatcherActivity, R.drawable.ic_android), f.name,
-                                            fmt.format(f.lastModified())
-                                        )
-                                    )
-                                }
-                            }
+                        Files.walk(getPatchesDir().toPath()).filter {
+                            it.name.endsWith(".zip")
+                        }.collect(Collectors.toList()).forEach { patchFile ->
+                            val fmt = SimpleDateFormat("EEE, HH:mm")
+                            itemAdapter.add(
+                                PatcherHistoryItem(
+                                    System.currentTimeMillis().toInt(), ContextCompat.getDrawable(this@PatcherActivity, R.drawable.ic_android),
+                                    patchFile.name, fmt.format(Files.getLastModifiedTime(patchFile).toMillis())
+                                )
+                            )
                         }
 
                         if (itemAdapter.adapterItemCount >= 0) {
@@ -192,17 +204,6 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         outState.putString(LOG, binding.log.text.toString())
         outState.putString(PATCH_NAME, binding.filename.text.toString())
     }
-
-    companion object {
-        const val PATCH_NAME = "name"
-        const val LOG = "log"
-        const val PATCH_PATH = "patchPath"
-        const val HTML_URL = "htmlUrl"
-        const val DECODE_PATH = "decodeRootPath"
-        const val APK_PATH = "apkPath"
-        const val IS_DECODED_DEX = "dex2smaliClicked"
-    }
-
 
     public override fun onDestroy() {
         _binding = null
