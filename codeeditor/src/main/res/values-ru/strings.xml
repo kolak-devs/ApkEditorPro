@@ -24,7 +24,6 @@
     <string name="wordwrap">Перенос строк</string>
     <string name="line_number_visibility">Номера строк</string>
     <string name="pin_line_number">Закрепить номера строк</string>
-    <string name="feature_switches">Настройки</string>
     <string name="magnifier">Лупа</string>
     <string name="use_icu_library">Использовать ICU библиотеку</string>
     <string name="settings">Настройки</string>

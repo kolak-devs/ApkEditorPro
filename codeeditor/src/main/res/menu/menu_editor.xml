@@ -63,10 +63,6 @@
     </item>
 
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/feature_switches" />
-
-    <item
         android:id="@+id/search_panel_st"
         android:title="@string/search_text" />
 
@@ -82,6 +78,10 @@
     <item
         android:id="@+id/smali_to_java"
         android:title="Smali to Java" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings" />
 
     <item android:title="@string/other">
 
