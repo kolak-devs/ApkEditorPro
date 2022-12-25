@@ -54,39 +54,58 @@ class ApkComposeFailAdapter(
         var filePath: String? = null
         var lineIndex = 0
 
+        /**
+         * Пример ошибки в smali: Source: data/data/com.mcal.apkeditor.pro/files/ApkProtector/smali/a/a.smali;Line: 15;Column: 0
+         * Пример ошибки в xml: Source: data/data/com.mcal.apkeditor.pro/files/ApkProtector/AndroidManifest.xml;Line: 15;Message: not well-formed (invalid token)
+         */
         val pathMatcher = Pattern.compile("(Source: )(.+)(;)(Line: )(\\d+)(;)((Message: )|(Column: ))(.*)").matcher(strLine)
         if (pathMatcher.find()) {
             filePath = pathMatcher.group(2)?.takeIf { File(it).exists() }?.also {
+                /**
+                 * Получение пути к файлу с ошибкой
+                 */
                 holder.pathView.text = buildString {
                     append(activity.getString(R.string.error_path))
                     append(it.replace(ScopedStorage.filesDir.path, ""))
                 }
             }
             pathMatcher.group(5)?.let {
+                /**
+                 * Получение номера строки ошибки
+                 */
                 holder.lineView.text = buildString {
                     append(activity.getString(R.string.error_line))
                     append(it)
                 }
                 lineIndex = it.toInt() - 1
             }
-            pathMatcher.group(9)?.let { key ->
-                if (key.startsWith("Message")) {
+            val messageKey = pathMatcher.group(7)
+            if (messageKey != null) {
+                if (messageKey.startsWith("Message")) {
+                    /**
+                     * Получение сообщения ошибки - только для xml
+                     */
                     pathMatcher.group(10)?.let { value ->
                         holder.messageView.text = buildString {
                             append(activity.getString(R.string.error_message))
                             append(value)
                         }
                     }
-                } else if (key.startsWith("Column")) {
+                } else if (messageKey.startsWith("Column")) {
+                    /**
+                     * Получение столбца ошибки - только для smali
+                     */
                     pathMatcher.group(10)?.let { value ->
                         holder.messageView.text = buildString {
                             append(activity.getString(R.string.error_column))
                             append(value)
                         }
                     }
-                } else {
                 }
-            } ?: run {
+            } else {
+                /**
+                 * Иначе отображаем полную ошибку, как есть
+                 */
                 holder.messageView.text = buildString {
                     append(activity.getString(R.string.error_message))
                     append(strLine)
@@ -94,6 +113,9 @@ class ApkComposeFailAdapter(
             }
         }
         filePath?.let { path ->
+            /**
+             * Если путь не пустой предлагаем открыть в редакторе
+             */
             holder.editor.setOnClickListener {
                 val intent = getSoraEditor(activity, path, activity.srcApkPath, lineIndex, null)
                 activity.startActivity(intent)
