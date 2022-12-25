@@ -702,9 +702,6 @@ class EditorActivity : CustomizedLangActivity(),
         val id = item.itemId
         val editor = binding.editor
         when (id) {
-            R.id.color_converter -> {
-
-            }
             R.id.pallete -> {
                 ColorMixerDialog(this, 0xFFFFFF, this)
             }

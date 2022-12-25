@@ -100,10 +100,6 @@
                 android:title="@string/pallete" />
 
             <item
-                android:id="@+id/color_converter"
-                android:title="@string/color_converter" />
-
-            <item
                 android:id="@+id/template"
                 android:title="@string/template" />
 
