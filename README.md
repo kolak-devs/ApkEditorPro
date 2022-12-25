@@ -25,7 +25,7 @@
     brut.androlib.res.AndrolibResources.aapt1Package
     
     Вывод нормальных ошибок при компиляции дексов
-    brut.androlib.src.SmaliBuilder
+    brut.androlib.mod.SmaliMod
 
 ### ADD:
     brut.androlib.res.data.ResResSpec.getAllResources()
