@@ -83,7 +83,7 @@
         android:id="@+id/smali_to_java"
         android:title="Smali to Java" />
 
-    <item android:title="Другое">
+    <item android:title="@string/other">
 
         <menu>
 

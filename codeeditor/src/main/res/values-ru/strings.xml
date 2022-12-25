@@ -38,4 +38,5 @@
     <string name="template">Шаблоны</string>
     <string name="pallete">Палитра</string>
     <string name="color_converter">Конвертер цветов</string>
+    <string name="other">Другое</string>
 </resources>
