@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.ApkComposeActivity
@@ -48,8 +47,9 @@ class ApkComposeFailAdapter(
 
     override fun onBindViewHolder(holder: ApkComposeFailViewHolder, position: Int) {
         val strLine = lines[position]
-
-        Toast.makeText(activity, strLine, 0).show()
+        if (strLine.isEmpty()) {
+            return
+        }
 
         var filePath: String? = null
         var lineIndex = 0
