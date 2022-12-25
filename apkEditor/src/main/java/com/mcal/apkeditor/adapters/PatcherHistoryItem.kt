@@ -25,7 +25,7 @@ class PatcherHistoryItem() : AbstractItem<PatcherHistoryItem.ViewHolder>() {
         get() = R.id.patcher_menu_container
 
     override val layoutRes: Int
-        get() = R.layout.patcher_list_item
+        get() = R.layout.item_patcher_list
 
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)

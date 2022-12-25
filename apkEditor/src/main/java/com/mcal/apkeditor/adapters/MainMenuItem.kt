@@ -19,7 +19,7 @@ open class MainMenuItem(
 
     /** The layout for the given item */
     override val layoutRes: Int
-        get() = R.layout.main_list_item
+        get() = R.layout.item_main_list
 
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)

@@ -1,14 +1,10 @@
 package com.mcal.apkeditor.adapters
 
-import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.mcal.apkeditor.R
-import com.mcal.apkeditor.activities.ApkInfoExActivity
-import com.mcal.common.utils.ActivityHelper.attachParam
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
@@ -31,7 +27,7 @@ open class MainProjectItem() : AbstractItem<MainProjectItem.ViewHolder>() {
 
     /** The layout for the given item */
     override val layoutRes: Int
-        get() = R.layout.main_project_item
+        get() = R.layout.item_main_project
 
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)
