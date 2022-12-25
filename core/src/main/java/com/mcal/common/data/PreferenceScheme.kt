@@ -20,12 +20,10 @@ object PreferenceScheme {
 
    object Compiler {
       val DECODE_MULTIRES = booleanPreferencesKey("fixMultiRes")
-      val DECODE_DIR = stringPreferencesKey("DecodeDirectory")
       val BUILD_AAPT_RULES = booleanPreferencesKey("ae_aapt_rules")
       val BUILD_USE_AAPT2 = booleanPreferencesKey("aapt2")
       val BUILD_JSON_CONFIG = booleanPreferencesKey("apktool_use_json")
       val BUILD_SMALI_EDITING = booleanPreferencesKey("SmaliEditingEnabled")
-      val BUILD_CONFIRMATION = booleanPreferencesKey("RebuildConfirmation")
       val SIGNING_ENABLED = booleanPreferencesKey("signing_enabled")
       val SIGNING_CUSTOM_ON = booleanPreferencesKey("signing_on")
       val SIGNING_PASS = stringPreferencesKey("signing_pass")

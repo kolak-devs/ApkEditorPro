@@ -15,7 +15,6 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoExActivity;
 import com.mcal.common.utils.ActivityHelper;
@@ -62,12 +61,9 @@ class ProjectListAdapter extends BaseAdapter
             String fmt = activityRef.get().getString(R.string.prj_error_decode_dir_notfound);
             errMessage = String.format(fmt, info.decodeDirectory);
         }
-        // For APK Parser, do not need to check the APK path
-        if (!BuildConfig.PARSER_ONLY) {
-            if (!new File(info.apkPath).exists()) {
-                String fmt = activityRef.get().getString(R.string.prj_error_apk_notfound);
-                errMessage = String.format(fmt, info.apkPath);
-            }
+        if (!new File(info.apkPath).exists()) {
+            String fmt = activityRef.get().getString(R.string.prj_error_apk_notfound);
+            errMessage = String.format(fmt, info.apkPath);
         }
         return errMessage;
     }
@@ -182,7 +178,7 @@ class ProjectListAdapter extends BaseAdapter
         AppCompatImageButton delMenu;
     }
 
-   public static class ItemInfo {
+    public static class ItemInfo {
         String name;
         String apkPath;
         String decodeDirectory;

@@ -13,7 +13,6 @@ import com.mcal.apkeditor.databinding.ActivityFulleditorBinding
 import com.mcal.apkeditor.ui.fulleditor.utils.TaskDecoder
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utils.getDecodeDirectory
 import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.view.ProgressDialog
 import java.io.File
@@ -36,12 +35,7 @@ class FullEditorActivity : CustomizedLangActivity(), ApkParseConsumer {
         viewModel = ViewModelProvider(this)[FullEditorViewModel::class.java]
         viewModel.decodedPath = ActivityHelper.getParam(intent, "decodeRootPath")
         if (viewModel.decodedPath == null) {
-            val decodeDir = getDecodeDirectory()
-            if (decodeDir != null) {
-                viewModel.decodedPath = "$decodeDir/decoded"
-            } else {
-                viewModel.decodedPath = ScopedStorage.getDecodedDir().path
-            }
+            viewModel.decodedPath = ScopedStorage.getDecodedDir().path
         }
         viewModel.apkPath = ActivityHelper.getParam(intent, "apkPath")
         viewModel.curConfig = ActivityHelper.getParam(intent, "curConfig")

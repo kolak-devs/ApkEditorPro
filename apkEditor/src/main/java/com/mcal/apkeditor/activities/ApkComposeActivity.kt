@@ -17,11 +17,11 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.mcal.apkeditor.adapters.ApkComposeFailAdapter
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.ApkComposeService.ComposeServiceBinder
 import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
+import com.mcal.apkeditor.adapters.ApkComposeFailAdapter
 import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.data.Constants
 import com.mcal.apkeditor.databinding.ActivityApkcomposeBinding
@@ -238,7 +238,7 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
             val message = "$strSucceed!\n$strPlace\n\n"
 
             // APK is signed
-            if (BuildConfig.WITH_SIGN && signAPK) {
+            if (signAPK) {
                 // Check if already installed
                 mPackageName = apkPackageName
                 mPackageName?.let { pkg ->
@@ -276,14 +276,11 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
                 binding.btnInstall.visibility = View.GONE
             }
 
-            // Patch the DEX cache
-            if (BuildConfig.ODEX_PATCH) {
-                if (codeModified && isArtRuntime) {
-                    binding.patchDexLayout.visibility = View.VISIBLE
-                    binding.btnPatch.setOnClickListener(this)
-                } else {
-                    binding.patchDexLayout.visibility = View.GONE
-                }
+            if (codeModified && isArtRuntime) {
+                binding.patchDexLayout.visibility = View.VISIBLE
+                binding.btnPatch.setOnClickListener(this)
+            } else {
+                binding.patchDexLayout.visibility = View.GONE
             }
         } else {
             this.setResult(FAILED)

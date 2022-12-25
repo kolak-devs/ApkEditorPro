@@ -7,6 +7,7 @@ import static com.mcal.common.utils.FileHelperKt.reviseFileName;
 import static com.mcal.common.utils.FileHelperKt.writeObjectToFile;
 import static com.mcal.common.utils.FileHelperKt.writeToFile;
 import static com.mcal.common.utils.PathHelperKt.replaceNameWith;
+import static com.mcal.common.utils.ScopedStorage.getDecodedDir;
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
 
 import android.Manifest;
@@ -79,7 +80,6 @@ import com.mcal.apkeditor.dialogs.FileCopyDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.apkeditor.dialogs.LanguageSelectDialog;
-import com.mcal.apkeditor.dialogs.RebuildConfirmDialog;
 import com.mcal.apkeditor.dialogs.SearchFilenameDialog;
 import com.mcal.apkeditor.dialogs.SearchTextDialog;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
@@ -94,7 +94,6 @@ import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.ReactivePreferences;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
-import com.mcal.common.utils.FileHelperKt;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ServiceUtil;
@@ -368,14 +367,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             }
             decodeRootPath = ActivityHelper.getParam(getIntent(), "decodeRootPath");
             if (decodeRootPath == null) {
-                String decodeDir = FileHelperKt.getDecodeDirectory();
-                if (decodeDir != null) {
-                    decodeRootPath = decodeDir + "/decoded";
-                } else {
-                    File fileDir = this.getFilesDir();
-                    String rootDirectory = fileDir.getAbsolutePath();
-                    decodeRootPath = rootDirectory + "/decoded";
-                }
+                decodeRootPath = getDecodedDir().getPath();
             }
         }
 
@@ -395,10 +387,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         if (savedInstanceState != null) {
             recoverFromBundle(savedInstanceState);
         } else if (projectName != null) {
-            // For APK Parser
-            if (BuildConfig.PARSER_ONLY) {
-                loadParserProject();
-            } else if (prjInfo != null && prjInfo.state != null) {
+            if (prjInfo != null && prjInfo.state != null) {
                 recoverFromProject(prjInfo);
             } else {
                 Toast.makeText(this, R.string.cannot_load_project_info, Toast.LENGTH_LONG).show();
@@ -1188,28 +1177,13 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
     protected void composeApkFile() {
         collectAndSaveChangedString();
-
-        if (ReactivePreferences.isLegacyRebuildConfirmation()) {
-            Map<String, String> added = resListAdapter.getAddedFiles();
-            Map<String, String> replaced = resListAdapter.getReplacedFiles();
-            Set<String> deleted = resListAdapter.getDeletedFiles();
-            new RebuildConfirmDialog(this, stringModified, manifestModified, added, replaced, deleted).show();
-        } else {
-            build(true);
-        }
+        build(true);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // Add or import a folder, dialog callback functions
 
     private void saveStringValues(@NonNull Map<String, Map<String, String>> allChangedValues) throws Exception {
         Set<Entry<String, Map<String, String>>> entries = allChangedValues.entrySet();
         for (Entry<String, Map<String, String>> entry : entries) {
-//            ResConfigFlags cfgFlags = entry.getKey();
-//            String qualifier = cfgFlags.getQualifiers();
             String qualifier = entry.getKey();
-            // The value in allStringValues is already changed
-            //saveStringResource(qualifier, allStringValues.get(qualifier));
             modifyStringResource(qualifier, entry.getValue());
         }
     }

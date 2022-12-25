@@ -28,10 +28,6 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_LANGUAGE].orEmpty()
     }
 
-    suspend fun getDecodeDirectory(): String? {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_DIR]
-    }
-
     suspend fun getWebViewLanguage(): String {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Misc.WEB_LANGUAGE] ?: "ru"
     }
@@ -181,15 +177,6 @@ object ReactivePreferences {
         var fallback: Boolean
         runBlocking {
             fallback = isDexToSmali()
-        }
-        return fallback
-    }
-
-    @JvmStatic
-    fun isLegacyRebuildConfirmation(): Boolean {
-        var fallback: Boolean
-        runBlocking {
-            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.BUILD_CONFIRMATION] ?: false
         }
         return fallback
     }

@@ -12,11 +12,6 @@
             android:summary="@string/pref_summary_multi_package"
             android:title="@string/pref_title_multi_package" />
 
-        <androidx.preference.EditTextPreference
-            android:key="DecodeDirectory"
-            android:summary="@string/decode_dir_summary_may_change"
-            android:title="@string/decode_dir" />
-
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
@@ -49,12 +44,6 @@
             android:summaryOff="@string/smali_edit_disabled_summary"
             android:summaryOn="@string/smali_edit_summary"
             android:title="@string/smali_editing" />
-
-        <androidx.preference.SwitchPreference
-            android:key="RebuildConfirmation"
-            android:summaryOff="@string/rebuild_confirm_d_summary"
-            android:summaryOn="@string/rebuild_confirm_e_summary"
-            android:title="@string/rebuild_confirmation" />
 
     </androidx.preference.PreferenceCategory>
 

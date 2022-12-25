@@ -300,22 +300,6 @@ fun InputStream.readText(charset: Charset = Charsets.UTF_8): String {
     return this.bufferedReader(charset).use { it.readText() }
 }
 
-fun getDecodeDirectory(): String? {
-    var str: String?
-    runBlocking {
-        str = ReactivePreferences.getDecodeDirectory()
-    }
-    if (str != null) {
-        if (str!!.endsWith("/")) {
-            str = str!!.substring(0, str!!.length - 1)
-        }
-        if (dirCanWrite(str!!)) {
-            return str
-        }
-    }
-    return null
-}
-
 // Can write to the directory or not
 private fun dirCanWrite(dir: String): Boolean {
     val f = File(dir)

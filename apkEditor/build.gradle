@@ -71,13 +71,7 @@ android {
 
             minifyEnabled true
             shrinkResources true
-            buildConfigField "boolean", "IS_PRO", "true"
-            buildConfigField "boolean", "WITH_SIGN", "true"
-            buildConfigField "boolean", "DISPLAY_APP", "true"
-            buildConfigField "boolean", "ODEX_PATCH", "true"
             buildConfigField "boolean", "SHOW_AGREEMENT", "true"
-            buildConfigField "boolean", "LIMIT_NEW_VERSION", "false"
-            buildConfigField "boolean", "PARSER_ONLY", "false"
             buildConfigField "String", "JADX_VERSION", "\"1.4.2+\""
             buildConfigField "String", "APKTOOL_VERSION", "\"2.6.1+\""
             buildConfigField "String", "SMALI_VERSION", "\"2.5.2\""
@@ -90,13 +84,7 @@ android {
             ndk {
                 abiFilters "arm64-v8a", "x86_64"
             }
-            buildConfigField "boolean", "IS_PRO", "true"
-            buildConfigField "boolean", "WITH_SIGN", "true"
-            buildConfigField "boolean", "DISPLAY_APP", "true"
-            buildConfigField "boolean", "ODEX_PATCH", "true"
-            buildConfigField "boolean", "SHOW_AGREEMENT", "true"
-            buildConfigField "boolean", "LIMIT_NEW_VERSION", "false"
-            buildConfigField "boolean", "PARSER_ONLY", "false"
+            buildConfigField "boolean", "SHOW_AGREEMENT", "false"
             buildConfigField "String", "JADX_VERSION", "\"1.4.2+\""
             buildConfigField "String", "APKTOOL_VERSION", "\"2.6.1+\""
             buildConfigField "String", "SMALI_VERSION", "\"2.5.2\""
