@@ -26,6 +26,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/mode_decode_classes"
-        style="@style/AppTheme.SweetCheckBox"/>
+        style="@style/AppTheme.SweetCheckBox"
+        android:checked="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_search_background"
+        android:padding="8dp"
+        android:drawablePadding="4dp"
+        android:drawableStart="@drawable/info"
+        android:text="@string/msg_decode_notice"/>
 
 </LinearLayout>

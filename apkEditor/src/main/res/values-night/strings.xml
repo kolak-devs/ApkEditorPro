@@ -6,4 +6,5 @@
     <string name="settings_signing_on">The APK will be signed with a test signature, or a custom one, depending on the settings below</string>
     <string name="settings_signing_off">The APK will not be signed when compiled. Also affects custom signature settings</string>
     <string name="message_signing_disabled">Apk signing disabled, aborting...</string>
+    <string name="msg_decode_notice">Select one or more items by clicking on them</string>
 </resources>
