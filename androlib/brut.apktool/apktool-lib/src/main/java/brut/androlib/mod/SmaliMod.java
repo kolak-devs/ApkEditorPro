@@ -72,7 +72,7 @@ public class SmaliMod {
         reader.close();
         if (parser.getNumberOfSyntaxErrors() > 0 || lexer.getNumberOfSyntaxErrors() > 0) {
             String sourceName = lexer.getSourceName();
-            String errorMsg = "Source: " + sourceName + "Line: " + lexer.getLine() + "Column: " + lexer.getColumn();
+            String errorMsg = "Source: " + sourceName + ";Line: " + lexer.getLine() + ";Column: " + lexer.getColumn();
             throw new AndrolibException(errorMsg);
         }
 

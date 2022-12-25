@@ -366,7 +366,9 @@ class EditorActivity : CustomizedLangActivity(),
                             startLineList?.let { line ->
                                 startLine = line[curFileIndex]// - 1
                             }
-                            jumpToLine(startLine)
+                            if (startLine >= 0 && this.lineCount >= startLine) {
+                                jumpToLine(startLine)
+                            }
                         }
                     }
                 } catch (e: IOException) {

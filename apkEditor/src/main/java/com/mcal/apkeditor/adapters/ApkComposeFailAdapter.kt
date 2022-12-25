@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.ApkComposeActivity
@@ -48,10 +49,12 @@ class ApkComposeFailAdapter(
     override fun onBindViewHolder(holder: ApkComposeFailViewHolder, position: Int) {
         val strLine = lines[position]
 
+        Toast.makeText(activity, strLine, 0).show()
+
         var filePath: String? = null
         var lineIndex = 0
 
-        val pathMatcher = Pattern.compile("(Source: )(.+)(;)(Line: )(\\d+)(;)(Message: )(.*)").matcher(strLine)
+        val pathMatcher = Pattern.compile("(Source: )(.+)(;)(Line: )(\\d+)(;)((Message: )|(Column: ))(.*)").matcher(strLine)
         if (pathMatcher.find()) {
             filePath = pathMatcher.group(2)?.takeIf { File(it).exists() }?.also {
                 holder.pathView.text = buildString {
@@ -64,18 +67,18 @@ class ApkComposeFailAdapter(
                     append(activity.getString(R.string.error_line))
                     append(it)
                 }
-                lineIndex = it.toInt()
+                lineIndex = it.toInt() - 1
             }
-            pathMatcher.group(7)?.let { key ->
+            pathMatcher.group(9)?.let { key ->
                 if (key.startsWith("Message")) {
-                    pathMatcher.group(8)?.let { value ->
+                    pathMatcher.group(10)?.let { value ->
                         holder.messageView.text = buildString {
                             append(activity.getString(R.string.error_message))
                             append(value)
                         }
                     }
                 } else if (key.startsWith("Column")) {
-                    pathMatcher.group(8)?.let { value ->
+                    pathMatcher.group(10)?.let { value ->
                         holder.messageView.text = buildString {
                             append(activity.getString(R.string.error_column))
                             append(value)
