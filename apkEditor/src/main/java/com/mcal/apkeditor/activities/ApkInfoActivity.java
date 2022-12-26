@@ -8,6 +8,7 @@ import static com.mcal.common.utils.FileHelperKt.writeObjectToFile;
 import static com.mcal.common.utils.FileHelperKt.writeToFile;
 import static com.mcal.common.utils.PathHelperKt.replaceNameWith;
 import static com.mcal.common.utils.ScopedStorage.getDecodedDir;
+import static com.mcal.common.utils.ScopedStorage.getProjects;
 import static com.mcal.common.utils.StringHelperKt.getRandomString;
 
 import android.Manifest;
@@ -45,6 +46,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -91,6 +94,7 @@ import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
 import com.mcal.bshengine.BshEngineActivity;
 import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.common.data.ReactivePreferences;
+import com.mcal.common.filesystem.FilePickHelper;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.FileRecord;
@@ -115,6 +119,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -340,7 +345,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         ProjectInfo prjInfo = null;
         if (projectName != null) {
             try {
-                File prjRoot = ScopedStorage.getProjects();
+                File prjRoot = getProjects();
                 prjInfo = loadProject(prjRoot.getPath() + File.separator + projectName);
                 apkPath = prjInfo.apkPath;
                 decodeRootPath = prjInfo.decodeRootPath;
@@ -397,6 +402,26 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             parseThread = new ApkParseThread(this, this, apkPath, decodeRootPath);
             parseThread.start();
         }
+
+        pickLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        final Uri uri = result.getData().getData();
+                        if (uri != null) {
+                            final String dirPath = resListAdapter.getData(null);
+                            final File file = new File(dirPath, FilePickHelper.getFileName(ApkInfoActivity.this, uri));
+                            try {
+                                final InputStream inputStream = getContentResolver().openInputStream(uri);
+                                if (inputStream != null) {
+                                    copyFile(inputStream, file);
+                                    resListAdapter.addFile(file.getPath(), file.getName());
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
     }
 
     // save to file, also include version file
@@ -550,7 +575,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         try {
             String workingPath;
             if (projectName != null) {
-                File prjRoot = ScopedStorage.getProjects();
+                File prjRoot = getProjects();
                 workingPath = prjRoot.getPath() + File.separator + projectName;
             } else {
                 workingPath = ScopedStorage.getTmpDir().getPath();
@@ -728,7 +753,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
                 File parentFolder;
                 try {
-                    parentFolder = ScopedStorage.getProjects();
+                    parentFolder = getProjects();
                 } catch (Exception e) {
                     errorMessage = String.format(getString(R.string.general_error), e.getMessage());
                     return;
@@ -1259,20 +1284,22 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     }
 
     @Override
-    public void addFolder(String folderName) {
+    public void createFolder(String folderName) {
         final String dirPath = resListAdapter.getData(null);
         resListAdapter.addFolder(dirPath, folderName);
     }
 
     @Override
-    public void addFile(String fileName) {
+    public void createFile(String fileName) {
         final String dirPath = resListAdapter.getData(null);
-        resListAdapter.addFile(dirPath + "/" + fileName, fileName);
+        resListAdapter.createFile(dirPath + "/" + fileName, fileName);
     }
 
-    @Override
-    public void importFile(String folderPath) {
+    ActivityResultLauncher<Intent> pickLauncher;
 
+    @Override
+    public void importFile() {
+        pickLauncher.launch(FilePickHelper.pickFile(false));
     }
 
     // First check if the build is still ongoing

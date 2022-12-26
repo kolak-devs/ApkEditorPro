@@ -255,4 +255,8 @@
     <string name="error_line">\"Line: \"</string>
     <string name="error_message">\"Message: \"</string>
     <string name="error_column">\"Column: \"</string>
+    <string name="folder">Folder</string>
+    <string name="file">File</string>
+    <string name="import_file">Import</string>
+    <string name="enter_name">Enter name</string>
 </resources>

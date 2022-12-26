@@ -351,4 +351,8 @@
     <string name="error_line">"Строка: "</string>
     <string name="error_message">"Сообщение: "</string>
     <string name="error_column">"Столбец: "</string>
+    <string name="folder">Папка</string>
+    <string name="file">Файл</string>
+    <string name="import_file">Импорт</string>
+    <string name="enter_name">Введите название</string>
 </resources>

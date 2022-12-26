@@ -534,7 +534,7 @@ public class ResListAdapter extends BaseAdapter implements
         }
     }
 
-    public void addFile(@NonNull String targetPath, String fileName) {
+    public void createFile(@NonNull String targetPath, String fileName) {
         final File file = new File(targetPath);
         if (!file.exists()) {
             try {
@@ -546,6 +546,15 @@ public class ResListAdapter extends BaseAdapter implements
             }
         } else {
             Toast.makeText(ctxRef.get(), String.format(ctxRef.get().getString(R.string.file_already_exist), fileName), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void addFile(@NonNull String targetPath, String fileName) {
+        final File file = new File(targetPath);
+        if (file.exists()) {
+            listItemAdded(file.getParent(), new FileRecord(fileName, false, false));
+        } else {
+            Toast.makeText(ctxRef.get(), "Failed", Toast.LENGTH_LONG).show();
         }
     }
 
