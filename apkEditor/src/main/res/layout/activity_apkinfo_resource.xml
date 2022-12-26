@@ -178,18 +178,11 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/menu_addfile"
+                android:id="@+id/menu_create_file_or_folder"
                 style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/round_add_24" />
-
-            <ImageButton
-                android:id="@+id/menu_addfolder"
-                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/round_create_new_folder_24" />
 
             <LinearLayout
                 android:layout_width="0dp"

@@ -527,46 +527,25 @@ public class ResListAdapter extends BaseAdapter implements
     // Add a list item
     public void listItemAdded(String dirPath, FileRecord rec) {
         synchronized (fileList) {
-            if (this.curPath.equals(dirPath)) {
+            if (curPath.equals(dirPath)) {
                 fileList.add(rec);
-                this.notifyDataSetChanged();
+                notifyDataSetChanged();
             }
         }
     }
 
-    // Add a file (either in the decoded directory or inside the apk file)
-    // Called in UI thread
-    public void addFile(@NonNull String targetPath, String filePath) {
-        int pos = targetPath.lastIndexOf("/");
-        String filename = targetPath.substring(pos + 1);
-        String dirPath = targetPath.substring(0, pos);
-
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(filePath);
-            if (fis != null) {
-                FileRecord rec = addFile(targetPath, fis);
-                if (rec != null) {
-                    listItemAdded(dirPath, rec);
-                    String msg = String.format(
-                            ctxRef.get().getString(R.string.file_added),
-                            filename);
-                    Toast.makeText(ctxRef.get(), msg, Toast.LENGTH_SHORT)
-                            .show();
+    public void addFile(@NonNull String targetPath, String fileName) {
+        final File file = new File(targetPath);
+        if (!file.exists()) {
+            try {
+                if (file.createNewFile()) {
+                    listItemAdded(file.getParent(), new FileRecord(fileName, false, false));
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            String msg = String.format(ctxRef.get()
-                    .getString(R.string.failed_1), e.getMessage());
-            Toast.makeText(ctxRef.get(), msg, Toast.LENGTH_LONG).show();
-        } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        } else {
+            Toast.makeText(ctxRef.get(), String.format(ctxRef.get().getString(R.string.file_already_exist), fileName), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -663,57 +642,13 @@ public class ResListAdapter extends BaseAdapter implements
 
     // Add an empty folder
     public void addFolder(String dirPath, String folderName) {
-        try {
-            addFolderReportError(dirPath, folderName, true);
-        } catch (Exception e) {
-            Toast.makeText(ctxRef.get(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void addFolderReportError(@NonNull String dirPath, String folderName,
-                                     boolean bUiThread) throws Exception {
-        // Special case: in the root dir to check allowed or not
-        if (dirPath.equals(rootPath) && this.apkPath != null) {
-            checkCanPutInRootPath(folderName);
-        }
-
-        File dir = new File(dirPath);
-        // Add the folder into decode path
-        if (dir.exists() && !dirPath.equals(rootPath)) {
-            File f = new File(dirPath, folderName);
-            if (f.exists()) {
-                throwExistException(folderName);
+        final File folder = new File(dirPath, folderName);
+        if (!folder.exists()) {
+            if (folder.mkdir()) {
+                listItemAdded(folder.getParent(), new FileRecord(folderName, true, false));
             }
-
-            boolean ret = f.mkdir();
-            if (bUiThread) {
-                if (!ret && ctxRef.get() != null) {
-                    Toast.makeText(ctxRef.get(), R.string.failed,
-                            Toast.LENGTH_LONG).show();
-                } else { // call openDirectory to update the list
-                    openDirectory(dirPath);
-                }
-            }
-        }
-        // Add the folder in some place of the apk file
-        else {
-            String entryName;
-            if (dirPath.equals(rootPath)) { // special case
-                entryName = folderName;
-            } else {
-                entryName = dirPath.substring(rootPath.length() + 1) + "/"
-                        + folderName;
-            }
-            String[] paths = entryName.split("/");
-            ZipNode node = rootNode.findNodeByPath(paths);
-            if (node != null) {
-                throwExistException(folderName);
-            } else {
-                rootNode.addChildByPath(paths, false);
-                if (bUiThread) {
-                    openDirectory(dirPath); // update the list view
-                }
-            }
+        } else {
+            Toast.makeText(ctxRef.get(), String.format(ctxRef.get().getString(R.string.file_already_exist), folderName), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1103,18 +1038,18 @@ public class ResListAdapter extends BaseAdapter implements
         if (checkAll) {
             FileRecord rec = fileList.get(0);
             if (!rec.fileName.equals("..")) { // Not for parent folder
-                this.checkedItems.add(0);
+                checkedItems.add(0);
             }
             for (int i = 1; i < fileList.size(); ++i) {
-                this.checkedItems.add(i);
+                checkedItems.add(i);
             }
         } else {
-            this.checkedItems.clear();
+            checkedItems.clear();
             if (listenerRef.get() != null) {
                 listenerRef.get().selectionChanged(checkedItems);
             }
         }
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     // Check the folder exist or not

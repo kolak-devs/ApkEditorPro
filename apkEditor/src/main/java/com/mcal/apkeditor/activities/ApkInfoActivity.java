@@ -59,7 +59,6 @@ import com.mcal.androlib.util.OpenFiles;
 import com.mcal.apkeditor.ApkComposeService;
 import com.mcal.apkeditor.ApkParseConsumer;
 import com.mcal.apkeditor.ApkParseThread;
-import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.IGeneralCallback;
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.ResListAdapter;
@@ -1266,39 +1265,14 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     }
 
     @Override
-    public void importFolder(final String folderPath) {
+    public void addFile(String fileName) {
         final String dirPath = resListAdapter.getData(null);
-        new ProgressDialog(this, "", "Working…", false, new ProgressDialog.ProcessingInterface() {
-            private String errorMessage = null;
+        resListAdapter.addFile(dirPath + "/" + fileName, fileName);
+    }
 
-            @Override
-            public void process() {
-                File srcDir = new File(folderPath);
-                String folderName = srcDir.getName();
-                File curDir = new File(dirPath);
-                File targetDir = new File(curDir, folderName);
-                if (targetDir.exists()) {
-                    String fmt = getString(R.string.file_already_exist);
-                    errorMessage = String.format(fmt, folderName);
-                } else {
-                    targetDir.mkdir();
-                    try {
-                        copyFile(targetDir, srcDir);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+    @Override
+    public void importFile(String folderPath) {
 
-            @Override
-            public void afterProcess() {
-                if (errorMessage != null) {
-                    Toast.makeText(ApkInfoActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                } else {
-                    resListAdapter.refresh();
-                }
-            }
-        }, -1).show();
     }
 
     // First check if the build is still ongoing
@@ -2272,25 +2246,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
                 }
                 item3.setOnMenuItemClickListener(listener);
             }
-
-            // Add a file (always allow to add a file)
-            {
-                MenuItem item4 = menu.add(0, Menu.FIRST + 3, 0, R.string.add_a_file);
-                item4.setOnMenuItemClickListener(item -> {
-                    addFile(position);
-                    // resListAdapter.dumpChangedFiles();
-                    return true;
-                });
-            }
-
-            // Add a folder (always allow to add a folder)
-            {
-                MenuItem item5 = menu.add(0, Menu.FIRST + 4, 0, R.string.new_folder);
-                item5.setOnMenuItemClickListener(item -> {
-                    createFolder(position);
-                    return true;
-                });
-            }
         });
         return false;
     }
@@ -2489,32 +2444,9 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         new FileSelectDialog(this, callback, null, dirPath + "/" + rec.fileName, dlgTitle, true, true, false, null);
     }
 
-    // To add a file in current directory
-    protected void addFile(int position) {
-        String dirPath = resListAdapter.getData(null);
-        new FileSelectDialog(this, new IFileSelection() {
-            @Override
-            public void fileSelectedInDialog(String filePath, String extraStr, boolean openFile) {
-                String name = filePath.substring(filePath.lastIndexOf("/") + 1);
-                resListAdapter.addFile(extraStr + "/" + name, filePath);
-            }
-
-            @Override
-            public boolean isInterestedFile(String filename, String extraStr) {
-                return true;
-            }
-
-            @Override
-            public String getConfirmMessage(String filePath, String extraStr) {
-                return null;
-            }
-        }, null, dirPath, getString(R.string.add_a_file));
-    }
-
     // To create a folder in current directory
     protected void createFolder(int position) {
-        boolean showImportFolder = isFullDecoding;
-        new AddFolderDialog(this, this, showImportFolder);
+        new AddFolderDialog(this, this);
     }
 
     @Override

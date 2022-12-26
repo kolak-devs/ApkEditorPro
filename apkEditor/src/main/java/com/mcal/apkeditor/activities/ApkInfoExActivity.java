@@ -70,8 +70,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         binding.mainResources.menuHome.setOnClickListener(clickListener);
         binding.mainResources.menuDone.setOnClickListener(clickListener);
         binding.mainResources.menuSelect.setOnClickListener(clickListener);
-        binding.mainResources.menuAddfile.setOnClickListener(clickListener);
-        binding.mainResources.menuAddfolder.setOnClickListener(clickListener);
+        binding.mainResources.menuCreateFileOrFolder.setOnClickListener(clickListener);
         binding.mainResources.imageviewTextCheck.setOnClickListener(clickListener);
         binding.mainResources.imageviewInsensitiveCheck.setOnClickListener(clickListener);
 
@@ -158,12 +157,8 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             else if (id == R.id.menu_select) {
                 selectAllOrNone();
             }
-            // Add a file
-            else if (id == R.id.menu_addfile) {
-                addFile(0);
-            }
             // Add a folder
-            else if (id == R.id.menu_addfolder) {
+            else if (id == R.id.menu_create_file_or_folder) {
                 createFolder(0);
             }
             // Search option (text or filename)
