@@ -30,7 +30,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -225,6 +224,8 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
     private String lastValue = null;
 
+    private ActivityResultLauncher<Intent> importFileLaunch;
+
     // prjDirectory not ends with '/'
     @Nullable
     public static ProjectInfo loadProject(String prjDirectory) {
@@ -403,7 +404,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             parseThread.start();
         }
 
-        pickLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        importFileLaunch = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         final Uri uri = result.getData().getData();
@@ -1295,11 +1296,9 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         resListAdapter.createFile(dirPath + "/" + fileName, fileName);
     }
 
-    ActivityResultLauncher<Intent> pickLauncher;
-
     @Override
     public void importFile() {
-        pickLauncher.launch(FilePickHelper.pickFile(false));
+        importFileLaunch.launch(FilePickHelper.pickFile(false));
     }
 
     // First check if the build is still ongoing
@@ -2253,25 +2252,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
                     extractFileOrDir(positions);
                     return true;
                 });
-            }
-            // Replace the file/folder
-            if (!isFirstItem || curPath.equals(decodeRootPath)) {
-                MenuItem item3 = menu.add(0, Menu.FIRST + 2, 0, R.string.replace);
-                OnMenuItemClickListener listener;
-                if (isDir) {
-                    listener = item -> {
-                        replaceFolder(position);
-                        resListAdapter.dumpChangedFiles();
-                        return true;
-                    };
-                } else {
-                    listener = item -> {
-                        replaceFile(position);
-                        resListAdapter.dumpChangedFiles();
-                        return true;
-                    };
-                }
-                item3.setOnMenuItemClickListener(listener);
             }
         });
         return false;
