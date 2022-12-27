@@ -2,6 +2,7 @@ package com.mcal.apkeditor.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -79,7 +80,6 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         _binding = ActivityPatcherBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "Patcher", true)
-        binding.tickTimer.stop()
         binding.listLog.apply {
             adapter = FastAdapter.with(logItemAdapter)
             addItemDecoration(DividerItemDecoration(this@PatcherActivity, DividerItemDecoration.VERTICAL))
@@ -101,6 +101,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                 patchExecutor = PatchExecutor(this, this, path, this)
                 patchExecutor?.applyPatch()
                 it.isEnabled = false
+                binding.tickTimer.base = SystemClock.elapsedRealtime()
                 binding.tickTimer.start()
             }
         }
