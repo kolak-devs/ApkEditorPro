@@ -1,13 +1,7 @@
 package com.mcal.apkeditor.activities
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -85,6 +79,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         _binding = ActivityPatcherBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "Patcher", true)
+        binding.tickTimer.stop()
         binding.listLog.apply {
             adapter = FastAdapter.with(logItemAdapter)
             addItemDecoration(DividerItemDecoration(this@PatcherActivity, DividerItemDecoration.VERTICAL))
@@ -106,6 +101,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                 patchExecutor = PatchExecutor(this, this, path, this)
                 patchExecutor?.applyPatch()
                 it.isEnabled = false
+                binding.tickTimer.start()
             }
         }
 
@@ -340,7 +336,8 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
     override fun patchFinished() {
         appendText("Finished", bold = true, red = false)
         runOnUiThread {
-           binding.funcApply.isEnabled = true
+            binding.funcApply.isEnabled = true
+            binding.tickTimer.stop()
         }
     }
 
