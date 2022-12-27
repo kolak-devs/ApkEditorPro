@@ -1,10 +1,11 @@
 package com.mcal.common.data
 
-import com.mcal.common.App
 import kotlinx.coroutines.runBlocking
 
 
 object Constants {
+    const val LOG_ERROR = 1
+    const val LOG_INFO = 0
     const val PACKAGE_NAME = "com.mcal.apkeditor.pro"
     const val EXTRACT_AUTORENAME = 0
 

@@ -342,4 +342,6 @@ Nếu bạn mua apk Editor Pro trước đây, và đây không phải là nhữ
     <string name="file">File</string>
     <string name="import_file">Import</string>
     <string name="enter_name">Enter name</string>
+    <string name="btn_select_patch">Select patch</string>
+    <string name="btn_apply_patch">Apply patch</string>
 </resources>

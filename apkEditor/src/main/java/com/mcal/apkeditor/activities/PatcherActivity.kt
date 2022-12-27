@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.IGeneralCallback
@@ -25,6 +26,7 @@ import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener
 import com.mcal.apkeditor.patch.interfaces.IPatchContext
 import com.mcal.apkeditor.smali.AsyncDecodeTask
+import com.mcal.apkeditor.ui.patcher.PatchLogItem
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.activities.WebViewActivity
 import com.mcal.common.data.Constants
@@ -58,6 +60,9 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
     private var mPatchPath: String? = null
     private var mIsDexDecoded: Boolean = false
     private var mDexDecodedCallback: IGeneralCallback? = null
+    private val logItemAdapter by lazy {
+        ItemAdapter<PatchLogItem>()
+    }
 
     // Record all the global parameter values
     private val globalVariableValues: MutableMap<String, String> = HashMap()
@@ -67,7 +72,6 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
 
     companion object {
         const val PATCH_NAME = "name"
-        const val LOG = "log"
         const val PATCH_PATH = "patchPath"
         const val HTML_URL = "htmlUrl"
         const val DECODE_PATH = "decodeRootPath"
@@ -81,6 +85,10 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         _binding = ActivityPatcherBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "Patcher", true)
+        binding.listLog.apply {
+            adapter = FastAdapter.with(logItemAdapter)
+            addItemDecoration(DividerItemDecoration(this@PatcherActivity, DividerItemDecoration.VERTICAL))
+        }
 
         if (intent.extras != null) {
             mDecodedPath = intent.getStringExtra(DECODE_PATH)
@@ -89,15 +97,15 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
             mApkInfo = ApkInfoParser().parse(this, mApkPath)
         }
 
-        binding.selectPatch.setOnClickListener {
+        binding.funcSelect.setOnClickListener {
             pickLauncher.launch(FilePickHelper.pickFile(false))
         }
 
-        binding.applyPatch.setOnClickListener {
+        binding.funcApply.setOnClickListener {
             mPatchPath?.let { path ->
                 patchExecutor = PatchExecutor(this, this, path, this)
                 patchExecutor?.applyPatch()
-                binding.applyPatch.isEnabled = false
+                it.isEnabled = false
             }
         }
 
@@ -189,7 +197,6 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
             mDecodedPath = it.getString(DECODE_PATH)
             mApkPath = it.getString(APK_PATH)
             mIsDexDecoded = it.getBoolean(IS_DECODED_DEX)
-            binding.log.text = it.getString(LOG)
             binding.filename.setText(it.getString(PATCH_NAME))
             mApkInfo = ApkInfoParser().parse(this, mApkPath)
         }
@@ -201,7 +208,6 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         outState.putString(DECODE_PATH, mDecodedPath)
         outState.putString(APK_PATH, mApkPath)
         outState.putBoolean(IS_DECODED_DEX, mIsDexDecoded)
-        outState.putString(LOG, binding.log.text.toString())
         outState.putString(PATCH_NAME, binding.filename.text.toString())
     }
 
@@ -310,8 +316,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         args?.let {
             txt = String.format(txt, *args)
         }
-        val message = if (bold) "\n" + txt + "\n" else txt + "\n"
-        appendText(message, bold, false)
+        appendText(txt, bold, false)
     }
 
     override fun info(format: String, bold: Boolean, vararg args: Any?) {
@@ -320,8 +325,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         args?.let {
             txt = String.format(txt, *args)
         }
-        val message = if (bold) "\n" + txt + "\n" else txt + "\n"
-        appendText(message, bold, false)
+        appendText(txt, bold, false)
     }
 
     override fun error(resourceId: Int, vararg args: Any?) {
@@ -330,13 +334,13 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         args?.let {
             txt = String.format(txt, *args)
         }
-        appendText(txt + "\n", bold = false, red = true)
+        appendText(txt, bold = false, red = true)
     }
 
     override fun patchFinished() {
-        appendText("\nFinished", bold = true, red = false)
+        appendText("Finished", bold = true, red = false)
         runOnUiThread {
-            binding.applyPatch.isEnabled = true
+           binding.funcApply.isEnabled = true
         }
     }
 
@@ -376,20 +380,11 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
     ) {
         runOnUiThread {
             if (red) {
-                val spanString = SpannableString(txt)
-                val span = ForegroundColorSpan(Color.RED)
-                spanString.setSpan(span, 0, txt.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                binding.log.append(spanString)
+                logItemAdapter.add(PatchLogItem(Constants.LOG_ERROR, txt, false))
             } else if (bold) {
-                val spanString = SpannableString(txt)
-                val span = StyleSpan(Typeface.BOLD)
-                spanString.setSpan(
-                    span, 0, txt.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                binding.log.append(spanString)
+                logItemAdapter.add(PatchLogItem(Constants.LOG_INFO, txt, bold))
             } else {
-                binding.log.append(txt)
+                logItemAdapter.add(PatchLogItem(Constants.LOG_INFO, txt, false))
             }
         }
     }
