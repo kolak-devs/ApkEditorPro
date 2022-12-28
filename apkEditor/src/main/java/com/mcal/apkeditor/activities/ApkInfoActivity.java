@@ -32,12 +32,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -92,7 +90,6 @@ import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
 import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
 import com.mcal.bshengine.BshEngineActivity;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.data.ReactivePreferences;
 import com.mcal.common.filesystem.FilePickHelper;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
@@ -224,7 +221,12 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
     private String lastValue = null;
 
-    private ActivityResultLauncher<Intent> importFileLaunch;
+    @Nullable
+    private ActivityResultLauncher<Intent> mImportFileLaunch;
+    @Nullable
+    private ActivityResultLauncher<Intent> mReplaceFileLaunch;
+    @Nullable
+    private String mReplaceFilePath;
 
     // prjDirectory not ends with '/'
     @Nullable
@@ -404,7 +406,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             parseThread.start();
         }
 
-        importFileLaunch = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        mImportFileLaunch = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         final Uri uri = result.getData().getData();
@@ -419,6 +421,31 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+        mReplaceFileLaunch = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        final Uri uri = result.getData().getData();
+                        if (uri != null) {
+                            final String origFilePath = mReplaceFilePath;
+                            if (origFilePath != null) {
+                                final File file = new File(origFilePath);
+                                if (file.exists()) {
+                                    file.delete();
+                                }
+                                try {
+                                    final InputStream inputStream = getContentResolver().openInputStream(uri);
+                                    if (inputStream != null) {
+                                        copyFile(inputStream, file);
+                                        Toast.makeText(this, R.string.succeed, Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -1260,20 +1287,22 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     }
 
     @Override
-    public void createFolder(String folderName) {
+    public void createFolder(@NonNull String folderName) {
         final String dirPath = resListAdapter.getData(null);
         resListAdapter.addFolder(dirPath, folderName);
     }
 
     @Override
-    public void createFile(String fileName) {
+    public void createFile(@NonNull String fileName) {
         final String dirPath = resListAdapter.getData(null);
         resListAdapter.createFile(dirPath + "/" + fileName, fileName);
     }
 
     @Override
     public void importFile() {
-        importFileLaunch.launch(FilePickHelper.pickFile(false));
+        if (mImportFileLaunch != null) {
+            mImportFileLaunch.launch(FilePickHelper.pickFile(false));
+        }
     }
 
     // First check if the build is still ongoing
@@ -2228,8 +2257,28 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
                     return true;
                 });
             }
+
+            if (!isDir) {
+                if (!isFirstItem || curPath.equals(decodeRootPath)) {
+                    final MenuItem item2 = menu.add(0, Menu.FIRST + 2, 0, R.string.replace);
+                    item2.setOnMenuItemClickListener(item -> {
+                        replaceFileSAF(position);
+                        return true;
+                    });
+                }
+            }
         });
         return false;
+    }
+
+    public void replaceFileSAF(int position) {
+        final List<FileRecord> fileRecords = new ArrayList<>();
+        final String dirPath = resListAdapter.getData(fileRecords);
+        final FileRecord rec = fileRecords.get(position);
+        mReplaceFilePath = dirPath + "/" + rec.fileName;
+        if (mReplaceFileLaunch != null) {
+            mReplaceFileLaunch.launch(FilePickHelper.pickFile(false));
+        }
     }
 
     @NonNull

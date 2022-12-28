@@ -32,8 +32,8 @@ class AddFolderDialog(context: Context, callback: AddFolderCallback) {
     }
 
     interface AddFolderCallback {
-        fun createFolder(folderName: String?)
-        fun createFile(folderName: String?)
+        fun createFolder(folderName: String)
+        fun createFile(folderName: String)
         fun importFile()
     }
 }

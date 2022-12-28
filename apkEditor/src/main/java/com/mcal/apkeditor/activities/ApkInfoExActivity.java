@@ -133,7 +133,11 @@ public class ApkInfoExActivity extends ApkInfoActivity {
     public void selectionChanged(Set<Integer> selected) {
         super.selectionChanged(selected);
         if (selected.size() == 1) {
-            enableMenuItem(menuItem_replace, true);
+            final List<FileRecord> fileList = new ArrayList<>();
+            resListAdapter.getData(fileList);
+            final int position = selected.iterator().next();
+            final FileRecord rec = fileList.get(position);
+            enableMenuItem(menuItem_replace, rec != null && !rec.isDir);
             enableMenuItem(menuItem_details, true);
         } else {
             enableMenuItem(menuItem_replace, false);
@@ -455,8 +459,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             rename_addNewFile(curDir, curDir + "/" + newName, tmpFilePath);
         }
 
-        private void rename_addNewFile(String dirPath, String targetPath,
-                                       String filePath) {
+        private void rename_addNewFile(String dirPath, String targetPath, String filePath) {
             FileInputStream fis = null;
             try {
                 fis = new FileInputStream(filePath);
@@ -534,8 +537,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         }
 
         private void selectAllOrNone() {
-            Set<Integer> checked = ApkInfoExActivity.this.resListAdapter
-                    .getCheckedItems();
+            Set<Integer> checked = resListAdapter.getCheckedItems();
             int count = resListAdapter.getCount();
             List<FileRecord> records = new ArrayList<>(count);
             resListAdapter.getData(records);
@@ -549,23 +551,13 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         }
 
         private void replaceFileOrFolder() {
-            Set<Integer> selected = resListAdapter.getCheckedItems();
+            final Set<Integer> selected = resListAdapter.getCheckedItems();
             if (selected.isEmpty()) {
                 return;
             }
 
-            int position = selected.iterator().next();
-
-            // Check the item is directory or not
-            List<FileRecord> records = new ArrayList<>();
-            resListAdapter.getData(records);
-            boolean isDir = records.get(position).isDir;
-
-            if (isDir) {
-                replaceFolder(position);
-            } else {
-                replaceFile(position);
-            }
+            final int position = selected.iterator().next();
+            replaceFileSAF(position);
         }
     }
 }
