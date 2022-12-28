@@ -38,13 +38,6 @@
             android:summaryOn="JSON"
             android:summaryOff="YML"/>
 
-        <androidx.preference.SwitchPreference
-            app:defaultValue="true"
-            android:key="SmaliEditingEnabled"
-            android:summaryOff="@string/smali_edit_disabled_summary"
-            android:summaryOn="@string/smali_edit_summary"
-            android:title="@string/smali_editing" />
-
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

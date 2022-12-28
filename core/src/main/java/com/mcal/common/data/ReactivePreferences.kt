@@ -95,10 +95,6 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_CLASSES] ?: false
     }
 
-    suspend fun isDexToSmali(): Boolean{
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.BUILD_SMALI_EDITING] ?: true
-    }
-
     suspend fun setDecodeAssets(enabled: Boolean){
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Compiler.DECODE_ASSETS] = enabled
@@ -172,12 +168,4 @@ object ReactivePreferences {
         return fallback
     }
 
-    @JvmStatic
-    fun isLegacySmaliEnabled(): Boolean {
-        var fallback: Boolean
-        runBlocking {
-            fallback = isDexToSmali()
-        }
-        return fallback
-    }
 }
