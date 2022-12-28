@@ -1,57 +1,29 @@
 package com.mcal.apkeditor.activities
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import androidx.annotation.StringRes
-import androidx.appcompat.widget.Toolbar
 import com.mcal.apkeditor.R
+import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.activities.CustomizedLangActivity
 
 class AboutActivity : CustomizedLangActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
-        setupToolbar(R.string.about)
-    }
-
-    private fun setupToolbar(@StringRes title: Int) {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        supportActionBar?.apply {
-            setTitle(title)
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
+        run {
+            setToolbar(R.id.toolbar)
+            title(getString(R.string.about))
+            subTitle(Utils.getVersionString())
+            back(true)
+            show()
         }
     }
 
     fun openTelegram(view: View) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/apkeditorproofficial")))
-    }
-
-    fun openGitHub(view: View) {
-        startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://github.com/TimScriptov/ApkEditor")
-            )
-        )
-    }
-
-    fun donateTon(view: View) {
-        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText(
-            "Copied TON Coin Address",
-            "EQBw0AcMsqJ7slxDD8u8bo2frsqWizASHLHmlNkte6giZWBE"
-        )
-        clipboard.setPrimaryClip(clip)
-        Toast.makeText(this, "Copied TON Coin Address", Toast.LENGTH_SHORT).show()
     }
 
     fun openTimscriptov(view: View) {
@@ -60,21 +32,6 @@ class AboutActivity : CustomizedLangActivity() {
 
     fun openSVolf(view: View) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/SnowVolf")))
-    }
-
-    fun donateYandexMoney(view: View) {
-        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("Copied Yandex Money Address", "4100117726163824")
-        clipboard.setPrimaryClip(clip)
-        Toast.makeText(this, "Copied Yandex Money Address", Toast.LENGTH_SHORT).show()
-    }
-
-    fun donateQiwi(view: View) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://qiwi.com/p/79025916451")))
-    }
-
-    fun donatePayPal(view: View) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.me/timscriptov")))
     }
 
     fun openJaDX(view: View) {
