@@ -21,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class App : Application() {
+abstract class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -54,9 +54,9 @@ class App : Application() {
 
         @JvmStatic
         fun getContext(): Context {
-            if (context == null) {
-                context = App()
-            }
+//            if (context == null) {
+//                context = App()
+//            }
             return context!!
         }
         /**

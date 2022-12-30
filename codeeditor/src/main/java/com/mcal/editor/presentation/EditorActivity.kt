@@ -57,9 +57,11 @@ import java.nio.file.Paths
 import java.util.regex.PatternSyntaxException
 
 
-class EditorActivity : BaseEditorActivity<ActivitySoraeditorBinding>(
+class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBinding>(
     ActivitySoraeditorBinding::inflate
 ), CodeNavigationDialog.ISmaliMethodClicked, ColorMixer.OnColorChangedListener {
+
+    override fun viewModelClass() = EditorViewModel::class.java
 
     private var save: MenuItem? = null
     private var undo: MenuItem? = null
