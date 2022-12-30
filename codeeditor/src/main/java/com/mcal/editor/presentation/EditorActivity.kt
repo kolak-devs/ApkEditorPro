@@ -1,4 +1,4 @@
-package com.mcal.editor
+package com.mcal.editor.presentation
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -17,12 +17,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.colorconverter.ColorPickerConverter
 import com.mcal.colormixer.ColorMixer
 import com.mcal.colormixer.ColorMixerDialog
-import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ClipboardUtils.copyToClipboard
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
+import com.mcal.editor.TextEditor
+import com.mcal.editor.core.BaseEditorActivity
 import com.mcal.editor.dialogs.SmaliCodeDialog
 import com.mcal.editor.navigation.CodeNavigationDialog
 import com.mcal.editor.utils.FileUtils
@@ -56,9 +57,9 @@ import java.nio.file.Paths
 import java.util.regex.PatternSyntaxException
 
 
-class EditorActivity : CustomizedLangActivity(),
-    CodeNavigationDialog.ISmaliMethodClicked, ColorMixer.OnColorChangedListener {
-    private lateinit var binding: ActivitySoraeditorBinding
+class EditorActivity : BaseEditorActivity<ActivitySoraeditorBinding>(
+    ActivitySoraeditorBinding::inflate
+), CodeNavigationDialog.ISmaliMethodClicked, ColorMixer.OnColorChangedListener {
 
     private var save: MenuItem? = null
     private var undo: MenuItem? = null
@@ -84,8 +85,6 @@ class EditorActivity : CustomizedLangActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySoraeditorBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         setupToolbar(R.id.toolbar, "Editor", false)
         initIntent()
         getFileName()
