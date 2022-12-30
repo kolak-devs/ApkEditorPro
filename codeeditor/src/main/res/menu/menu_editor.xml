@@ -30,7 +30,6 @@
         <menu>
 
             <item
-
                 android:id="@+id/goto_end"
                 android:title="@string/go_to_end" />
 
