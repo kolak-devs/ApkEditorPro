@@ -85,8 +85,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
     private var resIdNotFound = -1
     private var startLine = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun callOperations() = with(viewModel) {
         setupToolbar(R.id.toolbar, "Editor", false)
         initIntent()
         getFileName()
@@ -94,9 +93,49 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
         initSearchEditor()
         initEditor()
         openFile()
-        updatePositionText()
+        viewModel.updatePositionText(binding.editor.cursor, binding.editor.text)
         updateBtnState()
-        setupDiagnostics()
+        viewModel.setupDiagnostics(binding.editor.text)
+    }
+
+    override fun onSetupLayout() = with(binding) {
+        buttonGotoNext.setOnClickListener {
+            try {
+                binding.editor.searcher.gotoNext()
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+            }
+        }
+        buttonGotoLast.setOnClickListener {
+            try {
+                binding.editor.searcher.gotoPrevious()
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+            }
+        }
+        buttonReplaceAll.setOnClickListener {
+            try {
+                binding.editor.searcher.replaceAll(binding.replaceEditor.text.toString())
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+            }
+        }
+        buttonReplace.setOnClickListener {
+            try {
+                binding.editor.searcher.replaceThis(binding.replaceEditor.text.toString())
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    override fun onBindViewModel() = with(viewModel){
+        updatePositionText.observe(this@EditorActivity) { text ->
+            binding.positionDisplay.text = text
+        }
+        setupDiagnostics.observe(this@EditorActivity) { container ->
+            binding.editor.diagnostics = container
+        }
     }
 
     private fun initEditor() {
@@ -106,7 +145,9 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
             typefaceText = Typeface.createFromAsset(assets, "JetBrainsMono-Regular.ttf")
             setLineSpacing(2f, 1.1f)
             // Update display dynamically
-            subscribeEvent<SelectionChangeEvent> { _, _ -> updatePositionText() }
+            subscribeEvent<SelectionChangeEvent> { _, _ ->
+                viewModel.updatePositionText(binding.editor.cursor, binding.editor.text)
+            }
             subscribeEvent<ContentChangeEvent> { _, _ ->
                 postDelayed(::updateBtnState, 50)
             }
@@ -146,22 +187,6 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
         }
     }
 
-    private fun setupDiagnostics() {
-        val editor = binding.editor
-        val container = DiagnosticsContainer()
-        for (i in 0 until editor.text.lineCount) {
-            val index = editor.text.getCharIndex(i, 0)
-            container.addDiagnostic(
-                DiagnosticRegion(
-                    index,
-                    index + editor.text.getColumnCount(i),
-                    DiagnosticRegion.SEVERITY_ERROR
-                )
-            )
-        }
-        editor.diagnostics = container
-    }
-
     private fun generateKeybindingString(event: KeyBindingEvent): String {
         val sb = StringBuilder()
         if (event.isCtrlPressed) {
@@ -178,43 +203,6 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
 
         sb.append(KeyEvent.keyCodeToString(event.keyCode))
         return sb.toString()
-    }
-
-    private fun updatePositionText() {
-        val cursor = binding.editor.cursor
-        var text = (1 + cursor.leftLine).toString() + ":" + cursor.leftColumn + " "
-        text += if (cursor.isSelected) {
-            "(" + (cursor.right - cursor.left) + " chars)"
-        } else {
-            val content = binding.editor.text
-            if (content.getColumnCount(cursor.leftLine) == cursor.leftColumn) {
-                "(<" + content.getLine(cursor.leftLine).lineSeparator.let {
-                    if (it == LineSeparator.NONE) {
-                        "EOF"
-                    } else {
-                        it.name
-                    }
-                } + ">)"
-            } else {
-                "(" + escapeIfNecessary(
-                    binding.editor.text.charAt(
-                        cursor.leftLine,
-                        cursor.leftColumn
-                    )
-                ) + ")"
-            }
-        }
-        binding.positionDisplay.text = text
-    }
-
-    private fun escapeIfNecessary(c: Char): String {
-        return when (c) {
-            '\n' -> "\\n"
-            '\t' -> "\\t"
-            '\r' -> "\\r"
-            ' ' -> "<ws>"
-            else -> c.toString()
-        }
     }
 
     private fun initSearchEditor() {
@@ -380,7 +368,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
                     e.printStackTrace()
                 }
             }.start()
-            updatePositionText()
+            viewModel.updatePositionText(binding.editor.cursor, binding.editor.text)
             updateBtnState()
         }
     }
@@ -494,7 +482,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
                         }
                         withContext(Dispatchers.Main) {
                             openFile()
-                            updatePositionText()
+                            viewModel.updatePositionText(binding.editor.cursor, binding.editor.text)
                             updateBtnState()
                             if (exit) {
                                 finish()
@@ -850,42 +838,6 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun gotoNext(view: View?) {
-        try {
-            binding.editor.searcher.gotoNext()
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-        }
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun gotoLast(view: View?) {
-        try {
-            binding.editor.searcher.gotoPrevious()
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-        }
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun replace(view: View?) {
-        try {
-            binding.editor.searcher.replaceThis(binding.replaceEditor.text.toString())
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-        }
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun replaceAll(view: View?) {
-        try {
-            binding.editor.searcher.replaceAll(binding.replaceEditor.text.toString())
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-        }
     }
 
     private fun showNavigationMethods() {

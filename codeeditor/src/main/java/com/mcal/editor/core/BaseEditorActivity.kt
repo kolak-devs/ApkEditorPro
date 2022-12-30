@@ -29,5 +29,12 @@ abstract class BaseEditorActivity<VM : ViewModel, VB : ViewBinding>(
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         viewModel = provideViewModel(viewModelClass(), this)
+        callOperations()
+        onSetupLayout()
+        onBindViewModel()
     }
+
+    abstract fun onSetupLayout()
+    abstract fun callOperations()
+    abstract fun onBindViewModel()
 }
