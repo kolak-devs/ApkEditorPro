@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.colormixer
+package com.mcal.colormixer
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import com.mcal.colormixer.R
 import java.lang.ref.WeakReference
 
 class ColorValueAdapter(

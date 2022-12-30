@@ -12,10 +12,10 @@ import android.widget.ListView
 import android.widget.Toast
 import com.google.android.material.appbar.MaterialToolbar
 import com.mcal.apkeditor.R
-import com.mcal.apkeditor.colormixer.ColorMixer
-import com.mcal.apkeditor.colormixer.ColorValue
-import com.mcal.apkeditor.colormixer.ColorValueAdapter
+import com.mcal.colormixer.ColorMixer
 import com.mcal.colormixer.ColorMixerDialog
+import com.mcal.colormixer.ColorValue
+import com.mcal.colormixer.ColorValueAdapter
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.ActivityHelper
 import com.mcal.editor.TextEditor.getSoraEditor
@@ -229,7 +229,7 @@ class ColorXmlActivity : CustomizedLangActivity(), View.OnClickListener, OnItemC
                 value.intColorValue = argb
                 value.strColorValue = "#" + Integer.toHexString(argb)
                 saveBtn?.let { save -> save.visibility = View.VISIBLE }
-                colorAdapter!!.notifyDataSetChanged()
+                colorAdapter?.notifyDataSetChanged()
             }
         }
     }

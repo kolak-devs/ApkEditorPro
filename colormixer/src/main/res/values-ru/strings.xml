@@ -7,4 +7,10 @@
     <string name="color">Цвет</string>
     <string name="name">Название</string>
     <string name="value">Значение</string>
+
+    <string name="clear">Очистить</string>
+    <string name="close">Закрыть</string>
+    <string name="color_converter">Конвертер цветов</string>
+    <string name="copied_to_clipboard">%1$s скопирован в буфер обмена</string>
+    <string name="invalid_color_value">Недопустимое значение цвета</string>
 </resources>

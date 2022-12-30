@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.colormixer
+package com.mcal.colormixer
 
 import android.annotation.SuppressLint
 import android.content.Context

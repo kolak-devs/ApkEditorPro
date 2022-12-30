@@ -14,7 +14,8 @@ import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.mcal.apkeditor.colormixer.ColorMixer
+import com.mcal.colorconverter.ColorPickerConverter
+import com.mcal.colormixer.ColorMixer
 import com.mcal.colormixer.ColorMixerDialog
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.ReactivePreferences
@@ -702,6 +703,9 @@ class EditorActivity : CustomizedLangActivity(),
         val id = item.itemId
         val editor = binding.editor
         when (id) {
+            R.id.color_converter -> {
+                ColorPickerConverter(this, 0xffff0000.toInt()).show()
+            }
             R.id.pallete -> {
                 ColorMixerDialog(this, 0xFFFFFF, this)
             }
