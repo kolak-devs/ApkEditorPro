@@ -10,7 +10,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.ApkInfoExActivity
 import com.mcal.common.data.ReactivePreferences
-import com.mcal.common.utils.ActivityHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

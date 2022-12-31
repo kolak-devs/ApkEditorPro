@@ -5,13 +5,11 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.GetContent
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.colorconverter.ColorPickerConverter
@@ -19,21 +17,19 @@ import com.mcal.colormixer.ColorMixer
 import com.mcal.colormixer.ColorMixerDialog
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ClipboardUtils.copyToClipboard
-import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
-import com.mcal.editor.TextEditor
 import com.mcal.editor.core.BaseEditorActivity
+import com.mcal.editor.dialogs.DecToHexConverter
+import com.mcal.editor.dialogs.DexToJava
 import com.mcal.editor.dialogs.SmaliCodeDialog
+import com.mcal.editor.dialogs.SmaliToJava
 import com.mcal.editor.navigation.CodeNavigationDialog
 import com.mcal.editor.utils.FileUtils
-import com.mcal.editor.utils.JavaExtractor
 import com.mcal.neweditor.R
 import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
 import io.github.rosemoe.sora.event.*
 import io.github.rosemoe.sora.lang.EmptyLanguage
-import io.github.rosemoe.sora.lang.diagnostic.DiagnosticRegion
-import io.github.rosemoe.sora.lang.diagnostic.DiagnosticsContainer
 import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme
 import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
 import io.github.rosemoe.sora.text.LineSeparator
@@ -42,8 +38,6 @@ import io.github.rosemoe.sora.widget.EditorSearcher
 import io.github.rosemoe.sora.widget.component.Magnifier
 import io.github.rosemoe.sora.widget.style.builtin.ScaleCursorAnimator
 import io.github.rosemoe.sora.widget.subscribeEvent
-import jadx.api.JadxDecompiler
-import jadx.plugins.input.smali.SmaliInputPlugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,8 +46,6 @@ import org.eclipse.tm4e.core.registry.IGrammarSource
 import org.eclipse.tm4e.core.registry.IThemeSource
 import java.io.File
 import java.io.IOException
-import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.regex.PatternSyntaxException
 
 
@@ -71,8 +63,8 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
     private var methodsList: MenuItem? = null
     private var templatesMenu: MenuItem? = null
 
-    private var filePath: File? = null
-    private var apkPath: File? = null
+    private var mFilePath: File? = null
+    private var mApkPath: File? = null
     private var realFilePath: String? = null // when not null, need to copy back to real path
     private var isRootMode = false
     private var resIds: List<Int>? = null
@@ -129,7 +121,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
         }
     }
 
-    override fun onBindViewModel() = with(viewModel){
+    override fun onBindViewModel() = with(viewModel) {
         updatePositionText.observe(this@EditorActivity) { text ->
             binding.positionDisplay.text = text
         }
@@ -272,7 +264,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
     }
 
     private fun getLanguage(): TextMateLanguage? {
-        filePath?.name?.let { fileName ->
+        mFilePath?.name?.let { fileName ->
             return if (fileName.endsWith(".smali")) {
                 getTextMateLanguage("smali.tmLanguage.json", "textmate/smali/syntaxes/smali.tmLanguage.json")
             } else if (fileName.endsWith(".java") || fileName.endsWith(".bsh")) {
@@ -321,11 +313,11 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
     private fun initIntent() {
         extraString = intent.getStringExtra("extraString")
         filePathList = intent.getStringArrayListExtra("fileList")
-        filePath = File(intent.getStringExtra("filePath").toString())
+        mFilePath = File(intent.getStringExtra("filePath").toString())
         curFileIndex = intent.getIntExtra("curFileIndex", 0)
         startLine = intent.getIntExtra("startLine", 0)
         startLineList = intent.getIntegerArrayListExtra("startLineList")
-        apkPath = File(intent.getStringExtra("apkPath").toString())
+        mApkPath = File(intent.getStringExtra("apkPath").toString())
         realFilePath = intent.getStringExtra("realFilePath")
         isRootMode = intent.getBooleanExtra("isRootMode", false)
         resIds = intent.getIntegerArrayListExtra("resourceIds")
@@ -338,7 +330,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
 
     private fun copyBack2RealPath(realPath: String) {
         try {
-            filePath?.let { path ->
+            mFilePath?.let { path ->
                 copyBack(path.path, realPath, isRootMode)
             }
         } catch (e: java.lang.Exception) {
@@ -347,7 +339,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
     }
 
     private fun openFile() {
-        filePath?.let { path ->
+        mFilePath?.let { path ->
             Thread {
                 try {
                     val text = FileUtils.readFileAsTextUsingInputStream(path.path)
@@ -375,10 +367,10 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
 
     private fun getFileName() {
         filePathList?.let { list ->
-            filePath = File(list[curFileIndex])
+            mFilePath = File(list[curFileIndex])
         }
         realFilePath?.let { path ->
-            filePath = File(path)
+            mFilePath = File(path)
         }
     }
 
@@ -390,7 +382,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
         save?.isEnabled = canSave()
         undo?.isEnabled = binding.editor.canUndo()
         redo?.isEnabled = binding.editor.canRedo()
-        filePath?.let { path ->
+        mFilePath?.let { path ->
             dexToJava?.isVisible = path.name.endsWith(".smali")
             smaliToJava?.isVisible = path.name.endsWith(".smali")
             methodsList?.isVisible = path.name.endsWith(".smali") or path.name.endsWith(".java")
@@ -473,7 +465,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
                 @Throws(java.lang.Exception::class)
                 override fun process() {
                     CoroutineScope(Dispatchers.IO).launch {
-                        filePath?.let {
+                        mFilePath?.let {
                             FileUtils.writeText(it.path, binding.editor.text.toString())
                         }
 
@@ -500,192 +492,20 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
     override fun onBackPressed() {
         if (canSave()) {
             val dialog = MaterialAlertDialogBuilder(this)
-            filePath?.name?.let { name ->
+            mFilePath?.name?.let { name ->
                 dialog.setTitle(name)
             }
-            dialog.setMessage("Do you want to save this file?")
-            dialog.setPositiveButton("Save") { _, _ ->
+            dialog.setMessage(getString(R.string.message_save_file))
+            dialog.setPositiveButton(getString(R.string.save)) { _, _ ->
                 save(true)
             }
-            dialog.setNegativeButton("Don't save") { _, _ ->
+            dialog.setNegativeButton(android.R.string.cancel) { _, _ ->
                 super.onBackPressed()
             }
             dialog.show()
         } else {
             super.onBackPressed()
         }
-    }
-
-    private fun smaliToJava() {
-        val inflater = LayoutInflater.from(this)
-        val view: View = inflater.inflate(R.layout.dialog_proccessing, null)
-        val dialog: AlertDialog = MaterialAlertDialogBuilder(this).create()
-        dialog.setView(view)
-        dialog.setCancelable(false)
-        dialog.show()
-
-        var javaPath: String? = null
-        CoroutineScope(Dispatchers.IO).launch {
-            filePath?.let { smaliPath ->
-                JadxDecompiler().use { decompiler ->
-                    decompiler.addCustomLoad(
-                        SmaliInputPlugin().loadFiles(
-                            listOf<Path>(
-                                Paths.get(
-                                    smaliPath.path
-                                )
-                            )
-                        )
-                    )
-                    decompiler.load()
-                    for (cls in decompiler.classes) {
-                        val packageNamePath = File(
-                            ScopedStorage.getTmpDir().path + File.separator + cls.getPackage().replace(".", "/")
-                        )
-                        if (!packageNamePath.exists()) {
-                            packageNamePath.mkdirs()
-                        }
-                        javaPath = packageNamePath.toString() + File.separator + cls.name + ".java"
-                        javaPath?.let { path ->
-                            FileUtils.writeText(path, cls.code)
-                        }
-                    }
-                }
-            }
-
-            withContext(Dispatchers.Main) {
-                javaPath?.let { path ->
-                    val intent = TextEditor.getSoraEditor(this@EditorActivity, path, null, 0, null)
-                    startActivity(intent)
-                    dialog.dismiss()
-                }
-            }
-        }
-    }
-
-    private fun dexToJava() {
-        if (apkPath == null) {
-            Toast.makeText(
-                this,
-                "Internal error: cannot find apk path to decode java code, please contact the author.",
-                Toast.LENGTH_LONG
-            ).show()
-            return
-        }
-
-        val workingDirectory: String = try {
-            ScopedStorage.getTmpDir().path
-        } catch (e: java.lang.Exception) {
-            Toast.makeText(this, "Cannot make working directory.", Toast.LENGTH_SHORT).show()
-            e.printStackTrace()
-            return
-        }
-
-        val dexAndClass = getDexAndClassName()
-        val dexName = dexAndClass[0]
-        val className = dexAndClass[1]
-
-        val inflater = LayoutInflater.from(this)
-        val view: View = inflater.inflate(R.layout.dialog_proccessing, null)
-
-        val dialog = MaterialAlertDialogBuilder(this).create()
-        dialog.setView(view)
-        dialog.setCancelable(false)
-        dialog.show()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            apkPath?.let { path ->
-                val extractor = JavaExtractor(path.path, dexName, className, workingDirectory)
-                val succeed = extractor.extract()
-                var errMessage: String? = null
-                if (!succeed) {
-                    errMessage = extractor.errorMessage
-                }
-
-                withContext(Dispatchers.Main) {
-                    if (succeed) {
-                        var relativePath = className.substring(1)
-                        var filePath = "$workingDirectory/$relativePath.java"
-                        var fileExist = File(filePath).exists()
-                        if (!fileExist) {
-                            do {
-                                // Try to remove string after $
-                                val position = relativePath.lastIndexOf('$')
-                                if (position != -1) {
-                                    relativePath = relativePath.substring(0, position)
-                                    filePath = "$workingDirectory/$relativePath.java"
-                                    fileExist = File(filePath).exists()
-                                    if (fileExist) {
-                                        break
-                                    }
-                                }
-
-                                // Try to get the file in defpackage folder
-                                filePath = workingDirectory + File.separator + "defpackage/" + relativePath + ".java"
-                                fileExist = File(filePath).exists()
-                                if (fileExist) {
-                                    break
-                                }
-                            } while (false)
-                        }
-                        if (!fileExist) {
-                            Toast.makeText(
-                                this@EditorActivity,
-                                "Cannot find java file",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } else {
-                            val intent: Intent =
-                                TextEditor.getSoraEditor(
-                                    this@EditorActivity,
-                                    filePath,
-                                    null,
-                                    0,
-                                    null
-                                )
-                            startActivity(intent)
-                        }
-                    } else {
-                        Toast.makeText(this@EditorActivity, errMessage, Toast.LENGTH_LONG).show()
-                    }
-                    dialog.dismiss()
-                }
-            }
-        }
-    }
-
-    private fun getDexAndClassName(): Array<String> {
-        var dexName = "classes.dex"
-        val sb = StringBuilder()
-        filePath?.path?.split("/")?.toTypedArray()?.let { dirs ->
-            var i = 0
-            while (i < dirs.size) {
-                if ("smali" == dirs[i]) {
-                    break
-                }
-                if (dirs[i].startsWith("smali_")) {
-                    dexName = dirs[i].substring(6) + ".dex"
-                    break
-                }
-                i++
-            }
-            sb.append('L')
-            i += 1
-            while (i < dirs.size) {
-                var name = dirs[i]
-                if (i == dirs.size - 1) {
-                    if (name.length > 6 && name.endsWith(".smali")) {
-                        name = name.substring(0, name.length - 6)
-                        sb.append(name)
-                    }
-                } else {
-                    sb.append(name)
-                    sb.append('/')
-                }
-                i++
-            }
-        }
-        return if (sb.isEmpty()) emptyArray() else arrayOf(dexName, sb.toString())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -695,6 +515,9 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
             R.id.color_converter -> {
                 ColorPickerConverter(this, 0xffff0000.toInt()).show()
             }
+            R.id.dec2hex -> {
+                DecToHexConverter(this).show()
+            }
             R.id.pallete -> {
                 ColorMixerDialog(this, 0xFFFFFF, this)
             }
@@ -702,15 +525,21 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
                 showNavigationMethods()
             }
             R.id.template -> {
-                filePath?.let {
+                mFilePath?.let {
                     SmaliCodeDialog(this, it.path)
                 }
             }
             R.id.smali_to_java -> {
-                smaliToJava()
+                mFilePath?.let { filePath ->
+                    SmaliToJava(this, filePath).show()
+                }
             }
             R.id.dex_to_java -> {
-                dexToJava()
+                mFilePath?.let { filePath ->
+                    mApkPath?.let { apkPath ->
+                        DexToJava(this, filePath, apkPath).show()
+                    }
+                }
             }
             R.id.text_save -> {
                 save()
@@ -841,7 +670,7 @@ class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBin
     }
 
     private fun showNavigationMethods() {
-        filePath?.let { path ->
+        mFilePath?.let { path ->
             CodeNavigationDialog(this).asyncShowPopup(
                 this,
                 path.path,

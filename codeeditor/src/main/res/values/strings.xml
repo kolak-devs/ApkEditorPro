@@ -38,4 +38,12 @@
     <string name="pallete">Палитра</string>
     <string name="color_converter">Конвертер цветов</string>
     <string name="other">Other</string>
+    <string name="message_save_file">Do you want to save this file?</string>
+    <string name="save">Save</string>
+    <string name="decimal">Decimal (base 10)</string>
+    <string name="hex">Hex (base 16)</string>
+    <string name="dec2hex">Dec to Hex</string>
+    <string name="close">Close</string>
+    <string name="clear">Clear</string>
+    <string name="copied_to_clipboard">\"Copied to clipboard \"</string>
 </resources>

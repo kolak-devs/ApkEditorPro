@@ -38,4 +38,12 @@
     <string name="pallete">Палитра</string>
     <string name="color_converter">Конвертер цветов</string>
     <string name="other">Другое</string>
+    <string name="message_save_file">Вы действительно хотите сохранить изменения в файле?</string>
+    <string name="save">Сохранить</string>
+    <string name="decimal">Decimal (base 10)</string>
+    <string name="hex">Hex (base 16)</string>
+    <string name="dec2hex">Dec в Hex</string>
+    <string name="close">Закрыть</string>
+    <string name="clear">Очистить</string>
+    <string name="copied_to_clipboard">\"Скопировано в буфер обмена \"</string>
 </resources>

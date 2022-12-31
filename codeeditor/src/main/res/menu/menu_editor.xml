@@ -103,6 +103,10 @@
                 android:title="@string/color_converter" />
 
             <item
+                android:id="@+id/dec2hex"
+                android:title="Dec to Hex" />
+
+            <item
                 android:id="@+id/template"
                 android:title="@string/template" />
 
