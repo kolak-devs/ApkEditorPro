@@ -34,7 +34,18 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewBinding>(
         onBindViewModel()
     }
 
+    /**
+     * Здесь происходит заполнение layout, например, клики кнопок, состояния на момент открытия и тд
+     * **/
     abstract fun onSetupLayout()
+
+    /**
+     * Здесь выполняются операции в ViewModel
+     * **/
     abstract fun callOperations()
+
+    /**
+     * Здесь обсервятся данные с ViewModel
+     * **/
     abstract fun onBindViewModel()
 }

@@ -1,0 +1,7 @@
+package com.mcal.apkeditor.settings.presentation
+
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.ViewModel
+
+class SettingsActivityViewModel(context: Context): ViewModel()

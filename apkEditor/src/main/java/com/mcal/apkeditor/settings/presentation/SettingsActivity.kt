@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.activities
+package com.mcal.apkeditor.settings.presentation
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,19 +7,20 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.ViewPagerAdapter
 import com.mcal.apkeditor.databinding.ActivitySettingsBinding
-import com.mcal.apkeditor.fragments.ApkSettingsFragment
-import com.mcal.apkeditor.fragments.SettingsFragment
-import com.mcal.apkeditor.fragments.TextSettingsFragment
-import com.mcal.common.activities.CustomizedLangActivity
+import com.mcal.apkeditor.settings.presentation.screens.apk_settings.ApkSettingsFragment
+import com.mcal.apkeditor.settings.presentation.screens.settings.SettingsFragment
+import com.mcal.apkeditor.settings.presentation.screens.text_settings.TextSettingsFragment
+import com.mcal.presentation.base.BaseActivity
 
-class SettingsActivity : CustomizedLangActivity() {
-    private var _binding: ActivitySettingsBinding? = null
-    private val binding get() = _binding!!
+class SettingsActivity : BaseActivity<SettingsActivityViewModel, ActivitySettingsBinding>(
+    ActivitySettingsBinding::inflate
+) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun viewModelClass() = SettingsActivityViewModel::class.java
+
+    override fun callOperations() = Unit
+
+    override fun onSetupLayout() = with(binding) {
         setupToolbar(getString(R.string.settings))
 
         val pagerAdapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
@@ -27,16 +28,18 @@ class SettingsActivity : CustomizedLangActivity() {
         pagerAdapter.addFragment(ApkSettingsFragment(), getString(R.string.tab_apk_decoding))
         pagerAdapter.addFragment(TextSettingsFragment(), getString(R.string.tab_text_editor))
 
-        binding.settingsViewpager.adapter = pagerAdapter
-        TabLayoutMediator(binding.tabLayout, binding.settingsViewpager) { tab, position ->
+        settingsViewpager.adapter = pagerAdapter
+        TabLayoutMediator(tabLayout, settingsViewpager) { tab, position ->
             tab.text = pagerAdapter.getTabTitle(position)
         }.attach()
 
         if (intent != null) {
             val index = intent.getIntExtra("startUpTab", 0)
-            binding.settingsViewpager.setCurrentItem(index, false)
+            settingsViewpager.setCurrentItem(index, false)
         }
     }
+
+    override fun onBindViewModel() = Unit
 
     private fun setupToolbar(title: String?) {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -55,10 +58,5 @@ class SettingsActivity : CustomizedLangActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
     }
 }

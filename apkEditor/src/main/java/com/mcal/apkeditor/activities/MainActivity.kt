@@ -30,6 +30,7 @@ import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
 import com.mcal.apkeditor.dialogs.selectFullEditDialog
 import com.mcal.apkeditor.prj.ProjectListActivity
+import com.mcal.apkeditor.settings.presentation.SettingsActivity
 import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity

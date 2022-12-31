@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.fragments
+package com.mcal.apkeditor.settings.presentation.screens.settings
 
 import android.content.DialogInterface
 import android.content.SharedPreferences
@@ -12,6 +12,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.R
+import com.mcal.apkeditor.settings.presentation.base.BasePreferenceFragment
 import com.mcal.common.data.BridgeDataStore
 import com.mcal.common.data.LegacyPreferences
 import com.mcal.common.data.prefStore
@@ -19,10 +20,12 @@ import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 
 
-class SettingsFragment : PreferenceFragmentCompat(),
+class SettingsFragment : BasePreferenceFragment<SettingsViewModel>(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-    override fun onCreatePreferences(bundle: Bundle?, s: String?) {
+    override fun viewModelClass() = SettingsViewModel::class.java
+
+    override fun onSetupLayout(bundle: Bundle?, s: String?) {
         val customStore = BridgeDataStore()
         customStore.attachDataStore(requireContext().prefStore)
         preferenceManager.preferenceDataStore = customStore
@@ -36,6 +39,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
             findPreference<SwitchPreference>("ui_monet")?.isEnabled = false
         }
     }
+
+    override fun onBindViewModel() = Unit
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
