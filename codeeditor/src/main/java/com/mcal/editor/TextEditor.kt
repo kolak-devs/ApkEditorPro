@@ -3,6 +3,7 @@ package com.mcal.editor
 import android.content.Context
 import android.content.Intent
 import com.mcal.common.utils.ActivityHelper
+import com.mcal.editor.presentation.EditorActivity
 
 object TextEditor {
     @JvmStatic

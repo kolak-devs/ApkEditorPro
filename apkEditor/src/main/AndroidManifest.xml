@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <application
-        android:name="com.mcal.common.App"
+        android:name="com.mcal.MainApp"
         android:allowBackup="true"
         android:allowNativeHeapPointerTagging="false"
         android:icon="@mipmap/ic_launcher"

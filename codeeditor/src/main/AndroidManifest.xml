@@ -7,7 +7,7 @@
             tools:targetApi="q" />
 
         <activity
-            android:name="com.mcal.editor.EditorActivity"
+            android:name="com.mcal.editor.presentation.EditorActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustResize"/>
