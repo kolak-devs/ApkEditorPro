@@ -19,7 +19,6 @@ import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ClipboardUtils.copyToClipboard
 import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
-import com.mcal.editor.core.BaseEditorActivity
 import com.mcal.editor.dialogs.DecToHexConverter
 import com.mcal.editor.dialogs.DexToJava
 import com.mcal.editor.dialogs.SmaliCodeDialog
@@ -28,6 +27,7 @@ import com.mcal.editor.navigation.CodeNavigationDialog
 import com.mcal.editor.utils.FileUtils
 import com.mcal.neweditor.R
 import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
+import com.mcal.presentation.base.BaseActivity
 import io.github.rosemoe.sora.event.*
 import io.github.rosemoe.sora.lang.EmptyLanguage
 import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme
@@ -49,7 +49,7 @@ import java.io.IOException
 import java.util.regex.PatternSyntaxException
 
 
-class EditorActivity : BaseEditorActivity<EditorViewModel, ActivitySoraeditorBinding>(
+class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
     ActivitySoraeditorBinding::inflate
 ), CodeNavigationDialog.ISmaliMethodClicked, ColorMixer.OnColorChangedListener {
 

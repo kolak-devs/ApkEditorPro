@@ -1,4 +1,4 @@
-package com.mcal.editor.core
+package com.mcal.presentation.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import com.mcal.sl.ViewModelProvider
 
 typealias Inflate<T> = (LayoutInflater) -> T
 
-abstract class BaseEditorActivity<VM : ViewModel, VB : ViewBinding>(
+abstract class BaseActivity<VM : ViewModel, VB : ViewBinding>(
     private val bindingInflater: Inflate<VB>
 ) : CustomizedLangActivity(), ViewModelProvider {
 
