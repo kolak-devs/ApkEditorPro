@@ -32,12 +32,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -92,7 +90,6 @@ import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
 import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
 import com.mcal.bshengine.BshEngineActivity;
 import com.mcal.common.activities.CustomizedLangActivity;
-import com.mcal.common.data.ReactivePreferences;
 import com.mcal.common.filesystem.FilePickHelper;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
@@ -140,7 +137,7 @@ import brut.androlib.res.data.value.ResScalarValue;
 import brut.androlib.res.data.value.ResValue;
 import brut.util.Duo;
 
-public class ApkInfoActivity extends CustomizedLangActivity implements OnItemClickListener, OnItemLongClickListener, IManifestChangeCallback, OnClickListener, IDecodeTaskCallback, OnLongClickListener, ApkParseConsumer, ResSelectionChangeListener, AddFolderDialog.AddFolderCallback, ApkInfoListener, StringListAdapter.StringItemListener {
+public class ApkInfoActivity extends CustomizedLangActivity implements OnItemClickListener, OnItemLongClickListener, IManifestChangeCallback, OnClickListener, IDecodeTaskCallback, ApkParseConsumer, ResSelectionChangeListener, AddFolderDialog.AddFolderCallback, ApkInfoListener, StringListAdapter.StringItemListener {
     // To edit/view a file before replacing
     public static final int RC_OPEN_BEFORE_REPLACE = 1001;
     // To edit/view a file in external app
@@ -224,7 +221,12 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
     private String lastValue = null;
 
-    private ActivityResultLauncher<Intent> importFileLaunch;
+    @Nullable
+    private ActivityResultLauncher<Intent> mImportFileLaunch;
+    @Nullable
+    private ActivityResultLauncher<Intent> mReplaceFileLaunch;
+    @Nullable
+    private String mReplaceFilePath;
 
     // prjDirectory not ends with '/'
     @Nullable
@@ -404,7 +406,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             parseThread.start();
         }
 
-        importFileLaunch = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        mImportFileLaunch = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         final Uri uri = result.getData().getData();
@@ -419,6 +421,31 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+        mReplaceFileLaunch = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        final Uri uri = result.getData().getData();
+                        if (uri != null) {
+                            final String origFilePath = mReplaceFilePath;
+                            if (origFilePath != null) {
+                                final File file = new File(origFilePath);
+                                if (file.exists()) {
+                                    file.delete();
+                                }
+                                try {
+                                    final InputStream inputStream = getContentResolver().openInputStream(uri);
+                                    if (inputStream != null) {
+                                        copyFile(inputStream, file);
+                                        Toast.makeText(this, R.string.succeed, Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -662,11 +689,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         showStringList();
         setupClickListener();
         showDecodedFileList();
-
-        // DEX decoded or not
-        if (dexDecoded) {
-            binding.mainResources.dexDecodeLayout.setVisibility(View.GONE);
-        }
 
         // Search text or not
         updateSearchOption();
@@ -1027,16 +1049,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             binding.mainStrings.keywordEdit.setText("");
         });
 
-        // DEX/Smali decoding
-        if (ReactivePreferences.isLegacySmaliEnabled()) {
-            final Button dex2smaliImage = binding.mainResources.imageviewDex2smali;
-            dex2smaliImage.setOnClickListener(this);
-            dex2smaliImage.setOnLongClickListener(this);
-            binding.mainResources.downArrowContainer.setOnClickListener(this);
-        } else {
-            binding.mainResources.dexDecodeLayout.setVisibility(View.GONE);
-        }
-
         // File search option
         updateSearchOption();
 
@@ -1110,16 +1122,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
                 boolean bSearchFilename = !searchTextContent;
                 searchInResourceFiles(keyword, curFolder, filenameList, bSearchFilename, searchResSensitive);
             }
-        }
-
-        // Image of dex2smali
-        else if (id == R.id.imageview_dex2smali) {
-            decodeDex(null);
-        }
-
-        // Hide the smali decoding result
-        else if (id == R.id.down_arrow_container) {
-            binding.mainResources.dexDecodeLayout.setVisibility(View.GONE);
         }
 
         // Apply a patch
@@ -1285,20 +1287,22 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     }
 
     @Override
-    public void createFolder(String folderName) {
+    public void createFolder(@NonNull String folderName) {
         final String dirPath = resListAdapter.getData(null);
         resListAdapter.addFolder(dirPath, folderName);
     }
 
     @Override
-    public void createFile(String fileName) {
+    public void createFile(@NonNull String fileName) {
         final String dirPath = resListAdapter.getData(null);
         resListAdapter.createFile(dirPath + "/" + fileName, fileName);
     }
 
     @Override
     public void importFile() {
-        importFileLaunch.launch(FilePickHelper.pickFile(false));
+        if (mImportFileLaunch != null) {
+            mImportFileLaunch.launch(FilePickHelper.pickFile(false));
+        }
     }
 
     // First check if the build is still ongoing
@@ -2253,8 +2257,28 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
                     return true;
                 });
             }
+
+            if (!isDir) {
+                if (!isFirstItem || curPath.equals(decodeRootPath)) {
+                    final MenuItem item2 = menu.add(0, Menu.FIRST + 2, 0, R.string.replace);
+                    item2.setOnMenuItemClickListener(item -> {
+                        replaceFileSAF(position);
+                        return true;
+                    });
+                }
+            }
         });
         return false;
+    }
+
+    public void replaceFileSAF(int position) {
+        final List<FileRecord> fileRecords = new ArrayList<>();
+        final String dirPath = resListAdapter.getData(fileRecords);
+        final FileRecord rec = fileRecords.get(position);
+        mReplaceFilePath = dirPath + "/" + rec.fileName;
+        if (mReplaceFileLaunch != null) {
+            mReplaceFileLaunch.launch(FilePickHelper.pickFile(false));
+        }
     }
 
     @NonNull
@@ -2484,9 +2508,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     // To show the dex decoding progress bar
     @Override
     public void dexDecodingStarted() {
-        binding.mainResources.imageviewDex2smali.setVisibility(View.INVISIBLE);
-        binding.mainResources.decodeResultLayout.setVisibility(View.INVISIBLE);
-        binding.mainResources.progressbarDex2smali.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -2496,57 +2518,32 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             mDexDecodedCallback.callbackFunc();
             mDexDecodedCallback = null;
         }
-
-        final TextView decodeResultTitle = binding.mainResources.decodeResultTitle;
-        final TextView decodeResultDetail = binding.mainResources.decodeResultDetail;
         boolean showResult = true;
         if (ret) {
             if (strWarning != null) {
-                decodeResultTitle.setText(R.string.succeed_with_warning);
-                String content = getString(R.string.warning) + ": " + strWarning;
-                decodeResultDetail.setText(content);
-                decodeResultDetail.setVisibility(View.VISIBLE);
+
             } else {
                 showResult = false;
-                decodeResultTitle.setText(R.string.succeed);
-                decodeResultDetail.setVisibility(View.GONE);
+
             }
         } else {
-            decodeResultTitle.setText(R.string.failed);
-            decodeResultDetail.setVisibility(View.VISIBLE);
+
             if (strError != null) {
-                decodeResultDetail.setText(strError);
+
             } else {
-                decodeResultDetail.setText(R.string.unknown_error);
+
             }
         }
 
         // Switch the layout (decoding panel)
-        final Button dex2smaliImage = binding.mainResources.imageviewDex2smali;
-        dex2smaliImage.setVisibility(View.INVISIBLE);
-        binding.mainResources.progressbarDex2smali.setVisibility(View.INVISIBLE);
-        if (showResult) {
-            binding.mainResources.decodeResultLayout.setVisibility(View.VISIBLE);
-        } else {
-            dex2smaliImage.setVisibility(View.GONE);
-            Toast.makeText(this, R.string.dex_decode_succeed, Toast.LENGTH_LONG).show();
-        }
+        Toast.makeText(this, R.string.dex_decode_succeed, Toast.LENGTH_LONG).show();
+
 
         // Update the file list if in the root decoded folder
         String curFolder = resListAdapter.getData(null);
         if (curFolder.endsWith("/decoded")) {
             resListAdapter.openDirectory(curFolder);
         }
-    }
-
-    @Override
-    public boolean onLongClick(@NonNull View v) {
-        int id = v.getId();
-        if (id == R.id.imageview_dex2smali) {
-            binding.mainResources.imageviewDex2smali.setVisibility(View.GONE);
-            return true;
-        }
-        return false;
     }
 
     @Override

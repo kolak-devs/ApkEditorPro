@@ -3,8 +3,6 @@ package com.mcal.colormixer
 import android.content.Context
 import android.content.DialogInterface
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.mcal.apkeditor.colormixer.ColorMixer
-import com.mcal.common.utils.ClipboardUtils
 
 class ColorMixerDialog(
     context: Context,

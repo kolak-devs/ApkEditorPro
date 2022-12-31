@@ -1,4 +1,4 @@
-package com.mcal.apkeditor.colormixer
+package com.mcal.colormixer
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -20,7 +20,6 @@ import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import com.mcal.colormixer.R
 
 class ColorMixer : RelativeLayout, TextWatcher {
     private var swatch: View? = null

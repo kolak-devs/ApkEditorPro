@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mcal.apkeditor.R;
+import com.mcal.common.App;
 import com.mcal.common.utils.ClipboardUtils;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.ScopedStorage;
@@ -133,7 +134,11 @@ public class ApkInfoExActivity extends ApkInfoActivity {
     public void selectionChanged(Set<Integer> selected) {
         super.selectionChanged(selected);
         if (selected.size() == 1) {
-            enableMenuItem(menuItem_replace, true);
+            final List<FileRecord> fileList = new ArrayList<>();
+            resListAdapter.getData(fileList);
+            final int position = selected.iterator().next();
+            final FileRecord rec = fileList.get(position);
+            enableMenuItem(menuItem_replace, rec != null && !rec.isDir);
             enableMenuItem(menuItem_details, true);
         } else {
             enableMenuItem(menuItem_replace, false);
@@ -203,8 +208,10 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             final AutoCompleteAdapter adapter = new AutoCompleteAdapter(context, "res_keywords");
 
             final LinearLayout layout = new LinearLayout(context);
+            final int padding16 = (int) App.dp2px(16f, context);
+            layout.setPadding(padding16, 0, padding16, 0);
             layout.setOrientation(LinearLayout.VERTICAL);
-            layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
             final AutoCompleteTextView input = new AutoCompleteTextView(context);
             input.setAdapter(adapter);
@@ -311,12 +318,12 @@ public class ApkInfoExActivity extends ApkInfoActivity {
 
             // Create dialog view
             final View view = LayoutInflater.from(ApkInfoExActivity.this).inflate(R.layout.dialog_resfile_more, null);
-            final TextInputEditText et = view.findViewById(R.id.filename);
-            et.setText(fileName);
-            final TextView et2 = view.findViewById(R.id.filepath);
-            et2.setText(relativePath);
-            final TextView et3 = view.findViewById(R.id.fileentry);
-            et3.setText(entryName != null ? entryName : getString(R.string.not_available));
+            final TextInputEditText filenameView = view.findViewById(R.id.filename);
+            filenameView.setText(fileName);
+            final TextView filePathView = view.findViewById(R.id.filepath);
+            filePathView.setText(filepath);
+            final TextView fileEntryView = view.findViewById(R.id.fileentry);
+            fileEntryView.setText(entryName != null ? entryName : getString(R.string.not_available));
 
             // Extract the original entry (for DEBUG)
             final String _entry = entryName;
@@ -339,7 +346,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
                 renameBtn.setVisibility(View.GONE);
             }
             renameBtn.setOnClickListener(v -> {
-                final String newName = et.getText().toString().trim();
+                final String newName = filenameView.getText().toString().trim();
                 // Empty input
                 if (newName.equals("")) {
                     Toast.makeText(ApkInfoExActivity.this, R.string.empty_input_tip, Toast.LENGTH_SHORT).show();
@@ -455,8 +462,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             rename_addNewFile(curDir, curDir + "/" + newName, tmpFilePath);
         }
 
-        private void rename_addNewFile(String dirPath, String targetPath,
-                                       String filePath) {
+        private void rename_addNewFile(String dirPath, String targetPath, String filePath) {
             FileInputStream fis = null;
             try {
                 fis = new FileInputStream(filePath);
@@ -534,8 +540,7 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         }
 
         private void selectAllOrNone() {
-            Set<Integer> checked = ApkInfoExActivity.this.resListAdapter
-                    .getCheckedItems();
+            Set<Integer> checked = resListAdapter.getCheckedItems();
             int count = resListAdapter.getCount();
             List<FileRecord> records = new ArrayList<>(count);
             resListAdapter.getData(records);
@@ -549,23 +554,13 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         }
 
         private void replaceFileOrFolder() {
-            Set<Integer> selected = resListAdapter.getCheckedItems();
+            final Set<Integer> selected = resListAdapter.getCheckedItems();
             if (selected.isEmpty()) {
                 return;
             }
 
-            int position = selected.iterator().next();
-
-            // Check the item is directory or not
-            List<FileRecord> records = new ArrayList<>();
-            resListAdapter.getData(records);
-            boolean isDir = records.get(position).isDir;
-
-            if (isDir) {
-                replaceFolder(position);
-            } else {
-                replaceFile(position);
-            }
+            final int position = selected.iterator().next();
+            replaceFileSAF(position);
         }
     }
 }

@@ -21,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class App : Application() {
+abstract class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -54,9 +54,9 @@ class App : Application() {
 
         @JvmStatic
         fun getContext(): Context {
-            if (context == null) {
-                context = App()
-            }
+//            if (context == null) {
+//                context = App()
+//            }
             return context!!
         }
         /**
@@ -66,6 +66,7 @@ class App : Application() {
          * @param context Context to get resources and device specific display metrics
          * @return A float value to represent px equivalent to dp depending on device density
          */
+        @JvmStatic
         fun dp2px(dp: Float, context: Context): Float {
             return dp * (context.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
         }
@@ -77,6 +78,7 @@ class App : Application() {
          * @param context Context to get resources and device specific display metrics
          * @return A float value to represent dp equivalent to px value
          */
+        @JvmStatic
         fun px2dp(context: Context, px: Float): Float {
             return px / (context.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
         }

@@ -30,7 +30,6 @@
         <menu>
 
             <item
-
                 android:id="@+id/goto_end"
                 android:title="@string/go_to_end" />
 
@@ -98,6 +97,14 @@
             <item
                 android:id="@+id/pallete"
                 android:title="@string/pallete" />
+
+            <item
+                android:id="@+id/color_converter"
+                android:title="@string/color_converter" />
+
+            <item
+                android:id="@+id/dec2hex"
+                android:title="Dec to Hex" />
 
             <item
                 android:id="@+id/template"

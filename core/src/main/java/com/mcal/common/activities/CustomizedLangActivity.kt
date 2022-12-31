@@ -5,15 +5,61 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import com.google.android.material.appbar.MaterialToolbar
-import com.mcal.common.utils.LocaleManager
 import ru.svolf.melissa.swipeback.SwipeBackActivity
 import ru.svolf.melissa.swipeback.SwipeBackLayout
 
 open class CustomizedLangActivity : SwipeBackActivity() {
+    private var mToolbar: MaterialToolbar? = null
+    private var mTitle: String? = null
+    private var mSubTitle: String? = null
+    private var mBack: Boolean = false
+    private var mIcon: Drawable? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //LocaleManager.apply()
         setEdgeLevel(SwipeBackLayout.EdgeLevel.MIN)
+    }
+
+    fun setToolbar(id: Int) {
+        mToolbar = findViewById(id)
+    }
+
+    fun title(title: String) {
+        mTitle = title
+    }
+
+    fun subTitle(subTitle: String) {
+        mSubTitle = subTitle
+    }
+
+    fun back(back: Boolean) {
+        mBack = back
+    }
+
+    fun icon(icon: Drawable) {
+        mIcon = icon
+    }
+
+    fun show() {
+        mToolbar?.let {
+            setSupportActionBar(it)
+            supportActionBar?.apply {
+                mTitle?.let { t ->
+                    title = t
+                }
+                mSubTitle?.let { s ->
+                    subtitle = s
+                }
+                mIcon?.let { i ->
+                    setIcon(i)
+                }
+                if (mBack) {
+                    setDisplayHomeAsUpEnabled(true)
+                    setDisplayShowHomeEnabled(true)
+                }
+            }
+        }
     }
 
     fun setupToolbar(id: Int, text: Int, back: Boolean = false) {

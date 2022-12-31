@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:onClick="gotoLast"
+                    android:id="@+id/buttonGotoLast"
                     android:text="@string/layout_tv_last" />
 
                 <Button
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:onClick="gotoNext"
+                    android:id="@+id/buttonGotoNext"
                     android:text="@string/layout_tv_next" />
 
                 <Button
@@ -145,6 +145,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:onClick="replace"
+                    android:id="@+id/buttonReplace"
                     android:text="@string/layout_tv_replace" />
 
                 <Button
@@ -153,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:onClick="replaceAll"
+                    android:id="@+id/buttonReplaceAll"
                     android:text="@string/layout_tv_replaceAll" />
 
             </LinearLayout>

@@ -7,4 +7,7 @@
     <string name="settings_signing_off">The APK will not be signed when compiled. Also affects custom signature settings</string>
     <string name="message_signing_disabled">Apk signing disabled, aborting...</string>
     <string name="msg_decode_notice">Select one or more items by clicking on them</string>
+    <string name="btn_select_patch">Select patch</string>
+    <string name="btn_apply_patch">Apply patch</string>
+    <string name="app_about_details">A powerful tool for testing and identifying vulnerabilities in Android applications</string>
 </resources>
