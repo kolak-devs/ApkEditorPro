@@ -60,7 +60,7 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements OnI
         Intent intent = getIntent();
 
         setContentView(R.layout.sql_activity_rowview);
-        setupToolbar(R.id.toolbar, R.string.table_record, true);
+        setupToolbar(R.id.toolbar, getString(R.string.table_record), null, null, true);
 
         this.originDbFilePath = ActivityHelper.getParam(intent, "originDbFilePath");
         this.dbFilePath = ActivityHelper.getParam(intent, "dbFilePath");

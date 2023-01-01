@@ -48,7 +48,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_applist)
-        setupToolbar(R.id.toolbar, getString(R.string.select_apk_from_app), true)
+        setupToolbar(id = R.id.toolbar, title = getString(R.string.select_apk_from_app), back = true)
 
         progressBar = findViewById(R.id.progress_bar)
         mRecyclerView = findViewById(R.id.application_list)

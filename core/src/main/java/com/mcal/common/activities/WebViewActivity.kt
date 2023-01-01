@@ -33,7 +33,7 @@ class WebViewActivity : CustomizedLangActivity() {
         super.onCreate(savedInstanceState)
         _binding = WebviewActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupToolbar(R.id.toolbar, "Documentation", back = true)
+        setupToolbar(id = R.id.toolbar, title = "Documentation", back = true)
         val webView = binding.webView
         webView.webViewClient = WebViewClient()
         webView.webChromeClient = ChromeClient(this)

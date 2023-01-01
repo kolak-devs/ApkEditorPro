@@ -25,7 +25,7 @@ class FullEditorActivity : CustomizedLangActivity(), ApkParseConsumer {
         super.onCreate(savedInstanceState)
         binding = ActivityFulleditorBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupToolbar(R.id.toolbar, "ApkEditor", false)
+        setupToolbar(id = R.id.toolbar, title = "ApkEditor", back = false)
         initViewModel()
         initNavigation()
         startDecodeApk()

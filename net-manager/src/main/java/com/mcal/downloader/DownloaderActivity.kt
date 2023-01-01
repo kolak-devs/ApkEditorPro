@@ -17,7 +17,7 @@ class DownloaderActivity : CustomizedLangActivity() {
         super.onCreate(savedInstanceState)
         _binding = DownloaderActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupToolbar(R.id.toolbar, getString(R.string.tools_manager), true)
+        setupToolbar(id = R.id.toolbar, title = getString(R.string.tools_manager), back = true)
         binding.recyclerview.apply {
             layoutManager = LinearLayoutManager(this@DownloaderActivity)
             adapter = DownloaderAdapter(

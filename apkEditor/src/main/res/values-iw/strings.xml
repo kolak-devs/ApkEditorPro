@@ -178,5 +178,6 @@
     <string name="app_about_details">A powerful tool for testing and identifying vulnerabilities in Android applications</string>
     <string name="addintional_components">Additional Components</string>
     <string name="authors">Authors</string>
+    <string name="title_patcher">Patcher</string>
 
 </resources>

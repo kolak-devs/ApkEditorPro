@@ -2,9 +2,7 @@ package com.mcal.pngeditor
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -36,7 +34,7 @@ class PhotoViewerActivity : CustomizedLangActivity() {
                 binding.image.setImage(ImageSource.uri(path))
 
                 val message = "(" + binding.image.sWidth + "x" + binding.image.sHeight + ")"
-                setupToolbar(R.id.toolbar, getString(R.string.app_name), message, true)
+                setupToolbar(id = R.id.toolbar, title = getString(R.string.app_name), subtitle = message, back = true)
             }
         }
     }

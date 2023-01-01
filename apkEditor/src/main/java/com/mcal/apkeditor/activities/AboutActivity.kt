@@ -13,13 +13,7 @@ class AboutActivity : CustomizedLangActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
-        run {
-            setToolbar(R.id.toolbar)
-            title(getString(R.string.about))
-            subTitle(Utils.getVersionString())
-            back(true)
-            show()
-        }
+        setupToolbar(id = R.id.toolbar, title = getString(R.string.about), subtitle = Utils.getVersionString(), back = true)
     }
 
     fun openTelegram(view: View) {

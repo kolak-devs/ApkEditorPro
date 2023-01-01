@@ -34,7 +34,7 @@ class ManifestSearchResultActivity : CustomizedLangActivity(), View.OnClickListe
         val format = resources.getString(R.string.mf_search_ret)
         lineIndexes?.size?.let { length ->
             val title = String.format(format, length)
-            setupToolbar(R.id.toolbar, title, true)
+            setupToolbar(id = R.id.toolbar, title=title, back = true)
         }
         val saveBtn = findViewById<View>(R.id.btn_save) as Button
         saveBtn.setOnClickListener(this)

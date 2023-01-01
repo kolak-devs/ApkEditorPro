@@ -66,7 +66,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupToolbar(R.id.toolbar, getString(R.string.app_name), false)
+        setupToolbar(id = R.id.toolbar, title = getString(R.string.app_name), back = false)
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_main, menu)

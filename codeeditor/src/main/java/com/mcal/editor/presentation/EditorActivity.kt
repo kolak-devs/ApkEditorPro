@@ -78,7 +78,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
     private var startLine = 0
 
     override fun callOperations() = with(viewModel) {
-        setupToolbar(R.id.toolbar, "Editor", false)
+        setupToolbar(id = R.id.toolbar, title = getString(R.string.title_code_editor), back = false)
         initIntent()
         getFileName()
         initSymbolsList()

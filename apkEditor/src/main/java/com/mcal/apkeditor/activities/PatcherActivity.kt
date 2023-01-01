@@ -79,7 +79,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         super.onCreate(savedInstanceState)
         _binding = ActivityPatcherBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupToolbar(R.id.toolbar, "Patcher", true)
+        setupToolbar(id = R.id.toolbar, title = getString(R.string.title_patcher), back = true)
         binding.listLog.apply {
             adapter = FastAdapter.with(logItemAdapter)
             addItemDecoration(DividerItemDecoration(this@PatcherActivity, DividerItemDecoration.VERTICAL))

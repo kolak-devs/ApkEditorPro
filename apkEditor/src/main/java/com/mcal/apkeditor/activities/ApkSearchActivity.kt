@@ -76,7 +76,7 @@ class ApkSearchActivity : CustomizedLangActivity(), AdapterView.OnItemClickListe
         if ("" == word) { // Not show the last "- ''"
             title = title.substring(0, title.length - 4)
         }
-        setupToolbar(R.id.toolbar, title, true)
+        setupToolbar(id = R.id.toolbar, title = title, back = true)
     }
 
     // To notify the searching is done

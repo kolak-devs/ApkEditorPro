@@ -86,14 +86,13 @@ public class SqliteTableListActivity extends CustomizedLangActivity {
     }
 
     private void initView() {
-        setupToolbar(R.id.toolbar, getResources().getString(R.string.tables_of) + " " + getFileName(originDbFilePath), true);
-
+        setupToolbar(R.id.toolbar, getString(R.string.tables_of) + " " + getFileName(originDbFilePath), null, null, true);
         // List
-        ListView tableLv = (ListView) this.findViewById(R.id.tableList);
+        ListView tableLv = findViewById(R.id.tableList);
         tableLv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tableList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                return (TextView) super.getView(position, convertView, parent);
+                return super.getView(position, convertView, parent);
             }
         });
         tableLv.setOnItemClickListener((arg0, arg1, position, arg3) -> {
