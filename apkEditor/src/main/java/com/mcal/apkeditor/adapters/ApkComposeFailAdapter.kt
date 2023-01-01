@@ -102,15 +102,17 @@ class ApkComposeFailAdapter(
                         }
                     }
                 }
-            } else {
-                /**
-                 * Иначе отображаем полную ошибку, как есть
-                 */
-                holder.messageView.text = buildString {
-                    append(activity.getString(R.string.error_message))
-                    append(strLine)
-                }
             }
+        } else {
+            /**
+             * Иначе отображаем полную ошибку, как есть
+             */
+            holder.messageView.text = buildString {
+                append(activity.getString(R.string.error_message))
+                append(strLine)
+            }
+            holder.lineView.visibility = View.GONE
+            holder.pathView.visibility = View.GONE
         }
         filePath?.let { path ->
             /**
