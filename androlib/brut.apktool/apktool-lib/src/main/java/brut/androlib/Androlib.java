@@ -20,7 +20,6 @@ import com.mcal.androlib.meta.MetaInfo;
 import com.mcal.androlib.meta.UsesFramework;
 import com.mcal.androlib.options.BuildOptions;
 import com.mcal.androlib.util.Logger;
-import com.mcal.common.data.LegacyPreferences;
 import com.mcal.common.data.ReactivePreferences;
 
 import org.apache.commons.io.FileUtils;
@@ -308,7 +307,7 @@ public class Androlib {
 
     // TODO: For ApkEditor
     public void writeMetaFile(File mOutDir, MetaInfo meta) throws AndrolibException {
-        if(ReactivePreferences.isJsonConfig()) {
+        if (ReactivePreferences.isJsonConfig()) {
             try {
                 meta.save(new File(mOutDir, "apktool.json"));
             } catch (IOException | JSONException ex) {
@@ -325,7 +324,7 @@ public class Androlib {
 
     // TODO: For ApkEditor
     public MetaInfo readMetaFile(ExtFile appDir) throws AndrolibException {
-        if(ReactivePreferences.isJsonConfig()) {
+        if (ReactivePreferences.isJsonConfig()) {
             try {
                 InputStream in = appDir.getDirectory().getFileInput("apktool.json");
                 MetaInfo meta = MetaInfo.load(in);
@@ -335,7 +334,7 @@ public class Androlib {
                 throw new AndrolibException(ex);
             }
         } else {
-            try(InputStream in = appDir.getDirectory().getFileInput("apktool.yml")) {
+            try (InputStream in = appDir.getDirectory().getFileInput("apktool.yml")) {
                 return MetaInfo.loadYaml(in);
             } catch (DirectoryException | IOException ex) {
                 throw new AndrolibException(ex);
@@ -795,7 +794,14 @@ public class Androlib {
             }
             outputFile.putNextEntry(newEntry);
 
-            BrutIO.copy(inputFile, outputFile);
+            /*
+              Проверять наличие файлов во время сборки?
+             */
+            if (ReactivePreferences.isCheckExistsFilesEnabledAsync()) {
+                BrutIO.copy(inputFile, outputFile);
+            } else if (inputFile.exists()) {
+                BrutIO.copy(inputFile, outputFile);
+            }
             outputFile.closeEntry();
         }
     }

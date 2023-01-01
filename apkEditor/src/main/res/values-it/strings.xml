@@ -303,4 +303,6 @@
     <string name="addintional_components">Additional Components</string>
     <string name="authors">Authors</string>
     <string name="title_patcher">Patcher</string>
+    <string name="tight_control">Tight control</string>
+    <string name="tight_control_summary">Check for the absence of files in the project. The list of files is in the configuration file apktool.json/yml</string>
 </resources>

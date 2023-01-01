@@ -159,6 +159,25 @@ object ReactivePreferences {
         return fallback
     }
 
+    suspend fun isCheckExistsFilesEnabled(): Boolean {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.CHECK_EXISTS_FILES] ?: false
+    }
+
+    @JvmStatic
+    fun isCheckExistsFilesEnabledAsync(): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.CHECK_EXISTS_FILES] ?: false
+        }
+        return fallback
+    }
+
+    suspend fun setCheckExistsFilesEnabled(enabled: Boolean){
+        App.getContext().prefStore.edit {
+            it[PreferenceScheme.Compiler.CHECK_EXISTS_FILES] = enabled
+        }
+    }
+
     @JvmStatic
     fun isLegacyNightMode(): Boolean {
         var fallback: Boolean

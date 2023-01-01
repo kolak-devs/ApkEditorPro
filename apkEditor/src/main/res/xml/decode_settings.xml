@@ -20,6 +20,12 @@
         android:title="@string/apk_building">
 
         <androidx.preference.SwitchPreference
+            android:defaultValue="false"
+            android:key="apktool_check_exists_files"
+            android:summary="@string/tight_control_summary"
+            android:title="@string/tight_control" />
+
+        <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:key="ae_aapt_rules"
             android:summary="@string/aapt_rules_sum"

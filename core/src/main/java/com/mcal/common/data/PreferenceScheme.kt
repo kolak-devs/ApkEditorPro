@@ -33,6 +33,7 @@ object PreferenceScheme {
       val DECODE_ASSETS = booleanPreferencesKey("decode_assets")
       val DECODE_RESOURCES = booleanPreferencesKey("decode_resources")
       val DECODE_CLASSES = booleanPreferencesKey("decode_classes")
+      val CHECK_EXISTS_FILES = booleanPreferencesKey("apktool_check_exists_files")
    }
 
    object Editor {
