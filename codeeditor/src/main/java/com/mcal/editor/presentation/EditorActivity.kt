@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mcal.UiAction
 import com.mcal.colorconverter.ColorPickerConverter
 import com.mcal.colormixer.ColorMixer
 import com.mcal.colormixer.ColorMixerDialog
@@ -654,16 +655,12 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                     .show()
             }
             R.id.action_settings -> {
-                try {
-                    startActivity(Intent(
-                        this,
-                        Class.forName("com.mcal.apkeditor.activities.SettingsActivity")
-                    ).apply {
-                        putExtra("startUpTab", 2)
-                    })
-                } catch (e: ClassNotFoundException) {
-                    e.printStackTrace()
-                }
+                navigator.navigateTo(
+                    uiAction = UiAction("Settings_feature"),
+                    onExtras = { intent ->
+                        intent.putExtra("startUpTab", 2)
+                    }
+                )
             }
         }
         return super.onOptionsItemSelected(item)
