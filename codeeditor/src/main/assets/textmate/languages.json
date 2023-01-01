@@ -7,7 +7,31 @@
       "languageConfiguration": "textmate/java/language-configuration.json"
     },
     {
-      "grammar": "textmate/kotlin/syntaxes/Kotlin.tmLanguage",
+      "grammar": "textmate/lua/syntaxes/lua.tmLanguage.json",
+      "name": "lua",
+      "scopeName": "source.lua",
+      "languageConfiguration": "textmate/lua/language-configuration.json"
+    },
+    {
+      "grammar": "textmate/json/syntaxes/json.tmLanguage.json",
+      "name": "json",
+      "scopeName": "source.json",
+      "languageConfiguration": "textmate/json/language-configuration.json"
+    },
+    {
+      "grammar": "textmate/smali/syntaxes/smali.tmLanguage.json",
+      "name": "smali",
+      "scopeName": "source.smali",
+      "languageConfiguration": "textmate/smali/language-configuration.json"
+    },
+    {
+      "grammar": "textmate/groovy/syntaxes/groovy.tmLanguage.json",
+      "name": "groovy",
+      "scopeName": "source.groovy",
+      "languageConfiguration": "textmate/groovy/language-configuration.json"
+    },
+    {
+      "grammar": "textmate/kotlin/syntaxes/kotlin.tmLanguage",
       "name": "kotlin",
       "scopeName": "source.kotlin",
       "languageConfiguration": "textmate/kotlin/language-configuration.json"
@@ -34,7 +58,7 @@
       }
     },
     {
-      "grammar": "textmate/javascript/syntaxes/JavaScript.tmLanguage.json",
+      "grammar": "textmate/javascript/syntaxes/javascript.tmLanguage.json",
       "name": "javascript",
       "scopeName": "source.js",
       "languageConfiguration": "textmate/javascript/language-configuration.json"
