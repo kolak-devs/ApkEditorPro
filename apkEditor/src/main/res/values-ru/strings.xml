@@ -363,4 +363,5 @@
     <string name="title_patcher">Патчер</string>
     <string name="tight_control">Жесткий контроль</string>
     <string name="tight_control_summary">Проверять отсутствие файлов в проекте. Список файлов находится в в файле конфигурации apktool.json/yml</string>
+    <string name="agreement">Соглашение</string>
 </resources>

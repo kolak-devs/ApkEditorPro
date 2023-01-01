@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.preference.PreferenceManager
@@ -25,42 +24,47 @@ class AppAgreementDialog @SuppressLint("SetTextI18n") constructor(activity: Main
     }
 
     init {
-        val inflater: LayoutInflater = LayoutInflater.from(activity)
-        val layout: View = inflater.inflate(R.layout.dialog_app_license, null)
-        val tv: TextView = layout.findViewById<View>(R.id.tv_content) as TextView
-        tv.text = """
-        Information in this dialog is provided in connection with APK Editor. No license, express or implied, by estoppel or otherwise, to any intellectual property rights is granted by this.
-        
-        APK Editor is designed for Android fans who know what exactly they are doing, but not intended for hack, please use it under following terms:
-        
-        1) Please only modify the apk files which you have intellectual property rights.
-        
-        2) For apk files you don't have intellectual property rights, you need to ask for authorities from the developer to modify it. And even though you have rights to modify it, you still need to ask for re-distribution rights to publish it.
-        
-        3) To prevent abuse of APK Editor, sign feature is not provided any more.
-        
-        4) We may make changes to specifications and product descriptions at any time, without notice.
-        """.trimIndent()
-        val inputEt: TextInputEditText =
-            layout.findViewById<View>(R.id.et_input) as TextInputEditText
+        val layout = LayoutInflater.from(activity).inflate(R.layout.dialog_app_license, null)
+        val textView = layout.findViewById<TextView>(R.id.tv_content)
+        textView.text = if (Locale.getDefault().language.contains("ru")) buildString {
+            append("Данная информация относится к приложению ApkEditor Pro.")
+            append("\n\n")
+            append("APK Editor Pro ApkEditor - приложение для анализа мобильных приложений с возможностью вносить правки в коде, а также тестировать приложение на уязвимости. Он не предназначен для взлома приложений! Пожалуйста используйте его на следующих условиях:")
+            append("\n\n")
+            append("1) Пожалуйста, изменяйте только те файлы APK, на которые у вас есть права интеллектуальной собственности.")
+            append("\n\n")
+            append("2) Для APK файлов, на которые у вас нет прав интеллектуальной собственности, вам необходимо запросить полномочия у разработчика, чтобы изменить их. И хотя у вас есть права на его изменение, вам все равно нужно запрашивать права на повторное распространение для его публикации.")
+            append("\n\n")
+            append("3) Мы можем вносить изменения в спецификации и описания продуктов в любое время без предварительного уведомления.")
+            append("\n\n")
+            append("Если вы не согласны с выше перечисленными пунктами, пожалуйста удалите приложение и не используйте его.")
+        } else buildString {
+            append("This information applies to the ApkEditor Pro application.")
+            append("\n\n")
+            append("APK Editor Pro ApkEditor is an application for analyzing mobile applications with the ability to make changes in the code, as well as test the application for vulnerabilities. It is not designed to hack apps! Please use it under the following conditions:")
+            append("\n\n")
+            append("1) Please only modify APK files for which you have intellectual property rights.")
+            append("\n\n")
+            append("2) For APK files for which you do not have intellectual property rights, you need to request permission from the developer to change them. And while you have rights to modify it, you still need to request redistribution rights to publish it.")
+            append("\n\n")
+            append("3) We may make changes to product specifications and descriptions at any time without notice.")
+            append("\n\n")
+            append("If you do not agree with the above points, please delete the application and do not use it.")
+        }
+
+        val textInputView = layout.findViewById<TextInputEditText>(R.id.et_input)
         val dialog = MaterialAlertDialogBuilder(activity)
-        dialog.setTitle("Agreement")
+        dialog.setTitle(activity.getString(R.string.agreement))
         dialog.setView(layout)
         dialog.setCancelable(false)
         dialog.setPositiveButton(android.R.string.ok) { v, _ ->
-            val input: String = inputEt.text.toString()
-            if (input.trim { it <= ' ' }.lowercase(Locale.getDefault()) == "accept") {
-
+            val input = textInputView.text.toString()
+            if (input.trim().lowercase(Locale.getDefault()) == "accept") {
                 activity.initFileWithPermissionCheck()
-                val sp: SharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(activity)
-                val e: SharedPreferences.Editor = sp.edit()
-                e.putBoolean("app_agreement_accepted", true)
-                e.apply()
+                PreferenceManager.getDefaultSharedPreferences(activity).edit().putBoolean("app_agreement_accepted", true).apply()
                 v.dismiss()
             } else {
-                Toast.makeText(activity, R.string.input_agree_toast, Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(activity, R.string.input_agree_toast, Toast.LENGTH_SHORT).show()
                 activity.finish()
             }
         }
