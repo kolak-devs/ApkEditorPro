@@ -1,9 +1,11 @@
-# apk_editor_pro
+# APK Editor Pro
+
+# Contributing guide
+Use [this guide](https://github.com/timscriptov/ApkEditor-Release/blob/main/CONTRIBUTING.md) if you want to help with app development
 
 # Update JaDX
 ### REPLACE:
     jadx.core.utils.android.Res9patchStreamDecoder
-
 
 # Update ApkTool
 ### REPLACE:
