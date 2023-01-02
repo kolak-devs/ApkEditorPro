@@ -100,7 +100,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
         initUI()
 
-        if (!BuildConfig.SHOW_AGREEMENT) {
+        if (BuildConfig.SHOW_AGREEMENT) {
             if (!appLicenseAccepted(this)) {
                 AppAgreementDialog(this)
             } else {

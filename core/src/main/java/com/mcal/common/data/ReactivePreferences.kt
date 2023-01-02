@@ -10,7 +10,7 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_THEME] ?: false
     }
 
-    suspend fun setNightMode(enabled: Boolean){
+    suspend fun setNightMode(enabled: Boolean) {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Main.UI_THEME] = enabled
         }
@@ -66,6 +66,44 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Editor.SHOW_UNPRINTABLE] ?: true
     }
 
+    suspend fun setIgnoreCase(enabled: Boolean) {
+        App.getContext().prefStore.edit {
+            it[PreferenceScheme.Editor.IGNORE_CASE] = enabled
+        }
+    }
+
+    suspend fun isIgnoreCase(): Boolean {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Editor.IGNORE_CASE] ?: false
+    }
+
+    @JvmStatic
+    fun isIgnoreCaseAsync(): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Editor.IGNORE_CASE] ?: false
+        }
+        return fallback
+    }
+
+    suspend fun setUseRegex(enabled: Boolean) {
+        App.getContext().prefStore.edit {
+            it[PreferenceScheme.Editor.USE_REGEX] = enabled
+        }
+    }
+
+    suspend fun isUseRegex(): Boolean {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Editor.USE_REGEX] ?: false
+    }
+
+    @JvmStatic
+    fun isUseRegexAsync(): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Editor.USE_REGEX] ?: false
+        }
+        return fallback
+    }
+
     suspend fun isAapt2(): Boolean {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.BUILD_USE_AAPT2] ?: true
     }
@@ -74,12 +112,12 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_MULTIRES] ?: true
     }
 
-    suspend fun isNeedDecodeAssets(): Boolean{
+    suspend fun isNeedDecodeAssets(): Boolean {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_ASSETS] ?: false
     }
 
     @JvmStatic
-    fun isNeedDecodeResourcesAsync(): Boolean{
+    fun isNeedDecodeResourcesAsync(): Boolean {
         var fallback: Boolean
         runBlocking {
             fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_RESOURCES] ?: true
@@ -87,27 +125,27 @@ object ReactivePreferences {
         return fallback
     }
 
-    suspend fun isNeedDecodeResources(): Boolean{
+    suspend fun isNeedDecodeResources(): Boolean {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_RESOURCES] ?: false
     }
 
-    suspend fun isNeedDecodeClasses(): Boolean{
+    suspend fun isNeedDecodeClasses(): Boolean {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_CLASSES] ?: false
     }
 
-    suspend fun setDecodeAssets(enabled: Boolean){
+    suspend fun setDecodeAssets(enabled: Boolean) {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Compiler.DECODE_ASSETS] = enabled
         }
     }
 
-    suspend fun setDecodeResources(enabled: Boolean){
+    suspend fun setDecodeResources(enabled: Boolean) {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Compiler.DECODE_RESOURCES] = enabled
         }
     }
 
-    suspend fun setDecodeClasses(enabled: Boolean){
+    suspend fun setDecodeClasses(enabled: Boolean) {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Compiler.DECODE_CLASSES] = enabled
         }
@@ -172,7 +210,7 @@ object ReactivePreferences {
         return fallback
     }
 
-    suspend fun setCheckExistsFilesEnabled(enabled: Boolean){
+    suspend fun setCheckExistsFilesEnabled(enabled: Boolean) {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Compiler.CHECK_EXISTS_FILES] = enabled
         }
