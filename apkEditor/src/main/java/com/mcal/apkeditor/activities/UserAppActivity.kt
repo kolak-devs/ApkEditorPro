@@ -15,14 +15,13 @@ import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.AppInfo
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.AppListAdapter
+import com.mcal.apkeditor.databinding.ActivityApplistBinding
 import com.mcal.apkeditor.dialogs.selectFullEditDialog
 import com.mcal.appdm.PrefOverallActivity
 import com.mcal.common.activities.CustomizedLangActivity
@@ -36,27 +35,19 @@ import java.io.File
 class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
     var mAdapter: AppListAdapter? = null
     var appList = mutableListOf<AppInfo>()
-    private var mRecyclerView: RecyclerView? = null
-    private var searchTextWatcher: EditText? = null
-    private var clearSearchText: ImageButton? = null
-    private var progressBar: ProgressBar? = null
-    private var textNotFound: TextView? = null
     private var userApps: MenuItem? = null
     private var systemApps: MenuItem? = null
 
+    private lateinit var binding: ActivityApplistBinding
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.requestFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.activity_applist)
+        binding = ActivityApplistBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupToolbar(id = R.id.toolbar, title = getString(R.string.select_apk_from_app), back = true)
 
-        progressBar = findViewById(R.id.progress_bar)
-        mRecyclerView = findViewById(R.id.application_list)
-        searchTextWatcher = findViewById(R.id.et_keyword)
-        textNotFound = findViewById(R.id.app_not_found)
-        clearSearchText = findViewById(R.id.clear_text)
-        clearSearchText?.setOnClickListener {
-            searchTextWatcher?.setText("")
+        binding.clearText.setOnClickListener {
+            binding.etKeyword.setText("")
         }
         reScanAppList(AppType.USERS)
     }
@@ -118,44 +109,42 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                     val list = appList.sortedBy { it.appName }
                     val adapter = AppListAdapter(context.packageManager, list, context)
                     mAdapter = adapter
-                    progressBar?.visibility = View.GONE
-                    mRecyclerView?.let { recyclerView ->
-                        recyclerView.visibility = View.VISIBLE
-                        recyclerView.layoutManager = LinearLayoutManager(context)
-                        recyclerView.adapter = adapter
-                        searchTextWatcher?.addTextChangedListener(object : TextWatcher {
-                            override fun onTextChanged(
-                                s: CharSequence,
-                                start: Int,
-                                before: Int,
-                                count: Int
-                            ) = Unit
+                    setVisibility(binding.progressBar, View.GONE)
+                    val recyclerView = binding.applicationList
+                    setVisibility(recyclerView, View.VISIBLE)
+                    recyclerView.layoutManager = LinearLayoutManager(context)
+                    recyclerView.adapter = adapter
+                    binding.etKeyword.addTextChangedListener(object : TextWatcher {
+                        override fun onTextChanged(
+                            s: CharSequence,
+                            start: Int,
+                            before: Int,
+                            count: Int
+                        ) = Unit
 
-                            override fun beforeTextChanged(
-                                s: CharSequence,
-                                start: Int,
-                                count: Int,
-                                after: Int
-                            ) = Unit
+                        override fun beforeTextChanged(
+                            s: CharSequence,
+                            start: Int,
+                            count: Int,
+                            after: Int
+                        ) = Unit
 
-                            override fun afterTextChanged(s: Editable) {
-                                clearSearchText?.visibility =
-                                    if (s.isEmpty()) View.GONE else View.VISIBLE
-                                if (adapter.canStartFilterProcess) {
-                                    if (!TextUtils.equals(s, lastValue)) {
-                                        val constraint = s.toString()
-                                        lastValue = constraint
-                                        recyclerView.smoothScrollToPosition(0)
-                                        adapter.canStartFilterProcess = false
-                                        adapter.filter(constraint)
-                                        return
-                                    }
+                        override fun afterTextChanged(s: Editable) {
+                            setVisibility(binding.clearText, if (s.isEmpty()) View.GONE else View.VISIBLE)
+                            if (adapter.canStartFilterProcess) {
+                                if (!TextUtils.equals(s, lastValue)) {
+                                    val constraint = s.toString()
+                                    lastValue = constraint
+                                    recyclerView.smoothScrollToPosition(0)
+                                    adapter.canStartFilterProcess = false
+                                    adapter.filter(constraint)
                                     return
                                 }
-                                adapter.newValue = s.toString()
+                                return
                             }
-                        })
-                    }
+                            adapter.newValue = s.toString()
+                        }
+                    })
                 }
             }, -1
         ).show()
@@ -225,7 +214,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
     }
 
     override fun onFoundApp(mode: Boolean) {
-        textNotFound?.visibility = if (mode) View.GONE else View.VISIBLE
+        setVisibility(binding.appNotFound, if (mode) View.GONE else View.VISIBLE)
     }
 
     private fun showAppInfo(position: Int) {

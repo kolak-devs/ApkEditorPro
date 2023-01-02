@@ -993,7 +993,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         });
 
 
-        binding.mainManifest.layoutSearchMf.setVisibility(View.VISIBLE);
+        setVisibility(binding.mainManifest.layoutSearchMf, View.VISIBLE);
         setupMfSearch();
 
         binding.mainResources.menuSearchRes.setOnClickListener(this);
@@ -1014,7 +1014,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
                 apkIcon.setImageResource(R.drawable.round_error_24);
                 apkLabel.setText("UNKNOWN");
             }
-            apkPkgPath.setVisibility(View.GONE);
+            setVisibility(apkPkgPath, View.GONE);
         }
 
         RecyclerView stringList = binding.mainStrings.stringList;
@@ -1024,7 +1024,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
         binding.mainStrings.keywordEdit.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                binding.mainStrings.appNotFound.setVisibility(s.length() > 0 ? View.GONE : View.VISIBLE);
+                setVisibility(binding.mainStrings.searchClear, s.length() > 0 ? View.VISIBLE : View.GONE);
                 if (stringListAdapter.canStartFilterProcess) {
                     if (!TextUtils.equals(s, lastValue)) {
                         String constraint = s.toString();
