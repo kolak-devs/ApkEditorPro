@@ -15,10 +15,8 @@ object Constants {
     fun getDomain(): String {
         val comOrNot: Boolean
         runBlocking {
-         comOrNot = ReactivePreferences.isDomainCom()
+            comOrNot = ReactivePreferences.isDomainCom()
         }
-        return if (comOrNot) {
-            DOMAIN_COM
-        } else DOMAIN_RU
+        return if (comOrNot) DOMAIN_COM else DOMAIN_RU
     }
 }

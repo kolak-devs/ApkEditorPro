@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class DownloaderAdapter(
-    private val tools: List<Pair<String, String>>,
+    private val tools: MutableList<Pair<String, String>>,
 ) :
     RecyclerView.Adapter<DownloaderAdapter.AppListViewHolder>() {
     override fun onCreateViewHolder(
