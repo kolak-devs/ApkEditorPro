@@ -90,7 +90,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                                 delegate.applyDayNight()
                             }
                         }
-
                         return true
                     }
                 }
