@@ -2,14 +2,13 @@ package com.mcal.editor.presentation
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.GetContent
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.UiAction
@@ -17,6 +16,10 @@ import com.mcal.colorconverter.ColorPickerConverter
 import com.mcal.colormixer.ColorMixer
 import com.mcal.colormixer.ColorMixerDialog
 import com.mcal.common.data.ReactivePreferences
+import com.mcal.common.data.ReactivePreferences.isIgnoreCaseAsync
+import com.mcal.common.data.ReactivePreferences.isUseRegexAsync
+import com.mcal.common.data.ReactivePreferences.setIgnoreCase
+import com.mcal.common.data.ReactivePreferences.setUseRegex
 import com.mcal.common.utils.ClipboardUtils.copyToClipboard
 import com.mcal.common.utils.copyBack
 import com.mcal.common.view.ProgressDialog
@@ -120,6 +123,47 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                 e.printStackTrace()
             }
         }
+        menu.setOnClickListener { view ->
+            val popupMenu = PopupMenu(this@EditorActivity, view)
+            popupMenu.menuInflater.inflate(R.menu.menu_editor_search, popupMenu.menu)
+            popupMenu.menu.findItem(R.id.use_regex).isChecked = isUseRegexAsync()
+            popupMenu.menu.findItem(R.id.ignore_case).isChecked = isIgnoreCaseAsync()
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.use_regex ->
+                        CoroutineScope(Dispatchers.Main).launch {
+                            setUseRegex(!item.isChecked)
+                            updateSearchState()
+                        }
+                    R.id.ignore_case ->
+                        CoroutineScope(Dispatchers.Main).launch {
+                            setIgnoreCase(!item.isChecked)
+                            updateSearchState()
+                        }
+                    R.id.close ->
+                        popupMenu.dismiss()
+                }
+                true
+            }
+            popupMenu.show()
+        }
+    }
+
+    /**
+     * Обновляет результаты поиска
+     */
+    private fun updateSearchState() {
+        try {
+            binding.searchEditor.text.toString().takeIf { it.isNotEmpty() }?.let {
+                binding.editor.searcher.search(
+                    it,
+                    EditorSearcher.SearchOptions(isIgnoreCaseAsync(), isUseRegexAsync())
+                )
+            }
+        } catch (e: PatternSyntaxException) {
+            e.printStackTrace()
+            // Regex error
+        }
     }
 
     override fun onBindViewModel() = with(viewModel) {
@@ -144,24 +188,23 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
             subscribeEvent<ContentChangeEvent> { _, _ ->
                 postDelayed(::updateBtnState, 50)
             }
-            subscribeEvent<SideIconClickEvent> { _, _ ->
-                Toast.makeText(this@EditorActivity, "Side icon clicked", Toast.LENGTH_SHORT).show()
-            }
+//            subscribeEvent<SideIconClickEvent> { _, _ ->
+//                Toast.makeText(this@EditorActivity, "Side icon clicked", Toast.LENGTH_SHORT).show()
+//            }
 
-            subscribeEvent<KeyBindingEvent> { event, _ ->
-                if (event.eventType != EditorKeyEvent.Type.DOWN) {
-                    return@subscribeEvent
-                }
-
-                Toast.makeText(
-                    context,
-                    "Keybinding event: " + generateKeybindingString(event),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+//            subscribeEvent<KeyBindingEvent> { event, _ ->
+//                if (event.eventType != EditorKeyEvent.Type.DOWN) {
+//                    return@subscribeEvent
+//                }
+//
+//                Toast.makeText(
+//                    context,
+//                    "Keybinding event: " + generateKeybindingString(event),
+//                    Toast.LENGTH_LONG
+//                ).show()
+//            }
             // Custom cursor animator
             cursorAnimator = ScaleCursorAnimator(editor)
-            typefaceText = Typeface.MONOSPACE
 
             lifecycleScope.launch {
                 if (ReactivePreferences.isShowUnprintable()) {
@@ -180,23 +223,23 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
         }
     }
 
-    private fun generateKeybindingString(event: KeyBindingEvent): String {
-        val sb = StringBuilder()
-        if (event.isCtrlPressed) {
-            sb.append("Ctrl + ")
-        }
-
-        if (event.isAltPressed) {
-            sb.append("Alt + ")
-        }
-
-        if (event.isShiftPressed) {
-            sb.append("Shift + ")
-        }
-
-        sb.append(KeyEvent.keyCodeToString(event.keyCode))
-        return sb.toString()
-    }
+//    private fun generateKeybindingString(event: KeyBindingEvent): String {
+//        val sb = StringBuilder()
+//        if (event.isCtrlPressed) {
+//            sb.append("Ctrl + ")
+//        }
+//
+//        if (event.isAltPressed) {
+//            sb.append("Alt + ")
+//        }
+//
+//        if (event.isShiftPressed) {
+//            sb.append("Shift + ")
+//        }
+//
+//        sb.append(KeyEvent.keyCodeToString(event.keyCode))
+//        return sb.toString()
+//    }
 
     private fun initSearchEditor() {
         binding.searchEditor.addTextChangedListener(object : TextWatcher {
@@ -207,7 +250,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                     try {
                         binding.editor.searcher.search(
                             editable.toString(),
-                            EditorSearcher.SearchOptions(true, true)
+                            EditorSearcher.SearchOptions(isIgnoreCaseAsync(), isUseRegexAsync())
                         )
                     } catch (e: PatternSyntaxException) {
                         e.printStackTrace()

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/use_regex"
+        android:checkable="true"
+        android:title="@string/use_regex" />
+    <item
+        android:id="@+id/ignore_case"
+        android:checkable="true"
+        android:title="@string/ignore_case" />
+    <item
+        android:id="@+id/close"
+        android:title="@string/close" />
+</menu>

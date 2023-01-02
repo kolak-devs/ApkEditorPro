@@ -44,6 +44,8 @@ object PreferenceScheme {
       val SHOW_UNPRINTABLE = booleanPreferencesKey("editor_printable_characters")
       val MAGNIFIER = booleanPreferencesKey("editor_magnifier")
       val USE_ICU_LIB = booleanPreferencesKey("editor_use_icu_library")
+      val IGNORE_CASE = booleanPreferencesKey("isIgnoreCase")
+      val USE_REGEX = booleanPreferencesKey("isUseRegex")
    }
 
    object Misc {

@@ -47,4 +47,6 @@
     <string name="clear">Очистить</string>
     <string name="copied_to_clipboard">\"Скопировано в буфер обмена \"</string>
     <string name="title_code_editor">Редактор</string>
+    <string name="use_regex">Регулярные выражения</string>
+    <string name="ignore_case">Учитывать регистр</string>
 </resources>
