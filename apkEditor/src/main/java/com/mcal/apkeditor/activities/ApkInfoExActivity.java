@@ -78,9 +78,9 @@ public class ApkInfoExActivity extends ApkInfoActivity {
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1.0f);
         LinearLayout menuLayout = binding.mainResources.resMenuLayout;
         menuLayout.addView(createMenuItem(R.drawable.round_save_24, R.string.extract), param);
-        menuItem_replace = createMenuItem(R.drawable.round_content_copy_24, R.string.replace);
+        menuItem_replace = createMenuItem(R.drawable.ic_copy, R.string.replace);
         menuLayout.addView(menuItem_replace, param);
-        menuLayout.addView(createMenuItem(R.drawable.round_search_24, R.string.search), param);
+        menuLayout.addView(createMenuItem(R.drawable.ic_search, R.string.search), param);
         menuLayout.addView(createMenuItem(R.drawable.ic_delete, R.string.delete), param);
         menuItem_details = createMenuItem(R.drawable.round_menu_24, R.string.detail);
         menuLayout.addView(menuItem_details, param);
@@ -179,12 +179,12 @@ public class ApkInfoExActivity extends ApkInfoActivity {
             }
 
             // Replace
-            else if (id == R.drawable.round_content_copy_24) {
+            else if (id == R.drawable.ic_copy) {
                 replaceFileOrFolder();
             }
 
             // Search
-            else if (id == R.drawable.round_search_24) {
+            else if (id == R.drawable.ic_search) {
                 inputKeywordAndSearch();
             }
 

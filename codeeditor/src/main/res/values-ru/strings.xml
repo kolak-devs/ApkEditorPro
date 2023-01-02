@@ -49,4 +49,5 @@
     <string name="title_code_editor">Редактор</string>
     <string name="use_regex">Регулярные выражения</string>
     <string name="ignore_case">Учитывать регистр</string>
+    <string name="menu">Меню</string>
 </resources>

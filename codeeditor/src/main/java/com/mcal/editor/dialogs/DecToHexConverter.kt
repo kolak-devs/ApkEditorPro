@@ -122,7 +122,7 @@ class DecToHexConverter(private val activity: Activity) : View.OnTouchListener {
             inputHex.addTextChangedListener(watcherHex)
         }
         btnNegative.isEnabled = inputDec.text.toString().isNotEmpty() || inputHex.text.toString().isNotEmpty()
-        val icCopy = ContextCompat.getDrawable(activity, R.drawable.round_content_copy_24)
+        val icCopy = ContextCompat.getDrawable(activity, R.drawable.ic_copy)
         inputDec.setCompoundDrawablesWithIntrinsicBounds(null, null, if (inputDec.length() > 0) icCopy else null, null)
         inputHex.setCompoundDrawablesWithIntrinsicBounds(null, null, if (inputHex.length() > 0) icCopy else null, null)
     }

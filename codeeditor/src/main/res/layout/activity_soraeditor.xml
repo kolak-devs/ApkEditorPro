@@ -99,63 +99,57 @@
             android:layout_marginRight="16dp"
             android:hint="@string/replacement" />
 
-        <HorizontalScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp">
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="5dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/buttonGotoLast"
+                style="@style/ButtonBarStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center_horizontal"
-                android:paddingBottom="5dp">
+                android:layout_weight="1"
+                android:text="@string/layout_tv_last" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/buttonGotoLast"
-                    android:text="@string/layout_tv_last"
-                    android:drawableTop="@drawable/skip_previous"
-                    style="@style/ButtonBarStyle"/>
+            <Button
+                android:id="@+id/buttonGotoNext"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/layout_tv_next" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/buttonGotoNext"
-                    android:text="@string/layout_tv_next"
-                    android:drawableTop="@drawable/skip_next"
-                    style="@style/ButtonBarStyle"/>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/buttonReplace"
-                    android:text="@string/layout_tv_replace"
-                    android:drawableTop="@drawable/find_replace"
-                    style="@style/ButtonBarStyle"/>
+            <Button
+                android:id="@+id/buttonReplace"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/layout_tv_replace" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/buttonReplaceAll"
-                    android:text="@string/layout_tv_replaceAll"
-                    android:drawableTop="@drawable/replace_all"
-                    style="@style/ButtonBarStyle"/>
+            <Button
+                android:id="@+id/buttonReplaceAll"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/layout_tv_replaceAll" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/menu"
-                    android:text="Menu"
-                    android:drawableTop="@drawable/ic_additional_menu"
-                    style="@style/ButtonBarStyle"/>
+            <Button
+                android:id="@+id/menu"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/menu" />
 
-            </LinearLayout>
-
-        </HorizontalScrollView>
+        </LinearLayout>
 
     </LinearLayout>
 

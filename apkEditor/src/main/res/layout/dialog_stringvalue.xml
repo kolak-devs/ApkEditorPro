@@ -35,6 +35,6 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/round_content_copy_24" />
+        android:src="@drawable/ic_copy" />
 
 </LinearLayout>

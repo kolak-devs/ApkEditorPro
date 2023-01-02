@@ -205,7 +205,7 @@ public class MatchedTextListAdapter extends BaseExpandableListAdapter implements
         int editResId = editClicked[groupPosition] ? R.drawable.round_edit_blue_24 : (R.drawable.round_edit_24);
         viewHolder.editImage.setImageResource(editResId);
 
-        int replaceId = replaceClicked[groupPosition] ? R.drawable.round_content_copy_blue_24 : (R.drawable.round_content_copy_24);
+        int replaceId = replaceClicked[groupPosition] ? R.drawable.round_content_copy_blue_24 : (R.drawable.ic_copy);
         viewHolder.replaceImage.setImageResource(replaceId);
 
 

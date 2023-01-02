@@ -534,7 +534,9 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (canSave()) {
+        if (binding.searchPanel.visibility == View.VISIBLE) {
+            stopSearch()
+        } else if (canSave()) {
             val dialog = MaterialAlertDialogBuilder(this)
             mFilePath?.name?.let { name ->
                 dialog.setTitle(name)
@@ -673,8 +675,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                         item.isChecked = true
                     }
                 } else {
-                    binding.searchPanel.visibility = View.GONE
-                    editor.searcher.stopSearch()
+                    stopSearch()
                     item.isChecked = false
                 }
             }
@@ -707,6 +708,14 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * Остановить поиск и скрыть вьюху поиска
+     */
+    private fun stopSearch() {
+        binding.searchPanel.visibility = View.GONE
+        binding.editor.searcher.stopSearch()
     }
 
     private fun showNavigationMethods() {

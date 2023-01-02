@@ -3,25 +3,25 @@
 
     <item
         android:id="@+id/methods"
-        android:icon="@drawable/explore_24"
+        android:icon="@drawable/ic_explore"
         android:title="Methods"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/text_undo"
-        android:icon="@drawable/undo_24"
+        android:icon="@drawable/ic_undo"
         android:title="@string/undo"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/text_redo"
-        android:icon="@drawable/redo_24"
+        android:icon="@drawable/ic_redo"
         android:title="@string/redo"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/text_save"
-        android:icon="@drawable/save_24"
+        android:icon="@drawable/ic_save"
         android:title="Save"
         app:showAsAction="always" />
 
