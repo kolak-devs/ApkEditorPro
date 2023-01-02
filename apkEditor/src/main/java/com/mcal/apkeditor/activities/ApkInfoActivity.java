@@ -28,7 +28,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +38,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -2226,48 +2226,43 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
     // Long click the resource list item
     @Override
-    public boolean onItemLongClick(@NonNull AdapterView<?> parent, View arg1, final int position, long id) {
+    public boolean onItemLongClick(@NonNull AdapterView<?> parent, View view, final int position, long id) {
         // The first item is always the parent folder
         final boolean isFirstItem = (position == 0);
 
-        parent.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
-            // Check the item is directory or not
-            List<FileRecord> records = new ArrayList<>();
-            String curPath = resListAdapter.getData(records);
-            boolean isDir = records.get(position).isDir;
+        final List<FileRecord> records = new ArrayList<>();
+        final String curPath = resListAdapter.getData(records);
 
-            // Delete
-            if (!isFirstItem) {
-                MenuItem item1 = menu.add(0, Menu.FIRST, 0, R.string.delete);
-                item1.setOnMenuItemClickListener(item -> {
-                    List<Integer> positions = new ArrayList<>(1);
-                    positions.add(position);
-                    resListAdapter.deleteFile(positions);
-                    resListAdapter.dumpChangedFiles();
-                    return true;
-                });
-            }
-            // Extract (res directory also allow to extract)
+        final PopupMenu popupMenu = new PopupMenu(this, view);
+        // Delete
+        if (!isFirstItem) {
+            popupMenu.getMenu().add(getString(R.string.delete));
+        }
+        // Extract (res directory also allow to extract)
+        if (!isFirstItem || curPath.equals(decodeRootPath)) {
+            popupMenu.getMenu().add(getString(R.string.extract));
+        }
+        if (!records.get(position).isDir) {
             if (!isFirstItem || curPath.equals(decodeRootPath)) {
-                MenuItem item2 = menu.add(0, Menu.FIRST + 1, 0, R.string.extract);
-                item2.setOnMenuItemClickListener(item -> {
-                    List<Integer> positions = new ArrayList<>(1);
-                    positions.add(position);
-                    extractFileOrDir(positions);
-                    return true;
-                });
+                popupMenu.getMenu().add(getString(R.string.replace));
             }
-
-            if (!isDir) {
-                if (!isFirstItem || curPath.equals(decodeRootPath)) {
-                    final MenuItem item2 = menu.add(0, Menu.FIRST + 2, 0, R.string.replace);
-                    item2.setOnMenuItemClickListener(item -> {
-                        replaceFileSAF(position);
-                        return true;
-                    });
-                }
+        }
+        popupMenu.setOnMenuItemClickListener(item -> {
+            final String title = item.getTitle().toString();
+            final List<Integer> positions = new ArrayList<>(1);
+            if (title.equals(getString(R.string.delete))) {
+                positions.add(position);
+                resListAdapter.deleteFile(positions);
+                resListAdapter.dumpChangedFiles();
+            } else if (title.equals(getString(R.string.extract))) {
+                positions.add(position);
+                extractFileOrDir(positions);
+            } else if (title.equals(getString(R.string.replace))) {
+                replaceFileSAF(position);
             }
+            return false;
         });
+        popupMenu.show();
         return false;
     }
 
