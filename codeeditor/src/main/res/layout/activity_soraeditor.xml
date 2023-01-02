@@ -102,59 +102,66 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
                 android:paddingBottom="5dp">
 
-                <Button
-                    style="@style/Widget.Material3.Button.TonalButton"
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:id="@+id/buttonGotoLast"
-                    android:text="@string/layout_tv_last" />
+                    android:text="@string/layout_tv_last"
+                    android:src="@drawable/skip_previous"
+                    android:background="@drawable/button_bar_bg"/>
 
-                <Button
-                    style="@style/Widget.Material3.Button.TonalButton"
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:id="@+id/buttonGotoNext"
-                    android:text="@string/layout_tv_next" />
+                    android:text="@string/layout_tv_next"
+                    android:src="@drawable/skip_next"
+                    android:background="@drawable/button_bar_bg"/>
 
-                <Button
-                    style="@style/Widget.Material3.Button.TonalButton"
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:onClick="replace"
                     android:id="@+id/buttonReplace"
-                    android:text="@string/layout_tv_replace" />
+                    android:text="@string/layout_tv_replace"
+                    android:src="@drawable/find_replace"
+                    android:background="@drawable/button_bar_bg"/>
 
-                <Button
-                    style="@style/Widget.Material3.Button.TonalButton"
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:id="@+id/buttonReplaceAll"
-                    android:text="@string/layout_tv_replaceAll" />
+                    android:text="@string/layout_tv_replaceAll"
+                    android:src="@drawable/replace_all"
+                    android:background="@drawable/button_bar_bg"/>
 
-                <Button
-                    style="@style/Widget.Material3.Button.TonalButton"
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:id="@+id/menu"
-                    android:text="Menu" />
+                    android:text="Menu"
+                    android:src="@drawable/ic_additional_menu"
+                    android:background="@drawable/button_bar_bg"/>
 
             </LinearLayout>
 
