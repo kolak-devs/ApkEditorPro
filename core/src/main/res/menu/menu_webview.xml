@@ -4,14 +4,14 @@
 
     <item
         android:id="@+id/menu_webview_refresh"
+        android:contentDescription="@string/update"
         android:icon="@drawable/ic_refresh"
-        android:title="Обновить"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_webview_language"
+        android:contentDescription="@string/language"
         android:icon="@drawable/ic_google_translate"
-        android:title="Язык"
         app:showAsAction="always" />
 
 </menu>
