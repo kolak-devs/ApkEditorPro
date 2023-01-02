@@ -1,39 +1,32 @@
 package com.mcal.common
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.preference.PreferenceManager
 import com.mcal.common.utils.LocaleManager.apply
 import com.balsikandar.crashreporter.CrashReporter
 import com.google.android.material.color.DynamicColors
-import com.mcal.common.data.LegacyPreferences
-import com.mcal.common.data.PreferenceScheme
+import com.mcal.Navigator
 import com.mcal.common.data.ReactivePreferences
-import com.mcal.common.data.prefStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-abstract class App : Application() {
+abstract class App : Application(), Navigator {
 
     override fun onCreate() {
         super.onCreate()
         context = this
         CrashReporter.initialize(this)
         CoroutineScope(Dispatchers.Main).launch {
-            if (ReactivePreferences.isNightMode()){
+            if (ReactivePreferences.isNightMode()) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-            if (ReactivePreferences.isMonetEnabled()){
+            if (ReactivePreferences.isMonetEnabled()) {
                 DynamicColors.applyToActivitiesIfAvailable(this@App)
             }
             // Support android 12 Monet Engine
@@ -59,6 +52,7 @@ abstract class App : Application() {
 //            }
             return context!!
         }
+
         /**
          * This method converts dp unit to equivalent pixels, depending on device density.
          *

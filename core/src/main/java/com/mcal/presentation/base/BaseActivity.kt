@@ -1,10 +1,13 @@
 package com.mcal.presentation.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
+import com.mcal.Navigator
+import com.mcal.UiAction
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.sl.ViewModelProvider
 
@@ -18,6 +21,8 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewBinding>(
 
     protected abstract fun viewModelClass(): Class<VM>
 
+    protected lateinit var navigator: Navigator
+
     override fun <T : ViewModel> provideViewModel(clazz: Class<T>, owner: ViewModelStoreOwner): T =
         (application as ViewModelProvider).provideViewModel(clazz, owner)
 
@@ -29,9 +34,14 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewBinding>(
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         viewModel = provideViewModel(viewModelClass(), this)
+        navigator = applicationContext as Navigator
         callOperations()
         onSetupLayout()
         onBindViewModel()
+    }
+
+    protected fun Navigator.navigateTo(uiAction: UiAction, onExtras: (Intent) -> Unit = {}) {
+        this@BaseActivity.navigateTo(uiAction, onExtras)
     }
 
     /**
