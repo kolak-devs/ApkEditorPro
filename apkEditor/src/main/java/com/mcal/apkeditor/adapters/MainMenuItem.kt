@@ -9,10 +9,26 @@ import com.mcal.apkeditor.R
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
-open class MainMenuItem(
-    var id: Int, @DrawableRes var icon: Int? = null,
-    @StringRes var title: Int? = null
-) : AbstractItem<MainMenuItem.ViewHolder>() {
+open class MainMenuItem() : AbstractItem<MainMenuItem.ViewHolder>() {
+    var id: Int? = null
+    @DrawableRes
+    private var icon: Int? = null
+    private var itemTitle: CharSequence? = null
+    @StringRes
+    private var itemString: Int? = null
+
+    constructor(id: Int, icon: Int?, title: CharSequence): this(){
+        this.id = id
+        this.icon = icon
+        this.itemTitle = title
+    }
+
+    constructor(id: Int, icon: Int?, title: Int): this(){
+        this.id = id
+        this.icon = icon
+        this.itemString = title
+    }
+
     /** The type of the Item. Can be a hardcoded INT, but preferred is a defined id */
     override val type: Int
         get() = R.id.main_menu_container
@@ -34,15 +50,19 @@ open class MainMenuItem(
             item.icon?.let {
                 icon.setImageResource(it)
             }
-            item.title?.let {
+            item.itemTitle?.let {
+                title.setText(it)
+            }
+            item.itemString?.let {
                 title.setText(it)
             }
         }
 
         /** View needs to release resources when its recycled */
         override fun unbindView(item: MainMenuItem) {
+            item.id = null
             item.icon = null
-            item.title = null
+            item.itemTitle = null
         }
     }
 }

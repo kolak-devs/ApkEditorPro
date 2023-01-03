@@ -26,10 +26,6 @@ abstract class App : Application(), Navigator {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-            if (ReactivePreferences.isMonetEnabled()) {
-                DynamicColors.applyToActivitiesIfAvailable(this@App)
-            }
-            // Support android 12 Monet Engine
             apply()
         }
     }
@@ -47,9 +43,6 @@ abstract class App : Application(), Navigator {
 
         @JvmStatic
         fun getContext(): Context {
-//            if (context == null) {
-//                context = App()
-//            }
             return context!!
         }
 

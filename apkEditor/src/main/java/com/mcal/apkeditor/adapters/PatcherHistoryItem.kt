@@ -32,9 +32,9 @@ class PatcherHistoryItem() : AbstractItem<PatcherHistoryItem.ViewHolder>() {
     }
 
     class ViewHolder(view: View) : FastAdapter.ViewHolder<PatcherHistoryItem>(view) {
-        var iconView: ImageView = view.findViewById(R.id.menu_icon)
-        var titleView: TextView = view.findViewById(R.id.menu_title)
-        var subtitleView: TextView = view.findViewById(R.id.menu_subtitle)
+        private var iconView: ImageView = view.findViewById(R.id.menu_icon)
+        private var titleView: TextView = view.findViewById(R.id.menu_title)
+        private var subtitleView: TextView = view.findViewById(R.id.menu_subtitle)
 
         override fun bindView(item: PatcherHistoryItem, payloads: List<Any>) {
             item.icon?.let {
@@ -49,6 +49,7 @@ class PatcherHistoryItem() : AbstractItem<PatcherHistoryItem.ViewHolder>() {
         }
 
         override fun unbindView(item: PatcherHistoryItem) {
+            item.id = null
             item.icon = null
             item.title = null
             item.subtitle = null

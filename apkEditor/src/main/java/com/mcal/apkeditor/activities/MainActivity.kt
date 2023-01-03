@@ -223,6 +223,10 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             MainMenuItem(6, R.drawable.ic_exit_to_app, R.string.exit)
         )
 
+//        for (i in 10..100){
+//            itemAdapter.add(MainMenuItem(i, R.drawable.bandage, "Item $i"))
+//        }
+
         fastApkAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
             when (mainMenuItem.id) {
                 0 -> {
