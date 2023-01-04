@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -79,6 +80,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
         super.onCreate(savedInstanceState)
         _binding = ActivityPatcherBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setupToolbar(id = R.id.toolbar, title = getString(R.string.title_patcher), back = true)
         binding.listLog.apply {
             adapter = FastAdapter.with(logItemAdapter)
@@ -123,25 +125,29 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                     R.id.history -> {
                         val itemAdapter = ItemAdapter<PatcherHistoryItem>()
                         val fastAdapter = FastAdapter.with(itemAdapter)
+                        val fmt = SimpleDateFormat("EEE, HH:mm")
+                        val list = arrayListOf<PatcherHistoryItem>()
                         /**
                          * Получаем список файлов в директории патчей. И отображаем на экране все архивы
                          */
                         Files.walk(getPatchesDir().toPath()).filter {
                             it.name.endsWith(".zip")
                         }.collect(Collectors.toList()).forEach { patchFile ->
-                            val fmt = SimpleDateFormat("EEE, HH:mm")
-                            itemAdapter.add(
-                                PatcherHistoryItem(
-                                    System.currentTimeMillis().toInt(), ContextCompat.getDrawable(this@PatcherActivity, R.drawable.ic_android),
-                                    patchFile.name, fmt.format(Files.getLastModifiedTime(patchFile).toMillis())
-                                )
+                            list.add(
+                                PatcherHistoryItem()
+                                    .withId(patchFile.name.hashCode().toLong())
+                                    .withIcon(ContextCompat.getDrawable(this@PatcherActivity, R.drawable.ic_android))
+                                    .withTitle(patchFile.name)
+                                    .withSubTitle(fmt.format(Files.getLastModifiedTime(patchFile).toMillis()))
                             )
+                            itemAdapter.add(list)
                         }
 
                         if (itemAdapter.adapterItemCount >= 0) {
                             LayoutInflater.from(this@PatcherActivity).inflate(R.layout.dialog_patcher_history, null).apply {
                                 findViewById<RecyclerView>(R.id.recycler_view).apply {
                                     adapter = fastAdapter
+                                    itemAnimator = DefaultItemAnimator()
                                 }
                                 val dialog = MaterialAlertDialogBuilder(this@PatcherActivity).create()
                                 dialog.setTitle(R.string.select_patch)
@@ -372,17 +378,12 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
 
     override fun translateLanguage(lang: String?) = Unit
 
-    private fun appendText(
-        txt: String, bold: Boolean,
-        red: Boolean
-    ) {
+    private fun appendText(txt: String, bold: Boolean, red: Boolean) {
         runOnUiThread {
             if (red) {
-                logItemAdapter.add(PatchLogItem(Constants.LOG_ERROR, txt, false))
-            } else if (bold) {
-                logItemAdapter.add(PatchLogItem(Constants.LOG_INFO, txt, bold))
+                logItemAdapter.add(PatchLogItem().withId(txt.hashCode().toLong()).withLogLevel(Constants.LOG_ERROR).withLogString(txt))
             } else {
-                logItemAdapter.add(PatchLogItem(Constants.LOG_INFO, txt, false))
+                logItemAdapter.add(PatchLogItem().withId(txt.hashCode().toLong()).withLogLevel(Constants.LOG_INFO).withLogString(txt).withBold(bold))
             }
         }
     }

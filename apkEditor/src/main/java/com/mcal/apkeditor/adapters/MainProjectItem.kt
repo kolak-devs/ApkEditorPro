@@ -8,18 +8,11 @@ import com.mcal.apkeditor.R
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
-open class MainProjectItem() : AbstractItem<MainProjectItem.ViewHolder>() {
-    var id: Int? = null
-    var icon: Drawable? = null
-    var title: String? = null
-    var subtitle: String? = null;
-
-    constructor(id: Int, icon: Drawable? = null, title: String? = null, subtitle: String? = null) : this() {
-        this.id = id
-        this.icon = icon
-        this.title = title
-        this.subtitle = subtitle
-    }
+open class MainProjectItem : AbstractItem<MainProjectItem.ViewHolder>() {
+    private var id: Int? = null
+    private var icon: Drawable? = null
+    private var title: String? = null
+    private var subtitle: String? = null;
 
     /** The type of the Item. Can be a hardcoded INT, but preferred is a defined id */
     override val type: Int
@@ -28,6 +21,34 @@ open class MainProjectItem() : AbstractItem<MainProjectItem.ViewHolder>() {
     /** The layout for the given item */
     override val layoutRes: Int
         get() = R.layout.item_main_project
+
+    fun withId(id: Int): MainProjectItem {
+        this.id = id
+        return this
+    }
+
+    fun withIcon(icon: Drawable?): MainProjectItem {
+        this.icon = icon
+        return this
+    }
+
+    fun withTitle(title: String): MainProjectItem {
+        this.title = title
+        return this
+    }
+
+    fun withSubTitle(subtitle: String): MainProjectItem {
+        this.subtitle = subtitle
+        return this
+    }
+
+    fun getId(): Int? {
+        return id
+    }
+
+    fun getTitle(): String? {
+        return title
+    }
 
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)
@@ -40,21 +61,17 @@ open class MainProjectItem() : AbstractItem<MainProjectItem.ViewHolder>() {
 
         /** Binds the data of this item onto the viewHolder */
         override fun bindView(item: MainProjectItem, payloads: List<Any>) {
-            item.icon?.let {
-                iconView.setImageDrawable(it)
-            }
-            item.title?.let { title ->
-                titleView.text = title
-            }
-            item.subtitle.let { subtitle ->
-                subtitleView.text = subtitle
-            }
+                iconView.setImageDrawable(item.icon)
+                titleView.text = item.title
+                subtitleView.text = item.subtitle
         }
 
         /** View needs to release resources when its recycled */
         override fun unbindView(item: MainProjectItem) {
+            item.id = null
             item.icon = null
             item.title = null
+            item.subtitle = null
         }
     }
 }

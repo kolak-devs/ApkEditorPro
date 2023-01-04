@@ -47,7 +47,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
+import java.nio.file.Files
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.system.exitProcess
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {
@@ -174,8 +177,14 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         // id может быть любым числом, главное, чтобы оно было уникальным. Сделано для того, чтобы не ломалась логика
         // onClick при добавлении новых айтемов
         apkItemAdapter.add(
-            MainMenuItem(0, R.drawable.ic_android, R.string.select_file),
-            MainMenuItem(1, R.drawable.apps_box, R.string.select_app),
+            MainMenuItem()
+                .withId(0)
+                .withIcon(R.drawable.ic_android)
+                .withTitle(R.string.select_file),
+            MainMenuItem()
+                .withId(1)
+                .withIcon(R.drawable.apps_box)
+                .withTitle(R.string.select_app)
         )
 
         // TODO: Обновить список если Пользователь нажал "Сохранить как проект"
@@ -195,21 +204,23 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
                 val info = ApkInfoActivity.loadProject(f.path) ?: continue
                 val fmt = SimpleDateFormat("EEE, HH:mm")
+                val millisDate = Files.getLastModifiedTime(File(info.decodeRootPath).toPath()).toMillis()
                 projectAdapter.add(
-                    MainProjectItem(
-                        System.currentTimeMillis().toInt(), icon, File(info.decodeRootPath).name,
-                        fmt.format(File(info.decodeRootPath).lastModified())
-                    )
+                    MainProjectItem()
+                        .withId(System.currentTimeMillis().toInt())
+                        .withIcon(icon)
+                        .withTitle(File(info.decodeRootPath).name)
+                        .withSubTitle(fmt.format(millisDate))
                 )
             }
 
             if (projectAdapter.adapterItemCount > 0) {
                 binding.titleProjects.visibility = View.VISIBLE
                 projectAdapter.add(
-                    MainProjectItem(
-                        REQ_SHOW_ALL, ContextCompat.getDrawable(this, R.drawable.ic_go_into),
-                        getString(R.string.projects_show_all), null
-                    )
+                    MainProjectItem()
+                        .withId(REQ_SHOW_ALL)
+                        .withIcon(ContextCompat.getDrawable(this, R.drawable.ic_go_into))
+                        .withTitle(getString(R.string.projects_show_all))
                 )
             } else {
                 binding.titleProjects.visibility = View.GONE
@@ -217,23 +228,35 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         }
 
         itemAdapter.add(
-            MainMenuItem(3, R.drawable.puzzle, R.string.odex_patcher),
-            MainMenuItem(4, R.drawable.settings, R.string.tools_manager),
-            MainMenuItem(5, R.drawable.round_logo_dev_24, R.string.view_logs),
-            MainMenuItem(6, R.drawable.ic_exit_to_app, R.string.exit)
+            MainMenuItem()
+                .withId(3)
+                .withIcon(R.drawable.puzzle)
+                .withTitle(R.string.odex_patcher),
+            MainMenuItem()
+                .withId(4)
+                .withIcon(R.drawable.settings)
+                .withTitle(R.string.tools_manager),
+            MainMenuItem()
+                .withId(5)
+                .withIcon(R.drawable.round_logo_dev_24)
+                .withTitle(R.string.view_logs),
+            MainMenuItem()
+                .withId(6)
+                .withIcon(R.drawable.ic_exit_to_app)
+                .withTitle(R.string.exit)
         )
 
 //        for (i in 10..100){
 //            itemAdapter.add(MainMenuItem(i, R.drawable.bandage, "Item $i"))
 //        }
 
-        fastApkAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
-            when (mainMenuItem.id) {
-                0 -> {
+        fastApkAdapter.onClickListener = { _: View?, adapter: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, position: Int ->
+            when (mainMenuItem.identifier) {
+                0L -> {
                     pickApk()
                     true
                 }
-                1 -> {
+                1L -> {
                     val intent = Intent(this, UserAppActivity::class.java)
                     startActivity(intent)
                     true
@@ -242,36 +265,36 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             }
         }
         fastProjectAdapter.onClickListener = { view: View?, iAdapter: IAdapter<MainProjectItem>, mainProjectItem: MainProjectItem, i: Int ->
-            if (mainProjectItem.id == REQ_SHOW_ALL) {
+            if (mainProjectItem.getId() == REQ_SHOW_ALL) {
                 startActivity(Intent(this, ProjectListActivity::class.java))
                 true
             } else {
                 val intent = Intent(this, ApkInfoExActivity::class.java)
-                ActivityHelper.attachParam(intent, "projectName", fastProjectAdapter.getItem(i)?.title)
+                ActivityHelper.attachParam(intent, "projectName", fastProjectAdapter.getItem(i)?.getTitle())
                 startActivity(intent)
                 true
             }
 
         }
         fastAdapter.onClickListener =
-            { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, i: Int ->
-                when (mainMenuItem.id) {
-                    3 -> {
+            { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, position: Int ->
+                when (mainMenuItem.identifier) {
+                    3L -> {
                         val intent = Intent(this, OdexPatchActivity::class.java)
                         startActivity(intent)
                         true
                     }
-                    4 -> {
+                    4L -> {
                         val intent = Intent(this, DownloaderActivity::class.java)
                         startActivity(intent)
                         true
                     }
-                    5 -> {
+                    5L -> {
                         val intent = Intent(this, CrashReporterActivity::class.java)
                         startActivity(intent)
                         true
                     }
-                    6 -> {
+                    6L -> {
                         Process.killProcess(Process.myPid())
                         exitProcess(0)
                     }

@@ -1,5 +1,5 @@
 ext {
-    def latestFastAdapterRelease = "5.6.0"
+    def latestFastAdapterRelease = "5.7.0"
 
     flat = [
             core: ":core",

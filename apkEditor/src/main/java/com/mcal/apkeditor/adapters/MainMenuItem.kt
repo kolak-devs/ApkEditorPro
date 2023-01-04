@@ -5,29 +5,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
 open class MainMenuItem() : AbstractItem<MainMenuItem.ViewHolder>() {
-    var id: Int? = null
-    @DrawableRes
-    private var icon: Int? = null
-    private var itemTitle: CharSequence? = null
-    @StringRes
-    private var itemString: Int? = null
-
-    constructor(id: Int, icon: Int?, title: CharSequence): this(){
-        this.id = id
-        this.icon = icon
-        this.itemTitle = title
-    }
-
-    constructor(id: Int, icon: Int?, title: Int): this(){
-        this.id = id
-        this.icon = icon
-        this.itemString = title
-    }
+    @DrawableRes var icon: Int? = null
+    var itemString: CharSequence? = null
+    @StringRes var itemTitle: Int? = null
 
     /** The type of the Item. Can be a hardcoded INT, but preferred is a defined id */
     override val type: Int
@@ -37,32 +23,55 @@ open class MainMenuItem() : AbstractItem<MainMenuItem.ViewHolder>() {
     override val layoutRes: Int
         get() = R.layout.item_main_list
 
+    fun withId(id: Long): MainMenuItem {
+        this.identifier = id
+        return this
+    }
+
+    fun withIcon(icon: Int): MainMenuItem {
+        this.icon = icon
+        return this
+    }
+
+    fun withTitle(title: Int): MainMenuItem {
+        this.itemTitle = title
+        return this
+    }
+
+    fun withTitle(title: String): MainMenuItem {
+        this.itemString = title
+        return this
+    }
+
+
+
+    /** Binds the data of this item onto the viewHolder */
+    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
+        super.bindView(holder, payloads)
+        icon?.let {
+            holder.icon.setImageResource(it)
+        }
+        itemTitle?.let {
+            holder.title.setText(it)
+        }
+        itemString?.let {
+            holder.title.setText(it)
+        }
+    }
+
+    /** View needs to release resources when its recycled */
+    override fun unbindView(holder: ViewHolder) {
+        super.unbindView(holder)
+        holder.icon.setImageDrawable(null)
+        holder.title.text = null
+    }
+
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)
     }
 
-    class ViewHolder(view: View) : FastAdapter.ViewHolder<MainMenuItem>(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var icon: ImageView = view.findViewById(R.id.menu_icon)
         var title: TextView = view.findViewById(R.id.menu_title)
-
-        /** Binds the data of this item onto the viewHolder */
-        override fun bindView(item: MainMenuItem, payloads: List<Any>) {
-            item.icon?.let {
-                icon.setImageResource(it)
-            }
-            item.itemTitle?.let {
-                title.setText(it)
-            }
-            item.itemString?.let {
-                title.setText(it)
-            }
-        }
-
-        /** View needs to release resources when its recycled */
-        override fun unbindView(item: MainMenuItem) {
-            item.id = null
-            item.icon = null
-            item.itemTitle = null
-        }
     }
 }

@@ -4,22 +4,15 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
-class PatcherHistoryItem() : AbstractItem<PatcherHistoryItem.ViewHolder>() {
-    var id: Int? = null
+class PatcherHistoryItem : AbstractItem<PatcherHistoryItem.ViewHolder>() {
     var icon: Drawable? = null
     var title: String? = null
     var subtitle: String? = null;
-
-    constructor(id: Int, icon: Drawable? = null, title: String? = null, subtitle: String? = null) : this() {
-        this.id = id
-        this.icon = icon
-        this.title = title
-        this.subtitle = subtitle
-    }
 
     override val type: Int
         get() = R.id.patcher_menu_container
@@ -31,28 +24,43 @@ class PatcherHistoryItem() : AbstractItem<PatcherHistoryItem.ViewHolder>() {
         return ViewHolder(v)
     }
 
-    class ViewHolder(view: View) : FastAdapter.ViewHolder<PatcherHistoryItem>(view) {
-        private var iconView: ImageView = view.findViewById(R.id.menu_icon)
-        private var titleView: TextView = view.findViewById(R.id.menu_title)
-        private var subtitleView: TextView = view.findViewById(R.id.menu_subtitle)
+    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
+        super.bindView(holder, payloads)
+        holder.iconView.setImageDrawable(icon)
+        holder.titleView.text = title
+        holder.subtitleView.text = subtitle
+    }
 
-        override fun bindView(item: PatcherHistoryItem, payloads: List<Any>) {
-            item.icon?.let {
-                iconView.setImageDrawable(it)
-            }
-            item.title?.let { title ->
-                titleView.text = title
-            }
-            item.subtitle.let { subtitle ->
-                subtitleView.text = subtitle
-            }
-        }
+    override fun unbindView(holder: ViewHolder) {
+        super.unbindView(holder)
+        holder.iconView.setImageDrawable(null)
+        holder.titleView.text = null
+        holder.subtitleView.text = null
+    }
 
-        override fun unbindView(item: PatcherHistoryItem) {
-            item.id = null
-            item.icon = null
-            item.title = null
-            item.subtitle = null
-        }
+    fun withId(id: Long): PatcherHistoryItem {
+        this.identifier = id
+        return this
+    }
+
+    fun withIcon(icon: Drawable?): PatcherHistoryItem {
+        this.icon = icon
+        return this
+    }
+
+    fun withTitle(title: String): PatcherHistoryItem {
+        this.title = title
+        return this
+    }
+
+    fun withSubTitle(subtitle: String): PatcherHistoryItem {
+        this.subtitle = subtitle
+        return this
+    }
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var iconView: ImageView = view.findViewById(R.id.menu_icon)
+        var titleView: TextView = view.findViewById(R.id.menu_title)
+        var subtitleView: TextView = view.findViewById(R.id.menu_subtitle)
     }
 }
