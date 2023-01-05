@@ -8,7 +8,6 @@ import android.os.*
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.mcal.apkeditor.activities.ApkComposeActivity
-import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.data.Constants
 import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.utils.ITaskCallback
@@ -47,7 +46,6 @@ class ApkComposeService : Service(), ITaskCallback {
     // Composing thread and result
     private var composeThread: ComposeThread? = null
     private var observer: WeakReference<ITaskCallback>? = null
-    private var extraMaker: IApkMaking? = null
 
     // Foreground notification
     private var mNotificationManager: NotificationManager? = null
@@ -151,9 +149,6 @@ class ApkComposeService : Service(), ITaskCallback {
         decodeRootPath?.let { decodePath ->
             targetApkPath?.let { apkPath ->
                 val thread = ApkComposeThreadNew(this, decodePath, apkPath)
-                extraMaker?.let { maker ->
-                    thread.setExtraMaker(maker)
-                }
                 stringModified?.let { string ->
                     manifestModified?.let { manifest ->
                         resFileModified?.let { res ->
@@ -329,10 +324,6 @@ class ApkComposeService : Service(), ITaskCallback {
                 }
             }
             hideNotification()
-        }
-
-        fun setBuildHooker(extraMaker: IApkMaking?) {
-            this@ApkComposeService.extraMaker = extraMaker
         }
 
         // Get key/value maps

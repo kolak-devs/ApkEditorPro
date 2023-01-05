@@ -4,7 +4,6 @@ import android.content.Context
 import brut.androlib.Androlib
 import com.mcal.androlib.options.BuildOptions
 import com.mcal.androlib.util.Logger
-import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.utils.AssetsInstaller
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.data.ReactivePreferences
@@ -43,7 +42,6 @@ class ApkComposeThreadNew(
     // Flag to control run or not
     private var isStopFlag = false
     private var isNeedSignApk = false
-    private var mExtraMaker: IApkMaking? = null
 
     private var runningJob = Job()
 
@@ -151,10 +149,6 @@ class ApkComposeThreadNew(
     override fun stopRunning() {
         isStopFlag = true
         runningJob.cancel()
-    }
-
-    override fun setExtraMaker(extraMaker: IApkMaking?) {
-        this.mExtraMaker = extraMaker
     }
 
     init {

@@ -21,10 +21,8 @@ import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.ApkComposeService.ComposeServiceBinder
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.ApkComposeFailAdapter
-import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.apkeditor.data.Constants
 import com.mcal.apkeditor.databinding.ActivityApkcomposeBinding
-import com.mcal.apkeditor.utils.AxmlStringModifier
 import com.mcal.apkeditor.utils.ErrorFixManager
 import com.mcal.apkeditor.utils.OdexPatcher
 import com.mcal.common.activities.CustomizedLangActivity
@@ -36,7 +34,6 @@ import com.mcal.common.utils.ITaskCallback.TaskStepInfo
 import com.mcal.common.utils.PackageHelper.uninstallPackage
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
-import org.jetbrains.annotations.Contract
 import java.io.File
 import java.lang.ref.WeakReference
 
@@ -466,31 +463,12 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
 
     fun buildAgain() {
         mBinder?.let { binder ->
-            // Set extra AXML Modifier
-            val m = errFixer?.modifications
-            if (!m.isNullOrEmpty()) {
-                createBuildHooker(m)?.let { hooker ->
-                    binder.setBuildHooker(hooker)
-                }
-            }
-
             // Switch the layout and build again
             binding.progressTip.text = ""
             switchView(true)
             binder.buildAgain()
         }
     }
-
-    @Contract(value = "_ -> new", pure = true)
-    private fun createBuildHooker(
-        modifications: Map<String, Map<String, String>>
-    ): IApkMaking? {
-        decodeRootPath?.let { path ->
-            return AxmlStringModifier(path, modifications)
-        }
-        return null
-    }
-
 
     private fun stopBuildAndGoBack() {
         try {

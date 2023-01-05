@@ -1,13 +1,11 @@
 package com.mcal.apkeditor
 
-import com.mcal.apkeditor.ce.IApkMaking
 import com.mcal.common.utils.ITaskCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 
 abstract class ComposeThread : CoroutineScope {
     abstract fun stopRunning()
-    abstract fun setExtraMaker(extraMaker: IApkMaking?)
     abstract fun setModification(
         strModified: Boolean,
         manifestModified: Boolean,

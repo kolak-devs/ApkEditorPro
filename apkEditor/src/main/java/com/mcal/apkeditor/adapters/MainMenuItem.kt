@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
 import com.mikepenz.fastadapter.items.AbstractItem
 
-open class MainMenuItem() : AbstractItem<MainMenuItem.ViewHolder>() {
+open class MainMenuItem : AbstractItem<MainMenuItem.ViewHolder>() {
     @DrawableRes
     var icon: Int? = null
     var itemString: CharSequence? = null
+
     @StringRes
     var itemTitle: Int? = null
 
@@ -55,7 +56,7 @@ open class MainMenuItem() : AbstractItem<MainMenuItem.ViewHolder>() {
             holder.title.setText(it)
         }
         itemString?.let {
-            holder.title.setText(it)
+            holder.title.text = it
         }
     }
 
