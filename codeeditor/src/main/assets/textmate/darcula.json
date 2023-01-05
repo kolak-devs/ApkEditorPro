@@ -1,47 +1,14 @@
 {
   "name": "darcula",
-  "settings": [
-    {
-      "settings": {
-        "background": "#1F1A1B",
-        "foreground": "#cccccc",
-        "lineHighlight": "#2B2B2B",
-        "blockLineColor": "#575757",
-        "currentBlockLineColor": "#7a7a7a",
-        "selection": "#214283",
-        "highlightedDelimetersForeground": "#57f6c0",
-        "completionWindowBackground": "#1F1A1B",
-        "completionWindowStroke": "#555555"
-      }
-    },
-    {
-      "name": "Package declaration",
-      "scope": "storage.modifier.package",
-      "settings": {
-        "foreground": "#CCCCCC"
-      }
-    },
-    {
-      "name": "Import declaration",
-      "scope": "storage.modifier.import",
-      "settings": {
-        "foreground": "#CCCCCC"
-      }
-    },
-    {
-      "name": "Class names (Identifiers starting with uppercase)",
-      "scope": "storage.type.java",
-      "settings": {
-        "foreground": "#CCCCCC"
-      }
-    },
-    {
-      "name": "Annotation",
-      "scope": "storage.type.annotation",
-      "settings": {
-        "foreground": "#BBB529"
-      }
-    },
+  "settings": [{
+    "settings": {
+      "background": "#242424",
+      "foreground": "#cccccc",
+      "lineHighlight": "#2B2B2B",
+      "selection": "#214283",
+      "highlightedDelimetersForeground": "#57f6c0"
+    }
+  },
     {
       "name": "Comment",
       "scope": "comment",
@@ -106,20 +73,6 @@
       }
     },
     {
-      "name": "Method return type",
-      "scope": "meta.method.return-type",
-      "settings": {
-        "foreground": "#A9B7C6"
-      }
-    },
-    {
-      "name": "Method call identifier",
-      "scope": "meta.method-call",
-      "settings": {
-        "foreground": "#A9B7C6"
-      }
-    },
-    {
       "name": "Types, Class Types",
       "scope": "entity.name.type,meta.return.type,meta.type.annotation,meta.type.parameters,support.type.primitive",
       "settings": {
@@ -158,7 +111,7 @@
       "name": "Function Argument",
       "scope": "variable.parameter, operator.rest.parameters",
       "settings": {
-        "foreground": "#A9B7C6"
+        "foreground": "#CCCCCC"
       }
     },
     {
@@ -166,20 +119,6 @@
       "scope": "variable.property,variable.other.property,variable.other.object.property,variable.object.property,support.variable.property",
       "settings": {
         "foreground": "#9E7BB0"
-      }
-    },
-    {
-      "name": "Variable name",
-      "scope": "entity.name.variable",
-      "settings": {
-        "foreground": "#A9B7C6"
-      }
-    },
-    {
-      "name": "CONSTANT",
-      "scope": "variable.other.constant",
-      "settings": {
-        "foreground": "#9876AA"
       }
     },
     {
@@ -298,7 +237,7 @@
       "name": "Class Name",
       "scope": "entity.name.type.class",
       "settings": {
-        "foreground": "#A9B7C6"
+        "foreground": "#CCCCCC"
       }
     },
     {
@@ -496,47 +435,30 @@
     },
     {
       "name": "PHP variables",
-      "scope": [
-        "variable.language.php",
-        "variable.other.php"
-      ],
+      "scope": ["variable.language.php", "variable.other.php"],
       "settings": {
         "foreground": "#9E7BB0"
       }
     },
     {
       "name": "Perl specific",
-      "scope": [
-        "variable.other.readwrite.perl"
-      ],
+      "scope": ["variable.other.readwrite.perl"],
       "settings": {
         "foreground": "#9E7BB0"
       }
     },
     {
       "name": "PHP variables",
-      "scope": [
-        "variable.other.property.php"
-      ],
+      "scope": ["variable.other.property.php"],
       "settings": {
         "foreground": "#CC8242"
       }
     },
     {
       "name": "PHP variables",
-      "scope": [
-        "support.variable.property.php"
-      ],
+      "scope": ["support.variable.property.php"],
       "settings": {
         "foreground": "#FFC66D"
-      }
-    },
-
-    {
-      "name": "XML Namespace prefix",
-      "scope": "entity.name.tag.namesapce.xml",
-      "settings": {
-        "foreground": "#9876AA"
       }
     }
   ]

@@ -57,10 +57,10 @@ ext {
     ]
 
     rosemoe = [
-            editor: 'io.github.Rosemoe.sora-editor:editor:0.17.2',
-            language_java: 'io.github.Rosemoe.sora-editor:language-java:0.17.2',
-            textmate: 'io.github.Rosemoe.sora-editor:language-textmate:0.17.2',
-            lsp: 'io.github.Rosemoe.sora-editor:editor-lsp:0.17.2'
+            editor: 'io.github.Rosemoe.sora-editor:editor:0.20.4',
+            language_java: 'io.github.Rosemoe.sora-editor:language-java:0.20.4',
+            textmate: 'io.github.Rosemoe.sora-editor:language-textmate:0.20.4',
+            lsp: 'io.github.Rosemoe.sora-editor:editor-lsp:0.20.4'
 
     ]
 }

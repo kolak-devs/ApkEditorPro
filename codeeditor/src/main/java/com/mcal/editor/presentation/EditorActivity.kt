@@ -3,11 +3,9 @@ package com.mcal.editor.presentation
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.graphics.Typeface
-import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
-import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,13 +26,14 @@ import com.mcal.editor.dialogs.DexToJava
 import com.mcal.editor.dialogs.SmaliCodeDialog
 import com.mcal.editor.dialogs.SmaliToJava
 import com.mcal.editor.navigation.CodeNavigationDialog
+import com.mcal.editor.utils.EditorUtils.getCodeColorScheme
+import com.mcal.editor.utils.EditorUtils.getTextMateLanguage
 import com.mcal.editor.utils.FileUtils
 import com.mcal.neweditor.R
 import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
 import com.mcal.presentation.base.BaseActivity
 import io.github.rosemoe.sora.event.*
 import io.github.rosemoe.sora.lang.EmptyLanguage
-import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme
 import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
 import io.github.rosemoe.sora.text.LineSeparator
 import io.github.rosemoe.sora.widget.CodeEditor
@@ -46,8 +45,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.eclipse.tm4e.core.registry.IGrammarSource
-import org.eclipse.tm4e.core.registry.IThemeSource
 import java.io.File
 import java.io.IOException
 import java.util.regex.PatternSyntaxException
@@ -75,6 +72,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
     private var startLineList: List<Int>? = null
     private var filePathList: ArrayList<String>? = null
     private var curFileIndex = 0
+    private var extraString: String? = null
 
     //private var resIdTooBig = -1
     private var resIdFileSaved = -1
@@ -188,21 +186,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
             subscribeEvent<ContentChangeEvent> { _, _ ->
                 postDelayed(::updateBtnState, 50)
             }
-//            subscribeEvent<SideIconClickEvent> { _, _ ->
-//                Toast.makeText(this@EditorActivity, "Side icon clicked", Toast.LENGTH_SHORT).show()
-//            }
-
-//            subscribeEvent<KeyBindingEvent> { event, _ ->
-//                if (event.eventType != EditorKeyEvent.Type.DOWN) {
-//                    return@subscribeEvent
-//                }
-//
-//                Toast.makeText(
-//                    context,
-//                    "Keybinding event: " + generateKeybindingString(event),
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
             // Custom cursor animator
             cursorAnimator = ScaleCursorAnimator(editor)
 
@@ -222,24 +205,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
             }
         }
     }
-
-//    private fun generateKeybindingString(event: KeyBindingEvent): String {
-//        val sb = StringBuilder()
-//        if (event.isCtrlPressed) {
-//            sb.append("Ctrl + ")
-//        }
-//
-//        if (event.isAltPressed) {
-//            sb.append("Alt + ")
-//        }
-//
-//        if (event.isShiftPressed) {
-//            sb.append("Shift + ")
-//        }
-//
-//        sb.append(KeyEvent.keyCodeToString(event.keyCode))
-//        return sb.toString()
-//    }
 
     private fun initSearchEditor() {
         binding.searchEditor.addTextChangedListener(object : TextWatcher {
@@ -273,40 +238,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
         )
     }
 
-    private suspend fun getCodeColorScheme(): TextMateColorScheme {
-        return TextMateColorScheme(
-            if (ReactivePreferences.isNightMode()) {
-                getDarkTheme()
-            } else {
-                getLightTheme()
-            }
-        )
-    }
-
-    private fun getDarkTheme(): IThemeSource? {
-        return try {
-            IThemeSource.fromInputStream(
-                assets.open("textmate/dark.json"),
-                "dark.json",
-                null
-            )
-        } catch (e: java.lang.Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
-    private fun getLightTheme(): IThemeSource? {
-        return try {
-            IThemeSource.fromInputStream(
-                assets.open("textmate/light.tmTheme"),
-                "light.tmTheme",
-                null
-            )
-        } catch (e: java.lang.Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
     private fun getLanguage(): TextMateLanguage? {
         mFilePath?.name?.let { fileName ->
             return if (fileName.endsWith(".smali")) {
@@ -335,24 +266,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
         }
         return null
     }
-
-    private fun getTextMateLanguage(name: String, path: String): TextMateLanguage? {
-        return try {
-            TextMateLanguage.create(
-                IGrammarSource.fromInputStream(
-                    assets.open(path),
-                    name,
-                    null
-                ),
-                null,
-                getDarkTheme()
-            )
-        } catch (e: java.lang.Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
-    private var extraString: String? = null
 
     private fun initIntent() {
         extraString = intent.getStringExtra("extraString")
@@ -438,52 +351,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
         return binding.editor.canUndo() || binding.editor.canRedo()
     }
 
-    private val loadTMLLauncher = registerForActivityResult(GetContent()) { result: Uri? ->
-        try {
-            if (result == null) return@registerForActivityResult
-            //TextMateLanguage only support TextMateColorScheme
-            var editorColorScheme = binding.editor.colorScheme
-            if (editorColorScheme !is TextMateColorScheme) {
-                val themeSource = IThemeSource.fromInputStream(
-                    assets.open("textmate/QuietLight.tmTheme"),
-                    "QuietLight.tmTheme",
-                    null
-                )
-                editorColorScheme = TextMateColorScheme.create(themeSource)
-                binding.editor.colorScheme = editorColorScheme
-            }
-            val language = TextMateLanguage.create(
-                IGrammarSource.fromInputStream(
-                    contentResolver.openInputStream(result),
-                    result.path, null
-                ),
-                null,
-                (editorColorScheme as TextMateColorScheme).themeSource
-            )
-            binding.editor.setEditorLanguage(language)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private val loadTMTLauncher = registerForActivityResult(GetContent()) { result: Uri? ->
-        try {
-            if (result == null) return@registerForActivityResult
-            val iRawTheme = IThemeSource.fromInputStream(
-                contentResolver.openInputStream(result), result.path,
-                null
-            )
-            val colorScheme = TextMateColorScheme.create(iRawTheme)
-            binding.editor.colorScheme = colorScheme
-            val language = binding.editor.editorLanguage
-            if (language is TextMateLanguage) {
-                language.updateTheme(iRawTheme)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_editor, menu)
         save = menu.findItem(R.id.text_save)
@@ -546,10 +413,12 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                 save(true)
             }
             dialog.setNegativeButton(android.R.string.cancel) { _, _ ->
+                @Suppress("DEPRECATION")
                 super.onBackPressed()
             }
             dialog.show()
         } else {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }
@@ -657,7 +526,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                             7 -> editor.setEditorLanguage(getTextMateLanguage("javascript.tmLanguage.json", "textmate/javascript/syntaxes/JavaScript.tmLanguage.json"))
                             8 -> editor.setEditorLanguage(getTextMateLanguage("markdown.tmLanguage.json", "textmate/markdown/syntaxes/markdown.tmLanguage.json"))
                             9 -> editor.setEditorLanguage(getTextMateLanguage("python.tmLanguage.json", "textmate/python/syntaxes/python.tmLanguage.json"))
-                            10 -> loadTMLLauncher.launch("*/*")
                             else -> editor.setEditorLanguage(EmptyLanguage())
                         }
                         dialog.dismiss()
@@ -678,25 +546,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                     stopSearch()
                     item.isChecked = false
                 }
-            }
-            R.id.switch_colors -> {
-                val themes = arrayOf(
-                    "Light",
-                    "Dark",
-                    "TM theme from file"
-                )
-                MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.color_scheme)
-                    .setSingleChoiceItems(themes, -1) { dialog: DialogInterface, which: Int ->
-                        when (which) {
-                            0 -> editor.colorScheme = TextMateColorScheme(getLightTheme())
-                            1 -> editor.colorScheme = TextMateColorScheme(getDarkTheme())
-                            3 -> loadTMTLauncher.launch("*/*")
-                        }
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show()
             }
             R.id.action_settings -> {
                 navigator.navigateTo(

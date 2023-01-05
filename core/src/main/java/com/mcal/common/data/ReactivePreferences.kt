@@ -10,6 +10,15 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_THEME] ?: false
     }
 
+    @JvmStatic
+    fun isNightModeAsync(): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_THEME] ?: false
+        }
+        return fallback
+    }
+
     suspend fun setNightMode(enabled: Boolean) {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Main.UI_THEME] = enabled
