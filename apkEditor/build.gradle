@@ -146,7 +146,6 @@ dependencies {
     implementation project(':androlib:brut.apktool:apktool-lib')
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':smali')
-    implementation project(':apklib')
     implementation project(':core')
     implementation project(':codeeditor')
     implementation project(':imageview')

@@ -15,7 +15,6 @@ dependencyResolutionManagement {
     }
 }
 
-include ':apklib'
 include ':core'
 include ':imageview'
 include ':apkEditor'
