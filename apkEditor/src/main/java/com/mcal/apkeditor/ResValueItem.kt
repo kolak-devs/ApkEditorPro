@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.mcal.apkeditor.databinding.ItemStringvalueStaticBinding
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 
-class ResValueItem : AbstractBindingItem<ItemStringvalueStaticBinding>(){
+class ResValueItem : AbstractBindingItem<ItemStringvalueStaticBinding>() {
     private var strKey: String? = null
     private var strValue: String? = null
 

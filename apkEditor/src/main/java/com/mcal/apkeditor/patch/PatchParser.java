@@ -58,7 +58,7 @@ public class PatchParser {
                 } else if (AUTHOR.equals(line)) {
                     String next = br.readLine();
                     result.author = next;
-                }else if (DESCRIPTION.equals(line)) {
+                } else if (DESCRIPTION.equals(line)) {
                     String next = br.readLine();
                     result.description = next;
                 } else if (PACKAGE.equals(line)) {

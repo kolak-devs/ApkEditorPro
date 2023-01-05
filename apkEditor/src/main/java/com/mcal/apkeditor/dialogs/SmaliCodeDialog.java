@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.apkeditor.BuildConfig;
 import com.mcal.apkeditor.R;
 
 import java.io.Closeable;

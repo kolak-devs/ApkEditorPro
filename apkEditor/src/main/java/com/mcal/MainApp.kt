@@ -30,7 +30,7 @@ class MainApp : App(), com.mcal.sl.ViewModelProvider {
         ViewModelProvider(owner, viewModelsFactory)[clazz]
 
     override fun BaseActivity<*, *>.navigateTo(uiAction: UiAction, onExtras: (Intent) -> Unit) {
-        val activity = when(uiAction.feature) {
+        val activity = when (uiAction.feature) {
             "Settings_feature" -> SettingsActivity::class.java
             "Editor_feature" -> EditorActivity::class.java
             else -> throw NotImplementedError("Activity not found")

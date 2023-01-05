@@ -1,6 +1,5 @@
 package com.mcal.apkeditor.settings.presentation
 
-import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.tabs.TabLayoutMediator

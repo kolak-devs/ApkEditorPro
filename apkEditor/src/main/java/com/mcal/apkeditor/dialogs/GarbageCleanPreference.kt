@@ -2,11 +2,10 @@ package com.mcal.apkeditor.dialogs
 
 import android.content.Context
 import android.content.DialogInterface
-import androidx.preference.MultiSelectListPreference
 import android.util.AttributeSet
 import android.util.Log
+import androidx.preference.MultiSelectListPreference
 import com.mcal.common.utils.ScopedStorage
-import java.util.HashSet
 
 class GarbageCleanPreference : MultiSelectListPreference {
     private val TAG = "GarbageCleanPreference"

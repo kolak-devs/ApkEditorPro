@@ -4,7 +4,6 @@ import android.widget.Toast
 import com.mcal.apkeditor.R
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.deleteAll
-import com.mcal.common.utils.makeDir
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
 import java.io.IOException

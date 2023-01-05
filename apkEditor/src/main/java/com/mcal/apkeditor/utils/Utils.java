@@ -11,13 +11,11 @@ import org.jetbrains.annotations.Contract;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kotlin.io.FilesKt;
@@ -73,13 +71,13 @@ public class Utils {
 
     @NonNull
     @Contract(pure = true)
-    public static String getVersionString(){
+    public static String getVersionString() {
         return "v. " + BuildConfig.VERSION_NAME + " [" + Build.SUPPORTED_ABIS[0] + "]";
     }
 
-    public static long getFoldersSize(@NonNull File... folders){
+    public static long getFoldersSize(@NonNull File... folders) {
         long commonSize = 0;
-        for (File folder: folders){
+        for (File folder : folders) {
             commonSize += sizeFromPath(folder.toPath());
         }
         return commonSize;
@@ -130,8 +128,8 @@ public class Utils {
     }
 
     //delete folders
-    public static void deleteFiles(@NonNull File... files){
-        for (File fs : files){
+    public static void deleteFiles(@NonNull File... files) {
+        for (File fs : files) {
             FilesKt.deleteRecursively(fs);
         }
     }

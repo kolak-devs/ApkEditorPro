@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.apkeditor.R;
 import com.mcal.common.data.Constants;
-import com.mcal.common.data.LegacyPreferences;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ZipHelper;
 

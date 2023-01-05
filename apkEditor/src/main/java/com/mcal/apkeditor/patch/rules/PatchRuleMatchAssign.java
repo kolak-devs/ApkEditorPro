@@ -10,8 +10,6 @@ import com.mcal.apkeditor.patch.PatchRule;
 import com.mcal.apkeditor.patch.PathFinder;
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.patch.interfaces.IPatchContext;
-import com.mcal.common.utils.ScopedStorage;
-import com.mcal.common.utils.SignatureHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;

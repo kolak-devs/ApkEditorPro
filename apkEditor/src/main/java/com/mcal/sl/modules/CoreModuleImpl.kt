@@ -2,7 +2,7 @@ package com.mcal.sl.modules
 
 import android.content.Context
 
-class CoreModuleImpl: CoreModule {
+class CoreModuleImpl : CoreModule {
 
     private lateinit var context: Context
 

@@ -19,7 +19,6 @@ import android.view.View
 import android.widget.Toast
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.ApkComposeService.ComposeServiceBinder
-import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.adapters.ApkComposeFailAdapter
 import com.mcal.apkeditor.ce.IApkMaking

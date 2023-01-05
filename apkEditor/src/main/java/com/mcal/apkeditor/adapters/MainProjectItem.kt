@@ -61,9 +61,9 @@ open class MainProjectItem : AbstractItem<MainProjectItem.ViewHolder>() {
 
         /** Binds the data of this item onto the viewHolder */
         override fun bindView(item: MainProjectItem, payloads: List<Any>) {
-                iconView.setImageDrawable(item.icon)
-                titleView.text = item.title
-                subtitleView.text = item.subtitle
+            iconView.setImageDrawable(item.icon)
+            titleView.text = item.title
+            subtitleView.text = item.subtitle
         }
 
         /** View needs to release resources when its recycled */

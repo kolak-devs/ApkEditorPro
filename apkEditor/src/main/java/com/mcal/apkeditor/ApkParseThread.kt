@@ -59,7 +59,7 @@ class ApkParseThread(
                         outDir.mkdirs()
                     }
                     TaskDecoder().decode(consumer, File(apkPath), File(decodePath))
-            }
+                }
             }
             return true
         } catch (e: Exception) {

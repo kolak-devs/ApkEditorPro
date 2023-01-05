@@ -149,6 +149,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     private static final int RC_COMPOSE = 1;
     private static final int RC_COLOR_EDITOR = 3;
     private static final int RC_TRANSLATE = 1000;
+    static boolean isFullDecoding = false;
     private final Stack<Duo<Integer, Integer>> resListPosition = new Stack<>();
     protected String apkPath;
     protected String decodeRootPath; // not ends with "/"
@@ -159,12 +160,12 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     // Record all the file entry to zip entry
     // As images are dummy, we need this info to show original image
     protected Map<String, String> mFileEntry2ZipEntry;
-    private ApkInfoParser.AppInfo apkInfo;
     // Is it OK to change to String type
     HashMap<String, ArrayList<StringItem>> allStringValues;
     Map<String, Map<String, String>> changedStringValues;
     ResListAdapter resListAdapter;
     ActivityApkinfoBinding binding;
+    private ApkInfoParser.AppInfo apkInfo;
     //HashMap<ResConfigFlags, ArrayList<StringItem>> allStringValues;
     //Map<ResConfigFlags, Map<String, String>> changedStringValues;
     //private ResConfigFlags curConfig = null; // config flag for string resource
@@ -216,9 +217,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     private String filePathForExternal;
     private String entryNameForExternal;
     private long modifiedTimeBeforeOpen;
-
-    static boolean isFullDecoding = false;
-
     private String lastValue = null;
 
     @Nullable

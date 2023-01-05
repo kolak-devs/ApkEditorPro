@@ -12,7 +12,7 @@ abstract class BasePreferenceFragment<VM : ViewModel> : PreferenceFragmentCompat
     protected abstract fun viewModelClass(): Class<VM>
 
     override fun onCreatePreferences(bundle: Bundle?, s: String?) {
-        viewModel = (requireActivity() as BaseActivity<*,*>).provideViewModel(viewModelClass(), this)
+        viewModel = (requireActivity() as BaseActivity<*, *>).provideViewModel(viewModelClass(), this)
         onSetupLayout(bundle, s)
         onBindViewModel()
     }

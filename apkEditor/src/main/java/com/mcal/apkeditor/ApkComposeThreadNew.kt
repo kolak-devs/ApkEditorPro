@@ -138,8 +138,7 @@ class ApkComposeThreadNew(
         return if (ReactivePreferences.isSigningEnabled()) {
             if (!ReactivePreferences.isCustomSigningEnabled()) {
                 return ApkSigner().signApk(inApk, mTargetApkPath)
-            }
-            else {
+            } else {
                 return ApkSigner().signApkCustom(inApk, mTargetApkPath)
             }
         } else false

@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.mcal.apkeditor.R;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.activities.types.ProjectInfo;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.view.ProgressDialog;
@@ -29,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mcal.apkeditor.activities.types.ProjectInfo;
 import ru.svolf.melissa.swipeback.SwipeBackActivity;
 
 public class ProjectListActivity extends SwipeBackActivity implements View.OnClickListener {

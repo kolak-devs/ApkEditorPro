@@ -7,13 +7,14 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
-import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
 open class MainMenuItem() : AbstractItem<MainMenuItem.ViewHolder>() {
-    @DrawableRes var icon: Int? = null
+    @DrawableRes
+    var icon: Int? = null
     var itemString: CharSequence? = null
-    @StringRes var itemTitle: Int? = null
+    @StringRes
+    var itemTitle: Int? = null
 
     /** The type of the Item. Can be a hardcoded INT, but preferred is a defined id */
     override val type: Int
@@ -42,7 +43,6 @@ open class MainMenuItem() : AbstractItem<MainMenuItem.ViewHolder>() {
         this.itemString = title
         return this
     }
-
 
 
     /** Binds the data of this item onto the viewHolder */

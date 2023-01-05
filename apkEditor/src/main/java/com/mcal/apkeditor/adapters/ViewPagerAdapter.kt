@@ -2,7 +2,6 @@ package com.mcal.apkeditor.adapters;
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
@@ -15,7 +14,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     private val mFragmentList: MutableList<Fragment> = ArrayList()
     private val mFragmentTitleList: MutableList<String> = ArrayList()
 
-    fun getTabTitle(position : Int): String{
+    fun getTabTitle(position: Int): String {
         return mFragmentTitleList[position]
     }
 

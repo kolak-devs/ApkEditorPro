@@ -4,7 +4,7 @@ import com.mcal.apkeditor.settings.presentation.screens.apk_settings.ApkSettings
 import com.mcal.sl.Module
 import com.mcal.sl.modules.CoreModule
 
-class SettingsApkModule(private val coreModule: CoreModule): Module<ApkSettingsViewModel> {
+class SettingsApkModule(private val coreModule: CoreModule) : Module<ApkSettingsViewModel> {
 
     override fun viewModel() = ApkSettingsViewModel(coreModule.getApplicationContext())
 }

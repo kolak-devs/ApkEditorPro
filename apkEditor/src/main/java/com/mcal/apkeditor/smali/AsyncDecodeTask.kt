@@ -79,7 +79,7 @@ class AsyncDecodeTask(
                 val entry = entries.nextElement()
                 val name = entry.name
                 if (name.endsWith(".dex") && !name.contains("/")) {
-                    unzipDex2File(zipFile, entry, tmpDirectory  + File.separator + name)
+                    unzipDex2File(zipFile, entry, tmpDirectory + File.separator + name)
                 }
             }
         } catch (e1: IOException) {

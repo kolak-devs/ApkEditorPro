@@ -4,7 +4,7 @@ import com.mcal.apkeditor.settings.presentation.screens.text_settings.TextSettin
 import com.mcal.sl.Module
 import com.mcal.sl.modules.CoreModule
 
-class SettingsTextModule(private val coreModule: CoreModule): Module<TextSettingsViewModel> {
+class SettingsTextModule(private val coreModule: CoreModule) : Module<TextSettingsViewModel> {
 
     override fun viewModel() = TextSettingsViewModel(coreModule.getApplicationContext())
 }

@@ -7,8 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
 import com.mcal.common.data.Constants
-
-import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
 open class PatchLogItem() : AbstractItem<PatchLogItem.ViewHolder>() {
@@ -24,7 +22,7 @@ open class PatchLogItem() : AbstractItem<PatchLogItem.ViewHolder>() {
     override val layoutRes: Int
         get() = R.layout.item_patchlog
 
-    fun withId(id: Long) : PatchLogItem {
+    fun withId(id: Long): PatchLogItem {
         this.identifier = id
         return this
     }

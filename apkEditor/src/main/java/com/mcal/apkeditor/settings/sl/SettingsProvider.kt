@@ -9,8 +9,6 @@ import com.mcal.apkeditor.settings.sl.modules.SettingsApkModule
 import com.mcal.apkeditor.settings.sl.modules.SettingsMainModule
 import com.mcal.apkeditor.settings.sl.modules.SettingsModule
 import com.mcal.apkeditor.settings.sl.modules.SettingsTextModule
-import com.mcal.editor.presentation.EditorViewModel
-import com.mcal.editor.sl.modules.MainModule
 import com.mcal.sl.DependencyContainer
 import com.mcal.sl.modules.CoreModule
 
