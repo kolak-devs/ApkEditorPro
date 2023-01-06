@@ -20,19 +20,33 @@ class DownloaderActivity : CustomizedLangActivity() {
         binding.recyclerview.apply {
             layoutManager = LinearLayoutManager(this@DownloaderActivity)
             val domain = getDomain()
+            val abi = getABI()
             adapter = DownloaderAdapter(
                 mutableListOf(
                     "android-framework.jar" to "$domain/apkeditor/framework/$SDK/android.jar",
-                    "aapt" to "$domain/apkeditor/bin/$ABI/aapt",
-                    "aapt2" to "$domain/apkeditor/bin/$ABI/aapt2",
-                    "mycp" to "$domain/apkeditor/bin/$ABI/mycp",
-                    "zipalign" to "$domain/apkeditor/bin/$ABI/zipalign",
+                    "aapt" to "$domain/apkeditor/bin/$abi/aapt",
+                    "aapt2" to "$domain/apkeditor/bin/$abi/aapt2",
+                    "mycp" to "$domain/apkeditor/bin/$abi/mycp",
+                    "zipalign" to "$domain/apkeditor/bin/$abi/zipalign",
                     //"aaptz" to "DOMAIN/apkeditor/bin/aaptz",
                     "testkey.pk8" to "$domain/apkeditor/keys/testkey.pk8",
                     "testkey.x509.pem" to "$domain/apkeditor/keys/testkey.x509.pem",
                 )
             )
         }
+    }
+
+    private fun getABI(): String {
+        for (androidArch in Build.SUPPORTED_ABIS) {
+            return when (androidArch) {
+                "arm64-v8a" -> return "arm64-v8a"
+                "armeabi-v7a" -> return "armeabi-v7a"
+                "x86_64" -> return "x86_64"
+                "x86" -> return "x86"
+                else -> "armeabi-v7a"
+            }
+        }
+        return "armeabi-v7a"
     }
 
     override fun onResume() {
@@ -46,7 +60,6 @@ class DownloaderActivity : CustomizedLangActivity() {
     }
 
     companion object {
-        private val ABI = Build.SUPPORTED_64_BIT_ABIS[0] ?: Build.SUPPORTED_32_BIT_ABIS[0] ?: "armeabi-v7a"
         private const val SDK = 33
     }
 }
