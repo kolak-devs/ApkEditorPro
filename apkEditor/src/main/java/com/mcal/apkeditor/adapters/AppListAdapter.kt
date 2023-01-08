@@ -147,10 +147,10 @@ class AppListAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     private fun publishResults(results: List<AppInfo>?) {
-        if (results != null) {
-            val length = results.size
-            listener.onFoundApp(length > 0)
-            if (length >= 0) {
+        results?.let {
+            val isNotEmpty = results.isNotEmpty()
+            listener.onFoundApp(isNotEmpty)
+            if (isNotEmpty) {
                 appFilterList = results
                 notifyDataSetChanged()
             }
