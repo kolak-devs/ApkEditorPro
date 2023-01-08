@@ -136,10 +136,12 @@ class AppListAdapter(
         } else {
             stringBuffer.setLength(0)
         }
-        while (matcher!!.find()) {
-            matcher.appendReplacement(stringBuffer, " ")
+        matcher?.let {
+            while (matcher.find()) {
+                matcher.appendReplacement(stringBuffer, " ")
+            }
+            matcher.appendTail(stringBuffer)
         }
-        matcher.appendTail(stringBuffer)
         return stringBuffer.toString().trim()
     }
 
