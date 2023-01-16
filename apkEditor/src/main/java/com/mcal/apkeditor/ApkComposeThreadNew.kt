@@ -7,9 +7,14 @@ import com.mcal.androlib.util.Logger
 import com.mcal.apkeditor.utils.AssetsInstaller
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.data.ReactivePreferences
+import com.mcal.common.data.ReactivePreferences.getKeyAlias
+import com.mcal.common.data.ReactivePreferences.getKeyPassword
+import com.mcal.common.data.ReactivePreferences.getSigningPassword
 import com.mcal.common.utils.ITaskCallback
 import com.mcal.common.utils.ITaskCallback.TaskStepInfo
 import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.ScopedStorage.filesDir
+import com.mcal.common.utils.ScopedStorage.getKey
 import com.mcal.common.utils.cleanup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -135,9 +140,23 @@ class ApkComposeThreadNew(
     private suspend fun signApk(inApk: String): Boolean {
         return if (ReactivePreferences.isSigningEnabled()) {
             if (!ReactivePreferences.isCustomSigningEnabled()) {
-                return ApkSigner().signApk(inApk, mTargetApkPath)
+                getKey()?.let { keyFile ->
+                    return ApkSigner().sign(File(inApk), File(mTargetApkPath), keyFile, getSigningPassword(), getKeyAlias(), getKeyPassword())
+                } ?: run {
+                    return ApkSigner().sign(
+                        inApk,
+                        mTargetApkPath,
+                        filesDir.toString() + File.separator + "bin/testkey.pk8",
+                        filesDir.toString() + File.separator + "bin/testkey.x509.pem"
+                    )
+                }
             } else {
-                return ApkSigner().signApkCustom(inApk, mTargetApkPath)
+                return ApkSigner().sign(
+                    inApk,
+                    mTargetApkPath,
+                    filesDir.toString() + File.separator + "bin/testkey.pk8",
+                    filesDir.toString() + File.separator + "bin/testkey.x509.pem"
+                )
             }
         } else false
     }

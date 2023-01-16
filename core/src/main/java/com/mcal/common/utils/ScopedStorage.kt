@@ -116,8 +116,7 @@ object ScopedStorage {
 
     @JvmStatic
     fun getKey(): File? {
-        val ks = getKeysDir().listFiles()
-        return ks?.get(0)
+        return getKeysDir().listFiles()?.get(0)
     }
 
     @JvmStatic

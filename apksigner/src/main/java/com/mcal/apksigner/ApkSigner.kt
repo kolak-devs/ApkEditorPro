@@ -2,12 +2,10 @@ package com.mcal.apksigner
 
 import com.android.apksig.ApkSigner
 import com.android.apksigner.ApkSignerTool
+import com.mcal.apksigner.utils.JKS
 import com.mcal.common.data.ReactivePreferences
-import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utils.ScopedStorage.filesDir
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.future.future
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.spongycastle.jce.provider.BouncyCastleProvider
 import java.io.File
@@ -15,49 +13,82 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.security.KeyStore
 import java.security.PrivateKey
+import java.security.Provider
 import java.security.Security
 import java.security.cert.X509Certificate
-import java.util.concurrent.CompletableFuture
 
 class ApkSigner {
-    suspend fun signApk(inputPath: String, outputPath: String): Boolean = withContext(Dispatchers.IO) {
-        val args = mutableListOf(
-            "sign",
-            "--in",
-            inputPath,
-            "--out",
-            outputPath,
-            "--key",
-            filesDir.toString() + File.separator + "bin/testkey.pk8",
-            "--cert",
-            filesDir.toString() + File.separator + "bin/testkey.x509.pem"
-        )
-        try {
-            ApkSignerTool.main(args.toTypedArray())
-            return@withContext true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return@withContext false
+    fun sign(inputPath: String, outputPath: String, pk8Path: String, x509Path: String): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = signApk(inputPath, outputPath, pk8Path, x509Path)
         }
+        return fallback
     }
 
-    suspend fun signApkCustom(inputPath: String, outputPath: String): Boolean {
-        return sign(File(inputPath), File(outputPath))
+    private suspend fun signApk(inputPath: String, outputPath: String, pk8Path: String, x509Path: String): Boolean =
+        withContext(Dispatchers.IO) {
+            val args = mutableListOf(
+                "sign",
+                "--in",
+                inputPath,
+                "--out",
+                outputPath,
+                "--key",
+                pk8Path,
+                "--cert",
+                x509Path
+            )
+            try {
+                ApkSignerTool.main(args.toTypedArray())
+                return@withContext true
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return@withContext false
+            }
+        }
+
+    fun sign(
+        inputPath: File,
+        outputPath: File,
+        keyPath: File,
+        certPass: String,
+        certAlias: String,
+        keyPass: String
+    ): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = signApk(
+                inputPath,
+                outputPath,
+                keyPath,
+                certPass,
+                certAlias,
+                keyPass
+            )
+        }
+        return fallback
     }
 
-    private suspend fun sign(input: File, out: File): Boolean = withContext(Dispatchers.IO) {
+    private suspend fun signApk(
+        inputPath: File,
+        outputPath: File,
+        keyPath: File,
+        certPass: String,
+        certAlias: String,
+        keyPass: String
+    ): Boolean = withContext(Dispatchers.IO) {
         try {
-            ScopedStorage.getKey()?.takeIf { it.exists() }?.let { keyFile ->
-                val keystore = loadKeyStore(FileInputStream(keyFile), ReactivePreferences.getSigningPassword().toCharArray())
-                val certAlias = ReactivePreferences.getKeyAlias()
+            keyPath.takeIf { it.exists() }?.let { keyPath ->
+                val keystore = loadKeyStore(FileInputStream(keyPath), certPass.toCharArray())
                 val signerConfig = ApkSigner.SignerConfig.Builder(
                     "CERT",
-                    keystore.getKey(certAlias, ReactivePreferences.getKeyPassword().toCharArray()) as PrivateKey,
+                    keystore.getKey(certAlias, keyPass.toCharArray()) as PrivateKey,
                     listOf(keystore.getCertificate(certAlias) as X509Certificate)
                 ).build()
                 ApkSigner.Builder(listOf(signerConfig)).apply {
-                    setInputApk(input)
-                    setOutputApk(out)
+                    setInputApk(inputPath)
+                    setOutputApk(outputPath)
                     when (ReactivePreferences.getSigningVersion()) {
                         1 -> setV1SigningEnabled(true)
                         2 -> {
@@ -94,21 +125,24 @@ class ApkSigner {
             keyStore = KeyStore.getInstance("jks")
             keyStore.load(keystorePath, password)
         } catch (e: Exception) {
+            val provider = BouncyCastleProvider()
+            Security.addProvider(provider)
             try {
-                val provider = BouncyCastleProvider()
-                Security.addProvider(provider)
-                keyStore = KeyStore.getInstance("bks", provider)
+                keyStore = JksKeyStore(provider)
                 keyStore.load(keystorePath, password)
             } catch (e: Exception) {
-                throw RuntimeException("Failed to load keystore: " + e.message)
+                try {
+                    keyStore = KeyStore.getInstance("bks", provider)
+                    keyStore.load(keystorePath, password)
+                } catch (e: Exception) {
+                    throw RuntimeException("Failed to load keystore: " + e.message)
+                }
             }
         } finally {
             keystorePath.close()
         }
         return keyStore
     }
-
-    // Helper to call coroutines from java
-    fun signAsync(inputPath: String, outputPath: String): CompletableFuture<Boolean> =
-        GlobalScope.future { signApk(inputPath, outputPath) }
 }
+
+class JksKeyStore(provider: Provider) : KeyStore(JKS(), provider, "jks")
