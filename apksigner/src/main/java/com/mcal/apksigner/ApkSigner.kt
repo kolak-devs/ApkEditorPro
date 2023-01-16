@@ -2,7 +2,6 @@ package com.mcal.apksigner
 
 import com.android.apksig.ApkSigner
 import com.android.apksigner.ApkSignerTool
-import com.mcal.apksigner.utils.JksKeyStore
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.ScopedStorage.filesDir
@@ -98,15 +97,10 @@ class ApkSigner {
             val provider = BouncyCastleProvider()
             Security.addProvider(provider)
             try {
-                keyStore = JksKeyStore(provider)
+                keyStore = KeyStore.getInstance("bks", provider)
                 keyStore.load(keystorePath, password)
             } catch (e: Exception) {
-                try {
-                    keyStore = KeyStore.getInstance("bks", provider)
-                    keyStore.load(keystorePath, password)
-                } catch (e: Exception) {
-                    throw RuntimeException("Failed to load keystore: " + e.message)
-                }
+                throw RuntimeException("Failed to load keystore: " + e.message)
             }
         } finally {
             keystorePath.close()
