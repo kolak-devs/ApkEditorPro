@@ -94,9 +94,9 @@ class ApkSigner {
             keyStore = KeyStore.getInstance("jks")
             keyStore.load(keystorePath, password)
         } catch (e: Exception) {
-            val provider = BouncyCastleProvider()
-            Security.addProvider(provider)
             try {
+                val provider = BouncyCastleProvider()
+                Security.addProvider(provider)
                 keyStore = KeyStore.getInstance("bks", provider)
                 keyStore.load(keystorePath, password)
             } catch (e: Exception) {
