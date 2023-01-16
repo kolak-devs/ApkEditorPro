@@ -3,8 +3,6 @@ package com.mcal.apksigner
 import com.android.apksig.ApkSigner
 import com.android.apksigner.ApkSignerTool
 import com.mcal.apksigner.utils.JksKeyStore
-import com.mcal.apksigner.utils.LoadKeystoreException
-import com.mcal.common.data.LegacyPreferences
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.ScopedStorage.filesDir
@@ -44,14 +42,14 @@ class ApkSigner {
         }
     }
 
-    suspend fun signApkCustom(inputPath: String, outputPath: String) : Boolean {
+    suspend fun signApkCustom(inputPath: String, outputPath: String): Boolean {
         return sign(File(inputPath), File(outputPath))
     }
 
     private suspend fun sign(input: File, out: File): Boolean = withContext(Dispatchers.IO) {
         try {
-            ScopedStorage.getKey()?.takeIf { it.exists() }?.let {
-                val keystore = loadKeyStore(it.path, ReactivePreferences.getSigningPassword().toCharArray())
+            ScopedStorage.getKey()?.takeIf { it.exists() }?.let { keyFile ->
+                val keystore = loadKeyStore(FileInputStream(keyFile), ReactivePreferences.getSigningPassword().toCharArray())
                 val certAlias = ReactivePreferences.getKeyAlias()
                 val signerConfig = ApkSigner.SignerConfig.Builder(
                     "CERT",
@@ -61,7 +59,7 @@ class ApkSigner {
                 ApkSigner.Builder(listOf(signerConfig)).apply {
                     setInputApk(input)
                     setOutputApk(out)
-                    when (ReactivePreferences.getSigningVersion()){
+                    when (ReactivePreferences.getSigningVersion()) {
                         1 -> setV1SigningEnabled(true)
                         2 -> {
                             setV1SigningEnabled(true)
@@ -91,29 +89,29 @@ class ApkSigner {
     }
 
     @Throws(Exception::class)
-    private fun loadKeyStore(keystorePath: String, password: CharArray): KeyStore {
-        val provider = BouncyCastleProvider()
-        Security.addProvider(provider)
-        var ks: KeyStore
-        return try {
-            ks = JksKeyStore(provider)
-            val fis = FileInputStream(keystorePath)
-            ks.load(fis, password)
-            fis.close()
-            ks
-        } catch (e: LoadKeystoreException) {
-            throw e
+    private fun loadKeyStore(keystorePath: FileInputStream, password: CharArray): KeyStore {
+        var keyStore: KeyStore
+        try {
+            keyStore = KeyStore.getInstance("jks")
+            keyStore.load(keystorePath, password)
         } catch (e: Exception) {
+            val provider = BouncyCastleProvider()
+            Security.addProvider(provider)
             try {
-                ks = KeyStore.getInstance("bks", provider)
-                val fis = FileInputStream(keystorePath)
-                ks.load(fis, password)
-                fis.close()
-                ks
+                keyStore = JksKeyStore(provider)
+                keyStore.load(keystorePath, password)
             } catch (e: Exception) {
-                throw RuntimeException("Failed to load keystore: " + e.message, e)
+                try {
+                    keyStore = KeyStore.getInstance("bks", provider)
+                    keyStore.load(keystorePath, password)
+                } catch (e: Exception) {
+                    throw RuntimeException("Failed to load keystore: " + e.message)
+                }
             }
+        } finally {
+            keystorePath.close()
         }
+        return keyStore
     }
 
     // Helper to call coroutines from java
