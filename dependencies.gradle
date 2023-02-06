@@ -12,7 +12,7 @@ ext {
 
     jetpack = [
             core: 'androidx.core:core-ktx:1.9.0',
-            appcompat: 'androidx.appcompat:appcompat:1.6.0-rc01',
+            appcompat: 'androidx.appcompat:appcompat:1.6.0',
             preference: 'androidx.preference:preference-ktx:1.2.0',
             mvvm_vm: 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1',
             mvvm_ld: 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1',

@@ -100,10 +100,15 @@ android {
 //        }
 //    }
 
+//    task runSign(type:Exec) {
+//        println "Run Jiagu Tool"
+//        commandLine = ['cmd','/c', jiagu_dir]
+//    }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             if (variant.name == "release") {
-                outputFileName = "Apk Editor v.${variant.versionName}-MinAPI${defaultConfig.minSdk}.apk"
+                outputFileName = "Apk Editor v.${variant.versionName}-Min API ${defaultConfig.minSdk}.apk"
             } else {
                 outputFileName = "${variant.name}-${variant.versionName}-milestone-(${versionCode}).apk"
             }

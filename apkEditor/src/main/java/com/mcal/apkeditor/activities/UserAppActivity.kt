@@ -87,7 +87,7 @@ class UserAppActivity : CustomizedLangActivity(), AppListAdapter.AppItemClick {
                 @Throws(java.lang.Exception::class)
                 override fun process() {
                     val pm = packageManager
-                    val appInfoList = pm.getInstalledApplications(0)
+                    val appInfoList = pm.getInstalledApplications(PackageManager.GET_META_DATA)
                     appList.clear()
                     if (listMode == AppType.USERS) {
                         for (ai in appInfoList) {
