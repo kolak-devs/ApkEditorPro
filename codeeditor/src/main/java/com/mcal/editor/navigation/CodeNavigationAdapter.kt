@@ -29,22 +29,48 @@ class CodeNavigationAdapter(private val listener: CodeNavigationClick, private v
     override fun onBindViewHolder(holder: SmaliViewHolder, position: Int) {
         val text = methods[position].methodDesc
         val spanText = SpannableString(text)
+        val textLength = text.length
         if (text.contains("(")) {
             holder.type.text = "M"
             holder.type.setBackgroundColor(Color.parseColor("#FFAB91"))
-            val start = text.indexOf("(")
-            val end = text.indexOf(")") + 1
-            if (start >= 0 && end >= 0) {
-                spanText.setSpan(ForegroundColorSpan(Color.GRAY), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            // Красим всё после имени метода
+            var start = text.indexOf("(")
+            if (start >= 0) {
+                spanText.setSpan(ForegroundColorSpan(Color.GRAY), start, textLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
+            // Красим всё перед именем метода
+            do {
+                val result = text[start]
+                if (result == ' ') {
+                    spanText.setSpan(ForegroundColorSpan(Color.GRAY), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    break
+                } else {
+                    start--
+                }
+            } while (true)
             holder.tv.text = spanText
         } else {
             holder.type.text = "F"
             holder.type.setBackgroundColor(Color.parseColor("#B39DDB"))
-            val start = text.indexOf(":")
-            val end = text.indexOf(";")
-            if (start >= 0 && end >= 0) {
-                spanText.setSpan(ForegroundColorSpan(Color.GRAY), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            var start = text.indexOf(":")
+            if (start >= 0) {
+                // Красим всё после названия поля
+                spanText.setSpan(ForegroundColorSpan(Color.GRAY), start, textLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                // Красим всё перед названием поля
+                do {
+                    val result = text[start]
+                    if (result == ' ') {
+                        spanText.setSpan(ForegroundColorSpan(Color.GRAY), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        break
+                    } else {
+                        start--
+                    }
+                } while (true)
+            } else {
+                val end = text.lastIndexOf(" ")
+                if (end >= 0) {
+                    spanText.setSpan(ForegroundColorSpan(Color.GRAY), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
             }
             holder.tv.text = spanText
         }

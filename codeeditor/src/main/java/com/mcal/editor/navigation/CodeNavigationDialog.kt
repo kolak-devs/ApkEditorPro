@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.StringReader
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 // Popup window helper
@@ -44,20 +45,35 @@ class CodeNavigationDialog(private val mCallback: ISmaliMethodClicked) : CodeNav
                             lineIndex += 1
                         }
                     } else if (filePath.endsWith(".java")) {
+                        var matcher: Matcher
+                        var mLine: String?
                         while (br.readLine().also { line = it } != null) {
-                            var mLine = line
+                            mLine = line
                             if (mLine != null) {
                                 mLine = mLine.trim()
                                 if (mLine.length > 6 && mLine[0] == 'p' && (mLine[1] == 'u' || mLine[1] == 'r')) {
-                                    val matcher = Pattern.compile(
+                                    matcher = Pattern.compile(
                                         "^[ \\t]*(?:(?:public|protected|private)\\s+)?(?:(static|final|native|synchronized|abstract|threadsafe|transient|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)\\s+)*(?!return)\\b([\\w.]+)\\b(?:|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)((?:\\[])*)\\s+\\b\\w+\\b\\s*\\(\\s*(?:\\b([\\w.]+)\\b(?:|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)((?:\\[])*)(\\.\\.\\.)?\\s+(\\w+)\\b(?![>\\[])\\s*(?:,\\s+\\b([\\w.]+)\\b(?:|<[?\\w\\[\\] ,&]+>|<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>|<[^<]*<[^<]*<[?\\w\\[\\] ,&]+>[^>]*>[^>]*>)((?:\\[])*)(\\.\\.\\.)?\\s+(\\w+)\\b(?![>\\[])\\s*)*)?\\s*\\)(?:\\s*throws [\\w.]+(\\s*,\\s*[\\w.]+))?\\s*[{;][ \\t]*$"
                                     ).matcher(mLine)
                                     if (matcher.matches()) {
                                         var prototype = matcher.group(0)
                                         if (prototype != null && (prototype.endsWith("{") || prototype.endsWith(";"))) {
                                             prototype = prototype.substring(0, prototype.length - 1)
-                                            prototype = prototype.trim()
-                                            methodList.add(CodeNavigationInfo(lineIndex, prototype))
+                                            methodList.add(CodeNavigationInfo(lineIndex, prototype.trim()))
+                                        }
+                                    } else {
+                                        matcher = Pattern.compile(
+                                            "\\s*(?:private|public|protected)?\\s*(?:static)?\\s*(?:final)?\\s*([\\w<>\\[\\] ?.]+|[\\w<>\\[\\], ?.]+)\\s+([\\w, +]+)\\s*=?\\s*(?:new)?\\s*(?:[\\w.]+)?\\s*\\(?\\s*;?"
+                                        ).matcher(mLine)
+                                        if (matcher.matches()) {
+                                            var fieldName = matcher.group(2)
+                                            if (fieldName != null) {
+                                                val fieldType = matcher.group(1)
+                                                if (fieldType != null) {
+                                                    fieldName = "$fieldType $fieldName"
+                                                }
+                                                methodList.add(CodeNavigationInfo(lineIndex, fieldName.trim()))
+                                            }
                                         }
                                     }
                                 }

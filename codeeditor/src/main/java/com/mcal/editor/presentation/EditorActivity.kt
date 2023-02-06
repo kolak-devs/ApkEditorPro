@@ -340,10 +340,11 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
         undo?.isEnabled = binding.editor.canUndo()
         redo?.isEnabled = binding.editor.canRedo()
         mFilePath?.let { path ->
-            dexToJava?.isVisible = path.name.endsWith(".smali")
-            smaliToJava?.isVisible = path.name.endsWith(".smali")
-            methodsList?.isVisible = path.name.endsWith(".smali") or path.name.endsWith(".java")
-            templatesMenu?.isVisible = path.name.endsWith(".smali")
+            val isSmali = path.name.endsWith(".smali")
+            dexToJava?.isVisible = isSmali
+            smaliToJava?.isVisible = isSmali
+            methodsList?.isVisible = isSmali or path.name.endsWith(".java")
+            templatesMenu?.isVisible = isSmali
         }
     }
 
