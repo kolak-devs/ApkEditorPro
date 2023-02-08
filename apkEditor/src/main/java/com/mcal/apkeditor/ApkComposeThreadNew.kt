@@ -13,7 +13,7 @@ import com.mcal.common.data.ReactivePreferences.getSigningPassword
 import com.mcal.common.utils.ITaskCallback
 import com.mcal.common.utils.ITaskCallback.TaskStepInfo
 import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utils.ScopedStorage.filesDir
+import com.mcal.common.utils.ScopedStorage.getAndroidDebugKey
 import com.mcal.common.utils.ScopedStorage.getKey
 import com.mcal.common.utils.cleanup
 import kotlinx.coroutines.Dispatchers
@@ -149,7 +149,7 @@ class ApkComposeThreadNew(
                     return ApkSigner().sign(File(inApk), File(mTargetApkPath), keyFile, getSigningPassword(), getKeyAlias(), getKeyPassword())
                 }
             }
-            return ApkSigner().sign(File(inApk), File(mTargetApkPath), File(ScopedStorage.getBinDir(), "androiddebug.jks"), "androiddebug", "androiddebug", "androiddebug")
+            return ApkSigner().sign(File(inApk), File(mTargetApkPath), getAndroidDebugKey(), "androiddebug", "androiddebug", "androiddebug")
         } else false
     }
 

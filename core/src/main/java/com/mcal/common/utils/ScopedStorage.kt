@@ -77,13 +77,8 @@ object ScopedStorage {
     }
 
     @JvmStatic
-    fun getPublicKey(): File {
-        return File(getBinDir(), "testkey.x509.pem")
-    }
-
-    @JvmStatic
-    fun getPrivateKey(): File {
-        return File(getBinDir(), "testkey.pk8")
+    fun getAndroidDebugKey(): File {
+        return File(getBinDir(), "androiddebug.jks")
     }
 
     @JvmStatic
@@ -121,7 +116,7 @@ object ScopedStorage {
 
     @JvmStatic
     fun isToolsInstalled(): Boolean {
-        return getAapt().exists() or getAapt2().exists() and getMyCp().exists() and getPublicKey().exists() and getPrivateKey().exists() and
+        return getAapt().exists() or getAapt2().exists() and getMyCp().exists() and getAndroidDebugKey().exists() and
                 (getFramework().exists() and getFramework().isFile)
     }
 }
