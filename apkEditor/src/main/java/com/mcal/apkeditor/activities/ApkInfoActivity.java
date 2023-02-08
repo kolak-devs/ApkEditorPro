@@ -55,7 +55,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.androlib.LanguageMapping;
-import com.mcal.androlib.util.OpenFiles;
+import com.mcal.common.utils.OpenFiles;
 import com.mcal.apkeditor.ApkComposeService;
 import com.mcal.apkeditor.ApkParseConsumer;
 import com.mcal.apkeditor.ApkParseThread;

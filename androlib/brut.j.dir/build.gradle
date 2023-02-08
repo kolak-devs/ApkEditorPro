@@ -1,26 +1,31 @@
 plugins {
-  id 'com.android.library'
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
-  compileSdk project.compileSDK.toInteger()
+    compileSdk project.compileSDK.toInteger()
 
-  defaultConfig {
-    minSdk project.minSDK.toInteger()
-    targetSdk project.targetSDK.toInteger()
-  }
-
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+    defaultConfig {
+        minSdk project.minSDK.toInteger()
+        targetSdk project.targetSDK.toInteger()
     }
-  }
-  namespace 'com.mcal.androlib.dir'
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    namespace 'com.mcal.androlib.dir'
 }
 
 dependencies {
-  implementation project(':androlib:brut.j.common')
-  implementation project(':androlib:brut.j.util')
-  implementation misc.commons_io
+    implementation project(':androlib:brut.j.common')
+    implementation project(':androlib:brut.j.util')
+    implementation misc.commons_io
 }

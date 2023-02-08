@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mcal.androlib.util.OpenFiles;
+import com.mcal.common.utils.OpenFiles;
 import com.mcal.appdm.base.R;
 import com.mcal.appdm.base.databinding.AppdmActivityDataoverviewBinding;
 import com.mcal.appdm.utils.SignatureInfoReader;

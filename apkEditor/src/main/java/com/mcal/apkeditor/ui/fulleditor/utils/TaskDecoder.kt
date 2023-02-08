@@ -3,7 +3,7 @@ package com.mcal.apkeditor.ui.fulleditor.utils
 import brut.androlib.Androlib
 import brut.androlib.ApkDecoder
 import com.mcal.androlib.options.BuildOptions
-import com.mcal.androlib.util.Logger
+import com.mcal.androlib.utils.Logger
 import com.mcal.apkeditor.ApkParseConsumer
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage
@@ -25,9 +25,13 @@ class TaskDecoder : Logger {
     private fun decode(apkPath: File, decodeRootPath: File) {
         val binFolder = ScopedStorage.getBinDir().path
         try {
-            val options = BuildOptions()
-            options.frameworkFolderLocation = binFolder
-            val lib = Androlib(options, this)
+            val lib = Androlib(BuildOptions().apply {
+                frameworkFolderLocation = binFolder
+                aaptPath = binFolder + File.separator + "aapt"
+                aapt2Path = binFolder + File.separator + "aapt2"
+                isAaptRules = ReactivePreferences.isAaptRules()
+                isJsonConfig = ReactivePreferences.isJsonConfig()
+            }, this)
             val decoder = ApkDecoder(apkPath, lib)
             decoder.setApkFile(apkPath)
             decoder.setBaksmaliDebugMode(false)

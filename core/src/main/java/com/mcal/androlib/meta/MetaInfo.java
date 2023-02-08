@@ -3,7 +3,7 @@ package com.mcal.androlib.meta;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mcal.common.utils.FileHelperKt;
+import com.mcal.androlib.utils.FileHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,7 +89,7 @@ public class MetaInfo {
 
     @NonNull
     public static MetaInfo load(InputStream is) throws IOException, JSONException {
-        String content = FileHelperKt.readText(is, StandardCharsets.UTF_8);
+        String content = FileHelper.readInputStream(is);
         JSONObject json = new JSONObject(content);
         MetaInfo meta = new MetaInfo();
         meta.load(json);

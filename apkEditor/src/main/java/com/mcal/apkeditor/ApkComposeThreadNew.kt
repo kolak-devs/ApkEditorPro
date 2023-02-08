@@ -3,7 +3,7 @@ package com.mcal.apkeditor
 import android.content.Context
 import brut.androlib.Androlib
 import com.mcal.androlib.options.BuildOptions
-import com.mcal.androlib.util.Logger
+import com.mcal.androlib.utils.Logger
 import com.mcal.apkeditor.utils.AssetsInstaller
 import com.mcal.apksigner.ApkSigner
 import com.mcal.common.data.ReactivePreferences
@@ -96,10 +96,16 @@ class ApkComposeThreadNew(
                 setNextStep(context.getString(R.string.build_preparing))
                 AssetsInstaller(context).install()
                 setNextStep(context.getString(R.string.build_compiling))
+
+
+                val binDirPath = binDir.path
                 Androlib(BuildOptions().apply {
+                    isAaptRules = ReactivePreferences.isAaptRules()
+                    isJsonConfig = ReactivePreferences.isJsonConfig()
                     useAapt2 = ReactivePreferences.isAapt2()
-                    aaptPath = binDir.path + File.separator + if (useAapt2) "aapt2" else "aapt"
-                    frameworkFolderLocation = binDir.path
+                    aaptPath = binDirPath + File.separator + "aapt"
+                    aapt2Path = binDirPath + File.separator + "aapt2"
+                    frameworkFolderLocation = binDirPath
                 }, this@ApkComposeThreadNew).build(File(mDecodedFilePath), tmpApkFile)
                 setNextStep(context.getString(R.string.build_signing))
                 if (!signApk(tmpApkFile.path)) {

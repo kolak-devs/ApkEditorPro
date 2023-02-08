@@ -25,7 +25,6 @@ include ':crashreporter'
 include ':apksigner'
 include ':patchview'
 include ':xpp3'
-include ':androlib'
 include ':smali'
 include ':bsh-engine'
 include ':colormixer'
@@ -44,8 +43,7 @@ include ':jadx:jadx-core',
 include ':androlib:brut.j.common',
         ':androlib:brut.j.util',
         ':androlib:brut.j.dir',
-        ':androlib:brut.apktool:apktool-lib',
-        ':androlib:brut.apktool:apktool-cli'
+        ':androlib:brut.apktool:apktool-lib'
 
 include ':manifestparser'
 include ':net-manager'
