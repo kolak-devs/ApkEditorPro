@@ -97,7 +97,6 @@ class ApkComposeThreadNew(
                 AssetsInstaller(context).install()
                 setNextStep(context.getString(R.string.build_compiling))
 
-
                 val binDirPath = binDir.path
                 Androlib(BuildOptions().apply {
                     isAaptRules = ReactivePreferences.isAaptRules()
@@ -145,25 +144,12 @@ class ApkComposeThreadNew(
 
     private suspend fun signApk(inApk: String): Boolean {
         return if (ReactivePreferences.isSigningEnabled()) {
-            if (!ReactivePreferences.isCustomSigningEnabled()) {
+            if (ReactivePreferences.isCustomSigningEnabled()) {
                 getKey()?.let { keyFile ->
                     return ApkSigner().sign(File(inApk), File(mTargetApkPath), keyFile, getSigningPassword(), getKeyAlias(), getKeyPassword())
-                } ?: run {
-                    return ApkSigner().sign(
-                        inApk,
-                        mTargetApkPath,
-                        filesDir.toString() + File.separator + "bin/testkey.pk8",
-                        filesDir.toString() + File.separator + "bin/testkey.x509.pem"
-                    )
                 }
-            } else {
-                return ApkSigner().sign(
-                    inApk,
-                    mTargetApkPath,
-                    filesDir.toString() + File.separator + "bin/testkey.pk8",
-                    filesDir.toString() + File.separator + "bin/testkey.x509.pem"
-                )
             }
+            return ApkSigner().sign(File(inApk), File(mTargetApkPath), File(ScopedStorage.getBinDir(), "androiddebug.jks"), "androiddebug", "androiddebug", "androiddebug")
         } else false
     }
 

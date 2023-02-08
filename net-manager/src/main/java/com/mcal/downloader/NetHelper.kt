@@ -77,6 +77,9 @@ object NetHelper {
                         }
                         if (destFile.exists()) {
                             val path = destFile.path
+                            if(path.contains("aapt")) {
+                                destFile.setExecutable(true)
+                            }
                             if (path.endsWith(".jar")) {
                                 copyFile(path, path.replace(destFile.name, "1.apk"))
                             }

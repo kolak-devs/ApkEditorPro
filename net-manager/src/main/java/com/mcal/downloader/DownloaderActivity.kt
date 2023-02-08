@@ -28,9 +28,10 @@ class DownloaderActivity : CustomizedLangActivity() {
                     "aapt2" to "$domain/apkeditor/bin/$abi/aapt2",
                     "mycp" to "$domain/apkeditor/bin/$abi/mycp",
                     "zipalign" to "$domain/apkeditor/bin/$abi/zipalign",
-                    //"aaptz" to "DOMAIN/apkeditor/bin/aaptz",
-                    "testkey.pk8" to "$domain/apkeditor/keys/testkey.pk8",
-                    "testkey.x509.pem" to "$domain/apkeditor/keys/testkey.x509.pem",
+                    "androiddebug.jks" to "$domain/apkeditor/keys/androiddebug.jks",
+//                    "aaptz" to "DOMAIN/apkeditor/bin/aaptz",
+//                    "testkey.pk8" to "$domain/apkeditor/keys/testkey.pk8",
+//                    "testkey.x509.pem" to "$domain/apkeditor/keys/testkey.x509.pem",
                 )
             )
         }

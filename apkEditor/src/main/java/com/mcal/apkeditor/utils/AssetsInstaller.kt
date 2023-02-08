@@ -9,12 +9,6 @@ import java.io.IOException
 class AssetsInstaller(private val context: Context) {
     @Throws(Exception::class)
     fun install() {
-        val path = ScopedStorage.getBinDir()
-        if (!path.exists()) {
-            path.mkdir()
-        }
-        context.copyAssetsFile("key/testkey.pk8", File(path, "testkey.pk8"))
-        context.copyAssetsFile("key/testkey.x509.pem", File(path, "testkey.x509.pem"))
         createWorkFiles()
     }
 
