@@ -28,9 +28,9 @@ import com.android.apksig.util.DataSource;
 import com.android.apksig.util.DataSources;
 import com.android.apksigner.utils.FileUtils;
 
-import org.conscrypt.OpenSSLProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -87,30 +87,22 @@ public class ApkSignerTool {
         try {
             if ("sign".equals(cmd)) {
                 sign(Arrays.copyOfRange(params, 1, params.length));
-                return;
             } else if ("verify".equals(cmd)) {
                 verify(Arrays.copyOfRange(params, 1, params.length));
-                return;
             } else if ("rotate".equals(cmd)) {
                 rotate(Arrays.copyOfRange(params, 1, params.length));
-                return;
             } else if ("lineage".equals(cmd)) {
                 lineage(Arrays.copyOfRange(params, 1, params.length));
-                return;
             } else if ("help".equals(cmd)) {
                 printUsage(HELP_PAGE_GENERAL);
-                return;
             } else if ("version".equals(cmd)) {
                 System.out.println(VERSION);
-                return;
             } else {
                 throw new ParameterException(
                         "Unsupported command: " + cmd + ". See --help for supported commands");
             }
         } catch (ParameterException | OptionsParser.OptionsException e) {
             System.err.println(e.getMessage());
-            //System.exit(1);
-            return;
         }
     }
 
@@ -120,7 +112,7 @@ public class ApkSignerTool {
      */
     private static void addProviders() {
         try {
-            Security.addProvider(new OpenSSLProvider());
+            Security.addProvider(new BouncyCastleProvider());
         } catch (UnsatisfiedLinkError e) {
             // This is expected if the library path does not include the native conscrypt library;
             // the default providers support all but PSS algorithms.
