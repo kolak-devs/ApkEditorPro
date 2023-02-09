@@ -61,7 +61,7 @@ ext {
     ]
 
     tools = [
-            apktool: "com.github.TimScriptov:Android-ApkTool-Library:2.7.0.2",
+            apktool: "com.github.TimScriptov:Android-ApkTool-Library:2.7.0.3",
             dexlib2: 'org.smali:dexlib2:2.5.2',
             smali: 'org.smali:smali:2.5.2',
             baksmali: 'org.smali:baksmali:2.5.2'
