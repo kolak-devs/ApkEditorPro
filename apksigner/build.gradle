@@ -26,7 +26,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api project(flat.jars)
     implementation project(flat.core)
     implementation project(flat.sun)
 
