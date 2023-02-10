@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Permission Editor</string>
+    <string name="enter_search">Enter search...</string>
+    <string name="add_permission">Add permission</string>
+    <string name="add">Add</string>
+    <string name="unselect">Unselect</string>
+    <string name="select">Select</string>
+    <string name="no_description">No description</string>
+    <string name="save">Save</string>
+    <string name="save_modified">Save modified</string>
+    <string name="save_modified_message">Data has changed, do you want to save？</string>
+    <string name="delete">Delete</string>
+    <string name="saved">Saved</string>
+    <string name="permission_editor">Permission Editor</string>
+    <string name="multi_select">Multi select</string>
+    <string name="no_permissions">No Permissions</string>
+    <string name="select_all">Select all</string>
+    <string name="unselect_all">Unselect all</string>
+    <string name="invert_all">Invert all</string>
+    <string name="settings">Settings</string>
+    <string name="comment_permission">Comment permission</string>
+</resources>

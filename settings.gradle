@@ -26,6 +26,7 @@ include ':apksigner'
 include ':patchview'
 include ':bsh-engine'
 include ':colormixer'
+include ':permission-editor'
 
 include ':jadx:jadx-core',
         ':jadx:jadx-cli',

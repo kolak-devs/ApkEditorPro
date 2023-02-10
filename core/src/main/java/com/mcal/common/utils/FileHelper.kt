@@ -147,7 +147,7 @@ fun writeToFile(fileName: String, data: ByteArray) {
 }
 
 @Throws(IOException::class)
-fun writeToFile(targetFile: String?, content: String) {
+fun writeToFile(targetFile: String, content: String) {
     var fos: FileOutputStream? = null
     try {
         fos = FileOutputStream(targetFile)

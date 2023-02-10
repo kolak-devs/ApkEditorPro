@@ -41,6 +41,7 @@ dependencies {
     implementation project(':jadx:jadx-plugins:jadx-smali-input')
     implementation project(':melissa')
     implementation project(':colormixer')
+    implementation project(':permission-editor')
     implementation misc.guava
 
     implementation tools.dexlib2

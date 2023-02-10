@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/delete_perm"
+        android:icon="@drawable/round_delete_24"
+        android:title="@string/delete"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/select_all_perm"
+        android:icon="@drawable/round_select_all_24"
+        android:title="@string/select_all"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/unselect_all_perm"
+        android:icon="@drawable/round_deselect_24"
+        android:title="@string/unselect_all"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/invert_all_perm"
+        android:icon="@drawable/round_published_with_changes_24"
+        android:title="@string/invert_all"
+        app:showAsAction="always"/>
+</menu>
