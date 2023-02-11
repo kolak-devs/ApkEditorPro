@@ -151,17 +151,17 @@ dependencies {
     implementation tools.apktool
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':core')
-    implementation project(':codeeditor')
-    implementation project(':imageview')
+    implementation project(':feature:code-editor')
+    implementation project(':feature:imageview')
     implementation project(':apksigner')
-    implementation project(':dataeditor')
-    implementation project(':crashreporter')
-    implementation project(':patchview')
+    implementation project(':feature:data-editor')
+    implementation project(':feature:crashreporter')
+    implementation project(':feature:patchview')
     implementation project(':melissa')
-    implementation project(':manifestparser')
-    implementation project(':net-manager')
-    implementation project(':bsh-engine')
-    implementation project(':colormixer')
+    implementation project(':feature:manifestparser')
+    implementation project(':feature:net-manager')
+    implementation project(':feature:bsh-engine')
+    implementation project(':feature:colormixer')
 
     implementation tools.dexlib2
     implementation tools.smali

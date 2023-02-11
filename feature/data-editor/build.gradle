@@ -25,8 +25,8 @@ android {
 
 dependencies {
     implementation project(':core')
-    api project(':sqliteutil')
-    api project(':codeeditor')
+    api project(':feature:sqliteutil')
+    api project(':feature:code-editor')
     implementation project(":melissa")
 
     implementation jetpack.appcompat

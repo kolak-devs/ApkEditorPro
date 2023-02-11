@@ -16,17 +16,8 @@ dependencyResolutionManagement {
 }
 
 include ':core'
-include ':imageview'
 include ':apkEditor'
-include ':sqliteutil'
-include ':codeeditor'
-include ':dataeditor'
-include ':crashreporter'
 include ':apksigner'
-include ':patchview'
-include ':bsh-engine'
-include ':colormixer'
-include ':permission-editor'
 
 include ':jadx:jadx-core',
         ':jadx:jadx-cli',
@@ -38,9 +29,17 @@ include ':jadx:jadx-core',
         ':jadx:jadx-plugins:jadx-smali-input',
         ':jadx:jadx-plugins:jadx-java-convert'
 
-include ':manifestparser'
-include ':net-manager'
-
 include ':melissa'
 
 include ':sun'
+include ':feature:imageview'
+include ':feature:sqliteutil'
+include ':feature:code-editor'
+include ':feature:data-editor'
+include ':feature:crashreporter'
+include ':feature:patchview'
+include ':feature:bsh-engine'
+include ':feature:colormixer'
+include ':feature:permission-editor'
+include ':feature:manifestparser'
+include ':feature:net-manager'
