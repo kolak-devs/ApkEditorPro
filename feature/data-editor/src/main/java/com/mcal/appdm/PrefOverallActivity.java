@@ -461,10 +461,7 @@ public class PrefOverallActivity extends CustomizedLangActivity {
                     public void afterProcess() {
                         if (tmpFilePath != null) {
                             // Open the editor
-                            Intent intent = TextEditor.getSoraEditor(PrefOverallActivity.this, tmpFilePath, filePath, isRootMode, new int[]{
-                                    R.string.appdm_file_too_big,
-                                    R.string.appdm_file_saved,
-                                    R.string.appdm_not_found});
+                            Intent intent = TextEditor.getSoraEditor(PrefOverallActivity.this, tmpFilePath, filePath, isRootMode);
                             startActivityForResult(intent, 1000);
                         } else {
                             Toast.makeText(PrefOverallActivity.this, "Failed to open the file.", Toast.LENGTH_SHORT).show();

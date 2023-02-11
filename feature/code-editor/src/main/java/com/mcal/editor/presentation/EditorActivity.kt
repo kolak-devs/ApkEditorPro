@@ -71,7 +71,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
     private var mApkPath: File? = null
     private var realFilePath: String? = null // when not null, need to copy back to real path
     private var isRootMode = false
-    private var resIds: List<Int>? = null
     private var startLineList: List<Int>? = null
     private var filePathList: ArrayList<String>? = null
     private var curFileIndex = 0
@@ -273,25 +272,21 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
     private fun initIntent() {
         extraString = intent.getStringExtra("extraString")
         filePathList = intent.getStringArrayListExtra("fileList")
-        mFilePath = File(intent.getStringExtra("filePath").toString())
+        mFilePath = intent.getStringExtra("filePath")?.let { File(it) }
         curFileIndex = intent.getIntExtra("curFileIndex", 0)
         startLine = intent.getIntExtra("startLine", 0)
         startLineList = intent.getIntegerArrayListExtra("startLineList")
-        mApkPath = File(intent.getStringExtra("apkPath").toString())
+        mApkPath = intent.getStringExtra("apkPath")?.let { File(it) }
         realFilePath = intent.getStringExtra("realFilePath")
         isRootMode = intent.getBooleanExtra("isRootMode", false)
-        resIds = intent.getIntegerArrayListExtra("resourceIds")
-        resIds?.let { id ->
-            //resIdTooBig = id[0]
-            resIdFileSaved = id[1]
-            resIdNotFound = id[2]
-        }
     }
 
     private fun copyBack2RealPath(realPath: String) {
         try {
-            mFilePath?.let { path ->
-                copyBack(path.path, realPath, isRootMode)
+            mFilePath?.let { file ->
+                val path = file.path
+                FileUtils.writeText(path, binding.editor.text.toString())
+                copyBack(path, realPath, isRootMode)
             }
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
@@ -327,9 +322,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
     private fun getFileName() {
         filePathList?.let { list ->
             mFilePath = File(list[curFileIndex])
-        }
-        realFilePath?.let { path ->
-            mFilePath = File(path)
         }
     }
 
@@ -381,12 +373,11 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                 @Throws(java.lang.Exception::class)
                 override fun process() {
                     CoroutineScope(Dispatchers.IO).launch {
-                        mFilePath?.let {
-                            FileUtils.writeText(it.path, binding.editor.text.toString())
-                        }
-
+                        println(realFilePath)
                         realFilePath?.let { path ->
                             copyBack2RealPath(path)
+                        } ?: mFilePath?.let {
+                            FileUtils.writeText(it.path, binding.editor.text.toString())
                         }
                         withContext(Dispatchers.Main) {
                             openFile()

@@ -6,9 +6,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.OpenableColumns
 import android.util.Log
-import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.utils.ScopedStorage.getMyCp
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.annotations.Contract
 import java.io.*
 import java.nio.charset.Charset
@@ -203,16 +201,14 @@ fun toByteArray(input: InputStream): ByteArray {
 @Throws(java.lang.Exception::class)
 fun copyBack(path: String, realPath: String, isRootMode: Boolean) {
     val rc = createCommandRunner(isRootMode)
-    var strCmd = "cp"
     val bin = getMyCp()
     if (bin.exists()) {
-        strCmd = bin.path
-    }
-    val copyRet = rc.runCommand(String.format("$strCmd %s \"%s\"", path, realPath), null, 3000)
+        val copyRet = rc.runCommand(String.format("${bin.path} %s \"%s\"", path, realPath), null, 3000)
 
-    // Copy file failed, use the original file
-    if (!copyRet) {
-        throw java.lang.Exception("Can not write file to $realPath")
+        // Copy file failed, use the original file
+        if (!copyRet) {
+            throw java.lang.Exception("Can not write file to $realPath")
+        }
     }
 }
 

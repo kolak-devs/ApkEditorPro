@@ -106,8 +106,7 @@ class PrefDetailActivity : CustomizedLangActivity(), ITableRowClicked, View.OnCl
                                     this@PrefDetailActivity,
                                     tmp,
                                     file,
-                                    isRootMode,
-                                    intArrayOf(R.string.appdm_file_too_big, R.string.appdm_file_saved, R.string.appdm_not_found)
+                                    isRootMode
                                 )
                                 @Suppress("DEPRECATION")
                                 startActivityForResult(intent, 1000)
