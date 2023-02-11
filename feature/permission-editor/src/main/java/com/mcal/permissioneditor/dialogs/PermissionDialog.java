@@ -139,7 +139,8 @@ public class PermissionDialog {
 
     @SuppressLint("DefaultLocale")
     public void updateDialogTitle() {
-        dialog.setTitle(String.format(activity.getString(R.string.dialog_add_permission), adapter.getSelected().size()));
+        int i = adapter.getSelected().size();
+        dialog.setTitle(activity.getResources().getQuantityString(R.plurals.dialog_add_permission, i, i));
     }
 
     @SuppressLint("WrongConstant")

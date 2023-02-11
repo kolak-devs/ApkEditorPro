@@ -18,5 +18,12 @@
     <string name="invert_all">Инвертировать всё</string>
     <string name="settings">Настройки</string>
     <string name="comment_permission">Комментировать разрешения</string>
-    <string name="dialog_add_permission">Добавление разрешений (%d элементов выбрано)</string>
+    <plurals name="dialog_add_permission">
+        <item quantity="zero">Добавление разрешений\n(%1$d элементов выбрано)</item>
+        <item quantity="one">Добавление разрешений\n(%1$d элемент выбран)</item>
+        <item quantity="two">Добавление разрешений\n(%1$d элемента выбрано)</item>
+        <item quantity="few">Добавление разрешений\n(%1$d элемента выбрано)</item>
+        <item quantity="many">Добавление разрешений\n(%1$d элементов выбрано)</item>
+        <item quantity="other">Добавление разрешений\n(%1$d элементов выбрано)</item>
+    </plurals>
 </resources>
