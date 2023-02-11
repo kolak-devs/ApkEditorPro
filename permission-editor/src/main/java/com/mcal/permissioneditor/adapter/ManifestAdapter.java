@@ -82,7 +82,7 @@ public class ManifestAdapter extends BaseAdapter {
 
     public void setSelected(Permission permission, boolean z) {
         if (z) {
-            getSelected().put(permission.getName(), new Boolean(z));
+            getSelected().put(permission.getName(), z);
         } else {
             getSelected().remove(permission.getName());
         }
