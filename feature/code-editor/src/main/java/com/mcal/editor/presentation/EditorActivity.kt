@@ -5,11 +5,8 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,7 +30,6 @@ import com.mcal.editor.navigation.CodeNavigationDialog
 import com.mcal.editor.utils.EditorUtils.getCodeColorScheme
 import com.mcal.editor.utils.EditorUtils.getTextMateLanguage
 import com.mcal.editor.utils.FileUtils
-import com.mcal.editor.utils.Permission
 import com.mcal.neweditor.R
 import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
 import com.mcal.permissioneditor.ManifestActivity
@@ -51,12 +47,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.xml.sax.SAXException
 import java.io.File
 import java.io.IOException
 import java.util.regex.PatternSyntaxException
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
 
 
 class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
@@ -444,6 +437,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                     val intent = Intent(this, ManifestActivity::class.java)
                     intent.putExtra("path", file.path)
                     startActivity(intent)
+                    finish()
                 }
             }
             R.id.color_converter -> {

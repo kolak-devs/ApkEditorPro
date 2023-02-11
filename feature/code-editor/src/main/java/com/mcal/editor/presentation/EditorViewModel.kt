@@ -1,15 +1,15 @@
 package com.mcal.editor.presentation
 
 import android.content.Context
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.github.rosemoe.sora.lang.diagnostic.DiagnosticRegion
 import io.github.rosemoe.sora.lang.diagnostic.DiagnosticsContainer
 import io.github.rosemoe.sora.text.Content
 import io.github.rosemoe.sora.text.Cursor
 
-class EditorViewModel(private val context: Context): ViewModel() {
+class EditorViewModel(private val context: Context) : ViewModel() {
 
     private val _updatePositionText = MutableLiveData<String>()
     val updatePositionText: LiveData<String> = _updatePositionText

@@ -17,14 +17,14 @@ class SearchAdapter(context: Context, private val backupList: MutableList<Permis
     private var mHighlight: MutableMap<String?, TextHighlight?> = HashMap()
     private var mSearchTask: SearchTask? = null
 
-    private fun makeHighlightText(str: String?, i: Int, i2: Int): SpannableStringBuilder {
+    private fun makeHighlightText(source: String, start: Int, end: Int): SpannableStringBuilder {
         val spannableStringBuilder = SpannableStringBuilder()
-        val spannableString = SpannableString(str)
-        if (i >= 0) {
+        val spannableString = SpannableString(source)
+        if (start >= 0) {
             val backgroundColorSpan = BackgroundColorSpan(getColorAccent(mContext))
             val foregroundColorSpan = ForegroundColorSpan(-1)
-            spannableString.setSpan(backgroundColorSpan, i, i2, 33)
-            spannableString.setSpan(foregroundColorSpan, i, i2, 33)
+            spannableString.setSpan(backgroundColorSpan, start, end, 33)
+            spannableString.setSpan(foregroundColorSpan, start, end, 33)
         }
         spannableStringBuilder.append(spannableString)
         return spannableStringBuilder
@@ -115,7 +115,7 @@ class SearchAdapter(context: Context, private val backupList: MutableList<Permis
             @Suppress("DEPRECATION")
             super.onPostExecute(list)
             if (!cancel) {
-                searchAdapter.setCurrentList(list)
+                searchAdapter.currentList = list
                 searchAdapter.notifyDataSetChanged()
             }
         }

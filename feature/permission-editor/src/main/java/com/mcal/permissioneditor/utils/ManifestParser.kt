@@ -1,7 +1,6 @@
 package com.mcal.permissioneditor.utils
 
 import android.content.Context
-import android.text.TextUtils
 import com.mcal.permissioneditor.model.Permission
 import org.xml.sax.SAXException
 import java.io.File
@@ -28,7 +27,7 @@ object ManifestParser {
                     item = attributes.item(i2)
                     if ("android:name" == item.nodeName) {
                         val nodeValue = item.nodeValue
-                        if (!TextUtils.isEmpty(nodeValue.trim())) {
+                        if (nodeValue.trim().isNotEmpty()) {
                             permissions.add(Permission(context, context.packageManager, nodeValue))
                         }
                     }

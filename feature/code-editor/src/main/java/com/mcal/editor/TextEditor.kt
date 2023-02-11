@@ -7,11 +7,12 @@ import com.mcal.editor.presentation.EditorActivity
 
 object TextEditor {
     @JvmStatic
-    fun getSoraEditor(context: Context,
-                      filepath: String,
-                      apkPath: String?,
-                      startLine: Int,
-                      searchString: String?
+    fun getSoraEditor(
+        context: Context,
+        filepath: String,
+        apkPath: String?,
+        startLine: Int,
+        searchString: String?
     ): Intent {
         val intent = Intent(context, EditorActivity::class.java)
         ActivityHelper.attachParam(intent, "filePath", filepath)
