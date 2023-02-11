@@ -312,7 +312,6 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
                     val text = FileUtils.readFileAsTextUsingInputStream(path.path)
                     runOnUiThread {
                         binding.toolbarFilename.text = path.name
-                        supportActionBar?.apply { title = path.name }
                         binding.editor.apply {
                             setText(text, null)
                             startLineList?.let { line ->
