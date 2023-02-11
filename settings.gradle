@@ -24,10 +24,9 @@ include ':dataeditor'
 include ':crashreporter'
 include ':apksigner'
 include ':patchview'
-include ':xpp3'
-include ':smali'
 include ':bsh-engine'
 include ':colormixer'
+include ':permission-editor'
 
 include ':jadx:jadx-core',
         ':jadx:jadx-cli',
@@ -39,16 +38,9 @@ include ':jadx:jadx-core',
         ':jadx:jadx-plugins:jadx-smali-input',
         ':jadx:jadx-plugins:jadx-java-convert'
 
-
-include ':androlib:brut.j.common',
-        ':androlib:brut.j.util',
-        ':androlib:brut.j.dir',
-        ':androlib:brut.apktool:apktool-lib'
-
 include ':manifestparser'
 include ':net-manager'
 
-include ':libraries'
 include ':melissa'
 
 include ':sun'

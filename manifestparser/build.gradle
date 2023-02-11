@@ -20,7 +20,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-    namespace 'ru.mcal.manifestparser'
+    namespace 'com.mcal.manifestparser'
 }
 
 dependencies {

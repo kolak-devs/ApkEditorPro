@@ -26,7 +26,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api project(flat.jars)
     implementation project(flat.core)
     implementation project(flat.sun)
 
@@ -36,6 +35,5 @@ dependencies {
     implementation misc.annotations
     implementation misc.annotations_android
 
-    implementation signing.conscrypt
     implementation misc.coroutines_java
 }

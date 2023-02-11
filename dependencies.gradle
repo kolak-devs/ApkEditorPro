@@ -3,10 +3,6 @@ ext {
 
     flat = [
             core: ":core",
-            androlib: ":androlib:brut.apktool:apktool-lib",
-            jars: ":libraries",
-            smali: ":smali",
-            xpp: ":xpp3",
             sun: ":sun"
     ]
 
@@ -35,8 +31,7 @@ ext {
 
     signing = [
             spongy_core: 'com.madgag.spongycastle:core:1.58.0.0',
-            spongy_prov: 'com.madgag.spongycastle:prov:1.58.0.0',
-            conscrypt: 'org.conscrypt:conscrypt-android:2.5.2'
+            spongy_prov: 'com.madgag.spongycastle:prov:1.58.0.0'
     ]
 
     misc = [
@@ -62,5 +57,12 @@ ext {
             textmate: 'io.github.Rosemoe.sora-editor:language-textmate:0.21.0',
             lsp: 'io.github.Rosemoe.sora-editor:editor-lsp:0.21.0'
 
+    ]
+
+    tools = [
+            apktool: "com.github.TimScriptov:Android-ApkTool-Library:2.7.0.3",
+            dexlib2: 'org.smali:dexlib2:2.5.2',
+            smali: 'org.smali:smali:2.5.2',
+            baksmali: 'org.smali:baksmali:2.5.2'
     ]
 }

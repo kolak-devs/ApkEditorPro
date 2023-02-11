@@ -6,6 +6,24 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 object ReactivePreferences {
+    @JvmStatic
+    fun isAnnotationPermission(): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Permissions.ANNOTATION_PERMISSION] ?: false
+        }
+        return fallback
+    }
+
+    @JvmStatic
+    fun setAnnotationPermission(enabled: Boolean) {
+        runBlocking {
+            App.getContext().prefStore.edit {
+                it[PreferenceScheme.Permissions.ANNOTATION_PERMISSION] = enabled
+            }
+        }
+    }
+
     suspend fun isNightMode(): Boolean {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_THEME] ?: false
     }

@@ -2,10 +2,14 @@ package com.mcal.editor.presentation
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Typeface
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,8 +33,10 @@ import com.mcal.editor.navigation.CodeNavigationDialog
 import com.mcal.editor.utils.EditorUtils.getCodeColorScheme
 import com.mcal.editor.utils.EditorUtils.getTextMateLanguage
 import com.mcal.editor.utils.FileUtils
+import com.mcal.editor.utils.Permission
 import com.mcal.neweditor.R
 import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
+import com.mcal.permissioneditor.ManifestActivity
 import com.mcal.presentation.base.BaseActivity
 import io.github.rosemoe.sora.event.*
 import io.github.rosemoe.sora.lang.EmptyLanguage
@@ -45,9 +51,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.xml.sax.SAXException
 import java.io.File
 import java.io.IOException
 import java.util.regex.PatternSyntaxException
+import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.parsers.ParserConfigurationException
 
 
 class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
@@ -63,6 +72,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
     private var smaliToJava: MenuItem? = null
     private var methodsList: MenuItem? = null
     private var templatesMenu: MenuItem? = null
+    private var permissions: MenuItem? = null
 
     private var mFilePath: File? = null
     private var mApkPath: File? = null
@@ -344,6 +354,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
             smaliToJava?.isVisible = isSmali
             methodsList?.isVisible = isSmali or path.name.endsWith(".java")
             templatesMenu?.isVisible = isSmali
+            permissions?.isVisible = path.name.endsWith("AndroidManifest.xml")
         }
     }
 
@@ -360,6 +371,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
         smaliToJava = menu.findItem(R.id.smali_to_java)
         methodsList = menu.findItem(R.id.methods)
         templatesMenu = menu.findItem(R.id.template)
+        permissions = menu.findItem(R.id.permissions)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -427,6 +439,13 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
         val id = item.itemId
         val editor = binding.editor
         when (id) {
+            R.id.permissions -> {
+                mFilePath?.let { file ->
+                    val intent = Intent(this, ManifestActivity::class.java)
+                    intent.putExtra("path", file.path)
+                    startActivity(intent)
+                }
+            }
             R.id.color_converter -> {
                 ColorPickerConverter(this, 0xffff0000.toInt()).show()
             }
@@ -563,8 +582,8 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
      * Остановить поиск и скрыть вьюху поиска
      */
     private fun stopSearch() {
-        binding.searchPanel.visibility = View.GONE
         binding.editor.searcher.stopSearch()
+        binding.searchPanel.visibility = View.GONE
     }
 
     private fun showNavigationMethods() {

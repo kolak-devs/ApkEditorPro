@@ -20,7 +20,9 @@ android {
 }
 
 dependencies {
-	api project(':smali')
+	implementation tools.dexlib2
+	implementation tools.smali
+	implementation tools.baksmali
 
 	api(project(":jadx:jadx-plugins:jadx-plugins-api"))
 
@@ -30,6 +32,6 @@ dependencies {
 		implementation 'com.beust:jcommander:1.81'
 	}
 
-	implementation 'org.jetbrains:annotations:23.0.0'
+	implementation 'org.jetbrains:annotations:23.1.0'
 	implementation 'org.slf4j:slf4j-api:2.0.3'
 }

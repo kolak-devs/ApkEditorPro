@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/save_perm"
+        android:icon="@drawable/round_save_24"
+        android:title="@string/save"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/add_perm"
+        android:icon="@drawable/round_add_24"
+        android:title="@string/settings"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/comment_perm"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/comment_permission" />
+    <item
+        android:id="@+id/multu_select_perm"
+        android:title="@string/multi_select" />
+</menu>

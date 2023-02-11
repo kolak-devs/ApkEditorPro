@@ -148,9 +148,8 @@ configurations {
 
 
 dependencies {
-    implementation project(':androlib:brut.apktool:apktool-lib')
+    implementation tools.apktool
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
-    implementation project(':smali')
     implementation project(':core')
     implementation project(':codeeditor')
     implementation project(':imageview')
@@ -164,7 +163,9 @@ dependencies {
     implementation project(':bsh-engine')
     implementation project(':colormixer')
 
-    implementation project(':libraries')
+    implementation tools.dexlib2
+    implementation tools.smali
+    implementation tools.baksmali
 
     implementation jetpack.core
     implementation jetpack.appcompat
@@ -194,8 +195,4 @@ dependencies {
 
     // LeakCanary
     debugImplementation misc.leaks
-
-    configurations.all {
-        exclude group: "org.yaml", module: "snakeyaml"
-    }
 }

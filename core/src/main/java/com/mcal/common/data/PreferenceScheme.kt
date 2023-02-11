@@ -7,6 +7,9 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
 object PreferenceScheme {
+   object Permissions {
+      val ANNOTATION_PERMISSION = booleanPreferencesKey("annotation_permission")
+   }
 
    object Main {
       @TargetApi(Build.VERSION_CODES.S)

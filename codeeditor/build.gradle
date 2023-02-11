@@ -41,10 +41,12 @@ dependencies {
     implementation project(':jadx:jadx-plugins:jadx-smali-input')
     implementation project(':melissa')
     implementation project(':colormixer')
-    api project(':smali')
+    implementation project(':permission-editor')
     implementation misc.guava
 
-    implementation project(':libraries')
+    implementation tools.dexlib2
+    implementation tools.smali
+    implementation tools.baksmali
 
     implementation jetpack.appcompat
     implementation jetpack.lifecycle
