@@ -135,7 +135,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                         }.collect(Collectors.toList()).forEach { patchFile ->
                             list.add(
                                 PatcherHistoryItem()
-                                    .withId(patchFile.name.hashCode().toLong())
+                                    .withId(Files.getLastModifiedTime(patchFile).toMillis())
                                     .withIcon(ContextCompat.getDrawable(this@PatcherActivity, R.drawable.ic_android))
                                     .withTitle(patchFile.name)
                                     .withSubTitle(fmt.format(Files.getLastModifiedTime(patchFile).toMillis()))
