@@ -24,7 +24,7 @@ public class XmlLayoutPropertyEditor {
 
     public static void addImageFromPicker(Activity activity, final Intent data) {
         if (pickImageEditView != null) {
-            MessageBox.queryText(activity, "Choose Name", "Enter a name for the image", pickImageEditView.suggestUserDrawableName(), t -> {
+            MessageBox.queryText(activity, activity.getString(R.string.choose_name), activity.getString(R.string.enter_name_for_image), pickImageEditView.suggestUserDrawableName(), t -> {
                 XmlLayoutPropertyEditor.pickImageEditView.addUserDrawable(t, data);
                 XmlLayoutPropertyEditor.pickImageEditView.setAttribute(XmlLayoutPropertyEditor.pickImageAttribute, "@drawable/" + t);
                 XmlLayoutPropertyEditor.pickImageEditView = null;
@@ -95,8 +95,8 @@ public class XmlLayoutPropertyEditor {
         if (attribute.value == null) {
             startSelectingOtherView(activity, editView, attribute);
         } else {
-            MessageBox.queryFromList(activity, attribute.property.getDisplayName(), Arrays.asList("View...", "none"), t -> {
-                if (t.equals("View...")) {
+            MessageBox.queryFromList(activity, attribute.property.getDisplayName(), Arrays.asList(activity.getString(R.string.view_), "none"), t -> {
+                if (t.equals(activity.getString(R.string.view_))) {
                     XmlLayoutPropertyEditor.startSelectingOtherView(activity, editView, attribute);
                 } else if (t.equals("id...")) {
                     List<String> values = new ArrayList<>(editView.getAllIDs());
@@ -111,14 +111,14 @@ public class XmlLayoutPropertyEditor {
 
     @SuppressLint("WrongConstant")
     public static void startSelectingOtherView(final Activity activity, @NonNull final XmlLayoutEditView editView, final AttributeValue attribute) {
-        Toast.makeText(activity, "Select another view", 0).show();
+        Toast.makeText(activity, R.string.select_another_view, Toast.LENGTH_SHORT).show();
         editView.startSelectingOtherView(otherView -> {
             if (otherView.getViewID() == null) {
                 editView.setIDAttribute(attribute, otherView, otherView.suggestViewID());
             } else {
                 editView.setIDAttribute(attribute, null, otherView.getViewID());
             }
-            Toast.makeText(activity, "View was selected for attribute " + attribute.property.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, activity.getString(R.string.view_was_selected_for_attribute) + attribute.property.getDisplayName(), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -190,10 +190,10 @@ public class XmlLayoutPropertyEditor {
 
     private static void queryDrawable(final Activity activity, final XmlLayoutEditView editView, @NonNull final AttributeValue attribute) {
         if (attribute.value == null) {
-            MessageBox.queryFromList(activity, attribute.property.getDisplayName(), Arrays.asList("Color...", "Drawable...", "none"), t -> {
-                if (t.equals("Color...")) {
+            MessageBox.queryFromList(activity, attribute.property.getDisplayName(), Arrays.asList(activity.getString(R.string.color_), activity.getString(R.string.drawable_), "none"), t -> {
+                if (t.equals(activity.getString(R.string.color_))) {
                     XmlLayoutPropertyEditor.queryColor(activity, editView, attribute);
-                } else if (t.equals("Drawable...")) {
+                } else if (t.equals(activity.getString(R.string.drawable_))) {
                     XmlLayoutPropertyEditor.queryDrawableResource(activity, editView, attribute);
                 } else {
                     editView.setAttribute(attribute, null);
@@ -223,16 +223,16 @@ public class XmlLayoutPropertyEditor {
         for (String s : values2) {
             listValues.add(AttributeValue.getDisplayValue(s));
         }
-        listValues.add("other...");
-        listValues.add("add...");
+        listValues.add(activity.getString(R.string.other_));
+        listValues.add(activity.getString(R.string.add__));
         listValues.add("none");
         MessageBox.queryIndexFromList(activity, attribute.property.getDisplayName(), listValues, i -> {
             String t = (String) listValues.get(i);
             if (t.equals("none")) {
                 editView.setAttribute(attribute, null);
-            } else if (t.equals("other...")) {
+            } else if (t.equals(activity.getString(R.string.other_))) {
                 XmlLayoutPropertyEditor.queryTextValue(activity, editView, attribute, "@drawable/");
-            } else if (t.equals("add...")) {
+            } else if (t.equals(activity.getString(R.string.add__))) {
                 XmlLayoutPropertyEditor.queryImageFromPicker(activity, editView, attribute);
             } else {
                 editView.setAttribute(attribute, (String) values2.get(i));
@@ -251,13 +251,13 @@ public class XmlLayoutPropertyEditor {
         for (String s : values2) {
             listValues.add(AttributeValue.getDisplayValue(s));
         }
-        listValues.add("other...");
+        listValues.add(activity.getString(R.string.other_));
         listValues.add("none");
         MessageBox.queryIndexFromList(activity, attribute.property.getDisplayName(), listValues, i1 -> {
             String t = (String) listValues.get(i1);
             if (t.equals("none")) {
                 editView.setAttribute(attribute, null);
-            } else if (t.equals("other...")) {
+            } else if (t.equals(activity.getString(R.string.other_))) {
                 XmlLayoutPropertyEditor.queryTextValue(activity, editView, attribute, defaultValue);
             } else {
                 editView.setAttribute(attribute, (String) values2.get(i1));
@@ -275,7 +275,7 @@ public class XmlLayoutPropertyEditor {
     }
 
     private static void queryLayoutSize(final Activity activity, final XmlLayoutEditView editView, @NonNull final AttributeValue attribute) {
-        MessageBox.queryFromList(activity, attribute.property.getDisplayName(), Arrays.asList("Wrap Content", "Match Parent", "Fixed size..."), t -> {
+        MessageBox.queryFromList(activity, attribute.property.getDisplayName(), Arrays.asList("Wrap Content", "Match Parent", activity.getString(R.string.fixed_size_)), t -> {
             if (t.equals("Wrap Content")) {
                 editView.setAttribute(attribute, "wrap_content");
             } else if (t.equals("Match Parent")) {
@@ -321,13 +321,13 @@ public class XmlLayoutPropertyEditor {
     public static void queryStyle(final Activity activity, @NonNull final XmlLayoutEditView editView) {
         List<String> styles = new ArrayList<>(editView.getAllUserStyles());
         Collections.sort(styles);
-        styles.add("other...");
+        styles.add(activity.getString(R.string.other_));
         styles.add("none");
         MessageBox.queryFromList(activity, "Style", styles, t -> {
             if (t.equals("none")) {
                 editView.setStyle(null);
             }
-            if (t.equals("other...")) {
+            if (t.equals(activity.getString(R.string.other_))) {
                 MessageBox.queryText(activity, "Style", null, "None", editView.getStyle(), t2 -> {
                     if (t2.length() == 0) {
                         editView.setStyle(null);

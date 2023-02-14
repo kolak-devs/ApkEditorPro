@@ -74,7 +74,7 @@ public class AppWizardProject {
         if (v == null) {
             return null;
         }
-        return Boolean.valueOf("true".equals(v));
+        return "true".equals(v);
     }
 
     public void createApp() {
@@ -168,7 +168,7 @@ public class AppWizardProject {
         DeviceDefaultLight("Device Default Light"),
         DeviceDefaultLightDarkActionBar("Device Default Light Dark ActionBar");
 
-        public String name;
+        public final String name;
 
         Theme(String name) {
             this.name = name;
@@ -244,7 +244,7 @@ public class AppWizardProject {
 
         public void setNavigationType(@NonNull NavigationType type) {
             this.element.setAttribute("type", type.name());
-            setShowTitleAttribute(Boolean.valueOf(type.showTitleByDefault()));
+            setShowTitleAttribute(type.showTitleByDefault());
             if (type.hasDrawer() && getFragments().size() < 2) {
                 addFragmentElement();
             }

@@ -2,20 +2,17 @@ package com.mcal.uidesigner.common;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 
+import com.mcal.common.activities.WebViewActivity;
+
 public class HelpActivityStarter {
-    public static final String EXTRA_CAT = "EXTRA_CAT";
-    public static final String EXTRA_REFERENCE_URL = "EXTRA_URL";
+    public static final String EXTRA_REFERENCE_URL = "htmlUrl";
 
     @SuppressLint("WrongConstant")
-    public static void showHelp(Activity caller, String referenceUrl, String category) {
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName(caller, "com.mcal.ui.activities.HelpViewActivity"));
+    public static void showHelp(Activity caller, String referenceUrl) {
+        Intent intent = new Intent(caller, WebViewActivity.class);
         intent.putExtra(EXTRA_REFERENCE_URL, referenceUrl);
-        intent.putExtra(EXTRA_CAT, category);
-        intent.setFlags(268435456);
         caller.startActivity(intent);
     }
 }

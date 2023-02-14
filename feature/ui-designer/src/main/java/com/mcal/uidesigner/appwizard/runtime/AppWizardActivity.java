@@ -116,7 +116,7 @@ public class AppWizardActivity extends AppCompatActivity {
 
     public int getResId(String clazz, String res) {
         try {
-            return ((Integer) Class.forName(getPackageName() + ".R$" + clazz).getField(res).get(null)).intValue();
+            return (Integer) Class.forName(getPackageName() + ".R$" + clazz).getField(res).get(null);
         } catch (Exception e) {
             return 0;
         }
@@ -164,12 +164,7 @@ public class AppWizardActivity extends AppCompatActivity {
         }
         if (getAppActivity().showFullscreen()) {
             container.setSystemUiVisibility(4);
-            getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-                @Override
-                public void onSystemUiVisibilityChange(int visibility) {
-                    AppWizardActivity.this.getWindow().getDecorView().setSystemUiVisibility(4);
-                }
-            });
+            getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(visibility -> getWindow().getDecorView().setSystemUiVisibility(4));
         } else {
             container.setSystemUiVisibility(0);
         }
@@ -193,12 +188,9 @@ public class AppWizardActivity extends AppCompatActivity {
                 for (AppWizardProject.AppFragment section : getAppActivity().getFragments()) {
                     names.add(section.getTitle());
                 }
-                getSupportActionBar().setListNavigationCallbacks(new ArrayAdapter<>(getSupportActionBar().getThemedContext(), 17367043, 16908308, names), new ActionBar.OnNavigationListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                        AppWizardActivity.this.getSupportFragmentManager().beginTransaction().replace(AppWizardActivity.this.containerId, AppWizardActivity.this.createSectionFragment(AppWizardActivity.this.getAppActivity().getFragments().get(itemPosition))).commit();
-                        return true;
-                    }
+                getSupportActionBar().setListNavigationCallbacks(new ArrayAdapter<>(getSupportActionBar().getThemedContext(), 17367043, 16908308, names), (itemPosition, itemId) -> {
+                    getSupportFragmentManager().beginTransaction().replace(containerId, createSectionFragment(getAppActivity().getFragments().get(itemPosition))).commit();
+                    return true;
                 });
                 return;
             case SpinnerDrawer:
@@ -210,12 +202,9 @@ public class AppWizardActivity extends AppCompatActivity {
                 for (int i = 0; i < count; i++) {
                     names2.add(getAppActivity().getFragments().get(i).getTitle());
                 }
-                getSupportActionBar().setListNavigationCallbacks(new ArrayAdapter<>(getSupportActionBar().getThemedContext(), 17367043, 16908308, names2), new ActionBar.OnNavigationListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                        AppWizardActivity.this.getSupportFragmentManager().beginTransaction().replace(AppWizardActivity.this.drawerContentId, AppWizardActivity.this.createSectionFragment(AppWizardActivity.this.getAppActivity().getFragments().get(itemPosition))).commit();
-                        return true;
-                    }
+                getSupportActionBar().setListNavigationCallbacks(new ArrayAdapter<>(getSupportActionBar().getThemedContext(), 17367043, 16908308, names2), (itemPosition, itemId) -> {
+                    getSupportFragmentManager().beginTransaction().replace(drawerContentId, createSectionFragment(getAppActivity().getFragments().get(itemPosition))).commit();
+                    return true;
                 });
                 return;
             case Slider:

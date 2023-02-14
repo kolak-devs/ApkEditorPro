@@ -30,7 +30,7 @@ public class Utils {
     }
 
     @Nullable
-    public static String getRealPathFromUri(Context context, Uri uri) {
+    public static String getRealPathFromUri(Context context, @NonNull Uri uri) {
         if ("content".equals(uri.getScheme())) {
             Cursor cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow("_data");

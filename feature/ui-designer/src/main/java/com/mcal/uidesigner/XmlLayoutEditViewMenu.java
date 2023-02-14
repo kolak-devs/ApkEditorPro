@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 
 import com.mcal.uidesigner.common.MessageBox;
 import com.mcal.uidesigner.common.PropertiesDialog;
-import com.mcal.uidesigner.common.ValueRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,7 +72,7 @@ public class XmlLayoutEditViewMenu {
         return Arrays.asList(new PropertiesDialog.PropertyCommand() {
             @Override
             public String getName() {
-                return "Parent View...";
+                return activity.getString(R.string.parent_view_);
             }
 
             @Override
@@ -98,7 +97,7 @@ public class XmlLayoutEditViewMenu {
         }, new PropertiesDialog.PropertyCommand() {
             @Override
             public String getName() {
-                return "Source code...";
+                return activity.getString(R.string.source_code_);
             }
 
             @Override
@@ -125,7 +124,7 @@ public class XmlLayoutEditViewMenu {
         }, new PropertiesDialog.PropertyCommand() {
             @Override
             public String getName() {
-                return "Add inside...";
+                return activity.getString(R.string.add_inside_);
             }
 
             @Override
@@ -135,11 +134,7 @@ public class XmlLayoutEditViewMenu {
 
             @Override
             public void run() {
-                XmlLayoutWidgetPicker.selectView(activity, "Add inside " + editView.getNodeName() + "...", new ValueRunnable<NewWidget>() {
-                    public void run(NewWidget widget) {
-                        editView.addViewInside(widget);
-                    }
-                });
+                XmlLayoutWidgetPicker.selectView(activity, activity.getString(R.string.add_inside) + editView.getNodeName() + "…", editView::addViewInside);
             }
 
             @Override
@@ -154,7 +149,7 @@ public class XmlLayoutEditViewMenu {
         }, new PropertiesDialog.PropertyCommand() {
             @Override
             public String getName() {
-                return "Add above...";
+                return activity.getString(R.string.add_above_);
             }
 
             @Override
@@ -164,11 +159,7 @@ public class XmlLayoutEditViewMenu {
 
             @Override
             public void run() {
-                XmlLayoutWidgetPicker.selectView(activity, "Add above " + editView.getNodeName() + "...", new ValueRunnable<NewWidget>() {
-                    public void run(NewWidget widget) {
-                        editView.addViewAbove(widget);
-                    }
-                });
+                XmlLayoutWidgetPicker.selectView(activity, activity.getString(R.string.add_above) + editView.getNodeName() + "…", editView::addViewAbove);
             }
 
             @Override
@@ -183,7 +174,7 @@ public class XmlLayoutEditViewMenu {
         }, new PropertiesDialog.PropertyCommand() {
             @Override
             public String getName() {
-                return "Add below...";
+                return activity.getString(R.string.add_below_);
             }
 
             @Override
@@ -193,11 +184,7 @@ public class XmlLayoutEditViewMenu {
 
             @Override
             public void run() {
-                XmlLayoutWidgetPicker.selectView(activity, "Add below " + editView.getNodeName() + "...", new ValueRunnable<NewWidget>() {
-                    public void run(NewWidget widget) {
-                        editView.addViewBelow(widget);
-                    }
-                });
+                XmlLayoutWidgetPicker.selectView(activity, activity.getString(R.string.add_below) + editView.getNodeName() + "…", editView::addViewBelow);
             }
 
             @Override
@@ -212,7 +199,7 @@ public class XmlLayoutEditViewMenu {
         }, new PropertiesDialog.PropertyCommand() {
             @Override
             public String getName() {
-                return "Add before...";
+                return activity.getString(R.string.add_before_);
             }
 
             @Override
@@ -222,11 +209,7 @@ public class XmlLayoutEditViewMenu {
 
             @Override
             public void run() {
-                XmlLayoutWidgetPicker.selectView(activity, "Add before " + editView.getNodeName() + "...", new ValueRunnable<NewWidget>() {
-                    public void run(NewWidget widget) {
-                        editView.addViewBefore(widget);
-                    }
-                });
+                XmlLayoutWidgetPicker.selectView(activity, activity.getString(R.string.add_before) + editView.getNodeName() + "…", editView::addViewBefore);
             }
 
             @Override
@@ -241,7 +224,7 @@ public class XmlLayoutEditViewMenu {
         }, new PropertiesDialog.PropertyCommand() {
             @Override
             public String getName() {
-                return "Add behind...";
+                return activity.getString(R.string.add_behind_);
             }
 
             @Override
@@ -251,11 +234,7 @@ public class XmlLayoutEditViewMenu {
 
             @Override
             public void run() {
-                XmlLayoutWidgetPicker.selectView(activity, "Add behind " + editView.getNodeName() + "...", new ValueRunnable<NewWidget>() {
-                    public void run(NewWidget widget) {
-                        editView.addViewBehind(widget);
-                    }
-                });
+                XmlLayoutWidgetPicker.selectView(activity, activity.getString(R.string.add_behind) + editView.getNodeName() + "…", editView::addViewBehind);
             }
 
             @Override
@@ -270,7 +249,7 @@ public class XmlLayoutEditViewMenu {
         }, new PropertiesDialog.PropertyCommand() {
             @Override
             public String getName() {
-                return "Surround with...";
+                return activity.getString(R.string.surround_with_);
             }
 
             @Override
@@ -280,11 +259,7 @@ public class XmlLayoutEditViewMenu {
 
             @Override
             public void run() {
-                XmlLayoutWidgetPicker.selectSurroundView(activity, "Surround " + editView.getNodeName() + " with...", new ValueRunnable<NewWidget>() {
-                    public void run(NewWidget widget) {
-                        editView.surroundWithView(widget);
-                    }
-                });
+                XmlLayoutWidgetPicker.selectSurroundView(activity, activity.getString(R.string.surround) + editView.getNodeName() + activity.getString(R.string.with_), editView::surroundWithView);
             }
 
             @Override
@@ -299,7 +274,7 @@ public class XmlLayoutEditViewMenu {
         }, new PropertiesDialog.PropertyCommand() {
             @Override
             public String getName() {
-                return "Delete";
+                return activity.getString(R.string.delete);
             }
 
             @Override

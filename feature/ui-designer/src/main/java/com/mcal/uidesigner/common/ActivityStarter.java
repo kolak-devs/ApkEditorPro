@@ -6,18 +6,16 @@ import android.content.ComponentName;
 import android.content.Intent;
 
 public class ActivityStarter {
-    public static final String EXTRA_NAVIGATE_COLUMN = "NavigateColumn";
-    public static final String EXTRA_NAVIGATE_FILE = "NavigateFile";
-    public static final String EXTRA_NAVIGATE_LINE = "NavigateLine";
+    public static final String EXTRA_NAVIGATE_FILE = "filePath";
+    public static final String EXTRA_NAVIGATE_LINE = "startLine";
 
     @SuppressLint("WrongConstant")
-    public static void navigateTo(Activity caller, String filepath, int line, int column) {
+    public static void navigateTo(Activity activity, String filepath, int line) {
         Intent intent = new Intent();
-        intent.setComponent(new ComponentName(caller, "com.mcal.ui.MainActivity"));
+        intent.setComponent(new ComponentName(activity, "com.mcal.editor.presentation.EditorActivity"));
         intent.putExtra(EXTRA_NAVIGATE_FILE, filepath);
         intent.putExtra(EXTRA_NAVIGATE_LINE, line);
-        intent.putExtra(EXTRA_NAVIGATE_COLUMN, column);
-        intent.addFlags(67108864);
-        caller.startActivity(intent);
+        activity.startActivity(intent);
+        activity.finish();
     }
 }

@@ -420,7 +420,11 @@ public class XmlLayoutWidgetPicker {
         @NonNull
         @Contract(pure = true)
         public String getHelpUrl() {
-            return "android/widget/" + this.elementName + ".html";
+            if (elementName.contains(".")) {
+                return elementName.replace(".", "/") + ".html";
+            } else {
+                return "android/widget/" + elementName + ".html";
+            }
         }
     }
 

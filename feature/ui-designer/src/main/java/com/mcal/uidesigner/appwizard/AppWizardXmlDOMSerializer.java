@@ -15,11 +15,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 public class AppWizardXmlDOMSerializer {
     private final String indent = "\t";
     private final String lineSeparator = "\n";
-    private final String encoding = "UTF8";
 
     public String serialize(Document document) {
         StringWriter writer = new StringWriter();
@@ -32,7 +32,7 @@ public class AppWizardXmlDOMSerializer {
     }
 
     public void serialize(Document doc, OutputStream out) throws IOException {
-        serialize(doc, new OutputStreamWriter(out, this.encoding));
+        serialize(doc, new OutputStreamWriter(out, StandardCharsets.UTF_8));
     }
 
     public void serialize(Document doc, File file) throws IOException {

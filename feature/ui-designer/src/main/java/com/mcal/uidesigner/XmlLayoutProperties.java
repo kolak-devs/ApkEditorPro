@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.mcal.uidesigner.common.PositionalXMLReader;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class XmlLayoutProperties {
     public static PropertySpec LAYOUT_TORIGHTOF = new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_toRightOf", "ProxyRelativeLayoutParams", "setRightOf()", PropertyType.ID);
@@ -55,6 +56,7 @@ public class XmlLayoutProperties {
             new PropertySpec("android.widget.TableRow$LayoutParams", "layout_column", PositionalXMLReader.COLUMN, PropertyType.Int),
             new PropertySpec("android.widget.AbsoluteLayout$LayoutParams", "layout_x", "x", PropertyType.Size),
             new PropertySpec("android.widget.AbsoluteLayout$LayoutParams", "layout_y", "y", PropertyType.Size)};
+    public static PropertySpec[] SORTED_PROPERTIES;
     public static PropertySpec[] VIEW_PROPERTIES = {
             new PropertySpec("android.view.View", "padding", "ProxyViewPaddings", "setPadding()", PropertyType.Size),
             new PropertySpec("android.view.View", "paddingLeft", "ProxyViewPaddings", "setPaddingLeft()", PropertyType.Size),
@@ -165,12 +167,12 @@ public class XmlLayoutProperties {
             new PropertySpec("android.widget.DatePicker", "spinnersShown", "setSpinnersShown()", PropertyType.Bool),
             new PropertySpec("android.widget.ListView", "divider", "setDivider()", PropertyType.Drawable),
             new PropertySpec("android.widget.ListView", "dividerHeight", "setDividerHeight()", PropertyType.Size)};
-    public static PropertySpec[] SORTED_PROPERTIES = new PropertySpec[LAYOUT_PROPERTIES.length + VIEW_PROPERTIES.length];
 
     static {
+        SORTED_PROPERTIES = new PropertySpec[LAYOUT_PROPERTIES.length + VIEW_PROPERTIES.length];
         System.arraycopy(LAYOUT_PROPERTIES, 0, SORTED_PROPERTIES, 0, LAYOUT_PROPERTIES.length);
         System.arraycopy(VIEW_PROPERTIES, 0, SORTED_PROPERTIES, LAYOUT_PROPERTIES.length, VIEW_PROPERTIES.length);
-        Arrays.sort(SORTED_PROPERTIES, (lhs, rhs) -> lhs.getDisplayName().compareTo(rhs.getDisplayName()));
+        Arrays.sort(SORTED_PROPERTIES, Comparator.comparing(PropertySpec::getDisplayName));
     }
 
 
@@ -259,7 +261,7 @@ public class XmlLayoutProperties {
         }
 
         private void createDisplayName() {
-            String name = this.attrName.substring("android:".length());
+            String name = attrName.substring("android:".length());
             StringBuilder result = new StringBuilder();
             result.append(Character.toUpperCase(name.charAt(0)));
             boolean nextUpper = false;
@@ -278,7 +280,7 @@ public class XmlLayoutProperties {
                     result.append(ch);
                 }
             }
-            this.displayName = result.toString();
+            displayName = result.toString();
         }
     }
 }

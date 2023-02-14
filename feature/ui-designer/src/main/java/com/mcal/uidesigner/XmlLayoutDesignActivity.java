@@ -3,7 +3,6 @@ package com.mcal.uidesigner;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,10 +30,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.accessibility.AccessibilityEventCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.mcal.common.activities.CustomizedLangActivity;
 import com.mcal.uidesigner.common.ActivityStarter;
 import com.mcal.uidesigner.common.AndroidHelper;
 import com.mcal.uidesigner.common.HelpActivityStarter;
@@ -52,7 +51,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XmlLayoutDesignActivity extends AppCompatActivity {
+public class XmlLayoutDesignActivity extends CustomizedLangActivity {
     public static final String EXTRA_DEMO = "EXTRA_LICENSED";
     public static final String EXTRA_FILE = "EXTRA_FILE";
     public static final String EXTRA_LANGUAGE = "EXTRA_LANGUAGE";
@@ -134,27 +133,11 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
     }
 
     public void gotoSourceCode(int sourceLine, int sourceColumn) {
-        if (this.isStandalone) {
-            try {
-                Intent intent = new Intent("android.intent.action.VIEW");
-                intent.setDataAndType(Uri.fromFile(new File(this.xmlFilePath)), "application/xml");
-                startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
-            ActivityStarter.navigateTo(this, xmlFilePath, sourceLine, sourceColumn);
-        }
+        ActivityStarter.navigateTo(this, xmlFilePath, sourceLine);
     }
 
     public void showHelp(String helpUrl) {
-        if (this.isStandalone) {
-            Intent intent = new Intent("android.intent.action.VIEW");
-            intent.setData(Uri.parse("http://developer.android.com/reference/" + helpUrl));
-            startActivity(intent);
-            return;
-        }
-        HelpActivityStarter.showHelp(this, helpUrl, "");
+        HelpActivityStarter.showHelp(this, "https://developer.android.com/reference/" + helpUrl);
     }
 
     @SuppressLint("ResourceType")

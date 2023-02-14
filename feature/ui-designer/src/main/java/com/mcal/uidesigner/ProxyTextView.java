@@ -66,14 +66,14 @@ public class ProxyTextView {
     public void setTextAppearance(String value) {
         try {
             if (value.startsWith("?android:attr/")) {
-                int attrID = ((Integer) R.attr.class.getField(value.substring("?android:attr/".length())).get(null)).intValue();
+                int attrID = (Integer) android.R.attr.class.getField(value.substring("?android:attr/".length())).get(null);
                 Resources.Theme theme = this.textView.getContext().getTheme();
                 TypedValue styleID = new TypedValue();
                 if (theme.resolveAttribute(attrID, styleID, true)) {
                     this.textView.setTextAppearance(this.textView.getContext(), styleID.data);
                 }
             } else if (value.startsWith("@android:style/")) {
-                this.textView.setTextAppearance(this.textView.getContext(), ((Integer) R.style.class.getField(value.substring("@android:style/".length()).replace(".", "_")).get(null)).intValue());
+                this.textView.setTextAppearance(this.textView.getContext(), (Integer) R.style.class.getField(value.substring("@android:style/".length()).replace(".", "_")).get(null));
             }
         } catch (Throwable th) {
             th.printStackTrace();

@@ -1,5 +1,6 @@
 package com.mcal.uidesigner;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -18,6 +19,7 @@ import org.w3c.dom.Element;
 
 import java.util.List;
 
+@SuppressLint("ViewConstructor")
 public class XmlLayoutEditView extends ClickableBorder {
     private final int depth;
     private final XmlLayoutlInflater inflater;
