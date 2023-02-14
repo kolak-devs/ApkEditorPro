@@ -452,11 +452,11 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         if (inflateException != null) {
             TextView textView = new TextView(context);
             if (!inflateException.getMessage().contains("no element")) {
-                textView.setText("Can not view the layout. " + inflateException.getMessage());
+                textView.setText(context.getString(R.string.can_not_view_the_layout) + inflateException.getMessage());
             } else if (editMode) {
-                textView.setText("No views have been added. Tap to add views.");
+                textView.setText(R.string.no_views_have_been_added);
             } else {
-                textView.setText("No views have been added.");
+                textView.setText(R.string.no_views_hava_been_added);
             }
             int p = (int) (10.0f * context.getResources().getDisplayMetrics().density);
             textView.setPadding(p, p, p, p);
@@ -625,7 +625,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 if (view == null) {
                     view = LayoutInflater.from(context).inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
                 }
-                ((TextView) view.findViewById(android.R.id.text1)).setText("Group " + (groupPosition + 1));
+                ((TextView) view.findViewById(android.R.id.text1)).setText(context.getString(R.string.group_) + (groupPosition + 1));
                 return view;
             }
 
@@ -636,8 +636,8 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 if (view2 == null) {
                     view2 = LayoutInflater.from(context).inflate(android.R.layout.simple_expandable_list_item_2, parent, false);
                 }
-                ((TextView) view2.findViewById(android.R.id.text1)).setText("Item " + (childPosition + 1));
-                ((TextView) view2.findViewById(16908309)).setText("Item " + (childPosition + 1));
+                ((TextView) view2.findViewById(android.R.id.text1)).setText(context.getString(R.string.item_) + (childPosition + 1));
+                ((TextView) view2.findViewById(16908309)).setText(context.getString(R.string.item_) + (childPosition + 1));
                 return view2;
             }
 
@@ -832,7 +832,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             case Drawable:
                 Integer value = getColorAttributeValue(node, property);
                 if (value != null) {
-                    return new ColorDrawable(value.intValue());
+                    return new ColorDrawable(value);
                 }
                 return getDrawableAttributeValue(node, property);
             case Text:
@@ -856,11 +856,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 }
                 return null;
             case FloatSize:
-                Integer value3 = getSizeAttributeValue(node, property);
-                if (value3 != null) {
-                    return new Float((float) value3.intValue());
-                }
-                return null;
+                return getSizeAttributeValue(node, property);
             default:
                 return null;
         }
@@ -872,7 +868,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         if (value == null) {
             return null;
         }
-        return Boolean.valueOf("true".equals(value));
+        return "true".equals(value);
     }
 
     @Nullable
@@ -884,7 +880,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
         if (value != null && value.startsWith("@android:drawable/")) {
             try {
-                return context.getResources().getDrawable(((Integer) R.drawable.class.getDeclaredField(value.substring("@android:drawable/".length())).get(null)).intValue());
+                return context.getResources().getDrawable((Integer) R.drawable.class.getDeclaredField(value.substring("@android:drawable/".length())).get(null));
             } catch (Throwable th) {
                 th.printStackTrace();
             }
@@ -921,17 +917,17 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         for (String val : value.split("\\|")) {
             Integer c = getIntConstantAttributeValue(val, property);
             if (c != null) {
-                result |= c.intValue();
+                result |= c;
             }
         }
-        return Integer.valueOf(result);
+        return result;
     }
 
     @Nullable
     private Integer getIntConstantAttributeValue(String value, @NonNull XmlLayoutProperties.PropertySpec property) {
         if (property.constantFieldPrefix == null) {
             try {
-                return Integer.valueOf(((Integer) property.constantClass.getField(value.toUpperCase()).get(null)).intValue());
+                return (Integer) property.constantClass.getField(value.toUpperCase()).get(null);
             } catch (IllegalAccessException | NoSuchFieldException e) {
                 e.printStackTrace();
             }
@@ -941,7 +937,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             String fieldName = field.getName();
             if ((field.getModifiers() & 8) != 0 && fieldName.startsWith(property.constantFieldPrefix) && fieldName.substring(property.constantFieldPrefix.length()).replace("_", "").toUpperCase().equals(value.toUpperCase())) {
                 try {
-                    return Integer.valueOf(((Integer) field.get(null)).intValue());
+                    return (Integer) field.get(null);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -964,9 +960,9 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                     if (value.length() == 7) {
                         color |= -16777216;
                     }
-                    return Integer.valueOf((int) color);
+                    return (int) color;
                 } else if (value.startsWith("@android:color/")) {
-                    return Integer.valueOf(context.getResources().getColor(((Integer) R.color.class.getDeclaredField(value.substring("@android:color/".length())).get(null)).intValue()));
+                    return context.getResources().getColor((Integer) R.color.class.getDeclaredField(value.substring("@android:color/".length())).get(null));
                 }
             } catch (Throwable th) {
                 th.printStackTrace();
@@ -979,7 +975,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     private Float getTextSizeAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         Integer size = getSizeAttributeValue(node, property);
         if (size != null) {
-            return Float.valueOf(((float) size.intValue()) / context.getResources().getDisplayMetrics().scaledDensity);
+            return ((float) size) / context.getResources().getDisplayMetrics().scaledDensity;
         }
         return null;
     }
@@ -990,17 +986,17 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         if (value != null) {
             try {
                 if (value.endsWith("px")) {
-                    return Integer.valueOf((int) Float.parseFloat(value.substring(0, value.length() - 2)));
+                    return (int) Float.parseFloat(value.substring(0, value.length() - 2));
                 }
                 if (value.endsWith("dp")) {
-                    return Integer.valueOf((int) (context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 2))));
+                    return (int) (context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 2)));
                 } else if (value.endsWith("dip")) {
-                    return Integer.valueOf((int) (context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 3))));
+                    return (int) (context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 3)));
                 } else if (value.endsWith("sp")) {
-                    return Integer.valueOf((int) (context.getResources().getDisplayMetrics().scaledDensity * Float.parseFloat(value.substring(0, value.length() - 2))));
-                }// else if (value.startsWith("@android:dimen/")) {
-                //   return Integer.valueOf(context.getResources().getDimensionPixelSize(((Integer) R.dimen.class.getDeclaredField(value.substring("@android:dimen/".length())).get(null)).intValue()));
-                //}
+                    return (int) (context.getResources().getDisplayMetrics().scaledDensity * Float.parseFloat(value.substring(0, value.length() - 2)));
+                } else if (value.startsWith("@android:dimen/")) {
+                    return context.getResources().getDimensionPixelSize((Integer) android.R.dimen.class.getDeclaredField(value.substring("@android:dimen/".length())).get(null));
+                }
             } catch (Throwable th) {
                 th.printStackTrace();
             }
@@ -1013,7 +1009,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
             try {
-                return Integer.valueOf(Integer.parseInt(value));
+                return Integer.parseInt(value);
             } catch (Throwable th) {
                 th.printStackTrace();
             }
@@ -1026,7 +1022,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
             try {
-                return Float.valueOf(Float.parseFloat(value));
+                return Float.parseFloat(value);
             } catch (Throwable th) {
                 th.printStackTrace();
             }

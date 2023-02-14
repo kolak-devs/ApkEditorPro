@@ -43,7 +43,6 @@ import com.mcal.uidesigner.common.ShopActivityStarter;
 import com.mcal.uidesigner.common.TextToSpeechHelper;
 import com.mcal.uidesigner.common.TrainerLogo;
 import com.mcal.uidesigner.common.UndoManager;
-import com.mcal.uidesigner.common.ValueRunnable;
 import com.mcal.uidesigner.utils.Utils;
 
 import java.io.File;
@@ -441,7 +440,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
 
             @Override
             protected void onEmptyLayoutClicked() {
-                XmlLayoutWidgetPicker.selectRootView(XmlLayoutDesignActivity.this, "Add...", widget -> inflater.addView(widget));
+                XmlLayoutWidgetPicker.selectRootView(XmlLayoutDesignActivity.this, getString(R.string.add_), widget -> inflater.addView(widget));
             }
 
             @Override
@@ -519,64 +518,37 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        boolean z;
-        boolean z2;
-        boolean z3;
-        boolean z4;
-        boolean z5;
-        boolean z6 = false;
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.designerMenuRun).setVisible(isTrainer());
         menu.findItem(R.id.designerMenuRun).setTitle(getIntent().getStringExtra(EXTRA_TRAINER_RUN_BUTTON));
         menu.findItem(R.id.designerMenuHideBorders).setVisible(!isTrainer() && isEditMode());
+
         MenuItem findItem = menu.findItem(R.id.designerMenuShowBorders);
-        if (isTrainer() || isEditMode()) {
-            z = false;
-        } else {
-            z = true;
-        }
-        findItem.setVisible(z);
+        findItem.setVisible(!isTrainer() && !isEditMode());
+
         menu.findItem(R.id.designerMenuUndo).setEnabled(this.undoManager.canUndo());
         menu.findItem(R.id.designerMenuRedo).setEnabled(this.undoManager.canRedo());
         menu.findItem(R.id.designerMenuPaste).setEnabled(this.inflater.canPaste());
+
         MenuItem findItem2 = menu.findItem(R.id.designerMenuPaste);
-        if (!isTrainer()) {
-            z2 = true;
-        } else {
-            z2 = false;
-        }
-        findItem2.setVisible(z2);
+        findItem2.setVisible(!isTrainer());
+
         MenuItem findItem3 = menu.findItem(R.id.designerMenuCopy);
-        if (this.isDemo || this.inflater.getXml().length() <= 0) {
-            z3 = false;
-        } else {
-            z3 = true;
-        }
-        findItem3.setEnabled(z3);
+        findItem3.setEnabled(!this.isDemo && this.inflater.getXml().length() > 0);
+
         MenuItem findItem4 = menu.findItem(R.id.designerMenuCopy);
-        if (!isTrainer()) {
-            z4 = true;
-        } else {
-            z4 = false;
-        }
-        findItem4.setVisible(z4);
+        findItem4.setVisible(!isTrainer());
+
         MenuItem findItem5 = menu.findItem(R.id.designerMenuShare);
-        if (this.isDemo || this.inflater.getXml().length() <= 0) {
-            z5 = false;
-        } else {
-            z5 = true;
-        }
-        findItem5.setEnabled(z5);
+        findItem5.setEnabled(!this.isDemo && this.inflater.getXml().length() > 0);
+
         MenuItem findItem6 = menu.findItem(R.id.designerMenuShare);
-        if (!isTrainer()) {
-            z6 = true;
-        }
-        findItem6.setVisible(z6);
+        findItem6.setVisible(!isTrainer());
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(/*int featureId, **/MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (this.drawerToggle != null && this.drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -606,33 +578,28 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
     }
 
     public void deleteLayout(final String filepath) {
-        MessageBox.queryYesNo(this, "Delete Layout " + new File(filepath).getName(), "Really delete this layout?", new Runnable() {
-            @Override
-            public void run() {
-                new File(filepath).delete();
-                if (xmlFilePath.equals(filepath)) {
-                    xmlFilePath = Utils.chooseLayoutOrCreateNew(resDirPath);
-                    if (isDefaultProject) {
-                        setLastFilepath(xmlFilePath);
-                    }
-                    createInflater();
-                    return;
-                }
-                updateHierachy();
-            }
-        }, (Runnable) null);
-    }
-
-    public void createNewLayout() {
-        MessageBox.queryText(this, "New Layout", "File name:", Utils.suggestNewLayoutName(this.resDirPath), new ValueRunnable<String>() {
-            public void run(String name) {
-                setEditMode(true);
-                xmlFilePath = Utils.createNewLayoutFile(resDirPath, name);
+        MessageBox.queryYesNo(this, getString(R.string.delete_layout) + new File(filepath).getName(), getString(R.string.really_delete_this_layout), () -> {
+            new File(filepath).delete();
+            if (xmlFilePath.equals(filepath)) {
+                xmlFilePath = Utils.chooseLayoutOrCreateNew(resDirPath);
                 if (isDefaultProject) {
                     setLastFilepath(xmlFilePath);
                 }
                 createInflater();
+                return;
             }
+            updateHierachy();
+        }, (Runnable) null);
+    }
+
+    public void createNewLayout() {
+        MessageBox.queryText(this, getString(R.string.new_layout), getString(R.string.file_name_), Utils.suggestNewLayoutName(this.resDirPath), name -> {
+            setEditMode(true);
+            xmlFilePath = Utils.createNewLayoutFile(resDirPath, name);
+            if (isDefaultProject) {
+                setLastFilepath(xmlFilePath);
+            }
+            createInflater();
         });
     }
 
@@ -766,7 +733,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                 fileRadioButton2.setFocusableInTouchMode(false);
                 fileRadioButton2.setVisibility(4);
                 TextView fileNameView2 = (TextView) view.findViewById(R.id.designerViewlistentryFileName);
-                fileNameView2.setText("New layout...");
+                fileNameView2.setText(R.string.new_layout_);
                 fileNameView2.setTypeface(Typeface.DEFAULT);
                 ((ImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(AndroidHelper.obtainImageResourceId(getContext(), R.attr.icon_add));
                 ((ImageView) view.findViewById(R.id.designerViewlistentryDelete)).setVisibility(8);

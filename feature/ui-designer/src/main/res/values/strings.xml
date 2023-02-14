@@ -8,7 +8,7 @@
     <string name="dialog_community_rate">Rate</string>
     <string name="dialog_community_title">Community</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_ok">Ok</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Yes</string>
     <string name="trainer_skip_lesson">Skip lesson</string>
     <string name="ui_design_run">Run</string>
@@ -19,4 +19,15 @@
     <string name="ui_design_paste_xml">Paste XML</string>
     <string name="ui_design_copy_xml">Copy XML</string>
     <string name="ui_design_share_xml">Share XML</string>
+    <string name="add_">Add…</string>
+    <string name="delete_layout">\"Delete Layout \"</string>
+    <string name="really_delete_this_layout">Really delete this layout?</string>
+    <string name="new_layout">New Layout</string>
+    <string name="file_name_">File name:</string>
+    <string name="new_layout_">New layout…</string>
+    <string name="can_not_view_the_layout">\"Can not view the layout. \"</string>
+    <string name="no_views_have_been_added">No views have been added. Tap to add views.</string>
+    <string name="no_views_hava_been_added">No views have been added.</string>
+    <string name="group_">\"Group \"</string>
+    <string name="item_">\"Item \"</string>
 </resources>

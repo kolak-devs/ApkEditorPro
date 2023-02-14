@@ -19,4 +19,15 @@
     <string name="ui_design_paste_xml">Вставить XML</string>
     <string name="ui_design_copy_xml">Копировать XML</string>
     <string name="ui_design_share_xml">Поделиться XML</string>
+    <string name="add_">Добавить…</string>
+    <string name="delete_layout">\"Удалить макет \"</string>
+    <string name="really_delete_this_layout">Really delete this layout?</string>
+    <string name="new_layout">Новый макет</string>
+    <string name="file_name_">Название файла:</string>
+    <string name="new_layout_">Новый макет…</string>
+    <string name="can_not_view_the_layout">\"Не удалось отобразить макет. \"</string>
+    <string name="no_views_have_been_added">Виджеты не добавлены. Нажмите, чтобы добавить Виджеты.</string>
+    <string name="no_views_hava_been_added">Виджеты не добавлены.</string>
+    <string name="group_">\"Group \"</string>
+    <string name="item_">\"Item \"</string>
 </resources>
