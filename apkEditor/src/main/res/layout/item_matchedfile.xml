@@ -49,7 +49,7 @@
             android:layout_width="@dimen/image_button_width"
             android:layout_height="@dimen/image_button_height"
             android:scaleType="centerInside"
-            android:src="@drawable/round_edit_24" />
+            android:src="@drawable/ic_edit" />
 
     </RelativeLayout>
 

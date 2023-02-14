@@ -4,13 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.appwizard.runtime.AppWizardActivity;
@@ -173,39 +172,19 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
 
     private void setEditListeners() {
         refreshButtons();
-        findViewById(R.id.appwizardModeButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                setEditMode(!isEditMode());
-            }
-        });
-        findViewById(R.id.appwizardEditButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editor.showProperties();
-            }
-        });
-        findViewById(R.id.appwizardUndoButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                undoManager.undo();
-            }
-        });
-        findViewById(R.id.appwizardRedoButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                undoManager.redo();
-            }
-        });
+        findViewById(R.id.appwizardModeButton).setOnClickListener(p1 -> setEditMode(!isEditMode()));
+        findViewById(R.id.appwizardEditButton).setOnClickListener(v -> editor.showProperties());
+        findViewById(R.id.appwizardUndoButton).setOnClickListener(v -> undoManager.undo());
+        findViewById(R.id.appwizardRedoButton).setOnClickListener(v -> undoManager.redo());
     }
 
     @SuppressLint("WrongConstant")
     private void refreshButtons() {
-        AppCompatImageView modeButton = (AppCompatImageView) findViewById(R.id.appwizardModeButton);
+        ImageView modeButton = (ImageView) findViewById(R.id.appwizardModeButton);
         if (isEditMode()) {
-            modeButton.setImageResource(R.drawable.round_edit_24);
+            modeButton.setImageResource(R.drawable.ic_edit);
         } else {
-            modeButton.setImageResource(R.drawable.round_image_24);
+            modeButton.setImageResource(R.drawable.ic_image);
         }
         findViewById(R.id.appwizardEditButtonLayout).setVisibility(isEditMode() ? 0 : 8);
         findViewById(R.id.appwizardUndoButton).setEnabled(this.undoManager.canUndo());

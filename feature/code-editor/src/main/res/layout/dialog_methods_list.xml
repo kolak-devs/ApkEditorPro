@@ -7,7 +7,7 @@
         android:id="@+id/methods"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:divider="@null" />
+        android:divider="@null"
+        android:padding="16dp" />
 
 </LinearLayout>

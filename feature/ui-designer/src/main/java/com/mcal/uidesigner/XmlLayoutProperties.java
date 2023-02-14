@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import com.mcal.uidesigner.common.PositionalXMLReader;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class XmlLayoutProperties {
     public static PropertySpec LAYOUT_TORIGHTOF = new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_toRightOf", "ProxyRelativeLayoutParams", "setRightOf()", PropertyType.ID);
@@ -171,11 +170,7 @@ public class XmlLayoutProperties {
     static {
         System.arraycopy(LAYOUT_PROPERTIES, 0, SORTED_PROPERTIES, 0, LAYOUT_PROPERTIES.length);
         System.arraycopy(VIEW_PROPERTIES, 0, SORTED_PROPERTIES, LAYOUT_PROPERTIES.length, VIEW_PROPERTIES.length);
-        Arrays.sort(SORTED_PROPERTIES, new Comparator<PropertySpec>() {
-            public int compare(PropertySpec lhs, PropertySpec rhs) {
-                return lhs.getDisplayName().compareTo(rhs.getDisplayName());
-            }
-        });
+        Arrays.sort(SORTED_PROPERTIES, (lhs, rhs) -> lhs.getDisplayName().compareTo(rhs.getDisplayName()));
     }
 
 
@@ -197,9 +192,9 @@ public class XmlLayoutProperties {
         TextAppearance(String.class),
         Event(CharSequence.class);
 
-        public Class<?> valueType;
+        public final Class<?> valueType;
 
-        PropertyType(Class cls) {
+        PropertyType(Class<?> cls) {
             this.valueType = cls;
         }
     }

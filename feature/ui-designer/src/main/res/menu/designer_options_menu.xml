@@ -4,38 +4,38 @@
     <item
         android:id="@+id/designerMenuRun"
         android:icon="?icon_run"
-        app:showAsAction="always|withText"
-        android:title="@string/ui_design_run" />
+        android:title="@string/ui_design_run"
+        app:showAsAction="always|withText" />
     <item
         android:id="@+id/designerMenuShowBorders"
         android:icon="?icon_view"
-        app:showAsAction="always"
-        android:title="@string/ui_design_view" />
+        android:title="@string/ui_design_view"
+        app:showAsAction="always" />
     <item
         android:id="@+id/designerMenuHideBorders"
         android:icon="?icon_edit"
-        app:showAsAction="always"
-        android:title="@string/editui_design_edit" />
+        android:title="@string/editui_design_edit"
+        app:showAsAction="always" />
     <item
         android:id="@+id/designerMenuUndo"
         android:icon="?icon_undo"
-        app:showAsAction="ifRoom"
-        android:title="@string/ui_design_undo" />
+        android:title="@string/ui_design_undo"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/designerMenuRedo"
         android:icon="?icon_redo"
-        app:showAsAction="ifRoom"
-        android:title="@string/ui_design_redo" />
+        android:title="@string/ui_design_redo"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/designerMenuPaste"
-        app:showAsAction="never"
-        android:title="@string/ui_design_paste_xml" />
+        android:title="@string/ui_design_paste_xml"
+        app:showAsAction="never" />
     <item
         android:id="@+id/designerMenuCopy"
-        app:showAsAction="never"
-        android:title="@string/ui_design_copy_xml" />
+        android:title="@string/ui_design_copy_xml"
+        app:showAsAction="never" />
     <item
         android:id="@+id/designerMenuShare"
-        app:showAsAction="never"
-        android:title="@string/ui_design_share_xml" />
+        android:title="@string/ui_design_share_xml"
+        app:showAsAction="never" />
 </menu>

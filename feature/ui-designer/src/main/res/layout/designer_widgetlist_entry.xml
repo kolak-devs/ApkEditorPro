@@ -12,12 +12,12 @@
         android:gravity="center_vertical"
         android:minHeight="60.0dip"
         android:orientation="vertical"
-        android:paddingTop="5.0dip"
-        android:paddingBottom="5.0dip"
         android:paddingStart="?android:expandableListPreferredItemPaddingLeft"
-        android:paddingLeft="?android:expandableListPreferredItemPaddingLeft">
+        android:paddingLeft="?android:expandableListPreferredItemPaddingLeft"
+        android:paddingTop="5.0dip"
+        android:paddingBottom="5.0dip">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/widgetlistName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,11 +32,11 @@
             android:orientation="vertical" />
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/widgetlistHelp"
         style="@style/BrowserHelpButton"
+        android:layout_marginEnd="4.0dip"
         android:layout_marginRight="4.0dip"
-        android:src="@drawable/round_info_24"
-        android:layout_marginEnd="4.0dip" />
+        android:src="@drawable/ic_info" />
 
 </LinearLayout>

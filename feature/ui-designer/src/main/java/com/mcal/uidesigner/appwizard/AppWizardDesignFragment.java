@@ -1,22 +1,20 @@
 package com.mcal.uidesigner.appwizard;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.mcal.uidesigner.R;
-import com.mcal.uidesigner.NewWidget;
 import com.mcal.uidesigner.XmlLayoutEditView;
 import com.mcal.uidesigner.XmlLayoutEditViewMenu;
 import com.mcal.uidesigner.XmlLayoutWidgetPicker;
 import com.mcal.uidesigner.XmlLayoutlInflater;
 import com.mcal.uidesigner.appwizard.runtime.AppWizardProject;
 import com.mcal.uidesigner.common.UndoManager;
-import com.mcal.uidesigner.common.ValueRunnable;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -53,11 +51,7 @@ public class AppWizardDesignFragment extends Fragment {
         this.inflater = new XmlLayoutlInflater(layoutContainer, xmlFilePath, resDirPath, getUndoManager()) {
             @Override
             protected void onEmptyLayoutClicked() {
-                XmlLayoutWidgetPicker.selectRootView(getActivity(), "Add...", new ValueRunnable<NewWidget>() {
-                    public void run(NewWidget widget) {
-                        inflater.addView(widget);
-                    }
-                });
+                XmlLayoutWidgetPicker.selectRootView(getActivity(), "Add...", widget -> inflater.addView(widget));
             }
 
             @Override

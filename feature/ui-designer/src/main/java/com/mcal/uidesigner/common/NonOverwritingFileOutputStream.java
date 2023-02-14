@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class NonOverwritingFileOutputStream extends OutputStream {
-    private byte[] buffer = new byte[1000];
     private final String path;
+    private byte[] buffer = new byte[1000];
     private int pos;
 
     public NonOverwritingFileOutputStream(String path) {

@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/ui_designer"
-        android:icon="@drawable/ic_explore"
+        android:icon="@drawable/ic_image"
         android:title="UI Designer"
         app:showAsAction="always" />
 

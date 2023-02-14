@@ -1,34 +1,31 @@
 package com.mcal.uidesigner.common;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.AppCompatSeekBar;
-import androidx.appcompat.widget.AppCompatTextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.uidesigner.R;
 
 public class SizePickerDialog extends MessageBox {
-    private AlertDialog dialog;
     private final Runnable neutral;
     private final ValueRunnable<String> ok;
     private final String oldValue;
     private final String title;
+    private AlertDialog dialog;
     private boolean updatingText;
 
     public SizePickerDialog(String title, String oldValue, ValueRunnable<String> ok, Runnable neutral) {
@@ -41,9 +38,9 @@ public class SizePickerDialog extends MessageBox {
     @Override
     protected Dialog buildDialog(final Activity activity) {
         View content = LayoutInflater.from(activity).inflate(R.layout.designer_sizedialog, (ViewGroup) null);
-        final AppCompatEditText input = (AppCompatEditText) content.findViewById(R.id.designersizedialogEditText);
+        final EditText input = (EditText) content.findViewById(R.id.designersizedialogEditText);
         input.setText(this.oldValue);
-        final AppCompatSeekBar slider = (AppCompatSeekBar) content.findViewById(R.id.designersizedialogSeekBar);
+        final SeekBar slider = (SeekBar) content.findViewById(R.id.designersizedialogSeekBar);
         slider.setMax(100);
         updateSlider(slider, this.oldValue);
         slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -78,66 +75,47 @@ public class SizePickerDialog extends MessageBox {
             public void afterTextChanged(Editable p1) {
             }
         });
-        ((AppCompatTextView) content.findViewById(R.id.designersizedialogPlusButton)).setOnClickListener(new View.OnClickListener() {
+        ((TextView) content.findViewById(R.id.designersizedialogPlusButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View p1) {
                 input.setText(increase(input.getText().toString()));
                 updateSlider(slider, input.getText().toString());
             }
         });
-        ((AppCompatTextView) content.findViewById(R.id.designersizedialogMinusButton)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                input.setText(decrease(input.getText().toString()));
-                updateSlider(slider, input.getText().toString());
-            }
+        ((TextView) content.findViewById(R.id.designersizedialogMinusButton)).setOnClickListener(p1 -> {
+            input.setText(decrease(input.getText().toString()));
+            updateSlider(slider, input.getText().toString());
         });
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setView(content).setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                ((InputMethodManager) activity.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                dialog.dismiss();
-                ok.run(input.getText().toString().trim());
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                ((InputMethodManager) activity.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                dialog.cancel();
-            }
-        }).setNeutralButton("None", new DialogInterface.OnClickListener() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((InputMethodManager) activity.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                neutral.run();
-            }
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
+        builder.setView(content).setCancelable(true).setPositiveButton("Ok", (dialog, id) -> {
+            ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+            dialog.dismiss();
+            ok.run(input.getText().toString().trim());
+        }).setNegativeButton("Cancel", (dialog, id) -> {
+            ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+            dialog.cancel();
+        }).setNeutralButton("None", (dialog, which) -> {
+            ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+            neutral.run();
         });
         if (this.title != null) {
             builder.setTitle(this.title);
         }
         this.dialog = builder.create();
-        input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == 6) {
-                    ((InputMethodManager) activity.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                    dialog.dismiss();
-                    ok.run(input.getText().toString().trim());
-                }
-                return false;
+        input.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == 6) {
+                ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                dialog.dismiss();
+                ok.run(input.getText().toString().trim());
             }
+            return false;
         });
         this.dialog.setCanceledOnTouchOutside(true);
         this.dialog.getWindow().setSoftInputMode(2);
         return this.dialog;
     }
 
-    public String getSliderValue(AppCompatSeekBar slider, String size) {
+    public String getSliderValue(SeekBar slider, String size) {
         String unit = getUnit(size);
         if (unit == null) {
             unit = "";
@@ -145,7 +123,7 @@ public class SizePickerDialog extends MessageBox {
         return slider.getProgress() + unit;
     }
 
-    public void updateSlider(@NonNull AppCompatSeekBar slider, String size) {
+    public void updateSlider(@NonNull SeekBar slider, String size) {
         slider.setProgress(Math.max(0, Math.min(100, getValue(size))));
     }
 
@@ -174,7 +152,7 @@ public class SizePickerDialog extends MessageBox {
         while (p < size.length() && (Character.isDigit(size.charAt(p)) || size.charAt(p) == '-')) {
             p++;
         }
-        return size.substring(p, size.length());
+        return size.substring(p);
     }
 
     private int getValue(@NonNull String size) {

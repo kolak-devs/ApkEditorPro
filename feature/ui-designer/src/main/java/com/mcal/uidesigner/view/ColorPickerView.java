@@ -7,24 +7,24 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.internal.view.SupportMenu;
 import androidx.core.view.MotionEventCompat;
 import androidx.core.view.ViewCompat;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.mcal.uidesigner.common.AndroidHelper;
 
 public class ColorPickerView extends View {
     private final int[] hueBarColors;
+    private final int[] derivedColors;
     private int currentColor;
     private float currentHue;
     private int currentX;
     private int currentY;
-    private final int[] derivedColors;
     private int initialColor;
     private OnColorChangedListener listener;
     private Paint paint;
@@ -63,9 +63,9 @@ public class ColorPickerView extends View {
     @NonNull
     public static String toHexColor(int c) {
         if (Color.alpha(c) == 255) {
-            return String.format("#%06X", Integer.valueOf(16777215 & c));
+            return String.format("#%06X", 16777215 & c);
         }
-        return String.format("#%08X", Integer.valueOf(c & -1));
+        return String.format("#%08X", c & -1);
     }
 
     public static int parseColor(String hexColor) {
@@ -271,6 +271,7 @@ public class ColorPickerView extends View {
         setMeasuredDimension((int) (276.0f * this.scale), (int) (366.0f * this.scale));
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getAction() == 0 || event.getAction() == 2) {

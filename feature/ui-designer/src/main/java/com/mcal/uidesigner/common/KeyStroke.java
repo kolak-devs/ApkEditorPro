@@ -1,12 +1,12 @@
 package com.mcal.uidesigner.common;
 
 import android.annotation.SuppressLint;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.TimeUtils;
-import android.view.KeyCharacterMap;
-import android.view.KeyEvent;
 
 import com.mcal.uidesigner.ProxyTextView;
 

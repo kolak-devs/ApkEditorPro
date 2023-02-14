@@ -22,16 +22,16 @@ import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatRadioButton;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.accessibility.AccessibilityEventCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -54,13 +54,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XmlLayoutDesignActivity extends AppCompatActivity {
-    private static final int DARK = 3;
-    private static final int DARK_SMALL = 1;
     public static final String EXTRA_DEMO = "EXTRA_LICENSED";
     public static final String EXTRA_FILE = "EXTRA_FILE";
     public static final String EXTRA_LANGUAGE = "EXTRA_LANGUAGE";
     public static final String EXTRA_STANDALONE = "EXTRA_STANDALONE";
     public static final String EXTRA_TRAINER = "EXTRA_TRAINER";
+    private static final int DARK = 3;
+    private static final int DARK_SMALL = 1;
     private static final String EXTRA_TRAINER_ACTION = "EXTRA_TRAINER_ACTION";
     private static final String EXTRA_TRAINER_BUTTON = "EXTRA_TRAINER_BUTTON";
     private static final String EXTRA_TRAINER_HEADER = "EXTRA_HEADER";
@@ -194,7 +194,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
             getSupportActionBar().setNavigationMode(1);
             getSupportActionBar().setListNavigationCallbacks(new ArrayAdapter<>(this, 17367049, new String[]{"Light Theme Small", "Dark Theme Small", "Light Theme", "Dark Theme"}),
                     (itemPosition, itemId) -> {
-                        if (!initialized || itemPosition == XmlLayoutDesignActivity.this.getViewType()) {
+                        if (!initialized || itemPosition == getViewType()) {
                             return true;
                         }
                         setViewType(itemPosition);
@@ -213,9 +213,9 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         if (isTrainer()) {
             final View header = findViewById(R.id.designerHeaderLearnTask);
             header.setVisibility(0);
-            AppCompatTextView textView = header.findViewById(R.id.designerHeaderLearnTaskText);
-            AppCompatTextView titleView = header.findViewById(R.id.designerHeaderLearnTaskTitle);
-            final AppCompatTextView button = header.findViewById(R.id.designerHeaderLearnButton);
+            TextView textView = header.findViewById(R.id.designerHeaderLearnTaskText);
+            TextView titleView = header.findViewById(R.id.designerHeaderLearnTaskTitle);
+            final TextView button = header.findViewById(R.id.designerHeaderLearnButton);
             titleView.setText(getIntent().getStringExtra(EXTRA_TRAINER_TITLE));
             textView.setText(Html.fromHtml(getIntent().getStringExtra(EXTRA_TRAINER_TASK)));
             button.setText(getIntent().getStringExtra(EXTRA_TRAINER_BUTTON));
@@ -234,8 +234,8 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
             findViewById(R.id.designerHeaderLearnTaskInner).setOnClickListener(v -> {
                 Intent data = new Intent();
                 data.putExtra(XmlLayoutDesignActivity.EXTRA_TRAINER_ACTION, 1);
-                XmlLayoutDesignActivity.this.setResult(-1, data);
-                XmlLayoutDesignActivity.this.finish();
+                setResult(-1, data);
+                finish();
             });
             findViewById(R.id.designerHeaderLearnTaskInner).setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
@@ -256,7 +256,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                 findViewById(R.id.designerContent).setPadding((int) (48.0f * density), 0, (int) (48.0f * density), (int) (27.0f * density));
             }
             header.postDelayed(() -> {
-                XmlLayoutDesignActivity.this.speak();
+                speak();
                 header.setVisibility(0);
                 header.startAnimation(anim);
             }, 500);
@@ -274,11 +274,11 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         ((ListView) findViewById(R.id.designerViewList)).setOnItemClickListener((parent, view, position, id) -> {
             ViewHierachyEntry entry = (ViewHierachyEntry) parent.getItemAtPosition(position);
             if (entry.view != null) {
-                XmlLayoutDesignActivity.this.onViewClicked(entry.view);
+                onViewClicked(entry.view);
             } else if (entry.file != null) {
-                XmlLayoutDesignActivity.this.openLayout(entry.file.getPath());
+                openLayout(entry.file.getPath());
             } else if (entry.isAddButton) {
-                XmlLayoutDesignActivity.this.createNewLayout();
+                createNewLayout();
             }
         });
         initFromIntent(savedInstanceState == null);
@@ -441,25 +441,21 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
 
             @Override
             protected void onEmptyLayoutClicked() {
-                XmlLayoutWidgetPicker.selectRootView(XmlLayoutDesignActivity.this, "Add...", new ValueRunnable<NewWidget>() {
-                    public void run(NewWidget widget) {
-                        XmlLayoutDesignActivity.this.inflater.addView(widget);
-                    }
-                });
+                XmlLayoutWidgetPicker.selectRootView(XmlLayoutDesignActivity.this, "Add...", widget -> inflater.addView(widget));
             }
 
             @Override
             protected void onXmlModified(boolean isUserEdit) {
-                XmlLayoutDesignActivity.this.invalidateOptionsMenu();
-                if (XmlLayoutDesignActivity.this.isDemo) {
+                invalidateOptionsMenu();
+                if (isDemo) {
                     if (isUserEdit && this.isFirstEdit) {
                         this.isFirstEdit = false;
                         ShopActivityStarter.show(XmlLayoutDesignActivity.this, 0, "unlock the UI designer", "savechanges", true, true, false, true, false);
                     }
-                } else if (XmlLayoutDesignActivity.this.xmlFilePath != null) {
+                } else if (xmlFilePath != null) {
                     try {
-                        FileWriter writer = new FileWriter(XmlLayoutDesignActivity.this.xmlFilePath);
-                        writer.write(XmlLayoutDesignActivity.this.inflater.getXml());
+                        FileWriter writer = new FileWriter(xmlFilePath);
+                        writer.write(inflater.getXml());
                         writer.close();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -469,11 +465,11 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
 
             @Override
             protected void onInflated() {
-                XmlLayoutDesignActivity.this.contentView.invalidate();
+                contentView.invalidate();
                 if (getEditViews().size() > 0) {
                     getEditViews().get(0).requestFocus();
                 }
-                XmlLayoutDesignActivity.this.updateHierachy();
+                updateHierachy();
             }
         };
         this.inflater.init();
@@ -614,15 +610,15 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
             @Override
             public void run() {
                 new File(filepath).delete();
-                if (XmlLayoutDesignActivity.this.xmlFilePath.equals(filepath)) {
-                    XmlLayoutDesignActivity.this.xmlFilePath = Utils.chooseLayoutOrCreateNew(XmlLayoutDesignActivity.this.resDirPath);
-                    if (XmlLayoutDesignActivity.this.isDefaultProject) {
-                        XmlLayoutDesignActivity.this.setLastFilepath(XmlLayoutDesignActivity.this.xmlFilePath);
+                if (xmlFilePath.equals(filepath)) {
+                    xmlFilePath = Utils.chooseLayoutOrCreateNew(resDirPath);
+                    if (isDefaultProject) {
+                        setLastFilepath(xmlFilePath);
                     }
-                    XmlLayoutDesignActivity.this.createInflater();
+                    createInflater();
                     return;
                 }
-                XmlLayoutDesignActivity.this.updateHierachy();
+                updateHierachy();
             }
         }, (Runnable) null);
     }
@@ -630,12 +626,12 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
     public void createNewLayout() {
         MessageBox.queryText(this, "New Layout", "File name:", Utils.suggestNewLayoutName(this.resDirPath), new ValueRunnable<String>() {
             public void run(String name) {
-                XmlLayoutDesignActivity.this.setEditMode(true);
-                XmlLayoutDesignActivity.this.xmlFilePath = Utils.createNewLayoutFile(XmlLayoutDesignActivity.this.resDirPath, name);
-                if (XmlLayoutDesignActivity.this.isDefaultProject) {
-                    XmlLayoutDesignActivity.this.setLastFilepath(XmlLayoutDesignActivity.this.xmlFilePath);
+                setEditMode(true);
+                xmlFilePath = Utils.createNewLayoutFile(resDirPath, name);
+                if (isDefaultProject) {
+                    setLastFilepath(xmlFilePath);
                 }
-                XmlLayoutDesignActivity.this.createInflater();
+                createInflater();
             }
         });
     }
@@ -733,52 +729,47 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                 viewLayout.setVisibility(0);
                 fileLayout.setVisibility(8);
                 viewLayout.setPadding((int) (((float) ((entry.view.getDepth() * 20) + 5)) * getContext().getResources().getDisplayMetrics().density), 0, 0, 0);
-                ((AppCompatTextView) view.findViewById(R.id.designerViewlistEntryName)).setText(entry.view.getNodeName());
-                AppCompatImageView imageView = (AppCompatImageView) view.findViewById(R.id.designerViewlistEntryImage);
+                ((TextView) view.findViewById(R.id.designerViewlistEntryName)).setText(entry.view.getNodeName());
+                ImageView imageView = (ImageView) view.findViewById(R.id.designerViewlistEntryImage);
                 if (entry.view.canAddInside()) {
-                    i = R.drawable.round_category_24;
+                    i = R.drawable.ic_category;
                 } else {
-                    i = R.drawable.round_widgets_24;
+                    i = R.drawable.ic_widgets;
                 }
                 imageView.setImageResource(i);
             } else if (entry.file != null) {
                 viewLayout.setVisibility(8);
                 fileLayout.setVisibility(0);
                 fileLayout.setPadding(0, 0, 0, 0);
-                AppCompatRadioButton fileRadioButton = (AppCompatRadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
+                RadioButton fileRadioButton = (RadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
                 fileRadioButton.setFocusable(false);
                 fileRadioButton.setFocusableInTouchMode(false);
-                fileRadioButton.setChecked(XmlLayoutDesignActivity.this.xmlFilePath.equals(entry.file.getPath()));
-                fileRadioButton.setVisibility(XmlLayoutDesignActivity.this.isStandalone ? 0 : 8);
-                AppCompatTextView fileNameView = (AppCompatTextView) view.findViewById(R.id.designerViewlistentryFileName);
+                fileRadioButton.setChecked(xmlFilePath.equals(entry.file.getPath()));
+                fileRadioButton.setVisibility(isStandalone ? 0 : 8);
+                TextView fileNameView = (TextView) view.findViewById(R.id.designerViewlistentryFileName);
                 fileNameView.setText(entry.file.getName());
-                if (XmlLayoutDesignActivity.this.xmlFilePath.equals(entry.file.getPath())) {
+                if (xmlFilePath.equals(entry.file.getPath())) {
                     fileNameView.setTypeface(Typeface.DEFAULT_BOLD);
                 } else {
                     fileNameView.setTypeface(Typeface.DEFAULT);
                 }
-                ((AppCompatImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(R.drawable.round_insert_drive_file_24);
-                AppCompatImageView deleteButton = (AppCompatImageView) view.findViewById(R.id.designerViewlistentryDelete);
-                deleteButton.setVisibility(XmlLayoutDesignActivity.this.isStandalone ? 0 : 8);
-                deleteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        XmlLayoutDesignActivity.this.deleteLayout(entry.file.getPath());
-                    }
-                });
+                ((ImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(R.drawable.ic_file);
+                ImageView deleteButton = (ImageView) view.findViewById(R.id.designerViewlistentryDelete);
+                deleteButton.setVisibility(isStandalone ? 0 : 8);
+                deleteButton.setOnClickListener(v -> deleteLayout(entry.file.getPath()));
             } else {
                 viewLayout.setVisibility(8);
                 fileLayout.setVisibility(0);
                 fileLayout.setPadding(0, 0, 0, (int) (10.0f * getContext().getResources().getDisplayMetrics().density));
-                AppCompatRadioButton fileRadioButton2 = (AppCompatRadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
+                RadioButton fileRadioButton2 = (RadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
                 fileRadioButton2.setFocusable(false);
                 fileRadioButton2.setFocusableInTouchMode(false);
                 fileRadioButton2.setVisibility(4);
-                AppCompatTextView fileNameView2 = (AppCompatTextView) view.findViewById(R.id.designerViewlistentryFileName);
+                TextView fileNameView2 = (TextView) view.findViewById(R.id.designerViewlistentryFileName);
                 fileNameView2.setText("New layout...");
                 fileNameView2.setTypeface(Typeface.DEFAULT);
-                ((AppCompatImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(AndroidHelper.obtainImageResourceId(getContext(), R.attr.icon_add));
-                ((AppCompatImageView) view.findViewById(R.id.designerViewlistentryDelete)).setVisibility(8);
+                ((ImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(AndroidHelper.obtainImageResourceId(getContext(), R.attr.icon_add));
+                ((ImageView) view.findViewById(R.id.designerViewlistentryDelete)).setVisibility(8);
             }
             return view;
         }

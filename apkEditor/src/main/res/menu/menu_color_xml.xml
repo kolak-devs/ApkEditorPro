@@ -4,7 +4,7 @@
     tools:context="com.example.test2.MainActivity">
     <item
         android:id="@+id/action_edit_code"
-        android:icon="@drawable/round_edit_24"
+        android:icon="@drawable/ic_edit"
         android:orderInCategory="100"
         android:title="Edit"
         app:showAsAction="always" />

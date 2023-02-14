@@ -65,9 +65,9 @@ public class TextToSpeechHelper {
 
 
     public class LanguageTTS {
+        private final String ttsLanguage;
         private boolean initialized;
         private TextToSpeech tts;
-        private final String ttsLanguage;
         private Locale ttsLocale;
         private String ttsText;
 
@@ -88,26 +88,23 @@ public class TextToSpeechHelper {
                 i++;
             }
             if (this.ttsLocale != null) {
-                this.tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(int p1) {
-                        initialized = true;
-                        if (tts != null) {
-                            int isLanguageAvailable = tts.isLanguageAvailable(ttsLocale);
-                            AppLog.d(ttsLocale + " TTS available: " + isLanguageAvailable);
-                            if (isLanguageAvailable == -1) {
-                                tts.shutdown();
-                                tts = null;
-                            } else if (isLanguageAvailable == -2) {
-                                tts.shutdown();
-                                tts = null;
-                            } else {
-                                tts.getDefaultEngine();
-                                tts.setLanguage(ttsLocale);
-                                if (ttsText != null) {
-                                    tts.speak(ttsText, 0, null);
-                                    ttsText = null;
-                                }
+                this.tts = new TextToSpeech(context, p1 -> {
+                    initialized = true;
+                    if (tts != null) {
+                        int isLanguageAvailable = tts.isLanguageAvailable(ttsLocale);
+                        AppLog.d(ttsLocale + " TTS available: " + isLanguageAvailable);
+                        if (isLanguageAvailable == -1) {
+                            tts.shutdown();
+                            tts = null;
+                        } else if (isLanguageAvailable == -2) {
+                            tts.shutdown();
+                            tts = null;
+                        } else {
+                            tts.getDefaultEngine();
+                            tts.setLanguage(ttsLocale);
+                            if (ttsText != null) {
+                                tts.speak(ttsText, 0, null);
+                                ttsText = null;
                             }
                         }
                     }

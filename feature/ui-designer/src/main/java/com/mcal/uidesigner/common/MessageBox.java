@@ -3,25 +3,24 @@ package com.mcal.uidesigner.common;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.ProxyTextView;
+import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.widget.KeyStrokeEditText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public abstract class MessageBox {
@@ -60,18 +59,12 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(Activity activity2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setMessage(message).setCancelable(true).setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
+                builder.setMessage(message).setCancelable(true).setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), (dialog, id) -> {
                 });
                 if (negativeButton != null) {
-                    builder = builder.setNegativeButton(negativeButton, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            no.run();
-                        }
+                    builder = builder.setNegativeButton(negativeButton, (dialog, which) -> {
+                        dialog.dismiss();
+                        no.run();
                     });
                 }
                 if (title != null) {
@@ -102,33 +95,24 @@ public abstract class MessageBox {
             public Dialog buildDialog(Activity activity2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
                 builder.setMessage(message).setCancelable(cancelable);
-                builder.setPositiveButton(okText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        if (ok != null) {
-                            ok.run();
-                        }
+                builder.setPositiveButton(okText, (dialog, id) -> {
+                    dialog.dismiss();
+                    if (ok != null) {
+                        ok.run();
                     }
                 });
                 if (cancelText != null) {
-                    builder.setNegativeButton(cancelText, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                            if (cancelled != null) {
-                                cancelled.run();
-                            }
-                        }
-                    });
-                }
-                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
+                    builder.setNegativeButton(cancelText, (dialog, id) -> {
                         dialog.dismiss();
                         if (cancelled != null) {
                             cancelled.run();
                         }
+                    });
+                }
+                builder.setOnCancelListener(dialog -> {
+                    dialog.dismiss();
+                    if (cancelled != null) {
+                        cancelled.run();
                     }
                 });
                 if (title != null) {
@@ -145,9 +129,8 @@ public abstract class MessageBox {
 
     public static void queryYesNo(Activity activity, int title, int message, @NonNull List<String> list, Runnable yes, Runnable no) {
         String listText = "\n";
-        Iterator<String> i = list.iterator();
-        while (i.hasNext()) {
-            listText = (listText + "\n") + i.next();
+        for (String s : list) {
+            listText = (listText + "\n") + s;
         }
         queryYesNo(activity, activity.getResources().getString(title), activity.getResources().getString(message) + listText, activity.getResources().getString(R.string.dialog_no), no, activity.getResources().getString(R.string.dialog_yes), yes, null);
     }
@@ -169,29 +152,23 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(Activity activity2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setMessage(message).setCancelable(true).setPositiveButton(yesText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        if (yes != null) {
-                            yes.run();
-                        }
-                    }
-                }).setNegativeButton(noText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        if (no != null) {
-                            no.run();
-                        }
+                builder.setMessage(message);
+                builder.setCancelable(true);
+                builder.setPositiveButton(yesText, (dialog, id) -> {
+                    dialog.dismiss();
+                    if (yes != null) {
+                        yes.run();
                     }
                 });
-                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        if (cancelled != null) {
-                            cancelled.run();
-                        }
+                builder.setNegativeButton(noText, (dialog, id) -> {
+                    dialog.dismiss();
+                    if (no != null) {
+                        no.run();
+                    }
+                });
+                builder.setOnCancelListener(dialog -> {
+                    if (cancelled != null) {
+                        cancelled.run();
                     }
                 });
                 if (title != null) {
@@ -210,52 +187,37 @@ public abstract class MessageBox {
             public Dialog buildDialog(final Activity activity2) {
                 final KeyStrokeEditText input = new KeyStrokeEditText(activity2);
                 input.setKeyStroke(oldStroke);
-                input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == 6) {
-                            ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                            ok.run(input.getKeyStroke());
-                        }
-                        return false;
-                    }
-                });
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setView(input).setMessage(message).setCancelable(true).setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                input.setOnEditorActionListener((v, actionId, event) -> {
+                    if (actionId == 6) {
+                        ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
                         ok.run(input.getKeyStroke());
                     }
-                }).setNegativeButton(activity2.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                        dialog.cancel();
-                    }
-                }).setNeutralButton("Default", new DialogInterface.OnClickListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                        dialog.cancel();
-                        ok.run(null);
-                    }
+                    return false;
+                });
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                builder.setView(input);
+                builder.setMessage(message);
+                builder.setCancelable(true);
+                builder.setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), (dialog, id) -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                    ok.run(input.getKeyStroke());
+                });
+                builder.setNegativeButton(activity2.getResources().getString(R.string.dialog_cancel), (dialog, id) -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                    dialog.cancel();
+                });
+                builder.setNeutralButton("Default", (dialog, id) -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                    dialog.cancel();
+                    ok.run(null);
                 });
                 if (title != null) {
                     builder.setTitle(title);
                 }
                 AlertDialog dialog = builder.create();
-                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onShow(DialogInterface dialog2) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).showSoftInput(input, 1);
-                        input.selectAll();
-                    }
+                dialog.setOnShowListener(dialog2 -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(input, 1);
+                    input.selectAll();
                 });
                 return dialog;
             }
@@ -271,12 +233,10 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(Activity activity2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setCancelable(cancelable).setItems((CharSequence[]) values.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        ok.run(values.get(which));
-                    }
+                builder.setCancelable(cancelable);
+                builder.setItems((CharSequence[]) values.toArray(new CharSequence[0]), (dialog, which) -> {
+                    dialog.dismiss();
+                    ok.run(values.get(which));
                 });
                 if (title != null) {
                     builder.setTitle(title);
@@ -293,20 +253,16 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(Activity activity2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setCancelable(true).setSingleChoiceItems((CharSequence[]) values.toArray(new CharSequence[0]), values.indexOf(selectedValue), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface p1, int p2) {
-                    }
-                }).setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        SparseBooleanArray items = ((AlertDialog) dialog).getListView().getCheckedItemPositions();
-                        if (items != null) {
-                            for (int i = 0; i < values.size(); i++) {
-                                if (items.get(i)) {
-                                    ok.run(values.get(i));
-                                }
+                builder.setCancelable(true);
+                builder.setSingleChoiceItems((CharSequence[]) values.toArray(new CharSequence[0]), values.indexOf(selectedValue), (p1, p2) -> {
+                });
+                builder.setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    SparseBooleanArray items = ((AlertDialog) dialog).getListView().getCheckedItemPositions();
+                    if (items != null) {
+                        for (int i = 0; i < values.size(); i++) {
+                            if (items.get(i)) {
+                                ok.run(values.get(i));
                             }
                         }
                     }
@@ -328,27 +284,23 @@ public abstract class MessageBox {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
                 boolean[] checkedItems = new boolean[selectedValues.size()];
                 for (int i = 0; i < checkedItems.length; i++) {
-                    checkedItems[i] = ((Boolean) selectedValues.get(i)).booleanValue();
+                    checkedItems[i] = (Boolean) selectedValues.get(i);
                 }
-                builder.setCancelable(true).setMultiChoiceItems((CharSequence[]) values.toArray(new CharSequence[0]), checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                    }
-                }).setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        ArrayList<Integer> arrayList = new ArrayList<>();
-                        SparseBooleanArray items = ((AlertDialog) dialog).getListView().getCheckedItemPositions();
-                        if (items != null) {
-                            for (int i2 = 0; i2 < values.size(); i2++) {
-                                if (items.get(i2)) {
-                                    arrayList.add(Integer.valueOf(i2));
-                                }
+                builder.setCancelable(true);
+                builder.setMultiChoiceItems((CharSequence[]) values.toArray(new CharSequence[0]), checkedItems, (dialog, which, isChecked) -> {
+                });
+                builder.setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    ArrayList<Integer> arrayList = new ArrayList<>();
+                    SparseBooleanArray items = ((AlertDialog) dialog).getListView().getCheckedItemPositions();
+                    if (items != null) {
+                        for (int i2 = 0; i2 < values.size(); i2++) {
+                            if (items.get(i2)) {
+                                arrayList.add(i2);
                             }
                         }
-                        ok.run(arrayList);
                     }
+                    ok.run(arrayList);
                 });
                 if (title != null) {
                     builder.setTitle(title);
@@ -365,12 +317,10 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(Activity activity2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setCancelable(true).setItems((CharSequence[]) values.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        ok.run(Integer.valueOf(which));
-                    }
+                builder.setCancelable(true);
+                builder.setItems((CharSequence[]) values.toArray(new CharSequence[0]), (dialog, which) -> {
+                    dialog.dismiss();
+                    ok.run(which);
                 });
                 if (title != null) {
                     builder.setTitle(title);
@@ -387,18 +337,14 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(Activity activity2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setCancelable(true).setItems((CharSequence[]) values.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        click.run(Integer.valueOf(which));
-                    }
-                }).setPositiveButton(okButtonText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        ok.run();
-                    }
+                builder.setCancelable(true);
+                builder.setItems((CharSequence[]) values.toArray(new CharSequence[0]), (dialog, which) -> {
+                    dialog.dismiss();
+                    click.run(which);
+                });
+                builder.setPositiveButton(okButtonText, (dialog, which) -> {
+                    dialog.dismiss();
+                    ok.run();
                 });
                 if (title != null) {
                     builder.setTitle(title);
@@ -415,7 +361,7 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(final Activity activity2) {
                 final AlertDialog[] dialog = new AlertDialog[1];
-                final AppCompatEditText input = new AppCompatEditText(activity2) {
+                final EditText input = new AppCompatEditText(activity2) {
                     @Override
                     public boolean onKeyDown(int keyCode, KeyEvent event) {
                         if (keyCode == 66) {
@@ -432,7 +378,7 @@ public abstract class MessageBox {
                         }
                         ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(getWindowToken(), 0);
                         try {
-                            ok.run(Integer.valueOf(Integer.parseInt(getText().toString().trim())));
+                            ok.run(Integer.parseInt(getText().toString().trim()));
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                         }
@@ -441,56 +387,44 @@ public abstract class MessageBox {
                     }
                 };
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setView(input).setMessage(message).setCancelable(true).setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onClick(DialogInterface dialog2, int id) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                        try {
-                            ok.run(Integer.valueOf(Integer.parseInt(input.getText().toString().trim())));
-                        } catch (NumberFormatException e) {
-                            e.printStackTrace();
-                        }
+                builder.setView(input);
+                builder.setMessage(message);
+                builder.setCancelable(true);
+                builder.setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), (dialog2, id) -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                    try {
+                        ok.run(Integer.parseInt(input.getText().toString().trim()));
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
                     }
-                }).setNegativeButton(activity2.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onClick(DialogInterface dialog2, int id) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                        dialog2.cancel();
-                    }
+                });
+                builder.setNegativeButton(activity2.getResources().getString(R.string.dialog_cancel), (dialog2, id) -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                    dialog2.cancel();
                 });
                 if (title != null) {
                     builder.setTitle(title);
                 }
                 dialog[0] = builder.create();
-                dialog[0].setOnShowListener(new DialogInterface.OnShowListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onShow(DialogInterface dialog2) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).showSoftInput(input, 1);
-                        input.selectAll();
-                    }
+                dialog[0].setOnShowListener(dialog2 -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(input, 1);
+                    input.selectAll();
                 });
                 input.setText(oldValue + "");
                 input.setImeOptions(268435456);
                 input.setInputType(2);
                 input.setTypeface(Typeface.DEFAULT);
-                input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == 6) {
-                            ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                            dialog[0].dismiss();
-                            try {
-                                ok.run(Integer.valueOf(Integer.parseInt(input.getText().toString().trim())));
-                            } catch (NumberFormatException e) {
-                                e.printStackTrace();
-                            }
+                input.setOnEditorActionListener((v, actionId, event) -> {
+                    if (actionId == 6) {
+                        ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                        dialog[0].dismiss();
+                        try {
+                            ok.run(Integer.parseInt(input.getText().toString().trim()));
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
                         }
-                        return false;
                     }
+                    return false;
                 });
                 dialog[0].setCanceledOnTouchOutside(true);
                 return dialog[0];
@@ -527,7 +461,7 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(final Activity activity2) {
                 final AlertDialog[] dialog = new AlertDialog[1];
-                final AppCompatEditText input = new AppCompatEditText(activity2) {
+                final EditText input = new AppCompatEditText(activity2) {
                     @Override
                     public boolean onKeyDown(int keyCode, KeyEvent event) {
                         if (keyCode == 66) {
@@ -542,58 +476,43 @@ public abstract class MessageBox {
                         if (keyCode != 66) {
                             return super.onKeyUp(keyCode, event);
                         }
-                        ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(getWindowToken(), 0);
+                        ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindowToken(), 0);
                         dialog[0].dismiss();
                         ok.run(getText().toString().trim());
                         return true;
                     }
                 };
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setView(input).setMessage(message).setCancelable(true).setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onClick(DialogInterface dialog2, int id) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                        dialog2.dismiss();
-                        ok.run(input.getText().toString().trim());
-                    }
-                }).setNegativeButton(activity2.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onClick(DialogInterface dialog2, int id) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                        dialog2.cancel();
-                    }
+                builder.setView(input);
+                builder.setMessage(message);
+                builder.setCancelable(true);
+                builder.setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), (dialog2, id) -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                    dialog2.dismiss();
+                    ok.run(input.getText().toString().trim());
+                });
+                builder.setNegativeButton(activity2.getResources().getString(R.string.dialog_cancel), (dialog2, id) -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                    dialog2.cancel();
                 });
                 if (neutralText != null) {
-                    builder.setNeutralButton(neutralText, new DialogInterface.OnClickListener() {
-                        @SuppressLint("WrongConstant")
-                        @Override
-                        public void onClick(DialogInterface dialog2, int which) {
-                            ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                            neutral.run();
-                        }
+                    builder.setNeutralButton(neutralText, (dialog2, which) -> {
+                        ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                        neutral.run();
                     });
                 }
                 if (title != null) {
                     builder.setTitle(title);
                 }
-                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog2) {
-                        if (cancelled != null) {
-                            cancelled.run();
-                        }
+                builder.setOnCancelListener(dialog2 -> {
+                    if (cancelled != null) {
+                        cancelled.run();
                     }
                 });
                 dialog[0] = builder.create();
-                dialog[0].setOnShowListener(new DialogInterface.OnShowListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public void onShow(DialogInterface dialog2) {
-                        ((InputMethodManager) activity2.getSystemService("input_method")).showSoftInput(input, 1);
-                        input.selectAll();
-                    }
+                dialog[0].setOnShowListener(dialog2 -> {
+                    ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(input, 1);
+                    input.selectAll();
                 });
                 input.setText(oldText);
                 input.setImeOptions(268435456);
@@ -603,17 +522,13 @@ public abstract class MessageBox {
                     input.setInputType(ProxyTextView.INPUTTYPE_textVisiblePassword);
                 }
                 input.setTypeface(Typeface.DEFAULT);
-                input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @SuppressLint("WrongConstant")
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == 6) {
-                            ((InputMethodManager) activity2.getSystemService("input_method")).hideSoftInputFromWindow(input.getWindowToken(), 0);
-                            dialog[0].dismiss();
-                            ok.run(input.getText().toString().trim());
-                        }
-                        return false;
+                input.setOnEditorActionListener((v, actionId, event) -> {
+                    if (actionId == 6) {
+                        ((InputMethodManager) activity2.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                        dialog[0].dismiss();
+                        ok.run(input.getText().toString().trim());
                     }
+                    return false;
                 });
                 dialog[0].setCanceledOnTouchOutside(true);
                 return dialog[0];
@@ -635,24 +550,22 @@ public abstract class MessageBox {
         List<Boolean> isSelected = new ArrayList<>();
         List<String> selectedValues = value == null ? new ArrayList<>() : Arrays.asList(value.split("\\|"));
         for (String v : values) {
-            isSelected.add(Boolean.valueOf(selectedValues.contains(v)));
+            isSelected.add(selectedValues.contains(v));
         }
-        queryMultipleChoiceFromList(activity, title, displayValues, isSelected, new ValueRunnable<List<Integer>>() {
-            public void run(List<Integer> t) {
-                if (t.size() == 0) {
-                    ok.run(null);
-                    return;
-                }
-                String newValue = "";
-                for (Integer num : t) {
-                    int i = num.intValue();
-                    if (newValue.length() > 0) {
-                        newValue = newValue + "|";
-                    }
-                    newValue = newValue + ((String) values.get(i));
-                }
-                ok.run(newValue);
+        queryMultipleChoiceFromList(activity, title, displayValues, isSelected, t -> {
+            if (t.size() == 0) {
+                ok.run(null);
+                return;
             }
+            StringBuilder newValue = new StringBuilder();
+            for (Integer num : t) {
+                int i = num;
+                if (newValue.length() > 0) {
+                    newValue.append("|");
+                }
+                newValue.append((String) values.get(i));
+            }
+            ok.run(newValue.toString());
         });
     }
 

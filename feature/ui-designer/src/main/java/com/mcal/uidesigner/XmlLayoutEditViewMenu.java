@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.common.MessageBox;
 import com.mcal.uidesigner.common.PropertiesDialog;
 import com.mcal.uidesigner.common.ValueRunnable;

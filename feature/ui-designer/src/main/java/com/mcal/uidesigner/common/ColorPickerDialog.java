@@ -2,7 +2,6 @@ package com.mcal.uidesigner.common;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,12 +15,12 @@ import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.view.ColorPickerView;
 
 public class ColorPickerDialog extends MessageBox {
-    private boolean allowsNone;
-    private int newColor;
-    private String newHexColor;
     private final ColorRunnable ok;
     private final String oldHexColor;
     private final String title;
+    private boolean allowsNone;
+    private int newColor;
+    private String newHexColor;
     private boolean updatingColorPicker;
     private boolean updatingEditText;
 
@@ -85,25 +84,12 @@ public class ColorPickerDialog extends MessageBox {
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setView(layout).setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                ok.run(newColor, newHexColor);
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setView(layout).setCancelable(true).setPositiveButton("Ok", (dialog, id) -> {
+            dialog.dismiss();
+            ok.run(newColor, newHexColor);
+        }).setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         if (this.allowsNone) {
-            builder.setNeutralButton("None", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ok.run(0, null);
-                }
-            });
+            builder.setNeutralButton("None", (dialog, which) -> ok.run(0, null));
         }
         builder.setTitle(this.title);
         AlertDialog dialog = builder.create();

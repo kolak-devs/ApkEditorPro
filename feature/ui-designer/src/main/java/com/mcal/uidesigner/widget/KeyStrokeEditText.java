@@ -15,12 +15,9 @@ import com.mcal.uidesigner.common.KeyStrokeDetector;
 public class KeyStrokeEditText extends AppCompatEditText {
     private KeyStrokeDetector keyStrokeDetector;
     private KeyStroke stroke;
-    private final KeyStrokeDetector.KeyStrokeHandler keyStrokeHandler = new KeyStrokeDetector.KeyStrokeHandler() {
-        @Override
-        public boolean onKeyStroke(KeyStroke keyStroke) {
-            setKeyStroke(keyStroke);
-            return true;
-        }
+    private final KeyStrokeDetector.KeyStrokeHandler keyStrokeHandler = keyStroke -> {
+        setKeyStroke(keyStroke);
+        return true;
     };
 
     public KeyStrokeEditText(Context context) {

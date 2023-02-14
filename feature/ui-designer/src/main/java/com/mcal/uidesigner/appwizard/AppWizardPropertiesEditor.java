@@ -88,11 +88,7 @@ public class AppWizardPropertiesEditor {
                 }
             });
         }
-        addStringProperty(cmds, "Title", appFragment.getTitle(), new ValueRunnable<String>() {
-            public void run(String t) {
-                appFragment.setTitle(t);
-            }
-        });
+        addStringProperty(cmds, "Title", appFragment.getTitle(), appFragment::setTitle);
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
@@ -180,28 +176,12 @@ public class AppWizardPropertiesEditor {
                 return true;
             }
         });
-        addStringProperty(cmds, "Title", appActivity.getTitle(), new ValueRunnable<String>() {
-            public void run(String t) {
-                appActivity.setTitle(t);
-            }
-        });
+        addStringProperty(cmds, "Title", appActivity.getTitle(), appActivity::setTitle);
         addNavigationProperty(cmds, appActivity);
         addThemeProperty(cmds, appActivity);
-        addBooleanProperty(cmds, "Show Title", appActivity.showTitleValue(), new ValueRunnable<Boolean>() {
-            public void run(Boolean b) {
-                appActivity.setShowTitle(b);
-            }
-        });
-        addBooleanProperty(cmds, "Show Action Bar", appActivity.showActionBarValue(), new ValueRunnable<Boolean>() {
-            public void run(Boolean b) {
-                appActivity.setShowActionBar(b);
-            }
-        });
-        addBooleanProperty(cmds, "Fullscreen", appActivity.showFullscreenValue(), new ValueRunnable<Boolean>() {
-            public void run(Boolean b) {
-                appActivity.setShowFullscreen(b);
-            }
-        });
+        addBooleanProperty(cmds, "Show Title", appActivity.showTitleValue(), appActivity::setShowTitle);
+        addBooleanProperty(cmds, "Show Action Bar", appActivity.showActionBarValue(), appActivity::setShowActionBar);
+        addBooleanProperty(cmds, "Fullscreen", appActivity.showFullscreenValue(), appActivity::setShowFullscreen);
         return cmds;
     }
 
@@ -209,10 +189,8 @@ public class AppWizardPropertiesEditor {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
-                MessageBox.queryFromList(activity, "Navigation", AppWizardProject.NavigationType.getPossibleNames(), new ValueRunnable<String>() {
-                    public void run(String t) {
-                        app.setNavigationType(AppWizardProject.NavigationType.forName(t));
-                    }
+                MessageBox.queryFromList(activity, "Navigation", AppWizardProject.NavigationType.getPossibleNames(), t -> {
+                    app.setNavigationType(AppWizardProject.NavigationType.forName(t));
                 });
             }
 
@@ -242,10 +220,8 @@ public class AppWizardPropertiesEditor {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
-                MessageBox.queryFromList(activity, "Theme", AppWizardProject.Theme.getPossibleNames(), new ValueRunnable<String>() {
-                    public void run(String t) {
-                        app.setTheme(AppWizardProject.Theme.forName(t));
-                    }
+                MessageBox.queryFromList(activity, "Theme", AppWizardProject.Theme.getPossibleNames(), t -> {
+                    app.setTheme(AppWizardProject.Theme.forName(t));
                 });
             }
 
@@ -275,11 +251,7 @@ public class AppWizardPropertiesEditor {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
-                MessageBox.queryText(activity, title, (String) null, value, new ValueRunnable<String>() {
-                    public void run(String t) {
-                        ok.run(t);
-                    }
-                });
+                MessageBox.queryText(activity, title, (String) null, value, t -> ok.run(t));
             }
 
             @Override
@@ -308,26 +280,20 @@ public class AppWizardPropertiesEditor {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
-                MessageBox.queryFromList(activity, title, Arrays.asList("true", "false", "none"), new ValueRunnable<String>() {
-                    public void run(String t) {
-                        new ValueRunnable<String>() {
-                            public void run(String t2) {
-                                if ("none".equals(t2)) {
-                                    ok.run(null);
-                                } else if ("true".equals(t2)) {
-                                    ok.run(true);
-                                } else {
-                                    ok.run(false);
-                                }
-                            }
-                        }.run(t);
+                MessageBox.queryFromList(activity, title, Arrays.asList("true", "false", "none"), t -> ((ValueRunnable<String>) t2 -> {
+                    if ("none".equals(t2)) {
+                        ok.run(null);
+                    } else if ("true".equals(t2)) {
+                        ok.run(true);
+                    } else {
+                        ok.run(false);
                     }
-                });
+                }).run(t));
             }
 
             @Override
             public String getName() {
-                return AppWizardPropertiesEditor.this.getPropertyTitle(title, value == null ? null : Boolean.toString(value.booleanValue()));
+                return AppWizardPropertiesEditor.this.getPropertyTitle(title, value == null ? null : Boolean.toString(value));
             }
 
             @Override

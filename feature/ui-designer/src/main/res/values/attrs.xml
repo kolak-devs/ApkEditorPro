@@ -313,11 +313,11 @@
     <attr name="icon_undo" format="reference" />
     <attr name="icon_view" format="reference" />
     <attr name="theme_name" format="string" />
-<!--    <attr name="imageAspectRatioAdjust">-->
-<!--        <enum name="adjust_height" value="2" />-->
-<!--        <enum name="adjust_width" value="1" />-->
-<!--        <enum name="none" value="0" />-->
-<!--    </attr>-->
+    <!--    <attr name="imageAspectRatioAdjust">-->
+    <!--        <enum name="adjust_height" value="2" />-->
+    <!--        <enum name="adjust_width" value="1" />-->
+    <!--        <enum name="none" value="0" />-->
+    <!--    </attr>-->
     <attr name="imageAspectRatio" format="float" />
     <attr name="circleCrop" format="boolean" />
 </resources>

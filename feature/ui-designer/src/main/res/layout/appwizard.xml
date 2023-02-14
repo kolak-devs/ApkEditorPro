@@ -19,13 +19,13 @@
             android:id="@+id/appwizardEditButtonLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="15.0dip"
             android:layout_marginRight="15.0dip"
             android:background="@drawable/appwizard_edit"
             android:orientation="horizontal"
-            android:padding="5.0dip"
-            android:layout_marginEnd="15.0dip">
+            android:padding="5.0dip">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/appwizardEditButton"
                 android:layout_width="50.0dip"
                 android:layout_height="50.0dip"
@@ -33,9 +33,9 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/round_architecture_24" />
+                android:src="@drawable/ic_architecture" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/appwizardUndoButton"
                 android:layout_width="50.0dip"
                 android:layout_height="50.0dip"
@@ -43,9 +43,9 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/round_undo_24" />
+                android:src="@drawable/ic_undo" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/appwizardRedoButton"
                 android:layout_width="50.0dip"
                 android:layout_height="50.0dip"
@@ -53,7 +53,7 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/round_redo_24" />
+                android:src="@drawable/ic_redo" />
         </LinearLayout>
 
         <LinearLayout
@@ -62,7 +62,7 @@
             android:background="@drawable/appwizard_edit"
             android:padding="5.0dip">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/appwizardModeButton"
                 android:layout_width="50.0dip"
                 android:layout_height="50.0dip"
@@ -70,7 +70,7 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/round_edit_24" />
+                android:src="@drawable/ic_edit" />
 
         </LinearLayout>
 

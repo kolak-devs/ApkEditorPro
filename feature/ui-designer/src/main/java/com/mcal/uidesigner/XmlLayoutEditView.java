@@ -9,9 +9,9 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 
-import com.mcal.uidesigner.widget.ClickableBorder;
 import com.mcal.uidesigner.common.PositionalXMLReader;
 import com.mcal.uidesigner.common.ValueRunnable;
+import com.mcal.uidesigner.widget.ClickableBorder;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

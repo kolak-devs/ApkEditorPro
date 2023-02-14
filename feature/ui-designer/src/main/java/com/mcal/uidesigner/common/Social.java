@@ -56,13 +56,10 @@ public class Social {
             facebookIntent = new Intent("android.intent.action.VIEW", Uri.parse("https://www.facebook.com/sharer/sharer.php?u=" + link));
         } else {
             ((ClipboardManager) context.getSystemService("clipboard")).setText(text);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Toast toast = Toast.makeText(context, "Long press to paste: \"" + text + "\"", 1);
-                    toast.setGravity(49, 0, 20);
-                    toast.show();
-                }
+            new Handler().postDelayed(() -> {
+                Toast toast = Toast.makeText(context, "Long press to paste: \"" + text + "\"", 1);
+                toast.setGravity(49, 0, 20);
+                toast.show();
             }, 1000);
         }
         startActivity(context, facebookIntent);

@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class Utils {
         if (path == null) {
             return null;
         }
-        return path.substring(path.lastIndexOf("/") + 1, path.length());
+        return path.substring(path.lastIndexOf("/") + 1);
     }
 
     @Nullable
@@ -141,11 +140,7 @@ public class Utils {
                 }
             }
         }
-        Collections.sort(layoutFiles, new Comparator<File>() {
-            public int compare(File lhs, File rhs) {
-                return lhs.getName().compareTo(rhs.getName());
-            }
-        });
+        layoutFiles.sort(Comparator.comparing(File::getName));
         return layoutFiles;
     }
 

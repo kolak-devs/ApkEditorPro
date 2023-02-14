@@ -681,23 +681,23 @@
             @android:style/Widget.TextView.SpinnerItem
         </item>
         <item name="Android_Widget_WebView">@android:style/Widget.WebView</item>
-        <item name="icon_add">@drawable/round_add_circle_outline_24</item>
-        <item name="icon_copy">@drawable/round_content_copy_24</item>
-        <item name="icon_cut">@drawable/round_content_cut_24</item>
-        <item name="icon_delete">@drawable/round_delete_24</item>
-        <item name="icon_design">@drawable/round_image_24</item>
-        <item name="icon_edit">@drawable/round_edit_24</item>
-        <item name="icon_expand">@drawable/round_add_circle_outline_24</item>
-        <item name="icon_fix">@drawable/round_check_circle_outline_24</item>
-        <item name="icon_goto">@drawable/round_south_east_24</item>
-        <item name="icon_help">@drawable/round_info_24</item>
-        <item name="icon_manage">@drawable/round_architecture_24</item>
-        <item name="icon_more">@drawable/round_expand_more_24</item>
-        <item name="icon_paste">@drawable/round_content_paste_24</item>
-        <item name="icon_redo">@drawable/round_redo_24</item>
-        <item name="icon_run">@drawable/round_play_arrow_24</item>
-        <item name="icon_undo">@drawable/round_undo_24</item>
-        <item name="icon_view">@drawable/round_visibility_24</item>
+        <item name="icon_add">@drawable/ic_add_circle</item>
+        <item name="icon_copy">@drawable/ic_content_copy</item>
+        <item name="icon_cut">@drawable/ic_content_cut</item>
+        <item name="icon_delete">@drawable/ic_delete</item>
+        <item name="icon_design">@drawable/ic_image</item>
+        <item name="icon_edit">@drawable/ic_edit</item>
+        <item name="icon_expand">@drawable/ic_add_circle</item>
+        <item name="icon_fix">@drawable/ic_check_circle</item>
+        <item name="icon_goto">@drawable/ic_south_east</item>
+        <item name="icon_help">@drawable/ic_info</item>
+        <item name="icon_manage">@drawable/ic_architecture</item>
+        <item name="icon_more">@drawable/ic_expand_more</item>
+        <item name="icon_paste">@drawable/ic_content_paste</item>
+        <item name="icon_redo">@drawable/ic_redo</item>
+        <item name="icon_run">@drawable/ic_play</item>
+        <item name="icon_undo">@drawable/ic_undo</item>
+        <item name="icon_view">@drawable/ic_visibility</item>
     </style>
 
     <style name="ActivityThemeDesignerLight" parent="Theme.Material3.Light">
@@ -1381,23 +1381,23 @@
             @android:style/Widget.TextView.SpinnerItem
         </item>
         <item name="Android_Widget_WebView">@android:style/Widget.WebView</item>
-        <item name="icon_add">@drawable/round_add_circle_outline_24</item>
-        <item name="icon_copy">@drawable/round_content_copy_24</item>
-        <item name="icon_cut">@drawable/round_content_cut_24</item>
-        <item name="icon_delete">@drawable/round_delete_24</item>
-        <item name="icon_design">@drawable/round_image_24</item>
-        <item name="icon_edit">@drawable/round_edit_24</item>
-        <item name="icon_expand">@drawable/round_add_circle_outline_24</item>
-        <item name="icon_fix">@drawable/round_check_circle_outline_24</item>
-        <item name="icon_goto">@drawable/round_south_east_24</item>
-        <item name="icon_help">@drawable/round_info_24</item>
-        <item name="icon_manage">@drawable/round_architecture_24</item>
-        <item name="icon_more">@drawable/round_expand_more_24</item>
-        <item name="icon_paste">@drawable/round_content_paste_24</item>
-        <item name="icon_redo">@drawable/round_redo_24</item>
-        <item name="icon_run">@drawable/round_play_arrow_24</item>
-        <item name="icon_undo">@drawable/round_undo_24</item>
-        <item name="icon_view">@drawable/round_visibility_24</item>
+        <item name="icon_add">@drawable/ic_add_circle</item>
+        <item name="icon_copy">@drawable/ic_content_copy</item>
+        <item name="icon_cut">@drawable/ic_content_cut</item>
+        <item name="icon_delete">@drawable/ic_delete</item>
+        <item name="icon_design">@drawable/ic_image</item>
+        <item name="icon_edit">@drawable/ic_edit</item>
+        <item name="icon_expand">@drawable/ic_add_circle</item>
+        <item name="icon_fix">@drawable/ic_check_circle</item>
+        <item name="icon_goto">@drawable/ic_south_east</item>
+        <item name="icon_help">@drawable/ic_info</item>
+        <item name="icon_manage">@drawable/ic_architecture</item>
+        <item name="icon_more">@drawable/ic_expand_more</item>
+        <item name="icon_paste">@drawable/ic_content_paste</item>
+        <item name="icon_redo">@drawable/ic_redo</item>
+        <item name="icon_run">@drawable/ic_play</item>
+        <item name="icon_undo">@drawable/ic_undo</item>
+        <item name="icon_view">@drawable/ic_visibility</item>
     </style>
 
     <style name="TrainerHeaderInner">

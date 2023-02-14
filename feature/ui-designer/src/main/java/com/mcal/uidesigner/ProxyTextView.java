@@ -1,6 +1,5 @@
 package com.mcal.uidesigner;
 
-import android.R;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.util.TypedValue;

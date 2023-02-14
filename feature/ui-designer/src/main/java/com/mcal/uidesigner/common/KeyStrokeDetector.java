@@ -20,9 +20,9 @@ import org.jetbrains.annotations.Contract;
 
 public class KeyStrokeDetector {
     private static final boolean DEBUG = false;
+    private final Context context;
     private boolean altLeftDown;
     private boolean altRightDown;
-    private final Context context;
     private boolean ctrlLeftDown;
     private boolean ctrlRightDown;
     private boolean isSoftKeyboard;

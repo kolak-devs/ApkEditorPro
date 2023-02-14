@@ -15,10 +15,10 @@ import android.widget.LinearLayout;
 
 @SuppressLint("ViewConstructor")
 public class ClickableBorder extends LinearLayout {
-    private boolean down;
     private final float radius;
     private final Paint thickPaint;
     private final Paint thinPaint;
+    private boolean down;
     private boolean visible = true;
 
     public ClickableBorder(Context context, View view) {
@@ -30,12 +30,7 @@ public class ClickableBorder extends LinearLayout {
         setClipChildren(false);
         setEnabled(true);
         setFocusable(true);
-        setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClickableBorder.this.onClicked();
-            }
-        });
+        setOnClickListener(v -> ClickableBorder.this.onClicked());
         this.thinPaint = new Paint();
         this.thinPaint.setStyle(Paint.Style.STROKE);
         this.thinPaint.setColor(-5592406);
@@ -112,13 +107,10 @@ public class ClickableBorder extends LinearLayout {
             if (event.getAction() == 0) {
                 this.down = true;
                 repaint();
-                postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (down) {
-                            down = false;
-                            repaint();
-                        }
+                postDelayed(() -> {
+                    if (down) {
+                        down = false;
+                        repaint();
                     }
                 }, 1000);
             }

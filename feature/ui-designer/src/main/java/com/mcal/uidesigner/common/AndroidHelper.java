@@ -1,7 +1,6 @@
 package com.mcal.uidesigner.common;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.UiModeManager;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -9,23 +8,21 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatSpinner;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
 
 import com.mcal.uidesigner.R;
@@ -55,12 +52,10 @@ public class AndroidHelper {
         }
     }
 
-    public static boolean isMaterialTheme(Context context) {
-        if (Build.VERSION.SDK_INT >= 20) {
-            TypedValue tv = new TypedValue();
-            if (context.getTheme().resolveAttribute(R.attr.theme_name, tv, true)) {
-                return "Material".equals(tv.string);
-            }
+    public static boolean isMaterialTheme(@NonNull Context context) {
+        TypedValue tv = new TypedValue();
+        if (context.getTheme().resolveAttribute(R.attr.theme_name, tv, true)) {
+            return "Material".contentEquals(tv.string);
         }
         return false;
     }
@@ -69,7 +64,7 @@ public class AndroidHelper {
         return false;
     }
 
-    @TargetApi(21)
+    @SuppressLint("DiscouragedApi")
     public static void setAndroidTVPadding(AppCompatActivity activity) {
         if (isAndroidTV(activity)) {
             float density = activity.getResources().getDisplayMetrics().density;
@@ -85,7 +80,7 @@ public class AndroidHelper {
         setAndroidTVPadding(contentView, false);
     }
 
-    @TargetApi(21)
+    @SuppressLint("DiscouragedApi")
     public static void setAndroidTVPadding(@NonNull View contentView, boolean bottomPadding) {
         int i;
         if (isAndroidTV(contentView.getContext())) {
@@ -107,16 +102,15 @@ public class AndroidHelper {
         }
     }
 
-    public static void makeToolbarFocusable(AppCompatActivity activity) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            View tv = activity.findViewById(activity.getResources().getIdentifier("action_bar", "id", "android"));
-            if (tv instanceof ViewGroup) {
-                ((ViewGroup) tv).setTouchscreenBlocksFocus(false);
-            }
-            View av = activity.findViewById(activity.getResources().getIdentifier("action_bar_container", "id", "android"));
-            if (av instanceof ViewGroup) {
-                ((ViewGroup) av).setTouchscreenBlocksFocus(false);
-            }
+    @SuppressLint("DiscouragedApi")
+    public static void makeToolbarFocusable(@NonNull AppCompatActivity activity) {
+        View tv = activity.findViewById(activity.getResources().getIdentifier("action_bar", "id", "android"));
+        if (tv instanceof ViewGroup) {
+            ((ViewGroup) tv).setTouchscreenBlocksFocus(false);
+        }
+        View av = activity.findViewById(activity.getResources().getIdentifier("action_bar_container", "id", "android"));
+        if (av instanceof ViewGroup) {
+            ((ViewGroup) av).setTouchscreenBlocksFocus(false);
         }
     }
 
@@ -125,14 +119,12 @@ public class AndroidHelper {
         boolean z = false;
         if (isAndroidTV == null) {
             isAndroidTV = false;
-            if (Build.VERSION.SDK_INT >= 21) {
-                if (((UiModeManager) context.getSystemService("uimode")).getCurrentModeType() == 4) {
-                    z = true;
-                }
-                isAndroidTV = Boolean.valueOf(z);
+            if (((UiModeManager) context.getSystemService("uimode")).getCurrentModeType() == 4) {
+                z = true;
             }
+            isAndroidTV = z;
         }
-        return isAndroidTV.booleanValue();
+        return isAndroidTV;
     }
 
     public static boolean hasHardwareKeyboard(@NonNull Context context) {
@@ -160,46 +152,37 @@ public class AndroidHelper {
         try {
             Method setHasEmbeddedTabsMethod = activity.getSupportActionBar().getClass().getDeclaredMethod("setHasEmbeddedTabs", Boolean.TYPE);
             setHasEmbeddedTabsMethod.setAccessible(true);
-            setHasEmbeddedTabsMethod.invoke(activity.getSupportActionBar(), Boolean.valueOf(enabled));
+            setHasEmbeddedTabsMethod.invoke(activity.getSupportActionBar(), enabled);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @SuppressLint({"DiscouragedApi", "DiscouragedPrivateApi", "PrivateApi"})
     public static void setActionBarReplacementPopup(final AppCompatActivity activity) {
-        new Handler().postDelayed(new Runnable() {
-            @SuppressLint("PrivateApi")
-            @Override
-            public void run() {
-                try {
-                    final ActionBar actionBar = activity.getSupportActionBar();
-                    final AppCompatSpinner spinner = (AppCompatSpinner) AndroidHelper.findViewOf(activity.findViewById(activity.getResources().getIdentifier("action_bar_container", "id", "android")), AppCompatSpinner.class);
-                    if (spinner != null) {
-                        View.OnClickListener onClickListener = new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                PopupMenu popup = new PopupMenu(activity, spinner);
-                                Menu menu = popup.getMenu();
-                                for (int i = 0; i < actionBar.getTabCount(); i++) {
-                                    menu.add(0, i, 0, actionBar.getTabAt(i).getText());
-                                }
-                                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(MenuItem item) {
-                                        actionBar.selectTab(actionBar.getTabAt(item.getItemId()));
-                                        return true;
-                                    }
-                                });
-                                popup.show();
-                            }
-                        };
-                        Method method_GetListenerInfo = View.class.getDeclaredMethod("getListenerInfo", new Class[0]);
-                        method_GetListenerInfo.setAccessible(true);
-                        Class.forName("android.view.View$ListenerInfo").getDeclaredField("mOnClickListener").set(method_GetListenerInfo.invoke(spinner, new Object[0]), onClickListener);
-                    }
-                } catch (Throwable t) {
-                    t.printStackTrace();
+        new Handler().postDelayed(() -> {
+            try {
+                final ActionBar actionBar = activity.getSupportActionBar();
+                final Spinner spinner = (Spinner) AndroidHelper.findViewOf(activity.findViewById(activity.getResources().getIdentifier("action_bar_container", "id", "android")), Spinner.class);
+                if (spinner != null) {
+                    View.OnClickListener onClickListener = v -> {
+                        PopupMenu popup = new PopupMenu(activity, spinner);
+                        Menu menu = popup.getMenu();
+                        for (int i = 0; i < actionBar.getTabCount(); i++) {
+                            menu.add(0, i, 0, actionBar.getTabAt(i).getText());
+                        }
+                        popup.setOnMenuItemClickListener(item -> {
+                            actionBar.selectTab(actionBar.getTabAt(item.getItemId()));
+                            return true;
+                        });
+                        popup.show();
+                    };
+                    Method method_GetListenerInfo = View.class.getDeclaredMethod("getListenerInfo", new Class[0]);
+                    method_GetListenerInfo.setAccessible(true);
+                    Class.forName("android.view.View$ListenerInfo").getDeclaredField("mOnClickListener").set(method_GetListenerInfo.invoke(spinner, new Object[0]), onClickListener);
                 }
+            } catch (Throwable t) {
+                t.printStackTrace();
             }
         }, 200);
     }
@@ -221,11 +204,12 @@ public class AndroidHelper {
         return null;
     }
 
+    @SuppressLint({"PrivateApi", "DiscouragedPrivateApi"})
     public static void forceOptionsMenuButton(AppCompatActivity activity) {
         if (getScreenSizeDip(activity) >= 540.0f) {
             try {
                 ViewConfiguration config = ViewConfiguration.get(activity);
-                @SuppressLint("PrivateApi") Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+                Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
                 if (menuKeyField != null) {
                     menuKeyField.setAccessible(true);
                     menuKeyField.setBoolean(config, false);
@@ -278,7 +262,7 @@ public class AndroidHelper {
         return size;
     }
 
-    public static void correctCodeFontSize(@NonNull AppCompatTextView textView) {
+    public static void correctCodeFontSize(@NonNull TextView textView) {
         textView.setTextSize(((float) correctCodeFontSize(textView.getContext(), (int) textView.getTextSize())) / textView.getContext().getResources().getDisplayMetrics().scaledDensity);
     }
 
