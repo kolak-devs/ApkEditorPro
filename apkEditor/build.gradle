@@ -162,6 +162,7 @@ dependencies {
     implementation project(':feature:net-manager')
     implementation project(':feature:bsh-engine')
     implementation project(':feature:colormixer')
+    implementation project(':feature:ui-designer')
 
     implementation tools.dexlib2
     implementation tools.smali
@@ -174,8 +175,7 @@ dependencies {
     implementation jetpack.mvvm_ld
     implementation jetpack.fragment
     implementation jetpack.navigation
-
-    implementation jetpack.material
+    implementation jetpack.coordinatorlayout
 
     implementation misc.annotations
     implementation misc.gson
@@ -183,8 +183,6 @@ dependencies {
 
     implementation misc.guava
     implementation misc.antlr
-
-    implementation jetpack.constraint
 
     implementation ui.fastadapter
     implementation ui.fastadapter_binding

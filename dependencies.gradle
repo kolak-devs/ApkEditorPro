@@ -17,7 +17,9 @@ ext {
             navigation: 'androidx.navigation:navigation-ui:2.5.2',
             material: 'com.google.android.material:material:1.6.1',
             constraint: "androidx.constraintlayout:constraintlayout:2.1.4",
+            coordinatorlayout: "androidx.coordinatorlayout:coordinatorlayout:1.2.0",
             vp2: "androidx.viewpager2:viewpager2:1.0.0",
+            cardview: "androidx.cardview:cardview:1.0.0",
             preferences: "androidx.datastore:datastore-preferences:1.0.0",
             preferences_core: "androidx.datastore:datastore-preferences-core:1.0.0"
     ]

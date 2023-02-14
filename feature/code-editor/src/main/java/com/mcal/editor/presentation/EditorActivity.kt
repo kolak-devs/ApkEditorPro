@@ -34,6 +34,7 @@ import com.mcal.neweditor.R
 import com.mcal.neweditor.databinding.ActivitySoraeditorBinding
 import com.mcal.permissioneditor.ManifestActivity
 import com.mcal.presentation.base.BaseActivity
+import com.mcal.uidesigner.XmlLayoutDesignActivity
 import io.github.rosemoe.sora.event.*
 import io.github.rosemoe.sora.lang.EmptyLanguage
 import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
@@ -58,14 +59,15 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
 
     override fun viewModelClass() = EditorViewModel::class.java
 
-    private var save: MenuItem? = null
-    private var undo: MenuItem? = null
-    private var redo: MenuItem? = null
-    private var dexToJava: MenuItem? = null
-    private var smaliToJava: MenuItem? = null
-    private var methodsList: MenuItem? = null
+    private var saveMenu: MenuItem? = null
+    private var undoMenu: MenuItem? = null
+    private var redoMenu: MenuItem? = null
+    private var dexToJavaMenu: MenuItem? = null
+    private var smaliToJavaMenu: MenuItem? = null
+    private var methodsListMenu: MenuItem? = null
     private var templatesMenu: MenuItem? = null
-    private var permissions: MenuItem? = null
+    private var permissionsMenu: MenuItem? = null
+    private var uiDesignerMenu: MenuItem? = null
 
     private var mFilePath: File? = null
     private var mApkPath: File? = null
@@ -327,19 +329,20 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
 
     @SuppressLint("FileEndsWithExt")
     private fun updateBtnState() {
-        if (undo == null) {
+        if (undoMenu == null) {
             return
         }
-        save?.isEnabled = canSave()
-        undo?.isEnabled = binding.editor.canUndo()
-        redo?.isEnabled = binding.editor.canRedo()
+        saveMenu?.isEnabled = canSave()
+        undoMenu?.isEnabled = binding.editor.canUndo()
+        redoMenu?.isEnabled = binding.editor.canRedo()
         mFilePath?.let { path ->
             val isSmali = path.name.endsWith(".smali")
-            dexToJava?.isVisible = isSmali
-            smaliToJava?.isVisible = isSmali
-            methodsList?.isVisible = isSmali or path.name.endsWith(".java")
+            dexToJavaMenu?.isVisible = isSmali
+            smaliToJavaMenu?.isVisible = isSmali
+            methodsListMenu?.isVisible = isSmali or path.name.endsWith(".java")
             templatesMenu?.isVisible = isSmali
-            permissions?.isVisible = path.name.endsWith("AndroidManifest.xml")
+            permissionsMenu?.isVisible = path.name.endsWith("AndroidManifest.xml")
+            uiDesignerMenu?.isVisible= path.path.contains("res/layout/") && path.name.endsWith(".xml")
         }
     }
 
@@ -349,14 +352,15 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_editor, menu)
-        save = menu.findItem(R.id.text_save)
-        undo = menu.findItem(R.id.text_undo)
-        redo = menu.findItem(R.id.text_redo)
-        dexToJava = menu.findItem(R.id.dex_to_java)
-        smaliToJava = menu.findItem(R.id.smali_to_java)
-        methodsList = menu.findItem(R.id.methods)
+        saveMenu = menu.findItem(R.id.text_save)
+        undoMenu = menu.findItem(R.id.text_undo)
+        redoMenu = menu.findItem(R.id.text_redo)
+        dexToJavaMenu = menu.findItem(R.id.dex_to_java)
+        smaliToJavaMenu = menu.findItem(R.id.smali_to_java)
+        methodsListMenu = menu.findItem(R.id.methods)
         templatesMenu = menu.findItem(R.id.template)
-        permissions = menu.findItem(R.id.permissions)
+        permissionsMenu = menu.findItem(R.id.permissions)
+        uiDesignerMenu = menu.findItem(R.id.ui_designer)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -423,6 +427,18 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
         val id = item.itemId
         val editor = binding.editor
         when (id) {
+            R.id.ui_designer-> {
+                mFilePath?.let { file ->
+                    val intent = Intent(this, XmlLayoutDesignActivity::class.java)
+                    intent.putExtra(XmlLayoutDesignActivity.EXTRA_FILE, file.path)
+                    intent.putExtra(XmlLayoutDesignActivity.EXTRA_LANGUAGE, "xml")
+                    intent.putExtra(XmlLayoutDesignActivity.EXTRA_DEMO, false)
+                    intent.putExtra(XmlLayoutDesignActivity.EXTRA_STANDALONE, false)
+                    intent.putExtra(XmlLayoutDesignActivity.EXTRA_TRAINER, false)
+                    startActivity(intent)
+                    finish()
+                }
+            }
             R.id.permissions -> {
                 mFilePath?.let { file ->
                     val intent = Intent(this, ManifestActivity::class.java)

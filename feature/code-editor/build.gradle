@@ -42,6 +42,7 @@ dependencies {
     implementation project(':melissa')
     implementation project(':feature:colormixer')
     implementation project(':feature:permission-editor')
+    implementation project(':feature:ui-designer')
     implementation misc.guava
 
     implementation tools.dexlib2

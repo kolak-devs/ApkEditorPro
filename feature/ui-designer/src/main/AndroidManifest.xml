@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="com.mcal.uidesigner"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <supports-screens
+        android:largeScreens="true"
+        android:xlargeScreens="true" />
+    <application>
+		
+        <activity
+            android:theme="@style/ActivityThemeDesignerLight"
+            android:label="App UI Designer"
+            android:name="com.mcal.uidesigner.XmlLayoutDesignActivity"
+            android:configChanges="keyboard|keyboardHidden|locale|orientation|screenSize">
+<!--            <intent-filter>-->
+<!--                <action-->
+<!--                    android:name="android.intent.action.VIEW" />-->
+<!--                <category-->
+<!--                    android:name="android.intent.category.DEFAULT" />-->
+<!--                <category-->
+<!--                    android:name="android.intent.category.BROWSABLE" />-->
+<!--                <data-->
+<!--                    android:scheme="file" />-->
+<!--                <data-->
+<!--                    android:mimeType="*/*" />-->
+<!--                <data-->
+<!--                    android:pathPattern=".*\\.xml" />-->
+<!--                <data-->
+<!--                    android:host="*" />-->
+<!--            </intent-filter>-->
+<!--            <intent-filter>-->
+<!--                <action-->
+<!--                    android:name="android.intent.action.SEND" />-->
+<!--                <category-->
+<!--                    android:name="android.intent.category.DEFAULT" />-->
+<!--                <data-->
+<!--                    android:mimeType="*/*" />-->
+<!--                <data-->
+<!--                    android:pathPattern=".*\\.xml" />-->
+<!--                <data-->
+<!--                    android:host="*" />-->
+<!--            </intent-filter>-->
+        </activity>
+    </application>
+</manifest>
