@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.NinePatchDrawable
 import android.os.Build
 import com.mcal.uidesigner.common.StreamUtilities
+import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
 import org.w3c.dom.Attr
 import org.w3c.dom.DOMException
 import org.w3c.dom.Document
@@ -21,8 +22,7 @@ class XmlLayoutResourceFinder(private val context: Context, resDirPath: String?)
     private var styleParents: MutableMap<Int, MutableMap<String?, String>>? = null
     private var styles: MutableMap<Int, SortedMap<String?, Map<String, String>>>? = null
 
-    private val TARGET_SDK = 33
-
+    private val TARGET_SDK = Build.VERSION.SDK_INT
 
     fun reload() {
         resourceValues = HashMap()
@@ -189,6 +189,10 @@ class XmlLayoutResourceFinder(private val context: Context, resDirPath: String?)
             if (drawableNine != null) {
                 return drawableNine
             }
+            val vectorDrawable = loadVectorDrawable(File(File(resourcesDir, "drawable"), if (resName2.endsWith(".xml")) resName2 else "$resName2.xml"))
+            if (vectorDrawable != null) {
+                return vectorDrawable
+            }
             val arrDpi = arrayOf("xxhpdi", "xhdpi", "hdpi", "mdpi", "ldpi")
             val lenDpi = arrDpi.size
             for (i in 0 until lenDpi) {
@@ -232,6 +236,22 @@ class XmlLayoutResourceFinder(private val context: Context, resDirPath: String?)
         } catch (e: Exception) {
             null
         }
+    }
+
+    private fun loadVectorDrawable(vectorFile: File?): Drawable? {
+        if (vectorFile == null) {
+            return null
+        }
+        try {
+            val vectorMasterDrawable = VectorMasterDrawable(context, vectorFile)
+            if (vectorMasterDrawable.isVector) {
+                return vectorMasterDrawable
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            return null
+        }
+        return null
     }
 
     private fun loadImageFile(imageFile: File?): Drawable? {
