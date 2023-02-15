@@ -37,6 +37,9 @@ dependencies {
     implementation project(flat.core)
     implementation project(':feature:code-editor')
     implementation project(":melissa")
+
+    implementation 'com.github.TimScriptov.App-UI-Designer:webview:1.0.1'
+
     implementation jetpack.core
     implementation jetpack.appcompat
     

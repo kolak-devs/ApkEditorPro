@@ -39,6 +39,10 @@
 -keep class com.google.common.collect.** { *; }
 -keep class apkeditor.Utils.** { *; }
 
+# UI Designer
+-keep class androidx.** { *; }
+-keep class com.google.android.material.** { *; }
+
 -obfuscationdictionary proguard-dictionary.txt
 -packageobfuscationdictionary proguard-dictionary.txt
 -classobfuscationdictionary proguard-dictionary.txt

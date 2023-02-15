@@ -162,7 +162,8 @@ dependencies {
     implementation project(':feature:net-manager')
     implementation project(':feature:bsh-engine')
     implementation project(':feature:colormixer')
-    implementation project(':feature:ui-designer')
+
+    implementation 'com.github.TimScriptov.App-UI-Designer:webview:1.0.1'
 
     implementation tools.dexlib2
     implementation tools.smali

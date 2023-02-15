@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -24,13 +25,13 @@ import com.mcal.apkeditor.patch.interfaces.IPatchContext
 import com.mcal.apkeditor.smali.AsyncDecodeTask
 import com.mcal.apkeditor.ui.patcher.PatchLogItem
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.activities.WebViewActivity
 import com.mcal.common.data.Constants
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ActivityHelper
 import com.mcal.common.utils.ApkInfoParser
 import com.mcal.common.utils.ScopedStorage.getPatchesDir
 import com.mcal.common.utils.copyFile
+import com.mcal.webview.WebViewActivity
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
@@ -113,6 +114,7 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                 menuInflater.inflate(R.menu.menu_patcher, menu)
             }
 
+            @SuppressLint("SimpleDateFormat")
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     R.id.help -> {

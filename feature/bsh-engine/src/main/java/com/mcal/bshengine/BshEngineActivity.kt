@@ -13,13 +13,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.bshengine.api.*
 import com.mcal.bshengine.databinding.BshengineActivityBinding
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.activities.WebViewActivity
 import com.mcal.common.data.Constants.getDomain
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ActivityHelper.attachParam
 import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyFile
 import com.mcal.editor.TextEditor.getSoraEditor
+import com.mcal.webview.WebViewActivity
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader

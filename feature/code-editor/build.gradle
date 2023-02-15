@@ -42,7 +42,7 @@ dependencies {
     implementation project(':melissa')
     implementation project(':feature:colormixer')
     implementation project(':feature:permission-editor')
-    implementation project(':feature:ui-designer')
+    implementation 'com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.1'
     implementation misc.guava
 
     implementation tools.dexlib2
@@ -56,7 +56,6 @@ dependencies {
 
     implementation misc.coroutines_core
 
-//    implementation 'io.github.Rosemoe.sora-editor:editor-kt:0.15.0-dev-1'
     implementation rosemoe.editor
     implementation rosemoe.language_java
     implementation rosemoe.textmate
