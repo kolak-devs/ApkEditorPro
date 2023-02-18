@@ -31,6 +31,7 @@ class TaskDecoder : Logger {
                 aapt2Path = binFolder + File.separator + "aapt2"
                 isAaptRules = ReactivePreferences.isAaptRules()
                 isJsonConfig = ReactivePreferences.isJsonConfig()
+                isCheckExistsFilesEnabledAsync = ReactivePreferences.isCheckExistsFilesEnabledAsync()
             }, this)
             val decoder = ApkDecoder(apkPath, lib)
             decoder.setApkFile(apkPath)
