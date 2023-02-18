@@ -28,7 +28,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -52,10 +51,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.androlib.LanguageMapping;
-import com.mcal.common.utils.OpenFiles;
 import com.mcal.apkeditor.ApkComposeService;
 import com.mcal.apkeditor.ApkParseConsumer;
 import com.mcal.apkeditor.ApkParseThread;
@@ -94,6 +91,7 @@ import com.mcal.common.filesystem.FilePickHelper;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
 import com.mcal.common.utils.FileRecord;
+import com.mcal.common.utils.OpenFiles;
 import com.mcal.common.utils.ScopedStorage;
 import com.mcal.common.utils.ServiceUtil;
 import com.mcal.common.utils.StringHelperKt;
@@ -265,7 +263,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             String strEnd = inputName.substring(filename.length());
             if (".apk".equals(strEnd)) {
                 targetApkPath = outputDir + "/" + filename + "2.apk";
-            } else if (strEnd.matches("[1-9][0-9]*\\.apk")) {
+            } else if (strEnd.matches("[1-9]\\d*\\.apk")) {
                 String strNum = strEnd.substring(0, strEnd.length() - 4);
                 try {
                     int idx = Integer.parseInt(strNum);
@@ -615,26 +613,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    private void loadParserProject() {
-        allStringValues = new HashMap<>();
-        changedStringValues = null;
-        mFileEntry2ZipEntry = null;
-
-        curConfig = null;
-        langConfigList = null;
-        stringModified = false;
-        manifestModified = false;
-        stringParsed = true;
-        resourceParsed = true;
-        bStringPrepared = true;
-        curSelectedRadio = 1;
-
-        dexDecoded = false;
-        isFullDecoding = true;
-
-        recoverView();
-    }
-
     private void recoverData(@NonNull Bundle savedInstanceState) {
 
         String path = savedInstanceState.getString("allStringValues_file");
@@ -960,34 +938,22 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     }
 
     private void initView() {
-        binding.mainRadio.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-            /**
-             * Called when an item in the navigation menu is selected.
-             *
-             * @param item The selected item
-             * @return true to display the item as the selected item and false if the item should not be
-             * selected. Consider setting non-selectable items as disabled preemptively to make them
-             * appear non-interactive.
-             */
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.tab_string: {
-                        stringRadioClicked();
-                        return true;
-                    }
-                    case R.id.tab_resource: {
-                        resRadioClicked();
-                        return true;
-                    }
-                    case R.id.tab_manifest: {
-                        manifestRadioClicked();
-                        return true;
-                    }
+        binding.mainRadio.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.tab_string: {
+                    stringRadioClicked();
+                    return true;
                 }
-                return false;
+                case R.id.tab_resource: {
+                    resRadioClicked();
+                    return true;
+                }
+                case R.id.tab_manifest: {
+                    manifestRadioClicked();
+                    return true;
+                }
             }
+            return false;
         });
 
 
@@ -1018,7 +984,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         RecyclerView stringList = binding.mainStrings.stringList;
         stringList.setLayoutManager(new LinearLayoutManager(this));
         stringList.setAdapter(stringListAdapter);
-
 
         binding.mainStrings.keywordEdit.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -1866,21 +1831,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         writeToFile(filePath, newLines);
     }
 
-    @SuppressLint("DefaultLocale")
-    protected void searchStringByKeyword(@NonNull String keyword) {
-        String lcKeyword = keyword.toLowerCase();
-        ArrayList<StringItem> values = allStringValues.get(curConfig);
-        if (values != null) {
-            ArrayList<StringItem> selected = new ArrayList<>();
-            for (StringItem pair : values) {
-                if (pair.value.toLowerCase().contains(lcKeyword)) {
-                    selected.add(pair);
-                }
-            }
-            updateStringList(selected);
-        }
-    }
-
     private void updateStringList() {
         if (curConfig == null) {
             curConfig = getBestConfig(allStringValues.keySet());
@@ -1971,15 +1921,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         resListAdapter = new ResListAdapter(this, path, curDir, decodeRootPath, mFileEntry2ZipEntry, new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                // Do not filter AndroidManifest.xml any more
                 return true;
-//                File f = new File(dir, filename);
-//                if (f.isDirectory()) {
-//                    return true;
-//                } else {
-//                    return !(decodeRootPath.equals(dir.getAbsolutePath())
-//                            && filename.equals("AndroidManifest.xml"));
-//                }
             }
         }, this);
         resListAdapter.setModification(res_addedFiles, res_deletedFiles, res_replacedFiles);
@@ -2093,7 +2035,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     }
 
     // Open files like *.xml, *.txt, etc
-    private void openEditableFile(String directory, String fileName, boolean bInZip, String entryName, String syntaxFileName) {
+    private void openEditableFile(String directory, String fileName, boolean bInZip, String entryName) {
 
         String filePath = resListAdapter.getReplacedFilePath(entryName);
         if (filePath != null) {
@@ -2109,7 +2051,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         } else {
             filePath = directory + "/" + fileName;
         }
-        openFileEditor(filePath, syntaxFileName, fileName, entryName);
+        openFileEditor(filePath, fileName, entryName);
     }
 
     public void openFile(@NonNull String directory, String fileName, boolean bInZip) {
@@ -2121,9 +2063,8 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             entryName = directory.substring(decodeRootPath.length() + 1) + "/" + fileName;
         }
 
-        String syntaxFileName = getEditableSyntax(fileName);
-        if (syntaxFileName != null) {
-            openEditableFile(directory, fileName, bInZip, entryName, syntaxFileName);
+        if (StringHelperKt.findExt(fileName, "xml|java|txt|html|css|js|lua|kt|MF|SF|json|py|smali|yml|gradle")) {
+            openEditableFile(directory, fileName, bInZip, entryName);
         } else {
             String filePath = resListAdapter.getReplacedFilePath(entryName);
             if (filePath != null) {
@@ -2156,29 +2097,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         }
     }
 
-    // Get the syntax file name for the file when editing
-    @Nullable
-    private String getEditableSyntax(@NonNull String fileName) {
-        if (fileName.endsWith(".xml")) {
-            return "xml.xml";
-        } else if (fileName.endsWith(".smali")) {
-            return "smali.xml";
-        } else if (fileName.endsWith(".html") || fileName.endsWith(".htm")) {
-            return "html.xml";
-        } else if (fileName.endsWith(".css")) {
-            return "css.xml";
-        } else if (fileName.endsWith(".java")) {
-            return "java.xml";
-        } else if (fileName.endsWith(".json")) {
-            return "json.xml";
-        } else if (fileName.endsWith(".txt") || fileName.endsWith(".yml")) {
-            return "txt.xml";
-        } else if (fileName.endsWith(".js")) {
-            return "js.xml";
-        }
-        return null;
-    }
-
     public void replaceFile(String replacedPath, String replacingPath) {
         FileInputStream in = null;
         FileOutputStream out = null;
@@ -2209,7 +2127,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     // displayFileName: name to be shown in title
     // entryName: the editing entry in apk file (here as extraString)
     // Note: entryName can NOT be null
-    private void openFileEditor(String filePath, String syntaxFileName, String displayFileName, String entryName) {
+    private void openFileEditor(String filePath, String displayFileName, String entryName) {
         // Open the color editor
         if ("res/values/colors.xml".equals(entryName)) {
             Intent intent = new Intent(this, ColorXmlActivity.class);
@@ -2377,15 +2295,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         }
     }
 
-    // To replace a resource file by showing the a file select dlg
-    protected void replaceFile(int position) {
-        List<FileRecord> records = new ArrayList<>();
-        String dirPath = resListAdapter.getData(records);
-        FileRecord rec = records.get(position);
-        String filepath = dirPath + "/" + rec.fileName;
-        replaceFile(filepath, (SomethingChangedListener) null);
-    }
-
     // replacedPath, also called as decodedPath, will be replaced
     public void replaceFile(@NonNull String replacedPath, final SomethingChangedListener listener) {
         String suffix = null;
@@ -2425,47 +2334,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
                 return null;
             }
         }, suffix, replacedPath, null, false, false, true, null);
-    }
-
-    // Replace a folder
-    protected void replaceFolder(int position) {
-        String dlgTitle = getString(R.string.select_folder_replace);
-
-        List<FileRecord> records = new ArrayList<>();
-        String dirPath = resListAdapter.getData(records);
-        FileRecord rec = records.get(position);
-
-        IFileSelection callback = new IFileSelection() {
-            @Override
-            public void fileSelectedInDialog(String filePath, String decodedPath, boolean openFile) {
-                String workingDir = ScopedStorage.getTmpDir().getPath();
-                // Selected path contains working dir
-                if (workingDir.startsWith(filePath)) {
-                    Toast.makeText(ApkInfoActivity.this, R.string.select_folder_err2, Toast.LENGTH_LONG).show();
-                }
-                // Selected path inside working dir
-                else if (filePath.startsWith(workingDir)) {
-                    Toast.makeText(ApkInfoActivity.this, R.string.select_folder_err1, Toast.LENGTH_LONG).show();
-                } else {
-                    resListAdapter.replaceFolder(decodedPath, filePath);
-                }
-            }
-
-            @Override
-            public boolean isInterestedFile(String filename, String extraStr) {
-                return true;
-            }
-
-            @NonNull
-            @Override
-            public String getConfirmMessage(String filePath, @NonNull String extraStr) {
-                String replaced = extraStr.substring(decodeRootPath.length() + 1);
-                String message = getString(R.string.folder_replace_tip);
-                return String.format(message, replaced, filePath);
-            }
-        };
-
-        new FileSelectDialog(this, callback, null, dirPath + "/" + rec.fileName, dlgTitle, true, true, false, null);
     }
 
     // To create a folder in current directory
