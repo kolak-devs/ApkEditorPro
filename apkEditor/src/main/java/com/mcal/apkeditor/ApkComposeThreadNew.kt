@@ -145,8 +145,12 @@ class ApkComposeThreadNew(
     private suspend fun signApk(inApk: String): Boolean {
         return if (ReactivePreferences.isSigningEnabled()) {
             if (ReactivePreferences.isCustomSigningEnabled()) {
-                getKey()?.let { keyFile ->
-                    return ApkSigner().sign(File(inApk), File(mTargetApkPath), keyFile, getSigningPassword(), getKeyAlias(), getKeyPassword())
+                try {
+                    getKey()?.let { keyFile ->
+                        return ApkSigner().sign(File(inApk), File(mTargetApkPath), keyFile, getSigningPassword(), getKeyAlias(), getKeyPassword())
+                    }
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    e.printStackTrace()
                 }
             }
             return ApkSigner().sign(File(inApk), File(mTargetApkPath), getAndroidDebugKey(), "androiddebug", "androiddebug", "androiddebug")
