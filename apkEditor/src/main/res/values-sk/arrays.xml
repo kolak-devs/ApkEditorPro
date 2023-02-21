@@ -58,14 +58,6 @@
         <item>.doc</item>
         <item>.docx</item>
     </string-array>
-    <string-array name="order_key">
-        <item>Mena</item>
-        <item>Čas inštalácie</item>
-    </string-array>
-    <string-array name="order_value">
-        <item>Mena</item>
-        <item>Času inštalácie</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Auto (pridá číselnú príponu)</item>
         <item>Prepísať</item>
@@ -90,10 +82,5 @@
         <item>Turečtina</item>
         <item>Ukrajinčina</item>
         <item>Vietnamčina</item>
-    </string-array>
-    <string-array name="output_apkname_key">
-        <item>{package name}_[ne]podpisane.apk</item>
-        <item>gen_[ne]podpisane.apk</item>
-        <item>{app name}_[ne]podpisane.apk</item>
     </string-array>
 </resources>

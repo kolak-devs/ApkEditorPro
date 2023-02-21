@@ -25,6 +25,6 @@
         android:textColor="?colorAccent"
         android:textSize="14sp"
         android:textStyle="bold"
-        tools:text="TEST"/>
+        tools:text="TEST" />
 
 </LinearLayout>

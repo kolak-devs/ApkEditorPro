@@ -59,24 +59,6 @@
         <item>.doc</item>
         <item>.docx</item>
     </string-array>
-    <string-array name="order_key">
-        <item>Wg Nazwy Aplikacji</item>
-        <item>Wg Czasu Instalacji</item>
-    </string-array>
-    <string-array name="order_value">
-        <item>Wg Nazwy Aplikacji</item>
-        <item>Wg Czasu Instalacji</item>
-    </string-array>
 
-    <string-array name="output_apkname_key">
-        <item>{nazwa paczki}_[un]signed.apk</item>
-        <item>gen_[un]signed.apk</item>
-        <item>{nazwa aplikacji}_[un]signed.apk</item>
-    </string-array>
-    <string-array name="output_apkname_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
 </resources>
 

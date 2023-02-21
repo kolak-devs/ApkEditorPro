@@ -35,11 +35,11 @@
                 android:id="@+id/errors"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:layout_marginBottom="12dp"
                 android:background="@drawable/item_loading_chip"
                 android:gravity="center"
                 android:padding="12dp"
-                android:layout_margin="8dp"
                 android:text="Отсутствует Интернет подключение"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/title_selectApk"
@@ -64,9 +64,9 @@
                 android:id="@+id/apk_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_selectApk"
                 tools:itemCount="2"
@@ -81,7 +81,7 @@
                 android:padding="8dp"
                 android:text="@string/projects"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/apk_recycler"/>
+                app:layout_constraintTop_toBottomOf="@id/apk_recycler" />
 
             <!--- Список последних проектов -->
             <androidx.recyclerview.widget.RecyclerView
@@ -89,9 +89,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintStart_toStartOf="@+id/title_projects"
                 app:layout_constraintTop_toBottomOf="@+id/title_projects"
@@ -104,8 +104,8 @@
                 style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/others"
                 android:padding="8dp"
+                android:text="@string/others"
                 app:layout_constraintBottom_toTopOf="@+id/menu_recycler"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/projects_recycler" />
@@ -120,8 +120,8 @@
                 android:paddingEnd="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_others"
                 tools:itemCount="8"
                 tools:listitem="@layout/item_main_list" />

@@ -9,33 +9,33 @@
 
     <CheckBox
         android:id="@+id/decode_assets"
+        style="@style/AppTheme.SweetCheckBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/mode_decode_assets"
-        style="@style/AppTheme.SweetCheckBox" />
+        android:text="@string/mode_decode_assets" />
 
     <CheckBox
         android:id="@+id/decode_resources"
+        style="@style/AppTheme.SweetCheckBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/mode_decode_resources"
-        style="@style/AppTheme.SweetCheckBox"/>
+        android:text="@string/mode_decode_resources" />
 
     <CheckBox
         android:id="@+id/decode_classes"
+        style="@style/AppTheme.SweetCheckBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/mode_decode_classes"
-        style="@style/AppTheme.SweetCheckBox"
-        android:checked="true"/>
+        android:checked="true"
+        android:text="@string/mode_decode_classes" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edit_search_background"
-        android:padding="8dp"
-        android:drawablePadding="4dp"
         android:drawableStart="@drawable/info"
-        android:text="@string/msg_decode_notice"/>
+        android:drawablePadding="4dp"
+        android:padding="8dp"
+        android:text="@string/msg_decode_notice" />
 
 </LinearLayout>

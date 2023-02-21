@@ -9,10 +9,10 @@
         <androidx.preference.SeekBarPreference
             android:defaultValue="14"
             android:key="editor_font_size"
+            android:max="28"
             android:title="@string/editor_text_size_title"
             app:min="12"
-            android:max="28"
-            app:showSeekBarValue="true"/>
+            app:showSeekBarValue="true" />
 
         <androidx.preference.SwitchPreference
             android:defaultValue="false"
@@ -32,8 +32,8 @@
         <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:key="editor_printable_characters"
-            android:title="@string/settings_unprintable"
-            android:summary="@string/settings_unprintable_sum"/>
+            android:summary="@string/settings_unprintable_sum"
+            android:title="@string/settings_unprintable" />
 
         <androidx.preference.SwitchPreference
             android:defaultValue="true"

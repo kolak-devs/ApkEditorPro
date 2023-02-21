@@ -58,14 +58,6 @@
         <item>.doc</item>
         <item>.docx</item>
     </string-array>
-    <string-array name="order_key">
-        <item>Per nome app</item>
-        <item>Per data installazione</item>
-    </string-array>
-    <string-array name="order_value">
-        <item>Per nome app</item>
-        <item>Per data installazione</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Auto (aggiunta suffisso nuemrico)</item>
         <item>Sovrascrivi</item>
@@ -117,15 +109,5 @@
         <item>uk</item>
         <item>hu</item>
         <item>vi</item>
-    </string-array>
-    <string-array name="output_apkname_key">
-        <item>{package name}_[un]signed.apk</item>
-        <item>gen_[un]signed.apk</item>
-        <item>"{app name}_[un]signed.apk"</item>
-    </string-array>
-    <string-array name="output_apkname_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
 </resources>

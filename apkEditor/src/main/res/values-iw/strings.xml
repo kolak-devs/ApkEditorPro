@@ -6,7 +6,6 @@
     <string name="resource">משאבים</string>
     <string name="manifest">תצהיר</string>
     <string name="save">שמור</string>
-    <string name="cannot_parse_apk">לא מסוגל לנתח את קובץ הapk</string>
     <string name="resolution">אזולוציה</string>
     <string name="search">חיפוש</string>
     <string name="delete">מחק</string>
@@ -27,28 +26,22 @@
     <string name="in_progress">עובד &#8230;</string>
     <string name="select_file_replace">בחר קובץ להחלפה</string>
     <string name="pls_input_keyword">הכנס מילה לחיפוש</string>
-    <string name="manifest_edit_not_support">עריכה אינה נתמכת בגירסה החינמית!</string>
     <string name="not_available">לא זמין</string>
     <string name="add_key_value">הוסף מפתח/ערך:</string>
     <string name="open_in_new_window">פתח בחלונית חדשה</string>
     <string name="language">שפה:</string>
     <string name="code">קוד</string>
     <string name="replace">החלף</string>
-    <string name="sure_to_exit_editing">אתה בטוח שברצונך לצאת מהעריכה?</string>
     <string name="yes">כן</string>
     <string name="no">לא</string>
 
     <!-- For Folder List -->
     <string name="rename">שנה שם</string>
-    <string name="pls_input_filename">אנא הכנס שם קובץ:</string>
     <string name="file_already_exist">\'%s\' כבר קיים!</string>
     <string name="failed">נכשל</string>
 
     <!-- Settings -->
-    <string name="app_display">הצגת אפליקציות</string>
-    <string name="app_list_order">סדר רשימת האפליקציות</string>
     <string name="appearance">תצוגה</string>
-    <string name="launcher_icon">סמל אפליקצייה</string>
 
     <!-- added 20150501 -->
     <string name="save_succeed_1">הצליח: נשמר אל %s</string>
@@ -66,35 +59,13 @@
 
     <!-- added in version 1.3.0 -->
     <string name="full_edit">עריכה מלאה (בנייה מחדש)</string>
-    <string name="simple_edit">עריכה פשוטה (החלפת קבצים)</string>
-    <string name="files_capital">קבצים</string>
-    <string name="images_capital">תמונות</string>
-    <string name="audios_captical">צלילים</string>
-    <string name="size">גודל</string>
-    <string name="image_summary">%d תמונות</string>
-    <string name="audio_summary">%d צלילים</string>
-    <string name="compose">יוצר</string>
-    <string name="sign">חותם</string>
-    <string name="sign_error">שגיאה בחתימה: </string>
     <string name="apk_building">בונה קובץ APK</string>
 
     <!-- added in version 1.3.2 -->
-    <string name="str_app_name">שם אפליקציה</string>
-    <string name="common_edit">עריכה נפוצה</string>
-    <string name="package_name">שם החבילה</string>
-    <string name="install_location">מיקום התקנה</string>
-    <string name="version_code">מספר גירסה</string>
-    <string name="version_name">שם מספר גירסה</string>
-    <string name="location_0">ברירת מחדל (לא קבוע)</string>
-    <string name="location_1">אוטומטי (החלטת הטלפון)</string>
-    <string name="location_2">זיכרון פנמי בלבד</string>
-    <string name="location_3">העדף כרטיס זיכרון</string>
-    <string name="invalid_ver_code">מספר גירסה שגוי.</string>
     <string name="no_change_detected">לא זוהו שינויים.</string>
 
     <!-- added in version 1.3.4 -->
     <string name="step">שלב</string>
-    <string name="merge">מיזוג</string>
     <string name="cleanup">ניקוי</string>
 
     <!-- version 1.3.6 -->
@@ -103,8 +74,6 @@
     <string name="mf_search_ret">%d שורות נמצאו</string>
 
     <!-- version 1.3.12 -->
-    <string name="add_a_file">הוסף קובץ</string>
-    <string name="file_added">נוסף קובץ: %s</string>
 
     <!-- version 1.3.16 -->
     <string name="edit_data_root">ערוך מידע [שורש]</string>
@@ -116,18 +85,10 @@
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
     <string name="about_community">Community</string>
-    <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
-    <string name="about_source_code">Source code</string>
-    <string name="app_translator">Translator</string>
-    <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="title_clear_data">Clear Data</string>
-    <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
-    <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="file_open_as">Open as...</string>
     <string name="tab_general">General</string>
     <string name="tab_apk_decoding">Apk compiling</string>
     <string name="tab_text_editor">Text editor</string>
@@ -152,7 +113,6 @@
     <string name="build_preparing">Preparing...</string>
     <string name="build_compiling">Compiling...</string>
     <string name="build_signing">Signing...</string>
-    <string name="build_error_signing">Failed signing APK</string>
     <string name="build_canceled">User request to stop</string>
     <string name="mode_decode_assets">Decode DEX in /assets/ (if needed)</string>
     <string name="mode_decode_resources">Decode resources and XML\'s</string>

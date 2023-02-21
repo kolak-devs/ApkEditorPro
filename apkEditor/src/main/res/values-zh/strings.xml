@@ -7,7 +7,6 @@
     <string name="resource">资源</string>
     <string name="manifest">Manifest</string>
     <string name="save">保存</string>
-    <string name="cannot_parse_apk">不能解析APK文件.</string>
     <string name="resolution">分辨率</string>
     <string name="search">搜索</string>
     <string name="delete">删除</string>
@@ -27,29 +26,23 @@
     <string name="description">描述:</string>
     <string name="in_progress">工作中 &#8230;</string>
     <string name="pls_input_keyword">输入关键字进行搜索</string>
-    <string name="manifest_edit_not_support">Editing is not supported in free version!</string>
     <string name="not_available">不可用</string>
     <string name="add_key_value">添加键值对:</string>
     <string name="open_in_new_window">在新窗口中打开</string>
     <string name="language">Language:</string>
     <string name="code">Code</string>
     <string name="replace">替换</string>
-    <string name="sure_to_exit_editing">确定要退出编辑吗？</string>
     <string name="yes">是的</string>
     <string name="no">取消</string>
 
     <!-- For Folder List -->
     <string name="rename">重命名</string>
-    <string name="pls_input_filename">请输入文件名:</string>
     <string name="file_already_exist">\'%s\' 已存在!</string>
     <string name="failed">失败</string>
 
 
     <!-- Settings -->
-    <string name="app_display">应用显示</string>
-    <string name="app_list_order">应用列表排序方式</string>
     <string name="appearance">外观</string>
-    <string name="launcher_icon">启动图标</string>
 
     <!-- added 20150501 -->
     <string name="save_succeed_1">成功: 已保存到 %s</string>
@@ -67,35 +60,13 @@
 
     <!-- added in version 1.3.0 -->
     <string name="full_edit">高级编辑 (RESOURCE RE-BUILD)</string>
-    <string name="simple_edit">简单编辑 (FILE REPLACEMENT)</string>
-    <string name="files_capital">FILES</string>
-    <string name="images_capital">IMAGES</string>
-    <string name="audios_captical">AUDIOS</string>
-    <string name="size">大小</string>
-    <string name="image_summary">%d 图片</string>
-    <string name="audio_summary">%d 音频</string>
-    <string name="compose">Compose</string>
-    <string name="sign">签名</string>
-    <string name="sign_error">签名出错: </string>
     <string name="apk_building">APK Building</string>
 
     <!-- added in version 1.3.2 -->
-    <string name="str_app_name">应用名</string>
-    <string name="common_edit">普通编辑</string>
-    <string name="package_name">包名称</string>
-    <string name="install_location">安装位置</string>
-    <string name="version_code">版本代码</string>
-    <string name="version_name">版本名称</string>
-    <string name="location_0">默认 (未指定)</string>
-    <string name="location_1">自动 (系统自动选择)</string>
-    <string name="location_2">只允许内部存储</string>
-    <string name="location_3">偏好外部存储</string>
-    <string name="invalid_ver_code">无效版本代码.</string>
     <string name="no_change_detected">未检测到修改.</string>
 
     <!-- added in version 1.3.4 -->
     <string name="step">Step</string>
-    <string name="merge">合并</string>
     <string name="cleanup">清理</string>
 
     <!-- version 1.3.6 -->
@@ -104,16 +75,12 @@
     <string name="mf_search_ret">找到 %d 行</string>
 
     <!-- version 1.3.12 -->
-    <string name="add_a_file">添加一个文件</string>
-    <string name="file_added">文件已添加: %s</string>
 
     <!-- version 1.3.16 -->
     <string name="edit_data_root">编辑数据 [ROOT]</string>
 
     <!-- version 1.3.18 -->
     <string name="others">其他</string>
-    <string name="clean_garbage">垃圾清理</string>
-    <string name="temp_file_cleaned">临时文件已清理.</string>
 
     <!-- version 1.3.20 -->
     <string name="general_error">错误: %s</string>
@@ -124,20 +91,9 @@
 
     <!-- version 1.3.25 -->
     <string name="settings">设置</string>
-    <string name="cannot_find_ext_sdcard">找不到外置SD卡.</string>
-    <string name="rename_in_resources">修改 resources.arsc 中的包名</string>
     <string name="str_files_found" formatted="false">找到 %d 个文件 - \'%s\'</string>
 
     <!-- version 1.4 -->
-    <string name="smali_editing">Smali 编辑</string>
-    <string name="smali_edit_summary">已启用. 在高级编辑中会显示 DEX -> smali 按钮.</string>
-    <string name="smali_edit_disabled_summary">已禁用. 在高级编辑中不会显示 DEX -> smali 按钮.</string>
-    <string name="warning">警告</string>
-    <string name="succeed_with_warning">成功 (带警告信息).</string>
-    <string name="unknown_error">未知错误.</string>
-    <string name="assemble_dex_file">生成 DEX 文件</string>
-    <string name="assemble_dex_detail" formatted="false">已处理 %d/%d 文件</string>
-    <string name="donot_show_again">不再显示</string>
 
     <!-- version 1.4.1 -->
     <string name="searching">搜索中</string>
@@ -154,26 +110,16 @@
 
     <!-- version 1.4.4 -->
     <string name="confirm_dir_replace">确认目录替换</string>
-    <string name="select_folder_replace">选择一个目录进行替换</string>
-    <string name="folder_replace_tip" formatted="false">确定替换掉 %s 吗？(使用 %s)</string>
     <string name="folder_replaced">目录已替换</string>
 
     <!-- version 1.4.8 -->
     <string name="select_folder">请选择一个目录 (提示：可以长按列表，在弹出菜单中新建一个目录)</string>
-    <string name="select_folder_err1">请不要选择APK编辑器工作路径中的目录.</string>
-    <string name="select_folder_err2">请不要选择包含APK编辑器工作路径的目录.</string>
     <string name="file_replaced">文件已替换.</string>
-    <string name="hide_smali_tip">请长按 "DEX -> Smali" 隐藏该图标.</string>
 
     <!-- 20160508 -->
-    <string name="pkg_rename_notice">请注意: 重命名包名称可能会无法正常工作, 取决于应用的代码构建方式.</string>
-    <string name="package_rename_method">重命名方法</string>
-    <string name="pkg_rename_direct">直接重命名</string>
-    <string name="pkg_rename_as_plugin">插件方式</string>
 
     <!-- 1.5.0 -->
     <string name="decode_dex_file">解码 DEX 文件 &#8230;</string>
-    <string name="encode_dex_file">编码 DEX 文件 &#8230;</string>
     <string name="name">名称</string>
     <string name="sample_code">示例代码</string>
     <string name="show_a_toast">展示一条消息 (TOAST)</string>
@@ -193,15 +139,9 @@
     <string name="errmsg_copied">错误信息已拷贝到剪贴板.</string>
     <string name="search_file_names">在文件名中搜索</string>
     <string name="select_patch">选择一个补丁文件</string>
-    <string name="apply_the_patch">应用补丁</string>
-    <string name="patch_applied">补丁已应用</string>
-    <string name="save_patch_example"><u>保存示例补丁到SD卡</u></string>
-    <string name="current_patch"><u>当前路径:</u></string>
-    <string name="no_patch_selected">未选择补丁文件</string>
     <string name="patch_start_parse">正在解析patch.txt &#8230;</string>
     <string name="patch_start_apply" formatted="false">应用规则 (第%d行) &#8230;</string>
     <string name="all_rules_applied">所有规则已应用.</string>
-    <string name="patch_examples_copied" formatted="false">示例补丁已保存至 %s</string>
     <string name="patch_error_no_entry" formatted="false">补丁文件中找不到 \'%s\'.</string>
     <string name="patch_error_cannot_parse" formatted="false">不能解析第%d行: %s</string>
     <string name="patch_error_unknown_rule" formatted="false">检测到不支持的规则 (第%d行: %s)</string>
@@ -219,17 +159,6 @@
     <string name="translate_plugin">翻译插件</string>
 
     <string name="about">关于</string>
-    <string name="rebuild_confirmation">Build确认对话框</string>
-    <string name="rebuild_confirm_e_summary">已启用. 在点击 Build 按钮后会显示确认对话框，在该对话框中可选择是否对APK签名.</string>
-    <string name="rebuild_confirm_d_summary">已禁用. 不显示确认对话框，直接重新编译生成APK文件.</string>
-    <string name="rebuild_the_apk">Rebuild the APK</string>
-    <string name="rebuild_dex_file">重新生成 DEX 文件</string>
-    <string name="rebuild_res_file">重新生成资源文件</string>
-    <string name="sign_the_apk">对 APK 进行签名</string>
-    <string name="str_modified">已修改</string>
-    <string name="str_not_modified">未修改</string>
-    <string name="str_num_added_file">"添加了 %d 个文件"</string>
-    <string name="str_num_removed_file">"删除了 %d 个文件"</string>
     <string name="str_num_modified_file">"修改了 %d 个文件"</string>
     <string name="copy_file_path">复制文件路径</string>
     <string name="copied_to_clipboard">已拷贝 \'%s\' 到剪贴板.</string>
@@ -259,9 +188,6 @@
     <!-- 1.7.4 -->
     <string name="fix_invalid_symbol_tip">修正\'invalid symbol\'的问题？</string>
 
-    <string name="output_apk_name">APK 命名方式</string>
-    <string name="output_apk_name_summary">指定生成 APK 的命名方式.</string>
-
     <!-- 1.7.8 -->
     <string name="patch_code_cache_tip">直接将修改代码应用到 odex 文件？ (不需要重新安装，但需要 ROOT 权限)</string>
     <string name="patch_code_cache_done">补丁已打至 %s</string>
@@ -272,22 +198,14 @@
 
     <!-- 1.8.0 -->
     <string name="preferred_language">语言</string>
-    <string name="select_language_desc">请设置您偏好的语言.</string>
     <string name="edit_before_replace">替换 %s 前, 查看或修改新的替代文件</string>
-    <string name="min_sdk_version">最小 SDK 版本</string>
-    <string name="target_sdk_version">目标 SDK 版本</string>
-    <string name="max_sdk_version">最大 SDK 版本</string>
 
     <!-- 1.8.1 -->
     <string name="print_stack_trace">打印调用栈信息</string>
 
     <!-- 1.8.4 -->
     <string name="apk_decoding">APK 解码</string>
-    <string name="decode_dir">解码目录</string>
-    <string name="decode_dir_summary_may_change">未设置. 将使用默认的内部存储.</string>
-    <string name="invalid_directory">"无效目录: %s"</string>
     <string name="file_rename">文件重命名</string>
-    <string name="file_extract_rename_summary">指定是否自动重命名文件. (当抽取的文件已存在时)</string>
 
     <!-- 1.8.6 -->
     <string name="build">Build</string>
@@ -304,7 +222,6 @@
     <string name="prj_error_decode_dir_notfound">找不到解码目录: %s</string>
     <string name="prj_error_apk_notfound">找不到 APK 文件: %s</string>
     <string name="dex_decode_succeed">成功解码 DEX 文件.</string>
-    <string name="rename_in_dex">修改 DEX 文件中的包名称 [仍然是Beta版. 为了提高成功率, 请保持包名称长度不变，例如将com.android.xx改为com.android.xy]</string>
 
     <!-- 1.8.10 -->
     <string name="patch_error_regex_not_true">在 MATCH_ASSIGN 规则中, REGEX 必须是 true.</string>
@@ -312,25 +229,17 @@
 
     <!-- 1.8.12 -->
     <string name="fix_error_equivalent">修正 \'case-insensitive equivalent\'的问题？</string>
-    <string name="hide_warnings">隐藏警告信息</string>
 
     <!-- 1.8.15 -->
 
     <!-- 1.8.17 -->
-    <string name="error">错误</string>
-    <string name="xml_file_edit">XML 文件编辑 (BETA)</string>
-    <string name="failed_to_parse_xml">不能解析xml文件: %s.</string>
-    <string name="entry_modified">\'%s\' 已修改.</string>
 
     <!-- 1.8.20 -->
-    <string name="tip">提示</string>
     <string name="please_note">请注意</string>
     <string name="build_ongoing">生成APK文件</string>
     <string name="build_finished">APK文件已生成</string>
     <string name="build_in_progress_tip">前一次构建尚未完成, 不能开启一个新的构建任务.</string>
-    <string name="build_still_running_tip">请注意: 编译仍在进行, 你可以在状态栏中查看编译进度.</string>
     <string name="put_to_background">后台运行</string>
-    <string name="sure_to_stop_build">正在生产 APK 文件, 确认停止吗? </string>
     <string name="cannot_open_xxx">不能打开 %s</string>
 
     <string name="patch_error_no_script_name">未指定脚本名.</string>
@@ -345,14 +254,8 @@
     <string name="not_signed_tip">请注意: apk文件未签名, 因此不能安装.</string>
 
     <!-- 1.9.0 -->
-    <string name="build_not_support_tip">对不起, 不再支持生成APK文件.\n请联系heagoo@gmail.com索要解决方案. (邮件标题请设置为: \"VERSION 1.9 ISSUES\")</string>
 
     <!-- 1.9.1 -->
-    <string name="sd_card">SD 卡</string>
-    <string name="ext_sd_card">外部 SD 卡</string>
-    <string name="app_files">App 文件</string>
-    <string name="new_file">新建文件</string>
-    <string name="failed_create_file">创建文件失败.</string>
 
     <!-- 1.9.2 -->
     <string name="app_info">应用信息</string>
@@ -368,18 +271,10 @@
     <string name="pref_title_multi_package">Multi Package</string>
     <string name="pref_summary_multi_package">Fix decode multi resources</string>
     <string name="about_community">Community</string>
-    <string name="about_donate">Donate</string>
     <string name="about_telegram_channel">Telegram channel</string>
-    <string name="about_source_code">Source code</string>
-    <string name="app_translator">Translator</string>
-    <string name="open_binary_translator">Open binary translator?</string>
     <string name="copy">Copy</string>
-    <string name="title_clear_data">Clear Data</string>
-    <string name="message_clear_data">Are you sure you want to clear the data?</string>
     <string name="title_clear_history">Clear history</string>
-    <string name="message_clear_history">Are you sure you want to clear your search history?</string>
     <string name="pref_summary_clear_history">Clear search history</string>
-    <string name="file_open_as">Open as...</string>
     <string name="tab_general">General</string>
     <string name="tab_apk_decoding">Apk compiling</string>
     <string name="tab_text_editor">Text editor</string>
@@ -404,7 +299,6 @@
     <string name="build_preparing">Preparing...</string>
     <string name="build_compiling">Compiling...</string>
     <string name="build_signing">Signing...</string>
-    <string name="build_error_signing">Failed signing APK</string>
     <string name="build_canceled">User request to stop</string>
     <string name="mode_decode_assets">Decode DEX in /assets/ (if needed)</string>
     <string name="mode_decode_resources">Decode resources and XML\'s</string>

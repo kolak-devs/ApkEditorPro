@@ -30,17 +30,4 @@
         <item>Украинский</item>
         <item>Вьетнамский</item>
     </string-array>
-    <string-array name="order_key">
-        <item>по названию приложения</item>
-        <item>по времени установки</item>
-    </string-array>
-    <string-array name="order_value">
-        <item>По названию приложения</item>
-        <item>По времени установки</item>
-    </string-array>
-    <string-array name="output_apkname_key">
-        <item>{имя пакета}_[un]signed.apk</item>
-        <item>gen_[un]signed.apk</item>
-        <item>{имя приложения}_[un]signed.apk</item>
-    </string-array>
 </resources>

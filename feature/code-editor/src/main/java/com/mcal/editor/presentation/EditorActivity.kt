@@ -342,7 +342,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
             methodsListMenu?.isVisible = isSmali or path.name.endsWith(".java")
             templatesMenu?.isVisible = isSmali
             permissionsMenu?.isVisible = path.name.endsWith("AndroidManifest.xml")
-            uiDesignerMenu?.isVisible= path.path.contains("res/layout/") && path.name.endsWith(".xml")
+            uiDesignerMenu?.isVisible = path.path.contains("res/layout") && path.name.endsWith(".xml")
         }
     }
 
@@ -427,7 +427,7 @@ class EditorActivity : BaseActivity<EditorViewModel, ActivitySoraeditorBinding>(
         val id = item.itemId
         val editor = binding.editor
         when (id) {
-            R.id.ui_designer-> {
+            R.id.ui_designer -> {
                 mFilePath?.let { file ->
                     val intent = Intent(this, XmlLayoutDesignActivity::class.java)
                     intent.putExtra(XmlLayoutDesignActivity.EXTRA_FILE, file.path)

@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="order_key">
-        <item>Par nom</item>
-        <item>"Par heure d'installation"</item>
-    </string-array>
-    <string-array name="order_value">
-        <item>"Par nom d'application"</item>
-        <item>"Par heure d'installation"</item>
-    </string-array>
 
     <string-array name="fileTypeImage">
         <item>.png</item>

@@ -40,9 +40,9 @@
         <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:key="apktool_use_json"
-            android:title="@string/apktool_config_title"
+            android:summaryOff="YML"
             android:summaryOn="JSON"
-            android:summaryOff="YML"/>
+            android:title="@string/apktool_config_title" />
 
     </androidx.preference.PreferenceCategory>
 
@@ -54,38 +54,38 @@
             android:summaryOff="@string/settings_signing_off"
             android:summaryOn="@string/settings_signing_on"
             android:title="@string/settings_signing_title"
-            app:defaultValue="true"/>
+            app:defaultValue="true" />
         <androidx.preference.SwitchPreference
+            android:dependency="signing_enabled"
             android:key="signing_on"
-            android:title="@string/signing_on_title"
             android:summary="@string/signing_on_sum"
-            app:defaultValue="false"
-            android:dependency="signing_enabled"/>
+            android:title="@string/signing_on_title"
+            app:defaultValue="false" />
         <androidx.preference.EditTextPreference
             android:key="signing_pass"
             android:title="@string/signing_pass_title"
             app:dependency="signing_on"
-            app:useSimpleSummaryProvider="true"/>
+            app:useSimpleSummaryProvider="true" />
         <androidx.preference.EditTextPreference
             android:key="signing_key_alias"
             android:title="@string/signing_alias_title"
             app:dependency="signing_on"
-            app:useSimpleSummaryProvider="true"/>
+            app:useSimpleSummaryProvider="true" />
         <androidx.preference.EditTextPreference
             android:key="signing_key_password"
             android:title="@string/signing_password_title"
             app:dependency="signing_on"
-            app:useSimpleSummaryProvider="true"/>
+            app:useSimpleSummaryProvider="true" />
         <androidx.preference.SeekBarPreference
             android:key="signing_version"
-            android:title="@string/signing_signature_title"
-            android:summary="@string/signing_signature_sum"
-            app:defaultValue="2"
-            app:updatesContinuously="false"
-            app:min="1"
             android:max="4"
+            android:summary="@string/signing_signature_sum"
+            android:title="@string/signing_signature_title"
+            app:defaultValue="2"
+            app:dependency="signing_on"
+            app:min="1"
             app:showSeekBarValue="true"
-            app:dependency="signing_on"/>
+            app:updatesContinuously="false" />
 
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

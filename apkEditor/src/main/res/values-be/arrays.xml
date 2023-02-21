@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="order_key">
-        <item>"Па назве дадатка "</item>
-        <item>Па часе ўсталёўкі</item>
-    </string-array>
-    <string-array name="order_value">
-        <item>"Па назве дадатка "</item>
-        <item>Па часе ўсталёўкі</item>
-    </string-array>
     <string-array name="file_extract_rename_key">
         <item>Аўтаматычна (дадаваць суфікс ліку)</item>
         <item>Перазапісаць</item>

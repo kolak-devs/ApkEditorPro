@@ -5,13 +5,5 @@
         <item>Отмена</item>
         <item>@string/save_as_project</item>
     </string-array>
-    <string-array name="order_key">
-        <item>За назвою</item>
-        <item>За часом встановлення</item>
-    </string-array>
-    <string-array name="order_value">
-        <item>За назвою</item>
-        <item>За часом встановлення</item>
-    </string-array>
 
 </resources>

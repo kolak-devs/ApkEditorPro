@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="order_key">
-        <item>Podle jména aplikace</item>
-        <item>Podle času instalace</item>
-    </string-array>
-    <string-array name="order_value">
-        <item>Podle jména aplikace</item>
-        <item>Podle času instalace</item>
-    </string-array>
 
     <string-array name="fileTypeImage">
         <item>.png</item>

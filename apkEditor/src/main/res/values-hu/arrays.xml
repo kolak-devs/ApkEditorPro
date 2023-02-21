@@ -25,10 +25,6 @@
         <item>Ukrán</item>
         <item>Vietnámi</item>
     </string-array>
-    <string-array name="order_key">
-        <item>Alkalmazás neve szerint</item>
-        <item>Telepítési idő szerint</item>
-    </string-array>
 
     <string-array name="fileTypeAudio">
         <item>.mp3</item>
@@ -112,15 +108,5 @@
         <item>tr</item>
         <item>uk</item>
         <item>vi</item>
-    </string-array>
-    <string-array name="output_apkname_key">
-        <item>{Csomagnév}_[un]signed.apk</item>
-        <item>gen_[un]signed.apk</item>
-        <item>{Alkalmazásnév}_[un]signed.apk</item>
-    </string-array>
-    <string-array name="output_apkname_value">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
 </resources>
