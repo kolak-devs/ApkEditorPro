@@ -163,7 +163,7 @@ dependencies {
     implementation project(':feature:bsh-engine')
     implementation project(':feature:colormixer')
 
-    implementation 'com.github.TimScriptov.App-UI-Designer:webview:1.0.1'
+    implementation mcal.webview
 
     implementation tools.dexlib2
     implementation tools.smali

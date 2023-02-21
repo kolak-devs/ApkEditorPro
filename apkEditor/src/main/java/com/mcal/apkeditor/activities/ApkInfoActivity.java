@@ -107,7 +107,6 @@ import org.jetbrains.annotations.Contract;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -2063,7 +2062,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             entryName = directory.substring(decodeRootPath.length() + 1) + "/" + fileName;
         }
 
-        if (StringHelperKt.findExt(fileName, "xml|java|txt|html|css|js|lua|kt|MF|SF|json|py|smali|yml|gradle")) {
+        if (StringHelperKt.findExt(fileName, "xml|java|txt|html|htm|php|css|js|lua|kt|MF|SF|json|py|smali|yml|gradle|c|cpp|h|hpp|cs|properties")) {
             openEditableFile(directory, fileName, bInZip, entryName);
         } else {
             String filePath = resListAdapter.getReplacedFilePath(entryName);
@@ -2098,27 +2097,10 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     }
 
     public void replaceFile(String replacedPath, String replacingPath) {
-        FileInputStream in = null;
-        FileOutputStream out = null;
         try {
-            // Copy files
-            in = new FileInputStream(replacingPath);
-            out = new FileOutputStream(replacedPath);
-            copyFile(in, out);
+            copyFile(new FileInputStream(replacingPath), new FileOutputStream(replacedPath));
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeQuietly(in);
-            closeQuietly(out);
-        }
-    }
-
-    private void closeQuietly(Closeable c) {
-        if (c != null) {
-            try {
-                c.close();
-            } catch (IOException ignored) {
-            }
+            throw new RuntimeException(e);
         }
     }
 

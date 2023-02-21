@@ -7,11 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.common.App;
 import com.mcal.common.R;
 import com.mcal.common.data.LegacyPreferences;
 
@@ -63,12 +62,10 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
         String word = filteredData.get(position);
         AutoCompleteViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(
-                    R.layout.item_autocomplete, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_autocomplete, null);
 
             viewHolder = new AutoCompleteViewHolder();
-            viewHolder.filename = convertView
-                    .findViewById(R.id.filename);
+            viewHolder.filename = convertView.findViewById(R.id.filename);
 
             convertView.setTag(viewHolder);
         } else {
@@ -107,7 +104,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
     }
 
     static class AutoCompleteViewHolder {
-        public AppCompatTextView filename;
+        public TextView filename;
     }
 
     private class ItemFilter extends Filter {

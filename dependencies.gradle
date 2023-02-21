@@ -6,6 +6,11 @@ ext {
             sun: ":sun"
     ]
 
+    mcal = [
+            uidesigner: 'com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.6',
+            webview: 'com.github.TimScriptov.App-UI-Designer:webview:1.0.6'
+    ]
+
     jetpack = [
             core: 'androidx.core:core-ktx:1.9.0',
             appcompat: 'androidx.appcompat:appcompat:1.6.0',

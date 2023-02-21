@@ -42,7 +42,7 @@ dependencies {
     implementation project(':melissa')
     implementation project(':feature:colormixer')
     implementation project(':feature:permission-editor')
-    implementation 'com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.1'
+    implementation mcal.uidesigner
     implementation misc.guava
 
     implementation tools.dexlib2
