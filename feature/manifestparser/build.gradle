@@ -26,6 +26,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation misc.annotations
-    implementation misc.annotations_android
+    implementation misc.annotations.android
     implementation misc.guava
 }

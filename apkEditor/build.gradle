@@ -172,25 +172,25 @@ dependencies {
     implementation jetpack.core
     implementation jetpack.appcompat
     implementation jetpack.preference
-    implementation jetpack.mvvm_vm
-    implementation jetpack.mvvm_ld
+    implementation jetpack.mvvm.vm
+    implementation jetpack.mvvm.ld
     implementation jetpack.fragment
     implementation jetpack.navigation
     implementation jetpack.coordinatorlayout
 
     implementation misc.annotations
     implementation misc.gson
-    implementation misc.coroutines_core
+    implementation misc.coroutines.core
 
     implementation misc.guava
     implementation misc.antlr
 
     implementation ui.fastadapter
-    implementation ui.fastadapter_binding
+    implementation ui.fastadapter.binding
 
     implementation jetpack.vp2
     implementation jetpack.preferences
-    implementation jetpack.preferences_core
+    implementation jetpack.preferences.core
 
     // LeakCanary
     debugImplementation misc.leaks

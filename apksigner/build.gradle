@@ -26,14 +26,14 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(flat.core)
-    implementation project(flat.sun)
+    implementation project(":core")
+    implementation project(":sun")
 
-    implementation signing.spongy_core
-    implementation signing.spongy_prov
+    implementation signing.spongy.core
+    implementation signing.spongy.prov
 
     implementation misc.annotations
-    implementation misc.annotations_android
+    implementation misc.annotations.android
 
-    implementation misc.coroutines_java
+    implementation misc.coroutines.java
 }
