@@ -34,16 +34,16 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(flat.core)
+    implementation project(":core")
     implementation project(':feature:code-editor')
     implementation project(":melissa")
 
-    implementation 'com.github.TimScriptov.App-UI-Designer:webview:1.0.1'
+    implementation mcal.webview
 
     implementation jetpack.core
     implementation jetpack.appcompat
     
     implementation jetpack.material
 
-    implementation misc.coroutines_core
+    implementation misc.coroutines.core
 }

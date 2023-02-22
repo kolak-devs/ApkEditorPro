@@ -25,9 +25,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation signing.spongy_core
-    implementation signing.spongy_prov
+    implementation signing.spongy.core
+    implementation signing.spongy.prov
 
     implementation misc.annotations
-    implementation misc.annotations_android
+    implementation misc.annotations.android
 }
