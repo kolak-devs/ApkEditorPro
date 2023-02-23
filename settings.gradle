@@ -20,8 +20,8 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         mcal {
-            library('uidesigner', 'com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.7')
-            library('webview', 'com.github.TimScriptov.App-UI-Designer:webview:1.0.7')
+            library('uidesigner', 'com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.8')
+            library('webview', 'com.github.TimScriptov.App-UI-Designer:webview:1.0.8')
         }
 
         jetpack {
