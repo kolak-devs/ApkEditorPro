@@ -33,12 +33,14 @@ import com.mcal.apkeditor.settings.presentation.SettingsActivity
 import com.mcal.apkeditor.utils.Utils
 import com.mcal.common.App
 import com.mcal.common.activities.CustomizedLangActivity
+import com.mcal.common.data.Constants
 import com.mcal.common.data.ReactivePreferences
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.*
 import com.mcal.common.utils.ScopedStorage.getProjects
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import com.mcal.downloader.DownloaderActivity
+import com.mcal.webview.WebViewActivity
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
@@ -101,6 +103,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         initUI()
 
         if (BuildConfig.SHOW_AGREEMENT) {
+            // Политика конфиденциальности
             if (!appLicenseAccepted(this)) {
                 AppAgreementDialog(this)
             } else {
@@ -110,6 +113,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             initFileWithPermissionCheck()
         }
 
+        // Выбор АПК файла для полного редактирования
         pickLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 result.data?.data?.let { uri ->
@@ -117,12 +121,17 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     var apk = File(projectsDir, FilePickHelper.getFileName(this, uri))
                     contentResolver.openInputStream(uri)?.let { inputStream ->
                         copyFile(inputStream, apk)
+                        var name = "app"
+                        // Получение имени приложения
                         ApkInfoParser().parse(this@MainActivity, apk.path)?.label?.let {
-                            val newApkPath = File(projectsDir, "$it.apk")
-                            apk.renameTo(newApkPath).also { apk = newApkPath }
+                            name = it
                         }
+                        val newApkPath = File(projectsDir, "$name.apk")
+                        // Копирование АПК во временное хранилище
+                        apk.renameTo(newApkPath).also { apk = newApkPath }
                     }.also {
                         if (apk.exists()) {
+                            // Диалог с выбором режима декомпиляции
                             selectFullEditDialog(this@MainActivity, apk.path)
                         } else {
                             Toast.makeText(this@MainActivity, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
@@ -142,7 +151,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
     public override fun onResume() {
         super.onResume()
         binding.errors.visibility = if (!isNetworkAvailable(this)) {
-            binding.errors.text = "Отсутствует Интернет подключение"
+            binding.errors.setText(R.string.no_internet_connection)
             View.VISIBLE
         } else {
             View.GONE
@@ -235,16 +244,16 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 .withIcon(R.drawable.settings)
                 .withTitle(R.string.tools_manager),
             MainMenuItem()
+                .withId(5)
+                .withIcon(R.drawable.info)
+                .withTitle(R.string.apkeditor_instruction),
+            MainMenuItem()
                 .withId(6)
                 .withIcon(R.drawable.ic_exit_to_app)
                 .withTitle(R.string.exit)
         )
 
-//        for (i in 10..100){
-//            itemAdapter.add(MainMenuItem(i, R.drawable.bandage, "Item $i"))
-//        }
-
-        fastApkAdapter.onClickListener = { _: View?, adapter: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, position: Int ->
+        fastApkAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, _: Int ->
             when (mainMenuItem.identifier) {
                 0L -> {
                     pickApk()
@@ -258,7 +267,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 else -> false
             }
         }
-        fastProjectAdapter.onClickListener = { view: View?, iAdapter: IAdapter<MainProjectItem>, mainProjectItem: MainProjectItem, i: Int ->
+        fastProjectAdapter.onClickListener = { _: View?, _: IAdapter<MainProjectItem>, mainProjectItem: MainProjectItem, i: Int ->
             if (mainProjectItem.getId() == REQ_SHOW_ALL) {
                 startActivity(Intent(this, ProjectListActivity::class.java))
                 true
@@ -271,7 +280,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
         }
         fastAdapter.onClickListener =
-            { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, position: Int ->
+            { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, _: Int ->
                 when (mainMenuItem.identifier) {
                     3L -> {
                         val intent = Intent(this, OdexPatchActivity::class.java)
@@ -280,6 +289,12 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     }
                     4L -> {
                         val intent = Intent(this, DownloaderActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    5L -> {
+                        val intent = Intent(this, WebViewActivity::class.java)
+                        intent.putExtra("htmlUrl", Constants.getDomain() + "/apkeditor/doc/instructions/index.html")
                         startActivity(intent)
                         true
                     }
