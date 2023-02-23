@@ -1,25 +1,19 @@
 package com.mcal.apkeditor.pro
 
 import com.google.common.collect.Lists
-import org.jf.smali.SmaliOptions
-import com.mcal.apkeditor.pro.DexEncoder
-import org.jf.dexlib2.writer.builder.DexBuilder
-import org.jf.dexlib2.writer.io.FileDataStore
-import org.jf.smali.smaliFlexLexer
 import org.antlr.runtime.CommonTokenStream
-import org.jf.smali.smaliParser
-import org.jf.smali.smaliParser.smali_file_return
-import org.antlr.runtime.tree.CommonTree
 import org.antlr.runtime.tree.CommonTreeNodeStream
 import org.jf.dexlib2.Opcodes
+import org.jf.dexlib2.writer.builder.DexBuilder
+import org.jf.dexlib2.writer.io.FileDataStore
+import org.jf.smali.SmaliOptions
+import org.jf.smali.smaliFlexLexer
+import org.jf.smali.smaliParser
 import org.jf.smali.smaliTreeWalker
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
-import java.lang.Exception
-import java.lang.RuntimeException
 import java.nio.charset.StandardCharsets
-import java.util.LinkedHashSet
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 

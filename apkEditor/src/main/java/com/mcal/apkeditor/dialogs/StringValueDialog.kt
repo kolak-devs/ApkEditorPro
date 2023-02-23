@@ -14,9 +14,9 @@ import com.mcal.apkeditor.adapters.StringListAdapter
 import com.mcal.common.utils.ClipboardUtils
 
 class StringValueDialog @SuppressLint("InflateParams") constructor(
-	context: Context,
-	strListAdapter: StringListAdapter,
-	position: Int
+    context: Context,
+    strListAdapter: StringListAdapter,
+    position: Int
 ) {
     private val mKey: TextInputLayout
     private val mValue: TextInputEditText
