@@ -20,11 +20,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.apkeditor.MatchedFilenameAdapter;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.ResSelectionChangeListener;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.adapters.MatchedFilenameAdapter;
+import com.mcal.apkeditor.adapters.ResListAdapter;
 
 import java.io.File;
 import java.lang.ref.WeakReference;

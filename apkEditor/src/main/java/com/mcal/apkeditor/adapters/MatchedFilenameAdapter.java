@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.adapters;
 
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -13,6 +13,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.mcal.apkeditor.ImageThumbnailInfo;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.ResSelectionChangeListener;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
 
 import java.lang.ref.WeakReference;

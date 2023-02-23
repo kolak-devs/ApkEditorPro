@@ -1,4 +1,4 @@
-package com.mcal.apkeditor
+package com.mcal.apkeditor.adapters
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.mcal.apkeditor.R
 import com.mcal.apkeditor.activities.types.StringItem
 import com.mcal.apkeditor.dialogs.StringValueDialog
 import kotlinx.coroutines.CoroutineScope

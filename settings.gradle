@@ -50,6 +50,7 @@ dependencyResolutionManagement {
             library('fastadapter', "com.mikepenz:fastadapter:${latestFastAdapterRelease}")
             library('fastadapter_binding', "com.mikepenz:fastadapter-extensions-binding:${latestFastAdapterRelease}") // view binding helpers
             library('imageview', 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0')
+            library('fastscroll', "me.zhanghai.android.fastscroll:library:1.2.0")
 
         }
 

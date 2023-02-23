@@ -5,11 +5,11 @@ import android.content.Context
 import android.content.res.Configuration
 import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatDelegate
-import com.mcal.common.utils.LocaleManager.apply
 import com.balsikandar.crashreporter.CrashReporter
 import com.google.android.material.color.DynamicColors
 import com.mcal.Navigator
 import com.mcal.common.data.ReactivePreferences
+import com.mcal.common.utils.LocaleManager.apply
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +21,9 @@ abstract class App : Application(), Navigator {
         context = this
         CrashReporter.initialize(this)
         CoroutineScope(Dispatchers.Main).launch {
+            // Support android 12 Monet Engine
+            DynamicColors.applyToActivitiesIfAvailable(this@App)
+
             if (ReactivePreferences.isNightMode()) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {

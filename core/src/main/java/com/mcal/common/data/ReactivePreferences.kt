@@ -2,6 +2,7 @@ package com.mcal.common.data
 
 import androidx.datastore.preferences.core.edit
 import com.mcal.common.App
+import com.mcal.common.extension.prefStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -41,10 +42,6 @@ object ReactivePreferences {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Main.UI_THEME] = enabled
         }
-    }
-
-    suspend fun isMonetEnabled(): Boolean {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_MONET] ?: false
     }
 
     suspend fun isDomainCom(): Boolean {

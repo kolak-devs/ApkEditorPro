@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.IGeneralCallback
 import com.mcal.apkeditor.R
-import com.mcal.apkeditor.ResListAdapter
 import com.mcal.apkeditor.adapters.PatcherHistoryItem
+import com.mcal.apkeditor.adapters.ResListAdapter
 import com.mcal.apkeditor.databinding.ActivityPatcherBinding
 import com.mcal.apkeditor.patch.PatchExecutor
 import com.mcal.apkeditor.patch.interfaces.ApkInfoListener

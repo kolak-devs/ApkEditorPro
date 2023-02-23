@@ -3,18 +3,13 @@ package com.mcal.common.data
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.preference.PreferenceDataStore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.util.concurrent.CompletableFuture
 
-class BridgeDataStore : PreferenceDataStore() {
-    private var dataStoreImpl: DataStore<Preferences>? = null;
-
-    fun attachDataStore(dataStore: DataStore<Preferences>){
-        dataStoreImpl = dataStore
-    }
+class BridgeDataStore constructor(private val dataStoreImpl: DataStore<Preferences>) : PreferenceDataStore() {
+    private val job = Job()
+    private val IO = Dispatchers.IO + job
 
     /**
      * Sets a [String] value to the data store.
@@ -29,8 +24,8 @@ class BridgeDataStore : PreferenceDataStore() {
     override fun putString(key: String?, value: String?) {
       value?.let {
         val savedString = stringPreferencesKey(key!!)
-          CoroutineScope(Dispatchers.IO).launch {
-              dataStoreImpl?.edit { prefs ->
+          CoroutineScope(IO).launch {
+              dataStoreImpl.edit { prefs ->
                   prefs[savedString] = value
               }
           }
@@ -63,8 +58,8 @@ class BridgeDataStore : PreferenceDataStore() {
      */
     override fun putInt(key: String?, value: Int) {
         val savedString = intPreferencesKey(key!!)
-        CoroutineScope(Dispatchers.IO).launch {
-            dataStoreImpl?.edit { prefs ->
+        CoroutineScope(IO).launch {
+            dataStoreImpl.edit { prefs ->
                 prefs[savedString] = value
             }
         }
@@ -82,8 +77,8 @@ class BridgeDataStore : PreferenceDataStore() {
      */
     override fun putLong(key: String?, value: Long) {
         val savedString = longPreferencesKey(key!!)
-        CoroutineScope(Dispatchers.IO).launch {
-            dataStoreImpl?.edit { prefs ->
+        CoroutineScope(IO).launch {
+            dataStoreImpl.edit { prefs ->
                 prefs[savedString] = value
             }
         }
@@ -101,8 +96,8 @@ class BridgeDataStore : PreferenceDataStore() {
      */
     override fun putFloat(key: String?, value: Float) {
         val savedString = floatPreferencesKey(key!!)
-        CoroutineScope(Dispatchers.IO).launch {
-            dataStoreImpl?.edit { prefs ->
+        CoroutineScope(IO).launch {
+            dataStoreImpl.edit { prefs ->
                 prefs[savedString] = value
             }
         }
@@ -120,8 +115,8 @@ class BridgeDataStore : PreferenceDataStore() {
      */
     override fun putBoolean(key: String?, value: Boolean) {
         val savedString = booleanPreferencesKey(key!!)
-        CoroutineScope(Dispatchers.IO).launch {
-            dataStoreImpl?.edit { prefs ->
+        CoroutineScope(IO).launch {
+            dataStoreImpl.edit { prefs ->
                 prefs[savedString] = value
             }
         }
@@ -136,13 +131,13 @@ class BridgeDataStore : PreferenceDataStore() {
      * @see .putString
      */
     override fun getString(key: String?, defValue: String?): String? {
-        var str: String?
-        runBlocking {
-            val readObj = stringPreferencesKey(key!!)
-            val preferences = dataStoreImpl?.data?.first()
-            str = preferences?.get(readObj) ?: defValue ?: ""
+        val readObj = stringPreferencesKey(key!!)
+        val future = CompletableFuture<String>()
+        CoroutineScope(IO).launch {
+            val preferences = dataStoreImpl.data.first()
+            future.complete(preferences[readObj] ?: defValue)
         }
-        return str
+        return future.get()
     }
 
     /**
@@ -186,13 +181,13 @@ class BridgeDataStore : PreferenceDataStore() {
      * @see .putInt
      */
     override fun getInt(key: String?, defValue: Int): Int {
-        var str: Int
-        runBlocking {
-            val readObj = intPreferencesKey(key!!)
-            val preferences = dataStoreImpl?.data?.first()
-            str = preferences?.get(readObj) ?: defValue
+        val readObj = intPreferencesKey(key!!)
+        val future = CompletableFuture<Int>()
+        CoroutineScope(IO).launch {
+            val preferences = dataStoreImpl.data.first()
+            future.complete(preferences[readObj] ?: defValue)
         }
-        return str
+        return future.get()
     }
 
     /**
@@ -204,13 +199,13 @@ class BridgeDataStore : PreferenceDataStore() {
      * @see .putLong
      */
     override fun getLong(key: String?, defValue: Long): Long {
-        var str: Long
-        runBlocking {
-            val readObj = longPreferencesKey(key!!)
-            val preferences = dataStoreImpl?.data?.first()
-            str = preferences?.get(readObj) ?: defValue
+        val readObj = longPreferencesKey(key!!)
+        val future = CompletableFuture<Long>()
+        CoroutineScope(IO).launch {
+            val preferences = dataStoreImpl.data.first()
+            future.complete(preferences[readObj] ?: defValue)
         }
-        return str
+        return future.get()
     }
 
     /**
@@ -222,13 +217,13 @@ class BridgeDataStore : PreferenceDataStore() {
      * @see .putFloat
      */
     override fun getFloat(key: String?, defValue: Float): Float {
-        var str: Float
-        runBlocking {
-            val readObj = floatPreferencesKey(key!!)
-            val preferences = dataStoreImpl?.data?.first()
-            str = preferences?.get(readObj) ?: defValue
+        val readObj = floatPreferencesKey(key!!)
+        val future = CompletableFuture<Float>()
+        CoroutineScope(IO).launch {
+            val preferences = dataStoreImpl.data.first()
+            future.complete(preferences[readObj] ?: defValue)
         }
-        return str
+        return future.get()
     }
 
     /**
@@ -240,14 +235,13 @@ class BridgeDataStore : PreferenceDataStore() {
      * @see .getBoolean
      */
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
-        var str: Boolean
-        runBlocking {
-            val readObj = booleanPreferencesKey(key!!)
-            val preferences = dataStoreImpl?.data?.first()
-            str = preferences?.get(readObj) ?: defValue
+        val readObj = booleanPreferencesKey(key!!)
+        val future = CompletableFuture<Boolean>()
+        CoroutineScope(IO).launch {
+            val preferences = dataStoreImpl.data.first()
+            future.complete(preferences[readObj] ?: defValue)
         }
-        return str
+        return future.get()
     }
-
 
 }

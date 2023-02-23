@@ -1,7 +1,7 @@
 package com.mcal.apkeditor.patch.interfaces;
 
 import com.mcal.apkeditor.IGeneralCallback;
-import com.mcal.apkeditor.ResListAdapter;
+import com.mcal.apkeditor.adapters.ResListAdapter;
 import com.mcal.common.utils.ApkInfoParser;
 
 public interface ApkInfoListener {

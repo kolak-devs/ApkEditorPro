@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.adapters;
 
 import static com.mcal.common.utils.FileHelperKt.copyFile;
 import static com.mcal.common.utils.PathHelperKt.getSubFolder;
@@ -26,6 +26,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mcal.apkeditor.ImageThumbnailInfo;
+import com.mcal.apkeditor.R;
+import com.mcal.apkeditor.ResSelectionChangeListener;
 import com.mcal.common.utils.FileRecord;
 import com.mcal.common.utils.FilenameComparator;
 import com.mcal.common.utils.ImageHelper;

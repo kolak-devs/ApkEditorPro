@@ -4,11 +4,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.color.DynamicColors
-import com.mcal.common.data.ReactivePreferences
-import kotlinx.coroutines.launch
 import ru.svolf.melissa.swipeback.SwipeBackActivity
 import ru.svolf.melissa.swipeback.SwipeBackLayout
 
@@ -18,12 +14,6 @@ open class CustomizedLangActivity : SwipeBackActivity() {
         super.onCreate(savedInstanceState)
         //LocaleManager.apply()
         setEdgeLevel(SwipeBackLayout.EdgeLevel.MIN)
-        lifecycleScope.launch {
-            // Support android 12 Monet Engine
-            if (ReactivePreferences.isMonetEnabled()) {
-                DynamicColors.applyToActivitiesIfAvailable(application)
-            }
-        }
 
     }
 
