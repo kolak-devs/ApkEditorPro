@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.settings.presentation.base.BasePreferenceFragment
 import com.mcal.common.data.BridgeDataStore
-import com.mcal.common.data.prefStore
+import com.mcal.common.extension.prefStore
 
 
 class ApkSettingsFragment : BasePreferenceFragment<ApkSettingsViewModel>() {
@@ -12,8 +12,7 @@ class ApkSettingsFragment : BasePreferenceFragment<ApkSettingsViewModel>() {
     override fun viewModelClass() = ApkSettingsViewModel::class.java
 
     override fun onSetupLayout(bundle: Bundle?, s: String?) {
-        val customStore = BridgeDataStore()
-        customStore.attachDataStore(requireContext().prefStore)
+        val customStore = BridgeDataStore(requireContext().prefStore)
         preferenceManager.preferenceDataStore = customStore
         addPreferencesFromResource(R.xml.decode_settings)
     }

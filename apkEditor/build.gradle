@@ -155,7 +155,6 @@ dependencies {
     implementation project(':feature:imageview')
     implementation project(':apksigner')
     implementation project(':feature:data-editor')
-    implementation project(':feature:crashreporter')
     implementation project(':feature:patchview')
     implementation project(':melissa')
     implementation project(':feature:manifestparser')
@@ -187,6 +186,7 @@ dependencies {
 
     implementation ui.fastadapter
     implementation ui.fastadapter.binding
+    implementation ui.fastscroll
 
     implementation jetpack.vp2
     implementation jetpack.preferences

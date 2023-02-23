@@ -24,7 +24,6 @@ android {
 }
 
 dependencies {
-    implementation project(':feature:crashreporter')
     implementation project(":melissa")
     implementation project(':sun')
 

@@ -6,8 +6,8 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.mcal.apkeditor.ApkListAdapter
 import com.mcal.apkeditor.R
+import com.mcal.apkeditor.adapters.ApkListAdapter
 import com.mcal.apkeditor.dialogs.selectFullEditDialog
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.utils.ActivityHelper

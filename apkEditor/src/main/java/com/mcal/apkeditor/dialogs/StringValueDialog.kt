@@ -10,13 +10,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mcal.apkeditor.R
-import com.mcal.apkeditor.StringListAdapter
+import com.mcal.apkeditor.adapters.StringListAdapter
 import com.mcal.common.utils.ClipboardUtils
 
 class StringValueDialog @SuppressLint("InflateParams") constructor(
-    context: Context,
-    strListAdapter: StringListAdapter,
-    position: Int
+	context: Context,
+	strListAdapter: StringListAdapter,
+	position: Int
 ) {
     private val mKey: TextInputLayout
     private val mValue: TextInputEditText

@@ -20,13 +20,13 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         mcal {
-            library('uidesigner', 'com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.6')
-            library('webview', 'com.github.TimScriptov.App-UI-Designer:webview:1.0.6')
+            library('uidesigner', 'com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.7')
+            library('webview', 'com.github.TimScriptov.App-UI-Designer:webview:1.0.7')
         }
 
         jetpack {
             library('core', 'androidx.core:core-ktx:1.9.0')
-            library('appcompat', 'androidx.appcompat:appcompat:1.6.0')
+            library('appcompat', 'androidx.appcompat:appcompat:1.6.1')
             library('preference', 'androidx.preference:preference-ktx:1.2.0')
             library('mvvm_vm', "androidx.lifecycle:lifecycle-viewmodel-ktx:$jetpack_version")
             library('mvvm_ld', "androidx.lifecycle:lifecycle-livedata-ktx:$jetpack_version")
@@ -50,6 +50,7 @@ dependencyResolutionManagement {
             library('fastadapter', "com.mikepenz:fastadapter:${latestFastAdapterRelease}")
             library('fastadapter_binding', "com.mikepenz:fastadapter-extensions-binding:${latestFastAdapterRelease}") // view binding helpers
             library('imageview', 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0')
+            library('fastscroll', "me.zhanghai.android.fastscroll:library:1.2.0")
 
         }
 

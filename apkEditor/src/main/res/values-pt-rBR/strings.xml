@@ -53,4 +53,5 @@
     <string name="tight_control">Tight control</string>
     <string name="tight_control_summary">Check for the absence of files in the project. The list of files is in the configuration file apktool.json/yml</string>
     <string name="agreement">Agreement</string>
+    <string name="no_internet_connection">No internet connection</string>
 </resources>

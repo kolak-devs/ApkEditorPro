@@ -16,13 +16,6 @@
         android:layout="@layout/preferences_category"
         android:title="@string/appearance">
 
-        <androidx.preference.SwitchPreference
-            android:defaultValue="true"
-            android:key="ui_monet"
-            android:summaryOff="@string/ui_monet_sum_off"
-            android:summaryOn="@string/ui_monet_sum_on"
-            android:title="Material You" />
-
         <androidx.preference.ListPreference
             android:entries="@array/language_key"
             android:entryValues="@array/language_value"

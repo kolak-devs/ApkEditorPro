@@ -1,4 +1,4 @@
-package com.mcal.apkeditor;
+package com.mcal.apkeditor.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mcal.apkeditor.R;
 import com.mcal.common.utils.ApkInfoParser;
 
 import java.util.ArrayList;

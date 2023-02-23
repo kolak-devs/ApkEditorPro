@@ -58,17 +58,17 @@ import com.mcal.apkeditor.ApkParseConsumer;
 import com.mcal.apkeditor.ApkParseThread;
 import com.mcal.apkeditor.IGeneralCallback;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.ResNavigationMgr;
 import com.mcal.apkeditor.ResSelectionChangeListener;
 import com.mcal.apkeditor.SomethingChangedListener;
-import com.mcal.apkeditor.StringListAdapter;
 import com.mcal.apkeditor.activities.types.ActivityState;
 import com.mcal.apkeditor.activities.types.ProjectInfo;
 import com.mcal.apkeditor.activities.types.StringItem;
 import com.mcal.apkeditor.adapters.IManifestChangeCallback;
 import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.adapters.ManifestListAdapter;
+import com.mcal.apkeditor.adapters.ResListAdapter;
+import com.mcal.apkeditor.adapters.StringListAdapter;
 import com.mcal.apkeditor.databinding.ActivityApkinfoBinding;
 import com.mcal.apkeditor.dialogs.AboutPluginDialog;
 import com.mcal.apkeditor.dialogs.AddFolderDialog;
@@ -133,6 +133,7 @@ import brut.androlib.res.data.value.ResReferenceValue;
 import brut.androlib.res.data.value.ResScalarValue;
 import brut.androlib.res.data.value.ResValue;
 import brut.util.Duo;
+import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class ApkInfoActivity extends CustomizedLangActivity implements OnItemClickListener, OnItemLongClickListener, IManifestChangeCallback, OnClickListener, IDecodeTaskCallback, ApkParseConsumer, ResSelectionChangeListener, AddFolderDialog.AddFolderCallback, ApkInfoListener, StringListAdapter.StringItemListener {
     // To edit/view a file before replacing
@@ -983,6 +984,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         RecyclerView stringList = binding.mainStrings.stringList;
         stringList.setLayoutManager(new LinearLayoutManager(this));
         stringList.setAdapter(stringListAdapter);
+        new FastScrollerBuilder(stringList).build();
 
         binding.mainStrings.keywordEdit.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {

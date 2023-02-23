@@ -21,10 +21,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.apkeditor.MatchedTextListAdapter;
 import com.mcal.apkeditor.R;
-import com.mcal.apkeditor.ResListAdapter;
 import com.mcal.apkeditor.activities.ApkInfoActivity;
+import com.mcal.apkeditor.adapters.MatchedTextListAdapter;
+import com.mcal.apkeditor.adapters.ResListAdapter;
 import com.mcal.common.view.AutoCompleteAdapter;
 import com.mcal.common.view.AutoCompleteTextView;
 import com.mcal.common.view.ProgressDialog;

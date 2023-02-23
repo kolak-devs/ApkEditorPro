@@ -40,7 +40,7 @@
                 android:background="@drawable/item_loading_chip"
                 android:gravity="center"
                 android:padding="12dp"
-                android:text="Отсутствует Интернет подключение"
+                android:text="@string/no_internet_connection"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/title_selectApk"
                 app:layout_constraintEnd_toEndOf="parent"
