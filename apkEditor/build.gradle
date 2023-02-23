@@ -155,7 +155,6 @@ dependencies {
     implementation project(':feature:imageview')
     implementation project(':apksigner')
     implementation project(':feature:data-editor')
-    implementation project(':feature:crashreporter')
     implementation project(':feature:patchview')
     implementation project(':melissa')
     implementation project(':feature:manifestparser')

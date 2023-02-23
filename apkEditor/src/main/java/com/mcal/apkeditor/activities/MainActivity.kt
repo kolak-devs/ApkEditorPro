@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.balsikandar.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.ApkComposeService
@@ -236,10 +235,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 .withIcon(R.drawable.settings)
                 .withTitle(R.string.tools_manager),
             MainMenuItem()
-                .withId(5)
-                .withIcon(R.drawable.round_logo_dev_24)
-                .withTitle(R.string.view_logs),
-            MainMenuItem()
                 .withId(6)
                 .withIcon(R.drawable.ic_exit_to_app)
                 .withTitle(R.string.exit)
@@ -285,11 +280,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                     }
                     4L -> {
                         val intent = Intent(this, DownloaderActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    5L -> {
-                        val intent = Intent(this, CrashReporterActivity::class.java)
                         startActivity(intent)
                         true
                     }
