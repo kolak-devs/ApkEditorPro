@@ -1098,8 +1098,8 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             //new PatchDialog(this, this);
         } else if (id == R.id.bsh_patcher) {
             final Intent intent = new Intent(this, BshEngineActivity.class);
-            intent.putExtra("filePath", decodeRootPath);
-            intent.putExtra("apkPath", apkPath);
+            intent.putExtra(BshEngineActivity.FILE_PATH, decodeRootPath);
+            intent.putExtra(BshEngineActivity.APK_PATH, apkPath);
             startActivity(intent);
         }
         // Auto translate

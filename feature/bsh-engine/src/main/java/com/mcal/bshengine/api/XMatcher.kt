@@ -2,7 +2,7 @@ package com.mcal.bshengine.api
 
 import java.util.regex.Pattern
 
-class XMatcher() {
+class XMatcher {
     /**
      * @param regex - регулярное выражение
      * @param source - текст в котором нужно найти группу и заменить

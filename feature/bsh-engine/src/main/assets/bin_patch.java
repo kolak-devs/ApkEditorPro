@@ -27,14 +27,14 @@ Main() {
 		}
 		hookPath.createNewFile();
 
-		XFileHelper.writeToFile(hookPath.getPath(), replaceSignature);
+		XFileHelper.writeText(hookPath.getPath(), replaceSignature);
 		XLog.info("Dex patched");
 	}
 
 	public void patchManifest() {
 		final String manifestText = XFileHelper.readFile(manifest.getPath());
 		final String matchedText = XMatcher.replaceGroup(PATTERN, manifestText, 2, "cc.binmt.signature.PmsHookApplication");
-		XFileHelper.writeToFile(manifest.getPath(), matchedText);
+		XFileHelper.writeText(manifest.getPath(), matchedText);
 		XLog.info("Manifest patched");
 	}
 

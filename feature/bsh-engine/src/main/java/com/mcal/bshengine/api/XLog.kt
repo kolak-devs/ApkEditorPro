@@ -2,7 +2,7 @@ package com.mcal.bshengine.api
 
 import android.widget.TextView
 
-class XLog(val textView: TextView) {
+class XLog(private val textView: TextView) {
     private var count = 0
     fun info(message: String) {
         val text = textView.text.toString()
