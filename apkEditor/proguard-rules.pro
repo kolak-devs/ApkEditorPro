@@ -5,6 +5,7 @@
 #-dontobfuscate
 
 -keep class com.mcal.apkeditor.translate.** { *; }
+-keep class com.mcal.uidesigner.** { *; }
 
 # For project persistence
 -keep class common.types.** { *; }

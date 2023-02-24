@@ -45,6 +45,7 @@ class BshEngineActivity : CustomizedLangActivity() {
         ItemAdapter<LogAdapter>()
     }
 
+    private val fastApkAdapter = FastAdapter.with(logItemAdapter)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = BshengineActivityBinding.inflate(layoutInflater)
@@ -81,19 +82,29 @@ class BshEngineActivity : CustomizedLangActivity() {
             startActivityForResult(FilePickHelper.pickFile(false), OPEN_REQUEST_CODE);
         }
         binding.funcApply.setOnClickListener {
+            it.isEnabled = false
+            binding.funcSelect.isEnabled = false
             binding.tickTimer.base = SystemClock.elapsedRealtime()
             binding.tickTimer.start()
-            startPatching()
+            CoroutineScope(Dispatchers.IO).launch {
+                startPatching()
+                withContext(Dispatchers.Main) {
+                    it.isEnabled = true
+                    binding.funcSelect.isEnabled = true
+                    binding.tickTimer.stop()
+                }
+            }
         }
     }
 
-    private fun startPatching() {
+    private suspend fun startPatching(): Boolean = withContext(Dispatchers.IO) {
+        var result = true
         try {
             intent.extras?.let { bundle ->
                 bundle.getString(FILE_PATH)?.takeIf { File(it).exists() }?.let { decodedDir ->
                     mDecodedDir = decodedDir
                     val i = Interpreter()
-                    i["XActivity"] = this
+                    i["XActivity"] = this@BshEngineActivity
                     // API
                     i["XFileHelper"] = XFileHelper()
                     i["XStorage"] = XStorage().apply {
@@ -103,45 +114,46 @@ class BshEngineActivity : CustomizedLangActivity() {
                     i["XMatcher"] = XMatcher()
                     i["XString"] = XString()
                     i["XCipher"] = XCipher()
-                    i["XToast"] = XToast(this)
+                    i["XToast"] = XToast(this@BshEngineActivity)
 
-                    val fastApkAdapter = FastAdapter.with(logItemAdapter)
-                    binding.listLog.apply {
-                        FastScrollerBuilder(this).build();
-                        adapter = fastApkAdapter
-                        addItemDecoration(DividerItemDecoration(this@BshEngineActivity, DividerItemDecoration.VERTICAL))
+                    withContext(Dispatchers.Main) {
+                        binding.listLog.apply {
+                            FastScrollerBuilder(this).build();
+                            adapter = fastApkAdapter
+                            addItemDecoration(DividerItemDecoration(this@BshEngineActivity, DividerItemDecoration.VERTICAL))
+                        }
                     }
 
                     i["XLog"] = XLog(logItemAdapter, binding.listLog, fastApkAdapter)
                     i["XSignature"] = XSignature(decodedDir)
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        if (BuildConfig.DEBUG) {
-                            i.eval(InputStreamReader(assets.open("string_encryption.java")))
-                        } else {
-                            scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
-                                i.eval(InputStreamReader(FileInputStream(it)))
-                            } ?: run {
-                                withContext(Dispatchers.Main) {
-                                    Toast.makeText(this@BshEngineActivity, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
-                                }
+                    if (BuildConfig.DEBUG) {
+                        i.eval(InputStreamReader(assets.open("string_encryption.java")))
+                    } else {
+                        scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
+                            i.eval(InputStreamReader(FileInputStream(it)))
+                        } ?: run {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(this@BshEngineActivity, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
                             }
-                        }
-                        withContext(Dispatchers.Main) {
-                            binding.tickTimer.stop()
                         }
                     }
                 } ?: run {
-                    Toast.makeText(this, getString(R.string.not_found_project_dir), Toast.LENGTH_SHORT).show()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@BshEngineActivity, getString(R.string.not_found_project_dir), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         } catch (e: Exception) {
-            val dialog = MaterialAlertDialogBuilder(this)
-            dialog.setTitle("Warning")
-            dialog.setMessage(e.toString())
-            dialog.create()
-            dialog.show()
+            result = false
+            withContext(Dispatchers.Main) {
+                val dialog = MaterialAlertDialogBuilder(this@BshEngineActivity)
+                dialog.setMessage(e.toString())
+                dialog.create()
+                dialog.show()
+            }
         }
+        result
     }
 
     @Suppress("OVERRIDE_DEPRECATION")

@@ -192,6 +192,8 @@ dependencies {
     implementation jetpack.preferences
     implementation jetpack.preferences.core
 
+    implementation mcal.uidesigner
+
     // LeakCanary
     debugImplementation misc.leaks
 }
