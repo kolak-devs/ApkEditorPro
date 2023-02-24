@@ -3,4 +3,7 @@
     <string name="unsupported_file">Неподдерживаемый файл</string>
     <string name="not_found_project_dir">Директория проекта отсутствует</string>
     <string name="apk_not_found">Apk не найден!</string>
+    <string name="enter_name">Enter name</string>
+    <string name="btn_select_patch">Select patch</string>
+    <string name="btn_apply_patch">Apply patch</string>
 </resources>

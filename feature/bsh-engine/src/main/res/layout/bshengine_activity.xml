@@ -1,54 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar" />
+    <include
+        android:id="@+id/include2"
+        layout="@layout/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <EditText
-        android:id="@+id/text_script_patch"
-        android:layout_width="match_parent"
+        android:id="@+id/filename"
+        style="@style/ThemeOverlay.Material3.TextInputEditText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:hint="Enter script path" />
+        android:layout_marginStart="8dp"
+        android:background="@drawable/edit_search_background"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="@string/enter_name"
+        android:inputType="textNoSuggestions"
+        android:padding="12dp"
+        android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@id/tick_timer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/include2"
+        tools:layout_editor_absoluteY="72dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Chronometer
+        android:id="@+id/tick_timer"
+        style="@style/TextAppearance.Material3.TitleLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_select_patch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:text="Select" />
-
-        <Button
-            android:id="@+id/btn_start_patch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:text="Start" />
-
-    </LinearLayout>
+        android:padding="12dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/filename"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/filename"
+        tools:text="00:00" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/log"
+        android:id="@+id/list_log"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/func_select"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filename"
+        app:stackFromEnd="true" />
+
+    <Button
+        android:id="@+id/func_select"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        tools:itemCount="2" />
+        android:layout_margin="8dp"
+        android:text="@string/btn_select_patch"
+        app:layout_constraintBottom_toTopOf="@id/func_apply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/func_apply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/btn_apply_patch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.mcal.bshengine.api
 
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.bshengine.adapters.LogAdapter
+import com.mcal.common.data.Constants
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -13,9 +14,18 @@ class XLog(private val adapter: ItemAdapter<LogAdapter>, private val recyclerVie
         if (message.isNotEmpty()) {
             CoroutineScope(Dispatchers.Main).launch {
                 adapter.add(
-                    LogAdapter()
-                        .withId((0..Integer.MAX_VALUE).random().toLong())
-                        .withTitle(message)
+                    LogAdapter().withId(message.hashCode().toLong()).withLogLevel(Constants.LOG_INFO).withLogString(message)
+                )
+                recyclerView.smoothScrollToPosition(fastApkAdapter.itemCount)
+            }
+        }
+    }
+
+    fun error(message: String) {
+        if (message.isNotEmpty()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                adapter.add(
+                    LogAdapter().withId(message.hashCode().toLong()).withLogLevel(Constants.LOG_ERROR).withLogString(message)
                 )
                 recyclerView.smoothScrollToPosition(fastApkAdapter.itemCount)
             }

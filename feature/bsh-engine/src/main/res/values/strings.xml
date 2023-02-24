@@ -3,4 +3,7 @@
     <string name="unsupported_file">Unsupported file</string>
     <string name="not_found_project_dir">Not found project directory</string>
     <string name="apk_not_found">APK file not found!</string>
+    <string name="enter_name">Enter name</string>
+    <string name="btn_select_patch">Select patch</string>
+    <string name="btn_apply_patch">Apply patch</string>
 </resources>

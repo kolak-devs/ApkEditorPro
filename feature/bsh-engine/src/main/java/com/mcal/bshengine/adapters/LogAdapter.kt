@@ -1,16 +1,21 @@
 package com.mcal.bshengine.adapters
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.bshengine.R
+import com.mcal.common.data.Constants
 import com.mikepenz.fastadapter.items.AbstractItem
 
 open class LogAdapter : AbstractItem<LogAdapter.ViewHolder>() {
-    var itemTitle: String? = null
+    private var logLevel: Int? = null
+    private var logString: String? = null
+    var bold: Boolean? = null
 
     override val type: Int
-        get() = R.id.main_menu_container
+        get() = R.id.item_log
 
     override val layoutRes: Int
         get() = R.layout.item_bsh_log
@@ -20,28 +25,47 @@ open class LogAdapter : AbstractItem<LogAdapter.ViewHolder>() {
         return this
     }
 
-    fun withTitle(title: String): LogAdapter {
-        this.itemTitle = title
+    fun withLogLevel(level: Int): LogAdapter {
+        this.logLevel = level
         return this
     }
 
-    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
-        super.bindView(holder, payloads)
-        itemTitle?.let {
-            holder.title.text = it
-        }
+    fun withLogString(str: String): LogAdapter {
+        this.logString = str
+        return this
     }
 
-    override fun unbindView(holder: ViewHolder) {
-        super.unbindView(holder)
-        holder.title.text = null
+    fun withBold(isBold: Boolean): LogAdapter {
+        this.bold = isBold
+        return this
     }
 
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)
     }
 
+    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
+        super.bindView(holder, payloads)
+        holder.content.apply {
+            if (logLevel == Constants.LOG_ERROR) {
+                this.setTextColor(Color.RED)
+            }
+            if (bold == true) {
+                this.typeface = Typeface.DEFAULT_BOLD
+            }
+            this.text = logString
+        }
+    }
+
+    override fun unbindView(holder: ViewHolder) {
+        super.unbindView(holder)
+        holder.content.apply {
+            this.text = null
+            this.typeface = null
+        }
+    }
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var title: TextView = view.findViewById(R.id.menu_title)
+        var content = view as TextView
     }
 }

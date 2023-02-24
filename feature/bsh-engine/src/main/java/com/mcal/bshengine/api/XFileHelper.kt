@@ -40,6 +40,10 @@ class XFileHelper {
         return file.isFile
     }
 
+    fun isDirectory(file: File): Boolean {
+        return file.isDirectory
+    }
+
     fun isSmali(file: File): Boolean {
         return file.name.endsWith(".smali")
     }
