@@ -20,12 +20,12 @@ class XFileHelper {
 
     fun readFileAsLines(fileName: File): List<String> = fileName.bufferedReader().readLines()
 
-    fun readFile(path: String) = FileInputStream(File(path)).readBytes().toString(StandardCharsets.UTF_8)
+    fun readFile(path: String): String = FileInputStream(File(path)).readBytes().toString(StandardCharsets.UTF_8)
 
-    fun readFile(file: File) =
+    fun readFile(file: File): String =
         FileInputStream(file).readBytes().toString(StandardCharsets.UTF_8)
 
-    fun readFile(inputStream: InputStream) =
+    fun readFile(inputStream: InputStream): String =
         inputStream.readBytes().toString(StandardCharsets.UTF_8)
 
     fun writeText(path: String, fileContent: String) {

@@ -6,6 +6,7 @@
 
 -keep class com.mcal.apkeditor.translate.** { *; }
 -keep class com.mcal.uidesigner.** { *; }
+-keep class com.mcal.bshengine.api.** { *; }
 
 # For project persistence
 -keep class common.types.** { *; }
