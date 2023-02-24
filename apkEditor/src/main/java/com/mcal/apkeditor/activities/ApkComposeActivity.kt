@@ -37,7 +37,7 @@ import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
 import java.lang.ref.WeakReference
 
-class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClickListener {
+class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback {
     private lateinit var binding: ActivityApkcomposeBinding
 
     // Created from notification or not (by clicking at notification)
@@ -105,13 +105,17 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
     }
 
     private fun createChannel() {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_NOTIFY_CHANNEL, "default", NotificationManager.IMPORTANCE_LOW)
-        chan1.lightColor = Color.TRANSPARENT
-        chan1.enableVibration(false)
-        chan1.vibrationPattern = longArrayOf(0L)
-        chan1.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-        notificationManager.createNotificationChannel(chan1)
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(
+            NotificationChannel(
+                PRIMARY_NOTIFY_CHANNEL,
+                "default",
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                lightColor = Color.TRANSPARENT
+                enableVibration(false)
+                vibrationPattern = longArrayOf(0L)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,23 +126,43 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
         binding = ActivityApkcomposeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.result.setOnClickListener(this)
+        binding.result.setOnClickListener {
+            targetApkPath?.let { path ->
+                showFileInExplorer(path)
+            }
+        }
         switchView(true)
 
         // Close button
-        binding.btnClose.setOnClickListener(this)
+        binding.btnClose.setOnClickListener {
+            finish()
+        }
 
         // Remove the old app
-        binding.btnRemove.setOnClickListener(this)
+        binding.btnRemove.setOnClickListener {
+            mPackageName?.let { pkg ->
+                uninstallPackage(this, pkg)
+            }
+        }
 
         // Fix the issue
-        binding.btnFix.setOnClickListener(this)
+        binding.btnFix.setOnClickListener {
+            errFixer?.let { fixer ->
+                binding.fixLayout.visibility = View.GONE
+                fixer.fixErrors(this)
+            }
+        }
 
         // Copy error message
-        binding.btnCopyErrmsg.setOnClickListener(this)
+        binding.btnCopyErrmsg.setOnClickListener {
+            copyToClipboard(this, errMessage)
+            Toast.makeText(this, R.string.errmsg_copied, Toast.LENGTH_SHORT).show()
+        }
 
         // Put it to background
-        binding.btnBg.setOnClickListener(this)
+        binding.btnBg.setOnClickListener {
+            finish()
+        }
 
         // Запуск сервиса
         connection?.let { conn ->
@@ -220,7 +244,9 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
         }
         if (ret) {
             this.setResult(SUCCEED)
-            binding.btnInstall.setOnClickListener(this)
+            binding.btnInstall.setOnClickListener {
+                targetApkPath?.let { ApkInstaller.install(this, it) }
+            }
 
             // Hide the failed view
             binding.succeededView.visibility = View.VISIBLE
@@ -274,7 +300,13 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
 
             if (codeModified && isArtRuntime) {
                 binding.patchDexLayout.visibility = View.VISIBLE
-                binding.btnPatch.setOnClickListener(this)
+                binding.btnPatch.setOnClickListener {
+                    if (!patchSucceed) {
+                        applyCodePatch()
+                    } else {
+                        launchApp()
+                    }
+                }
             } else {
                 binding.patchDexLayout.visibility = View.GONE
             }
@@ -350,47 +382,6 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
             return null
         }
 
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.btn_close -> {
-                finish()
-            }
-            R.id.btn_install -> {
-                targetApkPath?.let { ApkInstaller.install(this, it) }
-            }
-            R.id.btn_remove -> {
-                mPackageName?.let { pkg ->
-                    uninstallPackage(this, pkg)
-                }
-            }
-            R.id.btn_copy_errmsg -> {
-                copyToClipboard(this, errMessage)
-                Toast.makeText(this, R.string.errmsg_copied, Toast.LENGTH_SHORT).show()
-            }
-            R.id.btn_fix -> {
-                errFixer?.let { fixer ->
-                    binding.fixLayout.visibility = View.GONE
-                    fixer.fixErrors(this)
-                }
-            }
-            R.id.btn_patch -> {
-                if (!patchSucceed) {
-                    applyCodePatch()
-                } else {
-                    launchApp()
-                }
-            }
-            R.id.btn_bg -> {
-                finish()
-            }
-            R.id.result -> {
-                targetApkPath?.let { path ->
-                    showFileInExplorer(path)
-                }
-            }
-        }
-    }
-
     private fun showFileInExplorer(filepath: String) {
         if (!File(filepath).exists()) {
             return
@@ -430,7 +421,7 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
     // Apply the DEX patch to the cache
     private fun applyCodePatch() {
         ProgressDialog(
-            this, "", "Working…", false,
+            this, "", getString(R.string.working), false,
             object : ProcessingInterface {
                 private var errMessage: String? = null
                 private var targetOdex: String? = null

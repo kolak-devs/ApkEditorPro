@@ -252,4 +252,5 @@
     <string name="agreement">Соглашение</string>
     <string name="no_internet_connection">Отсутствует Интернет подключение</string>
     <string name="apkeditor_instruction">Инструкция</string>
+    <string name="working">В процессе…</string>
 </resources>
