@@ -135,7 +135,7 @@ Main() {
         XLog.info("STARTING!");
         try {
             patchSmali();
-        } catch(Exception e) {
+        } catch (Exception e) {
             String error = e.toString();
             if (error != null || error.length() > 0) {
                 XLog.error(error);
