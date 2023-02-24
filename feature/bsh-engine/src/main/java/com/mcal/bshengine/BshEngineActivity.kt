@@ -8,8 +8,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.MenuProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import bsh.Interpreter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mcal.bshengine.adapters.LogAdapter
 import com.mcal.bshengine.api.*
 import com.mcal.bshengine.databinding.BshengineActivityBinding
 import com.mcal.common.activities.CustomizedLangActivity
@@ -20,6 +22,13 @@ import com.mcal.common.utils.ScopedStorage
 import com.mcal.common.utils.copyFile
 import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.webview.WebViewActivity
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
@@ -79,27 +88,43 @@ class BshEngineActivity : CustomizedLangActivity() {
                     val i = Interpreter()
                     i["XActivity"] = this
                     // API
-                    i["XFileHelper"] = XFileHelper
-                    i["XStorage"] = XStorage(decodedDir, bundle.getString(APK_PATH))
+                    i["XFileHelper"] = XFileHelper()
+                    i["XStorage"] = XStorage().apply {
+                        setDecodedDir(decodedDir)
+                        setApkPath(bundle.getString(APK_PATH))
+                    }
                     i["XMatcher"] = XMatcher()
-                    i["XString"] = XString
-                    i["XCipher"] = XCipher
+                    i["XString"] = XString()
+                    i["XCipher"] = XCipher()
                     i["XToast"] = XToast(this)
-                    i["XLog"] = XLog(binding.textLog)
+
+                    val apkItemAdapter = ItemAdapter<LogAdapter>()
+                    val fastApkAdapter = FastAdapter.with(apkItemAdapter)
+                    binding.log.apply {
+                        FastScrollerBuilder(this).build();
+                        layoutManager = GridLayoutManager(this@BshEngineActivity, 1)
+                        adapter = fastApkAdapter
+                    }
+
+                    i["XLog"] = XLog(apkItemAdapter, binding.log, fastApkAdapter)
                     i["XSignature"] = XSignature(decodedDir)
 
-                    if (BuildConfig.DEBUG) {
-                        i.eval(InputStreamReader(assets.open("string_encryption.java")))
-                    } else {
-                        scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
-                            i.eval(InputStreamReader(FileInputStream(it)))
-                        } ?: run {
-                            Toast.makeText(this, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if (BuildConfig.DEBUG) {
+                            i.eval(InputStreamReader(assets.open("string_encryption.java")))
+                        } else {
+                            scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
+                                i.eval(InputStreamReader(FileInputStream(it)))
+                            } ?: run {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(this@BshEngineActivity, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
                     }
-                } ?: run {
-                    Toast.makeText(this, getString(R.string.not_found_project_dir), Toast.LENGTH_SHORT).show()
-                }
+                }// ?: run {
+                //    Toast.makeText(this, getString(R.string.not_found_project_dir), Toast.LENGTH_SHORT).show()
+                //}
             }
         } catch (e: Exception) {
             val dialog = MaterialAlertDialogBuilder(this)
@@ -146,7 +171,7 @@ class BshEngineActivity : CustomizedLangActivity() {
     }
 
     companion object {
-        const val FILE_PATH = "decodeRootPath"
+        const val FILE_PATH = "filePath"
         const val APK_PATH = "apkPath"
 
         private const val OPEN_REQUEST_CODE = 41

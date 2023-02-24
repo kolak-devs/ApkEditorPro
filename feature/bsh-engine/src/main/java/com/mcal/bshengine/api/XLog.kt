@@ -1,33 +1,30 @@
 package com.mcal.bshengine.api
 
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.mcal.bshengine.adapters.LogAdapter
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class XLog(private val textView: TextView) {
-    private var count = 0
+class XLog(private val adapter: ItemAdapter<LogAdapter>, private val recyclerView: RecyclerView, private val fastApkAdapter: FastAdapter<LogAdapter>) {
     fun info(message: String) {
-        val text = textView.text.toString()
-        count++
-        if (text.isEmpty()) {
-            textView.text = buildString {
-                append(count)
-                append(": ")
-                append(message)
-            }
-        } else {
-            textView.text = buildString {
-                append(text)
-                append("\n")
-                append(count)
-                append(": ")
-                append(message)
+        if (message.isNotEmpty()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                adapter.add(
+                    LogAdapter()
+                        .withId((0..Integer.MAX_VALUE).random().toLong())
+                        .withTitle(message)
+                )
+                recyclerView.smoothScrollToPosition(fastApkAdapter.itemCount)
             }
         }
     }
 
     fun clear() {
-        val view = textView
-        if (view.text.isNotEmpty()) {
-            view.text = ""
+        CoroutineScope(Dispatchers.Main).launch {
+            adapter.clear()
         }
     }
 }

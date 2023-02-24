@@ -28,7 +28,10 @@ Main() {
                     }
                     register = matcher.group(1);
                     startTextLine = "    const-string " + register + ", \"";
-                    encrypted = XCipher.encodeBase64(XString.unescapeUnicode(text));
+                    String unescapeText = XString.unescapeUnicode(text);
+                    XLog.info("Original: " + unescapeText);
+                    encrypted = XCipher.encodeBase64(unescapeText);
+                    XLog.info("Encrypted: " + encrypted);
                     if (Integer.parseInt(register.substring(1)) > 15 && register.startsWith("v")) {
                         call = "    invoke-static/range {" + register + " .. " + register + "}, " + className + "->" + methodName + "(" + "Ljava/lang/String;)Ljava/lang/String;\n";
                     } else if (register.startsWith("v") || (register.startsWith("p") && Integer.parseInt(register.substring(1)) < 10)) {
@@ -53,12 +56,13 @@ Main() {
     String stringerMethodName = "Lcom/mcal/Stringer";
 
     public void patchSmali() {
-        for(File f: smaliDir.listFiles()) {
-            if(f.isFile() && f.getName().endsWith(".smali")) {
+        for(File f: XFileHelper.getFiles(smaliDir)) {
+            if(XFileHelper.isFile(f) && XFileHelper.isSmali(f)) {
                 XLog.info(f.getPath());
                 encryptSmaliStringsRegex(f, stringerClassName, stringerMethodName);
             }
         }
+        XLog.info("FINISHED!");
     }
 
     public void onCreate() {

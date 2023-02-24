@@ -42,8 +42,11 @@ dependencies {
 
     implementation jetpack.core
     implementation jetpack.appcompat
-    
     implementation jetpack.material
+
+    implementation ui.fastadapter
+    implementation ui.fastadapter.binding
+    implementation ui.fastscroll
 
     implementation misc.coroutines.core
 }
