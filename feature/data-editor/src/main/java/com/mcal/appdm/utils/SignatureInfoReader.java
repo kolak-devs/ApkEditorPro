@@ -26,17 +26,12 @@ public class SignatureInfoReader {
                 }
 
                 String name = entry.getName();
-                if (name.endsWith(".RSA") || name.endsWith(".rsa") ||
-                        name.endsWith(".DSA") || name.endsWith(".dsa")) {
-                    //Log.d("DEBUG", "Entry: " + name);
-                    InputStream input = zipFile.getInputStream(entry);
-                    try {
+                if (name.endsWith(".RSA") || name.endsWith(".DSA")) {
+                    try (InputStream input = zipFile.getInputStream(entry)) {
                         X509Certificate cert = readSignatureBlock(input);
                         return getCertInfo(cert);
                     } catch (Exception e) {
                         e.printStackTrace();
-                    } finally {
-                        input.close();
                     }
                 }
             }
@@ -95,7 +90,7 @@ public class SignatureInfoReader {
         }
 
         @NonNull
-        public static String makeReadable(String str) {
+        public static String makeReadable(@NonNull String str) {
             return str.replace("C=", "Country=")
                     .replaceAll("O=", "Organization=")
                     .replaceAll("OU=", "Organization Unit=")

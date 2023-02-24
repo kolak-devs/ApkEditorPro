@@ -16,11 +16,12 @@ package com.mcal.appdm.utils;
  * limitations under the License.
  */
 
+import androidx.annotation.NonNull;
+
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.ByteBuffer;
@@ -37,7 +38,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * specific XML files being written with it.
  */
 public class FastXmlSerializer implements XmlSerializer {
-    private static final String ESCAPE_TABLE[] = new String[]{
+    private static final String[] ESCAPE_TABLE = new String[]{
             null, null, null, null, null, null, null, null,  // 0-7
             null, null, null, null, null, null, null, null,  // 8-15
             null, null, null, null, null, null, null, null,  // 16-23
@@ -51,14 +52,11 @@ public class FastXmlSerializer implements XmlSerializer {
     private static final int BUFFER_LEN = 8192;
 
     private final char[] mText = new char[BUFFER_LEN];
+    private final ByteBuffer mBytes = ByteBuffer.allocate(BUFFER_LEN);
     private int mPos;
-
     private Writer mWriter;
-
     private OutputStream mOutputStream;
     private CharsetEncoder mCharset;
-    private ByteBuffer mBytes = ByteBuffer.allocate(BUFFER_LEN);
-
     private boolean mInTag;
 
     private void append(char c) throws IOException {
@@ -113,16 +111,15 @@ public class FastXmlSerializer implements XmlSerializer {
         append(str, 0, str.length());
     }
 
-    private void escapeAndAppendString(final String string) throws IOException {
+    private void escapeAndAppendString(@NonNull final String string) throws IOException {
         final int N = string.length();
         final char NE = (char) ESCAPE_TABLE.length;
-        final String[] escapes = ESCAPE_TABLE;
         int lastPos = 0;
         int pos;
         for (pos = 0; pos < N; pos++) {
             char c = string.charAt(pos);
             if (c >= NE) continue;
-            String escape = escapes[c];
+            String escape = ESCAPE_TABLE[c];
             if (escape == null) continue;
             if (lastPos < pos) append(string, lastPos, pos - lastPos);
             lastPos = pos + 1;
@@ -133,14 +130,13 @@ public class FastXmlSerializer implements XmlSerializer {
 
     private void escapeAndAppendString(char[] buf, int start, int len) throws IOException {
         final char NE = (char) ESCAPE_TABLE.length;
-        final String[] escapes = ESCAPE_TABLE;
         int end = start + len;
         int lastPos = start;
         int pos;
         for (pos = start; pos < end; pos++) {
             char c = buf[pos];
             if (c >= NE) continue;
-            String escape = escapes[c];
+            String escape = ESCAPE_TABLE[c];
             if (escape == null) continue;
             if (lastPos < pos) append(buf, lastPos, pos - lastPos);
             lastPos = pos + 1;
@@ -164,7 +160,7 @@ public class FastXmlSerializer implements XmlSerializer {
         return this;
     }
 
-    public void cdsect(String text) throws IOException, IllegalArgumentException,
+    public void cdsect(String text) throws IllegalArgumentException,
             IllegalStateException {
         throw new UnsupportedOperationException();
     }
@@ -174,7 +170,7 @@ public class FastXmlSerializer implements XmlSerializer {
         throw new UnsupportedOperationException();
     }
 
-    public void docdecl(String text) throws IOException, IllegalArgumentException,
+    public void docdecl(String text) throws IllegalArgumentException,
             IllegalStateException {
         throw new UnsupportedOperationException();
     }
@@ -200,7 +196,7 @@ public class FastXmlSerializer implements XmlSerializer {
         return this;
     }
 
-    public void entityRef(String text) throws IOException, IllegalArgumentException,
+    public void entityRef(String text) throws IllegalArgumentException,
             IllegalStateException {
         throw new UnsupportedOperationException();
     }
@@ -265,17 +261,17 @@ public class FastXmlSerializer implements XmlSerializer {
         throw new UnsupportedOperationException();
     }
 
-    public void ignorableWhitespace(String text) throws IOException, IllegalArgumentException,
+    public void ignorableWhitespace(String text) throws IllegalArgumentException,
             IllegalStateException {
         throw new UnsupportedOperationException();
     }
 
-    public void processingInstruction(String text) throws IOException, IllegalArgumentException,
+    public void processingInstruction(String text) throws IllegalArgumentException,
             IllegalStateException {
         throw new UnsupportedOperationException();
     }
 
-    public void setFeature(String name, boolean state) throws IllegalArgumentException,
+    public void setFeature(@NonNull String name, boolean state) throws IllegalArgumentException,
             IllegalStateException {
         if (name.equals("http://xmlpull.org/v1/doc/features.html#indent-output")) {
             return;
@@ -285,34 +281,24 @@ public class FastXmlSerializer implements XmlSerializer {
 
     public void setOutput(OutputStream os, String encoding) throws IOException,
             IllegalArgumentException, IllegalStateException {
-        if (os == null)
+        if (os == null) {
             throw new IllegalArgumentException();
-        if (true) {
-            try {
-                mCharset = Charset.forName(encoding).newEncoder();
-            } catch (IllegalCharsetNameException e) {
-                throw (UnsupportedEncodingException) (new UnsupportedEncodingException(
-                        encoding).initCause(e));
-            } catch (UnsupportedCharsetException e) {
-                throw (UnsupportedEncodingException) (new UnsupportedEncodingException(
-                        encoding).initCause(e));
-            }
-            mOutputStream = os;
-        } else {
-            setOutput(
-                    encoding == null
-                            ? new OutputStreamWriter(os)
-                            : new OutputStreamWriter(os, encoding));
         }
+        try {
+            mCharset = Charset.forName(encoding).newEncoder();
+        } catch (IllegalCharsetNameException | UnsupportedCharsetException e) {
+            throw (UnsupportedEncodingException) (new UnsupportedEncodingException(
+                    encoding).initCause(e));
+        }
+        mOutputStream = os;
     }
 
-    public void setOutput(Writer writer) throws IOException, IllegalArgumentException,
+    public void setOutput(Writer writer) throws IllegalArgumentException,
             IllegalStateException {
         mWriter = writer;
     }
 
-    public void setPrefix(String prefix, String namespace) throws IOException,
-            IllegalArgumentException, IllegalStateException {
+    public void setPrefix(String prefix, String namespace) throws IllegalArgumentException, IllegalStateException {
         throw new UnsupportedOperationException();
     }
 
@@ -321,8 +307,7 @@ public class FastXmlSerializer implements XmlSerializer {
         throw new UnsupportedOperationException();
     }
 
-    public void startDocument(String encoding, Boolean standalone) throws IOException,
-            IllegalArgumentException, IllegalStateException {
+    public void startDocument(String encoding, Boolean standalone) throws IOException, IllegalArgumentException, IllegalStateException {
         append("<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\""
                 + (standalone ? "yes" : "no") + "\" ?>\n");
     }
@@ -361,5 +346,4 @@ public class FastXmlSerializer implements XmlSerializer {
         escapeAndAppendString(text);
         return this;
     }
-
 }

@@ -19,7 +19,6 @@
 
         <Button
             android:id="@+id/btn_delete"
-            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -28,7 +27,6 @@
 
         <Button
             android:id="@+id/btn_close"
-            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"

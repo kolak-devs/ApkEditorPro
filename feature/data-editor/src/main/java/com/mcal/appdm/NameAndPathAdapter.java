@@ -46,26 +46,32 @@ public class NameAndPathAdapter extends BaseAdapter {
         }
 
         ViewHolder viewHolder;
-        // sawsem theme
         if (convertView == null) {
-            convertView = LayoutInflater.from(activityRef.get()).inflate(
-                    (R.layout.appdm_item_nameandpath), null);
+            convertView = LayoutInflater.from(activityRef.get()).inflate(R.layout.appdm_item_nameandpath, null);
 
             viewHolder = new ViewHolder();
-            viewHolder.firstTv = (TextView) convertView
-                    .findViewById(R.id.tv_first);
-            viewHolder.secondTv = (TextView) convertView
-                    .findViewById(R.id.tv_second);
+            viewHolder.firstTv = (TextView) convertView.findViewById(R.id.tv_first);
+            viewHolder.secondTv = (TextView) convertView.findViewById(R.id.tv_second);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
         viewHolder.firstTv.setText(info.first);
-        viewHolder.secondTv.setText(info.second);
-
+        int index = info.second.indexOf("shared_prefs");
+        final String filePath;
+        if (index >= 0) {
+            filePath = info.second.substring(index);
+        } else {
+            index = info.second.indexOf("databases");
+            if (index >= 0) {
+                filePath = info.second.substring(index);
+            } else {
+                filePath = info.second;
+            }
+        }
+        viewHolder.secondTv.setText(filePath);
         return convertView;
-
     }
 
     static class ViewHolder {

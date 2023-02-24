@@ -2,6 +2,10 @@ package com.mcal.appdm.utils;
 
 import android.util.TypedValue;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.Contract;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -44,7 +48,7 @@ class MyInputStream {
         return AddSharedUserId.getInt(arr, 0);
     }
 
-    public void readIntArray(int[] arr) throws IOException {
+    public void readIntArray(@NonNull int[] arr) throws IOException {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = readInt();
         }
@@ -69,7 +73,7 @@ class MyInputStream {
 // Output wrapper
 class MyFileOutput {
 
-    private RandomAccessFile outFile;
+    private final RandomAccessFile outFile;
     private int writeLength = 0;
 
     public MyFileOutput(RandomAccessFile outFile) {
@@ -104,7 +108,7 @@ class MyFileOutput {
         writeLength += 2;
     }
 
-    public void writeIntArray(int[] values) throws IOException {
+    public void writeIntArray(@NonNull int[] values) throws IOException {
         byte[] buf = new byte[4 * values.length];
         for (int i = 0; i < values.length; i++) {
             AddSharedUserId.setInt(buf, 4 * i, values[i]);
@@ -135,8 +139,7 @@ class ResStringChunk {
     byte[] strBuffer;
     String[] stringValues;
 
-    private static void parseString(byte[] buffer, int[] stringIdxOffset,
-                                    String[] stringValues) throws IOException {
+    private static void parseString(byte[] buffer, @NonNull int[] stringIdxOffset, String[] stringValues) {
         for (int i = 0; i < stringIdxOffset.length; i++) {
             int curOffset = stringIdxOffset[i];
             int strLen = AddSharedUserId.getShort(buffer, curOffset);
@@ -154,7 +157,7 @@ class ResStringChunk {
         }
     }
 
-    public void parse(MyInputStream is) throws IOException {
+    public void parse(@NonNull MyInputStream is) throws IOException {
 
         // Resource String Table
         // 4 bytes (Chunk Type: 01 00 1c 00)
@@ -191,7 +194,7 @@ class ResStringChunk {
     // Add a string to the string table
     // position is the index of added string
     // NOTE: long string (> 32767) is not supported
-    public void addString(String addedStr, int position) {
+    public void addString(@NonNull String addedStr, int position) {
         int addedSize = 4 + (addedStr.length() + 2) * 2;
 
         this.chunkSize += addedSize;
@@ -267,7 +270,7 @@ class ResStringChunk {
     }
 
     // Dump to the output
-    public void dump(MyFileOutput out) throws IOException {
+    public void dump(@NonNull MyFileOutput out) throws IOException {
         // Recompute chunk size
         int lastStrPos = this.stringOffsetArray[this.stringCount - 1];
         int lastStrLen = getStrTotalLength(strBuffer, lastStrPos);
@@ -298,7 +301,7 @@ class ResAttrIdChunk {
     int chunkSize;
     int[] attrIdArray;
 
-    public void parse(MyInputStream is) throws IOException {
+    public void parse(@NonNull MyInputStream is) throws IOException {
         chunkTag = is.readInt();
         chunkSize = is.readInt();
         int attrCount = (chunkSize - 8) / 4;
@@ -331,7 +334,7 @@ class ResAttrIdChunk {
         attrIdArray = newAttrIds;
     }
 
-    public void dump(MyFileOutput out) throws IOException {
+    public void dump(@NonNull MyFileOutput out) throws IOException {
         out.writeInt(chunkTag);
         out.writeInt(chunkSize);
         out.writeIntArray(attrIdArray);
@@ -344,17 +347,17 @@ class AxmlBodyChunk {
     public static int endTag = 0x00100103;
     public static int namespaceTag = 0x00100100;
     public static int cdataTag = 0x00100104;
+    private final int addedAttrPosition;
+    private final int addedValPosition;
+    private final int stringCount; // stringCount after modification
     // index in the string table ("android" & "manifest")
     ResStringChunk stringChunk;
     private byte[] rawChunkData;
-    private int addedAttrPosition;
-    private int addedValPosition;
-    private int stringCount; // stringCount after modification
     private int androidIndex;
     private int manifestIndex;
 
     // addedAttrPosition = the position of added attribute name in string table
-    public AxmlBodyChunk(int addedAttrPos, int addedValPos, ResStringChunk strChunk) {
+    public AxmlBodyChunk(int addedAttrPos, int addedValPos, @NonNull ResStringChunk strChunk) {
         this.addedAttrPosition = addedAttrPos;
         this.addedValPosition = addedValPos;
         this.stringCount = strChunk.stringCount;
@@ -373,7 +376,7 @@ class AxmlBodyChunk {
         return rawChunkData;
     }
 
-    public int parseNext(MyInputStream is) throws IOException {
+    public int parseNext(@NonNull MyInputStream is) throws IOException {
         int chunkTag = is.readInt();
         int chunkSize = is.readInt();
 
@@ -549,8 +552,8 @@ class AxmlBodyChunk {
 // Designed to add installLocation Attribute to AndroidManifest binary file
 public class AddSharedUserId {
 
-    private MyInputStream is;
-    private MyFileOutput out;
+    private final MyInputStream is;
+    private final MyFileOutput out;
 
     public AddSharedUserId(String inputFile, String outputFile)
             throws IOException {
@@ -566,44 +569,35 @@ public class AddSharedUserId {
     }
 
     public static void main(String[] args) throws Exception {
-//		if (args.length < 1) {
-//			System.out
-//					.println("Usage: AddInstallLocationAttr.jar inputFile outputFile");
-//			return;
-//		}
-//
-//		String inputFile = args[0];
-//		String outputFile = args[1];
-
         String inputFile = "D:\\Android\\apk\\HackAppDataFree\\dist\\AndroidManifest.old.xml";
         String outputFile = "D:\\Android\\apk\\HackAppDataFree\\dist\\AndroidManifest.xml";
 
-        AddSharedUserId ama = new AddSharedUserId(inputFile,
-                outputFile);
-
+        AddSharedUserId ama = new AddSharedUserId(inputFile, outputFile);
         ama.addSharedUserId();
     }
 
-    protected static int getInt(byte[] buf, int offset) {
+    @Contract(pure = true)
+    protected static int getInt(@NonNull byte[] buf, int offset) {
         return ((int) buf[offset + 0] & 0xff)
                 | (((int) buf[offset + 1] & 0xff) << 8)
                 | (((int) buf[offset + 2] & 0xff) << 16)
                 | (((int) buf[offset + 3] & 0xff) << 24);
     }
 
-    protected static int getShort(byte[] buf, int offset) {
+    @Contract(pure = true)
+    protected static int getShort(@NonNull byte[] buf, int offset) {
         return ((int) buf[offset + 0] & 0xff)
                 | (((int) buf[offset + 1] & 0xff) << 8);
     }
 
-    protected static void setInt(byte[] buf, int offset, int value) {
+    protected static void setInt(@NonNull byte[] buf, int offset, int value) {
         buf[offset + 0] = (byte) (value & 0xff);
         buf[offset + 1] = (byte) ((value >> 8) & 0xff);
         buf[offset + 2] = (byte) ((value >> 16) & 0xff);
         buf[offset + 3] = (byte) ((value >> 24) & 0xff);
     }
 
-    protected static void setShort(byte[] buf, int offset, int value) {
+    protected static void setShort(@NonNull byte[] buf, int offset, int value) {
         buf[offset + 0] = (byte) (value & 0xff);
         buf[offset + 1] = (byte) ((value >> 8) & 0xff);
     }
@@ -667,5 +661,4 @@ public class AddSharedUserId {
         // Revise the file size
         out.writeInt(4, fileSize);
     }
-
 }
