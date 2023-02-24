@@ -146,7 +146,7 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
         }
     }
 
-    public override fun onNewIntent(intent: Intent) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         intentAction = intent.action
         // Cancel the notification if invoked from service
@@ -356,7 +356,7 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback, View.OnClick
                 finish()
             }
             R.id.btn_install -> {
-                ApkInstaller.install(this, targetApkPath)
+                targetApkPath?.let { ApkInstaller.install(this, it) }
             }
             R.id.btn_remove -> {
                 mPackageName?.let { pkg ->
