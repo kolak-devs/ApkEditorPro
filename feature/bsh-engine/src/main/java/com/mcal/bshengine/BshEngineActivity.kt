@@ -36,56 +36,6 @@ class BshEngineActivity : CustomizedLangActivity() {
         binding = BshengineActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(R.id.toolbar, "BSH Patcher", back = true)
-        intent.extras?.let { bundle ->
-            mDecodedDir = bundle.getString(FILE_PATH)
-            mApkPath = bundle.getString(APK_PATH)
-        }
-
-        binding.btnSelectPatch.setOnClickListener {
-            @Suppress("DEPRECATION")
-            startActivityForResult(FilePickHelper.pickFile(false), OPEN_REQUEST_CODE);
-        }
-        binding.btnStartPatch.setOnClickListener {
-            try {
-                mDecodedDir?.takeIf { File(it).exists() }?.let { decodedDir ->
-                    val i = Interpreter()
-                    i["XActivity"] = this
-                    // API
-                    i["XFileHelper"] = XFileHelper
-                    mApkPath?.takeIf { File(it).exists() }?.let { apkPath ->
-                        mApkPath = apkPath
-                        i["XStorage"] = XStorage(decodedDir, apkPath)
-                    } ?: run {
-                        Toast.makeText(this, getString(R.string.apk_not_found), Toast.LENGTH_SHORT).show()
-                    }
-                    i["XMatcher"] = XMatcher()
-                    i["XString"] = XString
-                    i["XCipher"] = XCipher
-                    i["XToast"] = XToast(this)
-//                    i["XToast.show"] = XToast(this)::class.java.getMethod("show", String::class.java, Boolean::class.java)
-                    i["XLog"] = XLog(binding.textLog)
-                    i["XSignature"] = XSignature(decodedDir)
-
-                    if (BuildConfig.DEBUG) {
-                        i.eval(InputStreamReader(assets.open("string_encryption.java")))
-                    } else {
-                        scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
-                            i.eval(InputStreamReader(FileInputStream(it)))
-                        } ?: run {
-                            Toast.makeText(this, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                } ?: run {
-                    Toast.makeText(this, getString(R.string.not_found_project_dir), Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                val dialog = MaterialAlertDialogBuilder(this)
-                dialog.setTitle("Warning")
-                dialog.setMessage(e.toString())
-                dialog.create()
-                dialog.show()
-            }
-        }
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_bsh_patch, menu)
@@ -112,6 +62,52 @@ class BshEngineActivity : CustomizedLangActivity() {
                 return false
             }
         })
+        binding.btnSelectPatch.setOnClickListener {
+            @Suppress("DEPRECATION")
+            startActivityForResult(FilePickHelper.pickFile(false), OPEN_REQUEST_CODE);
+        }
+        binding.btnStartPatch.setOnClickListener {
+            startPatching()
+        }
+    }
+
+    private fun startPatching() {
+        try {
+            intent.extras?.let { bundle ->
+                bundle.getString(FILE_PATH)?.takeIf { File(it).exists() }?.let { decodedDir ->
+                    mDecodedDir = decodedDir
+                    val i = Interpreter()
+                    i["XActivity"] = this
+                    // API
+                    i["XFileHelper"] = XFileHelper
+                    i["XStorage"] = XStorage(decodedDir, bundle.getString(APK_PATH))
+                    i["XMatcher"] = XMatcher()
+                    i["XString"] = XString
+                    i["XCipher"] = XCipher
+                    i["XToast"] = XToast(this)
+                    i["XLog"] = XLog(binding.textLog)
+                    i["XSignature"] = XSignature(decodedDir)
+
+                    if (BuildConfig.DEBUG) {
+                        i.eval(InputStreamReader(assets.open("string_encryption.java")))
+                    } else {
+                        scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
+                            i.eval(InputStreamReader(FileInputStream(it)))
+                        } ?: run {
+                            Toast.makeText(this, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } ?: run {
+                    Toast.makeText(this, getString(R.string.not_found_project_dir), Toast.LENGTH_SHORT).show()
+                }
+            }
+        } catch (e: Exception) {
+            val dialog = MaterialAlertDialogBuilder(this)
+            dialog.setTitle("Warning")
+            dialog.setMessage(e.toString())
+            dialog.create()
+            dialog.show()
+        }
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
@@ -143,8 +139,10 @@ class BshEngineActivity : CustomizedLangActivity() {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        mDecodedDir = savedInstanceState?.getString(FILE_PATH)
-        mApkPath = savedInstanceState?.getString(APK_PATH)
+        savedInstanceState?.let { bundle ->
+            mDecodedDir = bundle.getString(FILE_PATH)
+            mApkPath = bundle.getString(APK_PATH)
+        }
     }
 
     companion object {

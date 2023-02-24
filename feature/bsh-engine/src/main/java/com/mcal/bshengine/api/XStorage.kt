@@ -3,14 +3,14 @@ package com.mcal.bshengine.api
 import android.os.Environment
 import java.io.File
 
-class XStorage(private var decodedDir: String, private var apkFile: String) {
+class XStorage(private var decodedDir: String, private var apkFile: String?) {
 
     fun getStorageDir(): File {
         return Environment.getExternalStorageDirectory()
     }
 
-    fun getApk(): File {
-        return File(apkFile)
+    fun getApk(): File? {
+        return apkFile?.let { File(it) }
     }
 
     fun getProject(): File {

@@ -27,7 +27,7 @@ Main() {
                         continue;
                     }
                     register = matcher.group(1);
-                    startTextLine = "    const-string $register, \"";
+                    startTextLine = "    const-string " + register + ", \"";
                     encrypted = XCipher.encodeBase64(XString.unescapeUnicode(text));
                     if (Integer.parseInt(register.substring(1)) > 15 && register.startsWith("v")) {
                         call = "    invoke-static/range {" + register + " .. " + register + "}, " + className + "->" + methodName + "(" + "Ljava/lang/String;)Ljava/lang/String;\n";
