@@ -8,6 +8,8 @@ class XMatcher {
      * @param source - текст в котором нужно найти группу и заменить
      * @param groupToReplace - в какой группе заменить текст
      * @param replacement - на что заменить
+     *
+     * Since: 2.4.5
      */
     fun replaceGroup(regex: String, source: String, groupToReplace: Int, replacement: String): String {
         return replaceGroup(regex, source, groupToReplace, 1, replacement)

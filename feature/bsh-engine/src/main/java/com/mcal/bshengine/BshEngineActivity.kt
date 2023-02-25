@@ -150,6 +150,7 @@ class BshEngineActivity : CustomizedLangActivity() {
 
     private suspend fun startPatching(): Boolean = withContext(Dispatchers.IO) {
         var result = true
+        val log = XLog(logItemAdapter, binding.listLog, fastApkAdapter)
         try {
             intent.extras?.let { bundle ->
                 bundle.getString(FILE_PATH)?.takeIf { File(it).exists() }?.let { decodedDir ->
@@ -166,6 +167,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                     i["XString"] = XString()
                     i["XCipher"] = XCipher()
                     i["XToast"] = XToast(this@BshEngineActivity)
+                    i["XAlert"] = XAlert(this@BshEngineActivity)
 
                     withContext(Dispatchers.Main) {
                         binding.listLog.apply {
@@ -175,7 +177,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                         }
                     }
 
-                    i["XLog"] = XLog(logItemAdapter, binding.listLog, fastApkAdapter)
+                    i["XLog"] = log
                     i["XSignature"] = XSignature(decodedDir)
 
                     if (BuildConfig.DEBUG) {
@@ -198,10 +200,7 @@ class BshEngineActivity : CustomizedLangActivity() {
         } catch (e: Exception) {
             result = false
             withContext(Dispatchers.Main) {
-                val dialog = MaterialAlertDialogBuilder(this@BshEngineActivity)
-                dialog.setMessage(e.toString())
-                dialog.create()
-                dialog.show()
+                e.message?.let { log.error(it) }
             }
         }
         result

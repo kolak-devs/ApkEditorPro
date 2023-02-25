@@ -15,22 +15,37 @@ class XStorage() {
         apkFilePath = path
     }
 
+    /**
+     * Since: 2.4.5
+     */
     fun getStorageDir(): File {
         return Environment.getExternalStorageDirectory()
     }
 
+    /**
+     * Since: 2.4.5
+     */
     fun getApkFile(): File? {
         return apkFilePath?.let { File(it) }
     }
 
+    /**
+     * Since: 2.4.5
+     */
     fun getProjectDir(): File {
         return File(decodedDirPath)
     }
 
+    /**
+     * Since: 2.4.5
+     */
     fun getSmaliDir(): File {
         return File(getProjectDir(), "smali")
     }
 
+    /**
+     * Since: 2.4.5
+     */
     fun getAllSmaliDirs(): List<File> {
         val files = arrayListOf<File>()
         getProjectDir().walk().maxDepth(1).forEach { file ->
@@ -44,10 +59,16 @@ class XStorage() {
         return files
     }
 
+    /**
+     * Since: 2.4.5
+     */
     fun getResDir(): File {
         return File(getProjectDir(), "res")
     }
 
+    /**
+     * Since: 2.4.5
+     */
     fun getManifestFile(): File {
         return File(getProjectDir(), "AndroidManifest.xml")
     }

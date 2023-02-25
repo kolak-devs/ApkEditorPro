@@ -10,22 +10,42 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class XLog(private val adapter: ItemAdapter<LogAdapter>, private val recyclerView: RecyclerView, private val fastApkAdapter: FastAdapter<LogAdapter>) {
+    /**
+     * Since: 2.4.5
+     */
     fun info(message: String) {
+        info(message, false)
+    }
+
+    /**
+     * 2.4.6
+     */
+    fun info(message: String, boldStyle: Boolean) {
         if (message.isNotEmpty()) {
             CoroutineScope(Dispatchers.Main).launch {
                 adapter.add(
-                    LogAdapter().withId(message.hashCode().toLong()).withLogLevel(Constants.LOG_INFO).withLogString(message)
+                    LogAdapter().withId(message.hashCode().toLong()).withLogLevel(Constants.LOG_INFO).withBold(boldStyle).withLogString(message)
                 )
                 recyclerView.smoothScrollToPosition(fastApkAdapter.itemCount)
             }
         }
     }
 
+    /**
+     * Since: 2.4.5
+     */
     fun error(message: String) {
+        error(message, false)
+    }
+
+    /**
+     * 2.4.6
+     */
+    fun error(message: String, boldStyle: Boolean) {
         if (message.isNotEmpty()) {
             CoroutineScope(Dispatchers.Main).launch {
                 adapter.add(
-                    LogAdapter().withId(message.hashCode().toLong()).withLogLevel(Constants.LOG_ERROR).withLogString(message)
+                    LogAdapter().withId(message.hashCode().toLong()).withLogLevel(Constants.LOG_ERROR).withBold(boldStyle).withLogString(message)
                 )
                 recyclerView.smoothScrollToPosition(fastApkAdapter.itemCount)
             }

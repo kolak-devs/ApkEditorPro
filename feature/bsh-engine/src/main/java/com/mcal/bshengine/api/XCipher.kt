@@ -4,11 +4,17 @@ import android.util.Base64
 import java.nio.charset.StandardCharsets
 
 class XCipher {
+    /**
+     * Since: 2.4.5
+     */
     fun decodeBase64(text: String): String {
-        return String(Base64.decode(text, Base64.NO_WRAP), StandardCharsets.UTF_8)
+        return String(Base64.decode(text, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP), StandardCharsets.UTF_8)
     }
 
+    /**
+     * Since: 2.4.5
+     */
     fun encodeBase64(text: String): String {
-        return Base64.encodeToString(text.toByteArray(StandardCharsets.UTF_8), Base64.NO_WRAP)
+        return Base64.encodeToString(text.toByteArray(StandardCharsets.UTF_8), Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
     }
 }

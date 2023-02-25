@@ -7,6 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class XToast(private val context: Context) {
+    /**
+     * Since: 2.4.5
+     */
     fun show(message: String, durationLong: Boolean) {
         CoroutineScope(Dispatchers.Main).launch {
             Toast.makeText(context, message, if (durationLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
