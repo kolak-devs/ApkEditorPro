@@ -1,8 +1,6 @@
 package com.mcal.bshengine.api
 
-import java.io.File
-import java.io.FileInputStream
-import java.io.InputStream
+import java.io.*
 import java.nio.charset.StandardCharsets
 
 class XFileHelper {
@@ -46,5 +44,33 @@ class XFileHelper {
 
     fun isSmali(file: File): Boolean {
         return file.name.endsWith(".smali")
+    }
+
+    fun isXml(file: File): Boolean {
+        return file.name.endsWith(".xml")
+    }
+
+    @Throws(IOException::class)
+    fun copyFile(path: String, destinationPath: String) {
+        copyFile(File(path), File(destinationPath))
+    }
+
+    @Throws(IOException::class)
+    fun copyFile(file: File, destinationFile: File) {
+        copyFile(FileInputStream(file), FileOutputStream(destinationFile))
+    }
+
+    @Throws(IOException::class)
+    fun copyFile(input: InputStream, destinationFile: File) {
+        copyFile(input, FileOutputStream(destinationFile))
+    }
+
+    @Throws(IOException::class)
+    fun copyFile(source: InputStream, target: OutputStream) {
+        val buf = ByteArray(8192)
+        var length: Int
+        while (source.read(buf).also { length = it } != -1) {
+            target.write(buf, 0, length)
+        }
     }
 }

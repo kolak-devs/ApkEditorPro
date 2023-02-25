@@ -4,26 +4,29 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import bsh.Interpreter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.bshengine.adapters.LogAdapter
+import com.mcal.bshengine.adapters.PatcherHistoryItem
 import com.mcal.bshengine.api.*
 import com.mcal.bshengine.databinding.BshengineActivityBinding
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Constants.getDomain
 import com.mcal.common.filesystem.FilePickHelper
 import com.mcal.common.utils.ActivityHelper.attachParam
-import com.mcal.common.utils.ScopedStorage
+import com.mcal.common.utils.ScopedStorage.getPatchesDir
 import com.mcal.common.utils.copyFile
 import com.mcal.editor.TextEditor.getSoraEditor
 import com.mcal.webview.WebViewActivity
 import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,11 +36,15 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
+import java.nio.file.Files
+import java.text.SimpleDateFormat
+import java.util.stream.Collectors
+import kotlin.io.path.name
 
 class BshEngineActivity : CustomizedLangActivity() {
     private lateinit var binding: BshengineActivityBinding
 
-    private var scriptPath: File? = null
+    private var mPatchPath: File? = null
     private var mDecodedDir: String? = null
     private var mApkPath: String? = null
 
@@ -59,7 +66,7 @@ class BshEngineActivity : CustomizedLangActivity() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     R.id.menu_patch_edit -> {
-                        scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
+                        mPatchPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
                             val intent = getSoraEditor(this@BshEngineActivity, it.path, null, 0, null)
                             @Suppress("DEPRECATION")
                             startActivityForResult(intent, 0)
@@ -71,6 +78,50 @@ class BshEngineActivity : CustomizedLangActivity() {
                         val intent = Intent(this@BshEngineActivity, WebViewActivity::class.java)
                         attachParam(intent, WebViewActivity.HTML_URL, link)
                         startActivity(intent)
+                        return true
+                    }
+                    R.id.menu_patch_history -> {
+                        val itemAdapter = ItemAdapter<PatcherHistoryItem>()
+                        val fastAdapter = FastAdapter.with(itemAdapter)
+                        val fmt = SimpleDateFormat("EEE, HH:mm")
+                        val list = arrayListOf<PatcherHistoryItem>()
+                        /**
+                         * Получаем список файлов в директории патчей. И отображаем на экране все архивы
+                         */
+                        Files.walk(getPatchesDir().toPath()).filter {
+                            it.name.endsWith(".bsh")
+                        }.collect(Collectors.toList()).forEach { patchFile ->
+                            list.add(
+                                PatcherHistoryItem()
+                                    .withId(Files.getLastModifiedTime(patchFile).toMillis())
+                                    .withIcon(ContextCompat.getDrawable(this@BshEngineActivity, R.drawable.ic_android))
+                                    .withTitle(patchFile.name)
+                                    .withSubTitle(fmt.format(Files.getLastModifiedTime(patchFile).toMillis()))
+                            )
+                            itemAdapter.add(list)
+                        }
+
+                        if (itemAdapter.adapterItemCount >= 0) {
+                            LayoutInflater.from(this@BshEngineActivity).inflate(R.layout.dialog_bsh_patcher_history, null).apply {
+                                findViewById<RecyclerView>(R.id.recycler_view).apply {
+                                    adapter = fastAdapter
+                                    itemAnimator = DefaultItemAnimator()
+                                }
+                                val dialog = MaterialAlertDialogBuilder(this@BshEngineActivity).create()
+                                dialog.setTitle(R.string.select_patch)
+                                dialog.setView(this)
+                                dialog.show()
+
+                                fastAdapter.onClickListener = { _: View?, _: IAdapter<PatcherHistoryItem>, mainMenuItem: PatcherHistoryItem, i: Int ->
+                                    mainMenuItem.title?.let { title ->
+                                        mPatchPath = File(getPatchesDir(), title)
+                                        binding.filename.setText(title)
+                                        dialog.dismiss()
+                                    }
+                                    true
+                                }
+                            }
+                        }
                         return true
                     }
                 }
@@ -130,7 +181,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                     if (BuildConfig.DEBUG) {
                         i.eval(InputStreamReader(assets.open("string_encryption.java")))
                     } else {
-                        scriptPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
+                        mPatchPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
                             i.eval(InputStreamReader(FileInputStream(it)))
                         } ?: run {
                             withContext(Dispatchers.Main) {
@@ -163,14 +214,17 @@ class BshEngineActivity : CustomizedLangActivity() {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == OPEN_REQUEST_CODE) {
                 resultData?.data?.let {
-                    val script = File(ScopedStorage.getTmpDir().path, FilePickHelper.getFileName(this, it))
-                    contentResolver.openInputStream(it)?.let { it1 -> copyFile(it1, script) }
-                    if (script.exists() && script.name.endsWith(".bsh")) {
-                        val file = File(script.path)
-                        binding.filename.setText(file.name)
-                        scriptPath = file
-                    } else {
-                        Toast.makeText(this, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
+                    val patchFile = File(getPatchesDir(), FilePickHelper.getFileName(this, it))
+                    contentResolver.openInputStream(it)?.let { inputStream ->
+                        copyFile(inputStream, patchFile)
+                    }.also {
+                        val patchName = patchFile.name
+                        if (patchFile.exists() && patchName.endsWith(".bsh")) {
+                            binding.filename.setText(patchName)
+                            mPatchPath = patchFile
+                        } else {
+                            Toast.makeText(this, getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }

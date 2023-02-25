@@ -183,9 +183,10 @@ class PatcherActivity : CustomizedLangActivity(), ApkInfoListener, IPatchContext
                     contentResolver.openInputStream(uri)?.let { inputStream ->
                         copyFile(inputStream, patchFile)
                     }.also {
-                        if (patchFile.exists()) {
+                        val patchName = patchFile.name
+                        if (patchFile.exists() && patchName.endsWith(".zip")) {
                             mPatchPath = patchFile.path
-                            binding.filename.setText(patchFile.name)
+                            binding.filename.setText(patchName)
                         } else {
                             Toast.makeText(this@PatcherActivity, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
                         }
