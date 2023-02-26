@@ -132,8 +132,57 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.BUILD_USE_AAPT2] ?: true
     }
 
+    suspend fun setAapt2(enabled: Boolean) {
+        App.getContext().prefStore.edit {
+            it[PreferenceScheme.Compiler.BUILD_USE_AAPT2] = enabled
+        }
+    }
+
+    @JvmStatic
+    fun setAapt2Async(enabled: Boolean) {
+        runBlocking {
+            App.getContext().prefStore.edit {
+                it[PreferenceScheme.Compiler.BUILD_USE_AAPT2] = enabled
+            }
+        }
+    }
+
+    @JvmStatic
+    fun isAapt2Async(): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.BUILD_USE_AAPT2] ?: true
+        }
+        return fallback
+    }
+
+
+    @JvmStatic
+    fun isFixMultiResAsync(): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_MULTIRES] ?: true
+        }
+        return fallback
+    }
+
     suspend fun isFixMultiRes(): Boolean {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_MULTIRES] ?: true
+    }
+
+    suspend fun setFixMultiRes(enabled: Boolean) {
+        App.getContext().prefStore.edit {
+            it[PreferenceScheme.Compiler.DECODE_MULTIRES] = enabled
+        }
+    }
+
+    @JvmStatic
+    fun setFixMultiResAsync(enabled: Boolean) {
+        runBlocking {
+            App.getContext().prefStore.edit {
+                it[PreferenceScheme.Compiler.DECODE_MULTIRES] = enabled
+            }
+        }
     }
 
     suspend fun isNeedDecodeAssets(): Boolean {
@@ -191,6 +240,30 @@ object ReactivePreferences {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_ENABLED] ?: true
     }
 
+    @JvmStatic
+    fun isSigningEnabledAsync(): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_ENABLED] ?: true
+        }
+        return fallback
+    }
+
+    suspend fun setSigningEnabled(enabled: Boolean) {
+        App.getContext().prefStore.edit {
+            it[PreferenceScheme.Compiler.SIGNING_ENABLED] = enabled
+        }
+    }
+
+    @JvmStatic
+    fun setSigningEnabledAsync(enabled: Boolean) {
+        runBlocking {
+            App.getContext().prefStore.edit {
+                it[PreferenceScheme.Compiler.SIGNING_ENABLED] = enabled
+            }
+        }
+    }
+
     suspend fun isCustomSigningEnabled(): Boolean {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.SIGNING_CUSTOM_ON] ?: false
     }
@@ -213,12 +286,32 @@ object ReactivePreferences {
     }
 
     @JvmStatic
-    fun isAaptRules(): Boolean {
+    suspend fun isAaptRules(): Boolean {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.BUILD_AAPT_RULES] ?: true
+    }
+
+    @JvmStatic
+    fun isAaptRulesAsync(): Boolean {
         var fallback: Boolean
         runBlocking {
             fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.BUILD_AAPT_RULES] ?: true
         }
         return fallback
+    }
+
+    suspend fun setAaptRules(enabled: Boolean) {
+        App.getContext().prefStore.edit {
+            it[PreferenceScheme.Compiler.BUILD_AAPT_RULES] = enabled
+        }
+    }
+
+    @JvmStatic
+    fun setAaptRulesAsync(enabled: Boolean) {
+        runBlocking {
+            App.getContext().prefStore.edit {
+                it[PreferenceScheme.Compiler.BUILD_AAPT_RULES] = enabled
+            }
+        }
     }
 
     suspend fun isCheckExistsFilesEnabled(): Boolean {
@@ -237,6 +330,15 @@ object ReactivePreferences {
     suspend fun setCheckExistsFilesEnabled(enabled: Boolean) {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Compiler.CHECK_EXISTS_FILES] = enabled
+        }
+    }
+
+    @JvmStatic
+    fun setCheckExistsFilesEnabledAsync(enabled: Boolean) {
+        runBlocking {
+            App.getContext().prefStore.edit {
+                it[PreferenceScheme.Compiler.CHECK_EXISTS_FILES] = enabled
+            }
         }
     }
 

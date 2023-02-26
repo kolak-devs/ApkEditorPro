@@ -382,7 +382,7 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
                 ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),
                 ScopedStorage.getDecodedDir(), ScopedStorage.getTmpDir()
             ) / 1000 / 1000
-            Log.i(TAG, "scheduleCleaning: cache size = " + total)
+            Log.i(TAG, "scheduleCleaning: cache size = $total")
             if (total > ReactivePreferences.getGarbageLimit()) {
                 Utils.deleteFiles(
                     ScopedStorage.cacheDir, ScopedStorage.getBackupsDir(),

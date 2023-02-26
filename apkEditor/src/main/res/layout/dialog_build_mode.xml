@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="8dp"
+    android:paddingRight="16dp">
+
+    <CheckBox
+        android:id="@+id/fixMultiRes"
+        style="@style/AppTheme.SweetCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/pref_summary_multi_package" />
+
+    <CheckBox
+        android:id="@+id/apktool_check_exists_files"
+        style="@style/AppTheme.SweetCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tight_control_summary" />
+
+    <CheckBox
+        android:id="@+id/ae_aapt_rules"
+        style="@style/AppTheme.SweetCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/aapt_rules_sum" />
+
+    <CheckBox
+        android:id="@+id/aapt2"
+        style="@style/AppTheme.SweetCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/pref_summary_aapt2" />
+
+    <CheckBox
+        android:id="@+id/sign_apk"
+        style="@style/AppTheme.SweetCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/sign_apk" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_search_background"
+        android:drawableStart="@drawable/info"
+        android:drawablePadding="4dp"
+        android:padding="8dp"
+        android:text="@string/msg_decode_notice" />
+
+</LinearLayout>

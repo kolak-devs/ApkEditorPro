@@ -1,5 +1,6 @@
 package com.mcal.apkeditor.activities;
 
+import static com.mcal.common.data.ReactivePreferences.isFixMultiResAsync;
 import static com.mcal.common.utils.FileHelperKt.copyFile;
 import static com.mcal.common.utils.FileHelperKt.readObjectFromFile;
 import static com.mcal.common.utils.FileHelperKt.recursiveModifiedTime;
@@ -34,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -87,6 +89,7 @@ import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
 import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
 import com.mcal.bshengine.BshEngineActivity;
 import com.mcal.common.activities.CustomizedLangActivity;
+import com.mcal.common.data.ReactivePreferences;
 import com.mcal.common.filesystem.FilePickHelper;
 import com.mcal.common.utils.ActivityHelper;
 import com.mcal.common.utils.ApkInfoParser;
@@ -1148,7 +1151,32 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
     }
 
     protected void setupClickListener() {
-        binding.btnBuildApk.setOnClickListener(v -> composeApkFile());
+        binding.btnBuildApk.setOnClickListener(v -> {
+            final View view = getLayoutInflater().inflate(R.layout.dialog_build_mode, null, false);
+            final CheckBox fixMultiRes = view.findViewById(R.id.fixMultiRes);
+            fixMultiRes.setChecked(isFixMultiResAsync());
+            final CheckBox apktoolCheckExistsFiles = view.findViewById(R.id.apktool_check_exists_files);
+            apktoolCheckExistsFiles.setChecked(ReactivePreferences.isCheckExistsFilesEnabledAsync());
+            final CheckBox aeAaptRules = view.findViewById(R.id.ae_aapt_rules);
+            aeAaptRules.setChecked(ReactivePreferences.isAaptRulesAsync());
+            final CheckBox aapt2 = view.findViewById(R.id.aapt2);
+            aapt2.setChecked(ReactivePreferences.isAapt2Async());
+            final CheckBox signApk = view.findViewById(R.id.sign_apk);
+            signApk.setChecked(ReactivePreferences.isSigningEnabledAsync());
+
+            final MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
+            dialog.setTitle(R.string.settings);
+            dialog.setView(view);
+            dialog.setPositiveButton(android.R.string.ok, (dialog1, which) -> {
+                ReactivePreferences.setFixMultiResAsync(fixMultiRes.isChecked());
+                ReactivePreferences.setCheckExistsFilesEnabledAsync(apktoolCheckExistsFiles.isChecked());
+                ReactivePreferences.setAaptRulesAsync(aeAaptRules.isChecked());
+                ReactivePreferences.setAapt2Async(aapt2.isChecked());
+                ReactivePreferences.setSigningEnabledAsync(signApk.isChecked());
+                composeApkFile();
+            });
+            dialog.show();
+        });
         binding.menuApplyPatch.setOnClickListener(this);
         binding.bshPatcher.setOnClickListener(this);
     }
