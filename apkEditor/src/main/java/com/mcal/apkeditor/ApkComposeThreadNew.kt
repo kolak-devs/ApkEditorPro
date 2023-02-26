@@ -86,11 +86,11 @@ class ApkComposeThreadNew(
             buildDir.mkdir()
         }
         do {
-            val tmpApkFile = File(ScopedStorage.getTmpDir(), "app.apk")
+            val unsignedApk = File(ScopedStorage.getApkEditorDir(), "app_unsigned.apk")
             val binDir = ScopedStorage.getBinDir()
             try {
                 launch(Dispatchers.IO) {
-                    tmpApkFile.createNewFile()
+                    unsignedApk.createNewFile()
                 }
                 mStepInfo.stepTotal = 12
                 setNextStep(context.getString(R.string.build_preparing))
@@ -105,10 +105,12 @@ class ApkComposeThreadNew(
                     aaptPath = binDirPath + File.separator + "aapt"
                     aapt2Path = binDirPath + File.separator + "aapt2"
                     frameworkFolderLocation = binDirPath
-                }, this@ApkComposeThreadNew).build(File(mDecodedFilePath), tmpApkFile)
+                }, this@ApkComposeThreadNew).build(File(mDecodedFilePath), unsignedApk)
                 setNextStep(context.getString(R.string.build_signing))
-                if (!signApk(tmpApkFile.path)) {
+                if (!signApk(unsignedApk.path)) {
                     setNextStep(context.getString(R.string.message_signing_disabled))
+                } else {
+                    unsignedApk.delete()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -123,7 +125,6 @@ class ApkComposeThreadNew(
             setNextStep(context.getString(R.string.cleanup))
             ScopedStorage.getTmpDir().cleanup()
             ScopedStorage.getDecodedDir().cleanup()
-            tmpApkFile.delete()
             isSucceed = true
         } while (false)
         if (!isStopFlag) {
