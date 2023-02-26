@@ -187,7 +187,7 @@ Main() {
                 final Matcher matcher = Pattern.compile("const-string ([vp]\\d{1,2}), \"(.*)\"").matcher(line);
                 if (matcher.find()) {
                     final String text = matcher.group(2);
-                    if (text == null || text.length() <= 0) {
+                    if (XString.isNullOrEmpty(text)) {
                         // Если строка нулл или пустая - пропускаем
                         out.append(line).append("\n");
                         continue;
@@ -245,7 +245,7 @@ Main() {
             patchSmali();
         } catch (Exception e) {
             final String error = e.toString();
-            if (error != null || error.length() > 0) {
+            if (!XString.isNullOrEmpty(error)) {
                 XLog.error(error);
             }
         }
