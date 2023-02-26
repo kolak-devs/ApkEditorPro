@@ -112,7 +112,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                                 dialog.setView(this)
                                 dialog.show()
 
-                                fastAdapter.onClickListener = { _: View?, _: IAdapter<PatcherHistoryItem>, mainMenuItem: PatcherHistoryItem, i: Int ->
+                                fastAdapter.onClickListener = { _: View?, _: IAdapter<PatcherHistoryItem>, mainMenuItem: PatcherHistoryItem, _: Int ->
                                     mainMenuItem.title?.let { title ->
                                         mPatchPath = File(getPatchesDir(), title)
                                         binding.filename.setText(title)
