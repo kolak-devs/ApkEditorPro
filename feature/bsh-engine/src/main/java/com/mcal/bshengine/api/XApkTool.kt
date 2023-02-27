@@ -71,6 +71,9 @@ class XApkTool(private val xLog: XLog) {
         }
     }
 
+    /**
+     * Since: 2.4.7
+     */
     fun decode(apkPath: File, decodeRootPath: File) {
         try {
             CoroutineScope(Dispatchers.IO).launch {
@@ -90,27 +93,42 @@ class XApkTool(private val xLog: XLog) {
         }
     }
 
+    /**
+     * Since: 2.4.7
+     */
     fun build(decodeDir: File, outputApkFile: File) {
         CoroutineScope(Dispatchers.IO).launch {
             Androlib(options(), logger()).build(decodeDir, outputApkFile)
         }
     }
 
+    /**
+     * Since: 2.4.7
+     */
     fun setUseNewAaptRules(mode: Boolean): XApkTool {
         mUseNewAaptRules = mode
         return this
     }
 
+    /**
+     * Since: 2.4.7
+     */
     fun setUseJsonConfig(mode: Boolean): XApkTool {
         mUseJsonConfig = mode
         return this
     }
 
+    /**
+     * Since: 2.4.7
+     */
     fun setAaptPath(path: String): XApkTool {
         mAaptPath = path
         return this
     }
 
+    /**
+     * Since: 2.4.7
+     */
     fun setAapt2Path(path: String): XApkTool {
         mAapt2Path = path
         return this
