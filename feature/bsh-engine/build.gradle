@@ -39,6 +39,9 @@ dependencies {
     implementation project(":melissa")
 
     implementation mcal.webview
+    implementation mcal.webview
+
+    implementation tools.apktool
 
     implementation jetpack.core
     implementation jetpack.appcompat
