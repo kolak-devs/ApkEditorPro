@@ -158,26 +158,25 @@ object ReactivePreferences {
 
 
     @JvmStatic
-    fun isFixMultiResAsync(): Boolean {
+    fun ignoreMultiResAsync(): Boolean {
         var fallback: Boolean
         runBlocking {
             fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_MULTIRES] ?: true
         }
         return fallback
     }
-
-    suspend fun isFixMultiRes(): Boolean {
+    suspend fun ignoreMultiRes(): Boolean {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Compiler.DECODE_MULTIRES] ?: true
     }
 
-    suspend fun setFixMultiRes(enabled: Boolean) {
+    suspend fun setIgnoreMultiRes(enabled: Boolean) {
         App.getContext().prefStore.edit {
             it[PreferenceScheme.Compiler.DECODE_MULTIRES] = enabled
         }
     }
 
     @JvmStatic
-    fun setFixMultiResAsync(enabled: Boolean) {
+    fun setIgnoreMultiResAsync(enabled: Boolean) {
         runBlocking {
             App.getContext().prefStore.edit {
                 it[PreferenceScheme.Compiler.DECODE_MULTIRES] = enabled

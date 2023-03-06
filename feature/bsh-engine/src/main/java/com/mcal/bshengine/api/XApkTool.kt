@@ -19,7 +19,7 @@ class XApkTool(private val xLog: XLog) {
     private lateinit var mAaptPath: String
     private lateinit var mAapt2Path: String
     private lateinit var mFrameworkFolderLocation: String
-
+    private var mIgnoreMultiRes = true
     private fun logger(): Logger {
         return object : Logger {
             override fun error(args: String?) {
@@ -62,12 +62,13 @@ class XApkTool(private val xLog: XLog) {
 
     private fun options(): BuildOptions {
         return BuildOptions().apply {
-            this.isAaptRules = mUseNewAaptRules
-            this.isJsonConfig = mUseJsonConfig
+            this.useNewBuildRules = mUseNewAaptRules
+            this.useJsonConfig = mUseJsonConfig
             this.useAapt2 = mUseAapt2
             this.aaptPath = mAaptPath
             this.aapt2Path = mAapt2Path
             this.frameworkFolderLocation = mFrameworkFolderLocation
+            this.ignoreMultiRes = mIgnoreMultiRes
         }
     }
 
@@ -115,6 +116,14 @@ class XApkTool(private val xLog: XLog) {
      */
     fun setUseJsonConfig(mode: Boolean): XApkTool {
         mUseJsonConfig = mode
+        return this
+    }
+
+    /**
+     * Since: 2.4.7
+     */
+    fun setIgnoreMultiRes(mode: Boolean): XApkTool {
+        mIgnoreMultiRes = mode
         return this
     }
 

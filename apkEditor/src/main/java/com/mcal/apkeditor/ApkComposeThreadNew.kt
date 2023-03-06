@@ -99,12 +99,13 @@ class ApkComposeThreadNew(
 
                 val binDirPath = binDir.path
                 Androlib(BuildOptions().apply {
-                    isAaptRules = ReactivePreferences.isAaptRules()
-                    isJsonConfig = ReactivePreferences.isJsonConfig()
+                    useNewBuildRules = ReactivePreferences.isAaptRules()
+                    useJsonConfig = ReactivePreferences.isJsonConfig()
                     useAapt2 = ReactivePreferences.isAapt2()
                     aaptPath = binDirPath + File.separator + "aapt"
                     aapt2Path = binDirPath + File.separator + "aapt2"
                     frameworkFolderLocation = binDirPath
+                    ignoreMultiRes = ReactivePreferences.ignoreMultiResAsync()
                 }, this@ApkComposeThreadNew).build(File(mDecodedFilePath), unsignedApk)
                 setNextStep(context.getString(R.string.build_signing))
                 if (!signApk(unsignedApk.path)) {

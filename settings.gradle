@@ -85,7 +85,7 @@ dependencyResolutionManagement {
         }
 
         tools {
-            library('apktool', "com.github.TimScriptov:Android-ApkTool-Library:2.7.0.3")
+            library('apktool', "com.github.TimScriptov:Android-ApkTool-Library:2.7.0.5")
             library('dexlib2', "org.smali:dexlib2:${smali_version}")
             library('smali', "org.smali:smali:${smali_version}")
             library('baksmali', "org.smali:baksmali:${smali_version}")

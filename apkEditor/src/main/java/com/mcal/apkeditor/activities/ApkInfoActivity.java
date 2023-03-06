@@ -1,6 +1,6 @@
 package com.mcal.apkeditor.activities;
 
-import static com.mcal.common.data.ReactivePreferences.isFixMultiResAsync;
+import static com.mcal.common.data.ReactivePreferences.ignoreMultiResAsync;
 import static com.mcal.common.utils.FileHelperKt.copyFile;
 import static com.mcal.common.utils.FileHelperKt.readObjectFromFile;
 import static com.mcal.common.utils.FileHelperKt.recursiveModifiedTime;
@@ -1154,7 +1154,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         binding.btnBuildApk.setOnClickListener(v -> {
             final View view = getLayoutInflater().inflate(R.layout.dialog_build_mode, null, false);
             final CheckBox fixMultiRes = view.findViewById(R.id.fixMultiRes);
-            fixMultiRes.setChecked(isFixMultiResAsync());
+            fixMultiRes.setChecked(ignoreMultiResAsync());
             final CheckBox apktoolCheckExistsFiles = view.findViewById(R.id.apktool_check_exists_files);
             apktoolCheckExistsFiles.setChecked(ReactivePreferences.isCheckExistsFilesEnabledAsync());
             final CheckBox aeAaptRules = view.findViewById(R.id.ae_aapt_rules);
@@ -1168,7 +1168,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             dialog.setTitle(R.string.settings);
             dialog.setView(view);
             dialog.setPositiveButton(android.R.string.ok, (dialog1, which) -> {
-                ReactivePreferences.setFixMultiResAsync(fixMultiRes.isChecked());
+                ReactivePreferences.setIgnoreMultiResAsync(fixMultiRes.isChecked());
                 ReactivePreferences.setCheckExistsFilesEnabledAsync(apktoolCheckExistsFiles.isChecked());
                 ReactivePreferences.setAaptRulesAsync(aeAaptRules.isChecked());
                 ReactivePreferences.setAapt2Async(aapt2.isChecked());

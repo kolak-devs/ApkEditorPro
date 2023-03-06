@@ -73,7 +73,7 @@ class ApkParseThread(
     suspend fun getResTable(apkFile: File, loadMainPkg: Boolean = true): ResTable {
         val resTable = ResTable()
         if (loadMainPkg) {
-            if (ReactivePreferences.isFixMultiRes()) {
+            if (ReactivePreferences.ignoreMultiRes()) {
                 loadOneMainPkg(resTable, apkFile)
             } else {
                 loadMainPkg(resTable, apkFile)
