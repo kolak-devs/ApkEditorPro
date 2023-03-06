@@ -27,8 +27,8 @@ class TaskDecoder : Logger {
         try {
             val lib = Androlib(BuildOptions().apply {
                 frameworkFolderLocation = binFolder
-                aaptPath = binFolder + File.separator + "aapt"
-                aapt2Path = binFolder + File.separator + "aapt2"
+                aaptPath = ScopedStorage.getAapt().path
+                aapt2Path = ScopedStorage.getAapt2().path
                 useNewBuildRules = ReactivePreferences.isAaptRulesAsync()
                 useJsonConfig = ReactivePreferences.isJsonConfig()
                 checkExistsFiles = ReactivePreferences.isCheckExistsFilesEnabledAsync()

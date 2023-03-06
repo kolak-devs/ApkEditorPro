@@ -35,10 +35,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(":core")
-    implementation project(':feature:code-editor')
     implementation project(":melissa")
+    implementation project(":feature:code-editor")
+    implementation project(":jadx:jadx-core")
+    implementation project(":jadx:jadx-plugins:jadx-smali-input")
 
-    implementation mcal.webview
     implementation mcal.webview
 
     implementation tools.apktool
