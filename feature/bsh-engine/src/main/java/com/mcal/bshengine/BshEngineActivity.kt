@@ -168,6 +168,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                     i["XCipher"] = XCipher()
                     i["XToast"] = XToast(this@BshEngineActivity)
                     i["XAlert"] = XAlert(this@BshEngineActivity)
+                    i["XSmali"] = XSmali()
 
                     withContext(Dispatchers.Main) {
                         binding.listLog.apply {

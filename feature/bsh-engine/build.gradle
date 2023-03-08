@@ -43,6 +43,9 @@ dependencies {
     implementation mcal.webview
 
     implementation tools.apktool
+    implementation tools.baksmali
+    implementation tools.dexlib2
+    implementation tools.smali
 
     implementation jetpack.core
     implementation jetpack.appcompat

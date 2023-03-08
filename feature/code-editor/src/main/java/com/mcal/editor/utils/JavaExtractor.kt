@@ -24,7 +24,7 @@ class JavaExtractor(
     private var errorMessage: String? = null
 
     private fun decompile(code: File?, targetFilePath: File): Boolean {
-        return try {
+        try {
             if (code != null) {
                 val args = JadxArgs()
                 args.isSkipResources = true
@@ -35,19 +35,16 @@ class JavaExtractor(
                 decompiler.load()
                 decompiler.saveSources()
                 writeDexFile(code, targetFilePath)
-                true
-            } else {
-                false
+                return true
             }
         } catch (e: Exception) {
             e.printStackTrace()
             errorMessage = "Cannot decompile java code: " + e.message
-            false
         } catch (e: StackOverflowError) {
             e.printStackTrace()
             errorMessage = "Cannot decompile java code: " + e.message
-            false
         }
+        return false
     }
 
     @Throws(IOException::class)

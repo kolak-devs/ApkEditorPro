@@ -14,4 +14,8 @@ object FileUtils {
     fun writeText(fileName: String, fileContent: String) {
         File(fileName).writeText(fileContent)
     }
+
+    fun writeText(file: File, fileContent: String) {
+        file.writeText(fileContent)
+    }
 }
