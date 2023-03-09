@@ -18,9 +18,27 @@ import java.nio.file.Paths
 
 class XSmali {
     /**
+     * @return result
      * Since: 2.4.7
      */
     fun smali2dex(smaliFilePathList: List<String>, outputDexPath: String): Boolean {
+        return Smali.assemble(SmaliOptions().apply {
+            outputDexFile = outputDexPath
+        }, smaliFilePathList)
+    }
+
+    /**
+     * @return result
+     * Since: 2.4.7
+     */
+    fun smali2dex(inputDir: File, outputDexPath: String): Boolean {
+        val smaliFilePathList = arrayListOf<String>()
+        inputDir.walk().filter { it.isFile }.forEach { smaliFile ->
+            val path = smaliFile.path
+            if (path.endsWith(".smali")) {
+                smaliFilePathList.add(path)
+            }
+        }
         return Smali.assemble(SmaliOptions().apply {
             outputDexFile = outputDexPath
         }, smaliFilePathList)
@@ -50,6 +68,27 @@ class XSmali {
         val smaliPathList = mutableListOf<Path>()
         smaliFilePath.forEach { smaliPath ->
             smaliPathList.add(Paths.get(smaliPath))
+        }
+        JadxDecompiler().use { decompiler ->
+            decompiler.addCustomLoad(
+                SmaliInputPlugin().loadFiles(
+                    smaliPathList
+                )
+            )
+            decompiler.load()
+            decompiler.classes.forEach { javaClass ->
+                writeText(File(outputDir, javaClass.name), javaClass.code)
+            }
+        }
+    }
+
+    /**
+     * Since: 2.4.7
+     */
+    fun smali2java(inputDir: File, outputDir: File) {
+        val smaliPathList = mutableListOf<Path>()
+        inputDir.walk().filter { it.isFile }.forEach { smaliPath ->
+            smaliPathList.add(Paths.get(smaliPath.path))
         }
         JadxDecompiler().use { decompiler ->
             decompiler.addCustomLoad(
