@@ -21,52 +21,62 @@ class XSmali {
      * @return result
      * Since: 2.4.7
      */
-    fun smali2dex(smaliFilePathList: List<String>, outputDexPath: String): Boolean {
-        return Smali.assemble(SmaliOptions().apply {
-            outputDexFile = outputDexPath
-        }, smaliFilePathList)
+    fun smaliDir2dex(smaliDir: File, outputDexFile: File): Boolean {
+        val smaliFilePathList = arrayListOf<String>()
+        smaliDir.walk().filter { it.isFile }.forEach { smaliFile ->
+            val path = smaliFile.path
+            if (path.endsWith(".smali")) {
+                smaliFilePathList.add(path)
+            }
+        }
+        return smali2dex(smaliFilePathList, outputDexFile)
     }
 
     /**
      * @return result
      * Since: 2.4.7
      */
-    fun smali2dex(inputDir: File, outputDexPath: String): Boolean {
-        val smaliFilePathList = arrayListOf<String>()
-        inputDir.walk().filter { it.isFile }.forEach { smaliFile ->
-            val path = smaliFile.path
-            if (path.endsWith(".smali")) {
-                smaliFilePathList.add(path)
-            }
-        }
+    fun smali2dex(smaliFile: File, outputDexFile: File): Boolean {
+        return smali2dex(arrayListOf<String>(smaliFile.path), outputDexFile)
+    }
+
+    /**
+     * @return result
+     * Since: 2.4.7
+     */
+    fun smali2dex(smaliFilePathList: List<String>, outputDexFile: File): Boolean {
         return Smali.assemble(SmaliOptions().apply {
-            outputDexFile = outputDexPath
+            this.outputDexFile = outputDexFile.path
         }, smaliFilePathList)
     }
 
     /**
      * Since: 2.4.7
      */
-    fun smali2java(smaliFilePath: String, outputDir: File) {
-        JadxDecompiler().use { decompiler ->
-            decompiler.addCustomLoad(
-                SmaliInputPlugin().loadFiles(
-                    listOf<Path>(Paths.get(smaliFilePath))
-                )
-            )
-            decompiler.load()
-            decompiler.classes.forEach { javaClass ->
-                writeText(File(outputDir, javaClass.name), javaClass.code)
+    fun smaliDir2java(smaliDir: File, outputDir: File) {
+        val smaliFilePathList = arrayListOf<String>()
+        smaliDir.walk().filter { it.isFile }.forEach { smaliFile ->
+            val path = smaliFile.path
+            if (path.endsWith(".smali")) {
+                smaliFilePathList.add(path)
             }
         }
+        smali2java(smaliFilePathList, outputDir)
     }
 
     /**
      * Since: 2.4.7
      */
-    fun smali2java(smaliFilePath: List<String>, outputDir: File) {
+    fun smali2java(smaliFile: File, outputJavaDir: File) {
+        smali2java(arrayListOf(smaliFile.path), outputJavaDir)
+    }
+
+    /**
+     * Since: 2.4.7
+     */
+    fun smali2java(smaliFilePathList: List<String>, outputJavaDir: File) {
         val smaliPathList = mutableListOf<Path>()
-        smaliFilePath.forEach { smaliPath ->
+        smaliFilePathList.forEach { smaliPath ->
             smaliPathList.add(Paths.get(smaliPath))
         }
         JadxDecompiler().use { decompiler ->
@@ -77,28 +87,7 @@ class XSmali {
             )
             decompiler.load()
             decompiler.classes.forEach { javaClass ->
-                writeText(File(outputDir, javaClass.name), javaClass.code)
-            }
-        }
-    }
-
-    /**
-     * Since: 2.4.7
-     */
-    fun smali2java(inputDir: File, outputDir: File) {
-        val smaliPathList = mutableListOf<Path>()
-        inputDir.walk().filter { it.isFile }.forEach { smaliPath ->
-            smaliPathList.add(Paths.get(smaliPath.path))
-        }
-        JadxDecompiler().use { decompiler ->
-            decompiler.addCustomLoad(
-                SmaliInputPlugin().loadFiles(
-                    smaliPathList
-                )
-            )
-            decompiler.load()
-            decompiler.classes.forEach { javaClass ->
-                writeText(File(outputDir, javaClass.name), javaClass.code)
+                writeText(File(File(outputJavaDir, javaClass.getPackage().replace(".", "/")), javaClass.name), javaClass.code)
             }
         }
     }
@@ -107,13 +96,13 @@ class XSmali {
      * @return result
      * Since: 2.4.7
      */
-    fun dex2smali(dexInputStream: FileInputStream, outputDir: File): Boolean {
+    fun dex2smali(dexFile: File, outputSmaliDir: File): Boolean {
         return Baksmali.disassembleDexFile(
             DexBackedDexFile.fromInputStream(
                 Opcodes.getDefault(),
-                BufferedInputStream(dexInputStream)
+                BufferedInputStream(FileInputStream(dexFile))
             ),
-            outputDir,
+            outputSmaliDir,
             Runtime.getRuntime().availableProcessors(),
             BaksmaliOptions()
         )
@@ -122,12 +111,12 @@ class XSmali {
     /**
      * Since: 2.4.7
      */
-    fun dex2java(dexFile: File, outputJavaFile: File) {
+    fun dex2java(dexFile: File, outputJavaDir: File) {
         val args = JadxArgs()
         args.isSkipResources = true
         args.isShowInconsistentCode = true
         args.setInputFile(dexFile)
-        args.outDirSrc = outputJavaFile
+        args.outDirSrc = outputJavaDir
         val decompiler = JadxDecompiler(args)
         decompiler.load()
         decompiler.saveSources()
