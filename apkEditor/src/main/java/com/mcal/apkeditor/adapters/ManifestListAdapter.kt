@@ -1,23 +1,26 @@
 package com.mcal.apkeditor.adapters
 
 import android.app.Activity
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.*
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.mcal.apkeditor.R
 import com.mcal.apkeditor.dialogs.ManifestLongClickDlg
 import com.mcal.apkeditor.dialogs.XmlLineDialog
 import com.mcal.apkeditor.dialogs.XmlLineDialog.IXmlLineChanged
 import com.mcal.common.utils.BitmapHelper
-import com.mcal.patchview.ui.CodeText
 import java.io.BufferedReader
 import java.io.FileReader
 import java.util.*
+import java.util.regex.Pattern
 
 class ManifestListAdapter(
     activity: Activity,
@@ -47,8 +50,84 @@ class ManifestListAdapter(
     override fun onBindViewHolder(holder: ManifestViewHolder, position: Int) {
         val item = mManifestLines[position]
         holder.lineData.apply {
-            text = item.lineData
-            setShowLineNumber(false)
+            val text = item.lineData
+            val spanText = SpannableString(text)
+            var start: Int
+            var end: Int
+            var matcher = Pattern.compile("\\s*</.*").matcher(text)
+            // Красим "</application>"
+            if (matcher.find()) {
+                start = text.indexOf("</") + 2
+                end = text.lastIndexOf(">")
+                if (start >= 0 && end >= 0) {
+                    spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+            }
+            // Красим "<application "
+            matcher = Pattern.compile("\\s*<\\w+.*").matcher(text)
+            if (matcher.find()) {
+                start = text.indexOf("<") + 1
+                end = text.indexOf(" ")
+                if (start >= 0 && end >= 0) {
+                    spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+            }
+            // Красим "<intent-filter>" и "</intent-filter>"
+            matcher = Pattern.compile("\\s*</?\\w+-\\w+>").matcher(text)
+            if (matcher.find()) {
+                start = text.indexOf("<") + 1
+                end = text.indexOf(">")
+                if (start >= 0 && end >= 0) {
+                    spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+            }
+            if (text.contains('"')) {
+                var count = 0
+                do {
+                    start = text.indexOf('"', count)
+                    if (start >= 0) {
+                        end = text.indexOf('"', start + 1)
+                        if (end >= 0) {
+                            count = end + 1
+                            spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_string)), start, end + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        } else {
+                            break
+                        }
+                    } else {
+                        break
+                    }
+                } while (true)
+            }
+            if (text.contains('=')) {
+                var count = 0
+                do {
+                    start = text.indexOf(':', count)
+                    if (start >= 0) {
+                        end = text.indexOf('=', start)
+                        if (end >= 0) {
+                            count = end + 1
+                            spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_arta_num_attribute)), start + 1, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        } else {
+                            break
+                        }
+                    } else {
+                        start = text.indexOf(' ', count)
+                        if (start >= 0) {
+                            end = text.indexOf('=', start)
+                            if (end >= 0) {
+                                count = end + 1
+                                spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_arta_num_attribute)), start + 1, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            } else {
+                                break
+                            }
+                        } else {
+                            break
+                        }
+                    }
+                } while (true)
+            }
+            this.text = spanText
+            this.typeface = Typeface.MONOSPACE
         }
         holder.collapseImage.apply {
             if (item.indent > 0) {
@@ -288,6 +367,6 @@ class ManifestListAdapter(
 
     class ManifestViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val collapseImage: ImageView = itemView.findViewById(R.id.collapse_icon)
-        val lineData: CodeText = itemView.findViewById(R.id.line_data)
+        val lineData: TextView = itemView.findViewById(R.id.line_data)
     }
 }

@@ -18,7 +18,7 @@
         android:scaleType="fitCenter"
         app:tint="?colorSecondaryContainer" />
 
-    <com.mcal.patchview.ui.CodeText
+    <TextView
         android:id="@+id/line_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
