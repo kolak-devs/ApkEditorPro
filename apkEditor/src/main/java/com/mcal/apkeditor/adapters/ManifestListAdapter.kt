@@ -1,10 +1,14 @@
 package com.mcal.apkeditor.adapters
 
 import android.app.Activity
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +56,7 @@ class ManifestListAdapter(
         holder.lineData.apply {
             val text = item.lineData
             val spanText = SpannableString(text)
+            val length = text.length
             var start: Int
             var end: Int
             var matcher = Pattern.compile("\\s*</.*").matcher(text)
@@ -60,25 +65,95 @@ class ManifestListAdapter(
                 start = text.indexOf("</") + 2
                 end = text.lastIndexOf(">")
                 if (start >= 0 && end >= 0) {
-                    spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
-            }
-            // Красим "<application "
-            matcher = Pattern.compile("\\s*<\\w+.*").matcher(text)
-            if (matcher.find()) {
-                start = text.indexOf("<") + 1
-                end = text.indexOf(" ")
-                if (start >= 0 && end >= 0) {
-                    spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spanText.setSpan(
+                        ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)),
+                        start,
+                        end,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    spanText.setSpan(
+                        StyleSpan(Typeface.BOLD),
+                        start,
+                        end,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                 }
             }
             // Красим "<intent-filter>" и "</intent-filter>"
             matcher = Pattern.compile("\\s*</?\\w+-\\w+>").matcher(text)
             if (matcher.find()) {
-                start = text.indexOf("<") + 1
-                end = text.indexOf(">")
-                if (start >= 0 && end >= 0) {
-                    spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                start = text.indexOf("</") + 2
+                if (start >= 0) {
+                    end = text.indexOf(">")
+                    if (end >= 0) {
+                        spanText.setSpan(
+                            ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)),
+                            start,
+                            end,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                        spanText.setSpan(
+                            StyleSpan(Typeface.BOLD),
+                            start,
+                            end,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                } else {
+                    start = text.indexOf("<") + 1
+                    if (start >= 0) {
+                        end = text.indexOf(">") - 1
+                        if (end >= 0) {
+                            spanText.setSpan(
+                                ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)),
+                                start,
+                                end,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            spanText.setSpan(
+                                StyleSpan(Typeface.BOLD),
+                                start,
+                                end,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                    }
+                }
+            } else {
+                // Красим "<application "
+                matcher = Pattern.compile("\\s*<\\w+.*").matcher(text)
+                if (matcher.find()) {
+                    start = text.indexOf("<") + 1
+                    if (start >= 0) {
+                        end = text.indexOf(" ")
+                        if (end >= 0) {
+                            spanText.setSpan(
+                                ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)),
+                                start,
+                                end,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            spanText.setSpan(
+                                StyleSpan(Typeface.BOLD),
+                                start,
+                                end,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        } else {
+                            spanText.setSpan(
+                                ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_num_attribute)),
+                                start,
+                                length,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            spanText.setSpan(
+                                StyleSpan(Typeface.BOLD),
+                                start,
+                                length,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                    }
                 }
             }
             if (text.contains('"')) {
@@ -89,7 +164,34 @@ class ManifestListAdapter(
                         end = text.indexOf('"', start + 1)
                         if (end >= 0) {
                             count = end + 1
-                            spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_string)), start, end + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            spanText.setSpan(
+                                ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_string)),
+                                start,
+                                end + 1,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        } else {
+                            break
+                        }
+                    } else {
+                        break
+                    }
+                } while (true)
+            }
+            if (text.contains('\'')) {
+                var count = 0
+                do {
+                    start = text.indexOf('\'', count)
+                    if (start >= 0) {
+                        end = text.indexOf('\'', start + 1)
+                        if (end >= 0) {
+                            count = end + 1
+                            spanText.setSpan(
+                                ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_string)),
+                                start,
+                                end + 1,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
                         } else {
                             break
                         }
@@ -106,7 +208,12 @@ class ManifestListAdapter(
                         end = text.indexOf('=', start)
                         if (end >= 0) {
                             count = end + 1
-                            spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_arta_num_attribute)), start + 1, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            spanText.setSpan(
+                                ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_arta_num_attribute)),
+                                start + 1,
+                                end,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
                         } else {
                             break
                         }
@@ -116,11 +223,27 @@ class ManifestListAdapter(
                             end = text.indexOf('=', start)
                             if (end >= 0) {
                                 count = end + 1
-                                spanText.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_arta_num_attribute)), start + 1, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                spanText.setSpan(
+                                    ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_arta_num_attribute)),
+                                    start + 1,
+                                    end,
+                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                                )
                             } else {
                                 break
                             }
                         } else {
+                            if (text.indexOf(' ') < 0 && text.indexOf(':') < 0) {
+                                end = text.indexOf('=')
+                                if (end >= 0) {
+                                    spanText.setSpan(
+                                        ForegroundColorSpan(ContextCompat.getColor(context, com.mcal.patchview.R.color.syntax_arta_num_attribute)),
+                                        0,
+                                        end,
+                                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    )
+                                }
+                            }
                             break
                         }
                     }

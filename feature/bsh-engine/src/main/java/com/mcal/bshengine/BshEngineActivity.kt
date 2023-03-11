@@ -181,7 +181,7 @@ class BshEngineActivity : CustomizedLangActivity() {
                     i["XLog"] = log
                     i["XSignature"] = XSignature(decodedDir)
 
-                    if (BuildConfig.DEBUG) {
+                    if (BuildConfig.DEBUG && mPatchPath == null) {
                         i.eval(InputStreamReader(assets.open("string_encryption.java")))
                     } else {
                         mPatchPath?.takeIf { it.exists() && it.name.endsWith(".bsh") }?.let {
