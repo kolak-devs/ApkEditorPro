@@ -1,5 +1,7 @@
 package com.mcal.apkeditor.dialogs;
 
+import static com.mcal.common.utils.StringHelperKt.setManifestHightLight;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -17,7 +19,6 @@ import com.mcal.apkeditor.adapters.LineRecord;
 import com.mcal.apkeditor.dialogs.FileSelectDialog.IFileSelection;
 import com.mcal.common.utils.OpenFiles;
 import com.mcal.editor.TextEditor;
-import com.mcal.patchview.ui.CodeText;
 
 import org.jetbrains.annotations.Contract;
 
@@ -106,10 +107,9 @@ public class ManifestLongClickDlg {
                                 @NonNull LineRecord lineRec, IManifestChangeCallback callback) {
         this.lineRec = lineRec;
 
-        View view = activity.getLayoutInflater().inflate(
-                R.layout.dialog_manifestline, null, false);
-        CodeText contentTv = view.findViewById(R.id.content);
-        contentTv.setText(lineRec.lineData);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_manifestline, null, false);
+        TextView contentTv = view.findViewById(R.id.content);
+        contentTv.setText(setManifestHightLight(lineRec.lineData));
         TextView descTv = view.findViewById(R.id.description);
         String desc = getDescription();
         descTv.setText(desc != null ? desc : "");

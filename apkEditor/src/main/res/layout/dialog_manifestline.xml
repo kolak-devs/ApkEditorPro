@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:text="@string/line_data" />
 
-        <com.mcal.patchview.ui.CodeText
+        <TextView
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
