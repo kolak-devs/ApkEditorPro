@@ -37,12 +37,12 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':core')
     implementation project(":melissa")
-    implementation jetpack.core
-    implementation jetpack.appcompat
-    
-    implementation jetpack.material
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 
-    implementation misc.coroutines.core
+    implementation("com.google.android.material:material:1.8.0")
 
-    implementation misc.net
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 }

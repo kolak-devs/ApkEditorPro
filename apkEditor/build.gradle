@@ -148,7 +148,6 @@ configurations {
 
 
 dependencies {
-    implementation tools.apktool
     implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':core')
     implementation project(':feature:code-editor')
@@ -162,38 +161,41 @@ dependencies {
     implementation project(':feature:bsh-engine')
     implementation project(':feature:colormixer')
 
-    implementation mcal.webview
+    implementation("com.github.TimScriptov.App-UI-Designer:webview:1.0.9")
 
-    implementation tools.dexlib2
-    implementation tools.smali
-    implementation tools.baksmali
+    implementation("org.smali:dexlib2:2.5.2")
+    implementation("org.smali:smali:2.5.2")
+    implementation("org.smali:baksmali:2.5.2")
 
-    implementation jetpack.core
-    implementation jetpack.appcompat
-    implementation jetpack.preference
-    implementation jetpack.mvvm.vm
-    implementation jetpack.mvvm.ld
-    implementation jetpack.fragment
-    implementation jetpack.navigation
-    implementation jetpack.coordinatorlayout
+    implementation("com.github.TimScriptov:Android-ApkTool-Library:2.7.0.5")
 
-    implementation misc.annotations
-    implementation misc.gson
-    implementation misc.coroutines.core
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.preference:preference-ktx:1.2.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    implementation("androidx.navigation:navigation-fragment:2.5.1")
+    implementation("androidx.navigation:navigation-ui:2.5.1")
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
+    implementation("com.google.android.material:material:1.8.0")
 
-    implementation misc.guava
-    implementation misc.antlr
+    implementation("org.jetbrains:annotations:24.0.0")
+    implementation("com.google.code.gson:gson:2.9.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
 
-    implementation ui.fastadapter
-    implementation ui.fastadapter.binding
-    implementation ui.fastscroll
+    implementation("com.google.guava:guava:31.0.1-android")
+    implementation("org.antlr:antlr-runtime:3.5.2")
 
-    implementation jetpack.vp2
-    implementation jetpack.preferences
-    implementation jetpack.preferences.core
+    implementation("com.mikepenz:fastadapter:5.7.0")
+    implementation("com.mikepenz:fastadapter-extensions-binding:5.7.0")
+    implementation("me.zhanghai.android.fastscroll:library:1.2.0")
 
-    implementation mcal.uidesigner
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
+
+    implementation("com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.9")
 
     // LeakCanary
-    debugImplementation misc.leaks
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
 }

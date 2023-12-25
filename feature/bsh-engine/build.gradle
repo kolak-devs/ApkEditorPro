@@ -40,20 +40,20 @@ dependencies {
     implementation project(":jadx:jadx-core")
     implementation project(":jadx:jadx-plugins:jadx-smali-input")
 
-    implementation mcal.webview
+    implementation("com.github.TimScriptov.App-UI-Designer:webview:1.0.9")
 
-    implementation tools.apktool
-    implementation tools.baksmali
-    implementation tools.dexlib2
-    implementation tools.smali
+    implementation("com.github.TimScriptov:Android-ApkTool-Library:2.7.0.5")
+    implementation("org.smali:baksmali:2.5.2")
+    implementation("org.smali:dexlib2:2.5.2")
+    implementation("org.smali:smali:2.5.2")
 
-    implementation jetpack.core
-    implementation jetpack.appcompat
-    implementation jetpack.material
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.8.0")
 
-    implementation ui.fastadapter
-    implementation ui.fastadapter.binding
-    implementation ui.fastscroll
+    implementation("com.mikepenz:fastadapter:5.7.0")
+    implementation("com.mikepenz:fastadapter-extensions-binding:5.7.0")
+    implementation("me.zhanghai.android.fastscroll:library:1.2.0")
 
-    implementation misc.coroutines.core
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
 }

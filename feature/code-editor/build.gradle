@@ -42,22 +42,21 @@ dependencies {
     implementation project(':melissa')
     implementation project(':feature:colormixer')
     implementation project(':feature:permission-editor')
-    implementation mcal.uidesigner
-    implementation misc.guava
+    implementation("com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.9")
+    implementation("com.google.guava:guava:31.0.1-android")
 
-    implementation tools.dexlib2
-    implementation tools.smali
-    implementation tools.baksmali
+    implementation("org.smali:baksmali:2.5.2")
+    implementation("org.smali:dexlib2:2.5.2")
+    implementation("org.smali:smali:2.5.2")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
 
-    implementation jetpack.appcompat
-    implementation jetpack.lifecycle
+    implementation("com.google.android.material:material:1.8.0")
 
-    implementation jetpack.material
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
 
-    implementation misc.coroutines.core
-
-    implementation rosemoe.editor
-    implementation rosemoe.language.java
-    implementation rosemoe.textmate
-    implementation rosemoe.lsp
+    implementation("io.github.Rosemoe.sora-editor:editor:0.21.0")
+    implementation("io.github.Rosemoe.sora-editor:language-java:0.21.0")
+    implementation("io.github.Rosemoe.sora-editor:language-textmate:0.21.0")
+    implementation("io.github.Rosemoe.sora-editor:editor-lsp:0.21.0")
 }

@@ -27,19 +27,20 @@ dependencies {
     implementation project(":melissa")
     implementation project(':sun')
 
-    implementation jetpack.appcompat
-    implementation jetpack.preference
-    implementation jetpack.material
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.preference:preference-ktx:1.2.0")
+    implementation("com.google.android.material:material:1.8.0")
 
-    implementation google.play
+    implementation("com.google.android.gms:play-services-base:18.1.0")
 
-    implementation misc.annotations
-    implementation misc.coroutines.core
+    implementation("org.jetbrains:annotations:24.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
 
-    implementation misc.util.codex
-    implementation misc.commons.text
+    implementation("com.blankj:utilcodex:1.30.6")
+    implementation("org.apache.commons:commons-text:1.9")
 
-    implementation jetpack.preferences
-    implementation jetpack.preferences.core
-    implementation jetpack.lifecycle
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
 }

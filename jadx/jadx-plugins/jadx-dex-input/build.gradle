@@ -20,9 +20,9 @@ android {
 }
 
 dependencies {
-	implementation tools.dexlib2
-	implementation tools.smali
-	implementation tools.baksmali
+	implementation("org.smali:dexlib2:2.5.2")
+	implementation("org.smali:smali:2.5.2")
+	implementation("org.smali:baksmali:2.5.2")
 
 	api(project(":jadx:jadx-plugins:jadx-plugins-api"))
 
