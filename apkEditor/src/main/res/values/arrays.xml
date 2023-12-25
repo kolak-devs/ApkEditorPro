@@ -59,14 +59,4 @@
         <item>1</item>
     </string-array>
 
-    <string-array name="domain_com">
-        <item>Russia</item>
-        <item>Hong Kong</item>
-    </string-array>
-
-    <string-array name="domain_com_values">
-        <item>ru</item>
-        <item>hk</item>
-    </string-array>
-
 </resources>

@@ -18,8 +18,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.mcal.apksigner'
 }
@@ -29,11 +29,11 @@ dependencies {
     implementation project(":core")
     implementation project(":sun")
 
-    implementation("com.madgag.spongycastle:core:1.58.0.0")
-    implementation("com.madgag.spongycastle:prov:1.58.0.0")
+    implementation(libs.core)
+    implementation(libs.prov)
 
-    implementation("org.jetbrains:annotations:24.0.0")
-    implementation("androidx.annotation:annotation:1.5.0")
+    implementation(libs.annotations)
+    implementation(libs.androidx.annotation)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation(libs.kotlinx.coroutines.core)
 }

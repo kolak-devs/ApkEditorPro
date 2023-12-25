@@ -119,11 +119,11 @@ android {
     compileOptions {
         // Flag to enable support for the new language APIs
         //coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
     packagingOptions {
         resources.excludes += 'keys/*'
@@ -131,6 +131,8 @@ android {
         resources.excludes += '**/tmp/*'
         resources.excludes += 'org/eclipse/*'
         resources.excludes += 'android/*'
+        resources.excludes += 'smali.properties'
+        resources.excludes += 'baksmali.properties'
     }
     lint {
         abortOnError false
@@ -161,41 +163,41 @@ dependencies {
     implementation project(':feature:bsh-engine')
     implementation project(':feature:colormixer')
 
-    implementation("com.github.TimScriptov.App-UI-Designer:webview:1.0.9")
+    implementation(libs.webview)
 
-    implementation("org.smali:dexlib2:2.5.2")
-    implementation("org.smali:smali:2.5.2")
-    implementation("org.smali:baksmali:2.5.2")
+    implementation(libs.dexlib2)
+    implementation(libs.smali)
+    implementation(libs.baksmali)
 
-    implementation("com.github.TimScriptov:Android-ApkTool-Library:2.7.0.5")
+    implementation(libs.android.apktool)
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.preference:preference-ktx:1.2.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
-    implementation("androidx.navigation:navigation-fragment:2.5.1")
-    implementation("androidx.navigation:navigation-ui:2.5.1")
-    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
-    implementation("com.google.android.material:material:1.8.0")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.coordinatorlayout)
+    implementation(libs.material)
 
-    implementation("org.jetbrains:annotations:24.0.0")
-    implementation("com.google.code.gson:gson:2.9.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation(libs.annotations)
+    implementation(libs.gson)
+    implementation(libs.kotlinx.coroutines.core)
 
-    implementation("com.google.guava:guava:31.0.1-android")
-    implementation("org.antlr:antlr-runtime:3.5.2")
+    implementation(libs.guava)
+    implementation(libs.antlr.runtime)
 
-    implementation("com.mikepenz:fastadapter:5.7.0")
-    implementation("com.mikepenz:fastadapter-extensions-binding:5.7.0")
-    implementation("me.zhanghai.android.fastscroll:library:1.2.0")
+    implementation(libs.fastadapter)
+    implementation(libs.fastadapter.extensions.binding)
+    implementation(libs.library)
 
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences.core)
 
-    implementation("com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.9")
+    implementation(libs.uidesigner)
 
     // LeakCanary
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
+    debugImplementation(libs.leakcanary.android)
 }

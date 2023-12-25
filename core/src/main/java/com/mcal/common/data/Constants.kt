@@ -13,10 +13,6 @@ object Constants {
     private const val DOMAIN_COM = "https://timscriptov.com"
 
     fun getDomain(): String {
-        val comOrNot: Boolean
-        runBlocking {
-            comOrNot = ReactivePreferences.isDomainCom()
-        }
-        return if (comOrNot) DOMAIN_COM else DOMAIN_RU
+        return DOMAIN_RU
     }
 }

@@ -17,6 +17,10 @@ android {
 		}
 	}
 	namespace 'com.mcal.jadx.jadx_plugin_java_input'
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_17
+		targetCompatibility JavaVersion.VERSION_17
+	}
 }
 
 dependencies {

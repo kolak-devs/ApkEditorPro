@@ -44,10 +44,6 @@ object ReactivePreferences {
         }
     }
 
-    suspend fun isDomainCom(): Boolean {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Main.NET_SERVER].equals("hk")
-    }
-
     suspend fun getAppLanguage(): String {
         return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_LANGUAGE].orEmpty()
     }

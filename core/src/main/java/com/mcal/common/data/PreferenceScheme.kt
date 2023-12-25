@@ -16,7 +16,6 @@ object PreferenceScheme {
       val UI_MONET = booleanPreferencesKey("ui_monet")
       val UI_THEME = booleanPreferencesKey("night_mode")
       val UI_LANGUAGE = stringPreferencesKey("Language")
-      val NET_SERVER = stringPreferencesKey("domain_hk")
       val OTHER_GARBAGE_LMT = intPreferencesKey("garbage_limit")
       val OTHER_RENAME_KEY = booleanPreferencesKey("FileRenameOption")
    }

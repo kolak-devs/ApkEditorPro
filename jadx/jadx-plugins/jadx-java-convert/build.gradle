@@ -17,6 +17,10 @@ android {
 		}
 	}
 	namespace 'com.mcal.jadx.jadx_plugin_java_convert'
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_17
+		targetCompatibility JavaVersion.VERSION_17
+	}
 }
 
 dependencies {
@@ -24,8 +28,8 @@ dependencies {
 
 	implementation(project(":jadx:jadx-plugins:jadx-dex-input"))
 	implementation('com.jakewharton.android.repackaged:dalvik-dx:11.0.0_r3')
-	implementation('com.android.tools:r8:4.0.48')
+	implementation('com.android.tools:r8:8.2.33')
 
-	implementation 'org.ow2.asm:asm:9.4'
+	implementation 'org.ow2.asm:asm:9.6'
 	implementation 'org.slf4j:slf4j-api:2.0.3'
 }
