@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="order_key">
+        <item>By App Name</item>
+        <item>By Install Time</item>
+    </string-array>
+
+    <string-array name="order_value">
+        <item>By App Name</item>
+        <item>By Install Time</item>
+    </string-array>
+
+    <string-array name="appicon_key">
+        <item>Default Icon (1)</item>
+        <item>(2)</item>
+        <item>(3)</item>
+        <item>(4)</item>
+        <item>(5)</item>
+        <item>(6)</item>
+        <item>(7)</item>
+        <item>(8)</item>
+        <item>(9)</item>
+        <item>(10)</item>
+        <item>(11)</item>
+        <item>(12)</item>
+        <item>(13)</item>
+        <item>(14)</item>
+        <item>(15)</item>
+        <item>(16)</item>
+        <item>(17)</item>
+    </string-array>
+
+    <string-array name="appicon_value">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+    </string-array>
+
+    <string-array name="compression_level_key">
+        <item>0 (No Compression)</item>
+        <item>1 (Best Speed)</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5 (Medium)</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9 (Best Compression)</item>
+    </string-array>
+
+    <string-array name="compression_level_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+
+    <string-array name="signer_key">
+        <item>testkey</item>
+        <item>key created by APK Editor</item>
+        <item>custom key</item>
+    </string-array>
+    <string-array name="signer_value_dont_translate">
+        <item>testkey</item>
+        <item>editorkey</item>
+        <item>customkey</item>
+    </string-array>
+
+    <string-array name="theme_key">
+        <item>Light Theme</item>
+        <item>Dark Theme 1</item>
+        <item>Dark Theme 2</item>
+    </string-array>
+
+    <string-array name="theme_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="language_key">
+        <item>Default</item>
+        <item>Arabic</item>
+        <item>Chinese</item>
+        <item>Czech</item>
+        <item>Dutch</item>
+        <item>English</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Hebrew</item>
+        <item>Hungarian</item>
+        <item>Persian</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Russian</item>
+        <item>Slovak</item>
+        <item>Spanish</item>
+        <item>Turkish</item>
+        <item>Ukrainian</item>
+        <item>Vietnamese</item>
+    </string-array>
+
+    <string-array name="language_value">
+        <item></item>
+        <item>ar</item>
+        <item>zh</item>
+        <item>cs</item>
+        <item>nl</item>
+        <item>en</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>iw</item>
+        <item>hu</item>
+        <item>fa</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>ru</item>
+        <item>sk</item>
+        <item>es</item>
+        <item>tr</item>
+        <item>uk</item>
+        <item>vi</item>
+    </string-array>
+
+    <string-array name="output_apkname_key">
+        <item>{package name}_[un]signed.apk</item>
+        <item>gen_[un]signed.apk</item>
+        <item>{app name}_[un]signed.apk</item>
+    </string-array>
+
+    <string-array name="output_apkname_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="file_extract_rename_key">
+        <item>Auto (by add a number suffix)</item>
+        <item>Overwrite</item>
+    </string-array>
+    <string-array name="file_extract_rename_value">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="decode_dir_key">
+        <item>Internal Directory</item>
+        <item>Custom Directory</item>
+    </string-array>
+
+    <string-array name="decode_dir_value">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="decode_mode_key">
+        <item>@string/decode_all_files</item>
+        <item>@string/decode_partial_files</item>
+        <item>Decide it at decoding</item>
+    </string-array>
+
+    <string-array name="decode_mode_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!-- Translate Plugin arrays -->
+    <string-array name="services">
+        <item>Google</item>
+        <item>Yandex</item>
+    </string-array>
+
+    <string-array name="google_languages">
+        <item>auto|Automatic</item>
+        <item>af|Afrikaans</item>
+        <item>sq|Albanian</item>
+        <item>am|Amharic</item>
+        <item>ar|Arabic</item>
+        <item>hy|Armenian</item>
+        <item>az|Azerbaijani</item>
+        <item>eu|Basque</item>
+        <item>be|Belarusian</item>
+        <item>bn|Bengali</item>
+        <item>bs|Bosnian</item>
+        <item>bg|Bulgarian</item>
+        <item>ca|Catalan</item>
+        <item>ceb|Cebuano</item>
+        <item>ny|Chichewa</item>
+        <item>zh-CN|Chinese (Simplified)</item>
+        <item>zh-TW|Chinese (Traditional)</item>
+        <item>hr|Croatian</item>
+        <item>cs|Czech</item>
+        <item>da|Danish</item>
+        <item>nl|Dutch</item>
+        <item>en|English</item>
+        <item>eo|Esperanto</item>
+        <item>et|Estonian</item>
+        <item>tl|Filipino</item>
+        <item>fi|Finnish</item>
+        <item>fr|French</item>
+        <item>gl|Galician</item>
+        <item>ka|Georgian</item>
+        <item>de|German</item>
+        <item>el|Greek</item>
+        <item>gu|Gujarati</item>
+        <item>ht|Haitian Creole</item>
+        <item>ha|Hausa</item>
+        <item>iw|Hebrew</item>
+        <item>hi|Hindi</item>
+        <item>hu|Hungarian</item>
+        <item>is|Icelandic</item>
+        <item>ig|Igbo</item>
+        <item>id|Indonesian</item>
+        <item>ga|Irish</item>
+        <item>it|Italian</item>
+        <item>ja|Japanese</item>
+        <item>jw|Javanese</item>
+        <item>kn|Kannada</item>
+        <item>kk|Kazakh</item>
+        <item>km|Khmer</item>
+        <item>ko|Korean</item>
+        <item>lo|Lao</item>
+        <item>la|Latin</item>
+        <item>lv|Latvian</item>
+        <item>lt|Lithuanian</item>
+        <item>mk|Macedonian</item>
+        <item>mg|Malagasy</item>
+        <item>ms|Malay</item>
+        <item>ml|Malayalam</item>
+        <item>mt|Maltese</item>
+        <item>mi|Maori</item>
+        <item>mr|Marathi</item>
+        <item>mn|Mongolian</item>
+        <item>my|Myanmar (Burmese)</item>
+        <item>ne|Nepali</item>
+        <item>no|Norwegian</item>
+        <item>fa|Persian</item>
+        <item>pl|Polish</item>
+        <item>pt|Portuguese</item>
+        <item>pa|Punjabi</item>
+        <item>ro|Romanian</item>
+        <item>ru|Russian</item>
+        <item>sr|Serbian</item>
+        <item>st|Sesotho</item>
+        <item>si|Sinhala</item>
+        <item>sk|Slovak</item>
+        <item>sl|Slovenian</item>
+        <item>so|Somali</item>
+        <item>es|Spanish</item>
+        <item>su|Sundanese</item>
+        <item>sw|Swahili</item>
+        <item>sv|Swedish</item>
+        <item>tg|Tajik</item>
+        <item>ta|Tamil</item>
+        <item>te|Telugu</item>
+        <item>th|Thai</item>
+        <item>tr|Turkish</item>
+        <item>uk|Ukrainian</item>
+        <item>ur|Urdu</item>
+        <item>uz|Uzbek</item>
+        <item>vi|Vietnamese</item>
+        <item>cy|Welsh</item>
+        <item>yi|Yiddish</item>
+        <item>yo|Yoruba</item>
+        <item>zu|Zulu</item>
+    </string-array>
+
+    <string-array name="yandex_languages">
+        <item>auto|Automatic</item>
+        <item>af|Afrikaans</item>
+        <item>sq|Albanian</item>
+        <item>am|Amharic</item>
+        <item>ar|Arabic</item>
+        <item>hy|Armenian</item>
+        <item>az|Azerbaijani</item>
+        <item>eu|Basque</item>
+        <item>be|Belarusian</item>
+        <item>bn|Bengali</item>
+        <item>bs|Bosnian</item>
+        <item>bg|Bulgarian</item>
+        <item>my|Burmese</item>
+        <item>ca|Catalan</item>
+        <item>ceb|Cebuano</item>
+        <item>zh|Chinese</item>
+        <item>hr|Croatian</item>
+        <item>cs|Czech</item>
+        <item>da|Danish</item>
+        <item>nl|Dutch</item>
+        <item>en|English</item>
+        <item>eo|Esperanto</item>
+        <item>et|Estonian</item>
+        <item>fi|Finnish</item>
+        <item>fr|French</item>
+        <item>gl|Galician</item>
+        <item>ka|Georgian</item>
+        <item>de|German</item>
+        <item>el|Greek</item>
+        <item>gu|Gujarati</item>
+        <item>ht|Haitian</item>
+        <item>he|Hebrew</item>
+        <item>hi|Hindi</item>
+        <item>hu|Hungarian</item>
+        <item>is|Icelandic</item>
+        <item>id|Indonesian</item>
+        <item>ga|Irish</item>
+        <item>it|Italian</item>
+        <item>ja|Japanese</item>
+        <item>jv|Javanese</item>
+        <item>kn|Kannada</item>
+        <item>kk|Kazakh</item>
+        <item>km|Khmer</item>
+        <item>ko|Korean</item>
+        <item>ky|Kyrgyz</item>
+        <item>lo|Lao</item>
+        <item>la|Latin</item>
+        <item>lv|Latvian</item>
+        <item>lt|Lithuanian</item>
+        <item>lb|Luxembourgish</item>
+        <item>mk|Macedonian</item>
+        <item>mg|Malagasy</item>
+        <item>ms|Malay</item>
+        <item>ml|Malayalam</item>
+        <item>mt|Maltese</item>
+        <item>mi|Maori</item>
+        <item>mr|Marathi</item>
+        <item>mn|Mongolian</item>
+        <item>ne|Nepali</item>
+        <item>no|Norwegian</item>
+        <item>fa|Persian</item>
+        <item>pl|Polish</item>
+        <item>pt|Portuguese</item>
+        <item>pa|Punjabi</item>
+        <item>ro|Romanian</item>
+        <item>ru|Russian</item>
+        <item>sr|Serbian</item>
+        <item>si|Sinhalese</item>
+        <item>sk|Slovak</item>
+        <item>sl|Slovenian</item>
+        <item>es|Spanish</item>
+        <item>su|Sundanese</item>
+        <item>sw|Swahili</item>
+        <item>sv|Swedish</item>
+        <item>tl|Tagalog</item>
+        <item>tg|Tajik</item>
+        <item>ta|Tamil</item>
+        <item>tt|Tatar</item>
+        <item>te|Telugu</item>
+        <item>th|Thai</item>
+        <item>tr|Turkish</item>
+        <item>uk|Ukrainian</item>
+        <item>ur|Urdu</item>
+        <item>uz|Uzbek</item>
+        <item>vi|Vietnamese</item>
+        <item>cy|Welsh</item>
+        <item>yi|Yiddish</item>
+    </string-array>
+
+</resources>

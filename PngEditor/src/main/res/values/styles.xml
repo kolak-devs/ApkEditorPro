@@ -1,0 +1,8 @@
+<resources>
+
+    <style name="CheckBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorPrimary">@color/deepblue</item>
+        <item name="colorPrimaryDark">@color/deepblue</item>
+        <item name="colorAccent">@color/lightblue</item>
+    </style>
+</resources>

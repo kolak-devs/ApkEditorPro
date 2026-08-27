@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary colors centralized in apkEditorPro/src/main/res/values/colors.xml -->
+
+    <color name="pnge_grey">#ff606060</color>
+</resources>

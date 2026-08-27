@@ -1,0 +1,21 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/CodeOnTheGoProjects/ApkEditorPro/apkEditor/src/main/res/layout/activity_main.xml",
+      "selection": {
+        "end": {
+          "column": 39,
+          "index": 367,
+          "line": 8
+        },
+        "start": {
+          "column": 39,
+          "index": 367,
+          "line": 8
+        }
+      }
+    }
+  ],
+  "projectPath": "/storage/emulated/0/CodeOnTheGoProjects/ApkEditorPro",
+  "selectedFile": "/storage/emulated/0/CodeOnTheGoProjects/ApkEditorPro/apkEditor/src/main/res/layout/activity_main.xml"
+}

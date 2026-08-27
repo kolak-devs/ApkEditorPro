@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@color/colorSurface">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/translate_service"
+        android:textColor="@color/colorPrimary"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginBottom="4dp"/>
+
+    <Spinner
+        android:id="@+id/startdialogSpinner1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorSurface"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/translate_source_lang"
+        android:textColor="@color/colorPrimary"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginBottom="4dp"/>
+
+    <Spinner
+        android:id="@+id/startdialogSpinner2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorSurface"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/translate_target_lang"
+        android:textColor="@color/colorPrimary"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginBottom="4dp"/>
+
+    <Spinner
+        android:id="@+id/startdialogSpinner3"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorSurface" />
+</LinearLayout>

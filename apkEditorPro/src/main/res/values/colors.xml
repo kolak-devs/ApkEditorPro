@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ============================================ -->
+    <!-- CENTRAL COLOR DEFINITIONS (Satu tempat ubah) -->
+    <!-- ============================================ -->
+
+    <!-- Primary brand colors -->
+    <color name="colorPrimary">#1565C0</color>
+    <color name="colorPrimaryDark">#0D47A1</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <!-- Secondary / Accent -->
+    <color name="colorSecondary">#00897B</color>
+    <color name="colorAccent">#00897B</color>
+
+    <!-- Background & Surface -->
+    <color name="colorBackground">#FAFAFA</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnBackground">#1C1B1F</color>
+    <color name="colorOnSurface">#1C1B1F</color>
+
+    <!-- Status bar -->
+    <color name="colorStatusBar">#0D47A1</color>
+
+    <!-- Error -->
+    <color name="colorError">#B3261E</color>
+
+    <!-- ============================== -->
+    <!-- LEGACY COLORS (backward compat) -->
+    <!-- ============================== -->
+
+    <!-- Blues -->
+    <color name="deepblue">#FF1565C0</color>
+    <color name="lightblue">#FF00897B</color>
+    <color name="darkblue">#FF0D47A1</color>
+    <color name="littleblue">#FFF5F5F5</color>
+    <color name="blue_transparent">#8000897B</color>
+
+    <!-- Toolbar / header backgrounds -->
+    <color name="apked_white">#FFF5F5F5</color>
+
+    <!-- Text colors -->
+    <color name="lightblack">#FF1C1B1F</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Utility -->
+    <color name="grey">#FFE0E0E0</color>
+    <color name="black">#FF000000</color>
+
+    <!-- Layout-specific colors (replace hardcoded hex values) -->
+    <color name="dividerColor">#FFE3E3E3</color>
+    <color name="dialogBackground">#FFFFFFFF</color>
+    <color name="textPrimary">#FF222222</color>
+    <color name="textSecondary">#FF666666</color>
+    <color name="toolbarText">#FF111111</color>
+    <color name="blueText">#FF33B5E5</color>
+    <color name="darkBackground">#FF333333</color>
+    <color name="silverBackground">#FFC0C0C0</color>
+    <color name="mediumGrey">#FF808080</color>
+    <color name="darkGrey">#FF555555</color>
+    <color name="semiTransparentWhite">#FFFFFFD5</color>
+    <color name="lightBlueText">#FF5997C4</color>
+</resources>

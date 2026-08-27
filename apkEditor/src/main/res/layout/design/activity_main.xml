@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.appdevforall.codeonthego.layouteditor.editor.palette.layouts.DrawerLayoutDesign
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/drawer_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<org.appdevforall.codeonthego.layouteditor.editor.palette.layouts.LinearLayoutDesign
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+		<org.appdevforall.codeonthego.layouteditor.editor.palette.containers.ScrollViewDesign
+			android:layout_width="fill_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1"
+			android:fillViewport="true">
+
+			<org.appdevforall.codeonthego.layouteditor.editor.palette.layouts.LinearLayoutDesign
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:orientation="vertical">
+
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/tv_select_apkfile"
+					android:layout_width="fill_parent"
+					android:layout_height="50dip"
+					android:layout_marginLeft="32dip"
+					android:layout_marginRight="32dip"
+					android:layout_marginBottom="24dip"
+					android:gravity="center"
+					android:singleLine="true"
+					android:text="@string/select_apk_file"
+					android:textSize="20sp" />
+
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/tv_select_appfile"
+					android:layout_width="fill_parent"
+					android:layout_height="50dip"
+					android:layout_marginLeft="32dip"
+					android:layout_marginRight="32dip"
+					android:layout_marginBottom="24dip"
+					android:gravity="center"
+					android:singleLine="true"
+					android:text="@string/select_apk_from_app"
+					android:textSize="20sp" />
+
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/tv_help"
+					android:layout_width="fill_parent"
+					android:layout_height="50dip"
+					android:layout_marginLeft="32dip"
+					android:layout_marginRight="32dip"
+					android:layout_marginBottom="24dip"
+					android:gravity="center"
+					android:singleLine="true"
+					android:text="@string/help"
+					android:textSize="20sp" />
+
+                <com.google.android.material.button.MaterialButton
+					android:id="@+id/tv_settings"
+					android:layout_width="fill_parent"
+					android:layout_height="50dip"
+					android:layout_marginLeft="32dip"
+					android:layout_marginRight="32dip"
+					android:layout_marginBottom="24dip"
+					android:gravity="center"
+					android:singleLine="true"
+					android:text="@string/settings"
+					android:textSize="20sp" />
+
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/tv_exit"
+					android:layout_width="fill_parent"
+					android:layout_height="50dip"
+					android:layout_marginLeft="32dip"
+					android:layout_marginRight="32dip"
+					android:layout_marginBottom="24dip"
+					android:gravity="center"
+					android:singleLine="true"
+					android:text="@string/exit"
+					android:textSize="20sp" />
+
+			</org.appdevforall.codeonthego.layouteditor.editor.palette.layouts.LinearLayoutDesign>
+
+		</org.appdevforall.codeonthego.layouteditor.editor.palette.containers.ScrollViewDesign>
+
+	</org.appdevforall.codeonthego.layouteditor.editor.palette.layouts.LinearLayoutDesign>
+
+	<org.appdevforall.codeonthego.layouteditor.editor.palette.legacy.ListViewDesign
+		android:id="@+id/slider_list"
+		android:layout_width="200dp"
+		android:layout_height="match_parent"
+		android:layout_gravity="start"
+		android:choiceMode="singleChoice"
+		android:divider="@android:color/transparent"
+		android:dividerHeight="0dp"
+		android:paddingTop="16dip" />
+
+</org.appdevforall.codeonthego.layouteditor.editor.palette.layouts.DrawerLayoutDesign>

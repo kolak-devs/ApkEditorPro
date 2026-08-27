@@ -1,0 +1,111 @@
+<resources>
+
+    <!-- ============================================== -->
+    <!-- SATU TEMA UTAMA - Ubah di sini untuk semua      -->
+    <!-- ============================================== -->
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:windowBackground">@color/colorSurface</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+    </style>
+
+    <!-- Untuk SettingActivity/SettingEditorActivity (butuh ActionBar) -->
+    <style name="AppTheme.Settings" parent="Theme.MaterialComponents.DayNight">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+    </style>
+
+    <!-- Toolbar with centered title -->
+    <style name="AppTheme.ToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextAppearance">@style/AppTheme.ToolbarTitle</item>
+        <item name="titleCentered">true</item>
+    </style>
+
+    <style name="AppTheme.ToolbarTitle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- ============================================== -->
+    <!-- Shared styles                                  -->
+    <!-- ============================================== -->
+
+    <!-- Modern Button Style -->
+    <style name="Widget.ModernButton" parent="Widget.Material3.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:gravity">center</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+    </style>
+
+    <style name="Widget.ModernButton.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:gravity">center</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Dialog_No_Border_2">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="MyToggleButton" parent="@android:style/Widget.CompoundButton">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/selector_togglebutton</item>
+    </style>
+
+    <style name="main_tab_bottom">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:button">@null</item>
+    </style>
+
+    <style name="main_tab_left">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:button">@null</item>
+        <item name="android:layout_marginRight">1.0dip</item>
+    </style>
+
+</resources>
