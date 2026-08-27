@@ -69,10 +69,10 @@
         <item>Key được tạo bởi APK Editor</item>
         <item>Key thông thường</item>
     </string-array>
-    <string-array name="theme_key">
-        <item>Chủ đề sáng</item>
-        <item>Chủ đề tối 1</item>
-        <item>Chủ đề tối 2</item>
+        <string-array name="theme_key">
+        <item>@string/theme_follow_system</item>
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
     </string-array>
     <string-array name="decode_mode_key">
         <item>@string/decode_all_files</item>

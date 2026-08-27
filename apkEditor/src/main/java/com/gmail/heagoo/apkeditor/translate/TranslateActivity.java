@@ -35,6 +35,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import com.gmail.heagoo.apkeditor.base.R;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -154,7 +156,7 @@ public class TranslateActivity extends AppCompatActivity implements View.OnClick
          */
         @Override
         public void onBindViewHolder(@NonNull TranslationViewHolder holder, int position) {
-            int adapterPosition = holder.getBindingAdapterPosition();
+            int adapterPosition = position;
             if (adapterPosition == RecyclerView.NO_POSITION) return;
 
             final TranslateItem item = items.get(adapterPosition);

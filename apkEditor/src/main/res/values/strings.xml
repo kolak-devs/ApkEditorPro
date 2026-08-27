@@ -322,6 +322,9 @@
     <string name="fix_invalid_symbol_tip">Try to fix issue(s) about invalid symbol?</string>
     <string name="select_theme_desc">Please select your preferred theme.</string>
     <string name="app_theme">App Theme</string>
+    <string name="theme_follow_system">Follow System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
 
     <string name="output_apk_name">Output APK Name</string>
     <string name="output_apk_name_summary">Specify how to name the generated APK file.</string>

@@ -165,10 +165,10 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string-array name="theme_key">
-        <item>Tema chiaro</item>
-        <item>Tema scuro 1</item>
-        <item>Tema scuro 2</item>
+        <string-array name="theme_key">
+        <item>@string/theme_follow_system</item>
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
     </string-array>
     <string-array name="theme_value">
         <item>0</item>

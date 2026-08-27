@@ -78,10 +78,10 @@
         <item>editorkey</item>
         <item>customkey</item>
     </string-array>
-    <string-array name="theme_key">
-        <item>Tema Claro</item>
-        <item>Tema Oscuro 1</item>
-        <item>Tema Oscuro 2</item>
+        <string-array name="theme_key">
+        <item>@string/theme_follow_system</item>
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
     </string-array>
     <string-array name="compression_level_value">
         <item>0</item>

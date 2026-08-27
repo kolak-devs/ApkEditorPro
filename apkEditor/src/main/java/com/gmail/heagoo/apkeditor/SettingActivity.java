@@ -17,6 +17,8 @@ import android.preference.PreferenceScreen;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.gmail.heagoo.apkeditor.ProcessingDialog.ProcessingInterface;
 import com.gmail.heagoo.apkeditor.base.BuildConfig;
 import com.gmail.heagoo.apkeditor.base.R;
@@ -440,6 +442,9 @@ public class SettingActivity extends PreferenceActivity
             try {
                 int themeId = Integer.valueOf((String) newValue);
                 GlobalConfig.instance(this).updateThemeId(themeId);
+                AppCompatDelegate.setDefaultNightMode(
+                        GlobalConfig.themeIdToNightMode(themeId));
+                recreate();
             } catch (Exception ignored) {
             }
         }

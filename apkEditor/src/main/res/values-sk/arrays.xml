@@ -125,9 +125,9 @@
         <item>gen_[ne]podpisane.apk</item>
         <item>{app name}_[ne]podpisane.apk</item>
     </string-array>
-    <string-array name="theme_key">
-        <item>Svetlá téma</item>
-        <item>Tmavá téma 1</item>
-        <item>Tmavá téma 2</item>
+        <string-array name="theme_key">
+        <item>@string/theme_follow_system</item>
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
     </string-array>
 </resources>
