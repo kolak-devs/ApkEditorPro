@@ -2,6 +2,8 @@ package com.gmail.heagoo.apkeditor;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -119,7 +121,7 @@ public class ImageDownloadActivity extends AppCompatActivity implements Processi
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    AlertDialog.Builder db = new AlertDialog.Builder(ImageDownloadActivity.this);
+                    MaterialAlertDialogBuilder db = new MaterialAlertDialogBuilder(ImageDownloadActivity.this);
                     db.setMessage(messageId);
                     db.setTitle(R.string.tip);
                     db.setPositiveButton(android.R.string.ok, null);

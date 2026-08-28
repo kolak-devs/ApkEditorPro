@@ -1,5 +1,6 @@
 package com.gmail.heagoo.pngeditor;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -214,7 +215,7 @@ public class PngEditActivity extends AppCompatActivity implements
             closeEditorWithTip();
         } else {
             if (imageModified) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                         .setMessage(R.string.image_save_tip)
                         .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                             @Override
@@ -320,7 +321,7 @@ public class PngEditActivity extends AppCompatActivity implements
             return;
         }
         if (editor.isModified()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.image_modified_tip)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
@@ -417,7 +418,7 @@ public class PngEditActivity extends AppCompatActivity implements
                 break;
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.input_new_size)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

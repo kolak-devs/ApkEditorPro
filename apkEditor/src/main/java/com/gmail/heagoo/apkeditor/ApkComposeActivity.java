@@ -1,6 +1,8 @@
 package com.gmail.heagoo.apkeditor;
 
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -669,7 +671,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
         msgTv.setText(R.string.build_still_running_tip);
         final CheckBox cb = (CheckBox) view.findViewById(R.id.cb_show_once);
 
-        AlertDialog.Builder tipDlg = new AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder tipDlg = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.tip)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -709,7 +711,7 @@ public class ApkComposeActivity extends CustomizedLangActivity
 
     // Ask user: are you sure to stop build?
     private void showStopBuildDialog() {
-        AlertDialog.Builder confirmDlg = new AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder confirmDlg = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.please_note)
                 .setMessage(R.string.sure_to_stop_build)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

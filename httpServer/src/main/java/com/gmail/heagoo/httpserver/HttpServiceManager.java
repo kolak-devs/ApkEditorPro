@@ -2,6 +2,8 @@ package com.gmail.heagoo.httpserver;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -100,7 +102,7 @@ public class HttpServiceManager {
     private void showDialog(Activity activity, String strURL) {
         String format = activity.getString(R.string.web_server_started);
         String message = String.format(format, strURL);
-        new AlertDialog.Builder(activity)
+        new MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.web_server)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)

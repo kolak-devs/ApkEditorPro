@@ -1,6 +1,8 @@
 package com.gmail.heagoo.apkeditor;
 
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -352,7 +354,7 @@ public class AxmlEditActivity extends CustomizedLangActivity implements IDirChan
                 if (errMessage != null && !errMessage.equals("")) {
                     message = errMessage;
                 }
-                new AlertDialog.Builder(AxmlEditActivity.this)
+                new MaterialAlertDialogBuilder(AxmlEditActivity.this)
                         .setTitle(R.string.error)
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok, null)

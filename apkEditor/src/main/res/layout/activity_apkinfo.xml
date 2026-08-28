@@ -591,34 +591,15 @@
         </LinearLayout>
     </FrameLayout>
 
-    <RadioGroup
-        android:id="@+id/main_radio"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/main_tab_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorSurface"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/tab_string"
-            style="@style/main_tab_bottom"
-            android:checked="true"
-            android:drawableTop="@drawable/icon_text"
-            android:text="@string/string" />
-
-        <RadioButton
-            android:id="@+id/tab_resource"
-            style="@style/main_tab_bottom"
-            android:checked="false"
-            android:drawableTop="@drawable/icon_folder_grey"
-            android:text="@string/files" />
-
-        <RadioButton
-            android:id="@+id/tab_manifest"
-            style="@style/main_tab_bottom"
-            android:checked="false"
-            android:drawableTop="@drawable/icon_manifest_grey"
-            android:text="@string/manifest" />
-    </RadioGroup>
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabIndicatorColor="@color/colorAccent"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="@color/textSecondary" />
 
 </LinearLayout>

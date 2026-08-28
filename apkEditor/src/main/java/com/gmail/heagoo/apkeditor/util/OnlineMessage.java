@@ -3,6 +3,8 @@ package com.gmail.heagoo.apkeditor.util;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -100,7 +102,7 @@ public class OnlineMessage {
 
         if ((System.currentTimeMillis() - lastShow > 24 * 3600 * 1000l) &&
                 (num > 0) && !"".equals(savedMsg)) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(activityRef.get());
+            MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(activityRef.get());
             alert.setTitle("Message");
 
             WebView wv = new WebView(activityRef.get());

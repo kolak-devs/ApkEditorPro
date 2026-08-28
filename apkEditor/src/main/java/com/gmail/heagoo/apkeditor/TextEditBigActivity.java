@@ -2,6 +2,8 @@ package com.gmail.heagoo.apkeditor;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -436,7 +438,7 @@ public class TextEditBigActivity extends TextEditBase
             return;
         }
 
-        new AlertDialog.Builder(this).setMessage(R.string.save_changes_tip)
+        new MaterialAlertDialogBuilder(this).setMessage(R.string.save_changes_tip)
                 .setPositiveButton(R.string.save,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -842,7 +844,7 @@ public class TextEditBigActivity extends TextEditBase
             return;
         }
 
-        new AlertDialog.Builder(this).setMessage(R.string.save_changes_tip)
+        new MaterialAlertDialogBuilder(this).setMessage(R.string.save_changes_tip)
                 .setPositiveButton(R.string.save,
                         new DialogInterface.OnClickListener() {
                             @Override

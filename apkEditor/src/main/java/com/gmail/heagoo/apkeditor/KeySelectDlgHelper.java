@@ -1,6 +1,8 @@
 package com.gmail.heagoo.apkeditor;
 
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -38,7 +40,7 @@ public class KeySelectDlgHelper implements OnClickListener, IFileSelection {
         this.view = inflater.inflate(R.layout.dlg_keyselect, null, false);
         initView();
 
-        AlertDialog.Builder db = new AlertDialog.Builder(context);
+        MaterialAlertDialogBuilder db = new MaterialAlertDialogBuilder(context);
         db.setView(view);
         db.setTitle(R.string.custom_key_setting);
         db.setPositiveButton(android.R.string.ok,

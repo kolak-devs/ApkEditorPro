@@ -60,4 +60,13 @@
     <color name="darkGrey">#FF555555</color>
     <color name="semiTransparentWhite">#FFFFFFD5</color>
     <color name="lightBlueText">#FF5997C4</color>
+
+    <!-- Text colors used by legacy menu / popup / dialog items -->
+    <color name="label_color">#FF222222</color>
+    <color name="textview_color">#FF222222</color>
+
+    <!-- Material semantic extras -->
+    <color name="surfaceVariant">#FFE7E0EC</color>
+    <color name="outline">#FF79747E</color>
+    <color name="colorControlHighlight">#33000000</color>
 </resources>

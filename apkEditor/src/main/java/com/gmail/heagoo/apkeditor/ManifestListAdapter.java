@@ -3,6 +3,8 @@ package com.gmail.heagoo.apkeditor;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -178,7 +180,7 @@ class ManifestListAdapter extends BaseAdapter implements
     }
 
     public static void showPromoteDialog(final Context ctx) {
-        new AlertDialog.Builder(ctx)
+        new MaterialAlertDialogBuilder(ctx)
                 .setTitle(R.string.not_available)
                 .setMessage(R.string.promote_msg)
                 .setPositiveButton(R.string.view_pro_version,

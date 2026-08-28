@@ -3,6 +3,8 @@ package com.gmail.heagoo.apkeditor;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,7 +48,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.tabs.TabLayout;
 import com.gmail.heagoo.apkeditor.FileSelectDialog.IFileSelection;
 import com.gmail.heagoo.apkeditor.ac.AutoCompleteAdapter;
 import com.gmail.heagoo.apkeditor.base.BuildConfig;
@@ -160,9 +162,11 @@ public class ApkInfoActivity extends CustomizedLangActivity
     private ImageView apkIcon;
     private TextView apkLabel;
     private TextView apkPkgPath;
-    private RadioButton stringRadio;
-    private RadioButton resRadio;
-    private RadioButton manifestRadio;
+    private TabLayout mainTabLayout;
+    private TabLayout.Tab stringTab;
+    private TabLayout.Tab resTab;
+    private TabLayout.Tab manifestTab;
+    private boolean tabListenerAdded;
     private Drawable textIcon;
     //HashMap<ResConfigFlags, ArrayList<StringItem>> allStringValues;
     //Map<ResConfigFlags, Map<String, String>> changedStringValues;
@@ -834,7 +838,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
             return;
         }
 
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.sure_to_exit_editing)
                 .setPositiveButton(R.string.yes, (dialog, which) -> {
                     if (parseThread != null && parseThread.isAlive()) {
@@ -1155,18 +1159,29 @@ public class ApkInfoActivity extends CustomizedLangActivity
         this.apkIcon = (ImageView) this.findViewById(R.id.app_icon);
         this.apkLabel = (TextView) this.findViewById(R.id.app_name);
         this.apkPkgPath = (TextView) this.findViewById(R.id.app_pkgpath);
-        this.stringRadio = (RadioButton) this.findViewById(R.id.tab_string);
-        this.resRadio = (RadioButton) this.findViewById(R.id.tab_resource);
-        this.manifestRadio = (RadioButton) this.findViewById(R.id.tab_manifest);
-        if (isAmazonVersion()) {
-            manifestRadio.setVisibility(View.GONE);
+        this.mainTabLayout = (TabLayout) this.findViewById(R.id.main_tab_layout);
+        this.stringTab = mainTabLayout.newTab();
+        stringTab.setText(R.string.string);
+        stringTab.setIcon(textIcon);
+        mainTabLayout.addTab(stringTab);
+        this.resTab = mainTabLayout.newTab();
+        resTab.setText(R.string.files);
+        resTab.setIcon(resIconGrey);
+        mainTabLayout.addTab(resTab);
+        this.manifestTab = mainTabLayout.newTab();
+        manifestTab.setText(R.string.manifest);
+        manifestTab.setIcon(manifestIconGrey);
+        mainTabLayout.addTab(manifestTab);
+        if ((isAmazonVersion() || BuildConfig.PARSER_ONLY) && manifestTab.getPosition() >= 0) {
+            mainTabLayout.removeTab(manifestTab);
         }
-        //  For APK parser, manifest view is not visiblie, and for project, it does not contain string information
-        if (BuildConfig.PARSER_ONLY) {
-            manifestRadio.setVisibility(View.GONE);
-            if (projectName != null) {
-                stringRadio.setVisibility(View.GONE);
-                resRadio.setVisibility(View.GONE);
+        //  For APK parser, project does not contain string information
+        if (BuildConfig.PARSER_ONLY && projectName != null) {
+            if (stringTab.getPosition() >= 0) {
+                mainTabLayout.removeTab(stringTab);
+            }
+            if (resTab.getPosition() >= 0) {
+                mainTabLayout.removeTab(resTab);
             }
         }
 
@@ -1525,9 +1540,35 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     protected void setupClickListener() {
-        stringRadio.setOnClickListener(v -> stringRadioClicked());
-        resRadio.setOnClickListener(v -> resRadioClicked());
-        manifestRadio.setOnClickListener(v -> manifestRadioClicked());
+        if (!tabListenerAdded) {
+            tabListenerAdded = true;
+            mainTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    if (tab == stringTab) {
+                        stringRadioClicked();
+                    } else if (tab == resTab) {
+                        resRadioClicked();
+                    } else if (tab == manifestTab) {
+                        manifestRadioClicked();
+                    }
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+                }
+            });
+        }
+        // Make the tab bar selection match the current state
+        TabLayout.Tab target = curSelectedRadio == 0 ? stringTab
+                : (curSelectedRadio == 1 ? resTab : manifestTab);
+        if (target != null && mainTabLayout.getSelectedTabPosition() != target.getPosition()) {
+            mainTabLayout.selectTab(target);
+        }
 
         this.saveBtn = (Button) this.findViewById(R.id.save_button);
         if (BuildConfig.PARSER_ONLY) {
@@ -1568,7 +1609,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
     protected void composeApkFile() {
         if (BuildConfig.LIMIT_NEW_VERSION && !MainActivity.upgradedFromOldVersion(this)) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(this);
             alert.setTitle(R.string.please_note);
             alert.setMessage(R.string.build_not_support_tip);
             alert.show();
@@ -1679,7 +1720,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
         if (stringModified || manifestModified || resFileModified) {
             String errMsg = getKnownResourceError();
             if (errMsg != null) {
-                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(this);
                 dlg.setTitle(R.string.warning);
                 dlg.setMessage(errMsg + "\nAre you sure to continue?");
                 dlg.setPositiveButton(R.string.yes,
@@ -1730,7 +1771,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
     }
 
     private void showCannotStartBuildDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.build_in_progress_tip)
                 .setTitle(R.string.please_note)
                 .setPositiveButton(android.R.string.ok, null);
@@ -1873,12 +1914,9 @@ public class ApkInfoActivity extends CustomizedLangActivity
     // Update the view in the center of the screen
     private void updateCenterView() {
 
-        manifestRadio.setCompoundDrawablesWithIntrinsicBounds(null,
-                manifestIconGrey, null, null);
-        resRadio.setCompoundDrawablesWithIntrinsicBounds(null, resIconGrey,
-                null, null);
-        stringRadio.setCompoundDrawablesWithIntrinsicBounds(null, textIconGrey,
-                null, null);
+        manifestTab.setIcon(manifestIconGrey);
+        resTab.setIcon(resIconGrey);
+        stringTab.setIcon(textIconGrey);
 
         loadingLayout.setVisibility(View.INVISIBLE);
         manifestLayout.setVisibility(View.INVISIBLE);
@@ -1887,8 +1925,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
 
         switch (curSelectedRadio) {
             case 0:
-                stringRadio.setCompoundDrawablesWithIntrinsicBounds(null, textIcon,
-                        null, null);
+                stringTab.setIcon(textIcon);
                 if (this.stringParsed) {
                     stringLayout.setVisibility(View.VISIBLE);
                 } else {
@@ -1896,8 +1933,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 }
                 break;
             case 1:
-                resRadio.setCompoundDrawablesWithIntrinsicBounds(null, resIcon,
-                        null, null);
+                resTab.setIcon(resIcon);
                 if (this.resourceParsed) {
                     resourceLayout.setVisibility(View.VISIBLE);
                 } else {
@@ -1905,8 +1941,7 @@ public class ApkInfoActivity extends CustomizedLangActivity
                 }
                 break;
             case 2:
-                manifestRadio.setCompoundDrawablesWithIntrinsicBounds(null,
-                        manifestIcon, null, null);
+                manifestTab.setIcon(manifestIcon);
                 if (this.resourceParsed) {
                     manifestLayout.setVisibility(View.VISIBLE);
                 } else {

@@ -3,6 +3,8 @@ package com.gmail.heagoo.apkeditor;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -230,7 +232,7 @@ public class SearchTextDialog extends Dialog
 
         final String strReplace = etReplaceAll.getText().toString();
 
-        AlertDialog.Builder comfirmDlg = new AlertDialog.Builder(activityRef.get());
+        MaterialAlertDialogBuilder comfirmDlg = new MaterialAlertDialogBuilder(activityRef.get());
         String msg = String.format(
                 activityRef.get().getString(R.string.sure_to_replace_all),
                 this.keyword, strReplace);

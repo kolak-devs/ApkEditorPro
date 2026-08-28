@@ -1,5 +1,6 @@
 package com.gmail.heagoo.apkeditor;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,14 +8,15 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.gmail.heagoo.apkeditor.base.R;
 
-public class SettingEditorActivity extends PreferenceActivity implements
-        OnPreferenceChangeListener {
+public class SettingEditorActivity extends AppCompatActivity {
 
     public static boolean isLineWrap(Context ctx) {
         String key = "LineWrap";
@@ -64,16 +66,8 @@ public class SettingEditorActivity extends PreferenceActivity implements
         return sp.getBoolean(key, true);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // sawsem theme
-//		boolean isDarkTheme = GlobalConfig.instance(this).isDarkTheme();
-//		if (isDarkTheme) {
-//			this.setTheme(R.style.titlebar_dark);
-//			requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-//		}
-
         super.onCreate(savedInstanceState);
 
         if (GlobalConfig.instance(this).isFullScreen()) {
@@ -81,136 +75,131 @@ public class SettingEditorActivity extends PreferenceActivity implements
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-        this.addPreferencesFromResource(R.xml.editor_setting);
-
-//		if (isDarkTheme) {
-//			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-//					R.layout.titlebar_dark);
-//		}
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        init();
-// sawsem theme
-//		ImageView iv = (ImageView) this.findViewById(R.id.title_icon);
-//		if (iv != null) {
-//			int resId = (Integer) RefInvoke.invokeStaticMethod(
-//					"com.gmail.heagoo.seticon.SetIcon", "getSelectedIcon",
-//					new Class[] { Activity.class }, new Object[] { this });
-//			iv.setImageResource(resId);
-//		}
+        if (savedInstanceState == null) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(android.R.id.content, new SettingEditorFragment());
+            ft.commit();
+        }
     }
 
     @SuppressWarnings("deprecation")
-    private void init() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+    public static class SettingEditorFragment extends PreferenceFragment
+            implements OnPreferenceChangeListener {
 
-        // Line wrap
-        {
-            String key = "LineWrap";
-            CheckBoxPreference checkbox = (CheckBoxPreference) findPreference(key);
-            checkbox.setOnPreferenceChangeListener(this);
-            boolean enabled = sp.getBoolean(key, true);
-            if (enabled) {
-                checkbox.setSummary(R.string.line_wrap_enabled);
-                checkbox.setChecked(true);
-            } else {
-                checkbox.setSummary(R.string.line_wrap_disabled);
-                checkbox.setChecked(false);
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.editor_setting);
+            init();
+        }
+
+        private void init() {
+            Context context = getActivity();
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+
+            // Line wrap
+            {
+                String key = "LineWrap";
+                CheckBoxPreference checkbox = (CheckBoxPreference) findPreference(key);
+                checkbox.setOnPreferenceChangeListener(this);
+                boolean enabled = sp.getBoolean(key, true);
+                if (enabled) {
+                    checkbox.setSummary(R.string.line_wrap_enabled);
+                    checkbox.setChecked(true);
+                } else {
+                    checkbox.setSummary(R.string.line_wrap_disabled);
+                    checkbox.setChecked(false);
+                }
+            }
+
+            // Font size
+            {
+                String key = "FontSize";
+                EditTextPreference pref = (EditTextPreference) findPreference(key);
+                pref.setOnPreferenceChangeListener(this);
+                int fontSize = getFontSize(sp);
+                pref.setSummary(String.format(
+                        context.getString(R.string.font_size_summary), fontSize));
+            }
+
+            // Big File Threshold
+            {
+                String key = "BigFileSize";
+                EditTextPreference pref = (EditTextPreference) findPreference(key);
+                pref.setOnPreferenceChangeListener(this);
+                int filesize = getBigFileThreshold(sp);
+                pref.setSummary(String.format(
+                        context.getString(R.string.use_bfe_summary), filesize));
+            }
+
+            // Line numbers
+            {
+                String key = "ShowLineNumbers";
+                CheckBoxPreference checkbox = (CheckBoxPreference) findPreference(key);
+                checkbox.setOnPreferenceChangeListener(this);
+                boolean enabled = sp.getBoolean(key, true);
+                if (enabled) {
+                    checkbox.setSummary(R.string.line_numebrs_enabled);
+                    checkbox.setChecked(true);
+                } else {
+                    checkbox.setSummary(R.string.line_numbers_disabled);
+                    checkbox.setChecked(false);
+                }
+            }
+
+            // Symbol Input
+            {
+                String key = "SymbolInput";
+                CheckBoxPreference checkbox = (CheckBoxPreference) findPreference(key);
+                boolean enabled = sp.getBoolean(key, true);
+                checkbox.setChecked(enabled);
             }
         }
 
-        // Font size
-        {
-            String key = "FontSize";
-            EditTextPreference pref = (EditTextPreference) findPreference(key);
-            pref.setOnPreferenceChangeListener(this);
-            int fontSize = getFontSize(sp);
-            pref.setSummary(String.format(
-                    this.getString(R.string.font_size_summary), fontSize));
-        }
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            Context context = getActivity();
+            String key = preference.getKey();
 
-        // Big File Threshold
-        {
-            String key = "BigFileSize";
-            EditTextPreference pref = (EditTextPreference) findPreference(key);
-            pref.setOnPreferenceChangeListener(this);
-            int filesize = getBigFileThreshold(sp);
-            pref.setSummary(String.format(
-                    this.getString(R.string.use_bfe_summary), filesize));
-        }
-
-        // Line numbers
-        {
-            String key = "ShowLineNumbers";
-            CheckBoxPreference checkbox = (CheckBoxPreference) findPreference(key);
-            checkbox.setOnPreferenceChangeListener(this);
-            boolean enabled = sp.getBoolean(key, true);
-            if (enabled) {
-                checkbox.setSummary(R.string.line_numebrs_enabled);
-                checkbox.setChecked(true);
-            } else {
-                checkbox.setSummary(R.string.line_numbers_disabled);
-                checkbox.setChecked(false);
+            if ("LineWrap".equals(key)) {
+                Boolean b = (Boolean) newValue;
+                if (b) {
+                    preference.setSummary(R.string.line_wrap_enabled);
+                } else {
+                    preference.setSummary(R.string.line_wrap_disabled);
+                }
+            } else if ("FontSize".equals(key)) {
+                String strFontSize = (String) newValue;
+                int fontSize;
+                try {
+                    fontSize = Integer.valueOf(strFontSize);
+                } catch (Exception e) {
+                    fontSize = getFontSize(context);
+                }
+                preference.setSummary(String.format(
+                        context.getString(R.string.font_size_summary), fontSize));
+            } else if ("BigFileSize".equals(key)) {
+                String strSize = (String) newValue;
+                int fileSize;
+                try {
+                    fileSize = Integer.valueOf(strSize);
+                } catch (Exception e) {
+                    fileSize = getBigFileThreshold(context);
+                }
+                preference.setSummary(String.format(
+                        context.getString(R.string.use_bfe_summary), fileSize));
             }
-        }
 
-        // Symbol Input
-        {
-            String key = "SymbolInput";
-            CheckBoxPreference checkbox = (CheckBoxPreference) findPreference(key);
-            boolean enabled = sp.getBoolean(key, true);
-            checkbox.setChecked(enabled);
+            if ("ShowLineNumbers".equals(key)) {
+                Boolean b = (Boolean) newValue;
+                if (b) {
+                    preference.setSummary(R.string.line_numebrs_enabled);
+                } else {
+                    preference.setSummary(R.string.line_numbers_disabled);
+                }
+            }
+
+            return true;
         }
     }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        String key = preference.getKey();
-
-        if ("LineWrap".equals(key)) {
-            Boolean b = (Boolean) newValue;
-            if (b) {
-                preference.setSummary(R.string.line_wrap_enabled);
-            } else {
-                preference.setSummary(R.string.line_wrap_disabled);
-            }
-        } else if ("FontSize".equals(key)) {
-            String strFontSize = (String) newValue;
-            int fontSize;
-            try {
-                fontSize = Integer.valueOf(strFontSize);
-            } catch (Exception e) {
-                fontSize = getFontSize(this);
-            }
-            preference.setSummary(String.format(
-                    this.getString(R.string.font_size_summary), fontSize));
-        } else if ("BigFileSize".equals(key)) {
-            String strSize = (String) newValue;
-            int fileSize;
-            try {
-                fileSize = Integer.valueOf(strSize);
-            } catch (Exception e) {
-                fileSize = getBigFileThreshold(this);
-            }
-            preference.setSummary(String.format(
-                    this.getString(R.string.use_bfe_summary), fileSize));
-        }
-
-        if ("ShowLineNumbers".equals(key)) {
-            Boolean b = (Boolean) newValue;
-            if (b) {
-                preference.setSummary(R.string.line_numebrs_enabled);
-            } else {
-                preference.setSummary(R.string.line_numbers_disabled);
-            }
-        }
-
-        return true;
-    }
-
-
 }

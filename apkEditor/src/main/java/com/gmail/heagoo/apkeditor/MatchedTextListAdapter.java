@@ -2,6 +2,8 @@ package com.gmail.heagoo.apkeditor;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -362,7 +364,7 @@ class MatchedTextListAdapter extends BaseExpandableListAdapter
     }
 
     private void showReplaceDialog(final int index) {
-        AlertDialog.Builder inputDlg = new AlertDialog.Builder(
+        MaterialAlertDialogBuilder inputDlg = new MaterialAlertDialogBuilder(
                 activityRef.get());
         inputDlg.setTitle(R.string.replace);
         String msg = String.format(

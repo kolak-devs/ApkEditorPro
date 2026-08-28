@@ -2,6 +2,8 @@ package com.gmail.heagoo.apkeditor;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
@@ -348,7 +350,7 @@ public class RebuildConfirmDialog {
 
     @SuppressLint("InflateParams")
     public void show() {
-        AlertDialog.Builder confirmDlg = new AlertDialog.Builder(ctx);
+        MaterialAlertDialogBuilder confirmDlg = new MaterialAlertDialogBuilder(ctx);
         confirmDlg.setTitle(R.string.rebuild_the_apk);
 
         // Initialize the expandable list view

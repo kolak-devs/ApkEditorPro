@@ -2,6 +2,8 @@ package com.gmail.heagoo.sqliteutil;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -309,12 +311,12 @@ public class SqliteRowViewActivity extends CustomizedLangActivity implements
 
     @SuppressLint("NewApi")
     private void showDeleteDialog() {
-        AlertDialog.Builder builder = null;
+        MaterialAlertDialogBuilder builder = null;
         if (Build.VERSION.SDK_INT >= 11) {
-            builder = new AlertDialog.Builder(this,
+            builder = new MaterialAlertDialogBuilder(this,
                     AlertDialog.THEME_HOLO_LIGHT);
         } else {
-            builder = new AlertDialog.Builder(this);
+            builder = new MaterialAlertDialogBuilder(this);
         }
         Dialog alertDialog = builder
                 .setTitle("Sure to Delete?")

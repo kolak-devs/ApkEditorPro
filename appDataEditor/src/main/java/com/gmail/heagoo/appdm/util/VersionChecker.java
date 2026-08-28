@@ -1,5 +1,6 @@
 package com.gmail.heagoo.appdm.util;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -19,11 +20,11 @@ public class VersionChecker {
 
 //	@SuppressLint("NewApi")
 //	public static void showGetProDialog(final Context ctx, String msg) {
-//		AlertDialog.Builder builder = null;
+//		MaterialAlertDialogBuilder builder = null;
 //		if (Build.VERSION.SDK_INT >= 11) {
-//			builder = new AlertDialog.Builder(ctx, AlertDialog.THEME_HOLO_LIGHT);
+//			builder = new MaterialAlertDialogBuilder(ctx, AlertDialog.THEME_HOLO_LIGHT);
 //		} else {
-//			builder = new AlertDialog.Builder(ctx);
+//			builder = new MaterialAlertDialogBuilder(ctx);
 //		}
 //		builder.setTitle(R.string.not_available)
 //				.setMessage(R.string.to_buy_tip)
