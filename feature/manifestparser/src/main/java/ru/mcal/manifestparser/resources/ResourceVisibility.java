@@ -16,6 +16,8 @@
 
 package ru.mcal.manifestparser.resources;
 
+import com.mcal.appdm.base.R;
+
 
 import androidx.annotation.NonNull;
 

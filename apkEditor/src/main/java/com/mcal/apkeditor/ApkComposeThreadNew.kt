@@ -13,7 +13,6 @@ import com.mcal.common.data.ReactivePreferences.getSigningPassword
 import com.mcal.common.utils.ITaskCallback
 import com.mcal.common.utils.ITaskCallback.TaskStepInfo
 import com.mcal.common.utils.ScopedStorage
-import com.mcal.common.utils.ScopedStorage.getAndroidDebugKey
 import com.mcal.common.utils.ScopedStorage.getKey
 import com.mcal.common.utils.cleanup
 import kotlinx.coroutines.Dispatchers
@@ -97,14 +96,24 @@ class ApkComposeThreadNew(
                 AssetsInstaller(context).install()
                 setNextStep(context.getString(R.string.build_compiling))
 
-                val binDirPath = binDir.path
+                val aaptFile = ScopedStorage.getAapt()
+                val aapt2File = ScopedStorage.getAapt2()
+                if (!aaptFile.canExecute()) {
+                    mErrorMessage = "aapt is missing or not executable. Download it via Tools Manager."
+                    break
+                }
+                if (ReactivePreferences.isAapt2() && !aapt2File.canExecute()) {
+                    mErrorMessage = "aapt2 is missing or not executable. Download it via Tools Manager."
+                    break
+                }
+
                 Androlib(BuildOptions().apply {
                     useNewBuildRules = ReactivePreferences.isAaptRules()
                     useJsonConfig = ReactivePreferences.isJsonConfig()
                     useAapt2 = ReactivePreferences.isAapt2()
-                    aaptPath = binDirPath + File.separator + "aapt"
-                    aapt2Path = binDirPath + File.separator + "aapt2"
-                    frameworkFolderLocation = binDirPath
+                    aaptPath = aaptFile.path
+                    aapt2Path = aapt2File.path
+                    frameworkFolderLocation = binDir.path
                     ignoreMultiRes = ReactivePreferences.ignoreMultiResAsync()
                 }, this@ApkComposeThreadNew).build(File(mDecodedFilePath), unsignedApk)
                 setNextStep(context.getString(R.string.build_signing))
@@ -155,7 +164,28 @@ class ApkComposeThreadNew(
                     e.printStackTrace()
                 }
             }
-            return ApkSigner().sign(File(inApk), File(mTargetApkPath), getAndroidDebugKey(), "androiddebug", "androiddebug", "androiddebug")
+            val binDir = ScopedStorage.getBinDir()
+            val pk8 = File(binDir, "testkey.pk8")
+            val x509 = File(binDir, "testkey.x509.pem")
+            try {
+                if (!pk8.exists() || pk8.length() == 0L) {
+                    context.assets.open("testkey.pk8").use { input ->
+                        pk8.outputStream().use { output -> input.copyTo(output) }
+                    }
+                }
+                if (!x509.exists() || x509.length() == 0L) {
+                    context.assets.open("testkey.x509.pem").use { input ->
+                        x509.outputStream().use { output -> input.copyTo(output) }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return if (pk8.exists() && x509.exists()) {
+                ApkSigner().sign(inApk, mTargetApkPath, pk8.absolutePath, x509.absolutePath)
+            } else {
+                false
+            }
         } else false
     }
 

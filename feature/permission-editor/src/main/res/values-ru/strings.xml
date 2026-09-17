@@ -5,7 +5,7 @@
     <string name="unselect">Отменить выбор</string>
     <string name="select">Выбрать</string>
     <string name="no_description">Нет описания</string>
-    <string name="save">Сохранить</string>
+    <string name="perm_save">Сохранить</string>
     <string name="save_modified">Сохранить изменения</string>
     <string name="save_modified_message">Данные изменились, хотите сохранить?</string>
     <string name="delete">Удалить</string>
@@ -16,7 +16,7 @@
     <string name="select_all">Выбрать всё</string>
     <string name="unselect_all">Отменить всё</string>
     <string name="invert_all">Инвертировать всё</string>
-    <string name="settings">Настройки</string>
+    <string name="perm_settings">Настройки</string>
     <string name="comment_permission">Комментировать разрешения</string>
     <plurals name="dialog_add_permission">
         <item quantity="zero">Добавление разрешений\n(%1$d элементов выбрано)</item>

@@ -1,13 +1,13 @@
 package com.mcal.editor.utils
 
+import com.android.tools.smali.dexlib2.DexFileFactory
+import com.android.tools.smali.dexlib2.Opcodes
+import com.android.tools.smali.dexlib2.iface.ClassDef
+import com.android.tools.smali.dexlib2.iface.DexFile
+import com.android.tools.smali.dexlib2.immutable.ImmutableDexFile
 import jadx.api.JadxArgs
 import jadx.api.JadxDecompiler
 import jadx.plugins.input.dex.DexInputPlugin
-import org.jf.dexlib2.DexFileFactory
-import org.jf.dexlib2.Opcodes
-import org.jf.dexlib2.iface.ClassDef
-import org.jf.dexlib2.iface.DexFile
-import org.jf.dexlib2.immutable.ImmutableDexFile
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -86,7 +86,7 @@ class JavaExtractor(
                 File(mApkPath),
                 mDexName,
                 true,
-                Opcodes.forApi(15)
+                Opcodes.getDefault()
             ).dexFile
         } catch (e: Exception) {
             errorMessage = "The dex file cannot be decompiled."

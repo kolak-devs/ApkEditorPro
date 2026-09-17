@@ -85,7 +85,6 @@ class XApkTool(private val xLog: XLog) {
                     setDecodeResources(ApkDecoder.DECODE_RESOURCES_FULL)
                     setDecodeSources(ApkDecoder.DECODE_SOURCES_SMALI)
                     setOutDir(decodeRootPath)
-                    setApiLevel(14)
                     setForceDelete(true)
                 }.decode()
             }

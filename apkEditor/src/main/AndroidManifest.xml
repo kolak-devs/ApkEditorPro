@@ -7,7 +7,15 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
+    <uses-permission android:name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND"/>
+
+    <uses-permission android:name="android.permission.REQUEST_COMPANION_START_FOREGROUND_SERVICES_FROM_BACKGROUND"/>
+
+    <uses-permission android:name="android.permission.INSTANT_APP_FOREGROUND_SERVICE"/>
+    
     <application
         android:name="com.mcal.MainApp"
         android:allowBackup="true"
@@ -71,6 +79,7 @@
         <activity android:name="com.mcal.apkeditor.activities.ApkSearchActivity" />
         <activity android:name="com.mcal.apkeditor.activities.OdexPatchActivity" />
         <activity android:name="com.mcal.apkeditor.activities.ColorXmlActivity" />
+        <activity android:name="com.mcal.apkeditor.translate.TranslateActivity" />
         <activity android:name="com.mcal.apkeditor.prj.ProjectListActivity" />
         <activity android:name="com.mcal.apkeditor.ui.fulleditor.FullEditorActivity" />
 

@@ -1,12 +1,80 @@
+import com.android.build.api.artifact.SingleArtifact
+import com.android.build.api.variant.BuiltArtifactsLoader
+import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.TaskAction
+
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+abstract class RenameApkTask extends DefaultTask {
+
+    @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
+    abstract DirectoryProperty getInputDir()
+
+    @OutputDirectory
+    abstract DirectoryProperty getOutputDir()
+
+    @Internal
+    abstract Property<BuiltArtifactsLoader> getBuiltArtifactsLoader()
+
+    @Input
+    abstract Property<String> getVariantName()
+
+    @Input
+    abstract Property<Integer> getMinSdkVersion()
+
+    @TaskAction
+    void renameApk() {
+        File outDir = outputDir.get().asFile
+        if (outDir.exists()) {
+            outDir.deleteDir()
+        }
+        outDir.mkdirs()
+
+        def artifacts = builtArtifactsLoader.get().load(inputDir.get())
+        if (artifacts == null) {
+            throw new RuntimeException('Cannot load generated APKs')
+        }
+
+        artifacts.elements.each { builtArtifact ->
+            String newName
+            if (variantName.get() == 'release') {
+                newName = "Apk Editor v.${builtArtifact.versionName}-Min API ${minSdkVersion.get()}.apk"
+            } else {
+                newName = "${variantName.get()}-${builtArtifact.versionName}-milestone-(${builtArtifact.versionCode}).apk"
+            }
+            Files.copy(
+                    new File(builtArtifact.outputFile).toPath(),
+                    new File(outDir, newName).toPath(),
+                    StandardCopyOption.REPLACE_EXISTING
+            )
+        }
+        artifacts.save(outputDir.get())
+    }
+}
+
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id("com.android.application") version "8.13.0"
+    id("org.jetbrains.kotlin.android")
 }
 def Properties versionProps = new Properties()
 
+configurations.configureEach {
+    exclude group: 'org.ogce', module: 'xpp3'
+}
+
 android {
     compileSdk project.compileSDK.toInteger()
-    ndkVersion '24.0.8215888'
+    ndkVersion '26.3.11579264'
 
     def versionPropsFile = file('version.properties')
     if (versionPropsFile.canRead()) {
@@ -18,16 +86,9 @@ android {
         def versionMajor = versionProps['VERSION_MAJOR'].toInteger()
         def versionMinor = versionProps['VERSION_MINOR'].toInteger()
         def versionPatch = versionProps['VERSION_PATCH'].toInteger()
-        // increment build number on every gradle sync
         def versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
-        // versionProps['CACHED_VERSION']
-        // Используется для поддержки Instant Run в дебаг режиме. Потому что при инкрементальном обновлении постоянно меняется versionCode
-        // в AndroidManifest.xml из-за чего применение изменений становится невозможным без полной установки приложения.
-        // Этот костыль берет для дебаг версии versionCode с последней релизной сборки и не меняет его на протяжении всего процесса debug сборок,
-        // обновляется на новое, в тот момент, когда происходит релизная сборка проекта
 
-
-        // only in release build
+        
         if (':apkEditor:assembleRelease' in runTasks || 'aR' in runTasks) {
             versionPatch++;
             if (versionPatch >= 9) {
@@ -64,9 +125,27 @@ android {
     } else {
         throw new GradleException("Could not read version.properties!")
     }
+    
+    signingConfigs {
+        release {
+            storeFile file("release.keystore")
+            storePassword "3ynWk8kn"
+            keyAlias "SZnWi6DX0BtyUK"
+            keyPassword "3ynWk8kn"
+        }
+        debug {
+            storeFile file("release.keystore")
+            storePassword "3ynWk8kn"
+            keyAlias "SZnWi6DX0BtyUK"
+            keyPassword "3ynWk8kn"
+        }
+        
+        
+    }
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             defaultConfig.versionCode = versionProps['VERSION_BUILD'].toInteger()
 
             minifyEnabled true
@@ -74,11 +153,12 @@ android {
             buildConfigField "boolean", "SHOW_AGREEMENT", "true"
             buildConfigField "String", "JADX_VERSION", "\"1.4.2+\""
             buildConfigField "String", "APKTOOL_VERSION", "\"2.6.1+\""
-            buildConfigField "String", "SMALI_VERSION", "\"2.5.2\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "SMALI_VERSION", "\"3.0.10\""
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
+            signingConfig signingConfigs.debug
             defaultConfig.versionCode = versionProps['CACHED_VERSION'].toInteger()
 
             ndk {
@@ -87,9 +167,11 @@ android {
             buildConfigField "boolean", "SHOW_AGREEMENT", "false"
             buildConfigField "String", "JADX_VERSION", "\"1.4.2+\""
             buildConfigField "String", "APKTOOL_VERSION", "\"2.6.1+\""
-            buildConfigField "String", "SMALI_VERSION", "\"2.5.2\""
+            buildConfigField "String", "SMALI_VERSION", "\"3.0.10\""
         }
     }
+    
+    
 
 //    splits {
 //        abi {
@@ -105,25 +187,11 @@ android {
 //        commandLine = ['cmd','/c', jiagu_dir]
 //    }
 
-    applicationVariants.all { variant ->
-        variant.outputs.all {
-            if (variant.name == "release") {
-                outputFileName = "Apk Editor v.${variant.versionName}-Min API ${defaultConfig.minSdk}.apk"
-            } else {
-                outputFileName = "${variant.name}-${variant.versionName}-milestone-(${versionCode}).apk"
-            }
-        }
-    }
-
-
     compileOptions {
         // Flag to enable support for the new language APIs
         //coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = '17'
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
     packagingOptions {
         resources.excludes += 'keys/*'
@@ -140,8 +208,27 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
     namespace 'com.mcal.apkeditor'
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        def renameTask = tasks.register("renameApkFor${variant.name.capitalize()}", RenameApkTask) {
+            it.outputDir.set(layout.buildDirectory.dir("outputs/renamed_apks/${variant.name}"))
+            it.builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
+            it.variantName.set(variant.name)
+            it.minSdkVersion.set(project.minSDK.toInteger())
+        }
+        variant.artifacts.use(renameTask).wiredWith { task -> task.inputDir }.toListenTo(SingleArtifact.APK.INSTANCE)
+    }
 }
 
 configurations {
@@ -150,18 +237,11 @@ configurations {
 
 
 dependencies {
-    implementation project(':jadx:jadx-plugins:jadx-dex-input')
     implementation project(':core')
+    implementation files('../libraries/jadx-core.jar')
     implementation project(':feature:code-editor')
-    implementation project(':feature:imageview')
     implementation project(':apksigner')
     implementation project(':feature:data-editor')
-    implementation project(':feature:patchview')
-    implementation project(':melissa')
-    implementation project(':feature:manifestparser')
-    implementation project(':feature:net-manager')
-    implementation project(':feature:bsh-engine')
-    implementation project(':feature:colormixer')
 
     implementation(libs.webview)
 
@@ -169,10 +249,13 @@ dependencies {
     implementation(libs.smali)
     implementation(libs.baksmali)
 
-    implementation(libs.android.apktool)
+    implementation(libs.android.apktool) {
+        exclude group: 'org.ogce', module: 'xpp3'
+    }
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
@@ -184,6 +267,10 @@ dependencies {
     implementation(libs.annotations)
     implementation(libs.gson)
     implementation(libs.kotlinx.coroutines.core)
+
+    implementation 'com.android.tools.build:aapt2-proto:7.2.2-7984345'
+    implementation 'com.google.protobuf:protobuf-java:3.22.2'
+    implementation 'org.slf4j:slf4j-api:2.0.3'
 
     implementation(libs.guava)
     implementation(libs.antlr.runtime)
@@ -197,6 +284,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences.core)
 
     implementation(libs.uidesigner)
+    implementation(libs.customactivitycrash)
 
     // LeakCanary
     debugImplementation(libs.leakcanary.android)

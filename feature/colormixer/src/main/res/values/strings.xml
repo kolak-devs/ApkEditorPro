@@ -5,13 +5,13 @@
     <string name="colormixer_blue">Blue</string>
     <string name="colormixer_alpha">Alpha</string>
     <string name="color">Color</string>
-    <string name="name">Name</string>
+    <string name="cm_name">Name</string>
     <string name="value">Value</string>
 
-    <string name="clear">Clear</string>
-    <string name="close">Close</string>
-    <string name="color_converter">Color Converter</string>
-    <string name="copied_to_clipboard">%1$s copied to clipboard</string>
+    <string name="cm_clear">Clear</string>
+    <string name="cm_close">Close</string>
+    <string name="cm_color_converter">Color Converter</string>
+    <string name="cm_copied_to_clipboard">%1$s copied to clipboard</string>
     <string name="invalid_color_value">Invalid color value</string>
 
 </resources>

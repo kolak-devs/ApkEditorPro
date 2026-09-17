@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="@string/name" />
+            android:text="@string/cm_name" />
 
         <TextView
             android:id="@+id/label_val"
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="@string/name" />
+            android:text="@string/cm_name" />
 
         <TextView
             android:id="@+id/tv_value"

@@ -6,12 +6,16 @@ import android.net.Uri
 
 object PackageHelper {
     @JvmStatic
-    fun uninstallPackage(ctx: Context, packageName: String) {
+    fun uninstallIntent(ctx: Context, packageName: String): Intent {
         val packageURI = Uri.parse("package:$packageName")
-        val uninstallIntent = Intent(
+        return Intent(
             Intent.ACTION_DELETE,
             packageURI
         )
-        ctx.startActivity(uninstallIntent)
+    }
+
+    @JvmStatic
+    fun uninstallPackage(ctx: Context, packageName: String) {
+        ctx.startActivity(uninstallIntent(ctx, packageName))
     }
 }

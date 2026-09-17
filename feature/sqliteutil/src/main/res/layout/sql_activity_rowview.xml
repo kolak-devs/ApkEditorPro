@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/sqlite_toolbar" />
 
     <ListView
         android:id="@+id/tableRowList"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:text="@string/close" />
+            android:text="@string/sqlite_close" />
 
     </LinearLayout>
 

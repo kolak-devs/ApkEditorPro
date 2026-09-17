@@ -1,5 +1,7 @@
 package com.mcal.pngeditor
 
+import com.mcal.appdm.base.R
+
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -11,7 +13,7 @@ import com.davemorrissey.labs.subscaleview.decoder.CompatDecoderFactory
 import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
 import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.pngeditor.databinding.ActivityPhotoViewBinding
+import com.mcal.appdm.base.databinding.ActivityPhotoViewBinding
 
 class PhotoViewerActivity : CustomizedLangActivity() {
     private var filepath: String? = null

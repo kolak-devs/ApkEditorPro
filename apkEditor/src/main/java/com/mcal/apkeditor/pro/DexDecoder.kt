@@ -1,10 +1,10 @@
 package com.mcal.apkeditor.pro
 
-import org.jf.baksmali.Baksmali
-import org.jf.baksmali.BaksmaliOptions
-import org.jf.dexlib2.DexFileFactory
-import org.jf.dexlib2.Opcodes
-import org.jf.dexlib2.dexbacked.DexBackedDexFile
+import com.android.tools.smali.baksmali.Baksmali
+import com.android.tools.smali.baksmali.BaksmaliOptions
+import com.android.tools.smali.dexlib2.DexFileFactory
+import com.android.tools.smali.dexlib2.Opcodes
+import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
 import java.io.File
 
 class DexDecoder(private val dexFilePath: String) {
@@ -24,7 +24,7 @@ class DexDecoder(private val dexFilePath: String) {
             }
         }
         val jobs = Runtime.getRuntime().availableProcessors()
-        if (!Baksmali.disassembleDexFile(dexFile, outputDirectoryFile, jobs, options, null)) {
+        if (!Baksmali.disassembleDexFile(dexFile, outputDirectoryFile, jobs, options)) {
             throw Exception("Baksmali.disassembleDexFile failed.")
         }
     }
@@ -35,7 +35,7 @@ class DexDecoder(private val dexFilePath: String) {
         if (!file.exists() || file.isDirectory) {
             throw Exception("Can't find file: $input")
         }
-        return DexFileFactory.loadDexFile(file, Opcodes.forApi(15))
+        return DexFileFactory.loadDexFile(file, Opcodes.getDefault())
     }
 
     private val options: BaksmaliOptions

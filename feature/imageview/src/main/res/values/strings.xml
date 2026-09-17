@@ -8,8 +8,8 @@
     <string name="preview">Preview</string>
     <string name="fit">Fit</string>
     <string name="help">Help</string>
-    <string name="close">Close</string>
-    <string name="save">Save</string>
+    <string name="imgv_close">Close</string>
+    <string name="imgv_save">Save</string>
     <string name="discard">Discard</string>
     <string name="background">Background</string>
     <string name="remove">Remove</string>

@@ -62,3 +62,33 @@
 #    public static void checkReturnedValueIsNotNull(java.lang.Object, java.lang.String, java.lang.String);
 #    public static void throwUninitializedPropertyAccessException(java.lang.String);
 #}
+
+# dontwarn - classes not available on Android
+-dontwarn com.mcal.apksigner.ApkSigner
+-dontwarn java.beans.**
+-dontwarn javax.script.**
+-dontwarn org.xmlpull.v1.wrapper.**
+-dontwarn org.xmlpull.v1.wrapper.classic.**
+
+# bsh service impl (hilang saat shrink)
+-dontwarn bsh.engine.BshScriptEngineFactory
+# xpp3 service impl dalam jar filter (tidak dipaketkan)
+-dontwarn org.xmlpull.mxp1.**
+
+# TextMate (tm4e) & Jackson — dipakai sora editor untuk syntax highlighting.
+# tm4e menggunakan reflection dan state static; tanpa keep ini release crash
+# (ExceptionInInitializerError saat TextMateAnalyzer.tokenizeLine).
+-dontwarn org.eclipse.tm4e.**
+-keep class org.eclipse.tm4e.** { *; }
+-dontwarn com.fasterxml.jackson.**
+-keep class com.fasterxml.jackson.** { *; }
+
+# JRuby JOni & JCodings — engine regex TextMate (dipakai org.eclipse.tm4e.core
+# melalui org.joni.Regex). Tanpa keep ini R8 mengobfusasi/membuang kelasnya,
+# membuat OnigRegExp gagal init saat release (ExceptionInInitializerError : NPE
+# di <clinit>), lihat Rosemoe/sora-editor#398.
+-dontwarn org.joni.**
+-keep class org.joni.** { *; }
+-dontwarn org.jcodings.**
+-keep class org.jcodings.** { *; }
+-keepattributes Signature, InnerClasses, EnclosingMethod

@@ -19,27 +19,5 @@ include ':core'
 include ':apkEditor'
 include ':apksigner'
 
-include ':jadx:jadx-core',
-        ':jadx:jadx-cli',
-        ':jadx:jadx-plugins',
-        ':jadx:jadx-plugins:jadx-plugins-api',
-        ':jadx:jadx-plugins:jadx-dex-input',
-        ':jadx:jadx-plugins:jadx-java-input',
-        ':jadx:jadx-plugins:jadx-raung-input',
-        ':jadx:jadx-plugins:jadx-smali-input',
-        ':jadx:jadx-plugins:jadx-java-convert'
-
-include ':melissa'
-
-include ':sun'
-include ':feature:imageview'
-include ':feature:sqliteutil'
 include ':feature:code-editor'
 include ':feature:data-editor'
-include ':feature:crashreporter'
-include ':feature:patchview'
-include ':feature:bsh-engine'
-include ':feature:colormixer'
-include ':feature:permission-editor'
-include ':feature:manifestparser'
-include ':feature:net-manager'

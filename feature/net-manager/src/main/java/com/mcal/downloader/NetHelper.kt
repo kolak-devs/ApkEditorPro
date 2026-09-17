@@ -1,12 +1,13 @@
 package com.mcal.downloader
 
+import com.mcal.appdm.base.R
+
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.mcal.common.utils.copyFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,7 +71,7 @@ object NetHelper {
                             val context = btn.context
                             val icon = ResourcesCompat.getDrawable(
                                 context.resources,
-                                R.drawable.ic_download_done,
+                                R.drawable.netmgr_ic_download_done,
                                 context.theme
                             )
                             btn.setImageDrawable(icon)
@@ -80,8 +81,8 @@ object NetHelper {
                             if(path.contains("aapt")) {
                                 destFile.setExecutable(true)
                             }
-                            if (path.endsWith(".jar")) {
-                                copyFile(path, path.replace(destFile.name, "1.apk"))
+                            if (path.contains("zipalign")) {
+                                destFile.setExecutable(true)
                             }
                         }
                     }

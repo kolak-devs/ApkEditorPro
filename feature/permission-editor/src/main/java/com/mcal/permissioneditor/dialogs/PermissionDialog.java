@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.permissioneditor.R;
+import com.mcal.neweditor.R;
 import com.mcal.permissioneditor.adapter.ManifestAdapter;
 import com.mcal.permissioneditor.adapter.SearchAdapter;
 import com.mcal.permissioneditor.model.Permission;

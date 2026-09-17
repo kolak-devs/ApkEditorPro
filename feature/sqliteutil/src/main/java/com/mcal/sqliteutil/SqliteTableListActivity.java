@@ -1,5 +1,7 @@
 package com.mcal.sqliteutil;
 
+import com.mcal.appdm.base.R;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;

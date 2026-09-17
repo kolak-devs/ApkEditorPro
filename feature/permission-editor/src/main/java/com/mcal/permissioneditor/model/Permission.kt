@@ -3,7 +3,7 @@ package com.mcal.permissioneditor.model
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.pm.PermissionInfo
-import com.mcal.permissioneditor.R
+import com.mcal.neweditor.R
 
 class Permission(private val context: Context, private val pm: PackageManager, val name: String) : Comparable<Permission> {
     private var info: PermissionInfo? = null

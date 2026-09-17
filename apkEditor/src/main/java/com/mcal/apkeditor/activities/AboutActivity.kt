@@ -27,6 +27,10 @@ class AboutActivity : CustomizedLangActivity() {
     fun openSVolf(view: View) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/SnowVolf")))
     }
+    
+    fun openRull(view: View) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/cumaRull")))
+    }
 
     fun openJaDX(view: View) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/skylot/jadx")))

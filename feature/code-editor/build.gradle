@@ -14,7 +14,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     packagingOptions {
@@ -22,32 +22,42 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = '17'
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
     buildFeatures {
         viewBinding true
     }
     namespace 'com.mcal.neweditor'
+    sourceSets {
+        main {
+            java.srcDirs += [
+                    file('../colormixer/src/main/java'),
+                    file('../permission-editor/src/main/java')
+            ]
+            res.srcDirs += [
+                    file('../colormixer/src/main/res'),
+                    file('../permission-editor/src/main/res')
+            ]
+        }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
 }
 
 dependencies {
     implementation project(':core')
-    implementation project(':jadx:jadx-core')
-    implementation project(':jadx:jadx-plugins:jadx-dex-input')
-    implementation project(':jadx:jadx-plugins:jadx-smali-input')
-    implementation project(':melissa')
-    implementation project(':feature:colormixer')
-    implementation project(':feature:permission-editor')
+    implementation files('../../libraries/jadx-core.jar')
     implementation("com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.9")
     implementation("com.google.guava:guava:31.0.1-android")
 
-    implementation("org.smali:baksmali:2.5.2")
-    implementation("org.smali:dexlib2:2.5.2")
-    implementation("org.smali:smali:2.5.2")
+    implementation("com.android.tools.smali:smali-baksmali:3.0.10")
+    implementation("com.android.tools.smali:smali-dexlib2:3.0.10")
+    implementation("com.android.tools.smali:smali:3.0.10")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
@@ -59,4 +69,13 @@ dependencies {
     implementation("io.github.Rosemoe.sora-editor:language-java:0.21.0")
     implementation("io.github.Rosemoe.sora-editor:language-textmate:0.21.0")
     implementation("io.github.Rosemoe.sora-editor:editor-lsp:0.21.0")
+
+    // permission-editor deps
+    //noinspection GradleDependency
+    implementation 'commons-io:commons-io:2.3'
+    implementation 'org.jetbrains:annotations:24.0.1'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.core:core-ktx:1.12.0"
 }

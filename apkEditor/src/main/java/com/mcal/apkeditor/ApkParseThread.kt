@@ -46,25 +46,32 @@ class ApkParseThread(
     private fun parse(): Boolean {
         try {
             CoroutineScope(Dispatchers.IO).launch {
-                val apkPath = mApkPath
-                val decodePath = mDecodeRootPath
-                if (apkPath != null && decodePath != null) {
-                    val apkFile = ExtFile(File(apkPath))
-                    // After decoding resource table, show string list
-                    resTable = getResTable(apkFile)
-                    consumerRef.get()?.resTableDecoded(true)
-                    deleteAll(File(decodePath))
-                    val outDir = File(decodePath)
-                    if (!outDir.exists()) {
-                        outDir.mkdirs()
+                try {
+                    val apkPath = mApkPath
+                    val decodePath = mDecodeRootPath
+                    if (apkPath != null && decodePath != null) {
+                        val apkFile = ExtFile(File(apkPath))
+                        // After decoding resource table, show string list
+                        resTable = getResTable(apkFile)
+                        consumerRef.get()?.resTableDecoded(true)
+                        deleteAll(File(decodePath))
+                        val outDir = File(decodePath)
+                        if (!outDir.exists()) {
+                            outDir.mkdirs()
+                        }
+                        TaskDecoder().decode(consumer, File(apkPath), File(decodePath))
                     }
-                    TaskDecoder().decode(consumer, File(apkPath), File(decodePath))
+                } catch (e: Exception) {
+                    errMessage = e.message
+                    e.printStackTrace()
+                    consumerRef.get()?.decodeFailed(errMessage)
                 }
             }
             return true
         } catch (e: Exception) {
             errMessage = e.message
             e.printStackTrace()
+            consumerRef.get()?.decodeFailed(errMessage)
         }
         return false
     }

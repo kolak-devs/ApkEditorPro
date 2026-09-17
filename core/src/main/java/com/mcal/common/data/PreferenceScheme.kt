@@ -15,6 +15,7 @@ object PreferenceScheme {
       @TargetApi(Build.VERSION_CODES.S)
       val UI_MONET = booleanPreferencesKey("ui_monet")
       val UI_THEME = booleanPreferencesKey("night_mode")
+      val UI_THEME_MODE = stringPreferencesKey("ui_theme")
       val UI_LANGUAGE = stringPreferencesKey("Language")
       val OTHER_GARBAGE_LMT = intPreferencesKey("garbage_limit")
       val OTHER_RENAME_KEY = booleanPreferencesKey("FileRenameOption")

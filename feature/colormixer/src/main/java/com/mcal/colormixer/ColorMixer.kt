@@ -1,5 +1,6 @@
 package com.mcal.colormixer
 
+import com.mcal.neweditor.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context

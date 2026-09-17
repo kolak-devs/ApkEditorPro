@@ -19,8 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,7 +34,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -72,7 +69,6 @@ import com.mcal.apkeditor.adapters.ManifestListAdapter;
 import com.mcal.apkeditor.adapters.ResListAdapter;
 import com.mcal.apkeditor.adapters.StringListAdapter;
 import com.mcal.apkeditor.databinding.ActivityApkinfoBinding;
-import com.mcal.apkeditor.dialogs.AboutPluginDialog;
 import com.mcal.apkeditor.dialogs.AddFolderDialog;
 import com.mcal.apkeditor.dialogs.FileCopyDialog;
 import com.mcal.apkeditor.dialogs.FileSelectDialog;
@@ -84,6 +80,7 @@ import com.mcal.apkeditor.patch.interfaces.ApkInfoListener;
 import com.mcal.apkeditor.smali.AsyncDecodeTask;
 import com.mcal.apkeditor.smali.AsyncDecodeTask.IDecodeTaskCallback;
 import com.mcal.apkeditor.translate.PossibleLanguages;
+import com.mcal.apkeditor.translate.TranslateActivity;
 import com.mcal.apkeditor.translate.TranslateItem;
 import com.mcal.apkeditor.ui.fulleditor.utils.SmaliUtilsKt;
 import com.mcal.apkeditor.ui.fulleditor.utils.StringsUtils;
@@ -279,15 +276,6 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
         }
 
         return targetApkPath;
-    }
-
-    public static boolean generalTranslatePluginExist(@NonNull Context ctx) {
-        Intent intent = new Intent("android.intent.action.VIEW");
-        intent.addCategory("android.intent.category.DEFAULT");
-        intent.setDataAndType(null, "application/com.mcal.apkeditor-translate");
-        PackageManager manager = ctx.getPackageManager();
-        List<ResolveInfo> infos = manager.queryIntentActivities(intent, 0);
-        return (infos.size() > 0);
     }
 
     @Nullable
@@ -1563,24 +1551,7 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
     // Set the click listener for translate button
     private void initTranslateBtn() {
-        ImageButton iv = binding.mainStrings.translate;
-        if (generalTranslatePluginExist(this)) {
-            iv.setOnClickListener(this);
-        } else if (proTranslatePluginExist()) {
-            iv.setOnClickListener(this);
-        } else {
-            iv.setOnClickListener(v -> new AboutPluginDialog(ApkInfoActivity.this));
-        }
-    }
-
-    private boolean proTranslatePluginExist() {
-        try {
-            getPackageManager().getApplicationInfo("apkeditor.translate", 0);
-            return true;
-        } catch (NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
+        binding.mainStrings.translate.setOnClickListener(this);
     }
 
     // Start a new translation, it may be called by the translation dialog
@@ -1619,23 +1590,12 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
 
     // Show the auto translation dialog (When language selection is completed)
     public void translateLanguage(String strQualifier) {
-        // List<TranslateItem> translateList = prepareTranslateItems("-zh-rCN");
         List<TranslateItem> translatedList = new ArrayList<>();
         List<TranslateItem> untranslatedList = new ArrayList<>();
         prepareTranslateItems(strQualifier, translatedList, untranslatedList);
 
         try {
-            Intent intent;
-            if (generalTranslatePluginExist(this)) {
-                intent = new Intent("android.intent.action.VIEW");
-                intent.addCategory("android.intent.category.DEFAULT");
-                intent.setDataAndType(null, "application/com.mcal.apkeditor-translate");
-            } else {
-                ComponentName componetName = new ComponentName("apkeditor.translate", "apkeditor.translate.TranslateActivity");
-                intent = new Intent();
-                intent.setComponent(componetName);
-            }
-
+            Intent intent = new Intent(this, TranslateActivity.class);
             Bundle bundle = new Bundle();
             {
                 String translatedFile = ScopedStorage.getTmpDir() + File.separator + "translated";
@@ -1649,12 +1609,10 @@ public class ApkInfoActivity extends CustomizedLangActivity implements OnItemCli
             }
             bundle.putString("targetLanguageCode", strQualifier);
             intent.putExtras(bundle);
-
             startActivityForResult(intent, RC_TRANSLATE);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void prepareTranslateItems(String qualifier, List<TranslateItem> translatedList, List<TranslateItem> untranslatedList) {

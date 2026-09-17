@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">APK Editor Pro</string>
+    <string name="app_name" translatable="false">APK Editor RE</string>
     <string name="action_settings">Settings</string>
     <string name="loading">Loading &#8230;</string>
     <string name="string">String</string>
@@ -43,6 +43,7 @@
 
     <!-- Settings -->
     <string name="appearance">Appearance</string>
+    <string name="theme">Theme</string>
 
     <!-- added 20150501 -->
     <string name="save_succeed_1">Succeed: saved to %s</string>
@@ -285,8 +286,9 @@
     -->
     <string name="odex_patcher">Odex patcher</string>
     <string name="tools_manager">Tools Manager</string>
-    <string name="ui_monet_sum_on">App theme has been changed according to your current selected wallpaper</string>
-    <string name="ui_monet_sum_off">Enable Material You dynamic theming support. Needs restart</string>
+    <string name="ui_monet">Dynamic color</string>
+    <string name="ui_monet_sum_on">App theme follows your current wallpaper</string>
+    <string name="ui_monet_sum_off">Use Material You dynamic colors (Android 12+)</string>
     <string name="dialog_install_frameworks">Install frameworks</string>
     <string name="dialog_install_frameworks_sum">Apk Editor requires downloading additional files to decode the apk (aapt/framework.jar/mycp). Without downloading them, the application will not work</string>
     <string name="select_file">File</string>
@@ -348,4 +350,60 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="apkeditor_instruction">Instruction</string>
     <string name="working">Working…</string>
+
+    <!-- Main menu cards -->
+    <string name="action_apk">APK file</string>
+    <string name="action_apk_desc">Select APK file to editing</string>
+    <string name="action_app">Installed app</string>
+    <string name="action_app_desc">Select an installed app to editing</string>
+    <string name="action_prj">Projects</string>
+    <string name="action_prj_desc">List of your projects</string>
+    <string name="action_odex">ODEX patcher</string>
+    <string name="action_odex_desc">Apply patch for application</string>
+    <string name="action_tools">Tools Manager</string>
+    <string name="action_tools_desc">Download and update tools</string>
+    <string name="action_info">Help</string>
+    <string name="action_info_desc">Help and useful information</string>
+    <string name="action_sett">Settings</string>
+    <string name="action_sett_desc">Appearance, decoding, assembly, etc</string>
+    <string name="action_exit">Exit</string>
+    <string name="action_exit_desc">Quit the application</string>
+    <!--About Strings -->
+    <string name="str_about_telegram">Telegram</string>
+    <string name="str_about_timscriptov">timscriptov</string>
+    <string name="str_about_summary_tims">Owner</string>
+    <string name="str_about_svolf">SVolf</string>
+    <string name="str_about_summary_svolf">Android Developer</string>
+    <string name="str_about_rul">ismasrull</string>
+    <string name="str_summ_rul">Ui Designer and Continued dev for this project</string>
+    <string name="str_about_jadx">JaDX</string>
+    <string name="str_about_summary_jadx">https://github.com/skylot/jadx</string>
+    <string name="str_about_apktool">ApkTool</string>
+    <string name="str_about_summary_apktool">https://github.com/iBotPeaches/Apktool</string>
+    <string name="str_about_smali">Smali</string>
+    <string name="str_about_summary_smali">https://github.com/JesusFreke/smali</string>
+    <string name="str_about_lincen">License</string>
+
+    <!-- Auto translate feature (bundled engine) -->
+    <string name="translate_title">Translate</string>
+    <string name="translate_stop">Stop</string>
+    <string name="translate_save_and_close">Save &amp; Close</string>
+    <string name="translate_translating">Translating…</string>
+    <string name="translate_translated">Translated</string>
+    <string name="translate_translated_format">%d strings translated</string>
+    <string name="translate_failed_format">%d strings failed</string>
+    <string name="translate_untranslated_format">%d strings untranslated</string>
+    <string name="translate_hint">Translated</string>
+    <string name="translate_error_no_string">No strings need translation.</string>
+    <string name="translate_error">Error, check internet connection.</string>
+    <string name="translate_no_strings">No strings to translate.</string>
+    <string name="translate_start">Start</string>
+    <string name="translate_cancel">Cancel</string>
+    <string name="translate_service">Translation service</string>
+    <string name="translate_source">Source language</string>
+    <string name="translate_target">Target language</string>
+    <string name="system_theme">System</string>
+    <string name="day_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="amoled_theme">AMOLED</string>
 </resources>

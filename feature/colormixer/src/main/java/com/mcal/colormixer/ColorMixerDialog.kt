@@ -1,5 +1,6 @@
 package com.mcal.colormixer
 
+import com.mcal.neweditor.R
 import android.content.Context
 import android.content.DialogInterface
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

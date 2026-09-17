@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.mcal.sqliteutil.databinding.SqlDialogTablerecordBinding
+import com.mcal.appdm.base.databinding.SqlDialogTablerecordBinding
 import java.util.*
 
 class TableRecordDialog(

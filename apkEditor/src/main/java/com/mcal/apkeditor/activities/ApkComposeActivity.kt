@@ -17,6 +17,7 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.ApkComposeService.ComposeServiceBinder
 import com.mcal.apkeditor.R
@@ -31,7 +32,7 @@ import com.mcal.common.utils.ApkInstaller
 import com.mcal.common.utils.ClipboardUtils.copyToClipboard
 import com.mcal.common.utils.ITaskCallback
 import com.mcal.common.utils.ITaskCallback.TaskStepInfo
-import com.mcal.common.utils.PackageHelper.uninstallPackage
+import com.mcal.common.utils.PackageHelper
 import com.mcal.common.view.ProgressDialog
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import java.io.File
@@ -46,6 +47,18 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback {
     // Generated apk path, Package name of the apk file
     @JvmField
     var srcApkPath: String? = null
+
+    private val uninstallLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val pkg = mPackageName
+            if (pkg == null || !isPackageInstalled(pkg)) {
+                // Old app removed, immediately offer the new build
+                binding.btnRemove.visibility = View.GONE
+                targetApkPath?.let { path ->
+                    ApkInstaller.install(this, path)
+                }
+            }
+        }
 
     // Apply patch to code cache succeed or not
     private var patchSucceed = false
@@ -141,7 +154,7 @@ class ApkComposeActivity : CustomizedLangActivity(), ITaskCallback {
         // Remove the old app
         binding.btnRemove.setOnClickListener {
             mPackageName?.let { pkg ->
-                uninstallPackage(this, pkg)
+                uninstallLauncher.launch(PackageHelper.uninstallIntent(this, pkg))
             }
         }
 

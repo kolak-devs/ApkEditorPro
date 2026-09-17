@@ -17,14 +17,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.apkeditor.ApkComposeService
 import com.mcal.apkeditor.BuildConfig
 import com.mcal.apkeditor.R
-import com.mcal.apkeditor.adapters.MainMenuItem
-import com.mcal.apkeditor.adapters.MainProjectItem
 import com.mcal.apkeditor.databinding.ActivityMainBinding
 import com.mcal.apkeditor.dialogs.AppAgreementDialog
 import com.mcal.apkeditor.dialogs.AppAgreementDialog.Companion.appLicenseAccepted
@@ -42,16 +39,10 @@ import com.mcal.common.utils.ScopedStorage.getProjects
 import com.mcal.common.view.ProgressDialog.ProcessingInterface
 import com.mcal.downloader.DownloaderActivity
 import com.mcal.webview.WebViewActivity
-import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.IAdapter
-import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
-import java.nio.file.Files
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.system.exitProcess
 
 class MainActivity : CustomizedLangActivity(), ProcessingInterface {
@@ -61,9 +52,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
     companion object {
         private const val TAG = "MainActivity"
-
-        // id для перехода на основной экран проектов
-        private const val REQ_SHOW_ALL = 670;
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,23 +107,37 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
             if (result.resultCode == RESULT_OK) {
                 result.data?.data?.let { uri ->
                     val projectsDir = getProjects()
-                    var apk = File(projectsDir, FilePickHelper.getFileName(this, uri))
-                    contentResolver.openInputStream(uri)?.let { inputStream ->
-                        copyFile(inputStream, apk)
+                    val pickedName = FilePickHelper.getFileName(this, uri) ?: "coping.apk"
+                    val tmpApk = File(projectsDir, ".coping_$pickedName")
+                    try {
+                        contentResolver.openInputStream(uri)?.use { inputStream ->
+                            copyFile(inputStream, tmpApk)
+                        } ?: return@let
+
+                        // Reject truncated / non-zip copies instead of crashing later
+                        if (!isValidApk(tmpApk)) {
+                            Toast.makeText(this@MainActivity, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                            return@let
+                        }
+
                         var name = "app"
                         // Получение имени приложения
-                        ApkInfoParser().parse(this@MainActivity, apk.path)?.label?.let {
+                        ApkInfoParser().parse(this@MainActivity, tmpApk.path)?.label?.let {
                             name = it
                         }
-                        val newApkPath = File(projectsDir, "$name.apk")
+                        val apk = File(projectsDir, "$name.apk")
                         // Копирование АПК во временное хранилище
-                        apk.renameTo(newApkPath).also { apk = newApkPath }
-                    }.also {
-                        if (apk.exists()) {
-                            // Диалог с выбором режима декомпиляции
-                            selectFullEditDialog(this@MainActivity, apk.path)
-                        } else {
-                            Toast.makeText(this@MainActivity, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                        if (!tmpApk.renameTo(apk)) {
+                            copyFile(tmpApk, apk)
+                        }
+                        // Диалог с выбором режима декомпиляции
+                        selectFullEditDialog(this@MainActivity, apk.path)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this@MainActivity, R.string.msg_unsupported_file, Toast.LENGTH_SHORT).show()
+                    } finally {
+                        if (tmpApk.exists()) {
+                            tmpApk.delete()
                         }
                     }
                 }
@@ -145,20 +147,6 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
         scheduleCleaning()
     }
 
-    public override fun onPause() {
-        super.onPause()
-    }
-
-    public override fun onResume() {
-        super.onResume()
-        binding.errors.visibility = if (!isNetworkAvailable(this)) {
-            binding.errors.setText(R.string.no_internet_connection)
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-    }
-
     public override fun onDestroy() {
         _binding = null
         super.onDestroy()
@@ -166,174 +154,61 @@ class MainActivity : CustomizedLangActivity(), ProcessingInterface {
 
     private fun initUI() {
         findViewById<MaterialToolbar>(R.id.toolbar).subtitle = Utils.getVersionString()
-        val apkItemAdapter = ItemAdapter<MainMenuItem>()
-        val fastApkAdapter = FastAdapter.with(apkItemAdapter)
 
-        val projectAdapter = ItemAdapter<MainProjectItem>()
-        val fastProjectAdapter = FastAdapter.with(projectAdapter)
-
-        val itemAdapter = ItemAdapter<MainMenuItem>()
-        val fastAdapter = FastAdapter.with(itemAdapter)
-
-        binding.apkRecycler.apply {
-            layoutManager = GridLayoutManager(this@MainActivity, 2)
-            adapter = fastApkAdapter
+        binding.btnApk.setOnClickListener { pickApk() }
+        binding.btnApp.setOnClickListener {
+            startActivity(Intent(this, UserAppActivity::class.java))
         }
-        binding.projectsRecycler.adapter = fastProjectAdapter
-        binding.menuRecycler.adapter = fastAdapter
-
-        // id может быть любым числом, главное, чтобы оно было уникальным. Сделано для того, чтобы не ломалась логика
-        // onClick при добавлении новых айтемов
-        apkItemAdapter.add(
-            MainMenuItem()
-                .withId(0)
-                .withIcon(R.drawable.ic_android)
-                .withTitle(R.string.select_file),
-            MainMenuItem()
-                .withId(1)
-                .withIcon(R.drawable.apps_box)
-                .withTitle(R.string.select_app)
-        )
-
-        // TODO: Обновить список если Пользователь нажал "Сохранить как проект"
-        getProjects().listFiles()?.let { files ->
-            //Обрезаем список до 5 первых элементов
-            for (f in files.take(5)) {
-                if (f.isFile) continue
-                findProjectFile(f.listFiles()) ?: continue
-                var icon = ContextCompat.getDrawable(this, R.drawable.ic_android)
-                files.forEach { file ->
-                    if (file.name.endsWith(".apk") && file.name.replace(".apk", "").contains(f.name)) {
-                        ApkInfoParser().parse(this@MainActivity, file.path)?.icon?.let {
-                            icon = it
-                        }
-                    }
-                }
-
-                val info = ApkInfoActivity.loadProject(f.path) ?: continue
-                val fmt = SimpleDateFormat("EEE, HH:mm")
-                val millisDate = Files.getLastModifiedTime(File(info.decodeRootPath).toPath()).toMillis()
-                projectAdapter.add(
-                    MainProjectItem()
-                        .withId(System.currentTimeMillis().toInt())
-                        .withIcon(icon)
-                        .withTitle(File(info.decodeRootPath).name)
-                        .withSubTitle(fmt.format(millisDate))
-                )
-            }
-
-            if (projectAdapter.adapterItemCount > 0) {
-                binding.titleProjects.visibility = View.VISIBLE
-                projectAdapter.add(
-                    MainProjectItem()
-                        .withId(REQ_SHOW_ALL)
-                        .withIcon(ContextCompat.getDrawable(this, R.drawable.ic_go_into))
-                        .withTitle(getString(R.string.projects_show_all))
-                )
-            } else {
-                binding.titleProjects.visibility = View.GONE
-            }
+        binding.btnPrj.setOnClickListener {
+            startActivity(Intent(this, ProjectListActivity::class.java))
+        }
+        binding.btnOdex.setOnClickListener {
+            startActivity(Intent(this, OdexPatchActivity::class.java))
+        }
+        binding.btnTools.setOnClickListener {
+            startActivity(Intent(this, DownloaderActivity::class.java))
+        }
+        binding.btnInfo.setOnClickListener {
+            val intent = Intent(this, WebViewActivity::class.java)
+            intent.putExtra("htmlUrl", Constants.getDomain() + "/apkeditor/doc/instructions/index.html")
+            startActivity(intent)
+        }
+        binding.btnSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+        binding.btnExit.setOnClickListener {
+            Process.killProcess(Process.myPid())
+            exitProcess(0)
         }
 
-        itemAdapter.add(
-            MainMenuItem()
-                .withId(3)
-                .withIcon(R.drawable.puzzle)
-                .withTitle(R.string.odex_patcher),
-            MainMenuItem()
-                .withId(4)
-                .withIcon(R.drawable.settings)
-                .withTitle(R.string.tools_manager),
-            MainMenuItem()
-                .withId(5)
-                .withIcon(R.drawable.info)
-                .withTitle(R.string.apkeditor_instruction),
-            MainMenuItem()
-                .withId(6)
-                .withIcon(R.drawable.ic_exit_to_app)
-                .withTitle(R.string.exit)
-        )
-
-        fastApkAdapter.onClickListener = { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, _: Int ->
-            when (mainMenuItem.identifier) {
-                0L -> {
-                    pickApk()
-                    true
-                }
-                1L -> {
-                    val intent = Intent(this, UserAppActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                else -> false
-            }
-        }
-        fastProjectAdapter.onClickListener = { _: View?, _: IAdapter<MainProjectItem>, mainProjectItem: MainProjectItem, i: Int ->
-            if (mainProjectItem.getId() == REQ_SHOW_ALL) {
-                startActivity(Intent(this, ProjectListActivity::class.java))
-                true
-            } else {
-                val intent = Intent(this, ApkInfoExActivity::class.java)
-                ActivityHelper.attachParam(intent, "projectName", fastProjectAdapter.getItem(i)?.getTitle())
-                startActivity(intent)
-                true
-            }
-
-        }
-        fastAdapter.onClickListener =
-            { _: View?, _: IAdapter<MainMenuItem>, mainMenuItem: MainMenuItem, _: Int ->
-                when (mainMenuItem.identifier) {
-                    3L -> {
-                        val intent = Intent(this, OdexPatchActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    4L -> {
-                        val intent = Intent(this, DownloaderActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }
-                    5L -> {
-                        val intent = Intent(this, WebViewActivity::class.java)
-                        intent.putExtra("htmlUrl", Constants.getDomain() + "/apkeditor/doc/instructions/index.html")
-                        startActivity(intent)
-                        true
-                    }
-                    6L -> {
-                        Process.killProcess(Process.myPid())
-                        exitProcess(0)
-                    }
-                    else -> false
-                }
-            }
-
-//        val msg = findViewById<TextView>(R.id.pirated_version_detected)
-//        if (BuildConfig.DEBUG || Native.getSignature(this)
-//                .startsWith("kQpOVghQhe8XLbkzKM4PynXi8R0=")
-//        ) {
-//            msg.visibility = View.INVISIBLE
-//        } else {
-//            msg.visibility = View.INVISIBLE
-//        }
         if (!ScopedStorage.isToolsInstalled()) {
             showToolManagerDialog()
         }
     }
 
-    private fun findProjectFile(files: Array<File>?): File? {
-        if (files == null) {
-            return null
-        }
-        for (f in files) {
-            if (f.isFile && f.name == "info.bin") {
-                return f
-            }
-        }
-        return null
-    }
-
     private fun pickApk() {
         pickLauncher.launch(FilePickHelper.pickFile(true))
+    }
+
+    private fun isValidApk(file: File): Boolean {
+        if (!file.exists() || file.length() < 4L) return false
+        return try {
+            file.inputStream().use { input ->
+                val magic = ByteArray(4)
+                var offset = 0
+                while (offset < magic.size) {
+                    val read = input.read(magic, offset, magic.size - offset)
+                    if (read < 0) return false
+                    offset += read
+                }
+                magic[0] == 0x50.toByte() && magic[1] == 0x4B.toByte() &&
+                    ((magic[2] == 0x03.toByte() && magic[3] == 0x04.toByte()) ||
+                        (magic[2] == 0x05.toByte() && magic[3] == 0x06.toByte()) ||
+                        (magic[2] == 0x07.toByte() && magic[3] == 0x08.toByte()))
+            }
+        } catch (e: Exception) {
+            false
+        }
     }
 
     private fun showToolManagerDialog() {

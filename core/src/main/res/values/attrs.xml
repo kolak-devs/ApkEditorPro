@@ -13,4 +13,12 @@
         <attr name="colorOnRobotToneContainer" format="color" />
         <attr name="harmonizeRobotTone" format="boolean" />
     </declare-styleable>
+    <attr name="cardBackground" format="color" />
+    <attr name="cardICBackground" format="color" />
+    <attr name="cardICColor" format="color" />
+    <attr
+            name="colorBackground"
+            format="reference|color" />
+    <attr name="colorScrim"
+          format="reference|color" />        
 </resources>

@@ -1,15 +1,15 @@
 package com.mcal.bshengine.api
 
+import com.android.tools.smali.baksmali.Baksmali
+import com.android.tools.smali.baksmali.BaksmaliOptions
+import com.android.tools.smali.dexlib2.Opcodes
+import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
+import com.android.tools.smali.smali.Smali
+import com.android.tools.smali.smali.SmaliOptions
 import com.mcal.editor.utils.FileUtils.writeText
 import jadx.api.JadxArgs
 import jadx.api.JadxDecompiler
 import jadx.plugins.input.smali.SmaliInputPlugin
-import org.jf.baksmali.Baksmali
-import org.jf.baksmali.BaksmaliOptions
-import org.jf.dexlib2.Opcodes
-import org.jf.dexlib2.dexbacked.DexBackedDexFile
-import org.jf.smali.Smali
-import org.jf.smali.SmaliOptions
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
@@ -54,14 +54,18 @@ class XSmali {
      * Since: 2.4.7
      */
     fun smaliDir2java(smaliDir: File, outputDir: File) {
-        val smaliFilePathList = arrayListOf<String>()
-        smaliDir.walk().filter { it.isFile }.forEach { smaliFile ->
-            val path = smaliFile.path
-            if (path.endsWith(".smali")) {
-                smaliFilePathList.add(path)
-            }
-        }
-        smali2java(smaliFilePathList, outputDir)
+        smali2java(allSmaliFiles(smaliDir), outputDir)
+    }
+
+    /**
+     * Since: 2.5.6
+     */
+    fun allSmaliFiles(smaliDir: File): List<String> {
+        return smaliDir.walk().filter {
+            it.isFile && it.name.endsWith(".smali")
+        }.map {
+            it.path
+        }.toList()
     }
 
     /**

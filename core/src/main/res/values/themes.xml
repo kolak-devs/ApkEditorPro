@@ -1,49 +1,157 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
-        <item name="colorPrimary">@color/md_theme_light_primary</item>
-        <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
-        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer</item>
-        <item name="colorSecondary">@color/md_theme_light_secondary</item>
-        <item name="colorOnSecondary">@color/md_theme_light_onSecondary</item>
-        <!-- Фон для кнопок (button) -->
-        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer</item>
-        <item name="colorTertiary">@color/md_theme_light_tertiary</item>
-        <item name="colorOnTertiary">@color/md_theme_light_onTertiary</item>
-        <item name="colorTertiaryContainer">@color/md_theme_light_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer</item>
-        <item name="colorError">@color/md_theme_light_error</item>
-        <item name="colorErrorContainer">@color/md_theme_light_errorContainer</item>
-        <item name="colorOnError">@color/md_theme_light_onError</item>
-        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer</item>
-        <item name="android:colorBackground">@color/md_theme_light_background</item>
-        <item name="colorOnBackground">@color/md_theme_light_onBackground</item>
-        <item name="colorSurface">@color/md_theme_light_surface</item>
-        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
-        <!-- Для Filled CardView -->
-        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
-        <item name="colorOutline">@color/md_theme_light_outline</item>
-        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
+    
+    <style name="ApkEditorTheme.Material3" parent="Theme.Material3Expressive.Light.NoActionBar" >
+    <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/colorOnPrimaryContainer</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorSecondaryContainer">@color/colorSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/colorOnSecondaryContainer</item>
+        <item name="colorTertiary">@color/colorTertiary</item>
+        <item name="colorOnTertiary">@color/colorOnTertiary</item>
+        <item name="colorTertiaryContainer">@color/colorTertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/colorOnTertiaryContainer</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="colorOnError">@color/colorOnError</item>
+        <item name="colorErrorContainer">@color/colorErrorContainer</item>
+        <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
+        <item name="colorOutline">@color/colorOutline</item>
+        <item name="colorOutlineVariant">@color/colorOutlineVariant</item>
+        <item name="colorSurfaceInverse">@color/colorInverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/colorInverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/colorInversePrimary</item>
+        <item name="colorPrimaryFixed">@color/colorPrimaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/colorOnPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/colorPrimaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/colorOnPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/colorSecondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/colorOnSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/colorSecondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/colorOnSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/colorTertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/colorOnTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/colorTertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/colorOnTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/colorSurfaceDim</item>
+        <item name="colorSurfaceBright">@color/colorSurfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/colorSurfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/colorSurfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/colorSurfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/colorSurfaceContainerHighest</item>
+    </style>
+    
+    
+    <style name="ApkEditorTheme.Base" parent="ApkEditorTheme.Material3">
+    <item name="android:fontFamily">@font/google_sans</item>
+    <item name="fontFamily">@font/google_sans</item>
+    <item name="android:homeAsUpIndicator">@drawable/ic_pan</item>
+  </style>
+  
+    <style name="AppTheme" parent="ApkEditorTheme.Base">
+        
         <item name="colorRobotTone">#006d43</item>
         <item name="colorOnRobotTone">#ffffff</item>
         <item name="colorRobotToneContainer">#70fcb4</item>
         <item name="colorOnRobotToneContainer">#002111</item>
         <item name="harmonizeRobotTone">false</item>
-        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
-        <item name="android:fontFamily">@font/google_sans</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_pan</item>
 
         <!-- Transparent system bars for edge-to-edge. -->
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
-
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="switchPreferenceStyle">@style/AppTheme.SwitchPreference</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
+    
+    <style name="ApkEditorTheme.Material3.AMOLED" parent="Theme.Material3Expressive.Dark.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+        <item name="android:windowBackground">@android:color/black</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/colorOnPrimaryContainer</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorSecondaryContainer">@color/colorSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/colorOnSecondaryContainer</item>
+        <item name="colorTertiary">@color/colorTertiary</item>
+        <item name="colorOnTertiary">@color/colorOnTertiary</item>
+        <item name="colorTertiaryContainer">@color/colorTertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/colorOnTertiaryContainer</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="colorOnError">@color/colorOnError</item>
+        <item name="colorErrorContainer">@color/colorErrorContainer</item>
+        <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
+        <item name="colorSurfaceInverse">@color/colorInverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/colorInverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/colorInversePrimary</item>
+        <item name="colorPrimaryFixed">@color/colorPrimaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/colorOnPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/colorPrimaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/colorOnPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/colorSecondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/colorOnSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/colorSecondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/colorOnSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/colorTertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/colorOnTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/colorTertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/colorOnTertiaryFixedVariant</item>
+
+        <item name="colorBackground">@color/amoledBlack</item>
+        <item name="colorSurface">@color/amoledBlack</item>
+        <item name="colorSurfaceVariant">@color/amoledSurfaceVariant</item>
+        <item name="colorSurfaceDim">@color/amoledBlack</item>
+        <item name="colorSurfaceBright">@color/amoledSurfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/amoledBlack</item>
+        <item name="colorSurfaceContainerLow">@color/amoledSurfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/amoledSurfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/amoledSurfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/amoledSurfaceContainerHighest</item>
+        <item name="colorOutline">@color/amoledOutline</item>
+        <item name="colorOutlineVariant">@color/amoledOutlineVariant</item>
+        <item name="colorScrim">@color/amoledBlack</item>
+    </style>
+
+    <style name="ApkEditorTheme.Base.AMOLED" parent="ApkEditorTheme.Material3.AMOLED">
+        <item name="android:fontFamily">@font/google_sans</item>
+        <item name="fontFamily">@font/google_sans</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_pan</item>
+    </style>
+
+    <style name="AppTheme.AMOLED" parent="ApkEditorTheme.Base.AMOLED">
+        <item name="colorRobotTone">#006d43</item>
+        <item name="colorOnRobotTone">#ffffff</item>
+        <item name="colorRobotToneContainer">#70fcb4</item>
+        <item name="colorOnRobotToneContainer">#002111</item>
+        <item name="harmonizeRobotTone">false</item>
+        <item name="switchPreferenceStyle">@style/AppTheme.SwitchPreference</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+
+    <style name="AppTheme.SwitchPreference" parent="Preference.SwitchPreference.Material">
+    <item name="android:widgetLayout">@layout/preference_widget_materialswitch</item>
+  </style>
 
     <style name="main_tab_bottom">
         <item name="android:textSize">13sp</item>
@@ -75,4 +183,75 @@
         <item name="android:paddingHorizontal">6dp</item>
         <item name="android:paddingVertical">6dp</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.Custom.MaterialAlertDialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="ThemeOverlay.Custom.MaterialAlertDialog" parent="ThemeOverlay.Material3Expressive.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Custom.MaterialAlertDialog</item>
+    </style>
+
+    <style name="ThemeOverlay.Custom.Dialog.Rounded" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_bg_rounded</item>
+    </style>
+    
+    <style name="MainCard">
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="cardCornerRadius">39dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
+    <style name="MainCardContent">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="MainCardTitle">
+        <item name="android:id">@id/card_title</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_toStartOf">@id/card_icon</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:textAppearance">?attr/textAppearanceBodyMedium</item>
+    </style>
+
+    <style name="MainCardSummary">
+        <item name="android:id">@id/card_summary</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:layout_toStartOf">@id/card_icon</item>
+        <item name="android:layout_below">@id/card_title</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:alpha">0.6</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    </style>
+
+    <style name="MainCardIcon">
+        <item name="android:id">@id/card_icon</item>
+        <item name="android:layout_width">55dp</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
 </resources>

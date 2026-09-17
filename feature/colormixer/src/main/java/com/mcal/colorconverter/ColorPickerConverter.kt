@@ -24,8 +24,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.mcal.colormixer.R
-import com.mcal.colormixer.databinding.DialogColorConverterBinding
+import com.mcal.neweditor.R
+import com.mcal.neweditor.databinding.DialogColorConverterBinding
 
 class ColorPickerConverter : View.OnTouchListener, DialogInterface.OnClickListener, View.OnClickListener {
     private val activity: Activity
@@ -109,10 +109,10 @@ class ColorPickerConverter : View.OnTouchListener, DialogInterface.OnClickListen
         inputArgb.setSelection(inputArgb.length())
 
         val builder = MaterialAlertDialogBuilder(activity)
-        builder.setTitle(R.string.color_converter)
+        builder.setTitle(R.string.cm_color_converter)
         builder.setView(binding.root)
         builder.setPositiveButton(android.R.string.ok, this)
-        builder.setNegativeButton(R.string.clear, null)
+        builder.setNegativeButton(R.string.cm_clear, null)
         builder.setNeutralButton("-0x", null)
 
         materialDialog = builder.create()
@@ -265,7 +265,7 @@ class ColorPickerConverter : View.OnTouchListener, DialogInterface.OnClickListen
                 val cd = ClipData.newPlainText("copied", input.text.toString())
                 cm.setPrimaryClip(cd)
                 if (Build.VERSION.SDK_INT < 33) {
-                    Toast.makeText(activity, activity.resources.getString(R.string.copied_to_clipboard, input.text.toString()), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, activity.resources.getString(R.string.cm_copied_to_clipboard, input.text.toString()), Toast.LENGTH_SHORT).show()
                 }
             }
         }

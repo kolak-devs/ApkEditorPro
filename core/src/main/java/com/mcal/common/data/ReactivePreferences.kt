@@ -26,21 +26,50 @@ object ReactivePreferences {
     }
 
     suspend fun isNightMode(): Boolean {
-        return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_THEME] ?: false
+        return isNightModeByTheme(getThemeMode())
     }
 
     @JvmStatic
     fun isNightModeAsync(): Boolean {
         var fallback: Boolean
         runBlocking {
-            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_THEME] ?: false
+            fallback = isNightModeByTheme(getThemeMode())
         }
         return fallback
     }
 
-    suspend fun setNightMode(enabled: Boolean) {
+    @JvmStatic
+    fun getThemeModeAsync(): String {
+        var fallback: String
+        runBlocking {
+            fallback = getThemeMode()
+        }
+        return fallback
+    }
+
+    suspend fun getThemeMode(): String {
+        return App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_THEME_MODE] ?: "system"
+    }
+
+    suspend fun setThemeMode(mode: String) {
         App.getContext().prefStore.edit {
-            it[PreferenceScheme.Main.UI_THEME] = enabled
+            it[PreferenceScheme.Main.UI_THEME_MODE] = mode
+        }
+    }
+
+    suspend fun setNightMode(enabled: Boolean) {
+        setThemeMode(if (enabled) "night" else "day")
+    }
+
+    private fun isNightModeByTheme(mode: String): Boolean {
+        return when (mode) {
+            "night", "amoled" -> true
+            "day" -> false
+            else -> {
+                val uiMode = App.getContext().resources.configuration.uiMode and
+                    android.content.res.Configuration.UI_MODE_NIGHT_MASK
+                uiMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
+            }
         }
     }
 
@@ -344,6 +373,24 @@ object ReactivePreferences {
             fallback = isNightMode()
         }
         return fallback
+    }
+
+    @JvmStatic
+    fun isMonetAsync(): Boolean {
+        var fallback: Boolean
+        runBlocking {
+            fallback = App.getContext().prefStore.data.first()[PreferenceScheme.Main.UI_MONET] ?: false
+        }
+        return fallback
+    }
+
+    @JvmStatic
+    fun setMonetAsync(enabled: Boolean) {
+        runBlocking {
+            App.getContext().prefStore.edit {
+                it[PreferenceScheme.Main.UI_MONET] = enabled
+            }
+        }
     }
 
 }

@@ -12,6 +12,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustResize"/>
 
+        <activity
+            android:label="@string/permission_editor"
+            android:name="com.mcal.permissioneditor.ManifestActivity"/>
+
     </application>
 
 </manifest>

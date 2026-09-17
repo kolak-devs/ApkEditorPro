@@ -5,11 +5,11 @@
     <string name="tables_of">Tables of</string>
     <string name="name">Name</string>
     <string name="value">Value</string>
-    <string name="save">Save</string>
+    <string name="sqlite_save">Save</string>
     <string name="pre_page">Previous Page</string>
     <string name="next_page">Next Page</string>
     <string name="delete">Delete</string>
-    <string name="close">Close</string>
+    <string name="sqlite_close">Close</string>
     
     <!-- 20150628 -->
     <string name="not_editable_tip">Sorry, value is not editable any more!</string>

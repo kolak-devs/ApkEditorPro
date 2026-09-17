@@ -17,11 +17,29 @@
         android:title="@string/appearance">
 
         <androidx.preference.ListPreference
+            android:defaultValue="system"
+            android:entries="@array/theme_key"
+            android:entryValues="@array/theme_value"
+            android:icon="@drawable/ic_dark_mode"
+            android:key="ui_theme"
+            android:title="@string/theme"
+            app:useSimpleSummaryProvider="true" />
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_dynamic_color"
+            android:key="ui_monet"
+            android:summaryOff="@string/ui_monet_sum_off"
+            android:summaryOn="@string/ui_monet_sum_on"
+            android:title="@string/ui_monet" />
+
+        <androidx.preference.ListPreference
             android:entries="@array/language_key"
             android:entryValues="@array/language_value"
             android:icon="@drawable/ic_language"
             android:key="Language"
             android:title="@string/preferred_language"
+            android:defaultValue="Default"
             app:useSimpleSummaryProvider="true" />
 
     </androidx.preference.PreferenceCategory>

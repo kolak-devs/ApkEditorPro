@@ -1,5 +1,6 @@
 package com.mcal.permissioneditor
 
+import com.mcal.neweditor.R
 import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -132,7 +133,7 @@ class ManifestActivity : CustomizedLangActivity(), AdapterView.OnItemClickListen
             MaterialAlertDialogBuilder(this).apply {
                 setTitle(getString(R.string.save_modified))
                 setMessage(getString(R.string.save_modified_message))
-                setPositiveButton(getString(R.string.save)) { _: DialogInterface?, _: Int -> save(true) }
+                setPositiveButton(getString(R.string.perm_save)) { _: DialogInterface?, _: Int -> save(true) }
                 setNegativeButton(android.R.string.cancel) { _: DialogInterface?, _: Int -> finish() }
             }.show()
         } else {

@@ -1,4 +1,7 @@
 <resources>
     <string name="tools_manager">Tools Manager</string>
     <string name="network_available">No Internet Connection</string>
+    <string name="netmgr_sdk_title">Choose SDK version</string>
+    <string name="netmgr_ok">OK</string>
+    <string name="netmgr_cancel">Cancel</string>
 </resources>

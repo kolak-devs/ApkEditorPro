@@ -224,12 +224,17 @@ fun copyFile(srcFilePath: String, dstFilePath: String) {
 
 @Throws(IOException::class)
 fun copyFile(filename: File, output: File) {
-    copyFile(FileInputStream(filename), FileOutputStream(output))
+    if (filename == output) return
+    filename.inputStream().use { input ->
+        copyFile(input, output)
+    }
 }
 
 @Throws(IOException::class)
 fun copyFile(input: InputStream, output: File) {
-    copyFile(input, FileOutputStream(output))
+    output.outputStream().use { target ->
+        copyFile(input, target)
+    }
 }
 
 @Throws(IOException::class)

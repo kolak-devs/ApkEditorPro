@@ -5,7 +5,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.mcal.bshengine.R
+import com.mcal.appdm.base.R
 import com.mcal.common.data.Constants
 import com.mikepenz.fastadapter.items.AbstractItem
 

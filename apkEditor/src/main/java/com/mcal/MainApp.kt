@@ -12,6 +12,7 @@ import com.mcal.sl.DependencyContainer
 import com.mcal.sl.ViewModelFactory
 import com.mcal.sl.dependencies.FeaturesDependencyContainer
 import com.mcal.sl.modules.CoreModuleImpl
+import cat.ereza.customactivityoncrash.config.CaocConfig
 
 class MainApp : App(), com.mcal.sl.ViewModelProvider {
 
@@ -24,6 +25,13 @@ class MainApp : App(), com.mcal.sl.ViewModelProvider {
         coreModule.init(this)
         val error = DependencyContainer.Error()
         viewModelsFactory = ViewModelFactory(FeaturesDependencyContainer(coreModule, error))
+        CaocConfig.Builder.create()
+        .enabled(true) //default: true
+        .showErrorDetails(true) //default: true
+        .showRestartButton(true) //default: true
+        .logErrorOnRestart(true) //default: true
+        .trackActivities(true) //default: false
+        .apply()
     }
 
     override fun <T : ViewModel> provideViewModel(clazz: Class<T>, owner: ViewModelStoreOwner) =

@@ -117,7 +117,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="Telegram"
+                                android:text="@string/about_telegram_channel"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -186,7 +186,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="timscriptov"
+                                android:text="@string/str_about_timscriptov"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -194,7 +194,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="Owner" />
+                                android:text="@string/str_about_summary_tims" />
 
                         </LinearLayout>
 
@@ -225,7 +225,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="SVolf"
+                                android:text="@string/str_about_svolf"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -233,11 +233,51 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="Android Developer" />
+                                android:text="@string/str_about_summary_svolf" />
 
                         </LinearLayout>
 
                     </LinearLayout>
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:gravity="center|top"
+                        android:onClick="openRull"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="54dp"
+                            android:layout_height="54dp"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_link" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:text="@string/str_about_rul"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:text="@string/str_summ_rul" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -294,7 +334,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="JaDX"
+                                android:text="@string/str_about_jadx"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -302,7 +342,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="https://github.com/skylot/jadx" />
+                                android:text="@string/str_about_summary_jadx" />
 
                         </LinearLayout>
 
@@ -333,7 +373,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="ApkTool"
+                                android:text="@string/str_about_apktool"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -341,7 +381,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="https://github.com/iBotPeaches/Apktool" />
+                                android:text="@string/str_about_summary_apktool" />
 
                         </LinearLayout>
 
@@ -372,7 +412,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="Smali"
+                                android:text="@string/str_about_smali"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -380,7 +420,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
-                                android:text="https://github.com/JesusFreke/smali" />
+                                android:text="@string/str_about_summary_smali" />
 
                         </LinearLayout>
 
@@ -410,7 +450,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:text="Лицензия"
+                        android:text="@string/str_about_lincen"
                         android:textStyle="bold" />
 
                     <LinearLayout

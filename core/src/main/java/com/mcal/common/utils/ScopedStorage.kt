@@ -1,6 +1,7 @@
 package com.mcal.common.utils
 
 import android.os.Environment
+import android.util.Log
 import com.mcal.common.App
 import java.io.File
 
@@ -45,7 +46,7 @@ object ScopedStorage {
 
     @JvmStatic
     fun getFramework(): File {
-        return File(getBinDir(), "android-framework.jar")
+        return File(getBinDir(), "android.jar")
     }
 
     @JvmStatic
@@ -84,22 +85,76 @@ object ScopedStorage {
     @JvmStatic
     fun getAapt(): File {
         val path = File(getBinDir(), "aapt")
-        path.setExecutable(true)
-        return path
+        return ensureExecutable(path)
     }
 
     @JvmStatic
     fun getMyCp(): File {
         val path = File(getBinDir(), "mycp")
-        path.setExecutable(true)
-        return path
+        if (!path.exists() || path.length() == 0L) {
+            try {
+                App.getContext().assets.open("mycp").use { input ->
+                    path.outputStream().use { output -> input.copyTo(output) }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return ensureExecutable(path)
     }
 
     @JvmStatic
     fun getAapt2(): File {
         val path = File(getBinDir(), "aapt2")
-        path.setExecutable(true)
-        return path
+        return ensureExecutable(path)
+    }
+
+    /**
+     * Make sure the given binary is executable. File.setExecutable can silently
+     * fail on some devices/ROMs, so we fall back to android.os.FileUtils
+     * (hidden API) and an explicit chmod, then verify the result.
+     */
+    @JvmStatic
+    fun ensureExecutable(file: File): File {
+        if (!file.exists()) {
+            return file
+        }
+        if (file.length() == 0L) {
+            file.delete()
+            return file
+        }
+        try {
+            file.setExecutable(true)
+            file.setExecutable(true, false)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        if (!file.canExecute()) {
+            try {
+                val fileUtils = Class.forName("android.os.FileUtils")
+                val setPermissions = fileUtils.getMethod(
+                    "setPermissions",
+                    String::class.java,
+                    Int::class.javaPrimitiveType,
+                    Int::class.javaPrimitiveType,
+                    Int::class.javaPrimitiveType
+                )
+                setPermissions.invoke(null, file.absolutePath, 0x1ED, -1, -1)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        if (!file.canExecute()) {
+            try {
+                Runtime.getRuntime()
+                    .exec(arrayOf("chmod", "755", file.absolutePath))
+                    .waitFor()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        Log.e("ScopedStorage", "ensureExecutable ${file.absolutePath} -> ${file.canExecute()}")
+        return file
     }
 
     @JvmStatic
@@ -116,7 +171,7 @@ object ScopedStorage {
 
     @JvmStatic
     fun isToolsInstalled(): Boolean {
-        return getAapt().exists() or getAapt2().exists() and getMyCp().exists() and getAndroidDebugKey().exists() and
+        return (getAapt().exists() or getAapt2().exists()) and
                 (getFramework().exists() and getFramework().isFile)
     }
 }

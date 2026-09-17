@@ -1,5 +1,7 @@
 package com.mcal.downloader
 
+import com.mcal.appdm.base.R
+
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -45,14 +47,14 @@ class DownloaderAdapter(
             if (isFileExists) {
                 icon = ResourcesCompat.getDrawable(
                     context.resources,
-                    R.drawable.ic_delete,
+                    R.drawable.netmgr_ic_delete,
                     context.theme
                 )
                 buttonDownload.setImageDrawable(icon)
             } else {
                 icon = ResourcesCompat.getDrawable(
                     context.resources,
-                    R.drawable.ic_download,
+                    R.drawable.netmgr_ic_download,
                     context.theme
                 )
                 buttonDownload.setImageDrawable(icon)
@@ -62,7 +64,7 @@ class DownloaderAdapter(
                     if (path.delete()) {
                         icon = ResourcesCompat.getDrawable(
                             context.resources,
-                            R.drawable.ic_download,
+                            R.drawable.netmgr_ic_download,
                             context.theme
                         )
                         buttonDownload.setImageDrawable(icon)

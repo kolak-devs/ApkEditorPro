@@ -9,13 +9,14 @@ class ApkInfoParser {
         var apkInfo: AppInfo? = null
         val packageManager = ctx.packageManager
         apkPath?.let { path ->
-            packageManager.getPackageArchiveInfo(path, 0)?.apply {
-                applicationInfo.sourceDir = path
-                applicationInfo.publicSourceDir = path
+            packageManager.getPackageArchiveInfo(path, 0)?.let { packageInfo ->
+                val appInfo = packageInfo.applicationInfo ?: return@let
+                appInfo.sourceDir = path
+                appInfo.publicSourceDir = path
                 apkInfo = AppInfo().apply {
-                    label = applicationInfo.loadLabel(packageManager).toString()
-                    pkgName = packageName
-                    icon = applicationInfo.loadIcon(packageManager)
+                    label = appInfo.loadLabel(packageManager).toString()
+                    pkgName = packageInfo.packageName
+                    icon = appInfo.loadIcon(packageManager)
                 }
             }
         }

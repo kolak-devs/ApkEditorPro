@@ -1,40 +1,56 @@
 package com.mcal.downloader
 
+import com.mcal.appdm.base.R
+
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.common.activities.CustomizedLangActivity
-import com.mcal.common.data.Constants.getDomain
+import com.mcal.common.data.Constants
 import com.mcal.common.utils.isNetworkAvailable
-import com.mcal.downloader.databinding.DownloaderActivityBinding
+import com.mcal.appdm.base.databinding.DownloaderActivityBinding
 
 class DownloaderActivity : CustomizedLangActivity() {
     private lateinit var binding: DownloaderActivityBinding
+    private var selectedSdk = 33
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DownloaderActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(id = R.id.toolbar, title = getString(R.string.tools_manager), back = true)
-        binding.recyclerview.apply {
-            layoutManager = LinearLayoutManager(this@DownloaderActivity)
-            val domain = getDomain()
-            val abi = getABI()
-            adapter = DownloaderAdapter(
-                mutableListOf(
-                    "android-framework.jar" to "$domain/apkeditor/framework/$SDK/android.jar",
-                    "aapt" to "$domain/apkeditor/bin/$abi/aapt",
-                    "aapt2" to "$domain/apkeditor/bin/$abi/aapt2",
-                    "mycp" to "$domain/apkeditor/bin/$abi/mycp",
-                    "zipalign" to "$domain/apkeditor/bin/$abi/zipalign",
-                    "androiddebug.jks" to "$domain/apkeditor/keys/androiddebug.jks",
-//                    "aaptz" to "DOMAIN/apkeditor/bin/aaptz",
-//                    "testkey.pk8" to "$domain/apkeditor/keys/testkey.pk8",
-//                    "testkey.x509.pem" to "$domain/apkeditor/keys/testkey.x509.pem",
-                )
+        binding.recyclerview.layoutManager = LinearLayoutManager(this@DownloaderActivity)
+        showSdkPicker()
+    }
+
+    private fun showSdkPicker() {
+        val sdks = Constants.SDK_VERSIONS
+        val names = sdks.map { it.toString() }.toTypedArray()
+        var checked = selectedSdk - sdks.first
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.netmgr_sdk_title))
+            .setSingleChoiceItems(names, checked) { _, which -> checked = which }
+            .setPositiveButton(getString(R.string.netmgr_ok)) { _, _ ->
+                selectedSdk = sdks.first + checked
+                showTools()
+            }
+            .setNegativeButton(getString(R.string.netmgr_cancel)) { _, _ -> showTools() }
+            .setOnCancelListener { showTools() }
+            .show()
+    }
+
+    private fun showTools() {
+        val abi = getABI()
+        binding.recyclerview.adapter = DownloaderAdapter(
+            mutableListOf(
+                "android.jar" to Constants.getMaximoffFramework(selectedSdk),
+                "aapt" to Constants.getMaximoffBin(abi, "aapt"),
+                "aapt2" to Constants.getMaximoffBin(abi, "aapt2"),
+                "zipalign" to Constants.getMaximoffBin(abi, "zipalign"),
             )
-        }
+        )
     }
 
     private fun getABI(): String {
@@ -58,9 +74,5 @@ class DownloaderActivity : CustomizedLangActivity() {
         } else {
             setVisibility(binding.errors, View.GONE)
         }
-    }
-
-    companion object {
-        private const val SDK = 33
     }
 }

@@ -1,4 +1,5 @@
 package ru.mcal.manifestparser;
+import com.mcal.appdm.base.R;
 /*
  * Copyright (C) 2019 The Android Open Source Project
  *

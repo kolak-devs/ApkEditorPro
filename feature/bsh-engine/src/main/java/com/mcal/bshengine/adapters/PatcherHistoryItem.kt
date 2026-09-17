@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.mcal.bshengine.R
+import com.mcal.appdm.base.R
 import com.mikepenz.fastadapter.items.AbstractItem
 
 class PatcherHistoryItem : AbstractItem<PatcherHistoryItem.ViewHolder>() {

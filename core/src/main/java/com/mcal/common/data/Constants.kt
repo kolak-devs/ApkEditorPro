@@ -12,7 +12,18 @@ object Constants {
     private const val DOMAIN_RU = "https://timscriptov.ru"
     private const val DOMAIN_COM = "https://timscriptov.com"
 
+    const val MAXIMOFF = "https://raw.githubusercontent.com/Maximoff/binaries/main"
+    val SDK_VERSIONS: IntRange = 22..36
+
     fun getDomain(): String {
         return DOMAIN_RU
+    }
+
+    fun getMaximoffBin(abi: String, name: String): String {
+        return "$MAXIMOFF/bin/$abi/$name"
+    }
+
+    fun getMaximoffFramework(sdk: Int): String {
+        return "$MAXIMOFF/bin/frameworks/sdk-$sdk.apk"
     }
 }

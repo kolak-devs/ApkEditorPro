@@ -15,7 +15,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.mcal.common.data.LegacyPreferences;
 import com.mcal.common.data.ReactivePreferences;
-import com.mcal.patchview.R;
+import com.mcal.appdm.base.R;
 
 /**
  * Created by Snow Volf on 03.11.2017, 16:23

@@ -1,8 +1,11 @@
 package com.mcal.common
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Build
+import android.os.Bundle
 import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.color.DynamicColors
@@ -12,23 +15,45 @@ import com.mcal.common.utils.LocaleManager.apply
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 abstract class App : Application(), Navigator {
 
     override fun onCreate() {
         super.onCreate()
         context = this
-        CoroutineScope(Dispatchers.Main).launch {
-            // Support android 12 Monet Engine
-            DynamicColors.applyToActivitiesIfAvailable(this@App)
+        // Support android 12 Monet Engine. Harus dipanggil sebelum activity pertama dibuat,
+        // kalau tidak temanya baru muncul setelah activity di-recreate.
+        registerDynamicColors()
 
-            if (ReactivePreferences.isNightMode()) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            apply()
+        when (ReactivePreferences.getThemeModeAsync()) {
+            "night", "amoled" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "day" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
+        runBlocking { apply() }
+    }
+
+    private fun registerDynamicColors() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            override fun onActivityPreCreated(activity: Activity, savedInstanceState: Bundle?) {
+                if (ReactivePreferences.isMonetAsync()) {
+                    DynamicColors.applyToActivityIfAvailable(activity)
+                }
+                if (ReactivePreferences.getThemeModeAsync() == "amoled") {
+                    activity.setTheme(R.style.AppTheme_AMOLED)
+                }
+            }
+
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
+            override fun onActivityStarted(activity: Activity) = Unit
+            override fun onActivityResumed(activity: Activity) = Unit
+            override fun onActivityPaused(activity: Activity) = Unit
+            override fun onActivityStopped(activity: Activity) = Unit
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
+            override fun onActivityDestroyed(activity: Activity) = Unit
+        })
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

@@ -1,132 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <androidx.core.widget.NestedScrollView
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_collapsing"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="4dp" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="@+id/title_projects"
-            app:layout_constraintStart_toEndOf="@+id/title_projects">
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="8dp">
 
-            <include
-                android:id="@+id/include"
-                layout="@layout/toolbar_collapsing"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:layout_marginBottom="4dp"
-                app:layout_constraintBottom_toTopOf="@+id/errors"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_apk"
+                style="@style/MainCard"
+                app:cardElevation="0dp">
 
-            <TextView
-                android:id="@+id/errors"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/item_loading_chip"
-                android:gravity="center"
-                android:padding="12dp"
-                android:text="@string/no_internet_connection"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/title_selectApk"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/include"
-                tools:visibility="visible" />
+                <RelativeLayout style="@style/MainCardContent">
+                    <TextView
+                        style="@style/MainCardTitle"
+                        android:text="@string/action_apk" />
+                    <TextView
+                        style="@style/MainCardSummary"
+                        android:text="@string/action_apk_desc" />
+                    <ImageView
+                        style="@style/MainCardIcon"
+                        android:contentDescription="@string/action_apk"
+                        android:src="@drawable/ic_btn_1" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            <!--- Титл "Выберите АПК" -->
-            <TextView
-                android:id="@+id/title_selectApk"
-                style="@style/TextAppearance.Material3.TitleMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/select_apk_file"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/errors" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_app"
+                style="@style/MainCard"
+                
+                app:cardElevation="0dp">
 
-            <!-- 2 кнопки выбора апк -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/apk_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title_selectApk"
-                tools:itemCount="2"
-                tools:listitem="@layout/item_main_list" />
+                <RelativeLayout style="@style/MainCardContent">
+                    <TextView
+                        style="@style/MainCardTitle"
+                        android:text="@string/action_app" />
+                    <TextView
+                        style="@style/MainCardSummary"
+                        android:text="@string/action_app_desc" />
+                    <ImageView
+                        style="@style/MainCardIcon"
+                        android:contentDescription="@string/action_app"
+                        android:src="@drawable/ic_btn_2" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            <!--- Титл "Проекты" -->
-            <TextView
-                android:id="@+id/title_projects"
-                style="@style/TextAppearance.Material3.TitleMedium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/projects"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/apk_recycler" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_prj"
+                style="@style/MainCard"
+                
+                app:cardElevation="0dp">
 
-            <!--- Список последних проектов -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/projects_recycler"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintStart_toStartOf="@+id/title_projects"
-                app:layout_constraintTop_toBottomOf="@+id/title_projects"
-                tools:itemCount="2"
-                tools:listitem="@layout/item_main_list" />
+                <RelativeLayout style="@style/MainCardContent">
+                    <TextView
+                        style="@style/MainCardTitle"
+                        android:text="@string/action_prj" />
+                    <TextView
+                        style="@style/MainCardSummary"
+                        android:text="@string/action_prj_desc" />
+                    <ImageView
+                        style="@style/MainCardIcon"
+                        android:contentDescription="@string/action_prj"
+                        android:src="@drawable/ic_btn_3" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            <!--- Титл "Прочие" -->
-            <TextView
-                android:id="@+id/title_others"
-                style="@style/TextAppearance.Material3.TitleMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/others"
-                app:layout_constraintBottom_toTopOf="@+id/menu_recycler"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/projects_recycler" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_odex"
+                style="@style/MainCard"
+                
+                app:cardElevation="0dp">
 
-            <!--- Прочие пункты -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/menu_recycler"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title_others"
-                tools:itemCount="8"
-                tools:listitem="@layout/item_main_list" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <RelativeLayout style="@style/MainCardContent">
+                    <TextView
+                        style="@style/MainCardTitle"
+                        android:text="@string/action_odex" />
+                    <TextView
+                        style="@style/MainCardSummary"
+                        android:text="@string/action_odex_desc" />
+                    <ImageView
+                        style="@style/MainCardIcon"
+                        android:contentDescription="@string/action_odex"
+                        android:src="@drawable/ic_btn_4" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-    </androidx.core.widget.NestedScrollView>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_tools"
+                style="@style/MainCard"
+                
+                app:cardElevation="0dp">
 
+                <RelativeLayout style="@style/MainCardContent">
+                    <TextView
+                        style="@style/MainCardTitle"
+                        android:text="@string/action_tools" />
+                    <TextView
+                        style="@style/MainCardSummary"
+                        android:text="@string/action_tools_desc" />
+                    <ImageView
+                        style="@style/MainCardIcon"
+                        android:contentDescription="@string/action_tools"
+                        android:src="@drawable/ic_btn_5" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_info"
+                style="@style/MainCard"
+                
+                app:cardElevation="0dp">
+
+                <RelativeLayout style="@style/MainCardContent">
+                    <TextView
+                        style="@style/MainCardTitle"
+                        android:text="@string/action_info" />
+                    <TextView
+                        style="@style/MainCardSummary"
+                        android:text="@string/action_info_desc" />
+                    <ImageView
+                        style="@style/MainCardIcon"
+                        android:contentDescription="@string/action_info"
+                        android:src="@drawable/ic_btn_6" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_settings"
+                style="@style/MainCard"
+                
+                app:cardElevation="0dp">
+
+                <RelativeLayout style="@style/MainCardContent">
+                    <TextView
+                        style="@style/MainCardTitle"
+                        android:text="@string/action_sett" />
+                    <TextView
+                        style="@style/MainCardSummary"
+                        android:text="@string/action_sett_desc" />
+                    <ImageView
+                        style="@style/MainCardIcon"
+                        android:contentDescription="@string/action_sett"
+                        android:src="@drawable/ic_btn_7" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_exit"
+                style="@style/MainCard"
+                
+                app:cardElevation="0dp">
+
+                <RelativeLayout style="@style/MainCardContent">
+                    <TextView
+                        style="@style/MainCardTitle"
+                        android:text="@string/action_exit" />
+                    <TextView
+                        style="@style/MainCardSummary"
+                        android:text="@string/action_exit_desc" />
+                    <ImageView
+                        style="@style/MainCardIcon"
+                        android:contentDescription="@string/action_exit"
+                        android:src="@drawable/ic_btn_8" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -38,7 +38,7 @@
             android:layout_height="3dp"
             android:fontFamily="sans-serif-light"
             android:visibility="invisible"
-            app:indicatorColor="@color/colorAccent"
+            app:indicatorColor="@color/netmgr_colorAccent"
             app:trackColor="?attr/colorSecondary"
             tools:visibility="visible" />
 
@@ -52,6 +52,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:contentDescription="Download"
-        android:src="@drawable/ic_download" />
+        android:src="@drawable/netmgr_ic_download" />
 
 </LinearLayout>

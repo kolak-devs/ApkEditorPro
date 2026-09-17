@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAccent">#2962FF</color>
-    <color name="colorPrimary">#FAFAFA</color>
-    <color name="colorPrimaryDark">#FAFAFA</color>
-    <color name="colorSecondary">#2962FF</color>
-    <color name="colorGray">#FF1F1F1F</color>
-    <color name="yellow">#FF9800</color>
+    <color name="imgv_colorAccent">#2962FF</color>
+    <color name="imgv_colorPrimary">#FAFAFA</color>
+    <color name="imgv_colorPrimaryDark">#FAFAFA</color>
+    <color name="imgv_colorSecondary">#2962FF</color>
+    <color name="imgv_colorGray">#FF1F1F1F</color>
+    <color name="imgv_yellow">#FF9800</color>
 
-    <color name="color_green">#ff4cb648</color>
+    <color name="imgv_color_green">#ff4cb648</color>
 </resources>

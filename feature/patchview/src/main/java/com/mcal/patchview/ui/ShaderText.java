@@ -21,7 +21,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
 import com.mcal.common.data.LegacyPreferences;
-import com.mcal.patchview.R;
+import com.mcal.appdm.base.R;
 import com.mcal.patchview.utils.RegexPattern;
 
 import java.util.regex.Matcher;

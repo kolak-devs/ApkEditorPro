@@ -1,5 +1,7 @@
 package com.mcal.bshengine
 
+import com.mcal.appdm.base.R
+
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -16,7 +18,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.bshengine.adapters.LogAdapter
 import com.mcal.bshengine.adapters.PatcherHistoryItem
 import com.mcal.bshengine.api.*
-import com.mcal.bshengine.databinding.BshengineActivityBinding
+import com.mcal.appdm.base.BuildConfig
+import com.mcal.appdm.base.databinding.BshengineActivityBinding
 import com.mcal.common.activities.CustomizedLangActivity
 import com.mcal.common.data.Constants.getDomain
 import com.mcal.common.filesystem.FilePickHelper
